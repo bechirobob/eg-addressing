@@ -26,6 +26,14 @@ This workspace isolates the addressing platform from other Hermes work so code, 
 - `docs` — architecture and planning docs
 - `artifacts` — generated PDFs, exports, diagrams
 
+## Repo conventions
+- Keep durable project docs in `docs/`.
+- Keep generated presentation/reference assets in `artifacts/`.
+- Keep local-only operator notes in `knowledge/` and never commit them.
+- Keep secrets out of git; commit only templates under `env/`.
+- Treat `data/` as disposable runtime state, not source.
+- Use GitHub Actions for deterministic repo-local checks; keep live smoke checks as an operator lane.
+
 ## Current platform direction
 - Frontend: Next.js + TypeScript
 - Backend: FastAPI

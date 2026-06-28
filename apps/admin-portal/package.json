@@ -9,6 +9,7 @@
     "test:copy": "node scripts/page-copy-guard.mjs",
     "test:role-auth": "node scripts/role-auth-guard.mjs",
     "test:smoke": "node scripts/admin-flow-smoke.mjs",
+    "test:ci": "npm run build && npm run test:role-auth",
     "test": "npm run test:copy && npm run test:role-auth && npm run test:smoke"
   },
   "dependencies": {
