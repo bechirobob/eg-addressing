@@ -1,0 +1,25 @@
+{
+  "name": "eg-addressing-admin-portal",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "test:copy": "node scripts/page-copy-guard.mjs",
+    "test:role-auth": "node scripts/role-auth-guard.mjs",
+    "test:smoke": "node scripts/admin-flow-smoke.mjs",
+    "test": "npm run test:copy && npm run test:role-auth && npm run test:smoke"
+  },
+  "dependencies": {
+    "next": "15.5.19",
+    "react": "18.3.1",
+    "react-dom": "18.3.1"
+  },
+  "devDependencies": {
+    "typescript": "5.6.3",
+    "@types/node": "22.7.4",
+    "@types/react": "18.3.3",
+    "@types/react-dom": "18.3.0"
+  }
+}

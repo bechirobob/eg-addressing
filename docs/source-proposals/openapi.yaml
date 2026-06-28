@@ -1,0 +1,633 @@
+openapi: 3.1.0
+info:
+  title: National Digital Addressing Platform API
+  version: 0.1.0
+  description: |
+    Pilot MVP API for the Equatorial Guinea national digital addressing platform.
+    Covers auth, territory, registry, field capture, workflow, reporting, and scoped integrations.
+servers:
+  - url: https://api.addressing.gov.gq/api/v1
+    description: Production
+  - url: https://staging-api.addressing.gov.gq/api/v1
+    description: Staging
+security:
+  - bearerAuth: []
+tags:
+  - name: Auth
+  - name: Territories
+  - name: Roads
+  - name: Buildings
+  - name: Addresses
+  - name: Field
+  - name: Corrections
+  - name: Reports
+  - name: Integrations
+paths:
+  /auth/login:
+    post:
+      tags: [Auth]
+      summary: Log in an internal user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email, password]
+              properties:
+                email: { type: string, format: email }
+                password: { type: string, format: password }
+      responses:
+        '200':
+          description: Authenticated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+  /auth/me:
+    get:
+      tags: [Auth]
+      summary: Get current user profile
+      responses:
+        '200':
+          description: Current user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserProfile'
+  /territories/provinces:
+    get:
+      tags: [Territories]
+      summary: List provinces
+      responses:
+        '200':
+          description: Province list
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/TerritoryNode'
+  /territories/zones:
+    get:
+      tags: [Territories]
+      summary: List zones
+      parameters:
+        - in: query
+          name: municipalityId
+          schema: { type: string, format: uuid }
+      responses:
+        '200':
+          description: Zone list
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Zone'
+    post:
+      tags: [Territories]
+      summary: Create zone
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ZoneCreate'
+      responses:
+        '201':
+          description: Zone created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zone'
+  /roads:
+    get:
+      tags: [Roads]
+      summary: List roads
+      parameters:
+        - in: query
+          name: zoneId
+          schema: { type: string, format: uuid }
+        - in: query
+          name: name
+          schema: { type: string }
+      responses:
+        '200':
+          description: Road list
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Road'
+    post:
+      tags: [Roads]
+      summary: Create road
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RoadCreate'
+      responses:
+        '201':
+          description: Road created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Road'
+  /buildings:
+    get:
+      tags: [Buildings]
+      summary: List buildings
+      parameters:
+        - in: query
+          name: zoneId
+          schema: { type: string, format: uuid }
+      responses:
+        '200':
+          description: Building list
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Building'
+    post:
+      tags: [Buildings]
+      summary: Create building
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BuildingCreate'
+      responses:
+        '201':
+          description: Building created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Building'
+  /addresses:
+    get:
+      tags: [Addresses]
+      summary: Search or list addresses
+      parameters:
+        - in: query
+          name: q
+          schema: { type: string }
+        - in: query
+          name: status
+          schema: { type: string }
+        - in: query
+          name: zoneId
+          schema: { type: string, format: uuid }
+      responses:
+        '200':
+          description: Address list
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Address'
+    post:
+      tags: [Addresses]
+      summary: Create an address candidate
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddressCreate'
+      responses:
+        '201':
+          description: Address created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Address'
+  /addresses/{addressId}/approve:
+    post:
+      tags: [Addresses]
+      summary: Approve address for publication pipeline
+      parameters:
+        - $ref: '#/components/parameters/AddressId'
+      responses:
+        '200':
+          description: Address approved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Address'
+  /addresses/{addressId}/publish:
+    post:
+      tags: [Addresses]
+      summary: Publish official address
+      parameters:
+        - $ref: '#/components/parameters/AddressId'
+      responses:
+        '200':
+          description: Address published
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Address'
+  /addresses/verify:
+    get:
+      tags: [Addresses]
+      summary: Verify official address by code
+      parameters:
+        - in: query
+          name: code
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          description: Verification response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VerificationResponse'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /field/assignments:
+    get:
+      tags: [Field]
+      summary: List field assignments
+      responses:
+        '200':
+          description: Assignment list
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/FieldAssignment'
+    post:
+      tags: [Field]
+      summary: Create field assignment
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FieldAssignmentCreate'
+      responses:
+        '201':
+          description: Assignment created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FieldAssignment'
+  /field/submissions:
+    get:
+      tags: [Field]
+      summary: List field submissions
+      responses:
+        '200':
+          description: Submission list
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/FieldSubmission'
+    post:
+      tags: [Field]
+      summary: Create field submission
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FieldSubmissionCreate'
+      responses:
+        '201':
+          description: Submission created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FieldSubmission'
+  /field/submissions/{submissionId}/accept:
+    post:
+      tags: [Field]
+      summary: Accept field submission
+      parameters:
+        - $ref: '#/components/parameters/SubmissionId'
+      responses:
+        '200':
+          description: Submission accepted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FieldSubmission'
+  /field/submissions/{submissionId}/reject:
+    post:
+      tags: [Field]
+      summary: Reject field submission
+      parameters:
+        - $ref: '#/components/parameters/SubmissionId'
+      responses:
+        '200':
+          description: Submission rejected
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FieldSubmission'
+  /corrections:
+    get:
+      tags: [Corrections]
+      summary: List correction requests
+      responses:
+        '200':
+          description: Correction list
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/CorrectionRequest'
+    post:
+      tags: [Corrections]
+      summary: Create correction request
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CorrectionRequestCreate'
+      responses:
+        '201':
+          description: Correction request created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CorrectionRequest'
+  /reports/coverage-summary:
+    get:
+      tags: [Reports]
+      summary: Get pilot coverage summary
+      responses:
+        '200':
+          description: Coverage report
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  totalBuildingsCaptured: { type: integer }
+                  totalAddressesApproved: { type: integer }
+                  pendingReview: { type: integer }
+                  zonesCompleted: { type: integer }
+  /integrations/addresses/verify:
+    get:
+      tags: [Integrations]
+      summary: External verification endpoint for approved clients
+      security:
+        - apiKeyAuth: []
+      parameters:
+        - in: query
+          name: code
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          description: Verification response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VerificationResponse'
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+    apiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+  parameters:
+    AddressId:
+      in: path
+      name: addressId
+      required: true
+      schema: { type: string, format: uuid }
+    SubmissionId:
+      in: path
+      name: submissionId
+      required: true
+      schema: { type: string, format: uuid }
+  responses:
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+  schemas:
+    AuthResponse:
+      type: object
+      properties:
+        accessToken: { type: string }
+        refreshToken: { type: string }
+        user:
+          $ref: '#/components/schemas/UserProfile'
+    UserProfile:
+      type: object
+      properties:
+        id: { type: string, format: uuid }
+        fullName: { type: string }
+        email: { type: string, format: email }
+        roles:
+          type: array
+          items: { type: string }
+    TerritoryNode:
+      type: object
+      properties:
+        id: { type: string, format: uuid }
+        code: { type: string }
+        name: { type: string }
+    Zone:
+      allOf:
+        - $ref: '#/components/schemas/TerritoryNode'
+        - type: object
+          properties:
+            zoneType: { type: string }
+            rolloutStatus: { type: string }
+    ZoneCreate:
+      type: object
+      required: [municipalityId, code, name, zoneType]
+      properties:
+        municipalityId: { type: string, format: uuid }
+        code: { type: string }
+        name: { type: string }
+        zoneType: { type: string }
+    Road:
+      type: object
+      properties:
+        id: { type: string, format: uuid }
+        zoneId: { type: string, format: uuid }
+        roadCode: { type: string }
+        officialName: { type: string, nullable: true }
+        provisionalName: { type: string, nullable: true }
+        roadType: { type: string }
+        namingStatus: { type: string }
+    RoadCreate:
+      type: object
+      required: [zoneId, roadCode, roadType]
+      properties:
+        zoneId: { type: string, format: uuid }
+        roadCode: { type: string }
+        officialName: { type: string }
+        provisionalName: { type: string }
+        roadType: { type: string }
+    Building:
+      type: object
+      properties:
+        id: { type: string, format: uuid }
+        zoneId: { type: string, format: uuid }
+        primaryRoadId: { type: string, format: uuid, nullable: true }
+        buildingType: { type: string }
+        buildingName: { type: string, nullable: true }
+        floorCount: { type: integer, nullable: true }
+    BuildingCreate:
+      type: object
+      required: [zoneId, buildingType]
+      properties:
+        zoneId: { type: string, format: uuid }
+        primaryRoadId: { type: string, format: uuid }
+        buildingType: { type: string }
+        buildingName: { type: string }
+        floorCount: { type: integer }
+    Address:
+      type: object
+      properties:
+        id: { type: string, format: uuid }
+        addressCode: { type: string }
+        zoneId: { type: string, format: uuid }
+        roadId: { type: string, format: uuid, nullable: true }
+        buildingId: { type: string, format: uuid, nullable: true }
+        addressLine1: { type: string }
+        addressLine2: { type: string, nullable: true }
+        numberingValue: { type: string }
+        status: { type: string }
+        isOfficial: { type: boolean }
+    AddressCreate:
+      type: object
+      required: [zoneId, buildingId, addressCode, addressLine1, numberingValue]
+      properties:
+        zoneId: { type: string, format: uuid }
+        buildingId: { type: string, format: uuid }
+        roadId: { type: string, format: uuid }
+        addressCode: { type: string }
+        addressLine1: { type: string }
+        addressLine2: { type: string }
+        numberingValue: { type: string }
+        postalCode: { type: string, nullable: true }
+    FieldAssignment:
+      type: object
+      properties:
+        id: { type: string, format: uuid }
+        zoneId: { type: string, format: uuid }
+        assignedUserId: { type: string, format: uuid }
+        assignmentType: { type: string }
+        status: { type: string }
+    FieldAssignmentCreate:
+      type: object
+      required: [zoneId, assignedUserId, assignmentType]
+      properties:
+        zoneId: { type: string, format: uuid }
+        assignedUserId: { type: string, format: uuid }
+        assignmentType: { type: string }
+    FieldSubmission:
+      type: object
+      properties:
+        id: { type: string, format: uuid }
+        assignmentId: { type: string, format: uuid }
+        zoneId: { type: string, format: uuid }
+        buildingId: { type: string, format: uuid, nullable: true }
+        roadId: { type: string, format: uuid, nullable: true }
+        syncStatus: { type: string }
+        reviewStatus: { type: string }
+    FieldSubmissionCreate:
+      type: object
+      required: [assignmentId, zoneId, gps, buildingType]
+      properties:
+        assignmentId: { type: string, format: uuid }
+        zoneId: { type: string, format: uuid }
+        buildingId: { type: string, format: uuid }
+        roadId: { type: string, format: uuid }
+        buildingType: { type: string }
+        gps:
+          type: object
+          required: [lat, lng]
+          properties:
+            lat: { type: number }
+            lng: { type: number }
+        notes: { type: string }
+    CorrectionRequest:
+      type: object
+      properties:
+        id: { type: string, format: uuid }
+        addressId: { type: string, format: uuid }
+        requesterType: { type: string }
+        issueType: { type: string }
+        status: { type: string }
+        description: { type: string }
+    CorrectionRequestCreate:
+      type: object
+      required: [addressId, requesterType, issueType, description]
+      properties:
+        addressId: { type: string, format: uuid }
+        requesterType: { type: string }
+        requesterName: { type: string }
+        requesterContact: { type: string }
+        issueType: { type: string }
+        description: { type: string }
+    VerificationResponse:
+      type: object
+      properties:
+        addressCode: { type: string }
+        status: { type: string }
+        isOfficial: { type: boolean }
+        addressLine1: { type: string }
+        zone: { type: string }
+        municipality: { type: string }
+        province: { type: string }
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            code: { type: string }
+            message: { type: string }
+            details: { type: string, nullable: true }

@@ -1,0 +1,256 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>National Digital Addressing System Proposal</title>
+<link rel="icon" href="data:," />
+<style>
+@page { size: A4; margin: 18mm 16mm; }
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  color: #162032;
+  font-family: "Inter", "Segoe UI", Arial, sans-serif;
+  background: #f4f7fb;
+  line-height: 1.45;
+}
+.page {
+  width: 210mm;
+  min-height: 297mm;
+  margin: 0 auto 18px;
+  background: #fff;
+  padding: 22mm 18mm 18mm;
+  position: relative;
+  overflow: hidden;
+  page-break-after: always;
+}
+.page:last-of-type { page-break-after: auto; }
+.cover {
+  background: radial-gradient(circle at 85% 12%, rgba(214, 32, 45, 0.18), transparent 28%),
+              linear-gradient(135deg, #07182e 0%, #0a315e 58%, #123d70 100%);
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.cover:before {
+  content: "";
+  position: absolute;
+  inset: auto -60mm -70mm auto;
+  width: 160mm;
+  height: 160mm;
+  border-radius: 50%;
+  border: 28mm solid rgba(255,255,255,.055);
+}
+.letter-cover {
+  background: linear-gradient(180deg, #fbfcff 0%, #f5f8fc 100%);
+}
+.flagline { display: flex; gap: 5px; margin-bottom: 22mm; }
+.flagline span { height: 6px; width: 42px; border-radius: 999px; display:block; }
+.green { background:#3c9c4a; } .white { background:#fff; } .red { background:#d6202d; } .blue { background:#2b66b1; }
+h1 { font-size: 42px; line-height: 1.04; margin: 0 0 14px; letter-spacing: -1.3px; }
+.cover h1 { max-width: 155mm; font-size: 44px; }
+.subtitle { font-size: 18px; max-width: 155mm; color: #dbeafe; }
+.letter-cover .subtitle { color: #31445f; }
+.kicker { text-transform: uppercase; letter-spacing: 1.7px; font-size: 12px; font-weight: 800; color: #83c5ff; margin-bottom: 10px; }
+.letter-cover .kicker { color: #0b315f; }
+.cover-meta { border-left: 4px solid #d6202d; padding-left: 16px; color: #eef6ff; font-size: 14px; max-width: 145mm; }
+.letter-meta { border-left: 4px solid #d6202d; padding-left: 16px; color: #31445f; font-size: 14px; max-width: 150mm; }
+h2 { font-size: 28px; margin: 0 0 12px; color:#0b315f; letter-spacing: -0.6px; }
+h3 { font-size: 16px; margin: 18px 0 8px; color:#0c3a6d; }
+p { margin: 0 0 10px; }
+.lead { font-size: 17px; color:#26384f; }
+.muted { color:#64748b; }
+.small { font-size: 11px; color:#64748b; }
+.section-tag { display:inline-block; color:#d6202d; font-weight: 800; font-size: 11px; letter-spacing: 1.2px; text-transform: uppercase; margin-bottom: 8px; }
+.grid { display:grid; gap: 12px; }
+.grid-2 { grid-template-columns: 1fr 1fr; }
+.grid-3 { grid-template-columns: repeat(3, 1fr); }
+.card { background:#f8fafc; border:1px solid #dce6f2; border-radius: 14px; padding: 14px; }
+.card.dark { background:#0b315f; color:#fff; border:0; }
+.card.dark h3 { color:#fff; }
+.stat { font-size: 29px; font-weight: 900; color:#0b315f; line-height:1.05; }
+.statlabel { font-size: 11px; text-transform: uppercase; letter-spacing:.7px; color:#64748b; margin-top:5px; }
+.dark .stat, .dark .statlabel { color:#fff; }
+ul { margin: 8px 0 0 20px; padding: 0; }
+li { margin-bottom: 6px; }
+.callout { border-left: 5px solid #d6202d; background:#f8fbff; padding: 14px 16px; border-radius: 12px; margin: 14px 0; }
+.quote { font-size: 21px; line-height: 1.3; color:#0b315f; font-weight: 800; }
+.timeline { display:grid; gap:10px; margin-top: 12px; }
+.phase { display:grid; grid-template-columns: 35mm 1fr 42mm; gap: 10px; align-items:start; padding: 12px; border:1px solid #dce6f2; border-radius: 12px; background:#fbfdff; }
+.phase strong { color:#0b315f; }
+.price { font-size: 17px; font-weight:900; color:#d6202d; text-align:right; }
+table { width:100%; border-collapse: collapse; margin-top: 10px; font-size: 12px; }
+th { background:#0b315f; color:#fff; text-align:left; padding:9px; }
+td { border-bottom:1px solid #dce6f2; padding:8px 9px; vertical-align: top; }
+.footer { position:absolute; bottom: 9mm; left:18mm; right:18mm; display:flex; justify-content:space-between; color:#8a97a8; font-size:10px; border-top:1px solid #e2e8f0; padding-top:6px; }
+.footer span:last-child { display: none; }
+.signature { margin-top: 24px; padding-top: 12px; border-top: 1px solid #dce6f2; }
+.tight li { margin-bottom: 4px; }
+.letter-body { font-size: 15px; color:#24354f; }
+.letter-body p { margin-bottom: 14px; }
+.letter-body .recipient { margin-bottom: 18px; }
+@media print {
+  body { background: #fff; }
+  .page { width: 210mm; min-height: 297mm; margin: 0; page-break-after: always; break-after: page; }
+  .page:last-of-type { page-break-after: auto; break-after: auto; }
+}
+</style>
+</head>
+<body>
+<section class="page cover">
+  <div>
+    <div class="flagline"><span class="green"></span><span class="white"></span><span class="red"></span><span class="blue"></span></div>
+    <div class="kicker">Confidential discussion proposal</div>
+    <h1>National Digital Addressing System Proposal</h1>
+    <p class="subtitle">A government-owned national addressing infrastructure program for Equatorial Guinea — giving every home, building, business, institution, and service point an official physical and digital address.</p>
+  </div>
+  <div class="cover-meta">
+    <p><strong>Prepared for the Ministry of Transportation at the request of the Vice President</strong></p>
+    <p>Purpose: to establish a national address registry and geospatial service layer that supports postal delivery, emergency response, planning, logistics, utilities, digital public services, and national modernization.</p>
+    <p>Prepared by: Benjamin Bob Bechiro<br/>Project Initiator<br/>Phone: +240 555 605 331<br/>Email: bechirobob@gmail.com<br/>Date: June 2026</p>
+  </div>
+</section>
+<section class="page">
+  <span class="section-tag">Founder’s note</span>
+  <h2>A patriotic infrastructure proposal for national order, visibility, and service delivery</h2>
+  <p class="lead">Every serious modern state needs a trusted way to identify places. Without a reliable address system, homes stay difficult to find, services stay hard to deliver, and national planning remains slower, more manual, and less accountable than it should be.</p>
+  <div class="callout"><p class="quote">Roads, homes, public buildings, businesses, and future cities already exist. What is missing is a shared national location language that government, citizens, emergency teams, couriers, utilities, and investors can all trust and use.</p></div>
+  <p>This proposal is not about street signs alone. It is about building a national operating layer for location identity: one authoritative system for house numbering, street naming, building registration, geolocation, postal coding, and searchable address verification.</p>
+  <p>A country that wants stronger logistics, better emergency response, cleaner records, more efficient public services, and a more investment-ready business environment should not leave addresses informal or fragmented. Addressing is foundational infrastructure.</p>
+  <p>Equatorial Guinea has the opportunity to do this with dignity and discipline: start with a controlled pilot, define standards correctly, keep government ownership of the registry, and scale in phases with auditability and operational realism.</p>
+  <div class="callout"><p><strong>Project initiator profile: Benjamin Bob Bechiro completed junior and senior high school at Archimedes International College in Accra, Ghana, where he served as Head of the Science Department in his senior year. He holds a Diploma in Software Engineering from the University of Staffordshire and an Honorary Bachelor’s Degree in Software Engineering from Coventry University in the United Kingdom. His private technology work includes completed platform projects for Joscol and Martínez Hermanos, covering practical digital commerce, operations, workflow, and service-delivery systems.</strong></p></div>
+  <div class="signature"><p><strong>Respectfully submitted,</strong></p><p>Benjamin Bob Bechiro<br/>Project Initiator<br/>Phone: +240 555 605 331<br/>Email: bechirobob@gmail.com</p></div>
+  <div class="footer"><span>National Digital Addressing System Proposal</span><span>2</span></div>
+</section>
+<section class="page">
+  <span class="section-tag">Executive summary</span>
+  <h2>Not a map project — a national address operating layer</h2>
+  <p class="lead">The recommended program is a phased National Digital Addressing System led by government and designed to become the authoritative source of location identity across Equatorial Guinea.</p>
+  <div class="grid grid-2"><div class="card"><h3>For citizens</h3><ul><li>Know and share a clear official address.</li><li>Receive deliveries, utility visits, and emergency response more reliably.</li><li>Verify and correct address records through a controlled channel.</li></ul></div><div class="card"><h3>For ministries and municipalities</h3><ul><li>Maintain one trusted registry instead of fragmented local lists.</li><li>Track coverage, verification, gaps, and field progress.</li><li>Connect addressing to permits, taxation, census, land, and service workflows.</li></ul></div><div class="card"><h3>For logistics and utilities</h3><ul><li>Reduce failed deliveries and service visits.</li><li>Plan routes, zones, and dispatch with verified coordinates.</li><li>Integrate approved address APIs into operations over time.</li></ul></div><div class="card"><h3>For national leadership</h3><ul><li>Create measurable visibility into territorial coverage.</li><li>Support urban planning, infrastructure decisions, and public-service readiness.</li><li>Strengthen digital sovereignty through a government-owned registry.</li></ul></div></div>
+  <div class="callout"><p><strong>Core proposal: approve a 9-month pilot covering standards, field capture, registry build, and public-service integration in priority zones of Malabo, then scale into a 3-year phased national rollout across Bata, Oyala/Ciudad de la Paz, and all provinces.</strong></p></div>
+  <div class="footer"><span>Executive summary</span><span>3</span></div>
+</section>
+<section class="page">
+  <span class="section-tag">Why now</span>
+  <h2>The country needs a trusted way to identify places</h2>
+  <p>Addressing affects far more than mail. A weak address system slows almost every service that depends on finding people, properties, or facilities correctly.</p>
+  <div class="grid grid-3"><div class="card"><div class="stat">Public services</div><div class="statlabel">Need location certainty for permits, inspections, notices, and response.</div></div><div class="card"><div class="stat">Emergency response</div><div class="statlabel">Needs fast, unambiguous building and route identification.</div></div><div class="card"><div class="stat">Utilities</div><div class="statlabel">Need precise service points for installation, meter records, and maintenance.</div></div><div class="card"><div class="stat">Commerce and logistics</div><div class="statlabel">Need trusted addresses for dispatch, delivery, and reconciliation.</div></div><div class="card"><div class="stat">Planning and census</div><div class="statlabel">Need consistent territorial units and verified building records.</div></div><div class="card"><div class="stat">Future cities</div><div class="statlabel">Should not inherit paper-first address confusion.</div></div></div>
+  <h3>What this means</h3>
+  <ul><li>If addressing remains informal, every digital service built on top of it becomes weaker and more expensive to operate.</li><li>A national address registry should be treated as foundational infrastructure, like roads, cadastral records, and public-service directories.</li><li>A mobile-first field workflow is mandatory because verification will happen on the territory, not only in offices.</li><li>Data governance and verification rules matter as much as software. A bad registry at scale becomes a national headache.</li></ul>
+  <div class="footer"><span>Why now</span><span>4</span></div>
+</section>
+<section class="page">
+  <span class="section-tag">National opportunity</span>
+  <h2>Oyala / Ciudad de la Paz should be born address-ready</h2>
+  <p class="lead">A future-facing administrative capital should not depend on vague directions, improvised landmarks, and disconnected local records. It should open with a formal location identity model already designed into its operations.</p>
+  <div class="callout"><p class="quote">If a new capital represents the future of the nation, then every plot, building, road, ministry site, and service point inside it should already be identifiable, searchable, and service-ready by design.</p></div>
+  <div class="grid grid-2"><div class="card"><h3>Digital-by-default public administration</h3><p>Permits, inspections, public notices, and inter-ministry coordination work better when locations are formally identified.</p></div><div class="card"><h3>Emergency and security readiness</h3><p>Response teams need precise building references, route logic, and zone awareness, especially in expanding administrative districts.</p></div><div class="card"><h3>Utility and infrastructure delivery</h3><p>Water, power, telecom, roads, sanitation, and maintenance operations benefit immediately from address-ready records.</p></div><div class="card"><h3>Investor and resident confidence</h3><p>A city that is easy to navigate, verify, and service projects seriousness and administrative maturity.</p></div></div>
+  <div class="footer"><span>National opportunity</span><span>5</span></div>
+</section>
+<section class="page">
+  <span class="section-tag">Platform model</span>
+  <h2>What the national system should contain</h2>
+  <table>
+    <thead><tr><th>Layer</th><th>Capability</th><th>National value</th></tr></thead>
+    <tbody><tr><td>National address registry</td><td>Authoritative building, plot, street, and zone records with administrative hierarchy and verification state.</td><td>Provides a single national source of truth.</td></tr><tr><td>Geospatial map layer</td><td>Interactive map of roads, districts, buildings, parcels, landmarks, and service points.</td><td>Makes the registry usable in the field and in planning offices.</td></tr><tr><td>Field capture application</td><td>Mobile/tablet workflow for enumerators to capture buildings, photos, coordinates, naming proposals, and validation status.</td><td>Supports structured territorial rollout and offline collection.</td></tr><tr><td>Address code engine</td><td>Generates official address formats, short codes, printable labels, and signage references.</td><td>Keeps standards consistent across ministries and municipalities.</td></tr><tr><td>Operations dashboard</td><td>Coverage metrics, approval queues, duplicate detection, team productivity, verification backlog, and reporting.</td><td>Gives leadership visibility and operational control.</td></tr><tr><td>Citizen and agency access</td><td>Search, verify, request correction, print proof of address, and approved API access for service operators.</td><td>Drives real-world adoption beyond the registry itself.</td></tr><tr><td>Integration gateway</td><td>Controlled interfaces for postal, utilities, emergency response, tax, land, planning, and logistics systems.</td><td>Prevents the address system from becoming an isolated database.</td></tr></tbody>
+  </table>
+  <div class="footer"><span>Platform model</span><span>6</span></div>
+</section>
+<section class="page">
+  <span class="section-tag">National advantages</span>
+  <h2>Why the whole country benefits</h2>
+  <p class="lead">A good address system is quiet infrastructure: when it works, everything above it becomes easier to find, route, verify, inspect, deliver, and improve.</p>
+  <div class="grid grid-2"><div class="card"><h3>Better public-service delivery</h3><p>Agencies can issue, inspect, route, and follow up with clearer location identity.</p></div><div class="card"><h3>Faster emergency response</h3><p>Ambulance, police, and fire services gain a more reliable operational reference model.</p></div><div class="card"><h3>Stronger economic activity</h3><p>Businesses, delivery operators, and suppliers spend less time failing to locate people and places.</p></div><div class="card"><h3>Cleaner national records</h3><p>Property, land, permits, service accounts, and census work gain a shared address backbone.</p></div><div class="card"><h3>Tourism and navigation</h3><p>Visitors understand how to reach hotels, offices, venues, and services with less friction.</p></div><div class="card"><h3>Digital sovereignty</h3><p>Government retains ownership and control of a strategic national dataset.</p></div></div>
+  <div class="footer"><span>National advantages</span><span>7</span></div>
+</section>
+<section class="page">
+  <span class="section-tag">Delivery roadmap</span>
+  <h2>Recommended phased rollout</h2>
+  <div class="timeline"><div class="phase"><strong>Phase 1</strong><div><strong>Standards + pilot design</strong><br>Define address standards, governance model, data schema, signage rules, pilot zones, field methodology, and ministry operating model.</div><div class="price">3 months</div></div><div class="phase"><strong>Phase 2</strong><div><strong>Pilot field capture + registry build</strong><br>Capture streets and buildings in pilot zones, verify naming/numbering, launch registry, and connect first government workflows.</div><div class="price">6 months</div></div><div class="phase"><strong>Phase 3</strong><div><strong>Malabo + Bata scale-up</strong><br>Expand to priority urban districts, strengthen dashboards, and onboard utilities, emergency services, and postal workflows.</div><div class="price">9-12 months</div></div><div class="phase"><strong>Phase 4</strong><div><strong>National expansion</strong><br>Roll out province by province with contractor control, QA, training, and approved integrations.</div><div class="price">12-24 months</div></div><div class="phase"><strong>Phase 5</strong><div><strong>Long-term operations</strong><br>Maintain the registry, govern updates, support new developments, and evolve agency integrations.</div><div class="price">Ongoing</div></div></div>
+  <div class="footer"><span>Delivery roadmap</span><span>8</span></div>
+</section>
+<section class="page">
+  <span class="section-tag">Governance and security</span>
+  <h2>This must be run as national trust infrastructure</h2>
+  <div class="grid grid-2"><div class="card"><h3>Government ownership of the registry</h3><ul><li>The core address database should remain under formal government control.</li><li>External vendors may support delivery, but not own the national source of truth.</li></ul></div><div class="card"><h3>Cross-ministry steering model</h3><ul><li>Transport, interior/local administration, planning, lands, postal, telecom, emergency response, and municipalities should align standards early.</li><li>One lead sponsor is necessary, but the system serves many institutions.</li></ul></div><div class="card"><h3>Verification before publication</h3><ul><li>No building record should become authoritative without defined validation rules.</li><li>Duplicates, naming conflicts, and unverified coordinates must be controlled operationally.</li></ul></div><div class="card"><h3>Security and auditability</h3><ul><li>Role-based access, change logs, backups, incident handling, and approval history are mandatory.</li><li>Strategic location data should not drift into unmanaged personal spreadsheets or contractor silos.</li></ul></div></div>
+  <h2 style="margin-top:18px">Pilot model: What the first pilot should prove</h2>
+  <ul><li>Government can define and approve one usable national address standard.</li><li>Field teams can capture roads, buildings, and coordinates in a repeatable workflow.</li><li>The registry can search, verify, and print official address records reliably.</li><li>At least one ministry workflow, one emergency-response use case, and one utility/logistics use case can operate against the pilot data.</li><li>Leadership can see measurable coverage, verification rate, backlog, and rollout cost signals before national expansion.</li></ul>
+  <div class="callout"><p>Recommended pilot geography: priority zones of Malabo, one government-service-heavy district, one fast-growing urban area, and one controlled zone in Oyala/Ciudad de la Paz to prove future-city readiness.</p></div>
+  <div class="footer"><span>Governance and security</span><span>9</span></div>
+</section>
+<section class="page">
+  <span class="section-tag">Legal and regulatory framework</span>
+  <h2>The registry needs legal force, not only software</h2>
+  <div class="grid grid-2"><div class="card"><h3>National authority model</h3><p>The State should designate the lead authority that approves address standards, naming rules, numbering policy, and inter-agency usage obligations.</p></div><div class="card"><h3>Municipal execution boundaries</h3><p>Municipalities should participate in street naming, local validation, and maintenance reporting under a common national standard rather than inventing incompatible local systems.</p></div><div class="card"><h3>Proof-of-address status</h3><p>The program should define when an address record becomes valid for residence proof, utility onboarding, inspection, delivery, and administrative correspondence.</p></div><div class="card"><h3>Appeals and corrections</h3><p>A formal process should exist for disputes over names, numbering, duplicates, parcel conflicts, and resident correction requests.</p></div></div>
+  <ul><li>A decree, regulation, or equivalent mandate should define ownership of the standard, approval authority, update rights, and institutional obligations to use the registry.</li><li>Street naming, building numbering, and district zoning rules should be documented with version control and publication discipline.</li><li>The legal layer should clarify how the address registry interacts with cadastral, land, tax, census, and municipal records.</li><li>No national rollout should happen without a clear rulebook for authority, appeal, and update responsibility.</li></ul>
+  <div class="footer"><span>Legal and regulatory framework</span><span>10</span></div>
+</section>
+<section class="page">
+  <span class="section-tag">Physical rollout and signage</span>
+  <h2>The physical layer must be operationally real</h2>
+  <div class="grid grid-2"><div class="card"><h3>Street and district signage</h3><p>The program should define sign formats, reflectivity, materials, installation standards, maintenance cycles, and replacement workflow for damaged or missing signage.</p></div><div class="card"><h3>Building numbering operations</h3><p>Number assignment rules should handle compounds, corner plots, apartment blocks, commercial floors, informal clusters, and future subdivisions without collapsing into inconsistency.</p></div><div class="card"><h3>Pilot-to-scale installation model</h3><p>Digital registry launch can precede full national signage completion, but physical rollout sequencing should still be planned by zone, contractor, and inspection batch.</p></div><div class="card"><h3>Field QA and acceptance</h3><p>Every installed sign and numbered building cluster should be auditable against approved records, photo evidence, and field acceptance reports.</p></div></div>
+  <ul><li>Fabrication specifications should be standardized nationally to avoid fragmented designs and inconsistent quality.</li><li>Installation contractors should work against survey-ready zone packets rather than ad hoc instructions.</li><li>A replacement and vandalism-response workflow should be planned from the beginning, not after loss starts accumulating.</li><li>Physical signage inventory should stay linked to registry IDs for traceability and future maintenance.</li></ul>
+  <div class="footer"><span>Physical rollout and signage</span><span>11</span></div>
+</section>
+<section class="page">
+  <span class="section-tag">Detailed integration model</span>
+  <h2>The address system must plug into real operations</h2>
+  <div class="grid grid-2"><div class="card"><h3>Postal transformation</h3><p>Postal workflows should move from vague routing toward address-backed sorting, route planning, delivery confirmation, and service-coverage improvement.</p></div><div class="card"><h3>Emergency dispatch</h3><p>Police, fire, and ambulance teams should receive searchable address references, zone logic, and dispatch-grade location identifiers in their operational tools.</p></div><div class="card"><h3>Utilities and field maintenance</h3><p>Electricity, water, sanitation, telecom, and meter teams should link service points to verified address records to reduce failed visits and orphan records.</p></div><div class="card"><h3>Land, tax, and planning systems</h3><p>Cadastral, permitting, taxation, and planning workflows should reconcile parcels and buildings against the address backbone rather than maintaining separate place identities.</p></div><div class="card"><h3>Citizen channels</h3><p>Call centers, service counters, web lookup, printed proofs, SMS/WhatsApp notices, and assisted verification channels should all reference the same official record.</p></div><div class="card"><h3>Private-sector enablement</h3><p>Approved APIs and data-access contracts should support logistics, banks, insurers, e-commerce operators, and large employers without compromising registry control.</p></div></div>
+  <div class="footer"><span>Detailed integration model</span><span>12</span></div>
+</section>
+<section class="page">
+  <span class="section-tag">National operating model</span>
+  <h2>Software alone will not run the system</h2>
+  <div class="grid grid-2"><div class="card"><h3>Field workforce model</h3><p>Enumerators, supervisors, QA leads, municipal validators, and central registry operators should each have defined responsibilities, escalation paths, and daily reporting structure.</p></div><div class="card"><h3>Training and certification</h3><p>Field and office users should be trained on capture standards, verification rules, exception handling, and safe use of devices and data.</p></div><div class="card"><h3>Zone-based rollout command</h3><p>The country should be divided into manageable operational zones with clear readiness gates, progress reporting, and acceptance sign-off before scale expansion.</p></div><div class="card"><h3>Service desk and registry operations</h3><p>A national service desk should manage correction requests, duplicate investigations, access provisioning, support incidents, and controlled record updates.</p></div></div>
+  <ul><li>Device inventories, SIM/data plans, transport planning, and supervision ratios should be budgeted as operating realities, not hidden assumptions.</li><li>A daily and weekly reporting cadence should measure capture volume, validation quality, exceptions, and blocked zones.</li><li>Field teams should work from approved basemaps, task packs, and naming/numbering rules rather than informal personal judgment.</li><li>The operating model should support both pilot execution and long-term national maintenance after rollout.</li></ul>
+  <div class="footer"><span>National operating model</span><span>13</span></div>
+</section>
+<section class="page">
+  <span class="section-tag">Data quality and lifecycle control</span>
+  <h2>Bad records at scale become a national liability</h2>
+  <div class="grid grid-2"><div class="card"><h3>Confidence and verification states</h3><p>Every record should carry status markers such as captured, pending review, approved, disputed, corrected, retired, or superseded.</p></div><div class="card"><h3>Duplicate and conflict handling</h3><p>The platform should flag overlapping coordinates, conflicting names, suspicious numbering gaps, and disputed parcel/building relationships before publication.</p></div><div class="card"><h3>Update governance</h3><p>New developments, demolitions, rezoning, and administrative renaming events should feed a controlled update pipeline with audit history.</p></div><div class="card"><h3>Revalidation cycle</h3><p>The system should include periodic re-checks for fast-changing urban areas so address records stay useful instead of becoming stale after first launch.</p></div></div>
+  <ul><li>Quality assurance should use scorecards, photo review, sampling, and supervisor spot checks.</li><li>Each province or city batch should clear acceptance thresholds before being declared operational.</li><li>A national correction log should prevent quiet data drift and unmanaged local edits.</li><li>Version history should support legal defensibility and operational trust.</li></ul>
+  <div class="footer"><span>Data quality and lifecycle control</span><span>14</span></div>
+</section>
+<section class="page">
+  <span class="section-tag">Infrastructure and continuity posture</span>
+  <h2>A sovereign registry needs continuity planning</h2>
+  <div class="grid grid-2"><div class="card"><h3>Hosting model choice</h3><p>Government should choose deliberately between sovereign hosting, trusted local data-center operation, hybrid cloud, or another approved model based on control, resilience, and procurement reality.</p></div><div class="card"><h3>Disaster recovery</h3><p>Backups are not enough. The program should define recovery objectives, failover procedures, secure restore drills, and continuity responsibilities.</p></div><div class="card"><h3>Access control and security hardening</h3><p>Authentication, role boundaries, encryption, key custody, endpoint management, and logging policy should be treated as essential infrastructure controls.</p></div><div class="card"><h3>Monitoring and audit readiness</h3><p>System health, sync failures, suspicious edits, API usage, field-upload backlog, and outage events should be observable in near real time.</p></div></div>
+  <ul><li>The registry should not depend on unmanaged contractor laptops, private spreadsheets, or undocumented exports.</li><li>Business continuity planning should cover both digital outages and field-operations disruption.</li><li>Security review should include administrative abuse, API misuse, device loss, and unauthorized record manipulation.</li><li>Operations should be measurable enough for ministerial oversight and future audits.</li></ul>
+  <div class="footer"><span>Infrastructure and continuity posture</span><span>15</span></div>
+</section>
+<section class="page">
+  <span class="section-tag">Program risks and mitigation</span>
+  <h2>The hard parts should be named early</h2>
+  <div class="grid grid-2"><div class="card"><h3>Institutional fragmentation</h3><p>Risk: ministries or municipalities create parallel address lists. Mitigation: one national standard, formal mandate, and integration obligations.</p></div><div class="card"><h3>Poor field consistency</h3><p>Risk: teams capture inconsistent names, numbering, or coordinates. Mitigation: strong training, QA sampling, approval gates, and zone supervision.</p></div><div class="card"><h3>Political or community disputes</h3><p>Risk: contested street names, district boundaries, or numbering decisions delay adoption. Mitigation: defined appeal process and staged validation.</p></div><div class="card"><h3>Stale registry after launch</h3><p>Risk: records decay if no maintenance workflow exists. Mitigation: permanent operating model, change pipeline, and annual update funding.</p></div></div>
+  <div class="footer"><span>Program risks and mitigation</span><span>16</span></div>
+</section>
+<section class="page">
+  <span class="section-tag">Investment model</span>
+  <h2>Indicative planning budget for discussion</h2>
+  <table>
+    <thead><tr><th>Workstream</th><th>Coverage</th><th>Budget range</th></tr></thead>
+    <tbody><tr><td>Program discovery + standards</td><td>Legal/administrative model, address standard, data schema, pilot governance, operational blueprint.</td><td>$500,000 - $800,000</td></tr><tr><td>Platform architecture + registry build</td><td>Core registry, map layer, dashboard, search, verification workflow, and hosting foundation.</td><td>$1,200,000 - $1,800,000</td></tr><tr><td>Field capture tools + operations</td><td>Enumerator app, offline capture, devices/process readiness, QA workflow, team management.</td><td>$800,000 - $1,200,000</td></tr><tr><td>Pilot field execution</td><td>Pilot-zone survey, verification, signage planning data, and controlled rollout support.</td><td>$1,800,000 - $2,800,000</td></tr><tr><td>Integrations + agency onboarding</td><td>Postal, emergency, utility, planning, and reporting workflow onboarding for the pilot stage.</td><td>$500,000 - $900,000</td></tr><tr><td>Security, training, and stabilization</td><td>Role security, backups, monitoring, training, documentation, and initial support.</td><td>$400,000 - $700,000</td></tr><tr><td><strong>Indicative 9-month pilot envelope</strong></td><td><strong>Discussion budget before formal field survey and procurement refinement.</strong></td><td><strong>$5,200,000 - $8,200,000</strong></td></tr></tbody>
+  </table>
+  <p class="small">These figures reflect a top-band sovereign-infrastructure pricing posture for a serious government pilot, not a final procurement quote. Final cost depends on pilot geography, field-team size, existing base maps, hardware approach, signage scope, hosting/security posture, procurement structure, political delivery model, and ministry integration depth.</p>
+  <div class="footer"><span>Investment model</span><span>17</span></div>
+</section>
+<section class="page">
+  <span class="section-tag">Commercial structure</span>
+  <h2>Suggested engagement structure</h2>
+  <div class="grid grid-3"><div class="card"><h3>Option A — Strategic design + pilot leadership</h3><p>Lead standards, architecture, product design, vendor orchestration, and pilot operating model while government controls implementation approvals.</p></div><div class="card"><h3>Option B — Build + pilot execution support</h3><p>Deliver the platform, coordinate the pilot system rollout, train teams, and support first agency integrations under a defined mandate.</p></div><div class="card"><h3>Option C — Government task-force advisory</h3><p>Support a ministry-led or presidency-backed task force with technical direction, scope definition, procurement shaping, and architecture review.</p></div></div>
+  <h2 style="margin-top:18px">Assumptions and boundaries</h2>
+  <div class="card tight"><ul><li>Government remains the owner of the national address registry and policy standards.</li><li>Final administrative authority for naming and numbering must be defined clearly before large-scale rollout.</li><li>Existing municipal, cadastral, or utility records may be incomplete and should be treated as inputs to verify, not truth to copy blindly.</li><li>National signage manufacture and installation can be phased separately from digital registry launch if needed.</li><li>This proposal does not assume that all agencies integrate on day one; the system should launch in controlled layers.</li><li>Final procurement, legal review, and territorial policy decisions remain with government.</li></ul></div>
+  <div class="footer"><span>Commercial structure</span><span>18</span></div>
+</section>
+<section class="page">
+  <span class="section-tag">Recommendation</span>
+  <h2>Recommended next step</h2>
+  <p class="lead">Approve a structured discovery and pilot-design mandate first. The immediate objective should not be a premature nationwide rollout. It should be to define standards properly, choose pilot territories intelligently, build the national registry foundation, prove operational value in the field, and create evidence for scaled expansion with government confidence.</p>
+  <div class="callout"><p class="quote">The right first win is not “we launched a map.” The right first win is “government can now identify, verify, search, and use addresses in real operations with confidence.”</p></div>
+  <div class="footer"><span>Recommendation</span><span>19</span></div>
+</section>
+</body>
+</html>

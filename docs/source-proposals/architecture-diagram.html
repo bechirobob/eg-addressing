@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>National Digital Addressing Platform Architecture</title>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:'JetBrains Mono',monospace;background:#020617;color:#fff;padding:2rem}
+    .container{max-width:1300px;margin:0 auto}
+    .header{margin-bottom:1.5rem}
+    .header-row{display:flex;align-items:center;gap:1rem;margin-bottom:.4rem}
+    .pulse-dot{width:12px;height:12px;border-radius:50%;background:#22d3ee;animation:pulse 2s infinite}
+    @keyframes pulse{0%,100%{opacity:1}50%{opacity:.45}}
+    h1{font-size:1.5rem}.subtitle{color:#94a3b8;font-size:.9rem;margin-left:1.75rem}
+    .diagram-container,.card{background:rgba(15,23,42,.5);border:1px solid #1e293b;border-radius:16px}
+    .diagram-container{padding:1.25rem;overflow:auto}.cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1rem;margin-top:1rem}
+    .card{padding:1rem}.card-header{display:flex;align-items:center;gap:.5rem;margin-bottom:.75rem}.dot{width:8px;height:8px;border-radius:50%}
+    .cyan{background:#22d3ee}.emerald{background:#34d399}.violet{background:#a78bfa}
+    .card h3{font-size:.9rem}.card ul{list-style:none;color:#94a3b8;font-size:.78rem;line-height:1.55}
+    .footer{text-align:center;color:#475569;font-size:.75rem;margin-top:1rem}
+    svg{width:100%;min-width:1180px;display:block}
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <div class="header-row"><div class="pulse-dot"></div><h1>National Digital Addressing Platform Architecture</h1></div>
+    <p class="subtitle">Government-owned address registry, field operations, approvals, and institutional verification stack</p>
+  </div>
+  <div class="diagram-container">
+    <svg viewBox="0 0 1240 840">
+      <defs>
+        <marker id="arrow" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto"><polygon points="0 0,10 3.5,0 7" fill="#64748b"/></marker>
+        <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M40 0 L0 0 0 40" fill="none" stroke="#1e293b" stroke-width="0.5"/></pattern>
+      </defs>
+      <rect width="100%" height="100%" fill="url(#grid)"/>
+      <rect x="160" y="40" width="1040" height="720" rx="14" fill="rgba(251,191,36,.05)" stroke="#fbbf24" stroke-width="1" stroke-dasharray="8,4"/>
+      <text x="175" y="62" fill="#fbbf24" font-size="10" font-weight="600">Pilot / National Platform Environment</text>
+
+      <rect x="25" y="190" width="110" height="56" rx="6" fill="rgba(30,41,59,.5)" stroke="#94a3b8" stroke-width="1.5"/>
+      <text x="80" y="214" fill="white" font-size="11" font-weight="600" text-anchor="middle">Admins</text>
+      <text x="80" y="230" fill="#94a3b8" font-size="9" text-anchor="middle">Registry / Ministry</text>
+
+      <rect x="25" y="300" width="110" height="56" rx="6" fill="rgba(30,41,59,.5)" stroke="#94a3b8" stroke-width="1.5"/>
+      <text x="80" y="324" fill="white" font-size="11" font-weight="600" text-anchor="middle">Field Teams</text>
+      <text x="80" y="340" fill="#94a3b8" font-size="9" text-anchor="middle">Enumerators / QA</text>
+
+      <rect x="25" y="410" width="110" height="56" rx="6" fill="rgba(30,41,59,.5)" stroke="#94a3b8" stroke-width="1.5"/>
+      <text x="80" y="434" fill="white" font-size="11" font-weight="600" text-anchor="middle">Agencies</text>
+      <text x="80" y="450" fill="#94a3b8" font-size="9" text-anchor="middle">Transport / Utility / EMS</text>
+
+      <rect x="220" y="180" width="180" height="86" rx="8" fill="rgba(8,51,68,.4)" stroke="#22d3ee" stroke-width="1.5"/>
+      <text x="310" y="205" fill="white" font-size="12" font-weight="600" text-anchor="middle">Admin Portal</text>
+      <text x="310" y="224" fill="#94a3b8" font-size="9" text-anchor="middle">Next.js + TypeScript</text>
+      <text x="310" y="240" fill="#94a3b8" font-size="9" text-anchor="middle">Registry / review / reports</text>
+
+      <rect x="220" y="300" width="180" height="86" rx="8" fill="rgba(8,51,68,.4)" stroke="#22d3ee" stroke-width="1.5"/>
+      <text x="310" y="325" fill="white" font-size="12" font-weight="600" text-anchor="middle">Field App (PWA)</text>
+      <text x="310" y="344" fill="#94a3b8" font-size="9" text-anchor="middle">Mobile-first capture</text>
+      <text x="310" y="360" fill="#94a3b8" font-size="9" text-anchor="middle">Offline queue + sync</text>
+
+      <rect x="220" y="420" width="180" height="86" rx="8" fill="rgba(8,51,68,.4)" stroke="#22d3ee" stroke-width="1.5"/>
+      <text x="310" y="445" fill="white" font-size="12" font-weight="600" text-anchor="middle">Lookup / Agency UI</text>
+      <text x="310" y="464" fill="#94a3b8" font-size="9" text-anchor="middle">Scoped verification views</text>
+      <text x="310" y="480" fill="#94a3b8" font-size="9" text-anchor="middle">Approved record access</text>
+
+      <rect x="500" y="165" width="250" height="370" rx="10" fill="rgba(6,78,59,.14)" stroke="#34d399" stroke-width="1.2" stroke-dasharray="4,4"/>
+      <text x="515" y="185" fill="#34d399" font-size="10" font-weight="600">FastAPI Modular Monolith</text>
+
+      <rect x="525" y="200" width="200" height="50" rx="6" fill="rgba(6,78,59,.4)" stroke="#34d399" stroke-width="1.5"/>
+      <text x="625" y="220" fill="white" font-size="11" font-weight="600" text-anchor="middle">Auth + RBAC</text>
+      <text x="625" y="236" fill="#94a3b8" font-size="9" text-anchor="middle">users / roles / scoped policy</text>
+
+      <rect x="525" y="262" width="200" height="50" rx="6" fill="rgba(6,78,59,.4)" stroke="#34d399" stroke-width="1.5"/>
+      <text x="625" y="282" fill="white" font-size="11" font-weight="600" text-anchor="middle">Registry Core</text>
+      <text x="625" y="298" fill="#94a3b8" font-size="9" text-anchor="middle">roads / buildings / addresses</text>
+
+      <rect x="525" y="324" width="200" height="50" rx="6" fill="rgba(6,78,59,.4)" stroke="#34d399" stroke-width="1.5"/>
+      <text x="625" y="344" fill="white" font-size="11" font-weight="600" text-anchor="middle">Field Workflow</text>
+      <text x="625" y="360" fill="#94a3b8" font-size="9" text-anchor="middle">assignments / submissions / QA</text>
+
+      <rect x="525" y="386" width="200" height="50" rx="6" fill="rgba(6,78,59,.4)" stroke="#34d399" stroke-width="1.5"/>
+      <text x="625" y="406" fill="white" font-size="11" font-weight="600" text-anchor="middle">Approvals + Reporting</text>
+      <text x="625" y="422" fill="#94a3b8" font-size="9" text-anchor="middle">publish / dashboards / exports</text>
+
+      <rect x="525" y="448" width="200" height="50" rx="6" fill="rgba(6,78,59,.4)" stroke="#34d399" stroke-width="1.5"/>
+      <text x="625" y="468" fill="white" font-size="11" font-weight="600" text-anchor="middle">Integration API</text>
+      <text x="625" y="484" fill="#94a3b8" font-size="9" text-anchor="middle">verification / agency access</text>
+
+      <rect x="820" y="180" width="180" height="76" rx="8" fill="rgba(76,29,149,.4)" stroke="#a78bfa" stroke-width="1.5"/>
+      <text x="910" y="205" fill="white" font-size="12" font-weight="600" text-anchor="middle">PostgreSQL + PostGIS</text>
+      <text x="910" y="224" fill="#94a3b8" font-size="9" text-anchor="middle">official registry + spatial data</text>
+
+      <rect x="820" y="285" width="180" height="76" rx="8" fill="rgba(120,53,15,.3)" stroke="#fbbf24" stroke-width="1.5"/>
+      <text x="910" y="310" fill="white" font-size="12" font-weight="600" text-anchor="middle">Object Storage</text>
+      <text x="910" y="329" fill="#94a3b8" font-size="9" text-anchor="middle">photos / evidence / exports</text>
+
+      <rect x="820" y="390" width="180" height="76" rx="8" fill="rgba(120,53,15,.3)" stroke="#fbbf24" stroke-width="1.5"/>
+      <text x="910" y="415" fill="white" font-size="12" font-weight="600" text-anchor="middle">Redis + Worker</text>
+      <text x="910" y="434" fill="#94a3b8" font-size="9" text-anchor="middle">queues / retries / exports</text>
+
+      <rect x="820" y="510" width="180" height="86" rx="8" fill="rgba(136,19,55,.4)" stroke="#fb7185" stroke-width="1.5"/>
+      <text x="910" y="536" fill="white" font-size="12" font-weight="600" text-anchor="middle">Security + Audit</text>
+      <text x="910" y="555" fill="#94a3b8" font-size="9" text-anchor="middle">RBAC / API scopes / logs</text>
+      <text x="910" y="571" fill="#94a3b8" font-size="9" text-anchor="middle">backups / monitoring / TLS</text>
+
+      <rect x="1070" y="250" width="100" height="56" rx="6" fill="rgba(30,41,59,.5)" stroke="#94a3b8" stroke-width="1.5"/>
+      <text x="1120" y="274" fill="white" font-size="11" font-weight="600" text-anchor="middle">Transport</text>
+      <text x="1120" y="290" fill="#94a3b8" font-size="9" text-anchor="middle">verification</text>
+
+      <rect x="1070" y="330" width="100" height="56" rx="6" fill="rgba(30,41,59,.5)" stroke="#94a3b8" stroke-width="1.5"/>
+      <text x="1120" y="354" fill="white" font-size="11" font-weight="600" text-anchor="middle">Emergency</text>
+      <text x="1120" y="370" fill="#94a3b8" font-size="9" text-anchor="middle">lookup</text>
+
+      <rect x="1070" y="410" width="100" height="56" rx="6" fill="rgba(30,41,59,.5)" stroke="#94a3b8" stroke-width="1.5"/>
+      <text x="1120" y="434" fill="white" font-size="11" font-weight="600" text-anchor="middle">Utilities</text>
+      <text x="1120" y="450" fill="#94a3b8" font-size="9" text-anchor="middle">address sync</text>
+
+      <line x1="135" y1="218" x2="218" y2="218" stroke="#22d3ee" stroke-width="1.5" marker-end="url(#arrow)"/>
+      <line x1="135" y1="328" x2="218" y2="338" stroke="#22d3ee" stroke-width="1.5" marker-end="url(#arrow)"/>
+      <line x1="135" y1="438" x2="218" y2="448" stroke="#22d3ee" stroke-width="1.5" marker-end="url(#arrow)"/>
+      <line x1="400" y1="223" x2="523" y2="223" stroke="#22d3ee" stroke-width="1.5" marker-end="url(#arrow)"/>
+      <line x1="400" y1="343" x2="523" y2="349" stroke="#22d3ee" stroke-width="1.5" marker-end="url(#arrow)"/>
+      <line x1="400" y1="463" x2="523" y2="473" stroke="#22d3ee" stroke-width="1.5" marker-end="url(#arrow)"/>
+      <line x1="725" y1="287" x2="818" y2="218" stroke="#a78bfa" stroke-width="1.5" marker-end="url(#arrow)"/>
+      <line x1="725" y1="349" x2="818" y2="323" stroke="#fbbf24" stroke-width="1.5" marker-end="url(#arrow)"/>
+      <line x1="725" y1="411" x2="818" y2="428" stroke="#fbbf24" stroke-width="1.5" marker-end="url(#arrow)"/>
+      <line x1="725" y1="473" x2="1068" y2="278" stroke="#34d399" stroke-width="1.5" marker-end="url(#arrow)"/>
+      <line x1="1000" y1="278" x2="1068" y2="278" stroke="#34d399" stroke-width="1.5" marker-end="url(#arrow)"/>
+      <line x1="1000" y1="358" x2="1068" y2="358" stroke="#34d399" stroke-width="1.5" marker-end="url(#arrow)"/>
+      <line x1="1000" y1="438" x2="1068" y2="438" stroke="#34d399" stroke-width="1.5" marker-end="url(#arrow)"/>
+      <line x1="620" y1="538" x2="820" y2="553" stroke="#fb7185" stroke-width="1.5" stroke-dasharray="5,5" marker-end="url(#arrow)"/>
+      <text x="704" y="530" fill="#94a3b8" font-size="9">audit + policy enforcement</text>
+
+      <text x="1015" y="90" fill="white" font-size="10" font-weight="600">Legend</text>
+      <rect x="1015" y="102" width="16" height="10" rx="2" fill="rgba(8,51,68,.4)" stroke="#22d3ee" stroke-width="1"/><text x="1038" y="110" fill="#94a3b8" font-size="8">Frontend</text>
+      <rect x="1015" y="118" width="16" height="10" rx="2" fill="rgba(6,78,59,.4)" stroke="#34d399" stroke-width="1"/><text x="1038" y="126" fill="#94a3b8" font-size="8">Backend</text>
+      <rect x="1015" y="134" width="16" height="10" rx="2" fill="rgba(76,29,149,.4)" stroke="#a78bfa" stroke-width="1"/><text x="1038" y="142" fill="#94a3b8" font-size="8">Database</text>
+      <rect x="1015" y="150" width="16" height="10" rx="2" fill="rgba(120,53,15,.3)" stroke="#fbbf24" stroke-width="1"/><text x="1038" y="158" fill="#94a3b8" font-size="8">Storage / Ops</text>
+      <rect x="1015" y="166" width="16" height="10" rx="2" fill="rgba(136,19,55,.4)" stroke="#fb7185" stroke-width="1"/><text x="1038" y="174" fill="#94a3b8" font-size="8">Security</text>
+    </svg>
+  </div>
+  <div class="cards">
+    <div class="card"><div class="card-header"><div class="dot cyan"></div><h3>Pilot application layer</h3></div><ul><li>• Admin portal for registry, review, and reports</li><li>• Mobile-first field app for territorial capture</li><li>• Scoped lookup surfaces for agencies</li><li>• Shared auth and role scoping</li></ul></div>
+    <div class="card"><div class="card-header"><div class="dot emerald"></div><h3>Core platform services</h3></div><ul><li>• Modular monolith keeps early ops simple</li><li>• Registry, field workflow, and reporting stay in one codebase first</li><li>• Integration API is controlled, not public-by-default</li><li>• Background worker handles retries and exports</li></ul></div>
+    <div class="card"><div class="card-header"><div class="dot violet"></div><h3>Operational posture</h3></div><ul><li>• PostgreSQL + PostGIS is the source of truth</li><li>• Object storage holds field evidence and exports</li><li>• Audit, backups, TLS, and monitoring are mandatory</li><li>• Start pilot-ready, scale later without rewriting the whole thing</li></ul></div>
+  </div>
+  <p class="footer">National Digital Addressing Platform • architecture overview for software, operations, and government review</p>
+</div>
+</body>
+</html>

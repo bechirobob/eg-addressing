@@ -1,0 +1,256 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Propuesta del Sistema Nacional de Direcciones Digitales</title>
+<link rel="icon" href="data:," />
+<style>
+@page { size: A4; margin: 18mm 16mm; }
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  color: #162032;
+  font-family: "Inter", "Segoe UI", Arial, sans-serif;
+  background: #f4f7fb;
+  line-height: 1.45;
+}
+.page {
+  width: 210mm;
+  min-height: 297mm;
+  margin: 0 auto 18px;
+  background: #fff;
+  padding: 22mm 18mm 18mm;
+  position: relative;
+  overflow: hidden;
+  page-break-after: always;
+}
+.page:last-of-type { page-break-after: auto; }
+.cover {
+  background: radial-gradient(circle at 85% 12%, rgba(214, 32, 45, 0.18), transparent 28%),
+              linear-gradient(135deg, #07182e 0%, #0a315e 58%, #123d70 100%);
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.cover:before {
+  content: "";
+  position: absolute;
+  inset: auto -60mm -70mm auto;
+  width: 160mm;
+  height: 160mm;
+  border-radius: 50%;
+  border: 28mm solid rgba(255,255,255,.055);
+}
+.letter-cover {
+  background: linear-gradient(180deg, #fbfcff 0%, #f5f8fc 100%);
+}
+.flagline { display: flex; gap: 5px; margin-bottom: 22mm; }
+.flagline span { height: 6px; width: 42px; border-radius: 999px; display:block; }
+.green { background:#3c9c4a; } .white { background:#fff; } .red { background:#d6202d; } .blue { background:#2b66b1; }
+h1 { font-size: 42px; line-height: 1.04; margin: 0 0 14px; letter-spacing: -1.3px; }
+.cover h1 { max-width: 155mm; font-size: 44px; }
+.subtitle { font-size: 18px; max-width: 155mm; color: #dbeafe; }
+.letter-cover .subtitle { color: #31445f; }
+.kicker { text-transform: uppercase; letter-spacing: 1.7px; font-size: 12px; font-weight: 800; color: #83c5ff; margin-bottom: 10px; }
+.letter-cover .kicker { color: #0b315f; }
+.cover-meta { border-left: 4px solid #d6202d; padding-left: 16px; color: #eef6ff; font-size: 14px; max-width: 145mm; }
+.letter-meta { border-left: 4px solid #d6202d; padding-left: 16px; color: #31445f; font-size: 14px; max-width: 150mm; }
+h2 { font-size: 28px; margin: 0 0 12px; color:#0b315f; letter-spacing: -0.6px; }
+h3 { font-size: 16px; margin: 18px 0 8px; color:#0c3a6d; }
+p { margin: 0 0 10px; }
+.lead { font-size: 17px; color:#26384f; }
+.muted { color:#64748b; }
+.small { font-size: 11px; color:#64748b; }
+.section-tag { display:inline-block; color:#d6202d; font-weight: 800; font-size: 11px; letter-spacing: 1.2px; text-transform: uppercase; margin-bottom: 8px; }
+.grid { display:grid; gap: 12px; }
+.grid-2 { grid-template-columns: 1fr 1fr; }
+.grid-3 { grid-template-columns: repeat(3, 1fr); }
+.card { background:#f8fafc; border:1px solid #dce6f2; border-radius: 14px; padding: 14px; }
+.card.dark { background:#0b315f; color:#fff; border:0; }
+.card.dark h3 { color:#fff; }
+.stat { font-size: 29px; font-weight: 900; color:#0b315f; line-height:1.05; }
+.statlabel { font-size: 11px; text-transform: uppercase; letter-spacing:.7px; color:#64748b; margin-top:5px; }
+.dark .stat, .dark .statlabel { color:#fff; }
+ul { margin: 8px 0 0 20px; padding: 0; }
+li { margin-bottom: 6px; }
+.callout { border-left: 5px solid #d6202d; background:#f8fbff; padding: 14px 16px; border-radius: 12px; margin: 14px 0; }
+.quote { font-size: 21px; line-height: 1.3; color:#0b315f; font-weight: 800; }
+.timeline { display:grid; gap:10px; margin-top: 12px; }
+.phase { display:grid; grid-template-columns: 35mm 1fr 42mm; gap: 10px; align-items:start; padding: 12px; border:1px solid #dce6f2; border-radius: 12px; background:#fbfdff; }
+.phase strong { color:#0b315f; }
+.price { font-size: 17px; font-weight:900; color:#d6202d; text-align:right; }
+table { width:100%; border-collapse: collapse; margin-top: 10px; font-size: 12px; }
+th { background:#0b315f; color:#fff; text-align:left; padding:9px; }
+td { border-bottom:1px solid #dce6f2; padding:8px 9px; vertical-align: top; }
+.footer { position:absolute; bottom: 9mm; left:18mm; right:18mm; display:flex; justify-content:space-between; color:#8a97a8; font-size:10px; border-top:1px solid #e2e8f0; padding-top:6px; }
+.footer span:last-child { display: none; }
+.signature { margin-top: 24px; padding-top: 12px; border-top: 1px solid #dce6f2; }
+.tight li { margin-bottom: 4px; }
+.letter-body { font-size: 15px; color:#24354f; }
+.letter-body p { margin-bottom: 14px; }
+.letter-body .recipient { margin-bottom: 18px; }
+@media print {
+  body { background: #fff; }
+  .page { width: 210mm; min-height: 297mm; margin: 0; page-break-after: always; break-after: page; }
+  .page:last-of-type { page-break-after: auto; break-after: auto; }
+}
+</style>
+</head>
+<body>
+<section class="page cover">
+  <div>
+    <div class="flagline"><span class="green"></span><span class="white"></span><span class="red"></span><span class="blue"></span></div>
+    <div class="kicker">Propuesta confidencial de discusión</div>
+    <h1>Propuesta del Sistema Nacional de Direcciones Digitales</h1>
+    <p class="subtitle">Un programa nacional de infraestructura de direcciones, propiedad del Estado, para Guinea Ecuatorial — otorgando a cada vivienda, edificio, empresa, institución y punto de servicio una dirección física y digital oficial.</p>
+  </div>
+  <div class="cover-meta">
+    <p><strong>Preparado para el Ministerio de Transportes por solicitud del Vicepresidente</strong></p>
+    <p>Objetivo: establecer un registro nacional de direcciones y una capa geoespacial de servicio que apoye la distribución postal, la respuesta de emergencia, la planificación, la logística, los servicios públicos, los servicios digitales del Estado y la modernización nacional.</p>
+    <p>Preparado por: Benjamin Bob Bechiro<br/>Iniciador del proyecto<br/>Teléfono: +240 555 605 331<br/>Correo: bechirobob@gmail.com<br/>Fecha: junio de 2026</p>
+  </div>
+</section>
+<section class="page">
+  <span class="section-tag">Nota del autor</span>
+  <h2>Una propuesta patriótica de infraestructura para el orden nacional, la visibilidad y la prestación de servicios</h2>
+  <p class="lead">Todo Estado moderno y serio necesita una forma confiable de identificar lugares. Sin un sistema de direcciones fiable, las viviendas siguen siendo difíciles de localizar, los servicios siguen siendo difíciles de prestar y la planificación nacional permanece más lenta, más manual y menos controlable de lo que debería.</p>
+  <div class="callout"><p class="quote">Carreteras, viviendas, edificios públicos, empresas y futuras ciudades ya existen. Lo que falta es un lenguaje nacional compartido de localización en el que puedan confiar y que puedan utilizar el gobierno, los ciudadanos, los equipos de emergencia, los mensajeros, los servicios públicos y los inversores.</p></div>
+  <p>Esta propuesta no trata solo de colocar placas en las calles. Trata de construir una capa nacional de identidad de ubicación: un sistema autoritativo para la numeración de viviendas, la denominación de calles, el registro de edificios, la geolocalización, la codificación postal y la verificación buscable de direcciones.</p>
+  <p>Un país que desea una logística más fuerte, una mejor respuesta de emergencia, registros más limpios, servicios públicos más eficientes y un entorno empresarial más preparado para la inversión no debe dejar las direcciones en un estado informal o fragmentado. La dirección es infraestructura fundamental.</p>
+  <p>Guinea Ecuatorial tiene la oportunidad de hacerlo con dignidad y disciplina: empezar con un piloto controlado, definir correctamente los estándares, mantener la propiedad gubernamental del registro y escalar por fases con trazabilidad y realismo operativo.</p>
+  <div class="callout"><p><strong>Perfil del iniciador del proyecto: Benjamin Bob Bechiro cursó la educación secundaria en Archimedes International College en Accra, Ghana, donde fue Jefe del Departamento de Ciencias en su último año. Posee un Diploma en Ingeniería de Software por la University of Staffordshire y una Licenciatura Honorífica en Ingeniería de Software por Coventry University en el Reino Unido. Su trabajo tecnológico privado incluye plataformas terminadas para Joscol y Martínez Hermanos, enfocadas en comercio digital, operaciones, flujos de trabajo y sistemas de prestación de servicios.</strong></p></div>
+  <div class="signature"><p><strong>Respetuosamente presentado,</strong></p><p>Benjamin Bob Bechiro<br/>Iniciador del proyecto<br/>Teléfono: +240 555 605 331<br/>Correo: bechirobob@gmail.com</p></div>
+  <div class="footer"><span>Propuesta del Sistema Nacional de Direcciones Digitales</span><span>2</span></div>
+</section>
+<section class="page">
+  <span class="section-tag">Resumen ejecutivo</span>
+  <h2>No es un proyecto de mapa: es una capa operativa nacional de direcciones</h2>
+  <p class="lead">El programa recomendado es un Sistema Nacional de Direcciones Digitales por fases, liderado por el Estado y diseñado para convertirse en la fuente autoritativa de identidad de localización en toda Guinea Ecuatorial.</p>
+  <div class="grid grid-2"><div class="card"><h3>Para los ciudadanos</h3><ul><li>Conocer y compartir una dirección oficial clara.</li><li>Recibir entregas, visitas de servicios públicos y respuesta de emergencia con mayor fiabilidad.</li><li>Verificar y corregir registros de dirección mediante un canal controlado.</li></ul></div><div class="card"><h3>Para ministerios y municipios</h3><ul><li>Mantener un solo registro confiable en lugar de listas locales fragmentadas.</li><li>Supervisar cobertura, verificación, vacíos y avance de campo.</li><li>Conectar las direcciones con permisos, impuestos, censo, tierras y flujos de servicio.</li></ul></div><div class="card"><h3>Para logística y servicios públicos</h3><ul><li>Reducir entregas y visitas fallidas.</li><li>Planificar rutas, zonas y despacho con coordenadas verificadas.</li><li>Integrar APIs de direcciones aprobadas en las operaciones con el tiempo.</li></ul></div><div class="card"><h3>Para el liderazgo nacional</h3><ul><li>Crear visibilidad medible sobre la cobertura territorial.</li><li>Apoyar la planificación urbana, las decisiones de infraestructura y la preparación de servicios públicos.</li><li>Reforzar la soberanía digital mediante un registro propiedad del Estado.</li></ul></div></div>
+  <div class="callout"><p><strong>Propuesta central: aprobar un piloto de 9 meses que cubra estándares, captura de campo, construcción del registro e integración inicial de servicios públicos en zonas prioritarias de Malabo, y después escalar hacia un despliegue nacional por fases de 3 años en Bata, Oyala/Ciudad de la Paz y todas las provincias.</strong></p></div>
+  <div class="footer"><span>Resumen ejecutivo</span><span>3</span></div>
+</section>
+<section class="page">
+  <span class="section-tag">Por qué ahora</span>
+  <h2>El país necesita una forma confiable de identificar lugares</h2>
+  <p>Las direcciones afectan mucho más que el correo. Un sistema débil ralentiza casi todos los servicios que dependen de encontrar correctamente a personas, propiedades o instalaciones.</p>
+  <div class="grid grid-3"><div class="card"><div class="stat">Servicios públicos</div><div class="statlabel">Necesitan certeza de ubicación para permisos, inspecciones, notificaciones y respuesta.</div></div><div class="card"><div class="stat">Respuesta de emergencia</div><div class="statlabel">Necesita identificación rápida y sin ambigüedad de edificios y rutas.</div></div><div class="card"><div class="stat">Servicios públicos básicos</div><div class="statlabel">Necesitan puntos de servicio precisos para instalación, registros de medidores y mantenimiento.</div></div><div class="card"><div class="stat">Comercio y logística</div><div class="statlabel">Necesitan direcciones confiables para despacho, entrega y conciliación.</div></div><div class="card"><div class="stat">Planificación y censo</div><div class="statlabel">Necesitan unidades territoriales consistentes y registros verificados de edificios.</div></div><div class="card"><div class="stat">Ciudades futuras</div><div class="statlabel">No deben heredar confusión de direcciones basada en papel.</div></div></div>
+  <h3>Qué significa esto</h3>
+  <ul><li>Si las direcciones siguen siendo informales, todos los servicios digitales construidos sobre ellas serán más débiles y más costosos de operar.</li><li>Un registro nacional de direcciones debe tratarse como infraestructura fundamental, al mismo nivel que carreteras, catastro y directorios de servicio público.</li><li>Un flujo de trabajo móvil para el terreno es obligatorio porque la verificación ocurre en el territorio, no solo en oficinas.</li><li>La gobernanza de datos y las reglas de verificación importan tanto como el software. Un mal registro a gran escala se convierte en un problema nacional.</li></ul>
+  <div class="footer"><span>Por qué ahora</span><span>4</span></div>
+</section>
+<section class="page">
+  <span class="section-tag">Oportunidad nacional</span>
+  <h2>Oyala / Ciudad de la Paz debe nacer preparada para direcciones formales</h2>
+  <p class="lead">Una capital administrativa orientada al futuro no debe depender de indicaciones vagas, puntos de referencia improvisados y registros locales desconectados. Debe abrir con un modelo formal de identidad de localización ya integrado en sus operaciones.</p>
+  <div class="callout"><p class="quote">Si una nueva capital representa el futuro de la nación, entonces cada parcela, edificio, carretera, sede ministerial y punto de servicio dentro de ella debe ser identificable, buscable y preparado para el servicio desde el diseño.</p></div>
+  <div class="grid grid-2"><div class="card"><h3>Administración pública digital por defecto</h3><p>Permisos, inspecciones, notificaciones públicas y coordinación interministerial funcionan mejor cuando las ubicaciones están formalmente identificadas.</p></div><div class="card"><h3>Preparación para emergencia y seguridad</h3><p>Los equipos de respuesta necesitan referencias precisas de edificios, lógica de rutas y conocimiento de zonas, especialmente en distritos administrativos en expansión.</p></div><div class="card"><h3>Prestación de infraestructuras y servicios</h3><p>Agua, electricidad, telecomunicaciones, carreteras, saneamiento y mantenimiento se benefician inmediatamente de registros listos para el servicio.</p></div><div class="card"><h3>Confianza de inversores y residentes</h3><p>Una ciudad fácil de navegar, verificar y atender proyecta seriedad y madurez administrativa.</p></div></div>
+  <div class="footer"><span>Oportunidad nacional</span><span>5</span></div>
+</section>
+<section class="page">
+  <span class="section-tag">Modelo de plataforma</span>
+  <h2>Qué debe contener el sistema nacional</h2>
+  <table>
+    <thead><tr><th>Capa</th><th>Capacidad</th><th>Valor nacional</th></tr></thead>
+    <tbody><tr><td>Registro nacional de direcciones</td><td>Registros autoritativos de edificios, parcelas, calles y zonas con jerarquía administrativa y estado de verificación.</td><td>Aporta una sola fuente nacional de verdad.</td></tr><tr><td>Capa geoespacial</td><td>Mapa interactivo de carreteras, distritos, edificios, parcelas, puntos de referencia y puntos de servicio.</td><td>Hace utilizable el registro tanto en campo como en oficinas de planificación.</td></tr><tr><td>Aplicación de captura de campo</td><td>Flujo móvil/tableta para que los enumeradores capturen edificios, fotos, coordenadas, propuestas de nombres y estado de validación.</td><td>Permite un despliegue territorial estructurado y captura offline.</td></tr><tr><td>Motor de códigos de dirección</td><td>Genera formatos oficiales de dirección, códigos cortos, etiquetas imprimibles y referencias de señalización.</td><td>Mantiene estándares consistentes entre ministerios y municipios.</td></tr><tr><td>Panel de operaciones</td><td>Métricas de cobertura, colas de aprobación, detección de duplicados, productividad de equipos, retrasos de verificación e informes.</td><td>Da visibilidad y control operativo al liderazgo.</td></tr><tr><td>Acceso ciudadano e institucional</td><td>Búsqueda, verificación, solicitud de corrección, impresión de comprobantes y acceso API aprobado para operadores de servicios.</td><td>Impulsa adopción real más allá del registro mismo.</td></tr><tr><td>Pasarela de integración</td><td>Interfaces controladas para correos, servicios básicos, emergencias, impuestos, tierras, planificación y logística.</td><td>Evita que el sistema de direcciones se convierta en una base de datos aislada.</td></tr></tbody>
+  </table>
+  <div class="footer"><span>Modelo de plataforma</span><span>6</span></div>
+</section>
+<section class="page">
+  <span class="section-tag">Ventajas nacionales</span>
+  <h2>Por qué beneficia a todo el país</h2>
+  <p class="lead">Un buen sistema de direcciones es una infraestructura silenciosa: cuando funciona, todo lo que está encima se vuelve más fácil de encontrar, enrutar, verificar, inspeccionar, entregar y mejorar.</p>
+  <div class="grid grid-2"><div class="card"><h3>Mejor prestación de servicios públicos</h3><p>Las agencias pueden emitir, inspeccionar, enrutar y dar seguimiento con una identidad de localización más clara.</p></div><div class="card"><h3>Respuesta de emergencia más rápida</h3><p>Ambulancias, policía y bomberos obtienen un modelo operativo de referencia más fiable.</p></div><div class="card"><h3>Actividad económica más fuerte</h3><p>Empresas, repartidores y proveedores pierden menos tiempo intentando localizar personas y lugares.</p></div><div class="card"><h3>Registros nacionales más limpios</h3><p>Propiedad, tierras, permisos, cuentas de servicio y censo obtienen una columna vertebral común de direcciones.</p></div><div class="card"><h3>Turismo y navegación</h3><p>Los visitantes entienden mejor cómo llegar a hoteles, oficinas, eventos y servicios con menos fricción.</p></div><div class="card"><h3>Soberanía digital</h3><p>El Estado mantiene la propiedad y control de un conjunto de datos nacionales estratégicos.</p></div></div>
+  <div class="footer"><span>Ventajas nacionales</span><span>7</span></div>
+</section>
+<section class="page">
+  <span class="section-tag">Hoja de ruta</span>
+  <h2>Despliegue por fases recomendado</h2>
+  <div class="timeline"><div class="phase"><strong>Fase 1</strong><div><strong>Estándares + diseño del piloto</strong><br>Definir estándares de dirección, modelo de gobernanza, esquema de datos, reglas de señalización, zonas piloto, metodología de campo y modelo operativo ministerial.</div><div class="price">3 meses</div></div><div class="phase"><strong>Fase 2</strong><div><strong>Captura piloto + construcción del registro</strong><br>Capturar calles y edificios en zonas piloto, verificar nombres/números, lanzar el registro y conectar primeros flujos de trabajo gubernamentales.</div><div class="price">6 meses</div></div><div class="phase"><strong>Fase 3</strong><div><strong>Escala Malabo + Bata</strong><br>Expandir a distritos urbanos prioritarios, reforzar paneles e incorporar servicios públicos, respuesta de emergencia y flujos postales.</div><div class="price">9-12 meses</div></div><div class="phase"><strong>Fase 4</strong><div><strong>Expansión nacional</strong><br>Desplegar provincia por provincia con control de contratistas, QA, capacitación e integraciones aprobadas.</div><div class="price">12-24 meses</div></div><div class="phase"><strong>Fase 5</strong><div><strong>Operación de largo plazo</strong><br>Mantener el registro, gobernar actualizaciones, soportar nuevos desarrollos y evolucionar integraciones institucionales.</div><div class="price">Continuo</div></div></div>
+  <div class="footer"><span>Hoja de ruta</span><span>8</span></div>
+</section>
+<section class="page">
+  <span class="section-tag">Gobernanza y seguridad</span>
+  <h2>Esto debe tratarse como infraestructura nacional de confianza</h2>
+  <div class="grid grid-2"><div class="card"><h3>Propiedad estatal del registro</h3><ul><li>La base de datos central de direcciones debe permanecer bajo control formal del Estado.</li><li>Los proveedores externos pueden apoyar la ejecución, pero no deben poseer la fuente nacional de verdad.</li></ul></div><div class="card"><h3>Modelo de dirección interministerial</h3><ul><li>Transporte, interior/administración local, planificación, tierras, correos, telecomunicaciones, emergencias y municipios deben alinear estándares desde el inicio.</li><li>Es necesario un patrocinador principal, pero el sistema sirve a muchas instituciones.</li></ul></div><div class="card"><h3>Verificación antes de publicar</h3><ul><li>Ningún registro de edificio debe considerarse autoritativo sin reglas definidas de validación.</li><li>Duplicados, conflictos de nombres y coordenadas no verificadas deben controlarse operativamente.</li></ul></div><div class="card"><h3>Seguridad y trazabilidad</h3><ul><li>Acceso por roles, bitácoras de cambios, copias de seguridad, manejo de incidentes e historial de aprobaciones son obligatorios.</li><li>Los datos estratégicos de localización no deben dispersarse en hojas de cálculo personales o silos de contratistas.</li></ul></div></div>
+  <h2 style="margin-top:18px">Modelo piloto: Qué debe demostrar el primer piloto</h2>
+  <ul><li>Que el gobierno puede definir y aprobar un estándar nacional de dirección utilizable.</li><li>Que los equipos de campo pueden capturar carreteras, edificios y coordenadas con un flujo repetible.</li><li>Que el registro puede buscar, verificar e imprimir direcciones oficiales de forma fiable.</li><li>Que al menos un flujo ministerial, un caso de uso de emergencia y un caso de utilidad/logística pueden operar sobre los datos piloto.</li><li>Que el liderazgo puede ver cobertura medible, tasa de verificación, atrasos y señales de coste antes de la expansión nacional.</li></ul>
+  <div class="callout"><p>Geografía piloto recomendada: zonas prioritarias de Malabo, un distrito con alta concentración de servicios públicos, un área urbana en crecimiento y una zona controlada en Oyala/Ciudad de la Paz para demostrar preparación de ciudad futura.</p></div>
+  <div class="footer"><span>Gobernanza y seguridad</span><span>9</span></div>
+</section>
+<section class="page">
+  <span class="section-tag">Marco legal y regulatorio</span>
+  <h2>El registro necesita fuerza legal, no solo software</h2>
+  <div class="grid grid-2"><div class="card"><h3>Modelo de autoridad nacional</h3><p>El Estado debe designar la autoridad principal que aprueba los estándares de dirección, las reglas de denominación, la política de numeración y las obligaciones de uso interinstitucional.</p></div><div class="card"><h3>Límites de ejecución municipal</h3><p>Los municipios deben participar en la denominación de calles, la validación local y el reporte de mantenimiento bajo un estándar nacional común, no inventando sistemas incompatibles.</p></div><div class="card"><h3>Valor oficial del comprobante de dirección</h3><p>El programa debe definir cuándo un registro de dirección se considera válido para residencia, contratación de servicios, inspecciones, entregas y correspondencia administrativa.</p></div><div class="card"><h3>Apelaciones y correcciones</h3><p>Debe existir un proceso formal para disputas sobre nombres, numeración, duplicados, conflictos parcelarios y solicitudes de corrección de residentes.</p></div></div>
+  <ul><li>Un decreto, reglamento o mandato equivalente debe definir la propiedad del estándar, la autoridad de aprobación, los derechos de actualización y las obligaciones institucionales de uso del registro.</li><li>La denominación de calles, la numeración de edificios y las reglas de zonificación distrital deben documentarse con control de versiones y disciplina de publicación.</li><li>La capa legal debe aclarar cómo interactúa el registro de direcciones con catastro, tierras, impuestos, censo y registros municipales.</li><li>No debe haber despliegue nacional sin un reglamento claro sobre autoridad, apelación y responsabilidad de actualización.</li></ul>
+  <div class="footer"><span>Marco legal y regulatorio</span><span>10</span></div>
+</section>
+<section class="page">
+  <span class="section-tag">Despliegue físico y señalización</span>
+  <h2>La capa física debe ser operativamente real</h2>
+  <div class="grid grid-2"><div class="card"><h3>Señalización de calles y distritos</h3><p>El programa debe definir formatos, reflectividad, materiales, estándares de instalación, ciclos de mantenimiento y flujo de reposición para señalización dañada o ausente.</p></div><div class="card"><h3>Operación de numeración de edificios</h3><p>Las reglas de asignación deben manejar recintos, esquinas, bloques de apartamentos, plantas comerciales, agrupaciones informales y futuras subdivisiones sin caer en inconsistencia.</p></div><div class="card"><h3>Modelo de instalación del piloto a la escala</h3><p>El lanzamiento del registro digital puede preceder a la finalización total de la señalización nacional, pero la secuencia física igualmente debe planificarse por zona, contratista y lote de inspección.</p></div><div class="card"><h3>QA de campo y aceptación</h3><p>Cada señal instalada y cada grupo numerado de edificios debe poder auditarse contra registros aprobados, evidencia fotográfica e informes de aceptación de campo.</p></div></div>
+  <ul><li>Las especificaciones de fabricación deben estandarizarse a nivel nacional para evitar diseños fragmentados y calidad inconsistente.</li><li>Los contratistas de instalación deben trabajar con paquetes zonales listos para levantamiento, no con instrucciones improvisadas.</li><li>Debe planificarse desde el principio un flujo de reposición y respuesta ante vandalismo.</li><li>El inventario físico de señalización debe permanecer vinculado a los IDs del registro para trazabilidad y mantenimiento futuro.</li></ul>
+  <div class="footer"><span>Despliegue físico y señalización</span><span>11</span></div>
+</section>
+<section class="page">
+  <span class="section-tag">Modelo detallado de integración</span>
+  <h2>El sistema de direcciones debe conectarse con operaciones reales</h2>
+  <div class="grid grid-2"><div class="card"><h3>Transformación postal</h3><p>Los flujos postales deben pasar de rutas vagas a clasificación, planeamiento de ruta, confirmación de entrega y mejora de cobertura apoyados en direcciones.</p></div><div class="card"><h3>Despacho de emergencias</h3><p>Policía, bomberos y ambulancias deben recibir referencias buscables, lógica de zonas e identificadores de localización aptos para despacho dentro de sus herramientas operativas.</p></div><div class="card"><h3>Servicios públicos y mantenimiento de campo</h3><p>Electricidad, agua, saneamiento, telecomunicaciones y equipos de medición deben vincular puntos de servicio con registros verificados para reducir visitas fallidas y registros huérfanos.</p></div><div class="card"><h3>Tierras, impuestos y planificación</h3><p>Catastro, permisos, tributación y planificación deben reconciliar parcelas y edificios con la columna vertebral de direcciones en lugar de mantener identidades de lugar separadas.</p></div><div class="card"><h3>Canales al ciudadano</h3><p>Centros de llamadas, ventanillas, búsqueda web, comprobantes impresos, avisos por SMS/WhatsApp y canales asistidos de verificación deben referenciar el mismo registro oficial.</p></div><div class="card"><h3>Habilitación del sector privado</h3><p>APIs aprobadas y contratos de acceso a datos deben apoyar logística, bancos, aseguradoras, comercio electrónico y grandes empleadores sin perder el control estatal del registro.</p></div></div>
+  <div class="footer"><span>Modelo detallado de integración</span><span>12</span></div>
+</section>
+<section class="page">
+  <span class="section-tag">Modelo operativo nacional</span>
+  <h2>El software por sí solo no operará el sistema</h2>
+  <div class="grid grid-2"><div class="card"><h3>Modelo de fuerza de campo</h3><p>Enumeradores, supervisores, líderes de QA, validadores municipales y operadores centrales del registro deben tener responsabilidades definidas, rutas de escalado y estructura diaria de reporte.</p></div><div class="card"><h3>Formación y certificación</h3><p>Usuarios de campo y de oficina deben formarse en estándares de captura, reglas de verificación, manejo de excepciones y uso seguro de dispositivos y datos.</p></div><div class="card"><h3>Comando de despliegue por zonas</h3><p>El país debe dividirse en zonas operables con puertas de preparación, reporte de avance y aceptación firmada antes de expandirse.</p></div><div class="card"><h3>Mesa de servicio y operación del registro</h3><p>Una mesa de servicio nacional debe gestionar correcciones, investigaciones de duplicados, provisión de accesos, incidencias de soporte y actualizaciones controladas.</p></div></div>
+  <ul><li>Inventario de dispositivos, planes de datos/SIM, transporte y ratios de supervisión deben presupuestarse como realidades operativas, no como supuestos ocultos.</li><li>Un ritmo diario y semanal de informes debe medir volumen de captura, calidad de validación, excepciones y zonas bloqueadas.</li><li>Los equipos de campo deben trabajar desde mapas base aprobados, paquetes de tareas y reglas de denominación/numeración, no desde juicio informal personal.</li><li>El modelo operativo debe sostener tanto la ejecución piloto como el mantenimiento nacional de largo plazo.</li></ul>
+  <div class="footer"><span>Modelo operativo nacional</span><span>13</span></div>
+</section>
+<section class="page">
+  <span class="section-tag">Calidad de datos y control de ciclo de vida</span>
+  <h2>Los malos registros a escala se convierten en una responsabilidad nacional</h2>
+  <div class="grid grid-2"><div class="card"><h3>Estados de confianza y verificación</h3><p>Cada registro debe llevar estados como capturado, pendiente de revisión, aprobado, en disputa, corregido, retirado o sustituido.</p></div><div class="card"><h3>Manejo de duplicados y conflictos</h3><p>La plataforma debe señalar coordenadas superpuestas, nombres conflictivos, huecos sospechosos de numeración y relaciones disputadas entre parcela y edificio antes de publicar.</p></div><div class="card"><h3>Gobernanza de actualizaciones</h3><p>Nuevos desarrollos, demoliciones, rezonificación y cambios administrativos de nombre deben alimentar una canalización controlada de actualización con historial auditable.</p></div><div class="card"><h3>Ciclo de revalidación</h3><p>El sistema debe incluir revisiones periódicas en áreas urbanas de cambio rápido para que los registros sigan siendo útiles y no queden obsoletos tras el primer lanzamiento.</p></div></div>
+  <ul><li>La garantía de calidad debe usar scorecards, revisión fotográfica, muestreo y controles puntuales de supervisores.</li><li>Cada lote provincial o urbano debe superar umbrales de aceptación antes de declararse operativo.</li><li>Un registro nacional de correcciones debe impedir deriva silenciosa de datos y ediciones locales sin control.</li><li>El historial de versiones debe apoyar la defensa legal y la confianza operativa.</li></ul>
+  <div class="footer"><span>Calidad de datos y control de ciclo de vida</span><span>14</span></div>
+</section>
+<section class="page">
+  <span class="section-tag">Infraestructura y continuidad</span>
+  <h2>Un registro soberano necesita planificación de continuidad</h2>
+  <div class="grid grid-2"><div class="card"><h3>Elección del modelo de hosting</h3><p>El gobierno debe elegir deliberadamente entre hosting soberano, centro de datos local confiable, nube híbrida u otro modelo aprobado según control, resiliencia y realidad de contratación.</p></div><div class="card"><h3>Recuperación ante desastres</h3><p>Los backups no bastan. El programa debe definir objetivos de recuperación, procedimientos de failover, pruebas seguras de restauración y responsabilidades de continuidad.</p></div><div class="card"><h3>Control de acceso y endurecimiento de seguridad</h3><p>Autenticación, límites por rol, cifrado, custodia de claves, gestión de endpoints y política de logs deben tratarse como controles esenciales de infraestructura.</p></div><div class="card"><h3>Monitoreo y preparación para auditoría</h3><p>La salud del sistema, fallos de sincronización, ediciones sospechosas, uso de API, retrasos de carga de campo y eventos de caída deben ser observables casi en tiempo real.</p></div></div>
+  <ul><li>El registro no debe depender de portátiles no gestionados, hojas de cálculo privadas o exportaciones sin documentación.</li><li>La continuidad de negocio debe cubrir tanto caídas digitales como interrupciones de operación de campo.</li><li>La revisión de seguridad debe incluir abuso administrativo, mal uso de API, pérdida de dispositivos y manipulación no autorizada de registros.</li><li>La operación debe ser medible al nivel que exige la supervisión ministerial y futuras auditorías.</li></ul>
+  <div class="footer"><span>Infraestructura y continuidad</span><span>15</span></div>
+</section>
+<section class="page">
+  <span class="section-tag">Riesgos del programa y mitigación</span>
+  <h2>Las partes difíciles deben nombrarse desde el inicio</h2>
+  <div class="grid grid-2"><div class="card"><h3>Fragmentación institucional</h3><p>Riesgo: ministerios o municipios crean listas paralelas. Mitigación: estándar nacional único, mandato formal y obligaciones de integración.</p></div><div class="card"><h3>Baja consistencia de campo</h3><p>Riesgo: los equipos capturan nombres, numeración o coordenadas inconsistentes. Mitigación: formación fuerte, muestreo QA, puertas de aprobación y supervisión zonal.</p></div><div class="card"><h3>Disputas políticas o comunitarias</h3><p>Riesgo: conflictos sobre nombres de calles, límites distritales o numeración retrasan la adopción. Mitigación: proceso definido de apelación y validación escalonada.</p></div><div class="card"><h3>Registro obsoleto tras el lanzamiento</h3><p>Riesgo: los datos se degradan si no existe flujo de mantenimiento. Mitigación: modelo operativo permanente, canal de cambios y financiación anual de actualización.</p></div></div>
+  <div class="footer"><span>Riesgos del programa y mitigación</span><span>16</span></div>
+</section>
+<section class="page">
+  <span class="section-tag">Modelo de inversión</span>
+  <h2>Presupuesto indicativo de planificación para discusión</h2>
+  <table>
+    <thead><tr><th>Área de trabajo</th><th>Cobertura</th><th>Rango presupuestario</th></tr></thead>
+    <tbody><tr><td>Descubrimiento del programa + estándares</td><td>Modelo legal/administrativo, estándar de dirección, esquema de datos, gobernanza piloto y plano operativo.</td><td>$500,000 - $800,000</td></tr><tr><td>Arquitectura de plataforma + construcción del registro</td><td>Registro central, capa cartográfica, panel, búsqueda, verificación y base de hosting.</td><td>$1,200,000 - $1,800,000</td></tr><tr><td>Herramientas de campo + operaciones</td><td>App de enumeradores, captura offline, preparación de dispositivos/procesos, QA y gestión de equipos.</td><td>$800,000 - $1,200,000</td></tr><tr><td>Ejecución del piloto</td><td>Levantamiento en zonas piloto, verificación, datos para señalización y soporte al despliegue controlado.</td><td>$1,800,000 - $2,800,000</td></tr><tr><td>Integraciones + incorporación institucional</td><td>Correos, emergencias, servicios básicos, planificación e incorporación de informes para la etapa piloto.</td><td>$500,000 - $900,000</td></tr><tr><td>Seguridad, capacitación y estabilización</td><td>Seguridad por roles, backups, monitoreo, formación, documentación y soporte inicial.</td><td>$400,000 - $700,000</td></tr><tr><td><strong>Envolvente indicativa del piloto de 9 meses</strong></td><td><strong>Presupuesto de discusión antes del afinamiento formal de campo y contratación.</strong></td><td><strong>$5,200,000 - $8,200,000</strong></td></tr></tbody>
+  </table>
+  <p class="small">Estas cifras reflejan una postura de precio de banda alta para infraestructura soberana en un piloto gubernamental serio, no una cotización final de contratación. El coste final depende de la geografía del piloto, el tamaño de los equipos de campo, la calidad cartográfica existente, el enfoque de hardware, el alcance de la señalización, la postura de hosting/seguridad, la estructura de contratación, el modelo político de ejecución y la profundidad de integración ministerial.</p>
+  <div class="footer"><span>Modelo de inversión</span><span>17</span></div>
+</section>
+<section class="page">
+  <span class="section-tag">Estructura de colaboración</span>
+  <h2>Modalidad sugerida de compromiso</h2>
+  <div class="grid grid-3"><div class="card"><h3>Opción A — Diseño estratégico + liderazgo del piloto</h3><p>Dirigir estándares, arquitectura, diseño de producto, orquestación de proveedores y modelo operativo piloto mientras el gobierno controla aprobaciones de implementación.</p></div><div class="card"><h3>Opción B — Construcción + apoyo a la ejecución del piloto</h3><p>Entregar la plataforma, coordinar el despliegue del sistema piloto, formar equipos y apoyar las primeras integraciones institucionales bajo un mandato definido.</p></div><div class="card"><h3>Opción C — Asesoría a una comisión gubernamental</h3><p>Apoyar una comisión liderada por el ministerio o respaldada por la Presidencia con dirección técnica, definición de alcance, estructuración de contratación y revisión de arquitectura.</p></div></div>
+  <h2 style="margin-top:18px">Supuestos y límites</h2>
+  <div class="card tight"><ul><li>El gobierno sigue siendo propietario del registro nacional de direcciones y de los estándares de política.</li><li>La autoridad administrativa final para nombrar y numerar debe definirse claramente antes del despliegue a gran escala.</li><li>Los registros municipales, catastrales o de servicios existentes pueden estar incompletos y deben tratarse como insumos a verificar, no como verdad para copiar ciegamente.</li><li>La fabricación e instalación nacional de señalización puede desarrollarse por separado del lanzamiento del registro digital si es necesario.</li><li>Esta propuesta no supone que todas las instituciones se integren el día uno; el sistema debe lanzarse por capas controladas.</li><li>La contratación final, la revisión legal y las decisiones de política territorial corresponden al gobierno.</li></ul></div>
+  <div class="footer"><span>Estructura de colaboración</span><span>18</span></div>
+</section>
+<section class="page">
+  <span class="section-tag">Recomendación</span>
+  <h2>Siguiente paso recomendado</h2>
+  <p class="lead">Aprobar primero un mandato estructurado de descubrimiento y diseño del piloto. El objetivo inmediato no debe ser un despliegue nacional prematuro. Debe ser definir bien los estándares, elegir inteligentemente los territorios piloto, construir la base del registro nacional, demostrar valor operativo en el terreno y generar evidencia para una expansión escalada con confianza gubernamental.</p>
+  <div class="callout"><p class="quote">La primera victoria correcta no es “lanzamos un mapa”. La primera victoria correcta es “el gobierno ya puede identificar, verificar, buscar y usar direcciones en operaciones reales con confianza”.</p></div>
+  <div class="footer"><span>Recomendación</span><span>19</span></div>
+</section>
+</body>
+</html>

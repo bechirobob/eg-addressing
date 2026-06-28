@@ -1,0 +1,134 @@
+'use client';
+
+import { useMemo, useState } from 'react';
+import { useRouter } from 'next/navigation';
+
+import { defaultRouteForRole } from './site-data';
+import { demoCredentials, setStoredToken } from './demoAuth';
+import { resolveBrowserApiBaseUrl } from './sessionClient';
+
+type LoginPanelProps = {
+  apiBaseUrl: string;
+};
+
+export function LoginPanel({ apiBaseUrl }: LoginPanelProps) {
+  const router = useRouter();
+  const browserApiBaseUrl = resolveBrowserApiBaseUrl(apiBaseUrl);
+  const [username, setUsername] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
+  const [notice, setNotice] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const credentialRows = useMemo(() => demoCredentials, []);
+
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    setIsSubmitting(true);
+    setNotice(null);
+    setError(null);
+
+    try {
+      const response = await fetch(`${browserApiBaseUrl}/api/v1/auth/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password }),
+      });
+      const payload = (await response.json()) as { token?: string; user?: { role: string }; detail?: string };
+
+      if (!response.ok || !payload.token) {
+        setError(payload.detail ?? 'Login failed.');
+        return;
+      }
+
+      setStoredToken(payload.token);
+      const nextRoute = defaultRouteForRole((payload.user?.role as 'viewer' | 'editor' | 'admin' | undefined) ?? 'viewer');
+      setNotice(`Signed in as ${username} (${payload.user?.role ?? 'unknown role'}). Opening your administration workspace…`);
+      router.push(nextRoute);
+      router.refresh();
+    } catch {
+      setError('Network error while signing in.');
+    } finally {
+      setIsSubmitting(false);
+    }
+  }
+
+  return (
+    <section className="section-grid single-column-grid">
+      <article className="panel panel-accent-blue">
+        <div className="panel-head">
+          <p className="section-label">Platform access</p>
+          <h3>Sign in to perform protected registry actions</h3>
+        </div>
+
+        <p className="institutional-note">
+          Choose a prepared role profile to verify access boundaries, audit trails, and protected administrative actions.
+        </p>
+
+        <div className="credential-grid">
+          {credentialRows.map((item) => (
+            <button
+              key={item.role}
+              type="button"
+              className="credential-card"
+              onClick={() => {
+                setUsername(item.username);
+                setPassword(item.password);
+              }}
+            >
+              <strong>{item.label}</strong>
+              <span>@{item.username}</span>
+              <span>{item.role} access profile</span>
+            </button>
+          ))}
+        </div>
+
+        <form className="territory-form" onSubmit={handleSubmit}>
+          <label className="territory-field" htmlFor="login-username">
+            <span className="territory-label">Username</span>
+            <input
+              id="login-username"
+              className="territory-input"
+              name="username"
+              autoComplete="username"
+              autoCapitalize="none"
+              autoCorrect="off"
+              spellCheck={false}
+              enterKeyHint="next"
+              value={username}
+              onChange={(event) => setUsername(event.target.value)}
+              required
+            />
+          </label>
+
+          <label className="territory-field" htmlFor="login-password">
+            <span className="territory-label">Password</span>
+            <input
+              id="login-password"
+              className="territory-input"
+              type="password"
+              name="password"
+              autoComplete="current-password"
+              enterKeyHint="done"
+              value={password}
+              onChange={(event) => setPassword(event.target.value)}
+              required
+            />
+          </label>
+
+          <div className="territory-form-actions">
+            <button className="verification-button" type="submit" disabled={isSubmitting} aria-describedby="login-submit-help">
+              {isSubmitting ? 'Signing in…' : 'Sign in'}
+            </button>
+            <p id="login-submit-help" className="institutional-note compact-note">
+              Press Enter from the password field or use one of the prepared role cards to prefill credentials.
+            </p>
+          </div>
+
+          {notice ? <p className="form-notice success">{notice}</p> : null}
+          {error ? <p className="form-notice error">{error}</p> : null}
+        </form>
+      </article>
+    </section>
+  );
+}

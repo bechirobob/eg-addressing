@@ -1,0 +1,46 @@
+# Project Container Strategy
+
+## Goal
+Give the Equatorial Guinea national addressing platform its own isolated development and runtime boundary so large-scale delivery does not get mixed with unrelated Hermes work.
+
+## Isolation model
+- One dedicated root workspace: `/home/ubuntu/projects/eg-addressing`
+- One dedicated compose project name: `eg_addressing`
+- One dedicated `.env` at project root
+- One dedicated persistent data area under `data/`
+- One dedicated docs/artifacts area for this initiative only
+
+## Why this matters
+As the platform grows, it will likely accumulate:
+- proposal and briefing artifacts
+- schema and API specs
+- frontend and backend code
+- local volumes
+- test exports
+- GIS data imports
+- operational scripts
+
+Without a project boundary, those start colliding with other workstreams.
+
+## Runtime shape
+Recommended local isolated stack:
+- Postgres/PostGIS
+- Redis
+- MinIO
+- API container
+- Admin UI container
+
+Later additions can include:
+- worker service
+- reverse proxy
+- GIS ingest tools
+- training/demo environment variants
+
+## Current blocker
+This machine currently does **not** have Docker or Podman installed, so the isolation scaffold has been prepared but not started.
+
+## Immediate next move when runtime is available
+1. Copy `env/.env.example` to `.env`
+2. Start `infra/docker/docker-compose.yml`
+3. Import current proposal/spec artifacts into `docs/` and `artifacts/`
+4. Begin implementation only inside this workspace

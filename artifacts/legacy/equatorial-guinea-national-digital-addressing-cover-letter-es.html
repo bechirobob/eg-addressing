@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Carta de Presentación</title>
+<link rel="icon" href="data:," />
+<style>
+@page { size: A4; margin: 18mm 16mm; }
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  color: #162032;
+  font-family: "Inter", "Segoe UI", Arial, sans-serif;
+  background: #f4f7fb;
+  line-height: 1.45;
+}
+.page {
+  width: 210mm;
+  min-height: 297mm;
+  margin: 0 auto 18px;
+  background: #fff;
+  padding: 22mm 18mm 18mm;
+  position: relative;
+  overflow: hidden;
+  page-break-after: always;
+}
+.page:last-of-type { page-break-after: auto; }
+.cover {
+  background: radial-gradient(circle at 85% 12%, rgba(214, 32, 45, 0.18), transparent 28%),
+              linear-gradient(135deg, #07182e 0%, #0a315e 58%, #123d70 100%);
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.cover:before {
+  content: "";
+  position: absolute;
+  inset: auto -60mm -70mm auto;
+  width: 160mm;
+  height: 160mm;
+  border-radius: 50%;
+  border: 28mm solid rgba(255,255,255,.055);
+}
+.letter-cover {
+  background: linear-gradient(180deg, #fbfcff 0%, #f5f8fc 100%);
+}
+.flagline { display: flex; gap: 5px; margin-bottom: 22mm; }
+.flagline span { height: 6px; width: 42px; border-radius: 999px; display:block; }
+.green { background:#3c9c4a; } .white { background:#fff; } .red { background:#d6202d; } .blue { background:#2b66b1; }
+h1 { font-size: 42px; line-height: 1.04; margin: 0 0 14px; letter-spacing: -1.3px; }
+.cover h1 { max-width: 155mm; font-size: 44px; }
+.subtitle { font-size: 18px; max-width: 155mm; color: #dbeafe; }
+.letter-cover .subtitle { color: #31445f; }
+.kicker { text-transform: uppercase; letter-spacing: 1.7px; font-size: 12px; font-weight: 800; color: #83c5ff; margin-bottom: 10px; }
+.letter-cover .kicker { color: #0b315f; }
+.cover-meta { border-left: 4px solid #d6202d; padding-left: 16px; color: #eef6ff; font-size: 14px; max-width: 145mm; }
+.letter-meta { border-left: 4px solid #d6202d; padding-left: 16px; color: #31445f; font-size: 14px; max-width: 150mm; }
+h2 { font-size: 28px; margin: 0 0 12px; color:#0b315f; letter-spacing: -0.6px; }
+h3 { font-size: 16px; margin: 18px 0 8px; color:#0c3a6d; }
+p { margin: 0 0 10px; }
+.lead { font-size: 17px; color:#26384f; }
+.muted { color:#64748b; }
+.small { font-size: 11px; color:#64748b; }
+.section-tag { display:inline-block; color:#d6202d; font-weight: 800; font-size: 11px; letter-spacing: 1.2px; text-transform: uppercase; margin-bottom: 8px; }
+.grid { display:grid; gap: 12px; }
+.grid-2 { grid-template-columns: 1fr 1fr; }
+.grid-3 { grid-template-columns: repeat(3, 1fr); }
+.card { background:#f8fafc; border:1px solid #dce6f2; border-radius: 14px; padding: 14px; }
+.card.dark { background:#0b315f; color:#fff; border:0; }
+.card.dark h3 { color:#fff; }
+.stat { font-size: 29px; font-weight: 900; color:#0b315f; line-height:1.05; }
+.statlabel { font-size: 11px; text-transform: uppercase; letter-spacing:.7px; color:#64748b; margin-top:5px; }
+.dark .stat, .dark .statlabel { color:#fff; }
+ul { margin: 8px 0 0 20px; padding: 0; }
+li { margin-bottom: 6px; }
+.callout { border-left: 5px solid #d6202d; background:#f8fbff; padding: 14px 16px; border-radius: 12px; margin: 14px 0; }
+.quote { font-size: 21px; line-height: 1.3; color:#0b315f; font-weight: 800; }
+.timeline { display:grid; gap:10px; margin-top: 12px; }
+.phase { display:grid; grid-template-columns: 35mm 1fr 42mm; gap: 10px; align-items:start; padding: 12px; border:1px solid #dce6f2; border-radius: 12px; background:#fbfdff; }
+.phase strong { color:#0b315f; }
+.price { font-size: 17px; font-weight:900; color:#d6202d; text-align:right; }
+table { width:100%; border-collapse: collapse; margin-top: 10px; font-size: 12px; }
+th { background:#0b315f; color:#fff; text-align:left; padding:9px; }
+td { border-bottom:1px solid #dce6f2; padding:8px 9px; vertical-align: top; }
+.footer { position:absolute; bottom: 9mm; left:18mm; right:18mm; display:flex; justify-content:space-between; color:#8a97a8; font-size:10px; border-top:1px solid #e2e8f0; padding-top:6px; }
+.footer span:last-child { display: none; }
+.signature { margin-top: 24px; padding-top: 12px; border-top: 1px solid #dce6f2; }
+.tight li { margin-bottom: 4px; }
+.letter-body { font-size: 15px; color:#24354f; }
+.letter-body p { margin-bottom: 14px; }
+.letter-body .recipient { margin-bottom: 18px; }
+@media print {
+  body { background: #fff; }
+  .page { width: 210mm; min-height: 297mm; margin: 0; page-break-after: always; break-after: page; }
+  .page:last-of-type { page-break-after: auto; break-after: auto; }
+}
+</style>
+</head>
+<body>
+<section class="page">
+  <div class="flagline"><span class="green"></span><span class="white"></span><span class="red"></span><span class="blue"></span></div>
+  <div class="kicker" style="color:#0b315f;">Carta confidencial de remisión</div>
+  <h1 style="color:#0b315f; max-width:160mm; margin-bottom:10px;">Carta de Presentación</h1>
+  <p class="subtitle" style="color:#31445f; margin-bottom:12px;">Remisión de la propuesta del Sistema Nacional de Direcciones Digitales para Guinea Ecuatorial</p>
+  <div class="letter-meta" style="margin-bottom:20px;"><p>Preparado por Benjamin Bob Bechiro<br/>Teléfono: +240 555 605 331<br/>Correo: bechirobob@gmail.com<br/>Fecha: junio de 2026</p></div>
+  <span class="section-tag">Nota formal de remisión</span>
+  <div class="letter-body">
+    <p class="recipient"><strong>A: El Ministerio de Transportes de la República de Guinea Ecuatorial</strong></p>
+    <p><strong>Asunto: Remisión de propuesta para un Sistema Nacional de Direcciones Digitales</strong></p>
+    <p>Por solicitud del Vicepresidente, someto respetuosamente la propuesta adjunta al Ministerio de Transportes para su consideración.</p><p>El objetivo de esta remisión es presentar una vía seria, de propiedad estatal, para crear un registro nacional de direcciones, una capa geoespacial de servicio, un modelo de captura de campo y una estructura operativa de despliegue que pueda apoyar la administración pública, la respuesta de emergencia, los servicios públicos, la logística, la planificación y la modernización digital de largo plazo.</p><p>Esta propuesta está planteada deliberadamente como infraestructura nacional y no como un producto de software estrecho. Está diseñada para ayudar al Estado a definir correctamente los estándares, demostrar valor mediante un piloto disciplinado y construir las bases institucionales y operativas necesarias para una expansión nacional confiable.</p><p>Sería un honor poder presentar formalmente la propuesta, aclarar el alcance recomendado del piloto y apoyar cualquier conversación posterior relacionada con estándares, gobernanza, estructura de implementación o planificación del despliegue nacional.</p><p>Gracias por su tiempo, su consideración y su servicio a la República de Guinea Ecuatorial.</p>
+    <div class="signature">
+      <p><strong>Respetuosamente,</strong></p>
+      <p>Benjamin Bob Bechiro<br/>Iniciador del proyecto<br/>Phone: +240 555 605 331<br/>Email: bechirobob@gmail.com</p>
+    </div>
+  </div>
+  <div class="footer"><span>Propuesta del Sistema Nacional de Direcciones Digitales</span><span>1</span></div>
+</section>
+</body>
+</html>
