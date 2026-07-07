@@ -1,7 +1,7 @@
 # Project Container Strategy
 
 ## Goal
-Give the Equatorial Guinea national addressing platform its own isolated development and runtime boundary so large-scale delivery does not get mixed with unrelated Hermes work.
+Give the Equatorial Guinea national addressing platform its own isolated development and runtime boundary so large-scale delivery does not get mixed with unrelated project work.
 
 ## Isolation model
 - One dedicated root workspace: `/home/ubuntu/projects/eg-addressing`

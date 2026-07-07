@@ -43,19 +43,21 @@ async function safeFetch<T>(url: string, fallback: T, headers?: Record<string, s
 export default async function ExportsPage() {
   const apiBaseUrl = process.env.INTERNAL_API_BASE_URL ?? 'http://api:8100';
   const publicApiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL ?? '';
-  const bootstrapHeaders = { Authorization: ['Bearer', 'admin-bootstrap-token'].join(' ') };
   const [addressesPayload, importJobsPayload, publicationPacksPayload] = await Promise.all([
     safeFetch<{ items: Address[] }>(`${apiBaseUrl}/api/v1/addresses`, { items: [] }),
-    safeFetch<{ items: ImportJob[] }>(`${apiBaseUrl}/api/v1/imports/jobs`, { items: [] }, bootstrapHeaders),
-    safeFetch<{ items: PublicationPack[] }>(`${apiBaseUrl}/api/v1/publication/packs`, { items: [] }, bootstrapHeaders),
+    Promise.resolve({ items: [] as ImportJob[] }),
+    Promise.resolve({ items: [] as PublicationPack[] }),
   ]);
 
   return (
     <SiteChrome
       apiBaseUrl={publicApiBaseUrl}
       eyebrow="Official exports"
+      eyebrowKey="exportsEyebrow"
       title="Publication and Intake Operations"
+      titleKey="exportsTitle"
       subtitle="Migration intake, official publication packs, and controlled output preparation for the national addressing registry."
+      subtitleKey="exportsSubtitle"
     >
       <PublicationOperationsPanel
         initialAddresses={addressesPayload.items}

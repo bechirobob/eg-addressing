@@ -60,8 +60,18 @@ export function TerritoryAdminPanel({ initialTerritories, provinces, apiBaseUrl 
   const [isRefreshing, setIsRefreshing] = useState(false);
 
   const readinessOptions = useMemo(() => Array.from(new Set(territories.map((item) => item.readiness))).sort(), [territories]);
+  const territorySummary = useMemo(
+    () => ({
+      visible: territories.length,
+      active: territories.filter((item) => !item.is_archived).length,
+      provinces: new Set(territories.map((item) => item.province_code)).size,
+    }),
+    [territories],
+  );
   const canWrite = sessionUser?.role === 'editor' || sessionUser?.role === 'admin';
   const canArchive = sessionUser?.role === 'admin';
+  const writeDisabledReason = !canWrite ? 'Editor or admin required' : isSubmitting ? 'Working…' : null;
+  const archiveDisabledReason = !canArchive ? 'Admin required' : isSubmitting ? 'Working…' : null;
 
   useEffect(() => {
     void loadSession();
@@ -179,7 +189,7 @@ export function TerritoryAdminPanel({ initialTerritories, provinces, apiBaseUrl 
     try {
       const response = await fetch(`${browserApiBaseUrl}/api/v1/territories`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        headers: { 'Content-Type': 'application/json', ...authorizationHeader(token) },
         body: JSON.stringify(createForm),
       });
       const payload = (await response.json()) as Territory | { detail?: string };
@@ -216,7 +226,7 @@ export function TerritoryAdminPanel({ initialTerritories, provinces, apiBaseUrl 
     try {
       const response = await fetch(`${browserApiBaseUrl}/api/v1/territories/${selectedTerritory.id}`, {
         method: 'PATCH',
-        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        headers: { 'Content-Type': 'application/json', ...authorizationHeader(token) },
         body: JSON.stringify(editForm),
       });
       const payload = (await response.json()) as Territory | { detail?: string };
@@ -252,7 +262,7 @@ export function TerritoryAdminPanel({ initialTerritories, provinces, apiBaseUrl 
     try {
       const response = await fetch(`${browserApiBaseUrl}/api/v1/territories/${selectedTerritory.id}`, {
         method: 'DELETE',
-        headers: { Authorization: `Bearer ${token}` },
+        headers: authorizationHeader(token),
       });
       const payload = (await response.json()) as Territory | { detail?: string };
       if (!response.ok) {
@@ -269,30 +279,20 @@ export function TerritoryAdminPanel({ initialTerritories, provinces, apiBaseUrl 
   }
 
   return (
-    <section className="section-grid territory-admin-grid">
-      <article className="panel panel-accent-blue">
-        <div className="panel-head">
-          <p className="section-label">Access posture</p>
-          <h3>Session and registry filters</h3>
+    <section className="territory-workspace">
+      <article className="public-task-panel territory-command-panel">
+        <div className="panel-head quiet-head">
+          <p className="section-label">Territory registry</p>
+          <h3>Filter and maintain operating areas</h3>
         </div>
 
-        <div className="session-card">
-          {sessionStatus === 'ready' && sessionUser ? (
-            <>
-              <strong>{sessionUser.full_name}</strong>
-              <p>
-                Signed in as <span className="session-role">{sessionUser.role}</span> · @{sessionUser.username}
-              </p>
-            </>
-          ) : (
-            <>
-              <strong>Guest mode</strong>
-              <p>Read access is available, but create, update, and archive actions require a signed-in operator role.</p>
-            </>
-          )}
+        <div className="territory-summary-row" aria-label="Territory registry summary">
+          <span><strong>{territorySummary.visible}</strong> visible records</span>
+          <span><strong>{territorySummary.active}</strong> active areas</span>
+          <span><strong>{territorySummary.provinces}</strong> provinces represented</span>
         </div>
 
-        <div className="filter-grid">
+        <div className="filter-grid territory-filter-grid">
           <label className="territory-field">
             <span className="territory-label">Search</span>
             <input className="territory-input" value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Search territory, province, type" />
@@ -321,7 +321,9 @@ export function TerritoryAdminPanel({ initialTerritories, provinces, apiBaseUrl 
           </label>
         </div>
 
-        <form className="territory-form" onSubmit={handleCreate}>
+        <details className="inline-disclosure territory-create-disclosure">
+          <summary>Create new territory</summary>
+          <form className="territory-form" onSubmit={handleCreate}>
           <div className="panel-head compact-panel-head">
             <p className="section-label">Create</p>
             <h3>Register a new territory</h3>
@@ -348,22 +350,32 @@ export function TerritoryAdminPanel({ initialTerritories, provinces, apiBaseUrl 
             <input className="territory-input" value={createForm.readiness} onChange={(event) => setCreateField('readiness', event.target.value)} required />
           </label>
           <div className="territory-form-actions">
-            <button className="verification-button" type="submit" disabled={isSubmitting || !canWrite}>Create territory</button>
+            <button className="verification-button" type="submit" disabled={Boolean(writeDisabledReason)}>{writeDisabledReason ?? 'Create territory'}</button>
           </div>
-        </form>
+          </form>
+        </details>
 
         {notice ? <p className="form-notice success">{notice}</p> : null}
         {error ? <p className="form-notice error">{error}</p> : null}
       </article>
 
-      <article className="panel panel-accent-gold">
+      <article className="public-task-panel territory-detail-panel">
         <div className="panel-head">
           <p className="section-label">Territory detail</p>
           <h3>Inspect, edit, and archive</h3>
         </div>
 
         {selectedTerritory ? (
-          <form className="territory-form" onSubmit={handleUpdate}>
+          <>
+            <div className="selection-summary compact-territory-summary">
+              <strong>{selectedTerritory.name}</strong>
+              <span className="status-chip">{selectedTerritory.province_code}</span>
+              <span className="status-chip warn">{selectedTerritory.is_archived ? 'archived' : selectedTerritory.readiness}</span>
+              <span className="status-chip">{selectedTerritory.type}</span>
+            </div>
+            <details className="inline-disclosure territory-edit-disclosure">
+              <summary>Edit selected territory details</summary>
+              <form className="territory-form" onSubmit={handleUpdate}>
             <div className="selection-summary">
               <strong>{selectedTerritory.name}</strong>
               <span className="territory-meta">{selectedTerritory.is_archived ? 'archived' : selectedTerritory.readiness}</span>
@@ -389,18 +401,20 @@ export function TerritoryAdminPanel({ initialTerritories, provinces, apiBaseUrl 
               <input className="territory-input" value={editForm.readiness} onChange={(event) => setEditField('readiness', event.target.value)} required />
             </label>
             <div className="button-row">
-              <button className="verification-button" type="submit" disabled={isSubmitting || !canWrite}>Save territory changes</button>
-              <button className="secondary-button" type="button" disabled={isSubmitting || !canArchive} onClick={() => void handleArchive()}>
-                Archive territory
+              <button className="verification-button" type="submit" disabled={Boolean(writeDisabledReason)}>{writeDisabledReason ?? 'Save territory changes'}</button>
+              <button className="secondary-button" type="button" disabled={Boolean(archiveDisabledReason)} onClick={() => void handleArchive()}>
+                {archiveDisabledReason ?? 'Archive territory'}
               </button>
             </div>
-          </form>
+            </form>
+            </details>
+          </>
         ) : (
           <p className="institutional-note">Select a territory from the live registry to inspect its full record.</p>
         )}
       </article>
 
-      <article className="panel panel-accent-blue territory-list-panel">
+      <article className="public-task-panel territory-list-panel">
         <div className="panel-head">
           <p className="section-label">Live registry</p>
           <h3>Current territory records</h3>

@@ -37,9 +37,12 @@ export default async function RegistryPage({
   return (
     <SiteChrome
       apiBaseUrl={publicApiBaseUrl}
-      eyebrow="Registry core"
-      title="Roads, Buildings, and Address Registry"
-      subtitle="Operational management surfaces for the core address-production entities maintained by the national registry."
+      eyebrow="Admin center"
+      eyebrowKey="registryEyebrow"
+      title="Registry Administration"
+      titleKey="registryTitle"
+      subtitle="Simple daily workspace for addresses, roads, and buildings. Start with addresses; open roads or buildings only when needed."
+      subtitleKey="registrySubtitle"
     >
       <RegistryCorePanel
         initialTerritories={territories}

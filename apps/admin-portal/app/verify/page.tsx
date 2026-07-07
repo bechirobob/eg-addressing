@@ -26,31 +26,21 @@ type LookupResult = {
 };
 
 async function getSubmissions(baseUrl: string): Promise<Submission[]> {
-  const bootstrapHeaders = { Authorization: ['Bearer', 'admin-bootstrap-token'].join(' ') };
-  try {
-    const response = await fetch(`${baseUrl}/api/v1/field/submissions`, {
-      cache: 'no-store',
-      headers: bootstrapHeaders,
-    });
-    if (!response.ok) return [];
-    const payload = (await response.json()) as { items: Submission[] };
-    return payload.items ?? [];
-  } catch {
-    return [];
-  }
+  void baseUrl;
+  return [];
 }
 
 async function getLookup(baseUrl: string): Promise<LookupResult> {
   try {
     const response = await fetch(
-      `${baseUrl}/api/v1/verification/lookup?query=${encodeURIComponent('Avenida de la Independencia')}`,
+      `${baseUrl}/api/v1/verification/lookup?query=${encodeURIComponent('EG-BN-MALABO-001A')}`,
       { cache: 'no-store' },
     );
     if (!response.ok) throw new Error('lookup failed');
     return (await response.json()) as LookupResult;
   } catch {
     return {
-      query: 'Avenida de la Independencia',
+      query: 'EG-BN-MALABO-001A',
       match_status: 'not-found',
       address_label: 'No published registry record found',
       jurisdiction: 'National registry lookup',
@@ -67,9 +57,12 @@ export default async function VerifyPage() {
   return (
     <SiteChrome
       apiBaseUrl={publicApiBaseUrl}
-      eyebrow="Verification portal"
-      title="Verification and Review Workflow"
-      subtitle="Review queue, decision control, and public-trust verification for records entering the national registry."
+      eyebrow="Evidence desk"
+      eyebrowKey="verifyEyebrow"
+      title="Evidence Review Workflow"
+      titleKey="verifyTitle"
+      subtitle="Review submitted evidence, confirm registry decisions, and run public-trust checks before records progress."
+      subtitleKey="verifySubtitle"
     >
       <VerificationWorkflowPanel
         submissions={submissions}

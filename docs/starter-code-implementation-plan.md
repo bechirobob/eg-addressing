@@ -1,7 +1,5 @@
 # Starter Code Implementation Plan
 
-> **For Hermes:** Build real starter code inside the isolated `eg-addressing` workspace and verify it with live container requests.
-
 **Goal:** Replace placeholder API/admin containers with a working FastAPI backend and Next.js admin starter that reflect the national addressing platform architecture.
 
 **Architecture:** Keep the backend as a small modular FastAPI starter with seed data and health/meta endpoints. Keep the admin app as a clean Next.js TypeScript shell that reads backend status and presents the MVP modules. Run both through the isolated Docker Compose stack.

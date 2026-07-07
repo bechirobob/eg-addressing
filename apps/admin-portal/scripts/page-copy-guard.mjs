@@ -3,8 +3,28 @@ const baseUrl = process.env.SMOKE_APP_BASE_URL ?? 'http://127.0.0.1:3100';
 const pages = [
   {
     path: '/',
-    required: ['National Digital Addressing Platform', 'Operational phase'],
+    required: ['National Addressing Platform', 'Choose the correct service before starting', 'From citizen capture to official registry'],
     forbidden: ['pilot-mvp', 'demo access', 'Rows JSON', 'http://localhost:8100', 'http://api:8100'],
+  },
+  {
+    path: '/geotag',
+    required: ['Register a Location', 'Use GPS to capture the property point', 'Submit location for review'],
+    forbidden: ['pilot-mvp', 'demo access', 'Rows JSON', 'http://localhost:8100', 'http://api:8100'],
+  },
+  {
+    path: '/issue',
+    required: ['Check Address Code', 'Search the public registry', 'Example official code'],
+    forbidden: ['Published sample record', 'pilot-mvp', 'demo access', 'Rows JSON', 'http://localhost:8100', 'http://api:8100'],
+  },
+  {
+    path: '/track',
+    required: ['Track a Location Request', 'Check the public-safe status', 'Tracking code'],
+    forbidden: ['citizen_contact', 'dip_last4', 'admin123', 'http://localhost:8100', 'http://api:8100'],
+  },
+  {
+    path: '/records',
+    required: ['Address Case Files', 'Search canonical government address records', 'Evidence is grouped as a case file'],
+    forbidden: ['pilot-mvp', 'Rows JSON', 'demo access'],
   },
   {
     path: '/login',
@@ -13,7 +33,7 @@ const pages = [
   },
   {
     path: '/verify',
-    required: ['Verification and Review Workflow'],
+    required: ['Evidence Review Workflow'],
     forbidden: ['pilot', 'demo', 'bootstrap'],
   },
   {

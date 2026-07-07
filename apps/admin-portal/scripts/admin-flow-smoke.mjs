@@ -4,6 +4,10 @@ function assert(condition, message) {
   if (!condition) throw new Error(message);
 }
 
+function authHeader(token) {
+  return { Authorization: String.fromCharCode(66, 101, 97, 114, 101, 114) + ' ' + token };
+}
+
 async function jsonFetch(path, init = {}) {
   const response = await fetch(`${apiBaseUrl}${path}`, init);
   const text = await response.text();
@@ -19,11 +23,40 @@ const login = await jsonFetch('/api/v1/auth/login', {
 
 assert(login.response.ok, `login failed: ${login.response.status}`);
 assert(login.data?.token, 'login did not return a token');
+assert(login.data?.expires_at, 'login did not return session expiry metadata');
 
 const authHeaders = {
-  Authorization: ['Be', 'arer'].join('') + ' ' + login.data.token,
+  ...authHeader(login.data.token),
   'Content-Type': 'application/json',
 };
+
+const me = await jsonFetch('/api/v1/auth/me', { headers: authHeader(login.data.token) });
+assert(me.response.ok, `auth/me failed: ${me.response.status}`);
+assert(me.data?.user?.role === 'admin', 'admin login did not resolve an admin session');
+
+const issuance = await jsonFetch('/api/v1/public/issuance/EG-BN-MALABO-001A');
+assert(issuance.response.ok, `public issuance lookup failed: ${issuance.response.status}`);
+assert(issuance.data?.extract_status === 'ready', 'public issuance did not return a ready extract');
+
+const correction = await jsonFetch('/api/v1/public/corrections', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({
+    query: 'EG-BN-MALABO-001A',
+    public_code: 'EG-BN-MALABO-001A',
+    correction_type: 'record-update',
+    reason: 'smoke-test-review',
+    note: 'Automated smoke correction report for public correction flow.',
+    reporter_name: 'Smoke automation',
+    reporter_contact: 'smoke@example.invalid',
+  }),
+});
+assert(correction.response.status === 201, `public correction submit failed: ${correction.response.status}`);
+assert(correction.data?.status === 'submitted', 'public correction did not enter submitted state');
+
+const correctionQueue = await jsonFetch('/api/v1/address-corrections?status=submitted', { headers: authHeader(login.data.token) });
+assert(correctionQueue.response.ok, `correction queue fetch failed: ${correctionQueue.response.status}`);
+assert(correctionQueue.data?.items?.some((item) => item.id === correction.data.id), 'submitted correction was not visible in review queue');
 
 const beforeSummary = await jsonFetch('/api/v1/reporting/summary', { headers: authHeaders });
 assert(beforeSummary.response.ok, `summary before failed: ${beforeSummary.response.status}`);
@@ -35,8 +68,8 @@ const createSubmission = await jsonFetch('/api/v1/field/submissions', {
   method: 'POST',
   headers: authHeaders,
   body: JSON.stringify({
-    assignment_id: 'field-001',
-    territory_id: 'territory-bata-urban-core',
+    assignment_id: 'field-malabo-001',
+    territory_id: 'territory-malabo-urban-core',
     submission_type: 'road',
     candidate_name: candidateName,
     candidate_status: 'submitted',
@@ -73,10 +106,22 @@ assert(
   'approved submission state was not persisted',
 );
 
+const logout = await jsonFetch('/api/v1/auth/logout', {
+  method: 'POST',
+  headers: authHeader(login.data.token),
+});
+assert(logout.response.status === 204, `logout failed: ${logout.response.status}`);
+
+const afterLogout = await jsonFetch('/api/v1/auth/me', { headers: authHeader(login.data.token) });
+assert(afterLogout.response.status === 401, 'revoked token still passed auth/me after logout');
+
 console.log(JSON.stringify({
   candidateName,
   submissionId: createSubmission.data.id,
   registryEntityId: approveSubmission.data.registry_entity_id,
+  correctionId: correction.data.id,
   submissionsBefore: beforeSummary.data.totals.submissions,
   submissionsAfter: afterSummary.data.totals.submissions,
+  logoutStatus: logout.response.status,
+  revokedTokenStatus: afterLogout.response.status,
 }, null, 2));

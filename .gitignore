@@ -5,6 +5,7 @@
 
 # runtime data
 data/
+backups/
 
 # node/python noise
 node_modules/
@@ -20,6 +21,49 @@ dist/
 build/
 coverage/
 artifacts/generated/
+artifacts/operator-digests/
+artifacts/qa/
+artifacts/reference-pdfs/
+*.tsbuildinfo
+
+# generated media/share artifacts; keep proposal text/PDF docs in git, not videos/audio/frames
+*.mp4
+*.mp3
+*.ogg
+*.wav
+*.jpg
+*.jpeg
+*.png
+*.vtt
+docs/**/workflow-video/
+
+# superseded generated proposal packages; keep the final government submission set
+/docs/becoreops-complete-submission/
+/docs/becoreops-official-submission/
+/docs/becoreops-pilot-proposal/
+/docs/becoreops-submission-package/
+/docs/deliverables/
+
+# non-final local proposal/planning drafts kept out of the repo
+/docs/admin-center-simplification-blueprint.md
+/docs/automation-process-ui-blueprint.md
+/docs/becoreops-company-profile-bilingual.*
+/docs/becoreops-registration-malabo/
+/docs/correction-review-queue-blueprint.md
+/docs/engineering-execution-plan-post-pilot-hardening.md
+/docs/executive-brief-national-digital-addressing.md
+/docs/government-grade-7-lane-hardening-blueprint.md
+/docs/government-grade-no-vibe-ui-blueprint.md
+/docs/ministry-follow-up/
+/docs/national-address-code-grammar.md
+/docs/national-application-theory.*
+/docs/official-square-visual-system-blueprint.md
+/docs/ops-environment-matrix.md
+/docs/pilot-ready-v1/
+/docs/public-issuance-blueprint.md
+/docs/rfp-scope-skeleton-national-digital-addressing.md
+/docs/technical-hardening-roadmap.md
+/scripts/
 
 # local mission logs / agent state
 knowledge/

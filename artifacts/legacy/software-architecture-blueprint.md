@@ -1,7 +1,5 @@
 # National Digital Addressing Platform — Software Architecture Blueprint
 
-> **For Hermes:** This blueprint defines the recommended software infrastructure for the national digital addressing platform proposed for Equatorial Guinea. It is scoped for a government-owned pilot that can scale into a national operational platform.
-
 **Goal:** Define a serious, scalable, government-grade software architecture for a National Digital Addressing System that supports address creation, validation, search, governance, field capture, mapping, and multi-agency integration.
 
 **Architecture:** Use a **modular monolith** backed by **PostgreSQL + PostGIS**, with a **web admin platform**, **field capture application**, **integration API layer**, and **object storage** for field evidence. Start simple enough to ship a pilot, but structure the domains cleanly so the system can evolve into a larger national platform without a rewrite.

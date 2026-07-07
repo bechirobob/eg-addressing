@@ -41,12 +41,8 @@ async function getAssignments(baseUrl: string): Promise<Assignment[]> {
 }
 
 async function getSubmissions(baseUrl: string): Promise<Submission[]> {
-  const bootstrapHeaders = { Authorization: ['Bearer', 'admin-bootstrap-token'].join(' ') };
   try {
-    const response = await fetch(`${baseUrl}/api/v1/field/submissions`, {
-      cache: 'no-store',
-      headers: bootstrapHeaders,
-    });
+    const response = await fetch(`${baseUrl}/api/v1/field/submissions`, { cache: 'no-store' });
     if (!response.ok) return [];
     const payload = (await response.json()) as { items: Submission[] };
     return payload.items ?? [];
@@ -79,8 +75,11 @@ export default async function FieldPage() {
     <SiteChrome
       apiBaseUrl={publicApiBaseUrl}
       eyebrow="Field operations"
+      eyebrowKey="fieldEyebrow"
       title="Field Submission Workflow"
+      titleKey="fieldTitle"
       subtitle="Operational intake for survey teams, route coordinators, and field officers feeding the national addressing verification queue."
+      subtitleKey="fieldSubtitle"
     >
       <FieldWorkflowPanel
         assignments={assignments}

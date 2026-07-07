@@ -1,7 +1,5 @@
 # National Surface Expansion + Core Slice Plan
 
-> **For Hermes:** Extend the existing isolated stack with additional branded national-facing routes and matching real API endpoints, then verify with tests and live screenshots.
-
 **What will be done**
 - Add reusable site chrome/navigation for the existing Next.js app.
 - Create additional branded routes for verification, field operations, and official exports.

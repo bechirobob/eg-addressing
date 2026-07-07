@@ -60,6 +60,8 @@ services:
       - ../../.env
     ports:
       - "${API_PORT:-8100}:8100"
+    volumes:
+      - ../../artifacts:/app/artifacts:ro
     depends_on:
       postgres:
         condition: service_healthy
@@ -77,6 +79,10 @@ services:
     build:
       context: ../../
       dockerfile: apps/admin-portal/Dockerfile
+      args:
+        NEXT_PUBLIC_API_BASE_URL: ${NEXT_PUBLIC_API_BASE_URL:-}
+        NEXT_PUBLIC_APP_ENV: ${APP_ENV:-staging}
+        NEXT_PUBLIC_DEPLOYMENT_LABEL: ${NEXT_PUBLIC_DEPLOYMENT_LABEL:-Controlled staging}
     container_name: eg-addressing-admin
     restart: unless-stopped
     env_file:

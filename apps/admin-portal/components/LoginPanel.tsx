@@ -1,10 +1,10 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 import { defaultRouteForRole } from './site-data';
-import { demoCredentials, setStoredToken } from './demoAuth';
+import { setStoredToken } from './demoAuth';
 import { resolveBrowserApiBaseUrl } from './sessionClient';
 
 type LoginPanelProps = {
@@ -19,8 +19,6 @@ export function LoginPanel({ apiBaseUrl }: LoginPanelProps) {
   const [notice, setNotice] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
-
-  const credentialRows = useMemo(() => demoCredentials, []);
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -55,33 +53,15 @@ export function LoginPanel({ apiBaseUrl }: LoginPanelProps) {
 
   return (
     <section className="section-grid single-column-grid">
-      <article className="panel panel-accent-blue">
+      <article className="public-task-panel civic-panel-blue">
         <div className="panel-head">
           <p className="section-label">Platform access</p>
           <h3>Sign in to perform protected registry actions</h3>
         </div>
 
         <p className="institutional-note">
-          Choose a prepared role profile to verify access boundaries, audit trails, and protected administrative actions.
+          Use an authorized operator account. Protected actions are role-controlled and recorded in the audit trail.
         </p>
-
-        <div className="credential-grid">
-          {credentialRows.map((item) => (
-            <button
-              key={item.role}
-              type="button"
-              className="credential-card"
-              onClick={() => {
-                setUsername(item.username);
-                setPassword(item.password);
-              }}
-            >
-              <strong>{item.label}</strong>
-              <span>@{item.username}</span>
-              <span>{item.role} access profile</span>
-            </button>
-          ))}
-        </div>
 
         <form className="territory-form" onSubmit={handleSubmit}>
           <label className="territory-field" htmlFor="login-username">
@@ -121,7 +101,7 @@ export function LoginPanel({ apiBaseUrl }: LoginPanelProps) {
               {isSubmitting ? 'Signing in…' : 'Sign in'}
             </button>
             <p id="login-submit-help" className="institutional-note compact-note">
-              Press Enter from the password field or use one of the prepared role cards to prefill credentials.
+              Pulse Intro desde el campo de contraseña después de introducir sus credenciales autorizadas de operador.
             </p>
           </div>
 

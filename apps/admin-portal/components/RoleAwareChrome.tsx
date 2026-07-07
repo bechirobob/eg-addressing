@@ -6,14 +6,16 @@ import type { ReactNode } from 'react';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { clearStoredToken } from './demoAuth';
+import { useTranslation } from './i18n';
 import {
   defaultRouteForRole,
   isRouteAccessible,
+  navGroupLabels,
   navItems,
   routeNeedsResolvedSession,
   type OperatorRole,
 } from './site-data';
-import { resolveBrowserApiBaseUrl, useStoredSession } from './sessionClient';
+import { authorizationHeader, resolveBrowserApiBaseUrl, useStoredSession } from './sessionClient';
 
 type RoleAwareChromeProps = {
   apiBaseUrl: string;
@@ -25,7 +27,37 @@ function roleFromSession(role: 'viewer' | 'editor' | 'admin' | undefined, status
   return role;
 }
 
+function navLabelKey(href: string) {
+  const labels: Record<string, Parameters<ReturnType<typeof useTranslation>['t']>[0]> = {
+    '/': 'navNationalPlatform',
+    '/geotag': 'navRegisterLocation',
+    '/issue': 'navVerifyAddress',
+    '/track': 'navTrackRequest',
+    '/login': 'navSignIn',
+    '/signage': 'navLocationReview',
+    '/verify': 'navVerificationDesk',
+    '/field': 'navFieldWork',
+    '/registry': 'navAddressRegistry',
+    '/records': 'navCaseFiles',
+    '/territories': 'navTerritories',
+    '/reports': 'navReports',
+    '/exports': 'navPublicationPacks',
+  };
+  return labels[href];
+}
+
+function navGroupKey(group: keyof typeof navGroupLabels) {
+  const labels: Record<keyof typeof navGroupLabels, Parameters<ReturnType<typeof useTranslation>['t']>[0]> = {
+    public: 'navPublic',
+    review: 'navReview',
+    operations: 'navOperations',
+    oversight: 'navOversight',
+  };
+  return labels[group];
+}
+
 export function RoleAwareChrome({ apiBaseUrl, children }: RoleAwareChromeProps) {
+  const { t } = useTranslation();
   const router = useRouter();
   const pathname = usePathname();
   const browserApiBaseUrl = resolveBrowserApiBaseUrl(apiBaseUrl);
@@ -46,15 +78,13 @@ export function RoleAwareChrome({ apiBaseUrl, children }: RoleAwareChromeProps) 
     [role],
   );
 
-  const primaryItems = useMemo(
-    () => visibleItems.filter((item) => item.priorityFor.includes(role) || item.href === currentRoute),
-    [currentRoute, role, visibleItems],
-  );
-
-  const secondaryItems = useMemo(
-    () => visibleItems.filter((item) => !primaryItems.some((primary) => primary.href === item.href)),
-    [primaryItems, visibleItems],
-  );
+  const groupedItems = useMemo(() => {
+    return visibleItems.reduce<Record<string, typeof visibleItems>>((groups, item) => {
+      if (!groups[item.group]) groups[item.group] = [];
+      groups[item.group].push(item);
+      return groups;
+    }, {});
+  }, [visibleItems]);
 
   useEffect(() => {
     if (effectiveSessionStatus === 'loading' || accessAllowed) {
@@ -67,50 +97,68 @@ export function RoleAwareChrome({ apiBaseUrl, children }: RoleAwareChromeProps) 
   const handleLogout = useCallback(async () => {
     setIsLoggingOut(true);
     setForcedGuest(true);
+    try {
+      const storedToken = typeof window === 'undefined' ? null : window.localStorage.getItem('egAddressingToken');
+      if (storedToken) {
+        await fetch(`${browserApiBaseUrl}/api/v1/auth/logout`, {
+          method: 'POST',
+          headers: authorizationHeader(storedToken),
+        });
+      }
+    } catch {
+      // Best-effort revoke; local cleanup still proceeds.
+    }
     clearStoredToken();
     await reloadSession();
     router.replace('/login');
     router.refresh();
-  }, [reloadSession, router]);
+  }, [browserApiBaseUrl, reloadSession, router]);
 
   const workspaceHref = defaultRouteForRole(role);
 
   return (
     <>
       <div className="chrome-shell">
-        <div className="nav-cluster">
-          <nav className="top-nav" aria-label="Surface navigation">
-            {primaryItems.map((item) => {
-              const isActive = item.href === currentRoute;
+        <div className="nav-cluster grouped-nav-cluster">
+          {currentRoute !== '/' ? (
+            <Link href="/" className="platform-overview-link">
+              <span className="platform-overview-title">{t('platformOverview')}</span>
+            </Link>
+          ) : null}
+          <nav className="top-nav grouped-top-nav" aria-label="Main platform navigation">
+            {(Object.keys(navGroupLabels) as Array<keyof typeof navGroupLabels>).map((group) => {
+              const items = groupedItems[group] ?? [];
+              if (!items.length) return null;
               return (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  className={`nav-link ${isActive ? 'nav-link-active' : ''}`}
-                  aria-current={isActive ? 'page' : undefined}
-                >
-                  {item.label}
-                </Link>
+                <section className="nav-group" key={group} aria-labelledby={`nav-group-${group}`}>
+                  <p className="nav-group-label" id={`nav-group-${group}`}>{t(navGroupKey(group))}</p>
+                  <div className="nav-group-links">
+                    {items.map((item) => {
+                      const isActive = item.href === currentRoute;
+                      const labelKey = navLabelKey(item.href);
+                      return (
+                        <Link
+                          key={item.href}
+                          href={item.href}
+                          className={`nav-link ${isActive ? 'nav-link-active' : ''}`}
+                          aria-current={isActive ? 'page' : undefined}
+                        >
+                          {item.href === '/login' ? (
+                            <>
+                              <span className="nav-link-title">{t('navAccount')}</span>
+                              <span className="nav-link-subtitle">{labelKey ? t(labelKey) : item.label}</span>
+                            </>
+                          ) : (
+                            <span className="nav-link-title">{labelKey ? t(labelKey) : item.label}</span>
+                          )}
+                        </Link>
+                      );
+                    })}
+                  </div>
+                </section>
               );
             })}
           </nav>
-          {secondaryItems.length ? (
-            <div className="secondary-nav" aria-label="Additional surfaces">
-              {secondaryItems.map((item) => {
-                const isActive = item.href === currentRoute;
-                return (
-                  <Link
-                    key={item.href}
-                    href={item.href}
-                    className={`secondary-nav-link ${isActive ? 'secondary-nav-link-active' : ''}`}
-                    aria-current={isActive ? 'page' : undefined}
-                  >
-                    {item.label}
-                  </Link>
-                );
-              })}
-            </div>
-          ) : null}
         </div>
 
         <div className="chrome-session-card" aria-live="polite">
@@ -119,37 +167,37 @@ export function RoleAwareChrome({ apiBaseUrl, children }: RoleAwareChromeProps) 
               <div>
                 <strong>{effectiveSessionUser.full_name}</strong>
                 <p>
-                  Signed in as <span className="session-role">{effectiveSessionUser.role}</span> · @{effectiveSessionUser.username}
+                  {t('signedInAs')} <span className="session-role">{effectiveSessionUser.role}</span> · @{effectiveSessionUser.username}
                 </p>
               </div>
               <div className="chrome-session-actions">
                 {currentRoute !== workspaceHref ? (
                   <Link href={workspaceHref} className="secondary-button chrome-link-button">
-                    Return to workspace
+                    {t('returnToWorkspace')}
                   </Link>
                 ) : null}
                 <button className="secondary-button" type="button" onClick={() => void handleLogout()} disabled={isLoggingOut}>
-                  {isLoggingOut ? 'Signing out…' : 'Sign out'}
+                  {isLoggingOut ? t('signingOut') : t('signOut')}
                 </button>
               </div>
             </>
           ) : effectiveSessionStatus === 'loading' ? (
             <>
               <div>
-                <strong>Checking session</strong>
-                <p>Validating operator access and role boundaries.</p>
+                <strong>{t('checkingSession')}</strong>
+                <p>{t('checkingSessionCopy')}</p>
               </div>
             </>
           ) : (
             <>
               <div>
-                <strong>Guest review mode</strong>
-                <p>Browse overview and reporting surfaces, or sign in for protected registry operations.</p>
+                <strong>{t('guestReviewMode')}</strong>
+                <p>{t('guestReviewCopy')}</p>
               </div>
               {currentRoute !== '/login' ? (
                 <div className="chrome-session-actions">
                   <Link href="/login" className="secondary-button chrome-link-button">
-                    Sign in
+                    {t('navSignIn')}
                   </Link>
                 </div>
               ) : null}
@@ -161,17 +209,15 @@ export function RoleAwareChrome({ apiBaseUrl, children }: RoleAwareChromeProps) 
       {waitingForAccessResolution ? (
         <section className="panel panel-state-grid">
           <div className="panel-state">
-            <strong>Checking access</strong>
-            <p>Resolving the operator session before loading this protected surface.</p>
+            <strong>{t('checkingAccess')}</strong>
+            <p>{t('checkingAccessCopy')}</p>
           </div>
         </section>
       ) : !accessAllowed ? (
         <section className="panel panel-state-grid">
           <div className="panel-state">
-            <strong>Redirecting to an allowed surface</strong>
-            <p>
-              This page is restricted for your current role. Redirecting to {role === 'guest' ? 'sign-in' : 'your workspace'} now.
-            </p>
+            <strong>{t('redirecting')}</strong>
+            <p>{t('redirectingCopy')}</p>
           </div>
         </section>
       ) : (

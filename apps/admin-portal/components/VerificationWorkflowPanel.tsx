@@ -38,6 +38,20 @@ type PromotionResult = {
   submissionType: string;
 };
 
+type SlaDrilldownItem = {
+  id: string;
+  type: string;
+  label: string;
+  status: string;
+  state: string;
+  age_hours?: number | null;
+  due_hours: number;
+  address_label?: string | null;
+  grid_code?: string | null;
+  territory_name?: string | null;
+  next_best_action_label?: string | null;
+};
+
 export function VerificationWorkflowPanel({ submissions: initialSubmissions, sampleLookup, apiBaseUrl }: VerificationWorkflowPanelProps) {
   const browserApiBaseUrl = resolveBrowserApiBaseUrl(apiBaseUrl);
   const { token, sessionUser, sessionStatus } = useStoredSession(browserApiBaseUrl);
@@ -48,12 +62,21 @@ export function VerificationWorkflowPanel({ submissions: initialSubmissions, sam
   const [notice, setNotice] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [lastPromotion, setLastPromotion] = useState<PromotionResult | null>(null);
+  const [slaItems, setSlaItems] = useState<SlaDrilldownItem[]>([]);
   const [isQueueRefreshing, setIsQueueRefreshing] = useState(false);
   const [isLookupLoading, setIsLookupLoading] = useState(false);
   const [busySubmissionId, setBusySubmissionId] = useState<string | null>(null);
+  const canReview = sessionUser?.role === 'editor' || sessionUser?.role === 'admin';
+
+  function reviewDisabledReason(submission: Submission, action: 'under-review' | 'approve' | 'reject' | 'rework') {
+    if (!canReview) return 'Editor or admin required';
+    if (busySubmissionId === submission.id) return 'Working…';
+    if (action === 'under-review' && submission.review_status === 'under-review') return 'Already under review';
+    return null;
+  }
 
   const actionableQueue = useMemo(
-    () => submissions.filter((submission) => submission.review_status !== 'approved'),
+    () => submissions.filter((submission) => ['submitted', 'under-review'].includes(submission.review_status)),
     [submissions],
   );
 
@@ -72,6 +95,11 @@ export function VerificationWorkflowPanel({ submissions: initialSubmissions, sam
       }
       const payload = (await response.json()) as { items: Submission[] };
       setSubmissions(payload.items ?? []);
+      const slaResponse = await fetch(`${browserApiBaseUrl}/api/v1/geotag-submissions/automation/sla-drilldown?state=overdue`, { headers: authorizationHeader(activeToken) });
+      if (slaResponse.ok) {
+        const slaPayload = (await slaResponse.json()) as { items: SlaDrilldownItem[] };
+        setSlaItems(slaPayload.items ?? []);
+      }
     } catch {
       setError('Unable to refresh the verification queue.');
     } finally {
@@ -142,7 +170,7 @@ export function VerificationWorkflowPanel({ submissions: initialSubmissions, sam
 
   return (
     <section className="section-grid territory-admin-grid">
-      <article className="panel panel-accent-blue territory-list-panel">
+      <article className="public-task-panel civic-panel-blue territory-list-panel">
         <div className="panel-head">
           <p className="section-label">Verification queue</p>
           <h3>Review field submissions before registry promotion</h3>
@@ -152,6 +180,25 @@ export function VerificationWorkflowPanel({ submissions: initialSubmissions, sam
         </p>
 
         {sessionStatus === 'loading' ? <p className="panel-state">Checking access and loading the current queue…</p> : null}
+
+        <details className="inline-disclosure compact-review-disclosure" open={slaItems.length > 0}>
+          <summary>
+            <strong>SLA drill-down</strong>
+            <span>{slaItems.length} overdue citizen geotag item{slaItems.length === 1 ? '' : 's'}</span>
+          </summary>
+          {slaItems.length ? (
+            <ul className="mini-list">
+              {slaItems.map((item) => (
+                <li key={item.id}>
+                  <strong>{item.address_label ?? item.id}</strong>
+                  <span>{item.grid_code ?? item.type} · {item.age_hours ?? 'unknown'}h / {item.due_hours}h · {item.next_best_action_label ?? item.label}</span>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p className="institutional-note">No overdue geotag SLA items are currently returned by the operational queue.</p>
+          )}
+        </details>
 
         <label className="territory-field territory-field-wide">
           <span className="territory-label">Reviewer note</span>
@@ -191,25 +238,28 @@ export function VerificationWorkflowPanel({ submissions: initialSubmissions, sam
                     <p>
                       {submission.territory_name} · {submission.submitted_by}
                     </p>
-                    <p>{submission.notes}</p>
-                    {submission.registry_entity_id ? (
-                      <p className="institutional-note">
-                        Registry record: <strong>{submission.registry_entity_id}</strong>
-                      </p>
-                    ) : null}
+                    <details className="inline-disclosure">
+                      <summary>Review evidence and secondary actions</summary>
+                      <p>{submission.notes}</p>
+                      {submission.registry_entity_id ? (
+                        <p className="institutional-note">
+                          Registry record: <strong>{submission.registry_entity_id}</strong>
+                        </p>
+                      ) : null}
+                    </details>
                   </div>
                   <div className="button-stack">
-                    <button className="mini-action-button" onClick={() => void sendAction(submission, 'under-review')} type="button" disabled={isBusy}>
-                      {isBusy ? 'Working…' : 'Mark under review'}
+                    <button className="mini-action-button" onClick={() => void sendAction(submission, 'under-review')} type="button" disabled={Boolean(reviewDisabledReason(submission, 'under-review'))}>
+                      {reviewDisabledReason(submission, 'under-review') ?? 'Mark under review'}
                     </button>
-                    <button className="mini-action-button primary" onClick={() => void sendAction(submission, 'approve')} type="button" disabled={isBusy}>
-                      {isBusy ? 'Working…' : 'Approve into registry'}
+                    <button className="mini-action-button primary" onClick={() => void sendAction(submission, 'approve')} type="button" disabled={Boolean(reviewDisabledReason(submission, 'approve'))}>
+                      {reviewDisabledReason(submission, 'approve') ?? 'Approve into registry'}
                     </button>
-                    <button className="mini-action-button" onClick={() => void sendAction(submission, 'rework')} type="button" disabled={isBusy}>
-                      {isBusy ? 'Working…' : 'Send to rework'}
+                    <button className="mini-action-button" onClick={() => void sendAction(submission, 'rework')} type="button" disabled={Boolean(reviewDisabledReason(submission, 'rework'))}>
+                      {reviewDisabledReason(submission, 'rework') ?? 'Send to rework'}
                     </button>
-                    <button className="mini-action-button danger" onClick={() => void sendAction(submission, 'reject')} type="button" disabled={isBusy}>
-                      {isBusy ? 'Working…' : 'Reject'}
+                    <button className="mini-action-button danger" onClick={() => void sendAction(submission, 'reject')} type="button" disabled={Boolean(reviewDisabledReason(submission, 'reject'))}>
+                      {reviewDisabledReason(submission, 'reject') ?? 'Reject'}
                     </button>
                   </div>
                 </li>
@@ -223,7 +273,7 @@ export function VerificationWorkflowPanel({ submissions: initialSubmissions, sam
         {error ? <p className="form-notice error">{error}</p> : null}
       </article>
 
-      <article className="panel panel-accent-green">
+      <article className="public-task-panel civic-panel-green">
         <div className="panel-head">
           <p className="section-label">Public trust check</p>
           <h3>Verify a published registry record</h3>

@@ -1,7 +1,5 @@
 # Equatorial Guinea National Identity UI Blueprint
 
-> **For Hermes:** Apply this blueprint to every front-facing surface of the national addressing platform before calling the UI presentable.
-
 **User goal and attention model**
 - Primary users should immediately read this as an official national digital platform, not a generic startup dashboard.
 - Attention should land in this order: state identity → platform purpose → operational trust/status → module/workflow overview.

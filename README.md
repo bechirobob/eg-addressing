@@ -3,7 +3,7 @@
 Dedicated project workspace for the national digital addressing platform.
 
 ## Why this exists
-This workspace isolates the addressing platform from other Hermes work so code, documents, data, exports, and future services do not mix with unrelated projects.
+This workspace isolates the addressing platform so code, documents, data, exports, and future services stay organized inside a dedicated project boundary.
 
 ## Isolation rules
 - Keep all addressing-platform code inside this workspace.

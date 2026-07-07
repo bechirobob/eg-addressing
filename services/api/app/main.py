@@ -1,17 +1,32 @@
+import json
+import logging
+import os
+import time
+import urllib.error
+import urllib.parse
+import urllib.request
+import uuid
+from pathlib import Path
+from collections import defaultdict, deque
 from contextlib import asynccontextmanager
+from datetime import datetime, timezone
 from typing import Any
 
-from fastapi import FastAPI, Header, HTTPException, Query, status
+from fastapi import FastAPI, Header, HTTPException, Query, Request, Response, status
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 
-from app.data import MODULES, PROVINCES
+from app.data import MODULES
 from app.db import (
+    AdminUnitProvinceMismatchError,
+    AddressCorrectionNotFoundError,
     AddressNotFoundError,
     AuthenticationError,
     BuildingNotFoundError,
     DuplicateAddressError,
     DuplicateBuildingError,
+    DuplicateImportJobError,
+    DuplicatePublicationPackError,
     DuplicateRoadError,
     DuplicateTerritoryError,
     ImportJobNotFoundError,
@@ -20,6 +35,7 @@ from app.db import (
     RoadNotFoundError,
     SubmissionNotFoundError,
     TerritoryNotFoundError,
+    UnknownAdminUnitError,
     UnknownBuildingError,
     UnknownProvinceError,
     UnknownRoadError,
@@ -31,33 +47,61 @@ from app.db import (
     archive_territory,
     authenticate_user_session,
     commit_import_job,
+    cleanup_demo_fixtures,
     create_address,
+    create_address_correction,
+    create_citizen_geotag_submission,
     create_building,
     create_field_submission,
     create_import_job,
     create_publication_pack,
     create_road,
     create_territory,
+    demo_fixture_status,
+    describe_address_code,
     fetch_addresses,
     fetch_buildings,
     fetch_roads,
     fetch_territories,
     get_address,
+    get_address_record_case_file,
     get_building,
     get_import_rows,
     get_road,
     get_submission,
     get_territory,
     init_db,
+    list_address_corrections,
+    list_citizen_geotag_submissions,
+    list_admin_units as list_admin_units_db,
     list_audit_logs,
     list_field_assignments,
     list_field_submissions,
+    list_geotag_field_tasks as list_field_geotag_tasks,
     list_import_jobs,
+    list_provinces as list_provinces_db,
     list_publication_packs,
     publish_publication_pack,
+    build_geotag_certificate,
+    geotag_duplicate_summary,
+    pilot_readiness_summary,
+    preview_citizen_geotag,
+    public_address_code_record_lookup,
+    record_geotag_duplicate_decision,
+    record_geotag_field_evidence,
     reporting_summary,
     resolve_user_from_token,
+    revoke_user_session,
+    review_geotag_road_suggestion,
+    search_address_records,
+    simulate_geotag_publication_path,
+    verify_geotag_identity,
+    signage_export,
     update_address,
+    update_address_correction_status,
+    update_citizen_geotag_status,
+    upsert_address_record_from_geotag,
+    update_geotag_field_status,
     update_building,
     update_road,
     update_submission_review_status,
@@ -74,6 +118,7 @@ class LoginRequest(BaseModel):
 class TerritoryCreate(BaseModel):
     name: str = Field(min_length=3, max_length=120)
     province_code: str = Field(min_length=2, max_length=8)
+    admin_unit_id: str | None = Field(default=None, min_length=3, max_length=120)
     type: str = Field(min_length=3, max_length=64)
     readiness: str = Field(min_length=3, max_length=64)
 
@@ -103,6 +148,16 @@ class AddressCreate(BaseModel):
     road_id: str = Field(min_length=3, max_length=120)
     building_id: str = Field(min_length=3, max_length=120)
     status: str = Field(min_length=3, max_length=64)
+    public_code: str | None = Field(default=None, min_length=8, max_length=32)
+    issuance_method: str = Field(default='manual', min_length=3, max_length=64)
+    source: str = Field(default='admin-portal', min_length=3, max_length=64)
+    verification_status: str = Field(default='provisional', min_length=3, max_length=64)
+    publication_state: str = Field(default='draft', min_length=3, max_length=64)
+    superseded_by_address_id: str | None = Field(default=None, min_length=3, max_length=120)
+    latitude: float | None = None
+    longitude: float | None = None
+    accuracy_meters: float | None = None
+    point_source_method: str | None = Field(default=None, min_length=3, max_length=64)
 
 
 class FieldSubmissionCreate(BaseModel):
@@ -117,6 +172,86 @@ class FieldSubmissionCreate(BaseModel):
 
 class ReviewActionRequest(BaseModel):
     reviewer_note: str = Field(default='', max_length=300)
+
+
+class AddressCorrectionCreate(BaseModel):
+    query: str = Field(min_length=3, max_length=180)
+    correction_type: str = Field(min_length=3, max_length=64)
+    reason: str = Field(min_length=3, max_length=180)
+    note: str = Field(default='', max_length=500)
+    address_id: str | None = Field(default=None, min_length=3, max_length=120)
+    public_code: str | None = Field(default=None, min_length=8, max_length=32)
+    reporter_name: str | None = Field(default=None, min_length=2, max_length=120)
+    reporter_contact: str | None = Field(default=None, min_length=3, max_length=120)
+
+
+class CorrectionReviewActionRequest(BaseModel):
+    reviewer_note: str = Field(default='', max_length=500)
+
+
+class CitizenGeotagPreviewRequest(BaseModel):
+    latitude: float = Field(ge=-90, le=90)
+    longitude: float = Field(ge=-180, le=180)
+    territory_id: str | None = Field(default=None, min_length=3, max_length=120)
+    province_code: str | None = Field(default=None, min_length=2, max_length=8)
+
+
+class RoadSuggestionRequest(BaseModel):
+    latitude: float = Field(ge=-90, le=90)
+    longitude: float = Field(ge=-180, le=180)
+
+
+class CitizenGeotagCreate(BaseModel):
+    territory_id: str | None = Field(default=None, min_length=3, max_length=120)
+    province_code: str | None = Field(default=None, min_length=2, max_length=8)
+    address_label: str = Field(min_length=5, max_length=180)
+    citizen_name: str | None = Field(default=None, min_length=2, max_length=120)
+    citizen_contact: str | None = Field(default=None, min_length=3, max_length=120)
+    landmark: str = Field(default='', max_length=300)
+    latitude: float = Field(ge=-90, le=90)
+    longitude: float = Field(ge=-180, le=180)
+    accuracy_meters: float | None = Field(default=None, ge=0, le=5000)
+    capture_method: str = Field(default='browser-gps', min_length=3, max_length=64)
+    grid_code: str | None = Field(default=None, min_length=8, max_length=40)
+    dip_last4: str | None = Field(default=None, pattern='^\\d{4}$')
+    suggested_road_name: str | None = Field(default=None, min_length=2, max_length=180)
+    suggested_local_area: str | None = Field(default=None, min_length=2, max_length=180)
+    suggested_place_name: str | None = Field(default=None, min_length=2, max_length=180)
+    map_display_name: str | None = Field(default=None, min_length=2, max_length=500)
+    road_suggestion_source: str | None = Field(default=None, min_length=3, max_length=80)
+    road_suggestion_attribution: str | None = Field(default=None, min_length=3, max_length=180)
+
+
+class GeotagReviewActionRequest(BaseModel):
+    reviewer_note: str = Field(default='', max_length=500)
+
+
+class GeotagIdentityReviewRequest(BaseModel):
+    dip_full: str = Field(pattern='^\\d{6,20}$')
+    identity_document_verified: bool = False
+    reviewer_note: str = Field(default='', max_length=500)
+
+
+class RoadSuggestionReviewRequest(BaseModel):
+    action: str = Field(pattern='^(accepted|edited|rejected)$')
+    reviewed_road_name: str | None = Field(default=None, min_length=2, max_length=180)
+    reviewer_note: str = Field(default='', max_length=500)
+
+
+class GeotagDuplicateDecisionRequest(BaseModel):
+    duplicate_action: str = Field(pattern='^(same-property-merge|different-property-same-cell|gps-error-recapture|send-field-verification)$')
+    reviewer_note: str = Field(default='', max_length=500)
+
+
+class GeotagFieldStatusRequest(BaseModel):
+    field_status: str = Field(pattern='^(assigned|visited|verified|needs-recapture|blocked)$')
+    field_note: str = Field(default='', max_length=500)
+
+
+class GeotagFieldEvidenceRequest(BaseModel):
+    evidence_type: str = Field(pattern='^(photo-reference|site-note|landmark-confirmation|coordinate-confirmation)$')
+    evidence_reference: str = Field(min_length=3, max_length=240)
+    evidence_note: str = Field(default='', max_length=500)
 
 
 class ImportRowInput(BaseModel):
@@ -146,6 +281,20 @@ async def lifespan(_: FastAPI):
     yield
 
 
+logging.basicConfig(level=os.getenv('LOG_LEVEL', 'INFO').upper(), format='%(message)s')
+logger = logging.getLogger('eg-addressing-api')
+
+APP_ENV = os.getenv('APP_ENV', 'local').strip().lower() or 'local'
+SESSION_TTL_HOURS = max(1, int(os.getenv('SESSION_TTL_HOURS', '12')))
+PUBLIC_RATE_LIMIT_ENABLED = os.getenv('PUBLIC_RATE_LIMIT_ENABLED', 'true').strip().lower() not in {'0', 'false', 'no'}
+PUBLIC_RATE_LIMIT_MAX_REQUESTS = max(1, int(os.getenv('PUBLIC_RATE_LIMIT_MAX_REQUESTS', '30')))
+PUBLIC_RATE_LIMIT_WINDOW_SECONDS = max(1, int(os.getenv('PUBLIC_RATE_LIMIT_WINDOW_SECONDS', '60')))
+PUBLIC_RATE_LIMIT_BUCKETS: dict[str, deque[float]] = defaultdict(deque)
+NOMINATIM_REVERSE_URL = os.getenv('NOMINATIM_REVERSE_URL', 'https://nominatim.openstreetmap.org/reverse')
+NOMINATIM_USER_AGENT = os.getenv('NOMINATIM_USER_AGENT', 'BeCoreOps-EG-Addressing-Pilot/0.1 contact: operator')
+NOMINATIM_LAST_REQUEST_AT = 0.0
+
+
 app = FastAPI(
     title='National Digital Addressing Platform API',
     version='0.1.0',
@@ -161,6 +310,134 @@ app.add_middleware(
     allow_methods=['GET', 'POST', 'PATCH', 'DELETE', 'OPTIONS'],
     allow_headers=['*'],
 )
+
+
+def _client_ip(request: Request) -> str:
+    forwarded_for = request.headers.get('x-forwarded-for', '').strip()
+    if forwarded_for:
+        return forwarded_for.split(',', 1)[0].strip()
+    if request.client and request.client.host:
+        return request.client.host
+    return 'unknown'
+
+
+def _check_public_rate_limit(request: Request, scope: str) -> None:
+    if not PUBLIC_RATE_LIMIT_ENABLED:
+        return
+    now = time.time()
+    key = f'{scope}:{_client_ip(request)}'
+    bucket = PUBLIC_RATE_LIMIT_BUCKETS[key]
+    while bucket and now - bucket[0] > PUBLIC_RATE_LIMIT_WINDOW_SECONDS:
+        bucket.popleft()
+    if len(bucket) >= PUBLIC_RATE_LIMIT_MAX_REQUESTS:
+        raise HTTPException(
+            status_code=status.HTTP_429_TOO_MANY_REQUESTS,
+            detail='rate limit exceeded',
+            headers={'Retry-After': str(PUBLIC_RATE_LIMIT_WINDOW_SECONDS)},
+        )
+    bucket.append(now)
+
+
+def _road_suggestion_unavailable() -> dict[str, Any]:
+    return {
+        'suggested_road_name': None,
+        'suggested_local_area': None,
+        'suggested_place_name': None,
+        'display_name': None,
+        'source': 'openstreetmap-nominatim',
+        'source_attribution': '© OpenStreetMap contributors',
+        'distance_meters': None,
+        'confidence': 'none',
+        'requires_review': True,
+        'status': 'unavailable',
+    }
+
+
+def _extract_road_name(address: dict[str, Any]) -> str | None:
+    for key in ('road', 'pedestrian', 'footway', 'residential', 'path', 'cycleway'):
+        value = address.get(key)
+        if isinstance(value, str) and value.strip():
+            return value.strip()
+    return None
+
+
+def _extract_local_area(address: dict[str, Any]) -> str | None:
+    for key in ('neighbourhood', 'suburb', 'quarter', 'city_district', 'hamlet', 'village', 'town', 'city', 'municipality', 'county'):
+        value = address.get(key)
+        if isinstance(value, str) and value.strip():
+            return value.strip()
+    return None
+
+
+def suggest_nearest_road_name(latitude: float, longitude: float) -> dict[str, Any]:
+    global NOMINATIM_LAST_REQUEST_AT
+    elapsed = time.time() - NOMINATIM_LAST_REQUEST_AT
+    if elapsed < 1.0:
+        time.sleep(1.0 - elapsed)
+    query = urllib.parse.urlencode({
+        'format': 'jsonv2',
+        'lat': f'{latitude:.7f}',
+        'lon': f'{longitude:.7f}',
+        'zoom': '18',
+        'addressdetails': '1',
+    })
+    request = urllib.request.Request(
+        f'{NOMINATIM_REVERSE_URL}?{query}',
+        headers={'User-Agent': NOMINATIM_USER_AGENT, 'Accept': 'application/json'},
+    )
+    try:
+        NOMINATIM_LAST_REQUEST_AT = time.time()
+        with urllib.request.urlopen(request, timeout=4) as response:
+            payload = json.loads(response.read().decode('utf-8'))
+    except (urllib.error.URLError, TimeoutError, json.JSONDecodeError, OSError):
+        return _road_suggestion_unavailable()
+
+    address = payload.get('address') or {}
+    road_name = _extract_road_name(address)
+    local_area = _extract_local_area(address)
+    place_name = payload.get('name') if isinstance(payload.get('name'), str) else None
+    display_name = payload.get('display_name') if isinstance(payload.get('display_name'), str) else None
+    if not road_name and not local_area and not place_name:
+        return _road_suggestion_unavailable()
+    return {
+        'suggested_road_name': road_name,
+        'suggested_local_area': local_area,
+        'suggested_place_name': place_name.strip() if place_name else None,
+        'display_name': display_name.strip() if display_name else None,
+        'source': 'openstreetmap-nominatim',
+        'source_attribution': '© OpenStreetMap contributors',
+        'distance_meters': None,
+        'confidence': 'medium' if road_name or local_area else 'low',
+        'requires_review': True,
+        'status': 'suggested',
+    }
+
+
+@app.middleware('http')
+async def request_context_middleware(request: Request, call_next):
+    request_id = request.headers.get('x-request-id') or str(uuid.uuid4())
+    started_at = time.perf_counter()
+    response: Response | None = None
+    try:
+        response = await call_next(request)
+        return response
+    finally:
+        elapsed_ms = round((time.perf_counter() - started_at) * 1000, 2)
+        status_code = response.status_code if response else 500
+        logger.info(
+            {
+                'event': 'http_request',
+                'request_id': request_id,
+                'method': request.method,
+                'path': request.url.path,
+                'status_code': status_code,
+                'duration_ms': elapsed_ms,
+                'client_ip': _client_ip(request),
+                'app_env': APP_ENV,
+            }
+        )
+        if response is not None:
+            response.headers['X-Request-ID'] = request_id
 
 
 def _bearer_token(authorization: str | None) -> str:
@@ -182,6 +459,392 @@ def _require_role(user: dict[str, str], *roles: str) -> None:
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail='insufficient role')
 
 
+def _geotag_quality_flags(item: dict[str, Any], duplicate_count: int) -> dict[str, Any]:
+    accuracy = item.get('accuracy_meters')
+    if accuracy is None:
+        accuracy_level = 'unknown'
+        accuracy_label = 'Accuracy not recorded'
+        requires_field_check = True
+    elif accuracy <= 10:
+        accuracy_level = 'high-accuracy'
+        accuracy_label = 'High accuracy'
+        requires_field_check = False
+    elif accuracy <= 25:
+        accuracy_level = 'needs-confirmation'
+        accuracy_label = 'Needs confirmation'
+        requires_field_check = True
+    else:
+        accuracy_level = 'weak-gps'
+        accuracy_label = 'Weak GPS — field check required'
+        requires_field_check = True
+    duplicate_code = duplicate_count > 1
+    possible_duplicate = duplicate_code or item.get('duplicate_hint') == 'possible-duplicate'
+    recommended_action = 'field-check' if requires_field_check or possible_duplicate else 'registry-ready-review'
+    return {
+        'accuracy_level': accuracy_level,
+        'accuracy_label': accuracy_label,
+        'requires_field_check': requires_field_check,
+        'duplicate_code': duplicate_code,
+        'possible_duplicate': possible_duplicate,
+        'recommended_action': recommended_action,
+    }
+
+
+def _now_utc() -> datetime:
+    return datetime.now(timezone.utc)
+
+
+def _parse_datetime(value: Any) -> datetime | None:
+    if isinstance(value, datetime):
+        return value if value.tzinfo else value.replace(tzinfo=timezone.utc)
+    if not value:
+        return None
+    try:
+        parsed = datetime.fromisoformat(str(value).replace('Z', '+00:00'))
+    except ValueError:
+        return None
+    return parsed if parsed.tzinfo else parsed.replace(tzinfo=timezone.utc)
+
+
+def _hours_since(value: Any, now: datetime) -> float | None:
+    parsed = _parse_datetime(value)
+    if not parsed:
+        return None
+    return max(0.0, (now - parsed.astimezone(timezone.utc)).total_seconds() / 3600)
+
+
+def _sla_state(age_hours: float | None, due_hours: int) -> str:
+    if age_hours is None:
+        return 'unknown'
+    if age_hours > due_hours:
+        return 'overdue'
+    if age_hours >= due_hours * 0.75:
+        return 'approaching'
+    return 'on_time'
+
+
+def _geotag_sla(item: dict[str, Any], automation: dict[str, Any], now: datetime) -> dict[str, Any] | None:
+    status_value = item.get('status') or 'submitted'
+    if status_value in {'rejected', 'registry-ready', 'published'}:
+        return None
+    if automation.get('triage_bucket') == 'field-verification':
+        label = 'Assign field verification'
+        due_hours = 72
+    elif automation.get('triage_bucket') == 'field-verification' and item.get('duplicate_hint') == 'possible-duplicate':
+        label = 'Supervisor duplicate decision'
+        due_hours = 120
+    elif automation.get('triage_bucket') == 'field-verification' and automation.get('quality_flags', {}).get('possible_duplicate'):
+        label = 'Supervisor duplicate decision'
+        due_hours = 120
+    else:
+        label = 'Review new citizen geotag'
+        due_hours = 48
+    if item.get('duplicate_hint') == 'possible-duplicate':
+        label = 'Supervisor duplicate decision'
+        due_hours = 120
+    age_hours = _hours_since(item.get('updated_at') or item.get('created_at'), now)
+    return {
+        'id': item.get('id'),
+        'type': 'geotag',
+        'label': label,
+        'status': status_value,
+        'age_hours': round(age_hours, 1) if age_hours is not None else None,
+        'due_hours': due_hours,
+        'state': _sla_state(age_hours, due_hours),
+    }
+
+
+def _correction_sla(item: dict[str, Any], now: datetime) -> dict[str, Any] | None:
+    status_value = item.get('status') or 'submitted'
+    if status_value != 'submitted':
+        return None
+    age_hours = _hours_since(item.get('created_at') or item.get('updated_at'), now)
+    return {
+        'id': item.get('id'),
+        'type': 'correction',
+        'label': 'Acknowledge correction request',
+        'status': status_value,
+        'age_hours': round(age_hours, 1) if age_hours is not None else None,
+        'due_hours': 48,
+        'state': _sla_state(age_hours, 48),
+    }
+
+
+def _publication_hold_summary(enriched_items: list[dict[str, Any]], now: datetime) -> dict[str, Any]:
+    held = [item for item in enriched_items if (item.get('status') == 'registry-ready' or (item.get('automation') or {}).get('integration', {}).get('api_record_state') == 'internal-registry')]
+    ages = [_hours_since(item.get('updated_at') or item.get('created_at'), now) for item in held]
+    known_ages = [age for age in ages if age is not None]
+    return {
+        'registry_ready': len(held),
+        'public_release_locked': True,
+        'oldest_days': round(max(known_ages) / 24) if known_ages else 0,
+        'oldest_hours': round(max(known_ages), 1) if known_ages else 0,
+        'note': 'Registry-ready records remain internal until full project/institutional approval publishes them.',
+    }
+
+
+def _sla_summary(enriched_items: list[dict[str, Any]], corrections: list[dict[str, Any]], now: datetime) -> dict[str, Any]:
+    items = [sla for sla in (_geotag_sla(item, item.get('automation') or {}, now) for item in enriched_items) if sla]
+    items.extend(sla for sla in (_correction_sla(item, now) for item in corrections) if sla)
+    by_state: dict[str, int] = defaultdict(int)
+    for item in items:
+        by_state[item['state']] += 1
+    overdue = [item for item in items if item['state'] == 'overdue']
+    oldest_overdue = max(overdue, key=lambda item: item.get('age_hours') or 0, default=None)
+    return {
+        'items_tracked': len(items),
+        'on_time': by_state.get('on_time', 0),
+        'approaching': by_state.get('approaching', 0),
+        'overdue': by_state.get('overdue', 0),
+        'unknown': by_state.get('unknown', 0),
+        'by_state': dict(by_state),
+        'oldest_overdue': oldest_overdue,
+        'items': sorted(items, key=lambda item: (item['state'] != 'overdue', -(item.get('age_hours') or 0)))[:8],
+    }
+
+
+def _geotag_automation(item: dict[str, Any], quality_flags: dict[str, Any], duplicate_count: int) -> dict[str, Any]:
+    status_value = item.get('status') or 'submitted'
+    field_status = item.get('field_status') or 'assigned'
+    road_status = item.get('road_suggestion_status') or 'not-suggested'
+    reasons: list[str] = []
+    score = 100
+
+    if quality_flags['accuracy_level'] == 'unknown':
+        score -= 30
+        reasons.append('GPS accuracy is not recorded, so the point needs confirmation before official use.')
+    elif quality_flags['accuracy_level'] == 'needs-confirmation':
+        score -= 20
+        reasons.append('GPS accuracy is moderate; operator or field confirmation is recommended.')
+    elif quality_flags['accuracy_level'] == 'weak-gps':
+        score -= 45
+        reasons.append('GPS accuracy is weak enough to require field verification.')
+
+    if quality_flags['possible_duplicate']:
+        score -= 25
+        reasons.append('The national address code or nearby-point check suggests a possible duplicate.')
+    if road_status == 'pending-review':
+        score -= 10
+        reasons.append('Map-derived road/local-area suggestion is waiting for operator review.')
+    if not item.get('territory_id'):
+        score -= 5
+        reasons.append('Official routing area is not selected yet; keep map local-area labels as suggestions.')
+    if not item.get('landmark'):
+        score -= 5
+        reasons.append('No landmark was supplied, which can slow field confirmation.')
+
+    score = max(0, min(100, score))
+    if status_value == 'rejected':
+        triage_bucket = 'closed-rejected'
+        process_stage = 'Closed — rejected'
+        next_action = 'closed'
+        next_action_label = 'No action unless reopened by an authorized reviewer.'
+    elif status_value == 'registry-ready':
+        triage_bucket = 'registry-ready'
+        process_stage = 'Approved for official case-file registry'
+        next_action = 'await-project-publication-approval'
+        next_action_label = 'Hold for full project/institutional approval before certificate, physical signage, or public publication.'
+    elif status_value == 'needs-field-check' or field_status in {'visited', 'needs-recapture', 'blocked'} or quality_flags['requires_field_check'] or quality_flags['possible_duplicate']:
+        triage_bucket = 'field-verification'
+        process_stage = 'Needs field verification'
+        next_action = 'send-field-check'
+        next_action_label = 'Send to field team or record field status before approval.'
+    elif road_status == 'pending-review':
+        triage_bucket = 'operator-road-review'
+        process_stage = 'Operator review'
+        next_action = 'review-map-suggestion'
+        next_action_label = 'Accept, edit, or reject the map-derived road/local-area suggestion.'
+    elif status_value in {'submitted', 'under-review'}:
+        triage_bucket = 'ready-for-operator'
+        process_stage = 'Ready for operator decision'
+        next_action = 'operator-review'
+        next_action_label = 'Review evidence, then approve the official case file or send to field check.'
+    else:
+        triage_bucket = 'monitor'
+        process_stage = status_value.replace('-', ' ').title()
+        next_action = 'monitor'
+        next_action_label = 'Monitor this request for the next workflow event.'
+
+    if not reasons:
+        reasons.append('GPS quality and duplicate checks do not show immediate blockers.')
+
+    return {
+        'quality_score': score,
+        'triage_bucket': triage_bucket,
+        'process_stage': process_stage,
+        'next_best_action': next_action,
+        'next_best_action_label': next_action_label,
+        'reasons': reasons[:4],
+        'citizen_tracking': {
+            'tracking_code': item.get('id'),
+            'public_status_label': process_stage,
+            'public_next_step': next_action_label,
+            'public_lookup_url': f"/code/{item.get('grid_code')}",
+        },
+        'routing': {
+            'assigned': bool(item.get('territory_id')),
+            'territory_id': item.get('territory_id'),
+            'territory_name': item.get('territory_name'),
+            'assignment_source': (item.get('routing_assignment') or {}).get('routing_assignment_source') if isinstance(item.get('routing_assignment'), dict) else ('manual' if item.get('territory_id') else None),
+            'assignment_confidence': (item.get('routing_assignment') or {}).get('routing_assignment_confidence') if isinstance(item.get('routing_assignment'), dict) else ('operator-confirmed' if item.get('territory_id') else None),
+        },
+        'field_work': {
+            'required': triage_bucket == 'field-verification',
+            'status': field_status,
+            'field_submission_id': item.get('field_submission_id'),
+        },
+        'signage': {
+            'ready': status_value == 'published',
+            'batch': item.get('signage_batch'),
+            'export_status': 'locked-until-full-project-approval' if status_value == 'registry-ready' else ('ready-for-export' if status_value == 'published' else 'not-ready'),
+        },
+        'corrections': {
+            'watch_public_reports': status_value in {'published', 'under-review'},
+            'recommended_queue': 'public-corrections' if status_value == 'published' else 'operator-review',
+        },
+        'integration': {
+            'api_record_state': 'public' if status_value == 'published' else ('internal-registry' if status_value == 'registry-ready' else 'not-public'),
+            'partner_api_ready': status_value == 'published',
+        },
+        'dashboard': {
+            'metric_bucket': triage_bucket,
+            'counts_toward_active_queue': status_value in {'submitted', 'under-review', 'needs-field-check'},
+        },
+    }
+
+
+def _automation_summary(enriched_items: list[dict[str, Any]], corrections: list[dict[str, Any]] | None = None) -> dict[str, Any]:
+    now = _now_utc()
+    corrections = corrections or []
+    buckets: dict[str, int] = defaultdict(int)
+    next_actions: dict[str, int] = defaultdict(int)
+    total_score = 0
+    active_count = 0
+    field_required = 0
+    registry_ready = 0
+    api_ready = 0
+    for item in enriched_items:
+        automation = item.get('automation') or {}
+        buckets[automation.get('triage_bucket', 'unknown')] += 1
+        next_actions[automation.get('next_best_action', 'unknown')] += 1
+        total_score += int(automation.get('quality_score') or 0)
+        if automation.get('dashboard', {}).get('counts_toward_active_queue'):
+            active_count += 1
+        if automation.get('field_work', {}).get('required'):
+            field_required += 1
+        if automation.get('integration', {}).get('api_record_state') == 'internal-registry':
+            registry_ready += 1
+        if automation.get('integration', {}).get('partner_api_ready'):
+            api_ready += 1
+    total = len(enriched_items)
+    return {
+        'total': total,
+        'active_queue': active_count,
+        'average_quality_score': round(total_score / total, 1) if total else 0,
+        'field_required': field_required,
+        'registry_ready': registry_ready,
+        'partner_api_ready': api_ready,
+        'triage_buckets': [{'bucket': key, 'count': value} for key, value in sorted(buckets.items())],
+        'next_actions': [{'action': key, 'count': value} for key, value in sorted(next_actions.items())],
+        'sla': _sla_summary(enriched_items, corrections, now),
+        'publication_hold': _publication_hold_summary(enriched_items, now),
+    }
+
+
+def _sla_drilldown(enriched_items: list[dict[str, Any]], corrections: list[dict[str, Any]], state_filter: str | None = None) -> dict[str, Any]:
+    now = _now_utc()
+    sla_items = _sla_summary(enriched_items, corrections, now)['items']
+    enriched_by_id = {item.get('id'): item for item in enriched_items}
+    rows = []
+    for sla in sla_items:
+        if state_filter and sla['state'] != state_filter:
+            continue
+        enriched = enriched_by_id.get(sla['id'], {}) if sla['type'] == 'geotag' else {}
+        automation = enriched.get('automation') or {}
+        rows.append({
+            **sla,
+            'address_label': enriched.get('address_label'),
+            'grid_code': enriched.get('grid_code'),
+            'territory_name': enriched.get('territory_name'),
+            'triage_bucket': automation.get('triage_bucket'),
+            'next_best_action': automation.get('next_best_action'),
+            'next_best_action_label': automation.get('next_best_action_label'),
+        })
+    return {'state': state_filter or 'all', 'count': len(rows), 'items': rows}
+
+
+def _public_tracking_payload(item: dict[str, Any], *, lookup_type: str) -> dict[str, Any]:
+    enriched = _enrich_geotag_submissions([item])[0]
+    automation = enriched.get('automation', {})
+    return _strip_identity_fields({
+        'lookup_type': lookup_type,
+        'id': enriched['id'],
+        'grid_code': enriched['grid_code'],
+        'status': enriched['status'],
+        'address_label': enriched['address_label'],
+        'created_at': enriched.get('created_at'),
+        'updated_at': enriched.get('updated_at'),
+        'tracking': automation.get('citizen_tracking'),
+        'process_stage': automation.get('process_stage'),
+        'next_step': automation.get('next_best_action_label'),
+        'public_lookup_url': enriched.get('public_lookup_url'),
+        'publication_state': automation.get('integration', {}).get('api_record_state'),
+    })
+
+
+def _csv_cell(value: Any) -> str:
+    text = '' if value is None else str(value)
+    return '"' + text.replace('"', '""') + '"'
+
+
+def _signage_pack(status_value: str = 'published') -> dict[str, Any]:
+    rows = signage_export(status=status_value).get('items', [])
+    generated_at = datetime.now(timezone.utc).replace(microsecond=0).isoformat().replace('+00:00', 'Z')
+    batch_id = f"signage-pack-{datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%SZ')}"
+    header = ['grid_code', 'signage_text', 'address_label', 'territory_name', 'latitude', 'longitude', 'accuracy_meters', 'batch', 'status']
+    csv_lines = [','.join(header)]
+    for row in rows:
+        csv_lines.append(','.join(_csv_cell(row.get(key)) for key in header))
+    return {
+        'batch_id': batch_id,
+        'generated_at': generated_at,
+        'status_filter': status_value,
+        'record_count': len(rows),
+        'items': rows,
+        'csv': '\n'.join(csv_lines),
+        'print_summary': [
+            f"{row.get('grid_code')} — {row.get('signage_text') or row.get('address_label')}"
+            for row in rows
+        ],
+        'operator_note': 'Physical signage packs include published records only. Registry-ready case files stay locked until full project/institutional approval.',
+    }
+
+
+def _enrich_geotag_submissions(items: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    code_groups: dict[str, list[dict[str, Any]]] = defaultdict(list)
+    for item in items:
+        code_groups[item.get('grid_code', '')].append(item)
+    enriched = []
+    for item in items:
+        group = code_groups.get(item.get('grid_code', ''), [])
+        quality_flags = _geotag_quality_flags(item, len(group))
+        enriched_item = {
+            **item,
+            'quality_flags': quality_flags,
+            'duplicate_group': {
+                'count': len(group),
+                'items': [
+                    {'id': other.get('id'), 'address_label': other.get('address_label'), 'status': other.get('status')}
+                    for other in group
+                ],
+            },
+            'public_lookup_url': f"/code/{item.get('grid_code')}",
+        }
+        enriched_item['automation'] = _geotag_automation(enriched_item, quality_flags, len(group))
+        enriched.append(enriched_item)
+    return enriched
+
+
 @app.get('/')
 def root() -> dict[str, str]:
     return {'message': 'eg-addressing-api online', 'docs': '/docs'}
@@ -189,7 +852,7 @@ def root() -> dict[str, str]:
 
 @app.get('/api/v1/health')
 def health() -> dict[str, str]:
-    return {'status': 'ok', 'service': 'eg-addressing-api', 'version': '0.1.0'}
+    return {'status': 'ok', 'service': 'eg-addressing-api', 'version': '0.1.0', 'environment': APP_ENV}
 
 
 @app.get('/api/v1/meta')
@@ -205,19 +868,42 @@ def meta() -> dict[str, Any]:
 @app.post('/api/v1/auth/login')
 def login(payload: LoginRequest) -> dict[str, Any]:
     try:
-        return authenticate_user_session(payload.username, payload.password)
+        session = authenticate_user_session(payload.username, payload.password)
+        session['session_ttl_hours'] = SESSION_TTL_HOURS
+        return session
     except AuthenticationError as exc:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail=str(exc)) from exc
 
 
 @app.get('/api/v1/auth/me')
 def auth_me(authorization: str | None = Header(default=None)) -> dict[str, Any]:
-    return {'user': _current_user(authorization)}
+    return {'user': _current_user(authorization), 'session_ttl_hours': SESSION_TTL_HOURS}
+
+
+@app.post('/api/v1/auth/logout', status_code=status.HTTP_204_NO_CONTENT)
+def auth_logout(authorization: str | None = Header(default=None)) -> Response:
+    user = _current_user(authorization)
+    revoke_user_session(_bearer_token(authorization), actor=user)
+    return Response(status_code=status.HTTP_204_NO_CONTENT)
 
 
 @app.get('/api/v1/territories/provinces')
 def list_provinces() -> dict[str, list[dict[str, str]]]:
-    return {'items': PROVINCES}
+    return {'items': list_provinces_db()}
+
+
+@app.get('/api/v1/provinces')
+def list_public_provinces() -> dict[str, list[dict[str, str]]]:
+    return {'items': list_provinces_db()}
+
+
+@app.get('/api/v1/admin-units')
+def admin_units(
+    level: str | None = Query(default=None),
+    parent_id: str | None = Query(default=None),
+    province_code: str | None = Query(default=None),
+) -> dict[str, list[dict[str, Any]]]:
+    return {'items': list_admin_units_db(level=level, parent_id=parent_id, province_code=province_code)}
 
 
 @app.get('/api/v1/territories')
@@ -246,7 +932,7 @@ def create_territory_endpoint(payload: TerritoryCreate, authorization: str | Non
         return create_territory(payload.model_dump(), actor=user)
     except DuplicateTerritoryError as exc:
         raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail=str(exc)) from exc
-    except UnknownProvinceError as exc:
+    except (UnknownProvinceError, UnknownAdminUnitError, AdminUnitProvinceMismatchError) as exc:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(exc)) from exc
 
 
@@ -258,7 +944,7 @@ def update_territory_endpoint(territory_id: str, payload: TerritoryUpdate, autho
         return update_territory(territory_id, payload.model_dump(), actor=user)
     except DuplicateTerritoryError as exc:
         raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail=str(exc)) from exc
-    except UnknownProvinceError as exc:
+    except (UnknownProvinceError, UnknownAdminUnitError, AdminUnitProvinceMismatchError) as exc:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(exc)) from exc
     except TerritoryNotFoundError as exc:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(exc)) from exc
@@ -432,6 +1118,35 @@ def field_assignments() -> dict[str, list[dict[str, Any]]]:
     return {'items': list_field_assignments()}
 
 
+@app.get('/api/v1/field/geotag-tasks')
+def field_geotag_tasks(status_filter: str | None = Query(default=None, alias='status'), territory_id: str | None = Query(default=None), authorization: str | None = Header(default=None)) -> dict[str, list[dict[str, Any]]]:
+    user = _current_user(authorization)
+    _require_role(user, 'viewer', 'editor', 'admin')
+    return {'items': _enrich_geotag_submissions(list_field_geotag_tasks(status=status_filter, territory_id=territory_id))}
+
+
+@app.post('/api/v1/field/geotag-tasks/{submission_id}/status')
+def update_field_geotag_task_status(submission_id: str, payload: GeotagFieldStatusRequest, authorization: str | None = Header(default=None)) -> dict[str, Any]:
+    user = _current_user(authorization)
+    _require_role(user, 'editor', 'admin')
+    try:
+        return update_geotag_field_status(submission_id, payload.field_status, payload.field_note, actor=user)
+    except (SubmissionNotFoundError, InvalidSubmissionActionError) as exc:
+        code = status.HTTP_404_NOT_FOUND if isinstance(exc, SubmissionNotFoundError) else status.HTTP_400_BAD_REQUEST
+        raise HTTPException(status_code=code, detail=str(exc)) from exc
+
+
+@app.post('/api/v1/field/geotag-tasks/{submission_id}/evidence')
+def record_field_geotag_task_evidence(submission_id: str, payload: GeotagFieldEvidenceRequest, authorization: str | None = Header(default=None)) -> dict[str, Any]:
+    user = _current_user(authorization)
+    _require_role(user, 'editor', 'admin')
+    try:
+        return _strip_identity_fields(record_geotag_field_evidence(submission_id, payload.evidence_type, payload.evidence_reference, payload.evidence_note, actor=user))
+    except (SubmissionNotFoundError, InvalidSubmissionActionError) as exc:
+        code = status.HTTP_404_NOT_FOUND if isinstance(exc, SubmissionNotFoundError) else status.HTTP_400_BAD_REQUEST
+        raise HTTPException(status_code=code, detail=str(exc)) from exc
+
+
 @app.get('/api/v1/field/submissions')
 def field_submissions(review_status: str | None = Query(default=None), territory_id: str | None = Query(default=None), authorization: str | None = Header(default=None)) -> dict[str, list[dict[str, Any]]]:
     user = _current_user(authorization)
@@ -447,6 +1162,8 @@ def create_field_submission_endpoint(payload: FieldSubmissionCreate, authorizati
         return create_field_submission(payload.model_dump(), actor=user)
     except UnknownTerritoryError as exc:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(exc)) from exc
+    except SubmissionNotFoundError as exc:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(exc)) from exc
 
 
 @app.post('/api/v1/field/submissions/{submission_id}/under-review')
@@ -498,6 +1215,19 @@ def rework_submission_endpoint(submission_id: str, payload: ReviewActionRequest,
         raise HTTPException(status_code=code, detail=str(exc)) from exc
 
 
+def _build_public_extract(result: dict[str, Any]) -> dict[str, Any]:
+    public_code = result.get('public_code') or result.get('address_id')
+    return {
+        **result,
+        'document_title': 'Official Address Registry Extract',
+        'document_reference': f"EXTRACT-{public_code}",
+        'record_locator': public_code,
+        'issued_for': result.get('address_label'),
+        'issuing_authority': 'Republic of Equatorial Guinea · National Digital Addressing Platform',
+        'extract_status': 'ready' if result.get('match_status') == 'verified' else 'not-available',
+    }
+
+
 @app.get('/api/v1/verification/lookup')
 def verification_lookup(query: str = Query(min_length=3)) -> dict[str, Any]:
     result = verify_address(query)
@@ -505,11 +1235,344 @@ def verification_lookup(query: str = Query(min_length=3)) -> dict[str, Any]:
         return {
             'query': query,
             'match_status': 'not-found',
+            'public_code': None,
             'address_label': 'No published registry record found',
             'jurisdiction': 'Pilot registry lookup',
+            'verification_status': 'not-found',
+            'publication_state': 'unpublished',
             'verification_note': 'The query does not match a published address record yet.',
         }
     return result
+
+
+@app.get('/api/v1/public/verification/{query}')
+def public_verification_lookup(query: str, request: Request) -> dict[str, Any]:
+    _check_public_rate_limit(request, 'public-verification')
+    return verification_lookup(query=query)
+
+
+@app.get('/api/v1/public/issuance/{query}')
+def public_issuance_lookup(query: str, request: Request) -> dict[str, Any]:
+    _check_public_rate_limit(request, 'public-issuance')
+    return _build_public_extract(verification_lookup(query=query))
+
+
+@app.get('/api/v1/public/address-code/{code}')
+def public_address_code_lookup(code: str, request: Request) -> dict[str, Any]:
+    _check_public_rate_limit(request, 'public-address-code')
+    return describe_address_code(code)
+
+
+def _strip_identity_fields(value: Any) -> Any:
+    identity_keys = {
+        'citizen_name',
+        'citizen_contact',
+        'dip_last4',
+        'dip_masked',
+        'dip_full',
+        'identity_verification_status',
+        'identity_document_verified',
+        'reviewer_note',
+        'field_note',
+    }
+    if isinstance(value, dict):
+        return {key: _strip_identity_fields(item) for key, item in value.items() if key not in identity_keys}
+    if isinstance(value, list):
+        return [_strip_identity_fields(item) for item in value]
+    return value
+
+
+@app.get('/api/v1/public/address-code/{code}/record')
+def public_address_code_record(code: str, request: Request) -> dict[str, Any]:
+    _check_public_rate_limit(request, 'public-address-code-record')
+    return _strip_identity_fields(public_address_code_record_lookup(code))
+
+
+@app.post('/api/v1/public/corrections', status_code=status.HTTP_201_CREATED)
+def create_public_correction(payload: AddressCorrectionCreate, request: Request) -> dict[str, Any]:
+    _check_public_rate_limit(request, 'public-corrections')
+    try:
+        return create_address_correction(payload.model_dump(), actor=None)
+    except AddressNotFoundError as exc:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(exc)) from exc
+
+
+@app.post('/api/v1/public/geotag/preview')
+def public_geotag_preview(payload: CitizenGeotagPreviewRequest, request: Request) -> dict[str, Any]:
+    _check_public_rate_limit(request, 'public-geotag-preview')
+    try:
+        return preview_citizen_geotag(payload.latitude, payload.longitude, territory_id=payload.territory_id, province_code=payload.province_code)
+    except UnknownTerritoryError as exc:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(exc)) from exc
+
+
+@app.post('/api/v1/public/geotag/road-suggestion')
+def public_road_suggestion(payload: RoadSuggestionRequest, request: Request) -> dict[str, Any]:
+    _check_public_rate_limit(request, 'public-road-suggestion')
+    return suggest_nearest_road_name(payload.latitude, payload.longitude)
+
+
+@app.post('/api/v1/public/geotag-submissions', status_code=status.HTTP_201_CREATED)
+def create_public_geotag_submission(payload: CitizenGeotagCreate, request: Request) -> dict[str, Any]:
+    _check_public_rate_limit(request, 'public-geotag-submissions')
+    try:
+        created = create_citizen_geotag_submission(payload.model_dump(), actor=None)
+        enriched = _enrich_geotag_submissions([created])[0]
+        return enriched
+    except UnknownTerritoryError as exc:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(exc)) from exc
+
+
+@app.get('/api/v1/public/geotag-submissions/{submission_id}/tracking')
+def public_geotag_submission_tracking(submission_id: str, request: Request) -> dict[str, Any]:
+    _check_public_rate_limit(request, 'public-geotag-tracking')
+    items = [item for item in list_citizen_geotag_submissions() if item['id'] == submission_id]
+    if not items:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail='citizen geotag submission not found')
+    return _public_tracking_payload(items[0], lookup_type='submission-id')
+
+
+@app.get('/api/v1/public/tracking/{lookup_code}')
+def public_tracking_lookup(lookup_code: str, request: Request) -> dict[str, Any]:
+    _check_public_rate_limit(request, 'public-tracking')
+    normalized = lookup_code.strip()
+    items = list_citizen_geotag_submissions()
+    for item in items:
+        if item['id'] == normalized:
+            return _public_tracking_payload(item, lookup_type='submission-id')
+    for item in items:
+        if str(item.get('grid_code', '')).upper() == normalized.upper():
+            return _public_tracking_payload(item, lookup_type='address-code')
+    if normalized.upper().startswith('EG-'):
+        record = _strip_identity_fields(public_address_code_record_lookup(normalized))
+        return {
+            'lookup_type': 'address-code',
+            'grid_code': normalized,
+            'status': record.get('publication_status', 'not_public'),
+            'address_label': (record.get('record') or {}).get('address_label') if isinstance(record.get('record'), dict) else None,
+            'process_stage': 'Published record available' if record.get('publication_status') == 'published' else 'Address code not public yet',
+            'next_step': 'Use the public record page when publication is approved.' if record.get('publication_status') == 'published' else 'The code is valid or reserved, but public details are locked until approval.',
+            'publication_state': 'public' if record.get('publication_status') == 'published' else 'not-public',
+            'public_lookup_url': f'/code/{normalized}',
+            'address_record': record,
+        }
+    raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail='tracking record was not found')
+
+
+@app.get('/api/v1/address-records/search')
+def address_record_search(
+    q: str | None = Query(default=None, max_length=160),
+    status_value: str | None = Query(default=None, alias='status', max_length=40),
+    province_code: str | None = Query(default=None, max_length=8),
+    limit: int = Query(default=25, ge=1, le=100),
+    authorization: str | None = Header(default=None),
+) -> dict[str, list[dict[str, Any]]]:
+    user = _current_user(authorization)
+    _require_role(user, 'viewer', 'editor', 'admin')
+    return {'items': search_address_records(q=q, status=status_value, province_code=province_code, limit=limit)}
+
+
+@app.get('/api/v1/address-records/{address_code}')
+def address_record_case_file(address_code: str, authorization: str | None = Header(default=None)) -> dict[str, Any]:
+    user = _current_user(authorization)
+    _require_role(user, 'viewer', 'editor', 'admin')
+    try:
+        return get_address_record_case_file(address_code)
+    except AddressNotFoundError as exc:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(exc)) from exc
+
+
+@app.get('/api/v1/geotag-submissions')
+def geotag_submissions(status: str | None = Query(default=None), territory_id: str | None = Query(default=None), authorization: str | None = Header(default=None)) -> dict[str, list[dict[str, Any]]]:
+    user = _current_user(authorization)
+    _require_role(user, 'viewer', 'editor', 'admin')
+    return {'items': _enrich_geotag_submissions(list_citizen_geotag_submissions(status=status, territory_id=territory_id))}
+
+
+@app.get('/api/v1/geotag-submissions/automation/summary')
+def geotag_automation_summary(authorization: str | None = Header(default=None)) -> dict[str, Any]:
+    user = _current_user(authorization)
+    _require_role(user, 'viewer', 'editor', 'admin')
+    enriched = _enrich_geotag_submissions(list_citizen_geotag_submissions())
+    return _automation_summary(enriched, list_address_corrections())
+
+
+@app.get('/api/v1/geotag-submissions/automation/sla-drilldown')
+def geotag_sla_drilldown(state: str | None = Query(default=None, pattern='^(on_time|approaching|overdue|unknown)$'), authorization: str | None = Header(default=None)) -> dict[str, Any]:
+    user = _current_user(authorization)
+    _require_role(user, 'viewer', 'editor', 'admin')
+    enriched = _enrich_geotag_submissions(list_citizen_geotag_submissions())
+    return _sla_drilldown(enriched, list_address_corrections(), state_filter=state)
+
+
+@app.get('/api/v1/geotag-submissions/duplicates/summary')
+def geotag_duplicates_summary(authorization: str | None = Header(default=None)) -> dict[str, Any]:
+    user = _current_user(authorization)
+    _require_role(user, 'viewer', 'editor', 'admin')
+    return geotag_duplicate_summary()
+
+
+@app.get('/api/v1/geotag-submissions/{submission_id}/certificate')
+def geotag_certificate(submission_id: str, authorization: str | None = Header(default=None)) -> dict[str, Any]:
+    user = _current_user(authorization)
+    _require_role(user, 'viewer', 'editor', 'admin')
+    try:
+        return _strip_identity_fields(build_geotag_certificate(submission_id))
+    except SubmissionNotFoundError as exc:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(exc)) from exc
+    except InvalidSubmissionActionError as exc:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(exc)) from exc
+
+
+@app.get('/api/v1/geotag-submissions/{submission_id}/history')
+def geotag_submission_history(submission_id: str, authorization: str | None = Header(default=None)) -> dict[str, list[dict[str, Any]]]:
+    user = _current_user(authorization)
+    _require_role(user, 'viewer', 'editor', 'admin')
+    return {'items': list_audit_logs(entity_type='citizen_geotag_submission', entity_id=submission_id, limit=25)}
+
+
+@app.post('/api/v1/geotag-submissions/{submission_id}/identity')
+def geotag_identity_review(submission_id: str, payload: GeotagIdentityReviewRequest, authorization: str | None = Header(default=None)) -> dict[str, Any]:
+    user = _current_user(authorization)
+    _require_role(user, 'editor', 'admin')
+    try:
+        return verify_geotag_identity(submission_id, payload.dip_full, payload.identity_document_verified, payload.reviewer_note, actor=user)
+    except (SubmissionNotFoundError, InvalidSubmissionActionError) as exc:
+        code = status.HTTP_404_NOT_FOUND if isinstance(exc, SubmissionNotFoundError) else status.HTTP_400_BAD_REQUEST
+        raise HTTPException(status_code=code, detail=str(exc)) from exc
+
+
+@app.post('/api/v1/geotag-submissions/{submission_id}/under-review')
+def mark_geotag_under_review(submission_id: str, payload: GeotagReviewActionRequest, authorization: str | None = Header(default=None)) -> dict[str, Any]:
+    user = _current_user(authorization)
+    _require_role(user, 'editor', 'admin')
+    try:
+        return update_citizen_geotag_status(submission_id, 'under-review', payload.reviewer_note, actor=user)
+    except (SubmissionNotFoundError, InvalidSubmissionActionError) as exc:
+        code = status.HTTP_404_NOT_FOUND if isinstance(exc, SubmissionNotFoundError) else status.HTTP_400_BAD_REQUEST
+        raise HTTPException(status_code=code, detail=str(exc)) from exc
+
+
+@app.post('/api/v1/geotag-submissions/{submission_id}/field-check')
+def send_geotag_to_field_check(submission_id: str, payload: GeotagReviewActionRequest, authorization: str | None = Header(default=None)) -> dict[str, Any]:
+    user = _current_user(authorization)
+    _require_role(user, 'editor', 'admin')
+    try:
+        return update_citizen_geotag_status(submission_id, 'needs-field-check', payload.reviewer_note, actor=user)
+    except (SubmissionNotFoundError, InvalidSubmissionActionError, UnknownTerritoryError) as exc:
+        code = status.HTTP_404_NOT_FOUND if isinstance(exc, SubmissionNotFoundError) else status.HTTP_400_BAD_REQUEST
+        raise HTTPException(status_code=code, detail=str(exc)) from exc
+
+
+@app.post('/api/v1/geotag-submissions/{submission_id}/registry-ready')
+def mark_geotag_registry_ready(submission_id: str, payload: GeotagReviewActionRequest, authorization: str | None = Header(default=None)) -> dict[str, Any]:
+    user = _current_user(authorization)
+    _require_role(user, 'editor', 'admin')
+    try:
+        updated = update_citizen_geotag_status(submission_id, 'registry-ready', payload.reviewer_note, actor=user)
+        address_record = upsert_address_record_from_geotag(updated, actor=user)
+        return {**updated, 'address_record': address_record}
+    except (SubmissionNotFoundError, InvalidSubmissionActionError, UnknownTerritoryError) as exc:
+        code = status.HTTP_404_NOT_FOUND if isinstance(exc, SubmissionNotFoundError) else status.HTTP_400_BAD_REQUEST
+        raise HTTPException(status_code=code, detail=str(exc)) from exc
+
+
+@app.post('/api/v1/geotag-submissions/{submission_id}/publication-simulation')
+def simulate_geotag_publication(submission_id: str, payload: GeotagReviewActionRequest, authorization: str | None = Header(default=None)) -> dict[str, Any]:
+    user = _current_user(authorization)
+    _require_role(user, 'editor', 'admin')
+    try:
+        return simulate_geotag_publication_path(submission_id, payload.reviewer_note, actor=user)
+    except (SubmissionNotFoundError, InvalidSubmissionActionError) as exc:
+        code = status.HTTP_404_NOT_FOUND if isinstance(exc, SubmissionNotFoundError) else status.HTTP_400_BAD_REQUEST
+        raise HTTPException(status_code=code, detail=str(exc)) from exc
+
+
+@app.post('/api/v1/geotag-submissions/{submission_id}/reject')
+def reject_geotag_submission(submission_id: str, payload: GeotagReviewActionRequest, authorization: str | None = Header(default=None)) -> dict[str, Any]:
+    user = _current_user(authorization)
+    _require_role(user, 'editor', 'admin')
+    try:
+        return update_citizen_geotag_status(submission_id, 'rejected', payload.reviewer_note, actor=user)
+    except (SubmissionNotFoundError, InvalidSubmissionActionError) as exc:
+        code = status.HTTP_404_NOT_FOUND if isinstance(exc, SubmissionNotFoundError) else status.HTTP_400_BAD_REQUEST
+        raise HTTPException(status_code=code, detail=str(exc)) from exc
+
+
+@app.post('/api/v1/geotag-submissions/{submission_id}/duplicate-decision')
+def geotag_duplicate_decision(submission_id: str, payload: GeotagDuplicateDecisionRequest, authorization: str | None = Header(default=None)) -> dict[str, Any]:
+    user = _current_user(authorization)
+    _require_role(user, 'editor', 'admin')
+    try:
+        return record_geotag_duplicate_decision(submission_id, payload.duplicate_action, payload.reviewer_note, actor=user)
+    except (SubmissionNotFoundError, InvalidSubmissionActionError) as exc:
+        code = status.HTTP_404_NOT_FOUND if isinstance(exc, SubmissionNotFoundError) else status.HTTP_400_BAD_REQUEST
+        raise HTTPException(status_code=code, detail=str(exc)) from exc
+
+
+@app.post('/api/v1/geotag-submissions/{submission_id}/road-suggestion')
+def geotag_road_suggestion_review(submission_id: str, payload: RoadSuggestionReviewRequest, authorization: str | None = Header(default=None)) -> dict[str, Any]:
+    user = _current_user(authorization)
+    _require_role(user, 'editor', 'admin')
+    try:
+        return review_geotag_road_suggestion(submission_id, payload.action, payload.reviewed_road_name, payload.reviewer_note, actor=user)
+    except (SubmissionNotFoundError, InvalidSubmissionActionError) as exc:
+        code = status.HTTP_404_NOT_FOUND if isinstance(exc, SubmissionNotFoundError) else status.HTTP_400_BAD_REQUEST
+        raise HTTPException(status_code=code, detail=str(exc)) from exc
+
+
+@app.get('/api/v1/signage/export')
+def signage_export_endpoint(status: str = Query(default='published'), authorization: str | None = Header(default=None)) -> dict[str, Any]:
+    user = _current_user(authorization)
+    _require_role(user, 'viewer', 'editor', 'admin')
+    return signage_export(status=status)
+
+
+@app.get('/api/v1/signage/pack')
+def signage_pack_endpoint(status: str = Query(default='published'), authorization: str | None = Header(default=None)) -> dict[str, Any]:
+    user = _current_user(authorization)
+    _require_role(user, 'viewer', 'editor', 'admin')
+    return _signage_pack(status_value=status)
+
+
+@app.get('/api/v1/address-corrections')
+def address_corrections(status: str | None = Query(default=None), authorization: str | None = Header(default=None)) -> dict[str, list[dict[str, Any]]]:
+    user = _current_user(authorization)
+    _require_role(user, 'editor', 'admin')
+    return {'items': list_address_corrections(status=status)}
+
+
+@app.post('/api/v1/address-corrections/{correction_id}/under-review')
+def mark_address_correction_under_review(correction_id: str, payload: CorrectionReviewActionRequest, authorization: str | None = Header(default=None)) -> dict[str, Any]:
+    user = _current_user(authorization)
+    _require_role(user, 'editor', 'admin')
+    try:
+        return update_address_correction_status(correction_id, 'under-review', payload.reviewer_note, actor=user)
+    except (AddressCorrectionNotFoundError, InvalidSubmissionActionError) as exc:
+        code = status.HTTP_404_NOT_FOUND if isinstance(exc, AddressCorrectionNotFoundError) else status.HTTP_400_BAD_REQUEST
+        raise HTTPException(status_code=code, detail=str(exc)) from exc
+
+
+@app.post('/api/v1/address-corrections/{correction_id}/resolve')
+def resolve_address_correction(correction_id: str, payload: CorrectionReviewActionRequest, authorization: str | None = Header(default=None)) -> dict[str, Any]:
+    user = _current_user(authorization)
+    _require_role(user, 'editor', 'admin')
+    try:
+        return update_address_correction_status(correction_id, 'resolved', payload.reviewer_note, actor=user)
+    except (AddressCorrectionNotFoundError, InvalidSubmissionActionError) as exc:
+        code = status.HTTP_404_NOT_FOUND if isinstance(exc, AddressCorrectionNotFoundError) else status.HTTP_400_BAD_REQUEST
+        raise HTTPException(status_code=code, detail=str(exc)) from exc
+
+
+@app.post('/api/v1/address-corrections/{correction_id}/reject')
+def reject_address_correction(correction_id: str, payload: CorrectionReviewActionRequest, authorization: str | None = Header(default=None)) -> dict[str, Any]:
+    user = _current_user(authorization)
+    _require_role(user, 'editor', 'admin')
+    try:
+        return update_address_correction_status(correction_id, 'rejected', payload.reviewer_note, actor=user)
+    except (AddressCorrectionNotFoundError, InvalidSubmissionActionError) as exc:
+        code = status.HTTP_404_NOT_FOUND if isinstance(exc, AddressCorrectionNotFoundError) else status.HTTP_400_BAD_REQUEST
+        raise HTTPException(status_code=code, detail=str(exc)) from exc
 
 
 @app.get('/api/v1/imports/jobs')
@@ -537,6 +1600,8 @@ def create_import_job_endpoint(payload: ImportJobCreate, authorization: str | No
         return create_import_job(payload.model_dump(), actor=user)
     except UnknownTerritoryError as exc:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(exc)) from exc
+    except DuplicateImportJobError as exc:
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail=str(exc)) from exc
 
 
 @app.post('/api/v1/imports/jobs/{job_id}/commit')
@@ -547,6 +1612,8 @@ def commit_import_job_endpoint(job_id: str, authorization: str | None = Header(d
         return commit_import_job(job_id, actor=user)
     except ImportJobNotFoundError as exc:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(exc)) from exc
+    except InvalidSubmissionActionError as exc:
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail=str(exc)) from exc
 
 
 @app.get('/api/v1/publication/packs')
@@ -560,10 +1627,14 @@ def publication_packs(authorization: str | None = Header(default=None)) -> dict[
 def create_publication_pack_endpoint(payload: PublicationPackCreate, authorization: str | None = Header(default=None)) -> dict[str, Any]:
     user = _current_user(authorization)
     _require_role(user, 'editor', 'admin')
+    if payload.status == 'published' and user['role'] != 'admin':
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail='admin required to create a published pack')
     try:
         return create_publication_pack(payload.model_dump(), actor=user)
     except AddressNotFoundError as exc:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(exc)) from exc
+    except DuplicatePublicationPackError as exc:
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail=str(exc)) from exc
 
 
 @app.post('/api/v1/publication/packs/{pack_id}/publish')
@@ -576,10 +1647,124 @@ def publish_publication_pack_endpoint(pack_id: str, authorization: str | None = 
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(exc)) from exc
 
 
+def _ministry_walkthrough_steps() -> list[dict[str, str]]:
+    return [
+        {
+            'step': '1',
+            'title': 'Citizen location registration',
+            'route': '/geotag',
+            'operator_message': 'Capture GPS, accuracy, landmark, province, and public-safe receipt tracking.',
+        },
+        {
+            'step': '2',
+            'title': 'Address-code tracking',
+            'route': '/track',
+            'operator_message': 'Show that citizens can track by receipt ID or official address code without exposing private identity data.',
+        },
+        {
+            'step': '3',
+            'title': 'Location review and field routing',
+            'route': '/signage',
+            'operator_message': 'Review duplicate risk, routing assignment, field-check needs, and registry-ready hold state.',
+        },
+        {
+            'step': '4',
+            'title': 'Evidence and SLA command desk',
+            'route': '/verify',
+            'operator_message': 'Show evidence review, field submissions, and overdue SLA drill-down.',
+        },
+        {
+            'step': '5',
+            'title': 'Publication simulation and continuity proof',
+            'route': '/reports',
+            'operator_message': 'Show command-center totals, restore proof, cleanup readiness, and locked publication simulation boundaries.',
+        },
+    ]
+
+
+def latest_restore_drill_report() -> dict[str, Any]:
+    report_path = Path(os.getenv('RESTORE_DRILL_REPORT_PATH', '/app/artifacts/operator-digests/restore_drill_latest.json'))
+    if not report_path.exists():
+        return {'status': 'not-run', 'operator_note': 'No restore drill proof has been recorded yet.'}
+    try:
+        payload = json.loads(report_path.read_text())
+    except (OSError, json.JSONDecodeError):
+        return {'status': 'unreadable', 'operator_note': 'Restore drill proof exists but could not be parsed.'}
+    if not isinstance(payload, dict):
+        return {'status': 'unreadable', 'operator_note': 'Restore drill proof has an invalid shape.'}
+    return payload
+
+
+@app.get('/api/v1/operator/command-center')
+def operator_command_center(authorization: str | None = Header(default=None)) -> dict[str, Any]:
+    user = _current_user(authorization)
+    _require_role(user, 'viewer', 'editor', 'admin')
+    summary = reporting_summary()
+    readiness = pilot_readiness_summary()
+    geotags = _enrich_geotag_submissions(list_citizen_geotag_submissions())
+    corrections = list_address_corrections()
+    automation = _automation_summary(geotags, corrections)
+    duplicates = geotag_duplicate_summary()
+    return {
+        'readiness': {
+            'status': readiness.get('readiness_status'),
+            'passed_gates': readiness.get('passed_gates'),
+            'total_gates': readiness.get('total_gates'),
+            'boundaries': readiness.get('boundaries', []),
+        },
+        'queues': {
+            'verification_queue': summary.get('totals', {}).get('review_queue', 0),
+            'citizen_geotag_queue': summary.get('totals', {}).get('geotag_queue', 0),
+            'public_correction_queue': summary.get('totals', {}).get('correction_queue', 0),
+            'active_operator_queue': automation.get('active_queue', 0),
+            'field_required': automation.get('field_required', 0),
+        },
+        'risk_lanes': {
+            'duplicate_groups': len(duplicates.get('groups', [])),
+            'overdue_sla': automation.get('sla', {}).get('overdue', 0),
+            'publication_holds': automation.get('publication_hold', {}).get('registry_ready', 0),
+        },
+        'publication': {
+            'published_addresses': summary.get('totals', {}).get('published_addresses', 0),
+            'registry_ready': automation.get('registry_ready', 0),
+            'public_release_locked': automation.get('publication_hold', {}).get('public_release_locked', True),
+        },
+        'demo_fixtures': demo_fixture_status(),
+        'restore_drill': latest_restore_drill_report(),
+        'walkthrough': _ministry_walkthrough_steps(),
+    }
+
+
+@app.get('/api/v1/operator/demo-fixtures/status')
+def operator_demo_fixture_status(authorization: str | None = Header(default=None)) -> dict[str, Any]:
+    user = _current_user(authorization)
+    _require_role(user, 'viewer', 'editor', 'admin')
+    return demo_fixture_status()
+
+
+@app.post('/api/v1/operator/demo-fixtures/cleanup')
+def operator_demo_fixture_cleanup(authorization: str | None = Header(default=None)) -> dict[str, Any]:
+    user = _current_user(authorization)
+    _require_role(user, 'admin')
+    return cleanup_demo_fixtures(actor=user)
+
+
+@app.get('/api/v1/operator/restore-drill/latest')
+def operator_restore_drill_latest(authorization: str | None = Header(default=None)) -> dict[str, Any]:
+    user = _current_user(authorization)
+    _require_role(user, 'viewer', 'editor', 'admin')
+    return latest_restore_drill_report()
+
+
 @app.get('/api/v1/reporting/summary')
 def reporting_summary_endpoint(authorization: str | None = Header(default=None)) -> dict[str, Any]:
     user = _current_user(authorization)
     _require_role(user, 'viewer', 'editor', 'admin')
     return reporting_summary()
-    
 
+
+@app.get('/api/v1/pilot-readiness/summary')
+def pilot_readiness_summary_endpoint(authorization: str | None = Header(default=None)) -> dict[str, Any]:
+    user = _current_user(authorization)
+    _require_role(user, 'viewer', 'editor', 'admin')
+    return pilot_readiness_summary()

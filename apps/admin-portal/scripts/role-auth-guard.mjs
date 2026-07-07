@@ -21,7 +21,7 @@ const roleAwareChrome = await read('components/RoleAwareChrome.tsx');
 const loginPanel = await read('components/LoginPanel.tsx');
 
 assert(/(^|\n)knowledge\//.test(gitignore), 'knowledge/ must stay ignored so mission logs never ride into git by accident');
-assert(/(^|\n)\.hermes\//.test(gitignore), '.hermes/ should stay ignored for local agent artifacts');
+assert(/(^|\n)\.hermes\//.test(gitignore), 'local tooling state should stay ignored');
 assert(!/NEXT_PUBLIC_API_BASE_URL:\s*http:\/\/localhost/.test(composeConfig), 'public browser API base must not be wired to localhost in docker compose');
 
 assert(/if \(role === 'admin'\) return '\/verify';/.test(siteData), 'admin default route must remain /verify');

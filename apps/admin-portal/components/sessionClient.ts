@@ -19,7 +19,7 @@ export function resolveBrowserApiBaseUrl(apiBaseUrl: string): string {
 
   const normalized = apiBaseUrl.trim();
   if (!normalized) {
-    return `${window.location.protocol}//${window.location.hostname}:8100`;
+    return '';
   }
 
   try {

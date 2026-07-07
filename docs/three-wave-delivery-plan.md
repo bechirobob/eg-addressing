@@ -1,7 +1,5 @@
 # Three-Wave Delivery Plan
 
-> **For Hermes:** Execute this plan directly in the `eg-addressing` workspace and verify each wave with API tests, container build checks, and live browser validation.
-
 **Goal:** Finish the remaining three roadmap waves: real field-to-verification-to-registry workflow, full registry CRUD depth, and import/publication/reporting operations.
 
 **Architecture:** Extend the existing FastAPI + PostgreSQL backbone instead of creating parallel demo logic. Persist field submissions, verification decisions, import jobs, and publication packs in PostgreSQL; expose them through authenticated endpoints; then replace the current demo Next.js pages with live operator panels that call the real API.

@@ -1,7 +1,5 @@
 # Roadmap Gap Closure Plan
 
-> **For Hermes:** Execute this plan directly in the isolated `eg-addressing` workspace and verify each slice with tests plus live browser/API checks.
-
 **Goal:** Close the most immediate Phase 1 and early Phase 2 roadmap gaps by turning the current territory starter into a more complete admin workflow, adding real auth/RBAC scaffolding, and shipping first registry-core management surfaces.
 
 **Architecture:** Keep the backend as a lean FastAPI modular starter backed by PostgreSQL via `psycopg`, with seed/bootstrap logic still in place for now. Extend the existing Next.js admin portal with small focused management routes and client components instead of adding new apps or dependencies.

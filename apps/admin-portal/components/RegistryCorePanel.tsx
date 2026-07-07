@@ -24,6 +24,26 @@ type RegistryFocus =
   | { entityType: 'address'; label: string; id: string }
   | null;
 
+type RegisterTab = 'addresses' | 'roads' | 'buildings';
+
+function plainStatus(value?: string | null) {
+  return (value || 'unknown').replaceAll('-', ' ').replaceAll('_', ' ');
+}
+
+function publicationLabel(address: Address) {
+  if (address.is_archived) return 'Archived';
+  if (address.publication_state === 'published') return 'Published';
+  if (address.publication_state === 'internal-registry' || address.status === 'registry-ready') return 'Internal hold';
+  return 'Draft';
+}
+
+function publicationTone(address: Address) {
+  if (address.is_archived) return '';
+  if (address.publication_state === 'published') return 'ok';
+  if (address.publication_state === 'internal-registry' || address.status === 'registry-ready') return 'warn';
+  return '';
+}
+
 export function RegistryCorePanel({
   initialTerritories,
   initialRoads,
@@ -43,6 +63,8 @@ export function RegistryCorePanel({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [registryFocus, setRegistryFocus] = useState<RegistryFocus>(null);
+  const [activeTab, setActiveTab] = useState<RegisterTab>('addresses');
+  const [includeArchived, setIncludeArchived] = useState(false);
 
   const [roadForm, setRoadForm] = useState({ name: '', territory_id: territories[0]?.id ?? '', status: 'draft', length_km: '1.0' });
   const [buildingForm, setBuildingForm] = useState({
@@ -59,9 +81,13 @@ export function RegistryCorePanel({
     building_id: initialBuildings[0]?.id ?? '',
     status: 'draft',
   });
-  const [selectedRoadId, setSelectedRoadId] = useState(initialRoads[0]?.id ?? '');
-  const [selectedBuildingId, setSelectedBuildingId] = useState(initialBuildings[0]?.id ?? '');
-  const [selectedAddressId, setSelectedAddressId] = useState(initialAddresses[0]?.id ?? '');
+  const [selectedRoadId, setSelectedRoadId] = useState(initialRoads.find((item) => !item.is_archived)?.id ?? initialRoads[0]?.id ?? '');
+  const [selectedBuildingId, setSelectedBuildingId] = useState(initialBuildings.find((item) => !item.is_archived)?.id ?? initialBuildings[0]?.id ?? '');
+  const [selectedAddressId, setSelectedAddressId] = useState(initialAddresses.find((item) => !item.is_archived)?.id ?? initialAddresses[0]?.id ?? '');
+
+  const visibleRoads = useMemo(() => roads.filter((item) => includeArchived || !item.is_archived), [roads, includeArchived]);
+  const visibleBuildings = useMemo(() => buildings.filter((item) => includeArchived || !item.is_archived), [buildings, includeArchived]);
+  const visibleAddresses = useMemo(() => addresses.filter((item) => includeArchived || !item.is_archived), [addresses, includeArchived]);
 
   const selectedRoad = roads.find((item) => item.id === selectedRoadId) ?? null;
   const selectedBuilding = buildings.find((item) => item.id === selectedBuildingId) ?? null;
@@ -85,12 +111,23 @@ export function RegistryCorePanel({
     [buildings, addressForm.territory_id, addressForm.road_id],
   );
 
+  const registryCounts = useMemo(
+    () => ({
+      activeAddresses: addresses.filter((item) => !item.is_archived).length,
+      internalHold: addresses.filter((item) => !item.is_archived && (item.publication_state === 'internal-registry' || item.status === 'registry-ready')).length,
+      published: addresses.filter((item) => !item.is_archived && item.publication_state === 'published').length,
+      archived: addresses.filter((item) => item.is_archived).length,
+    }),
+    [addresses],
+  );
+
   useEffect(() => {
     if (!highlightEntityId) return;
 
     const highlightedRoad = roads.find((item) => item.id === highlightEntityId);
     if (highlightedRoad) {
       setSelectedRoadId(highlightedRoad.id);
+      setActiveTab('roads');
       setRegistryFocus({ entityType: 'road', id: highlightedRoad.id, label: highlightedRoad.name });
       return;
     }
@@ -98,6 +135,7 @@ export function RegistryCorePanel({
     const highlightedBuilding = buildings.find((item) => item.id === highlightEntityId);
     if (highlightedBuilding) {
       setSelectedBuildingId(highlightedBuilding.id);
+      setActiveTab('buildings');
       setRegistryFocus({ entityType: 'building', id: highlightedBuilding.id, label: highlightedBuilding.label });
       return;
     }
@@ -105,6 +143,7 @@ export function RegistryCorePanel({
     const highlightedAddress = addresses.find((item) => item.id === highlightEntityId);
     if (highlightedAddress) {
       setSelectedAddressId(highlightedAddress.id);
+      setActiveTab('addresses');
       setRegistryFocus({ entityType: 'address', id: highlightedAddress.id, label: highlightedAddress.formatted });
     }
   }, [addresses, buildings, highlightEntityId, roads]);
@@ -169,399 +208,270 @@ export function RegistryCorePanel({
     }
   }
 
+  function archiveEntity(type: 'roads' | 'buildings' | 'addresses', id: string, label: string) {
+    void mutate(`/api/v1/${type}/${id}`, 'DELETE').then((result) => {
+      if (result) {
+        setNotice(`${type === 'addresses' ? 'Address' : type === 'roads' ? 'Road' : 'Building'} archived: ${label}`);
+      }
+    });
+  }
+
   return (
-    <section className="section-grid territory-admin-grid">
-      <article className="panel panel-accent-blue">
-        <div className="panel-head">
-          <p className="section-label">Road register</p>
-          <h3>Create, update, and archive roads</h3>
+    <section className="registry-simple-shell" aria-label="Registry administration center">
+      <article className="public-task-panel registry-simple-hero">
+        <div>
+          <p className="section-label">Admin center</p>
+          <h2>Choose one registry job</h2>
+          <p className="public-task-copy">Most work starts with an address. Roads and buildings are supporting lists, so they stay in simple tabs instead of crowding the screen.</p>
         </div>
-        <p className="institutional-note">
-          Signed-in role: <strong>{sessionUser?.role ?? 'guest'}</strong>. Registry creation and archive controls are protected.
-        </p>
+        <div className="operator-summary-row" aria-label="Registry overview">
+          <span className="status-chip">Active addresses: {registryCounts.activeAddresses}</span>
+          <span className="status-chip warn">Internal hold: {registryCounts.internalHold}</span>
+          <span className="status-chip ok">Published: {registryCounts.published}</span>
+          <span className="status-chip">Archived hidden: {registryCounts.archived}</span>
+        </div>
+        <div className="registry-job-tabs" role="tablist" aria-label="Registry sections">
+          <button className={activeTab === 'addresses' ? 'active' : ''} type="button" onClick={() => setActiveTab('addresses')}>Addresses</button>
+          <button className={activeTab === 'roads' ? 'active' : ''} type="button" onClick={() => setActiveTab('roads')}>Roads</button>
+          <button className={activeTab === 'buildings' ? 'active' : ''} type="button" onClick={() => setActiveTab('buildings')}>Buildings</button>
+        </div>
+        <label className="checkbox-row registry-archive-toggle">
+          <input type="checkbox" checked={includeArchived} onChange={(event) => setIncludeArchived(event.target.checked)} />
+          <span>Show archived records</span>
+        </label>
         {sessionStatus === 'loading' ? <p className="panel-state">Checking access before enabling registry actions…</p> : null}
         {isRefreshing ? <p className="panel-state">Refreshing registry lists…</p> : null}
-        {registryFocus ? (
-          <div className="selection-summary">
-            <strong>Registry focus: {registryFocus.label}</strong>
-            <span className="territory-meta">
-              {registryFocus.entityType} · {registryFocus.id}
-            </span>
-          </div>
-        ) : null}
-        <form
-          className="territory-form"
-          onSubmit={(event: FormEvent<HTMLFormElement>) => {
-            event.preventDefault();
-            void mutate('/api/v1/roads', 'POST', roadForm).then((result) => {
-              if (result?.id) {
-                setNotice(`Road created: ${roadForm.name}`);
-                setSelectedRoadId(result.id);
-                setRegistryFocus({ entityType: 'road', id: result.id, label: roadForm.name });
-              }
-            });
-          }}
-        >
-          <label className="territory-field">
-            <span className="territory-label">Road name</span>
-            <input className="territory-input" value={roadForm.name} onChange={(event) => setRoadForm({ ...roadForm, name: event.target.value })} required />
-          </label>
-          <label className="territory-field">
-            <span className="territory-label">Territory</span>
-            <select className="territory-input" value={roadForm.territory_id} onChange={(event) => setRoadForm({ ...roadForm, territory_id: event.target.value })}>
-              {territories.map((territory) => (
-                <option key={territory.id} value={territory.id}>
-                  {territory.name}
-                </option>
-              ))}
-            </select>
-          </label>
-          <label className="territory-field">
-            <span className="territory-label">Status</span>
-            <input className="territory-input" value={roadForm.status} onChange={(event) => setRoadForm({ ...roadForm, status: event.target.value })} required />
-          </label>
-          <label className="territory-field">
-            <span className="territory-label">Length (km)</span>
-            <input className="territory-input" value={roadForm.length_km} onChange={(event) => setRoadForm({ ...roadForm, length_km: event.target.value })} required />
-          </label>
-          <div className="territory-form-actions">
-            <button className="verification-button" type="submit" disabled={isSubmitting}>
-              {isSubmitting ? 'Working…' : 'Create road'}
-            </button>
-          </div>
-        </form>
-        <label className="territory-field">
-          <span className="territory-label">Selected road</span>
-          <select className="territory-input" value={selectedRoadId} onChange={(event) => setSelectedRoadId(event.target.value)}>
-            {roads.map((road) => (
-              <option key={road.id} value={road.id}>
-                {road.name} · {road.is_archived ? 'archived' : road.status}
-              </option>
-            ))}
-          </select>
-        </label>
-        {selectedRoad ? (
-          <div className="button-row">
-            <button
-              className="mini-action-button"
-              type="button"
-              disabled={isSubmitting}
-              onClick={() =>
-                void mutate(`/api/v1/roads/${selectedRoad.id}`, 'PATCH', {
-                  name: `${selectedRoad.name} Updated`,
-                  territory_id: selectedRoad.territory_id,
-                  status: selectedRoad.status,
-                  length_km: selectedRoad.length_km,
-                }).then((result) => {
-                  if (result) {
-                    setNotice(`Road updated: ${selectedRoad.name}`);
-                    setRegistryFocus({ entityType: 'road', id: selectedRoad.id, label: selectedRoad.name });
-                  }
-                })
-              }
-            >
-              Quick update
-            </button>
-            <button
-              className="mini-action-button danger"
-              type="button"
-              disabled={isSubmitting}
-              onClick={() =>
-                void mutate(`/api/v1/roads/${selectedRoad.id}`, 'DELETE').then((result) => {
-                  if (result) {
-                    setNotice(`Road archived: ${selectedRoad.name}`);
-                  }
-                })
-              }
-            >
-              Archive
-            </button>
-          </div>
-        ) : null}
-        <ul className="mini-list">
-          {roads.map((road) => (
-            <li key={road.id}>
-              <strong>{road.name}</strong>
-              <span>
-                {road.territory_name} · {road.status} · {road.is_archived ? 'archived' : 'active'}
-              </span>
-            </li>
-          ))}
-        </ul>
-      </article>
-
-      <article className="panel panel-accent-gold">
-        <div className="panel-head">
-          <p className="section-label">Building register</p>
-          <h3>Create, update, and archive buildings</h3>
-        </div>
-        <form
-          className="territory-form"
-          onSubmit={(event: FormEvent<HTMLFormElement>) => {
-            event.preventDefault();
-            void mutate('/api/v1/buildings', 'POST', buildingForm).then((result) => {
-              if (result?.id) {
-                setNotice(`Building created: ${buildingForm.label}`);
-                setSelectedBuildingId(result.id);
-                setRegistryFocus({ entityType: 'building', id: result.id, label: buildingForm.label });
-              }
-            });
-          }}
-        >
-          <label className="territory-field">
-            <span className="territory-label">Building label</span>
-            <input className="territory-input" value={buildingForm.label} onChange={(event) => setBuildingForm({ ...buildingForm, label: event.target.value })} required />
-          </label>
-          <label className="territory-field">
-            <span className="territory-label">Territory</span>
-            <select
-              className="territory-input"
-              value={buildingForm.territory_id}
-              onChange={(event) =>
-                setBuildingForm({
-                  ...buildingForm,
-                  territory_id: event.target.value,
-                  road_id: roads.filter((road) => road.territory_id === event.target.value && !road.is_archived)[0]?.id ?? '',
-                })
-              }
-            >
-              {territories.map((territory) => (
-                <option key={territory.id} value={territory.id}>
-                  {territory.name}
-                </option>
-              ))}
-            </select>
-          </label>
-          <label className="territory-field">
-            <span className="territory-label">Road</span>
-            <select className="territory-input" value={buildingForm.road_id} onChange={(event) => setBuildingForm({ ...buildingForm, road_id: event.target.value })}>
-              {roadsForBuildingTerritory.map((road) => (
-                <option key={road.id} value={road.id}>
-                  {road.name}
-                </option>
-              ))}
-            </select>
-          </label>
-          <label className="territory-field">
-            <span className="territory-label">Status</span>
-            <input className="territory-input" value={buildingForm.status} onChange={(event) => setBuildingForm({ ...buildingForm, status: event.target.value })} required />
-          </label>
-          <label className="territory-field">
-            <span className="territory-label">Usage</span>
-            <input className="territory-input" value={buildingForm.usage} onChange={(event) => setBuildingForm({ ...buildingForm, usage: event.target.value })} required />
-          </label>
-          <div className="territory-form-actions">
-            <button className="verification-button" type="submit" disabled={isSubmitting}>
-              {isSubmitting ? 'Working…' : 'Create building'}
-            </button>
-          </div>
-        </form>
-        <label className="territory-field">
-          <span className="territory-label">Selected building</span>
-          <select className="territory-input" value={selectedBuildingId} onChange={(event) => setSelectedBuildingId(event.target.value)}>
-            {buildings.map((building) => (
-              <option key={building.id} value={building.id}>
-                {building.label} · {building.is_archived ? 'archived' : building.status}
-              </option>
-            ))}
-          </select>
-        </label>
-        {selectedBuilding ? (
-          <div className="button-row">
-            <button
-              className="mini-action-button"
-              type="button"
-              disabled={isSubmitting}
-              onClick={() =>
-                void mutate(`/api/v1/buildings/${selectedBuilding.id}`, 'PATCH', {
-                  label: `${selectedBuilding.label} Updated`,
-                  territory_id: selectedBuilding.territory_id,
-                  road_id: selectedBuilding.road_id,
-                  status: selectedBuilding.status,
-                  usage: selectedBuilding.usage,
-                }).then((result) => {
-                  if (result) {
-                    setNotice(`Building updated: ${selectedBuilding.label}`);
-                    setRegistryFocus({ entityType: 'building', id: selectedBuilding.id, label: selectedBuilding.label });
-                  }
-                })
-              }
-            >
-              Quick update
-            </button>
-            <button
-              className="mini-action-button danger"
-              type="button"
-              disabled={isSubmitting}
-              onClick={() =>
-                void mutate(`/api/v1/buildings/${selectedBuilding.id}`, 'DELETE').then((result) => {
-                  if (result) {
-                    setNotice(`Building archived: ${selectedBuilding.label}`);
-                  }
-                })
-              }
-            >
-              Archive
-            </button>
-          </div>
-        ) : null}
-        <ul className="mini-list">
-          {buildings.map((building) => (
-            <li key={building.id}>
-              <strong>{building.label}</strong>
-              <span>
-                {building.road_name} · {building.usage} · {building.is_archived ? 'archived' : 'active'}
-              </span>
-            </li>
-          ))}
-        </ul>
-      </article>
-
-      <article className="panel panel-accent-green territory-list-panel">
-        <div className="panel-head">
-          <p className="section-label">Address register</p>
-          <h3>Create, update, and archive addresses</h3>
-        </div>
-        <form
-          className="territory-form"
-          onSubmit={(event: FormEvent<HTMLFormElement>) => {
-            event.preventDefault();
-            void mutate('/api/v1/addresses', 'POST', addressForm).then((result) => {
-              if (result?.id) {
-                setNotice(`Address created: ${addressForm.formatted}`);
-                setSelectedAddressId(result.id);
-                setRegistryFocus({ entityType: 'address', id: result.id, label: addressForm.formatted });
-              }
-            });
-          }}
-        >
-          <label className="territory-field territory-field-wide">
-            <span className="territory-label">Formatted address</span>
-            <input className="territory-input" value={addressForm.formatted} onChange={(event) => setAddressForm({ ...addressForm, formatted: event.target.value })} required />
-          </label>
-          <label className="territory-field">
-            <span className="territory-label">Territory</span>
-            <select
-              className="territory-input"
-              value={addressForm.territory_id}
-              onChange={(event) =>
-                setAddressForm({
-                  ...addressForm,
-                  territory_id: event.target.value,
-                  road_id: roads.filter((road) => road.territory_id === event.target.value && !road.is_archived)[0]?.id ?? '',
-                  building_id: '',
-                })
-              }
-            >
-              {territories.map((territory) => (
-                <option key={territory.id} value={territory.id}>
-                  {territory.name}
-                </option>
-              ))}
-            </select>
-          </label>
-          <label className="territory-field">
-            <span className="territory-label">Road</span>
-            <select
-              className="territory-input"
-              value={addressForm.road_id}
-              onChange={(event) =>
-                setAddressForm({
-                  ...addressForm,
-                  road_id: event.target.value,
-                  building_id: buildings.filter((building) => building.road_id === event.target.value && !building.is_archived)[0]?.id ?? '',
-                })
-              }
-            >
-              {roadsForAddressTerritory.map((road) => (
-                <option key={road.id} value={road.id}>
-                  {road.name}
-                </option>
-              ))}
-            </select>
-          </label>
-          <label className="territory-field">
-            <span className="territory-label">Building</span>
-            <select className="territory-input" value={addressForm.building_id} onChange={(event) => setAddressForm({ ...addressForm, building_id: event.target.value })}>
-              {buildingsForAddressChain.map((building) => (
-                <option key={building.id} value={building.id}>
-                  {building.label}
-                </option>
-              ))}
-            </select>
-          </label>
-          <label className="territory-field">
-            <span className="territory-label">Status</span>
-            <input className="territory-input" value={addressForm.status} onChange={(event) => setAddressForm({ ...addressForm, status: event.target.value })} required />
-          </label>
-          <div className="territory-form-actions">
-            <button className="verification-button" type="submit" disabled={isSubmitting}>
-              {isSubmitting ? 'Working…' : 'Create address'}
-            </button>
-          </div>
-        </form>
-        <label className="territory-field">
-          <span className="territory-label">Selected address</span>
-          <select className="territory-input" value={selectedAddressId} onChange={(event) => setSelectedAddressId(event.target.value)}>
-            {addresses.map((address) => (
-              <option key={address.id} value={address.id}>
-                {address.formatted} · {address.is_archived ? 'archived' : address.status}
-              </option>
-            ))}
-          </select>
-        </label>
-        {selectedAddress ? (
-          <div className="button-row">
-            <button
-              className="mini-action-button"
-              type="button"
-              disabled={isSubmitting}
-              onClick={() =>
-                void mutate(`/api/v1/addresses/${selectedAddress.id}`, 'PATCH', {
-                  formatted: `${selectedAddress.formatted} Updated`,
-                  territory_id: selectedAddress.territory_id,
-                  road_id: selectedAddress.road_id,
-                  building_id: selectedAddress.building_id,
-                  status: selectedAddress.status,
-                }).then((result) => {
-                  if (result) {
-                    setNotice(`Address updated: ${selectedAddress.formatted}`);
-                    setRegistryFocus({ entityType: 'address', id: selectedAddress.id, label: selectedAddress.formatted });
-                  }
-                })
-              }
-            >
-              Quick update
-            </button>
-            <button
-              className="mini-action-button danger"
-              type="button"
-              disabled={isSubmitting}
-              onClick={() =>
-                void mutate(`/api/v1/addresses/${selectedAddress.id}`, 'DELETE').then((result) => {
-                  if (result) {
-                    setNotice(`Address archived: ${selectedAddress.formatted}`);
-                  }
-                })
-              }
-            >
-              Archive
-            </button>
-          </div>
-        ) : null}
+        {registryFocus ? <p className="form-notice success">Selected from workflow: {registryFocus.label}</p> : null}
         {notice ? <p className="form-notice success">{notice}</p> : null}
         {error ? <p className="form-notice error">{error}</p> : null}
-        <ul className="mini-list">
-          {addresses.map((address) => (
-            <li key={address.id}>
-              <strong>{address.formatted}</strong>
-              <span>
-                {address.territory_name} · {address.publication_state} · {address.is_archived ? 'archived' : 'active'}
-              </span>
-            </li>
-          ))}
-        </ul>
       </article>
+
+      {activeTab === 'addresses' ? (
+        <article className="public-task-panel registry-simple-section">
+          <div className="panel-head quiet-head">
+            <div>
+              <p className="section-label">Address register</p>
+              <h3>Official address records</h3>
+            </div>
+            <span className="status-chip">{visibleAddresses.length} shown</span>
+          </div>
+
+          <details className="quiet-disclosure registry-create-disclosure">
+            <summary>Create a new address manually</summary>
+            <form
+              className="territory-form registry-simple-form"
+              onSubmit={(event: FormEvent<HTMLFormElement>) => {
+                event.preventDefault();
+                void mutate('/api/v1/addresses', 'POST', addressForm).then((result) => {
+                  if (result?.id) {
+                    setNotice(`Address created: ${addressForm.formatted}`);
+                    setSelectedAddressId(result.id);
+                    setRegistryFocus({ entityType: 'address', id: result.id, label: addressForm.formatted });
+                  }
+                });
+              }}
+            >
+              <label className="territory-field territory-field-wide">
+                <span className="territory-label">Address name shown to operators</span>
+                <input className="territory-input" value={addressForm.formatted} onChange={(event) => setAddressForm({ ...addressForm, formatted: event.target.value })} required />
+              </label>
+              <label className="territory-field">
+                <span className="territory-label">Routing area</span>
+                <select
+                  className="territory-input"
+                  value={addressForm.territory_id}
+                  onChange={(event) =>
+                    setAddressForm({
+                      ...addressForm,
+                      territory_id: event.target.value,
+                      road_id: roads.filter((road) => road.territory_id === event.target.value && !road.is_archived)[0]?.id ?? '',
+                      building_id: '',
+                    })
+                  }
+                >
+                  {territories.map((territory) => <option key={territory.id} value={territory.id}>{territory.name}</option>)}
+                </select>
+              </label>
+              <label className="territory-field">
+                <span className="territory-label">Road</span>
+                <select
+                  className="territory-input"
+                  value={addressForm.road_id}
+                  onChange={(event) =>
+                    setAddressForm({
+                      ...addressForm,
+                      road_id: event.target.value,
+                      building_id: buildings.filter((building) => building.road_id === event.target.value && !building.is_archived)[0]?.id ?? '',
+                    })
+                  }
+                >
+                  {roadsForAddressTerritory.map((road) => <option key={road.id} value={road.id}>{road.name}</option>)}
+                </select>
+              </label>
+              <label className="territory-field">
+                <span className="territory-label">Building</span>
+                <select className="territory-input" value={addressForm.building_id} onChange={(event) => setAddressForm({ ...addressForm, building_id: event.target.value })}>
+                  {buildingsForAddressChain.map((building) => <option key={building.id} value={building.id}>{building.label}</option>)}
+                </select>
+              </label>
+              <label className="territory-field">
+                <span className="territory-label">Starting status</span>
+                <select className="territory-input" value={addressForm.status} onChange={(event) => setAddressForm({ ...addressForm, status: event.target.value })}>
+                  <option value="draft">Draft</option>
+                  <option value="active">Active</option>
+                </select>
+              </label>
+              <div className="territory-form-actions">
+                <button className="verification-button" type="submit" disabled={!canWrite || isSubmitting}>
+                  {!canWrite ? 'Editor or admin access required' : isSubmitting ? 'Working…' : 'Create address'}
+                </button>
+              </div>
+            </form>
+          </details>
+
+          <div className="registry-simple-layout">
+            <aside className="registry-simple-list" aria-label="Address records">
+              {visibleAddresses.length ? visibleAddresses.map((address) => (
+                <button key={address.id} className={`registry-simple-row ${selectedAddressId === address.id ? 'active' : ''}`} type="button" onClick={() => setSelectedAddressId(address.id)}>
+                  <strong>{address.formatted}</strong>
+                  <span>{address.territory_name || 'Routing area pending'}</span>
+                  <small>{publicationLabel(address)} · {address.is_archived ? 'hidden from daily work' : 'active record'}</small>
+                </button>
+              )) : <p className="panel-state">No address records to show.</p>}
+            </aside>
+
+            <div className="registry-simple-detail">
+              {selectedAddress ? (
+                <>
+                  <div className="registry-selected-card">
+                    <p className="section-label">Selected address</p>
+                    <h3>{selectedAddress.formatted}</h3>
+                    <div className="operator-summary-row">
+                      <span className={`status-chip ${publicationTone(selectedAddress)}`}>{publicationLabel(selectedAddress)}</span>
+                      <span className="status-chip">{selectedAddress.territory_name || 'Routing pending'}</span>
+                      <span className="status-chip">{plainStatus(selectedAddress.status)}</span>
+                    </div>
+                    <p className="public-task-copy">
+                      {selectedAddress.is_archived
+                        ? 'This record is archived and hidden from normal daily work. Turn on archived records only when auditing history.'
+                        : selectedAddress.publication_state === 'published'
+                          ? 'This address is published. Treat changes carefully and keep an audit trail.'
+                          : 'This address is not public yet. Keep reviewing it internally until it is ready for official publication.'}
+                    </p>
+                    <details className="quiet-disclosure">
+                      <summary>Show record details</summary>
+                      <dl className="registry-fact-list">
+                        <div><dt>Province</dt><dd>{selectedAddress.province_code || 'Not set'}</dd></div>
+                        <div><dt>Road</dt><dd>{selectedAddress.road_name || 'Not set'}</dd></div>
+                        <div><dt>Building</dt><dd>{selectedAddress.building_label || 'Not set'}</dd></div>
+                        <div><dt>Publication state</dt><dd>{plainStatus(selectedAddress.publication_state)}</dd></div>
+                      </dl>
+                    </details>
+                    <details className="quiet-disclosure">
+                      <summary>Admin-only archive action</summary>
+                      <p className="institutional-note">Archive removes the record from daily work views. Use this only when the record should no longer be operated on.</p>
+                      <button
+                        className="mini-action-button danger"
+                        type="button"
+                        disabled={!canArchive || isSubmitting}
+                        title={!canArchive ? 'Admin access required to archive' : undefined}
+                        onClick={() => archiveEntity('addresses', selectedAddress.id, selectedAddress.formatted)}
+                      >
+                        {!canArchive ? 'Admin required' : selectedAddress.is_archived ? 'Already archived' : 'Archive address'}
+                      </button>
+                    </details>
+                  </div>
+                </>
+              ) : <p className="panel-state">Select an address to inspect it.</p>}
+            </div>
+          </div>
+        </article>
+      ) : null}
+
+      {activeTab === 'roads' ? (
+        <article className="public-task-panel registry-simple-section">
+          <div className="panel-head quiet-head">
+            <div>
+              <p className="section-label">Road register</p>
+              <h3>Roads support address creation</h3>
+            </div>
+            <span className="status-chip">{visibleRoads.length} shown</span>
+          </div>
+          <details className="quiet-disclosure registry-create-disclosure">
+            <summary>Create a new road</summary>
+            <form
+              className="territory-form registry-simple-form"
+              onSubmit={(event: FormEvent<HTMLFormElement>) => {
+                event.preventDefault();
+                void mutate('/api/v1/roads', 'POST', roadForm).then((result) => {
+                  if (result?.id) {
+                    setNotice(`Road created: ${roadForm.name}`);
+                    setSelectedRoadId(result.id);
+                    setRegistryFocus({ entityType: 'road', id: result.id, label: roadForm.name });
+                  }
+                });
+              }}
+            >
+              <label className="territory-field"><span className="territory-label">Road name</span><input className="territory-input" value={roadForm.name} onChange={(event) => setRoadForm({ ...roadForm, name: event.target.value })} required /></label>
+              <label className="territory-field"><span className="territory-label">Routing area</span><select className="territory-input" value={roadForm.territory_id} onChange={(event) => setRoadForm({ ...roadForm, territory_id: event.target.value })}>{territories.map((territory) => <option key={territory.id} value={territory.id}>{territory.name}</option>)}</select></label>
+              <label className="territory-field"><span className="territory-label">Status</span><select className="territory-input" value={roadForm.status} onChange={(event) => setRoadForm({ ...roadForm, status: event.target.value })}><option value="draft">Draft</option><option value="active">Active</option></select></label>
+              <label className="territory-field"><span className="territory-label">Length (km)</span><input className="territory-input" value={roadForm.length_km} onChange={(event) => setRoadForm({ ...roadForm, length_km: event.target.value })} required /></label>
+              <div className="territory-form-actions"><button className="verification-button" type="submit" disabled={!canWrite || isSubmitting}>{!canWrite ? 'Editor or admin required' : isSubmitting ? 'Working…' : 'Create road'}</button></div>
+            </form>
+          </details>
+          <div className="registry-simple-list registry-simple-list-full">
+            {visibleRoads.map((road) => (
+              <button key={road.id} className={`registry-simple-row ${selectedRoadId === road.id ? 'active' : ''}`} type="button" onClick={() => setSelectedRoadId(road.id)}>
+                <strong>{road.name}</strong><span>{road.territory_name}</span><small>{road.is_archived ? 'Archived' : plainStatus(road.status)}</small>
+              </button>
+            ))}
+          </div>
+          {selectedRoad ? <details className="quiet-disclosure"><summary>Admin-only archive action</summary><button className="mini-action-button danger" type="button" disabled={!canArchive || isSubmitting || selectedRoad.is_archived} onClick={() => archiveEntity('roads', selectedRoad.id, selectedRoad.name)}>{selectedRoad.is_archived ? 'Already archived' : 'Archive road'}</button></details> : null}
+        </article>
+      ) : null}
+
+      {activeTab === 'buildings' ? (
+        <article className="public-task-panel registry-simple-section">
+          <div className="panel-head quiet-head">
+            <div>
+              <p className="section-label">Building register</p>
+              <h3>Buildings connect roads to addresses</h3>
+            </div>
+            <span className="status-chip">{visibleBuildings.length} shown</span>
+          </div>
+          <details className="quiet-disclosure registry-create-disclosure">
+            <summary>Create a new building</summary>
+            <form
+              className="territory-form registry-simple-form"
+              onSubmit={(event: FormEvent<HTMLFormElement>) => {
+                event.preventDefault();
+                void mutate('/api/v1/buildings', 'POST', buildingForm).then((result) => {
+                  if (result?.id) {
+                    setNotice(`Building created: ${buildingForm.label}`);
+                    setSelectedBuildingId(result.id);
+                    setRegistryFocus({ entityType: 'building', id: result.id, label: buildingForm.label });
+                  }
+                });
+              }}
+            >
+              <label className="territory-field"><span className="territory-label">Building label</span><input className="territory-input" value={buildingForm.label} onChange={(event) => setBuildingForm({ ...buildingForm, label: event.target.value })} required /></label>
+              <label className="territory-field"><span className="territory-label">Routing area</span><select className="territory-input" value={buildingForm.territory_id} onChange={(event) => setBuildingForm({ ...buildingForm, territory_id: event.target.value, road_id: roads.filter((road) => road.territory_id === event.target.value && !road.is_archived)[0]?.id ?? '' })}>{territories.map((territory) => <option key={territory.id} value={territory.id}>{territory.name}</option>)}</select></label>
+              <label className="territory-field"><span className="territory-label">Road</span><select className="territory-input" value={buildingForm.road_id} onChange={(event) => setBuildingForm({ ...buildingForm, road_id: event.target.value })}>{roadsForBuildingTerritory.map((road) => <option key={road.id} value={road.id}>{road.name}</option>)}</select></label>
+              <label className="territory-field"><span className="territory-label">Status</span><select className="territory-input" value={buildingForm.status} onChange={(event) => setBuildingForm({ ...buildingForm, status: event.target.value })}><option value="draft">Draft</option><option value="active">Active</option></select></label>
+              <label className="territory-field"><span className="territory-label">Use</span><input className="territory-input" value={buildingForm.usage} onChange={(event) => setBuildingForm({ ...buildingForm, usage: event.target.value })} required /></label>
+              <div className="territory-form-actions"><button className="verification-button" type="submit" disabled={!canWrite || isSubmitting}>{!canWrite ? 'Editor or admin required' : isSubmitting ? 'Working…' : 'Create building'}</button></div>
+            </form>
+          </details>
+          <div className="registry-simple-list registry-simple-list-full">
+            {visibleBuildings.map((building) => (
+              <button key={building.id} className={`registry-simple-row ${selectedBuildingId === building.id ? 'active' : ''}`} type="button" onClick={() => setSelectedBuildingId(building.id)}>
+                <strong>{building.label}</strong><span>{building.road_name}</span><small>{building.is_archived ? 'Archived' : `${plainStatus(building.usage)} · ${plainStatus(building.status)}`}</small>
+              </button>
+            ))}
+          </div>
+          {selectedBuilding ? <details className="quiet-disclosure"><summary>Admin-only archive action</summary><button className="mini-action-button danger" type="button" disabled={!canArchive || isSubmitting || selectedBuilding.is_archived} onClick={() => archiveEntity('buildings', selectedBuilding.id, selectedBuilding.label)}>{selectedBuilding.is_archived ? 'Already archived' : 'Archive building'}</button></details> : null}
+        </article>
+      ) : null}
     </section>
   );
 }

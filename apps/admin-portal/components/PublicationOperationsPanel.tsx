@@ -47,6 +47,16 @@ type ImportRowDraft = {
   notes: string;
 };
 
+type PublicationSimulation = {
+  submission_id: string;
+  address_code?: string;
+  simulation_status: string;
+  public_release_locked: boolean;
+  physical_signage_locked: boolean;
+  resulting_record_status: string;
+  operator_note: string;
+};
+
 function createImportRow(id: string, territoryId: string): ImportRowDraft {
   return {
     id,
@@ -75,16 +85,26 @@ export function PublicationOperationsPanel({
     initialAddresses.filter((item) => item.publication_state !== 'published').slice(0, 2).map((item) => item.id),
   );
   const [importForm, setImportForm] = useState({
-    name: 'Legacy registry intake',
-    source_name: 'legacy-registry-bata.csv',
-    rows: [createImportRow('row-1', 'territory-bata-urban-core'), createImportRow('row-2', 'territory-oyala-civic-district')],
+    name: 'Malabo pilot intake',
+    source_name: 'bioko_norte_pilot_registry.csv',
+    rows: [createImportRow('row-1', 'territory-malabo-urban-core'), createImportRow('row-2', 'territory-malabo-aeropuerto-corridor')],
   });
-  const [packName, setPackName] = useState('Published addresses — executive circulation');
-  const [packAudience, setPackAudience] = useState('Cabinet / programme steering');
+  const [packName, setPackName] = useState('Published addresses — Bioko Norte pilot');
+  const [packAudience, setPackAudience] = useState('Pilot review / programme steering');
+  const [simulationSubmissionId, setSimulationSubmissionId] = useState('');
+  const [simulationNote, setSimulationNote] = useState('Simulation only for ministry workflow demonstration.');
+  const [publicationSimulation, setPublicationSimulation] = useState<PublicationSimulation | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const canWrite = sessionUser?.role === 'editor' || sessionUser?.role === 'admin';
   const canPublish = sessionUser?.role === 'admin';
+  const publicationSummary = {
+    intakeJobs: importJobs.length,
+    packs: publicationPacks.length,
+    eligibleAddresses: addresses.filter((item) => !item.is_archived).length,
+    selectedAddresses: selectedAddressIds.length,
+    publishedPacks: publicationPacks.filter((pack) => pack.status === 'published').length,
+  };
 
   useEffect(() => {
     if (!token) return;
@@ -122,7 +142,7 @@ export function PublicationOperationsPanel({
   function addImportRow() {
     setImportForm((current) => ({
       ...current,
-      rows: [...current.rows, createImportRow(`row-${current.rows.length + 1}`, current.rows[0]?.territory_id ?? 'territory-bata-urban-core')],
+      rows: [...current.rows, createImportRow(`row-${current.rows.length + 1}`, current.rows[0]?.territory_id ?? 'territory-malabo-urban-core')],
     }));
   }
 
@@ -181,6 +201,23 @@ export function PublicationOperationsPanel({
     }
   }
 
+
+  function commitDisabledReason(job: ImportJob) {
+    if (!canWrite) return 'Editor or admin required';
+    if (isSubmitting) return 'Working…';
+    if (job.status === 'committed') return 'Already committed';
+    if (job.valid_rows <= 0) return 'No valid rows';
+    return null;
+  }
+
+  function publishDisabledReason(pack: PublicationPack) {
+    if (!canPublish) return 'Admin required';
+    if (isSubmitting) return 'Working…';
+    if (pack.status === 'published') return 'Already published';
+    if (pack.address_count <= 0) return 'No linked addresses';
+    return null;
+  }
+
   async function commitImport(jobId: string) {
     if (!token || !canWrite) {
       setError('Sign in as editor or admin before committing intake jobs.');
@@ -206,6 +243,41 @@ export function PublicationOperationsPanel({
       await reloadAll(token);
     } catch {
       setError('Unable to commit the intake job.');
+    } finally {
+      setIsSubmitting(false);
+    }
+  }
+
+  async function simulatePublication(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    if (!token || !canWrite) {
+      setError('Sign in as editor or admin before running a publication simulation.');
+      return;
+    }
+    const submissionId = simulationSubmissionId.trim();
+    if (!submissionId) {
+      setError('Enter a registry-ready geotag submission ID before running the simulation.');
+      return;
+    }
+    setIsSubmitting(true);
+    setNotice(null);
+    setError(null);
+    setPublicationSimulation(null);
+    try {
+      const response = await fetch(`${browserApiBaseUrl}/api/v1/geotag-submissions/${encodeURIComponent(submissionId)}/publication-simulation`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', ...authorizationHeader(token) },
+        body: JSON.stringify({ reviewer_note: simulationNote }),
+      });
+      const payload = (await response.json()) as PublicationSimulation | { detail?: string };
+      if (!response.ok) {
+        setError('detail' in payload && payload.detail ? payload.detail : 'Unable to run publication simulation.');
+        return;
+      }
+      setPublicationSimulation(payload as PublicationSimulation);
+      setNotice('Publication simulation completed without releasing public records or signage.');
+    } catch {
+      setError('Unable to run publication simulation.');
     } finally {
       setIsSubmitting(false);
     }
@@ -279,16 +351,67 @@ export function PublicationOperationsPanel({
 
   return (
     <section className="section-grid territory-admin-grid">
-      <article className="panel panel-accent-blue">
+      <article className="public-task-panel review-glance-panel publication-glance-panel">
+        <div className="review-glance-head">
+          <div>
+            <p className="section-label">Publication operations</p>
+            <h3>Prepare outputs only when they are approved</h3>
+          </div>
+          <div className="operator-summary-row review-glance-chips" aria-label="Publication operations summary">
+            <span className="status-chip">Intake jobs: {publicationSummary.intakeJobs}</span>
+            <span className="status-chip warn">Packs: {publicationSummary.packs}</span>
+            <span className="status-chip">Eligible addresses: {publicationSummary.eligibleAddresses}</span>
+            <span className="status-chip ok">Published packs: {publicationSummary.publishedPacks}</span>
+          </div>
+        </div>
+        {sessionStatus === 'loading' ? <p className="panel-state">Checking access before loading protected publication tools…</p> : null}
+        {notice ? <p className="form-notice success">{notice}</p> : null}
+        {error ? <p className="form-notice error">{error}</p> : null}
+      </article>
+
+      <article className="public-task-panel civic-panel-gold">
+        <div className="panel-head">
+          <p className="section-label">Publication simulation</p>
+          <h3>Dry-run public release without publishing</h3>
+        </div>
+        <p className="institutional-note">
+          Simulation is locked: it does not create public records, certificates, or physical signage. Use it to demonstrate the approval path for a registry-ready geotag case.
+        </p>
+        <form className="territory-form" onSubmit={simulatePublication}>
+          <label className="territory-field territory-field-wide">
+            <span className="territory-label">Registry-ready geotag submission ID</span>
+            <input className="territory-input" value={simulationSubmissionId} onChange={(event) => setSimulationSubmissionId(event.target.value)} placeholder="citizen-geotag-…" />
+          </label>
+          <label className="territory-field territory-field-wide">
+            <span className="territory-label">Simulation note</span>
+            <textarea className="territory-input territory-textarea" value={simulationNote} onChange={(event) => setSimulationNote(event.target.value)} rows={3} />
+          </label>
+          <div className="territory-form-actions">
+            <button className="verification-button" type="submit" disabled={!canWrite || isSubmitting}>
+              {!canWrite ? 'Editor or admin required' : isSubmitting ? 'Working…' : 'Run simulation only'}
+            </button>
+          </div>
+        </form>
+        {publicationSimulation ? (
+          <div className="result-card">
+            <span className="status-pill warn">Simulation only</span>
+            <div>
+              <h4>{publicationSimulation.address_code ?? publicationSimulation.submission_id}</h4>
+              <p>{publicationSimulation.operator_note}</p>
+              <p>Public release locked: {publicationSimulation.public_release_locked ? 'yes' : 'no'} · Physical signage locked: {publicationSimulation.physical_signage_locked ? 'yes' : 'no'}</p>
+            </div>
+          </div>
+        ) : null}
+      </article>
+
+      <article className="public-task-panel civic-panel-blue">
         <div className="panel-head">
           <p className="section-label">Intake staging</p>
           <h3>Create migration and intake jobs</h3>
         </div>
-        <p className="institutional-note">
-          Signed-in role: <strong>{sessionUser?.role ?? 'guest'}</strong>. Prepare structured intake rows without exposing raw payload formats.
-        </p>
-        {sessionStatus === 'loading' ? <p className="panel-state">Checking access before loading protected publication tools…</p> : null}
-        <form className="territory-form" onSubmit={handleImportCreate}>
+        <details className="quiet-disclosure compact-review-disclosure">
+          <summary>Create migration or intake job manually</summary>
+          <form className="territory-form" onSubmit={handleImportCreate}>
           <label className="territory-field">
             <span className="territory-label">Job name</span>
             <input className="territory-input" value={importForm.name} onChange={(event) => setImportForm({ ...importForm, name: event.target.value })} required />
@@ -315,9 +438,9 @@ export function PublicationOperationsPanel({
                     <label className="territory-field">
                       <span className="territory-label">Territory</span>
                       <select className="territory-input" value={row.territory_id} onChange={(event) => updateImportRow(row.id, 'territory_id', event.target.value)}>
-                        <option value="territory-bata-urban-core">Bata Urban Core</option>
-                        <option value="territory-oyala-civic-district">Oyala Civic District</option>
-                        <option value="territory-ebebiyin-access-corridor">Ebebiyin Access Corridor</option>
+                        <option value="territory-malabo-urban-core">Malabo Urban Core</option>
+                        <option value="territory-malabo-aeropuerto-corridor">Carretera del Aeropuerto</option>
+                        <option value="territory-malabo-ela-nguema">Ela Nguema</option>
                       </select>
                     </label>
                     <label className="territory-field territory-field-wide">
@@ -344,14 +467,15 @@ export function PublicationOperationsPanel({
           </fieldset>
 
           <div className="button-row">
-            <button className="secondary-button" type="button" onClick={addImportRow} disabled={isSubmitting}>
+            <button className="secondary-button" type="button" onClick={addImportRow} disabled={!canWrite || isSubmitting}>
               Add intake row
             </button>
-            <button className="verification-button" type="submit" disabled={isSubmitting}>
-              {isSubmitting ? 'Working…' : 'Create intake job'}
+            <button className="verification-button" type="submit" disabled={!canWrite || isSubmitting}>
+              {!canWrite ? 'Editor or admin required' : isSubmitting ? 'Working…' : 'Create intake job'}
             </button>
           </div>
-        </form>
+          </form>
+        </details>
 
         <ul className="review-list compact-review-list">
           {importJobs.map((job) => (
@@ -365,8 +489,8 @@ export function PublicationOperationsPanel({
                 </p>
               </div>
               <div className="button-stack">
-                <button className="mini-action-button primary" type="button" onClick={() => void commitImport(job.id)} disabled={isSubmitting}>
-                  Commit into submissions
+                <button className="mini-action-button primary" type="button" onClick={() => void commitImport(job.id)} disabled={Boolean(commitDisabledReason(job))}>
+                  {commitDisabledReason(job) ?? 'Commit into submissions'}
                 </button>
               </div>
             </li>
@@ -374,7 +498,7 @@ export function PublicationOperationsPanel({
         </ul>
       </article>
 
-      <article className="panel panel-accent-gold">
+      <article className="public-task-panel civic-panel-gold">
         <div className="panel-head">
           <p className="section-label">Publication packs</p>
           <h3>Prepare official output groups</h3>
@@ -388,8 +512,10 @@ export function PublicationOperationsPanel({
             <span className="territory-label">Audience</span>
             <input className="territory-input" value={packAudience} onChange={(event) => setPackAudience(event.target.value)} required />
           </label>
-          <fieldset className="selection-group">
-            <legend className="territory-label">Eligible addresses</legend>
+          <details className="quiet-disclosure compact-review-disclosure">
+            <summary>{publicationSummary.selectedAddresses} selected from {publicationSummary.eligibleAddresses} eligible addresses</summary>
+            <fieldset className="selection-group">
+              <legend className="territory-label">Eligible addresses</legend>
             <div className="selection-list">
               {addresses.filter((item) => !item.is_archived).map((address) => (
                 <label key={address.id} className="checkbox-row">
@@ -408,10 +534,11 @@ export function PublicationOperationsPanel({
                 </label>
               ))}
             </div>
-          </fieldset>
+            </fieldset>
+          </details>
           <div className="territory-form-actions">
-            <button className="verification-button" type="submit" disabled={isSubmitting}>
-              {isSubmitting ? 'Working…' : 'Create publication pack'}
+            <button className="verification-button" type="submit" disabled={!canWrite || isSubmitting}>
+              {!canWrite ? 'Editor or admin required' : isSubmitting ? 'Working…' : 'Create publication pack'}
             </button>
           </div>
         </form>
@@ -425,8 +552,8 @@ export function PublicationOperationsPanel({
                 <p>{pack.address_count} linked addresses</p>
               </div>
               <div className="button-stack">
-                <button className="mini-action-button primary" type="button" onClick={() => void publishPack(pack.id)} disabled={isSubmitting}>
-                  Publish pack
+                <button className="mini-action-button primary" type="button" onClick={() => void publishPack(pack.id)} disabled={Boolean(publishDisabledReason(pack))}>
+                  {publishDisabledReason(pack) ?? 'Publish pack'}
                 </button>
               </div>
             </li>
@@ -434,27 +561,28 @@ export function PublicationOperationsPanel({
         </ul>
       </article>
 
-      <article className="panel panel-accent-green territory-list-panel">
+      <article className="public-task-panel civic-panel-green territory-list-panel">
         <div className="panel-head">
           <p className="section-label">Publication-ready records</p>
           <h3>Current address publication state</h3>
         </div>
         {addresses.length > 0 ? (
-          <ul className="mini-list">
-            {addresses.map((address) => (
-              <li key={address.id}>
-                <strong>{address.formatted}</strong>
-                <span>
-                  {address.territory_name} · {address.status} · {address.publication_state}
-                </span>
-              </li>
-            ))}
-          </ul>
+          <details className="quiet-disclosure compact-review-disclosure">
+            <summary>{addresses.length} address publication states</summary>
+            <ul className="mini-list">
+              {addresses.map((address) => (
+                <li key={address.id}>
+                  <strong>{address.formatted}</strong>
+                  <span>
+                    {address.territory_name} · {address.status} · {address.publication_state}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </details>
         ) : (
           <p className="panel-state">No address publication records are available yet.</p>
         )}
-        {notice ? <p className="form-notice success">{notice}</p> : null}
-        {error ? <p className="form-notice error">{error}</p> : null}
       </article>
     </section>
   );

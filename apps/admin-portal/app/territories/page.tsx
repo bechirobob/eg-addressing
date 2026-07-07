@@ -59,8 +59,11 @@ export default async function TerritoriesPage() {
     <SiteChrome
       apiBaseUrl={publicApiBaseUrl}
       eyebrow="Territory administration"
+      eyebrowKey="territoryEyebrow"
       title="Territory Registry Management"
+      titleKey="territoryTitle"
       subtitle="Administrative control surface for maintaining territory records in the national addressing registry."
+      subtitleKey="territorySubtitle"
     >
       <TerritoryAdminPanel initialTerritories={territories} provinces={provinces} apiBaseUrl={publicApiBaseUrl} />
     </SiteChrome>

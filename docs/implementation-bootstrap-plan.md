@@ -1,7 +1,5 @@
 # EG Addressing Isolated Workspace Bootstrap Plan
 
-> **For Hermes:** Use this workspace as the only implementation root for the addressing platform.
-
 **Goal:** Stand up a clean, dedicated workspace for the national addressing platform with container boundaries, env isolation, and project-specific docs/data separation.
 
 **Architecture:** Start with one project root and one compose stack. Keep app code, volumes, specs, and exports together inside that boundary. Delay real runtime start until Docker/Podman is installed.
