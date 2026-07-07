@@ -528,7 +528,7 @@ def init_db() -> None:
                     ),
                 )
 
-            for submission in FIELD_SUBMISSIONS:
+            for submissions in FIELD_SUBMISSIONS:
                 cursor.execute(
                     '''
                     INSERT INTO field_submissions (
