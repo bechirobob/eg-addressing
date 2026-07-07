@@ -581,3 +581,5 @@ def reporting_summary_endpoint(authorization: str | None = Header(default=None))
     user = _current_user(authorization)
     _require_role(user, 'viewer', 'editor', 'admin')
     return reporting_summary()
+    
+
