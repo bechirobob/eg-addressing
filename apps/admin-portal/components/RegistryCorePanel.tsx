@@ -268,9 +268,9 @@ export function RegistryCorePanel({
     <section className="registry-simple-shell" aria-label="Registry administration center">
       <article className="public-task-panel registry-simple-hero">
         <div>
-          <p className="section-label">Admin center</p>
-          <h2>Choose one registry job</h2>
-          <p className="public-task-copy">Most work starts with an address. Roads and buildings are supporting lists, so they stay in simple tabs instead of crowding the screen.</p>
+          <p className="section-label">Registry desk</p>
+          <h2>Case files</h2>
+          <p className="public-task-copy">Review addresses first. Roads and buildings stay available as supporting case files.</p>
         </div>
         <div className="operator-summary-row" aria-label="Registry overview">
           <span className="status-chip">Active addresses: {registryCounts.activeAddresses}</span>
@@ -291,7 +291,7 @@ export function RegistryCorePanel({
             >
               <span>{lane.label}</span>
               <strong>{lane.count}</strong>
-              <small>Information scent: {lane.scent}</small>
+              <small>{lane.scent}</small>
             </button>
           ))}
         </div>

@@ -548,17 +548,14 @@ export function SignageOperationsPanel({ apiBaseUrl }: SignageOperationsPanelPro
         <div className="operator-summary-row" aria-label="Location request status summary">
           <span className="status-chip warn">{t('activeReview')}: {activeReviewCount}</span>
           <span className="status-chip">{t('historyClosed')}: {terminalReviewCount}</span>
-          {Object.entries(statusCounts).length ? Object.entries(statusCounts).map(([status, count]) => (
-            <span className="status-chip" key={status}>{statusLabel(status)}: {count}</span>
-          )) : <span className="status-chip warn">No requests waiting</span>}
         </div>
       </article>
 
       <article className="public-task-panel review-glance-panel">
         <div className="review-glance-head">
           <div>
-            <p className="section-label">Operations at a glance</p>
-            <h3>Only open details when something needs attention</h3>
+            <p className="section-label">Attention needed</p>
+            <h3>Open issues blocking release</h3>
           </div>
           <div className="operator-summary-row review-glance-chips" aria-label="Location review operation summary">
             <span className="status-chip warn">Overdue: {automationSummary?.sla?.overdue ?? 0}</span>
@@ -569,11 +566,11 @@ export function SignageOperationsPanel({ apiBaseUrl }: SignageOperationsPanelPro
           </div>
         </div>
         <details className="quiet-disclosure compact-review-disclosure">
-          <summary>Show queue, SLA, hold, and duplicate details</summary>
+          <summary>View queue details</summary>
           <div className="compact-review-grid">
             <section>
               <strong>Queue lanes</strong>
-              <div className="operator-summary-row" aria-label="Automated queue lanes">
+              <div className="operator-summary-row" aria-label="Queue status">
                 {queueLanes.length ? queueLanes.map((lane) => (
                   <span className="status-chip" key={lane.lane}>{lane.label}: {lane.count}</span>
                 )) : <span className="status-chip warn">No queue lanes active</span>}

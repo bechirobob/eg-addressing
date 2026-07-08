@@ -115,6 +115,12 @@ export function RoleAwareChrome({ apiBaseUrl, children }: RoleAwareChromeProps) 
   }, [browserApiBaseUrl, reloadSession, router]);
 
   const workspaceHref = defaultRouteForRole(role);
+  const controlNavItems = [
+    { href: '/verify', label: 'Dashboard', iconClass: 'dashboard' },
+    { href: '/signage', label: 'Queue', iconClass: 'queue' },
+    { href: '/registry', label: 'Case files', iconClass: 'case-files' },
+    { href: '/reports', label: 'Reports', iconClass: 'reports' },
+  ].filter((item) => isRouteAccessible(item.href, role));
 
   return (
     <>
@@ -178,6 +184,20 @@ export function RoleAwareChrome({ apiBaseUrl, children }: RoleAwareChromeProps) 
           ) : null}
         </div>
       </div>
+
+      {role !== 'guest' && controlNavItems.length ? (
+        <nav className="mobile-control-nav" aria-label="Operator control navigation">
+          {controlNavItems.map((item) => {
+            const isActive = currentRoute === item.href;
+            return (
+              <Link key={item.href} href={item.href} className={`mobile-control-nav-link mobile-control-nav-${item.iconClass} ${isActive ? 'active' : ''}`} aria-current={isActive ? 'page' : undefined}>
+                <span aria-hidden="true" />
+                <strong>{item.label}</strong>
+              </Link>
+            );
+          })}
+        </nav>
+      ) : null}
 
       {waitingForAccessResolution ? (
         <section className="panel panel-state-grid">

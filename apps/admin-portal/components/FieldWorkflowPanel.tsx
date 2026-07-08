@@ -487,24 +487,24 @@ export function FieldWorkflowPanel({ assignments, submissions: initialSubmission
     <section className="section-grid territory-admin-grid field-workspace">
       <article className="public-task-panel civic-panel-green field-assignments-panel">
         <div className="panel-head">
-          <p className="section-label">Deployment queue</p>
-          <h3>Priority field assignments</h3>
+          <p className="section-label">Field desk</p>
+          <h3>Today’s field work</h3>
         </div>
         <div className="data-command-deck field-command-deck" aria-label="Field operation command lanes">
           <button className="case-lane warn" type="button">
             <span>Assignments</span>
             <strong>{fieldAssignments.length}</strong>
-            <small>Risk lane: priority deployment tasks assigned to field teams.</small>
+            <small>Priority assignments waiting for field teams.</small>
           </button>
           <button className="case-lane" type="button">
             <span>Location checks</span>
             <strong>{geotagTasks.length}</strong>
-            <small>Case lane: citizen geotags waiting for field confirmation.</small>
+            <small>Citizen locations waiting for field confirmation.</small>
           </button>
           <button className="case-lane ok" type="button">
             <span>Recent intake</span>
             <strong>{submissions.length}</strong>
-            <small>Evidence lane: records already submitted into verification.</small>
+            <small>Records already submitted for review.</small>
           </button>
         </div>
         <ul className="assignment-list">
@@ -523,8 +523,8 @@ export function FieldWorkflowPanel({ assignments, submissions: initialSubmission
 
       <article className="public-task-panel civic-panel-gold field-location-checks-panel">
         <div className="panel-head">
-          <p className="section-label">Assigned location checks</p>
-          <h3>Citizen geotag verification tasks</h3>
+          <p className="section-label">Location checks</p>
+          <h3>Requests needing field check</h3>
         </div>
         <details className="quiet-disclosure compact-review-disclosure">
           <summary>Shared field evidence settings</summary>

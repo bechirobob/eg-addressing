@@ -8851,3 +8851,640 @@ details.review-secondary-actions[open] > summary {
   border-top-left-radius: 8px !important;
   border-top-right-radius: 8px !important;
 }
+
+/* Civic Registry control-dashboard revamp */
+:root {
+  --registry-bg: #fbfaf7;
+  --registry-card: #fffdfa;
+  --registry-line: #e1e6ec;
+  --registry-line-soft: #edf0f4;
+  --registry-ink: #102943;
+  --registry-muted: #667085;
+  --registry-navy: #062b49;
+  --registry-warn: #b46a3c;
+  --registry-alert-bg: #fff8eb;
+  --registry-danger: #b84b3c;
+  --registry-gold: #e3aa41;
+  --registry-grey: #87929a;
+  --registry-radius: 14px;
+}
+
+.operator-review-shell,
+.verification-workspace,
+.field-workspace,
+.registry-simple-shell,
+.territory-admin-grid,
+.operator-review-desk {
+  color: var(--registry-ink) !important;
+}
+
+.operator-review-shell .public-task-panel,
+.verification-workspace .public-task-panel,
+.field-workspace .public-task-panel,
+.registry-simple-shell .public-task-panel,
+.territory-admin-grid .public-task-panel,
+.operator-review-desk .request-list-panel,
+.operator-review-desk .request-detail-panel,
+.registry-simple-section,
+.registry-simple-hero {
+  background: var(--registry-card) !important;
+  border: 1px solid var(--registry-line) !important;
+  border-radius: 14px !important;
+  box-shadow: none !important;
+  padding: 24px !important;
+}
+
+.operator-review-shell .review-desk-header,
+.registry-simple-shell .registry-simple-hero,
+.territory-admin-grid > .review-glance-panel:first-child,
+.field-workspace .field-intake-panel,
+.verification-workspace .verification-queue-panel {
+  display: grid !important;
+  gap: 18px !important;
+  grid-column: 1 / -1 !important;
+}
+
+.operator-review-shell .review-desk-header h3,
+.registry-simple-hero h2,
+.review-glance-panel h3,
+.verification-queue-panel h3,
+.field-intake-panel summary strong,
+.territory-admin-grid > .public-task-panel:first-child h3 {
+  font-size: clamp(1.55rem, 4.7vw, 2.35rem) !important;
+  line-height: 1.08 !important;
+  letter-spacing: -0.045em !important;
+  color: var(--registry-ink) !important;
+  font-weight: 820 !important;
+  margin: 0 !important;
+}
+
+.operator-review-shell .review-desk-header .public-task-copy,
+.registry-simple-hero .public-task-copy,
+.review-glance-panel .public-task-copy,
+.field-intake-panel .institutional-note,
+.verification-queue-panel .institutional-note {
+  color: #5f6873 !important;
+  font-size: 1rem !important;
+  line-height: 1.45 !important;
+  max-width: 40rem !important;
+}
+
+.operator-review-shell .section-label,
+.verification-workspace .section-label,
+.field-workspace .section-label,
+.registry-simple-shell .section-label,
+.territory-admin-grid .section-label {
+  color: #173750 !important;
+  letter-spacing: 0.12em !important;
+  font-size: 0.74rem !important;
+  font-weight: 820 !important;
+  margin-bottom: 4px !important;
+}
+
+/* Reference-style split metric card: use chips as cells, not pills. */
+.operator-review-shell .review-desk-header > .operator-summary-row,
+.registry-simple-hero > .operator-summary-row,
+.publication-glance-panel .review-glance-head > .operator-summary-row,
+.review-glance-panel .review-glance-head > .operator-summary-row {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)) !important;
+  gap: 0 !important;
+  width: 100% !important;
+  border: 1px solid var(--registry-line) !important;
+  border-radius: 14px !important;
+  background: #fff !important;
+  overflow: clip !important;
+}
+
+.operator-review-shell .review-desk-header > .operator-summary-row .status-chip,
+.registry-simple-hero > .operator-summary-row .status-chip,
+.publication-glance-panel .review-glance-head > .operator-summary-row .status-chip,
+.review-glance-panel .review-glance-head > .operator-summary-row .status-chip {
+  min-height: 74px !important;
+  display: grid !important;
+  place-items: center !important;
+  gap: 4px !important;
+  padding: 12px 14px !important;
+  border: 0 !important;
+  border-right: 1px solid var(--registry-line) !important;
+  border-radius: 0 !important;
+  background: #fff !important;
+  color: var(--registry-ink) !important;
+  font-size: 0.95rem !important;
+  line-height: 1.2 !important;
+  box-shadow: none !important;
+  text-align: center !important;
+}
+
+.operator-review-shell .review-desk-header > .operator-summary-row .status-chip:last-child,
+.registry-simple-hero > .operator-summary-row .status-chip:last-child,
+.publication-glance-panel .review-glance-head > .operator-summary-row .status-chip:last-child,
+.review-glance-panel .review-glance-head > .operator-summary-row .status-chip:last-child {
+  border-right: 0 !important;
+}
+
+/* Attention sections: rows with counts, not badge clouds. */
+.review-glance-panel {
+  background: var(--registry-card) !important;
+}
+
+.review-glance-head {
+  align-items: stretch !important;
+  gap: 18px !important;
+}
+
+.review-glance-chips,
+.operator-summary-row.review-glance-chips {
+  display: grid !important;
+  grid-template-columns: 1fr !important;
+  gap: 0 !important;
+  border: 1px solid var(--registry-line) !important;
+  border-radius: 14px !important;
+  background: #fff !important;
+  overflow: clip !important;
+}
+
+.review-glance-chips .status-chip,
+.operator-summary-row.review-glance-chips .status-chip,
+.compact-review-grid .operator-summary-row .status-chip {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  min-height: 48px !important;
+  padding: 11px 14px !important;
+  border: 0 !important;
+  border-bottom: 1px solid var(--registry-line-soft) !important;
+  border-radius: 0 !important;
+  background: #fff !important;
+  box-shadow: none !important;
+  color: var(--registry-ink) !important;
+  font-size: 0.95rem !important;
+  font-weight: 720 !important;
+}
+
+.review-glance-chips .status-chip:last-child,
+.operator-summary-row.review-glance-chips .status-chip:last-child,
+.compact-review-grid .operator-summary-row .status-chip:last-child {
+  border-bottom: 0 !important;
+}
+
+.review-glance-chips .status-chip::after,
+.operator-summary-row.review-glance-chips .status-chip::after {
+  content: '›' !important;
+  color: #6f7780 !important;
+  font-size: 1.55rem !important;
+  line-height: 1 !important;
+  font-weight: 400 !important;
+}
+
+.review-glance-chips .status-chip.warn::before,
+.review-glance-chips .status-chip.danger::before,
+.operator-summary-row.review-glance-chips .status-chip.warn::before,
+.operator-summary-row.review-glance-chips .status-chip.danger::before {
+  content: '!' !important;
+  display: inline-grid !important;
+  place-items: center !important;
+  width: 32px !important;
+  height: 32px !important;
+  margin-right: 10px !important;
+  border-radius: 999px !important;
+  background: #d7664e !important;
+  color: #fff !important;
+  font-weight: 850 !important;
+}
+
+.review-glance-chips .status-chip.warn,
+.operator-summary-row.review-glance-chips .status-chip.warn {
+  color: #8b3f2e !important;
+}
+
+.review-glance-chips .status-chip.danger,
+.operator-summary-row.review-glance-chips .status-chip.danger,
+.form-notice.error {
+  background: var(--registry-alert-bg) !important;
+  border-color: #ead2ad !important;
+  color: #7f2e25 !important;
+}
+
+.form-notice.error,
+.form-notice.warn,
+.publication-glance-panel .status-chip.warn,
+.review-glance-panel .status-chip.danger {
+  border-radius: 12px !important;
+}
+
+/* Case lanes become calm entry rows. */
+.data-command-deck {
+  display: grid !important;
+  grid-template-columns: 1fr !important;
+  gap: 0 !important;
+  border: 1px solid var(--registry-line) !important;
+  border-radius: 14px !important;
+  overflow: clip !important;
+  background: #fff !important;
+}
+
+.case-lane,
+.selection-item {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) auto 20px !important;
+  align-items: center !important;
+  gap: 10px !important;
+  min-height: 58px !important;
+  padding: 12px 14px !important;
+  border: 0 !important;
+  border-bottom: 1px solid var(--registry-line-soft) !important;
+  border-radius: 0 !important;
+  background: #fff !important;
+  color: var(--registry-ink) !important;
+  text-align: left !important;
+  box-shadow: none !important;
+}
+
+.case-lane:last-child,
+.selection-item:last-child { border-bottom: 0 !important; }
+.case-lane::before,
+.selection-item::before { display: none !important; }
+.case-lane::after,
+.selection-item::after {
+  content: '›' !important;
+  color: #6f7780 !important;
+  font-size: 1.45rem !important;
+  line-height: 1 !important;
+}
+.case-lane span,
+.selection-item span { font-weight: 760 !important; color: var(--registry-ink) !important; }
+.case-lane strong,
+.selection-item strong { font-size: 1.2rem !important; color: var(--registry-ink) !important; }
+.case-lane small,
+.selection-item small {
+  grid-column: 1 / -1 !important;
+  color: var(--registry-muted) !important;
+  font-size: 0.82rem !important;
+  line-height: 1.35 !important;
+}
+
+.summary-grid {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)) !important;
+  gap: 0 !important;
+  border: 1px solid var(--registry-line) !important;
+  border-radius: 14px !important;
+  overflow: clip !important;
+  background: #fff !important;
+}
+
+.summary-card {
+  border: 0 !important;
+  border-right: 1px solid var(--registry-line-soft) !important;
+  border-bottom: 1px solid var(--registry-line-soft) !important;
+  border-radius: 0 !important;
+  background: #fff !important;
+  box-shadow: none !important;
+  padding: 14px !important;
+  min-height: 78px !important;
+}
+.summary-card strong { color: var(--registry-ink) !important; font-size: 1.2rem !important; }
+.summary-card span { color: var(--registry-muted) !important; font-size: 0.84rem !important; }
+
+.request-list-item,
+.registry-simple-row,
+.mini-list li,
+.assignment-card,
+.review-card.compact-card,
+.result-card {
+  border-radius: 0 !important;
+  border: 0 !important;
+  border-bottom: 1px solid var(--registry-line-soft) !important;
+  background: #fff !important;
+  box-shadow: none !important;
+}
+.request-list-item::after,
+.registry-simple-row::after {
+  content: '›';
+  color: #6f7780;
+  font-size: 1.35rem;
+}
+.request-list-item.active,
+.registry-simple-row.active {
+  background: #f7fbfd !important;
+  outline: 1px solid rgba(6, 43, 73, 0.16) !important;
+  outline-offset: -1px !important;
+}
+
+.status-chip,
+.status-pill,
+.readiness-pill,
+.step-chip {
+  box-shadow: none !important;
+}
+
+/* Mobile Civic Registry reference shell. */
+.mobile-control-nav { display: none; }
+
+.mobile-control-nav-link span {
+  width: 24px;
+  height: 24px;
+  display: block;
+  background: currentColor;
+  -webkit-mask: var(--control-icon) center / contain no-repeat;
+  mask: var(--control-icon) center / contain no-repeat;
+}
+.mobile-control-nav-dashboard { --control-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3 11.5 12 4l9 7.5'/%3E%3Cpath d='M5.5 10.5V20h13v-9.5'/%3E%3Cpath d='M9.5 20v-5h5v5'/%3E%3C/svg%3E"); }
+.mobile-control-nav-queue { --control-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M8 6h13'/%3E%3Cpath d='M8 12h13'/%3E%3Cpath d='M8 18h13'/%3E%3Cpath d='M3 6h1'/%3E%3Cpath d='M3 12h1'/%3E%3Cpath d='M3 18h1'/%3E%3C/svg%3E"); }
+.mobile-control-nav-case-files { --control-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3.5 6.5h6l1.7 2h9.3v9.8h-17z'/%3E%3C/svg%3E"); }
+.mobile-control-nav-reports { --control-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 19V9'/%3E%3Cpath d='M10 19V5'/%3E%3Cpath d='M15 19v-7'/%3E%3Cpath d='M20 19V8'/%3E%3C/svg%3E"); }
+
+@media (max-width: 759px) {
+  .page-shell { background: var(--registry-bg) !important; padding-bottom: 92px !important; }
+  .flag-ribbon,
+  .civic-service-strip { display: none !important; }
+  .masthead-reference {
+    border: 0 !important;
+    border-bottom: 1px solid var(--registry-line) !important;
+    border-radius: 0 !important;
+    background: #fffdfa !important;
+    margin-inline: -12px !important;
+    padding: 18px 24px !important;
+  }
+  .masthead-content-grid { display: block !important; }
+  .masthead-topline { margin: 0 !important; }
+  .official-lockup { display: flex !important; align-items: center !important; gap: 12px !important; }
+  .crest-frame { width: 42px !important; height: 42px !important; border: 0 !important; background: transparent !important; padding: 0 !important; }
+  .kicker { font-size: 1.25rem !important; letter-spacing: -0.03em !important; text-transform: none !important; color: var(--registry-ink) !important; margin: 0 !important; }
+  .masthead-copy { padding-top: 26px !important; }
+  .masthead-titles h1 { font-size: 2.1rem !important; line-height: 1.06 !important; letter-spacing: -0.055em !important; }
+  .masthead-subtitle { font-size: 1rem !important; line-height: 1.42 !important; color: #5f6873 !important; margin-top: 10px !important; }
+  .chrome-shell { margin-top: 0 !important; }
+  .nav-cluster.grouped-nav-cluster { display: none !important; }
+  .chrome-session-card { position: fixed !important; top: 22px !important; right: 22px !important; z-index: 40 !important; border: 0 !important; background: transparent !important; padding: 0 !important; }
+  .session-utility-role { display: none !important; }
+  .session-utility-logout { width: 34px !important; height: 34px !important; overflow: hidden !important; color: transparent !important; border-radius: 999px !important; border: 2px solid #444 !important; background: transparent !important; }
+  .session-utility-logout::before { content: ''; display: block; width: 18px; height: 18px; margin: 6px auto; border: 2px solid #444; border-radius: 14px; }
+
+  .mobile-control-nav {
+    position: fixed;
+    inset-inline: 0;
+    bottom: 0;
+    z-index: 50;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+    min-height: 72px;
+    padding: 8px 10px 10px;
+    background: rgba(255, 253, 250, 0.98);
+    border-top: 1px solid var(--registry-line);
+  }
+  .mobile-control-nav-link {
+    display: grid;
+    place-items: center;
+    gap: 3px;
+    text-decoration: none !important;
+    color: #69727b;
+    font-size: 0.72rem;
+    font-weight: 640;
+  }
+  .mobile-control-nav-link.active { color: var(--registry-navy); }
+  .mobile-control-nav-link.active strong { border-bottom: 2px solid var(--registry-navy); padding-bottom: 3px; }
+
+  .operator-review-shell,
+  .verification-workspace,
+  .field-workspace,
+  .registry-simple-shell,
+  .territory-admin-grid {
+    gap: 22px !important;
+  }
+  .operator-review-shell .public-task-panel,
+  .verification-workspace .public-task-panel,
+  .field-workspace .public-task-panel,
+  .registry-simple-shell .public-task-panel,
+  .territory-admin-grid .public-task-panel,
+  .operator-review-desk .request-list-panel,
+  .operator-review-desk .request-detail-panel {
+    padding: 18px !important;
+    border-radius: 14px !important;
+  }
+  .review-glance-head { display: grid !important; grid-template-columns: 1fr !important; }
+  .operator-review-shell .review-desk-header > .operator-summary-row,
+  .registry-simple-hero > .operator-summary-row,
+  .publication-glance-panel .review-glance-head > .operator-summary-row,
+  .review-glance-panel .review-glance-head > .operator-summary-row {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+  .status-chip { max-width: 100% !important; }
+}
+
+/* Civic Registry revamp: field intake must be the first human task */
+.field-workspace {
+  grid-template-columns: minmax(520px, 0.9fr) minmax(520px, 1fr) !important;
+}
+.field-workspace .field-intake-panel {
+  grid-column: 1 / -1 !important;
+  grid-row: 1 !important;
+  order: -10 !important;
+}
+.field-workspace .field-assignments-panel {
+  grid-column: 1 !important;
+  grid-row: 2 !important;
+  order: 1 !important;
+}
+.field-workspace .field-location-checks-panel {
+  grid-column: 2 !important;
+  grid-row: 2 !important;
+  order: 2 !important;
+}
+.field-workspace .live-intake-panel {
+  grid-column: 1 / -1 !important;
+  grid-row: 3 !important;
+  order: 3 !important;
+}
+@media (max-width: 759px) {
+  .field-workspace { grid-template-columns: 1fr !important; }
+  .field-workspace .field-intake-panel,
+  .field-workspace .field-assignments-panel,
+  .field-workspace .field-location-checks-panel,
+  .field-workspace .live-intake-panel {
+    grid-column: 1 !important;
+  }
+}
+
+/* Civic Registry revamp: cleaner mobile app-bar and unclipped top metrics */
+@media (max-width: 759px) {
+  .top-utility-bar {
+    position: fixed !important;
+    top: 20px !important;
+    right: 62px !important;
+    z-index: 42 !important;
+    transform: scale(0.82) !important;
+    transform-origin: top right !important;
+  }
+
+  .masthead-reference {
+    padding-top: 22px !important;
+  }
+
+  .masthead-reference .eyebrow {
+    color: #173750 !important;
+    opacity: 1 !important;
+  }
+
+  .official-lockup::before {
+    content: '';
+    width: 28px;
+    height: 20px;
+    display: inline-block;
+    margin-right: 6px;
+    background: currentColor;
+    -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 28 20' fill='none' stroke='black' stroke-width='2' stroke-linecap='round'%3E%3Cpath d='M2 4h24'/%3E%3Cpath d='M2 10h24'/%3E%3Cpath d='M2 16h24'/%3E%3C/svg%3E") center / contain no-repeat;
+    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 28 20' fill='none' stroke='black' stroke-width='2' stroke-linecap='round'%3E%3Cpath d='M2 4h24'/%3E%3Cpath d='M2 10h24'/%3E%3Cpath d='M2 16h24'/%3E%3C/svg%3E") center / contain no-repeat;
+  }
+
+  .operator-review-shell .review-desk-header > .operator-summary-row .status-chip,
+  .registry-simple-hero > .operator-summary-row .status-chip,
+  .publication-glance-panel .review-glance-head > .operator-summary-row .status-chip,
+  .review-glance-panel .review-glance-head > .operator-summary-row .status-chip {
+    min-height: 78px !important;
+    white-space: normal !important;
+    overflow: visible !important;
+    text-transform: none !important;
+    font-size: 0.9rem !important;
+  }
+
+  .operator-review-shell .review-desk-header > .operator-summary-row .status-chip:nth-child(n+3) {
+    display: none !important;
+  }
+}
+
+/* Civic Registry revamp: mobile final fidelity fixes */
+.field-intake-panel .workbench-panel-disclosure > summary {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) auto !important;
+  align-items: start !important;
+  gap: 12px !important;
+}
+.field-intake-panel .workbench-panel-disclosure > summary span {
+  display: grid !important;
+  gap: 5px !important;
+  min-width: 0 !important;
+}
+.field-intake-panel .workbench-panel-disclosure > summary small {
+  display: block !important;
+  line-height: 1.1 !important;
+}
+.field-intake-panel .workbench-panel-disclosure > summary strong {
+  display: block !important;
+  font-size: clamp(1.35rem, 6.4vw, 1.85rem) !important;
+  line-height: 1.08 !important;
+  letter-spacing: -0.045em !important;
+  max-width: 12.5em !important;
+}
+.field-intake-panel .workbench-panel-disclosure > summary em {
+  font-size: 0.78rem !important;
+  line-height: 1.25 !important;
+  color: var(--registry-muted) !important;
+  text-align: right !important;
+}
+
+@media (max-width: 759px) {
+  .review-glance-chips,
+  .operator-summary-row.review-glance-chips,
+  .compact-review-grid .operator-summary-row {
+    grid-template-columns: 1fr !important;
+  }
+
+  .review-glance-chips .status-chip,
+  .operator-summary-row.review-glance-chips .status-chip,
+  .compact-review-grid .operator-summary-row .status-chip {
+    display: grid !important;
+    grid-template-columns: 34px minmax(0, 1fr) auto !important;
+    text-align: left !important;
+    min-height: 58px !important;
+  }
+
+  .review-glance-chips .status-chip::after,
+  .operator-summary-row.review-glance-chips .status-chip::after {
+    grid-column: 3 !important;
+    grid-row: 1 !important;
+    align-self: center !important;
+  }
+
+  .review-glance-chips .status-chip::before,
+  .operator-summary-row.review-glance-chips .status-chip::before {
+    grid-column: 1 !important;
+    grid-row: 1 !important;
+  }
+
+  .session-utility-logout {
+    min-width: 34px !important;
+    max-width: 34px !important;
+    width: 34px !important;
+    height: 34px !important;
+    padding: 0 !important;
+    border-radius: 999px !important;
+    color: transparent !important;
+    background: transparent !important;
+  }
+  .session-utility-logout::before {
+    content: '' !important;
+    display: block !important;
+    width: 18px !important;
+    height: 18px !important;
+    margin: 6px auto !important;
+    border: 2px solid #444 !important;
+    border-radius: 14px !important;
+    box-sizing: border-box !important;
+  }
+  .session-utility-logout::after {
+    content: '' !important;
+    display: block !important;
+    width: 22px !important;
+    height: 10px !important;
+    margin: -1px auto 0 !important;
+    border: 2px solid #444 !important;
+    border-top: 0 !important;
+    border-radius: 0 0 999px 999px !important;
+    box-sizing: border-box !important;
+  }
+}
+
+/* Civic Registry revamp: final mobile attention-row/app-bar cleanup */
+@media (max-width: 759px) {
+  .top-utility-bar {
+    display: none !important;
+  }
+
+  .chrome-session-card {
+    display: none !important;
+  }
+
+  .review-glance-panel .review-glance-chips,
+  .review-glance-panel .operator-summary-row.review-glance-chips,
+  .review-glance-panel .compact-review-grid .operator-summary-row {
+    display: block !important;
+  }
+
+  .review-glance-panel .review-glance-chips .status-chip,
+  .review-glance-panel .operator-summary-row.review-glance-chips .status-chip,
+  .review-glance-panel .compact-review-grid .operator-summary-row .status-chip {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 10px !important;
+    width: 100% !important;
+    min-height: 58px !important;
+    white-space: normal !important;
+    text-align: left !important;
+  }
+
+  .review-glance-panel .review-glance-chips .status-chip::before,
+  .review-glance-panel .operator-summary-row.review-glance-chips .status-chip::before {
+    flex: 0 0 32px !important;
+    margin-right: 2px !important;
+  }
+
+  .review-glance-panel .review-glance-chips .status-chip::after,
+  .review-glance-panel .operator-summary-row.review-glance-chips .status-chip::after {
+    flex: 0 0 auto !important;
+    margin-left: auto !important;
+  }
+}

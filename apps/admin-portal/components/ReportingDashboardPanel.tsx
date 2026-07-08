@@ -337,7 +337,7 @@ export function ReportingDashboardPanel({ summary: initialSummary, readinessSumm
     <section className="section-grid territory-admin-grid">
       <article className="public-task-panel civic-panel-green territory-list-panel">
         <div className="panel-head">
-          <p className="section-label">Operator command center</p>
+          <p className="section-label">Operations desk</p>
           <h3>{commandCenter ? `${commandCenter.queues.active_operator_queue} ${localizedCountLabel(commandCenter.queues.active_operator_queue, 'active item', 'active items', locale)} · ${commandCenter.risk_lanes.overdue_sla} ${localizedCountLabel(commandCenter.risk_lanes.overdue_sla, 'overdue item', 'overdue items', locale)} · ${translateUiText('restore', locale)} ${localizedStatusLabel(commandCenter.restore_drill.status, locale)}` : translateUiText('Command center loading', locale)}</h3>
         </div>
         {commandCenter ? (
@@ -355,7 +355,7 @@ export function ReportingDashboardPanel({ summary: initialSummary, readinessSumm
                 <a className="case-lane warn" href={lane.route} key={lane.key}>
                   <span>{lane.label}</span>
                   <strong>{lane.count}</strong>
-                  <small>Risk lane: {lane.scent}</small>
+                  <small>{lane.scent}</small>
                 </a>
               ))}
             </div>
@@ -438,12 +438,12 @@ export function ReportingDashboardPanel({ summary: initialSummary, readinessSumm
 
       <article className="public-task-panel civic-panel-blue">
         <div className="panel-head">
-          <p className="section-label">Automation command center</p>
+          <p className="section-label">Automation support</p>
           <h3>{automationSummary ? `${automationSummary.active_queue} active · score ${automationSummary.average_quality_score}/100` : 'Automation summary unavailable'}</h3>
         </div>
         {automationSummary ? (
           <details className="disclosure-panel">
-            <summary>Show process automation lanes</summary>
+            <summary>View automation details</summary>
             <div className="summary-grid">
               <div className="summary-card"><strong>{automationSummary.field_required}</strong><span>Need field verification</span></div>
               <div className="summary-card"><strong>{automationSummary.signage_ready}</strong><span>{translateUiText('Ready for signage/export', locale)}</span></div>

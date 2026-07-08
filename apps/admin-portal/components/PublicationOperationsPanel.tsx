@@ -275,7 +275,7 @@ export function PublicationOperationsPanel({
         return;
       }
       setPublicationSimulation(payload as PublicationSimulation);
-      setNotice('Publication simulation completed without releasing public records or signage.');
+      setNotice('Release check completed without releasing public records or signage.');
     } catch {
       setError('Unable to run publication simulation.');
     } finally {
@@ -354,10 +354,10 @@ export function PublicationOperationsPanel({
       <article className="public-task-panel review-glance-panel publication-glance-panel">
         <div className="review-glance-head">
           <div>
-            <p className="section-label">Publication operations</p>
-            <h3>Prepare outputs only when they are approved</h3>
+            <p className="section-label">Release desk</p>
+            <h3>Prepare official outputs after approval</h3>
           </div>
-          <div className="operator-summary-row review-glance-chips" aria-label="Publication operations summary">
+          <div className="operator-summary-row review-glance-chips" aria-label="Release desk summary">
             <span className="status-chip">Intake jobs: {publicationSummary.intakeJobs}</span>
             <span className="status-chip warn">Packs: {publicationSummary.packs}</span>
             <span className="status-chip">Eligible addresses: {publicationSummary.eligibleAddresses}</span>
@@ -371,8 +371,8 @@ export function PublicationOperationsPanel({
 
       <article className="public-task-panel civic-panel-gold">
         <div className="panel-head">
-          <p className="section-label">Publication simulation</p>
-          <h3>Dry-run public release without publishing</h3>
+          <p className="section-label">Release check</p>
+          <h3>Check public release without publishing</h3>
         </div>
         <p className="institutional-note">
           Simulation is locked: it does not create public records, certificates, or physical signage. Use it to demonstrate the approval path for a registry-ready geotag case.
@@ -409,8 +409,8 @@ export function PublicationOperationsPanel({
 
       <article className="public-task-panel civic-panel-blue">
         <div className="panel-head">
-          <p className="section-label">Intake staging</p>
-          <h3>Create migration and intake jobs</h3>
+          <p className="section-label">Intake jobs</p>
+          <h3>Create controlled intake jobs</h3>
         </div>
         <details className="quiet-disclosure compact-review-disclosure">
           <summary>Create migration or intake job manually</summary>
