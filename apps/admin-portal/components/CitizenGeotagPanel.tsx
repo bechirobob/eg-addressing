@@ -557,8 +557,11 @@ export function CitizenGeotagPanel({ apiBaseUrl, provinces, territories }: Citiz
             </div>
           </div>
 
-          <details className="quiet-disclosure routing-evidence-disclosure" open>
-            <summary>{locale === 'es' ? 'Fuente y alcance oficial del enrutamiento' : 'Source and official routing scope'}</summary>
+          <details className="quiet-disclosure routing-evidence-disclosure">
+            <summary>
+              <span>{locale === 'es' ? 'Fuente y alcance oficial del enrutamiento' : 'Source and official routing scope'}</span>
+              <small>{selectedTerritory ? routingStatusLabel(selectedTerritory, locale) : (locale === 'es' ? 'Revisión del operador antes de publicar' : 'Operator review before publication')}</small>
+            </summary>
             <div className="routing-evidence-grid">
               <span><strong>{locale === 'es' ? 'Fuente' : 'Source'}</strong>{sourceLabel(selectedTerritory, locale)}</span>
               <span><strong>{locale === 'es' ? 'Confianza' : 'Confidence'}</strong>{confidenceLabel(selectedTerritory, locale)}</span>
@@ -574,7 +577,7 @@ export function CitizenGeotagPanel({ apiBaseUrl, provinces, territories }: Citiz
             </label>
             <label className="territory-field important-field">
               <span className="territory-label">{t('landmarkLabel')}</span>
-              <input className="territory-input" value={landmark} onChange={(event) => setLandmark(event.target.value)} placeholder={locale === 'es' ? 'Vía cercana, color de portón o referencia pública' : 'Nearest road, portón color, or public landmark'} />
+              <input className="territory-input" value={landmark} onChange={(event) => setLandmark(event.target.value)} placeholder={locale === 'es' ? 'Vía cercana, color de portón o referencia pública' : 'Nearest road, gate color, or public landmark'} />
             </label>
             <label className="territory-field important-field">
               <span className="territory-label">{t('contactLabel')}</span>
@@ -603,8 +606,11 @@ export function CitizenGeotagPanel({ apiBaseUrl, provinces, territories }: Citiz
             </div>
           </details>
 
-          <details className="quiet-disclosure compact-secondary-disclosure">
-            <summary>{locale === 'es' ? 'Evidencia técnica capturada' : 'Captured technical evidence'}</summary>
+          <details className="quiet-disclosure compact-secondary-disclosure technical-evidence-disclosure">
+            <summary>
+              <span>{locale === 'es' ? 'Evidencia técnica capturada' : 'Captured technical evidence'}</span>
+              <small>{accuracyMeters === '' ? (locale === 'es' ? 'GPS pendiente' : 'GPS pending') : `${locale === 'es' ? 'Precisión' : 'Accuracy'} ${accuracyMeters}m`}</small>
+            </summary>
             <div className="citizen-form-grid routing-confirmation-grid">
               <div className="territory-field locked-location-field" aria-label="Captured GPS coordinates">
                 <span className="territory-label">{locale === 'es' ? 'Punto GPS' : 'GPS point'}</span>

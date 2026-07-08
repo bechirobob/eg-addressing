@@ -224,7 +224,7 @@ export function FieldWorkflowPanel({ assignments, submissions: initialSubmission
 
   return (
     <section className="section-grid territory-admin-grid">
-      <article className="public-task-panel civic-panel-green">
+      <article className="public-task-panel civic-panel-green field-assignments-panel">
         <div className="panel-head">
           <p className="section-label">Deployment queue</p>
           <h3>Priority field assignments</h3>
@@ -260,7 +260,7 @@ export function FieldWorkflowPanel({ assignments, submissions: initialSubmission
         </ul>
       </article>
 
-      <article className="public-task-panel civic-panel-gold territory-list-panel">
+      <article className="public-task-panel civic-panel-gold field-location-checks-panel">
         <div className="panel-head">
           <p className="section-label">Assigned location checks</p>
           <h3>Citizen geotag verification tasks</h3>
@@ -308,18 +308,20 @@ export function FieldWorkflowPanel({ assignments, submissions: initialSubmission
         )}
       </article>
 
-      <article className="public-task-panel civic-panel-blue">
-        <div className="panel-head">
-          <p className="section-label">Field intake</p>
-          <h3>Submit registry evidence from the territory</h3>
-        </div>
-        <p className="institutional-note">
-          Signed-in role: <strong>{sessionUser?.role ?? 'guest'}</strong>. This feeds the live verification queue.
-        </p>
-        {sessionStatus === 'loading' ? <p className="panel-state">Checking access before opening the submission form…</p> : null}
-        <details className="disclosure-panel">
-          <summary>Open field submission form</summary>
-          <form className="territory-form" onSubmit={handleSubmit}>
+      <article className="public-task-panel civic-panel-blue field-intake-panel">
+        <details className="workbench-panel-disclosure" open>
+          <summary>
+            <span>
+              <small className="section-label">Field intake</small>
+              <strong>Submit registry evidence from the territory</strong>
+            </span>
+            <em>{sessionUser?.role ?? 'guest'} role</em>
+          </summary>
+          <p className="institutional-note compact-note">
+            Feeds the live verification queue. Collapse this panel when reviewing recent intake.
+          </p>
+          {sessionStatus === 'loading' ? <p className="panel-state">Checking access before opening the submission form…</p> : null}
+          <form className="territory-form compact-field-form" onSubmit={handleSubmit}>
           <label className="territory-field">
             <span className="territory-label">Assignment</span>
             <select
@@ -382,18 +384,22 @@ export function FieldWorkflowPanel({ assignments, submissions: initialSubmission
             </button>
           </div>
           </form>
+          {notice ? <p className="form-notice success">{notice}</p> : null}
+          {error ? <p className="form-notice error">{error}</p> : null}
         </details>
-        {notice ? <p className="form-notice success">{notice}</p> : null}
-        {error ? <p className="form-notice error">{error}</p> : null}
       </article>
 
-      <article className="public-task-panel civic-panel-gold territory-list-panel">
-        <div className="panel-head">
-          <p className="section-label">Live intake</p>
-          <h3>Recently submitted field records</h3>
-        </div>
+      <article className="public-task-panel civic-panel-gold live-intake-panel">
+        <details className="workbench-panel-disclosure" open>
+          <summary>
+            <span>
+              <small className="section-label">Live intake</small>
+              <strong>Recently submitted field records</strong>
+            </span>
+            <em>{submissions.length} records</em>
+          </summary>
         {submissions.length > 0 ? (
-          <ul className="mini-list">
+          <ul className="mini-list live-intake-list">
             {submissions.map((submission) => (
               <li key={submission.id}>
                 <details className="inline-disclosure">
@@ -410,6 +416,7 @@ export function FieldWorkflowPanel({ assignments, submissions: initialSubmission
         ) : (
           <p className="panel-state">No field submissions have been recorded yet.</p>
         )}
+        </details>
       </article>
     </section>
   );
