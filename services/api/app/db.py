@@ -698,6 +698,16 @@ def init_db() -> None:
 
             cursor.execute(
                 '''
+                UPDATE territories
+                SET is_archived = FALSE,
+                    updated_at = NOW()
+                WHERE type = 'official-municipality'
+                  AND readiness = 'official-routing'
+                '''
+            )
+
+            cursor.execute(
+                '''
                 UPDATE territories t
                 SET admin_unit_id = au.id,
                     updated_at = NOW()
@@ -947,7 +957,12 @@ def init_db() -> None:
                 FROM territories t
                 WHERE r.territory_id = t.id AND t.province_code <> 'BN'
             """)
-            cursor.execute("UPDATE territories SET is_archived = TRUE, updated_at = NOW() WHERE province_code <> 'BN'")
+            cursor.execute("""
+                UPDATE territories
+                SET is_archived = TRUE, updated_at = NOW()
+                WHERE province_code <> 'BN'
+                  AND NOT (type = 'official-municipality' AND readiness = 'official-routing')
+            """)
         connection.commit()
 
 

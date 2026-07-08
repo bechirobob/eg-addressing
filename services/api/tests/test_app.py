@@ -121,6 +121,30 @@ def test_cookie_mode_public_submission_does_not_require_csrf(monkeypatch) -> Non
     assert response.status_code == 200
 
 
+
+
+
+
+def test_init_db_keeps_official_municipality_routing_active() -> None:
+    source = Path('app/db.py').read_text()
+    assert "WHERE type = 'official-municipality'" in source
+    assert "AND readiness = 'official-routing'" in source
+    assert 'SET is_archived = FALSE' in source
+    assert "AND NOT (type = 'official-municipality' AND readiness = 'official-routing')" in source
+
+def test_official_admin_routing_seed_contains_table_backed_units() -> None:
+    from app.data import ADMIN_UNITS, TERRITORIES
+
+    districts = [unit for unit in ADMIN_UNITS if unit['level'] == 'district']
+    municipalities = [unit for unit in ADMIN_UNITS if unit['level'] == 'municipality']
+    official_territories = [territory for territory in TERRITORIES if territory['type'] == 'official-municipality']
+
+    assert len(districts) == 20
+    assert len(municipalities) == 38
+    assert len(official_territories) == 38
+    assert {unit['name_es'] for unit in municipalities} >= {'Malabo', 'Bata', 'Mongomo', 'Ciudad de la Paz', 'San Antonio de Palé'}
+    assert next(territory for territory in TERRITORIES if territory['name'] == 'Rebola' and territory['province_code'] == 'BN')['readiness'] == 'official-routing'
+
 def test_provinces_endpoint_returns_database_rows(monkeypatch) -> None:
     expected = [
         {'id': 'admin-unit-annobon', 'code': 'AN', 'name': 'Annobón'},
