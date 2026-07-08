@@ -8595,3 +8595,259 @@ textarea.territory-input,.territory-textarea { min-height:72px !important; }
   grid-row: 2 !important;
   order: -5 !important;
 }
+
+/* Government-grade tile edge audit fixes */
+.public-task-panel,
+.panel,
+.map-confirm-panel,
+.review-card,
+.result-card,
+.assignment-card,
+.territory-record,
+.operator-finding-card,
+.summary-card,
+.review-desk-header,
+.case-lane,
+.selection-item,
+.quiet-disclosure,
+.inline-disclosure,
+.workbench-panel-disclosure,
+.spatial-review-banner,
+.spatial-analysis-summary,
+.spatial-evidence-summary,
+.human-evidence-summary {
+  min-width: 0 !important;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+.field-workspace > *,
+.verification-workspace > *,
+.territory-admin-grid > *,
+.section-grid > *,
+.registry-simple-shell > *,
+.operations-panel > * {
+  min-width: 0 !important;
+  max-width: 100% !important;
+}
+
+.case-lane,
+.selection-item {
+  position: relative !important;
+  overflow: clip !important;
+  border-left: 1px solid var(--gov-line) !important;
+  border-radius: 9px !important;
+  padding-left: 14px !important;
+  background: #fffefa !important;
+}
+
+.case-lane::before,
+.selection-item::before {
+  content: '' !important;
+  position: absolute !important;
+  inset-block: 8px !important;
+  inset-inline-start: 7px !important;
+  width: 3px !important;
+  border-radius: 999px !important;
+  background: var(--gov-blue) !important;
+  pointer-events: none !important;
+}
+
+.case-lane.warn::before,
+.selection-item.warn::before {
+  background: var(--gov-gold) !important;
+}
+
+.case-lane.ok::before,
+.selection-item.ok::before {
+  background: var(--gov-green) !important;
+}
+
+.quiet-disclosure,
+.inline-disclosure,
+.workbench-panel-disclosure {
+  border: 1px solid var(--gov-line) !important;
+  border-radius: 9px !important;
+  background: #fff !important;
+  overflow: clip !important;
+}
+
+.quiet-disclosure > summary,
+.inline-disclosure > summary,
+.workbench-panel-disclosure > summary {
+  border-radius: 8px !important;
+}
+
+.quiet-disclosure[open] > summary,
+.inline-disclosure[open] > summary,
+.workbench-panel-disclosure[open] > summary {
+  border-bottom: 1px solid rgba(13, 47, 79, 0.08) !important;
+  border-bottom-left-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
+}
+
+.spatial-review-banner,
+.spatial-analysis-summary,
+.spatial-evidence-summary,
+.human-evidence-summary {
+  border-radius: 9px !important;
+  overflow: clip !important;
+}
+
+@media (max-width: 759px) {
+  .page-shell,
+  main,
+  .section-grid,
+  .territory-admin-grid,
+  .field-workspace,
+  .verification-workspace,
+  .territory-workspace,
+  .registry-simple-shell,
+  .operations-panel,
+  .public-code-status-flow,
+  .tracking-lookup-flow,
+  .single-column-grid {
+    max-width: 100vw !important;
+    overflow-x: clip !important;
+  }
+
+  .public-task-panel,
+  .review-card,
+  .result-card,
+  .assignment-card,
+  .case-lane,
+  .quiet-disclosure,
+  .inline-disclosure,
+  .workbench-panel-disclosure {
+    width: 100% !important;
+  }
+}
+
+/* Tile-edge audit: disclosure and mobile viewport hardening */
+details.quiet-disclosure,
+details.inline-disclosure,
+details.workbench-panel-disclosure,
+details.compact-review-disclosure,
+details.routing-evidence-disclosure,
+details.compact-secondary-disclosure,
+details.technical-evidence-disclosure,
+details.registry-create-disclosure,
+details.territory-create-disclosure,
+details.territory-edit-disclosure,
+details.territory-evidence-disclosure,
+details.hierarchy-province,
+details.review-secondary-actions {
+  border-radius: 9px !important;
+  border: 1px solid var(--gov-line) !important;
+  background: #fff !important;
+  overflow: clip !important;
+}
+
+details.quiet-disclosure > summary,
+details.inline-disclosure > summary,
+details.workbench-panel-disclosure > summary,
+details.compact-review-disclosure > summary,
+details.routing-evidence-disclosure > summary,
+details.compact-secondary-disclosure > summary,
+details.technical-evidence-disclosure > summary,
+details.registry-create-disclosure > summary,
+details.territory-create-disclosure > summary,
+details.territory-edit-disclosure > summary,
+details.territory-evidence-disclosure > summary,
+details.hierarchy-province > summary,
+details.review-secondary-actions > summary {
+  border-radius: 8px !important;
+}
+
+details.quiet-disclosure[open] > summary,
+details.inline-disclosure[open] > summary,
+details.workbench-panel-disclosure[open] > summary,
+details.compact-review-disclosure[open] > summary,
+details.routing-evidence-disclosure[open] > summary,
+details.compact-secondary-disclosure[open] > summary,
+details.technical-evidence-disclosure[open] > summary,
+details.registry-create-disclosure[open] > summary,
+details.territory-create-disclosure[open] > summary,
+details.territory-edit-disclosure[open] > summary,
+details.territory-evidence-disclosure[open] > summary,
+details.hierarchy-province[open] > summary,
+details.review-secondary-actions[open] > summary {
+  border-bottom-left-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
+}
+
+.assignment-card {
+  border-radius: 9px !important;
+  overflow: clip !important;
+}
+
+@media (max-width: 759px) {
+  .page-shell {
+    width: 100vw !important;
+    max-width: 100vw !important;
+    padding-inline: 12px !important;
+  }
+
+  .public-task-panel,
+  .field-workspace .public-task-panel,
+  .verification-workspace .public-task-panel,
+  .section-grid .public-task-panel,
+  .territory-admin-grid .public-task-panel {
+    width: min(100%, calc(100vw - 24px)) !important;
+    max-width: calc(100vw - 24px) !important;
+    margin-inline: 0 !important;
+  }
+
+  .field-workspace .case-lane,
+  .field-workspace .assignment-card,
+  .field-workspace details.quiet-disclosure,
+  .field-workspace details.inline-disclosure,
+  .field-workspace details.workbench-panel-disclosure,
+  .field-workspace details.technical-evidence-disclosure,
+  .field-workspace details.compact-review-disclosure {
+    width: 100% !important;
+    max-width: 100% !important;
+    left: auto !important;
+    right: auto !important;
+  }
+}
+
+/* Tile-edge audit: beat old parent-child zero-radius card reset */
+.public-task-panel details.inline-disclosure,
+.public-task-panel details.quiet-disclosure,
+.public-task-panel details.workbench-panel-disclosure,
+.public-task-panel details.compact-review-disclosure,
+.public-task-panel details.routing-evidence-disclosure,
+.public-task-panel details.compact-secondary-disclosure,
+.public-task-panel details.technical-evidence-disclosure,
+.public-task-panel details.registry-create-disclosure,
+.public-task-panel details.territory-create-disclosure,
+.public-task-panel details.territory-edit-disclosure,
+.public-task-panel details.territory-evidence-disclosure,
+.public-task-panel details.hierarchy-province,
+.public-task-panel details.review-secondary-actions,
+.public-task-panel .assignment-card.assignment-card {
+  border-radius: 9px !important;
+  border-top-left-radius: 9px !important;
+  border-top-right-radius: 9px !important;
+  border-bottom-right-radius: 9px !important;
+  border-bottom-left-radius: 9px !important;
+  overflow: clip !important;
+}
+
+.public-task-panel details.inline-disclosure > summary,
+.public-task-panel details.quiet-disclosure > summary,
+.public-task-panel details.workbench-panel-disclosure > summary,
+.public-task-panel details.compact-review-disclosure > summary,
+.public-task-panel details.routing-evidence-disclosure > summary,
+.public-task-panel details.compact-secondary-disclosure > summary,
+.public-task-panel details.technical-evidence-disclosure > summary,
+.public-task-panel details.registry-create-disclosure > summary,
+.public-task-panel details.territory-create-disclosure > summary,
+.public-task-panel details.territory-edit-disclosure > summary,
+.public-task-panel details.territory-evidence-disclosure > summary,
+.public-task-panel details.hierarchy-province > summary,
+.public-task-panel details.review-secondary-actions > summary {
+  border-top-left-radius: 8px !important;
+  border-top-right-radius: 8px !important;
+}
