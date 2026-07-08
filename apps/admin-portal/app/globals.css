@@ -8367,3 +8367,231 @@ textarea.territory-input,.territory-textarea { min-height:72px !important; }
   padding: 0.45rem 0.68rem !important;
   font-size: 0.73rem !important;
 }
+
+/* Human-first government workflow simplification */
+.human-field-form {
+  gap: 12px !important;
+}
+
+.guided-workflow-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  grid-column: 1 / -1;
+  padding: 6px;
+  border: 1px solid rgba(11, 67, 98, 0.12);
+  border-radius: 10px;
+  background: #f8faf9;
+}
+
+.step-chip {
+  display: inline-flex;
+  align-items: center;
+  min-height: 26px;
+  padding: 0 9px;
+  border: 1px solid rgba(31, 48, 55, 0.12);
+  border-radius: 999px;
+  color: #62727a;
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+.step-chip.active {
+  border-color: rgba(11, 67, 98, 0.28);
+  background: #e9f2f5;
+  color: #0b4362;
+}
+
+.human-form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  grid-column: 1 / -1;
+}
+
+.human-capture-card {
+  padding: 11px !important;
+}
+
+.human-capture-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.readiness-pill {
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
+  padding: 0 8px;
+  border-radius: 999px;
+  border: 1px solid rgba(140, 106, 37, 0.24);
+  background: #fff8e8;
+  color: #6b4a08;
+  font-size: 0.7rem;
+  font-weight: 800;
+}
+
+.readiness-pill.ok {
+  border-color: rgba(26, 78, 58, 0.24);
+  background: #eef8f0;
+  color: #1a4e3a;
+}
+
+.guided-primary-action {
+  width: 100%;
+  min-height: 42px !important;
+  margin-top: 8px;
+  justify-content: center;
+}
+
+.human-evidence-summary {
+  display: grid;
+  gap: 3px;
+  margin-top: 8px;
+  padding: 8px 9px;
+  border: 1px solid rgba(11, 67, 98, 0.13);
+  border-radius: 8px;
+  background: #ffffff;
+  color: #34444b;
+  font-size: 0.78rem;
+}
+
+.human-evidence-summary strong {
+  color: #142f3a;
+}
+
+.technical-evidence-disclosure {
+  margin-top: 8px;
+}
+
+.technical-evidence-disclosure summary {
+  font-size: 0.75rem;
+  color: #52646d;
+}
+
+.human-review-summary strong {
+  font-size: 0.82rem;
+}
+
+@media (max-width: 720px) {
+  .human-form-grid {
+    grid-template-columns: 1fr;
+  }
+  .guided-workflow-strip {
+    gap: 5px;
+  }
+  .step-chip {
+    flex: 1 1 calc(50% - 5px);
+    justify-content: center;
+  }
+}
+
+.human-review-actions {
+  min-width: 150px;
+}
+
+.review-secondary-actions {
+  margin-top: 4px;
+}
+
+.review-secondary-actions summary {
+  font-size: 0.72rem;
+  color: #56656d;
+  cursor: pointer;
+}
+
+.review-secondary-actions[open] {
+  display: grid;
+  gap: 5px;
+}
+
+/* Government-grade workflow order: primary human task first */
+.field-intake-panel {
+  order: -3;
+  grid-column: 1 / -1;
+}
+
+.field-assignments-panel {
+  order: -2;
+}
+
+.field-location-checks-panel {
+  order: -1;
+}
+
+.verification-queue-panel {
+  order: -3;
+  grid-column: 1 / -1;
+}
+
+.verification-trust-panel {
+  order: -2;
+}
+
+@media (min-width: 980px) {
+  .field-intake-panel .compact-field-form {
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+  }
+
+  .verification-queue-panel .review-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* Final field workflow placement override: form first, support panels after */
+.field-workspace {
+  grid-template-columns: minmax(420px, 0.72fr) minmax(620px, 1fr) !important;
+}
+
+.field-workspace .field-intake-panel {
+  grid-column: 1 / -1 !important;
+  grid-row: 1 !important;
+  order: -10 !important;
+}
+
+.field-workspace .field-assignments-panel {
+  grid-column: 1 !important;
+  grid-row: 2 !important;
+  order: -5 !important;
+}
+
+.field-workspace .field-location-checks-panel {
+  grid-column: 2 !important;
+  grid-row: 2 !important;
+  order: -4 !important;
+}
+
+.field-workspace .live-intake-panel {
+  grid-column: 1 / -1 !important;
+  grid-row: 3 !important;
+  order: -3 !important;
+}
+
+@media (max-width: 860px) {
+  .field-workspace .field-intake-panel,
+  .field-workspace .field-assignments-panel,
+  .field-workspace .field-location-checks-panel,
+  .field-workspace .live-intake-panel {
+    grid-column: 1 !important;
+    grid-row: auto !important;
+  }
+}
+
+/* Final verification workflow placement override: review queue first, lookup support after */
+.verification-workspace {
+  grid-template-columns: minmax(0, 1fr) !important;
+}
+
+.verification-workspace .verification-queue-panel {
+  grid-column: 1 !important;
+  grid-row: 1 !important;
+  order: -10 !important;
+}
+
+.verification-workspace .verification-trust-panel {
+  grid-column: 1 !important;
+  grid-row: 2 !important;
+  order: -5 !important;
+}

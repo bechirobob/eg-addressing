@@ -122,16 +122,23 @@ export function VerificationWorkflowPanel({ submissions: initialSubmissions, sam
 
   function spatialEvidenceSummary(submission: Submission) {
     const evidence = submission.spatial_evidence;
-    if (!evidence || Object.keys(evidence).length === 0) return 'No spatial evidence captured.';
+    if (!evidence || Object.keys(evidence).length === 0) return 'Needs field location evidence before approval.';
     if (evidence.geometry_type === 'LineString') {
-      const suggested = evidence.map_suggestion?.suggested_road_name ? ` · suggested ${evidence.map_suggestion.suggested_road_name}` : '';
-      const grid = evidence.grid_cells?.length ? ` · ${evidence.grid_cells.length} grid cell${evidence.grid_cells.length === 1 ? '' : 's'}` : '';
-      return `Map/grid-assisted · ${evidence.points?.length ?? 0} GPS points · ${evidence.calculated_length_km ?? '—'} km server-calculated stretch${grid}${suggested}`;
+      const suggested = evidence.map_suggestion?.suggested_road_name || submission.candidate_name;
+      const distance = evidence.calculated_length_km ? `${evidence.calculated_length_km} km` : 'distance pending';
+      const cells = evidence.grid_cells?.length ? `${evidence.grid_cells.length} mapped cell${evidence.grid_cells.length === 1 ? '' : 's'}` : 'grid pending';
+      return `${suggested} · ${distance} · ${cells}. Human review still decides the official name.`;
     }
     if (evidence.geometry_type === 'Point') {
-      return `${evidence.latitude}, ${evidence.longitude} · ±${evidence.accuracy_meters ?? '—'}m · ${evidence.road_reference ?? 'no road reference'}`;
+      return `${evidence.road_reference ?? 'Road/frontage pending'} · GPS point captured · grid check ${evidence.grid_cells?.length ? 'ready' : 'pending'}.`;
     }
-    return 'Spatial evidence attached.';
+    return 'Location evidence attached.';
+  }
+
+  function reviewDecisionLabel(submission: Submission) {
+    if (!hasRequiredSpatialEvidence(submission)) return 'Send back: location evidence missing';
+    if (submission.spatial_evidence?.map_suggestion?.suggested_road_name) return 'Ready: map suggestion needs human confirmation';
+    return 'Ready: field evidence needs human confirmation';
   }
 
   function reviewDisabledReason(submission: Submission, action: 'under-review' | 'approve' | 'reject' | 'rework') {
@@ -243,7 +250,7 @@ export function VerificationWorkflowPanel({ submissions: initialSubmissions, sam
           <h3>Review field submissions before registry promotion</h3>
         </div>
         <p className="institutional-note">
-          Signed-in role: <strong>{sessionUser?.role ?? 'guest'}</strong>. Approval creates a registry record and returns the record identifier.
+          Signed-in role: <strong>{sessionUser?.role ?? 'guest'}</strong>. Review the plain summary first; open technical evidence only when something looks wrong.
         </p>
 
         {sessionStatus === 'loading' ? <p className="panel-state">Checking access and loading the current queue…</p> : null}
@@ -267,10 +274,13 @@ export function VerificationWorkflowPanel({ submissions: initialSubmissions, sam
           )}
         </details>
 
-        <label className="territory-field territory-field-wide">
-          <span className="territory-label">Reviewer note</span>
-          <textarea className="territory-input territory-textarea" value={reviewerNote} onChange={(event) => setReviewerNote(event.target.value)} rows={3} />
-        </label>
+        <details className="quiet-disclosure compact-review-disclosure">
+          <summary>Default reviewer note</summary>
+          <label className="territory-field territory-field-wide">
+            <span className="territory-label">Reviewer note used for rework/reject actions</span>
+            <textarea className="territory-input territory-textarea" value={reviewerNote} onChange={(event) => setReviewerNote(event.target.value)} rows={3} />
+          </label>
+        </details>
 
         {lastPromotion ? (
           <div className="result-card promotion-card">
@@ -305,13 +315,13 @@ export function VerificationWorkflowPanel({ submissions: initialSubmissions, sam
                     <p>
                       {submission.territory_name} · {submission.submitted_by}
                     </p>
-                    <div className={hasRequiredSpatialEvidence(submission) ? 'spatial-review-banner ok' : 'spatial-review-banner warn'}>
-                      <strong>{hasRequiredSpatialEvidence(submission) ? 'Spatial evidence ready' : 'Spatial evidence missing'}</strong>
+                    <div className={hasRequiredSpatialEvidence(submission) ? 'spatial-review-banner ok human-review-summary' : 'spatial-review-banner warn human-review-summary'}>
+                      <strong>{reviewDecisionLabel(submission)}</strong>
                       <span>{spatialEvidenceSummary(submission)}</span>
                     </div>
-                    <details className="inline-disclosure">
-                      <summary>Review evidence and secondary actions</summary>
-                      <p>{submission.notes}</p>
+                    <details className="inline-disclosure technical-evidence-disclosure">
+                      <summary>Technical evidence and notes</summary>
+                      <p>{submission.notes || 'No field note supplied.'}</p>
                       {submission.spatial_evidence?.points?.length ? (
                         <ol className="spatial-point-list">
                           {submission.spatial_evidence.points.map((point, index) => (
@@ -321,12 +331,12 @@ export function VerificationWorkflowPanel({ submissions: initialSubmissions, sam
                       ) : null}
                       {submission.spatial_evidence?.grid_cells?.length || submission.spatial_evidence?.map_suggestion ? (
                         <div className="spatial-analysis-summary reviewer">
-                          <strong>Map/grid intelligence · review required</strong>
+                          <strong>System analysis details</strong>
                           {submission.spatial_evidence.map_suggestion ? (
                             <span>Suggested road: {submission.spatial_evidence.map_suggestion.suggested_road_name || 'not found'} · Source: {submission.spatial_evidence.map_suggestion.source_attribution || submission.spatial_evidence.map_suggestion.source || 'map-derived'}</span>
                           ) : null}
                           {submission.spatial_evidence.grid_cells?.length ? <span>Grid cells crossed: {submission.spatial_evidence.grid_cells.map((cell) => cell.grid_code).join(', ')}</span> : null}
-                          <span>Confidence: {submission.spatial_evidence.review_confidence || submission.spatial_evidence.map_suggestion?.confidence || 'pending'} · Not official until approved.</span>
+                          <span>Review confidence: {submission.spatial_evidence.review_confidence || submission.spatial_evidence.map_suggestion?.confidence || 'pending'} · Not official until approved.</span>
                         </div>
                       ) : null}
                       {submission.registry_entity_id ? (
@@ -336,19 +346,22 @@ export function VerificationWorkflowPanel({ submissions: initialSubmissions, sam
                       ) : null}
                     </details>
                   </div>
-                  <div className="button-stack">
-                    <button className="mini-action-button" onClick={() => void sendAction(submission, 'under-review')} type="button" disabled={Boolean(reviewDisabledReason(submission, 'under-review'))}>
-                      {reviewDisabledReason(submission, 'under-review') ?? 'Mark under review'}
-                    </button>
+                  <div className="button-stack human-review-actions">
                     <button className="mini-action-button primary" onClick={() => void sendAction(submission, 'approve')} type="button" disabled={Boolean(reviewDisabledReason(submission, 'approve'))}>
-                      {reviewDisabledReason(submission, 'approve') ?? 'Approve into registry'}
+                      {reviewDisabledReason(submission, 'approve') ?? 'Approve record'}
                     </button>
                     <button className="mini-action-button" onClick={() => void sendAction(submission, 'rework')} type="button" disabled={Boolean(reviewDisabledReason(submission, 'rework'))}>
-                      {reviewDisabledReason(submission, 'rework') ?? 'Send to rework'}
+                      {reviewDisabledReason(submission, 'rework') ?? 'Request correction'}
                     </button>
-                    <button className="mini-action-button danger" onClick={() => void sendAction(submission, 'reject')} type="button" disabled={Boolean(reviewDisabledReason(submission, 'reject'))}>
-                      {reviewDisabledReason(submission, 'reject') ?? 'Reject'}
-                    </button>
+                    <details className="quiet-disclosure review-secondary-actions">
+                      <summary>Other actions</summary>
+                      <button className="mini-action-button" onClick={() => void sendAction(submission, 'under-review')} type="button" disabled={Boolean(reviewDisabledReason(submission, 'under-review'))}>
+                        {reviewDisabledReason(submission, 'under-review') ?? 'Mark under review'}
+                      </button>
+                      <button className="mini-action-button danger" onClick={() => void sendAction(submission, 'reject')} type="button" disabled={Boolean(reviewDisabledReason(submission, 'reject'))}>
+                        {reviewDisabledReason(submission, 'reject') ?? 'Reject'}
+                      </button>
+                    </details>
                   </div>
                 </li>
               );

@@ -179,8 +179,8 @@ export function FieldWorkflowPanel({ assignments, submissions: initialSubmission
   const spatialSubmitDisabledReason = (() => {
     if (!canSubmit) return 'Editor or admin required';
     if (isSubmitting) return 'Submitting…';
-    if (form.submission_type === 'road' && !buildSpatialEvidence()) return 'Capture road start and end GPS first';
-    if (form.submission_type === 'building' && !buildSpatialEvidence()) return 'Capture building GPS and road reference first';
+    if (form.submission_type === 'road' && !buildSpatialEvidence()) return 'Capture road stretch first';
+    if (form.submission_type === 'building' && !buildSpatialEvidence()) return 'Capture building location first';
     return null;
   })();
 
@@ -199,7 +199,7 @@ export function FieldWorkflowPanel({ assignments, submissions: initialSubmission
     setBuildingPoint(null);
     setRoadReference('');
     setSpatialAnalysis(null);
-    setNotice('Pilot road stretch loaded. Run Analyze map/grid to enrich it.');
+    setNotice('Pilot road stretch loaded. The system will check the map and grid automatically.');
   }
 
   async function analyzeSpatialEvidence() {
@@ -233,6 +233,60 @@ export function FieldWorkflowPanel({ assignments, submissions: initialSubmission
     } finally {
       setIsAnalyzingSpatialEvidence(false);
     }
+  }
+
+  function roadStartCaptured() {
+    return roadPoints.some((point) => point.role === 'start');
+  }
+
+  function roadEndCaptured() {
+    return roadPoints.some((point) => point.role === 'end');
+  }
+
+  function roadStepLabel() {
+    if (isCapturingGeometry) return 'Capturing GPS…';
+    if (!roadStartCaptured()) return 'Capture road start';
+    if (!roadEndCaptured()) return 'Capture road end';
+    if (isAnalyzingSpatialEvidence) return 'Checking map and grid…';
+    if (!spatialAnalysis) return 'Check map and grid';
+    return 'Road stretch ready';
+  }
+
+  function buildingStepLabel() {
+    if (isCapturingGeometry) return 'Capturing GPS…';
+    if (!buildingPoint) return 'Capture building location';
+    if (roadReference.trim().length < 2) return 'Add nearby road name';
+    if (isAnalyzingSpatialEvidence) return 'Checking map and grid…';
+    if (!spatialAnalysis) return 'Check map and grid';
+    return 'Building location ready';
+  }
+
+  function readinessState() {
+    if (form.submission_type === 'address') return { label: 'Ready for verification', tone: 'ok' };
+    const evidence = buildSpatialEvidence();
+    if (!evidence) return { label: 'Needs location evidence', tone: 'warn' };
+    if (!spatialAnalysis) return { label: 'System check pending', tone: 'warn' };
+    return { label: 'Ready for verification', tone: 'ok' };
+  }
+
+  async function continueRoadCapture() {
+    if (!roadStartCaptured()) {
+      await captureCurrentPosition('road-start');
+      return;
+    }
+    if (!roadEndCaptured()) {
+      await captureCurrentPosition('road-end');
+      return;
+    }
+    if (!spatialAnalysis) await analyzeSpatialEvidence();
+  }
+
+  async function continueBuildingCapture() {
+    if (!buildingPoint) {
+      await captureCurrentPosition('building');
+      return;
+    }
+    if (roadReference.trim().length >= 2 && !spatialAnalysis) await analyzeSpatialEvidence();
   }
 
   async function captureCurrentPosition(target: 'road-start' | 'road-midpoint' | 'road-end' | 'building') {
@@ -288,6 +342,12 @@ export function FieldWorkflowPanel({ assignments, submissions: initialSubmission
       setForm((current) => ({ ...current, territory_id: fieldTerritories[0].id }));
     }
   }, [fieldAssignments, fieldTerritories, form.assignment_id, form.territory_id]);
+
+  useEffect(() => {
+    if (!token || !canSubmit || spatialAnalysis || isAnalyzingSpatialEvidence || form.submission_type === 'address') return;
+    if (!buildSpatialEvidence()) return;
+    void analyzeSpatialEvidence();
+  }, [token, canSubmit, spatialAnalysis, isAnalyzingSpatialEvidence, form.submission_type, form.territory_id, roadPoints, buildingPoint, roadReference]);
 
   async function reloadProtectedLookups(activeToken: string) {
     const [assignmentsResponse, territoriesResponse] = await Promise.all([
@@ -519,121 +579,121 @@ export function FieldWorkflowPanel({ assignments, submissions: initialSubmission
             <em>{sessionUser?.role ?? 'guest'} role</em>
           </summary>
           <p className="institutional-note compact-note">
-            Feeds the live verification queue. Collapse this panel when reviewing recent intake.
+            Use this like a field checklist. The system handles GPS, map suggestions, grid cells, and distance in the background.
           </p>
           {sessionStatus === 'loading' ? <p className="panel-state">Checking access before opening the submission form…</p> : null}
-          <form className="territory-form compact-field-form" onSubmit={handleSubmit}>
-          <label className="territory-field">
-            <span className="territory-label">Assignment</span>
-            <select
-              className="territory-input"
-              value={form.assignment_id}
-              onChange={(event) => {
-                const assignment = fieldAssignments.find((item) => item.assignment_id === event.target.value);
-                setForm({
-                  ...form,
-                  assignment_id: event.target.value,
-                  territory_id: assignment?.territory_id ?? form.territory_id,
-                  submitted_by: assignment?.team ?? form.submitted_by,
-                });
-              }}
-            >
-              {fieldAssignments.map((assignment) => (
-                <option key={assignment.assignment_id} value={assignment.assignment_id}>
-                  {assignment.task} · {assignment.team}
-                </option>
-              ))}
-            </select>
-          </label>
-          <label className="territory-field">
-            <span className="territory-label">Territory</span>
-            <select className="territory-input" value={form.territory_id} onChange={(event) => setForm({ ...form, territory_id: event.target.value })}>
-              {fieldTerritories.map((territory) => (
-                <option key={territory.id} value={territory.id}>
-                  {territory.name}
-                </option>
-              ))}
-            </select>
-          </label>
-          <label className="territory-field">
-            <span className="territory-label">Submission type</span>
-            <select className="territory-input" value={form.submission_type} onChange={(event) => { setForm({ ...form, submission_type: event.target.value as 'road' | 'building' | 'address' }); setRoadPoints([]); setBuildingPoint(null); setSpatialAnalysis(null); }}>
-              <option value="road">Road proposal</option>
-              <option value="building">Building proposal</option>
-              <option value="address">Address proposal</option>
-            </select>
-          </label>
-          <label className="territory-field">
-            <span className="territory-label">Candidate name / label</span>
-            <input className="territory-input" value={form.candidate_name} onChange={(event) => setForm({ ...form, candidate_name: event.target.value })} required />
-          </label>
-          <label className="territory-field">
-            <span className="territory-label">Candidate status</span>
-            <input className="territory-input" value={form.candidate_status} onChange={(event) => setForm({ ...form, candidate_status: event.target.value })} required />
-          </label>
-          <label className="territory-field">
-            <span className="territory-label">Submitted by</span>
-            <input className="territory-input" value={form.submitted_by} onChange={(event) => setForm({ ...form, submitted_by: event.target.value })} required />
-          </label>
-          {form.submission_type === 'road' ? (
-            <div className="territory-field territory-field-wide spatial-evidence-capture">
-              <span className="territory-label">Road stretch GPS evidence</span>
-              <div className="calm-action-row">
-                <button className="secondary-action" type="button" disabled={isCapturingGeometry} onClick={() => void captureCurrentPosition('road-start')}>Capture start</button>
-                <button className="secondary-action" type="button" disabled={isCapturingGeometry} onClick={() => void captureCurrentPosition('road-midpoint')}>Add midpoint</button>
-                <button className="secondary-action" type="button" disabled={isCapturingGeometry} onClick={() => void captureCurrentPosition('road-end')}>Capture end</button>
-                <button className="secondary-action" type="button" onClick={loadPilotSampleStretch}>Load pilot sample</button>
-                <button className="primary-action compact-action" type="button" disabled={isAnalyzingSpatialEvidence || !buildSpatialEvidence()} onClick={() => void analyzeSpatialEvidence()}>{isAnalyzingSpatialEvidence ? 'Analyzing…' : 'Analyze map/grid'}</button>
-              </div>
-              <p className="institutional-note compact-note">
-                Approval requires captured start and end points. Length is calculated from GPS geometry, not typed manually.
-              </p>
-              {roadPoints.length > 0 ? (
-                <div className="spatial-evidence-summary">
-                  <strong>{roadPoints.length} point{roadPoints.length === 1 ? '' : 's'} captured · {roadLengthKm().toFixed(3)} km calculated</strong>
-                  <span>{roadPoints.map((point) => `${point.role}: ${point.latitude}, ${point.longitude} ±${Math.round(point.accuracy_meters ?? 0)}m`).join(' · ')}</span>
-                </div>
-              ) : null}
-              {spatialAnalysis ? (
-                <div className="spatial-analysis-summary">
-                  <strong>Map/grid analysis · review required</strong>
-                  <span>Suggested road: {spatialAnalysis.map_suggestion?.suggested_road_name || 'not found'} · Confidence: {spatialAnalysis.review_confidence ?? spatialAnalysis.map_suggestion?.confidence ?? 'pending'}</span>
-                  <span>Grid cells: {spatialAnalysis.grid_cells?.map((cell) => cell.grid_code).join(', ') || 'pending'}</span>
-                  <span>Source: {spatialAnalysis.map_suggestion?.source_attribution || spatialAnalysis.map_suggestion?.source || 'server grid analysis'}</span>
-                </div>
-              ) : null}
+          <form className="territory-form compact-field-form human-field-form" onSubmit={handleSubmit}>
+            <div className="guided-workflow-strip" aria-label="Field evidence progress">
+              <span className="step-chip active">1. Identify</span>
+              <span className={buildSpatialEvidence() ? 'step-chip active' : 'step-chip'}>2. Capture location</span>
+              <span className={spatialAnalysis || form.submission_type === 'address' ? 'step-chip active' : 'step-chip'}>3. System check</span>
+              <span className={spatialSubmitDisabledReason ? 'step-chip' : 'step-chip active'}>4. Submit</span>
             </div>
-          ) : null}
-
-          {form.submission_type === 'building' ? (
-            <div className="territory-field territory-field-wide spatial-evidence-capture">
-              <span className="territory-label">Building GPS evidence</span>
-              <div className="calm-action-row">
-                <button className="secondary-action" type="button" disabled={isCapturingGeometry} onClick={() => void captureCurrentPosition('building')}>Capture building point</button>
-                <button className="primary-action compact-action" type="button" disabled={isAnalyzingSpatialEvidence || !buildSpatialEvidence()} onClick={() => void analyzeSpatialEvidence()}>{isAnalyzingSpatialEvidence ? 'Analyzing…' : 'Analyze map/grid'}</button>
-              </div>
-              <label className="territory-field territory-field-wide nested-field">
-                <span className="territory-label">Road/frontage reference</span>
-                <input className="territory-input" value={roadReference} onChange={(event) => setRoadReference(event.target.value)} placeholder="Road, frontage, or access path observed in the field" />
+            <div className="human-form-grid">
+              <label className="territory-field">
+                <span className="territory-label">What are you registering?</span>
+                <select className="territory-input" value={form.submission_type} onChange={(event) => { setForm({ ...form, submission_type: event.target.value as 'road' | 'building' | 'address' }); setRoadPoints([]); setBuildingPoint(null); setSpatialAnalysis(null); }}>
+                  <option value="road">Road / street stretch</option>
+                  <option value="building">Building / property point</option>
+                  <option value="address">Address label only</option>
+                </select>
               </label>
-              <p className="institutional-note compact-note">
-                Approval requires a captured GPS point and a road/frontage reference. Manual labels alone cannot enter the registry.
-              </p>
-              {buildingPoint ? (
-                <div className="spatial-evidence-summary">
-                  <strong>Building point captured</strong>
-                  <span>{buildingPoint.latitude}, {buildingPoint.longitude} ±{Math.round(buildingPoint.accuracy_meters ?? 0)}m</span>
-                </div>
-              ) : null}
-              {spatialAnalysis ? (
-                <div className="spatial-analysis-summary">
-                  <strong>Grid analysis · review required</strong>
-                  <span>Grid cell: {spatialAnalysis.grid_cells?.map((cell) => cell.grid_code).join(', ') || 'pending'}</span>
-                  <span>Road/frontage: {spatialAnalysis.road_reference || roadReference || 'pending'}</span>
-                </div>
-              ) : null}
+              <label className="territory-field">
+                <span className="territory-label">Name or label people use</span>
+                <input className="territory-input" value={form.candidate_name} onChange={(event) => setForm({ ...form, candidate_name: event.target.value })} placeholder="Example: Airport Road extension" required />
+              </label>
             </div>
-          ) : null}
+
+            <details className="quiet-disclosure compact-review-disclosure">
+              <summary>Routing details</summary>
+              <label className="territory-field">
+                <span className="territory-label">Assignment</span>
+                <select
+                  className="territory-input"
+                  value={form.assignment_id}
+                  onChange={(event) => {
+                    const assignment = fieldAssignments.find((item) => item.assignment_id === event.target.value);
+                    setForm({
+                      ...form,
+                      assignment_id: event.target.value,
+                      territory_id: assignment?.territory_id ?? form.territory_id,
+                      submitted_by: assignment?.team ?? form.submitted_by,
+                    });
+                  }}
+                >
+                  {fieldAssignments.map((assignment) => (
+                    <option key={assignment.assignment_id} value={assignment.assignment_id}>
+                      {assignment.task} · {assignment.team}
+                    </option>
+                  ))}
+                </select>
+              </label>
+              <label className="territory-field">
+                <span className="territory-label">Territory</span>
+                <select className="territory-input" value={form.territory_id} onChange={(event) => setForm({ ...form, territory_id: event.target.value })}>
+                  {fieldTerritories.map((territory) => (
+                    <option key={territory.id} value={territory.id}>
+                      {territory.name}
+                    </option>
+                  ))}
+                </select>
+              </label>
+              <label className="territory-field">
+                <span className="territory-label">Submitted by</span>
+                <input className="territory-input" value={form.submitted_by} onChange={(event) => setForm({ ...form, submitted_by: event.target.value })} required />
+              </label>
+              <input type="hidden" value={form.candidate_status} readOnly />
+            </details>
+
+            {form.submission_type === 'road' ? (
+              <div className="territory-field territory-field-wide spatial-evidence-capture human-capture-card">
+                <div className="human-capture-head">
+                  <span className="territory-label">Road stretch</span>
+                  <span className={`readiness-pill ${readinessState().tone}`}>{readinessState().label}</span>
+                </div>
+                <button className="primary-action guided-primary-action" type="button" disabled={isCapturingGeometry || isAnalyzingSpatialEvidence || Boolean(spatialAnalysis)} onClick={() => void continueRoadCapture()}>{roadStepLabel()}</button>
+                <p className="field-help">Stand at the beginning of the stretch, tap once. Move to the end, tap again. The system checks the road name, grid cells, and distance automatically.</p>
+                <div className="human-evidence-summary">
+                  <strong>{roadStartCaptured() ? 'Start captured' : 'Start needed'} → {roadEndCaptured() ? 'End captured' : 'End needed'}</strong>
+                  <span>{spatialAnalysis?.map_suggestion?.suggested_road_name ? `Suggested road: ${spatialAnalysis.map_suggestion.suggested_road_name}` : roadPoints.length >= 2 ? 'System check running or ready to run.' : 'No technical input needed from the worker.'}</span>
+                  {spatialAnalysis?.calculated_length_km ? <span>Distance: {spatialAnalysis.calculated_length_km} km · Grid coverage saved for reviewer</span> : null}
+                </div>
+                <details className="quiet-disclosure technical-evidence-disclosure">
+                  <summary>Technical evidence</summary>
+                  <div className="calm-action-row">
+                    <button className="secondary-action" type="button" disabled={isCapturingGeometry} onClick={() => void captureCurrentPosition('road-midpoint')}>Add midpoint if road bends</button>
+                    <button className="secondary-action" type="button" onClick={loadPilotSampleStretch}>Load pilot sample</button>
+                    <button className="secondary-action" type="button" disabled={isAnalyzingSpatialEvidence || !buildSpatialEvidence()} onClick={() => void analyzeSpatialEvidence()}>{isAnalyzingSpatialEvidence ? 'Checking…' : 'Recheck system analysis'}</button>
+                  </div>
+                  {roadPoints.length > 0 ? <p>{roadPoints.map((point) => `${point.role}: ${point.latitude}, ${point.longitude} ±${Math.round(point.accuracy_meters ?? 0)}m`).join(' · ')}</p> : null}
+                  {spatialAnalysis ? <p>Grid cells: {spatialAnalysis.grid_cells?.map((cell) => cell.grid_code).join(', ') || 'pending'} · Source: {spatialAnalysis.map_suggestion?.source_attribution || spatialAnalysis.map_suggestion?.source || 'server grid analysis'}</p> : null}
+                </details>
+              </div>
+            ) : null}
+
+            {form.submission_type === 'building' ? (
+              <div className="territory-field territory-field-wide spatial-evidence-capture human-capture-card">
+                <div className="human-capture-head">
+                  <span className="territory-label">Building location</span>
+                  <span className={`readiness-pill ${readinessState().tone}`}>{readinessState().label}</span>
+                </div>
+                <button className="primary-action guided-primary-action" type="button" disabled={isCapturingGeometry || isAnalyzingSpatialEvidence || Boolean(spatialAnalysis && buildingPoint)} onClick={() => void continueBuildingCapture()}>{buildingStepLabel()}</button>
+                <label className="territory-field territory-field-wide nested-field">
+                  <span className="territory-label">Nearby road or frontage</span>
+                  <input className="territory-input" value={roadReference} onChange={(event) => { setRoadReference(event.target.value); setSpatialAnalysis(null); }} placeholder="Road, frontage, or access path observed in the field" />
+                </label>
+                <p className="field-help">Capture the building point and name the road/frontage. The grid check runs automatically before submission.</p>
+                <div className="human-evidence-summary">
+                  <strong>{buildingPoint ? 'Building point captured' : 'Building point needed'}</strong>
+                  <span>{spatialAnalysis?.grid_cells?.length ? `Grid coverage saved: ${spatialAnalysis.grid_cells.map((cell) => cell.grid_code).join(', ')}` : 'No coordinate typing needed.'}</span>
+                </div>
+                <details className="quiet-disclosure technical-evidence-disclosure">
+                  <summary>Technical evidence</summary>
+                  {buildingPoint ? <p>{buildingPoint.latitude}, {buildingPoint.longitude} ±{Math.round(buildingPoint.accuracy_meters ?? 0)}m</p> : null}
+                  {spatialAnalysis ? <p>Grid cells: {spatialAnalysis.grid_cells?.map((cell) => cell.grid_code).join(', ') || 'pending'}</p> : null}
+                </details>
+              </div>
+            ) : null}
 
           <label className="territory-field territory-field-wide">
             <span className="territory-label">Field notes</span>
