@@ -4,6 +4,26 @@ import { FormEvent, useEffect, useMemo, useState } from 'react';
 
 import { authorizationHeader, resolveBrowserApiBaseUrl, useStoredSession } from './sessionClient';
 
+type SpatialPoint = {
+  latitude: number;
+  longitude: number;
+  accuracy_meters?: number | null;
+  role?: string;
+};
+
+type SpatialEvidence = {
+  geometry_type?: 'LineString' | 'Point';
+  points?: SpatialPoint[];
+  calculated_length_km?: number;
+  latitude?: number;
+  longitude?: number;
+  accuracy_meters?: number | null;
+  road_reference?: string;
+  capture_method?: string;
+  evidence_source?: string;
+  accuracy_note?: string;
+};
+
 type Submission = {
   id: string;
   territory_name: string;
@@ -15,6 +35,7 @@ type Submission = {
   registry_entity_id?: string | null;
   submitted_by: string;
   notes: string;
+  spatial_evidence?: SpatialEvidence | null;
 };
 
 type LookupResult = {
@@ -68,10 +89,35 @@ export function VerificationWorkflowPanel({ submissions: initialSubmissions, sam
   const [busySubmissionId, setBusySubmissionId] = useState<string | null>(null);
   const canReview = sessionUser?.role === 'editor' || sessionUser?.role === 'admin';
 
+  function hasRequiredSpatialEvidence(submission: Submission) {
+    const evidence = submission.spatial_evidence;
+    if (submission.submission_type === 'road') {
+      const points = evidence?.points ?? [];
+      return evidence?.geometry_type === 'LineString' && points.length >= 2 && points.some((point) => point.role === 'start') && points.some((point) => point.role === 'end');
+    }
+    if (submission.submission_type === 'building') {
+      return evidence?.geometry_type === 'Point' && typeof evidence.latitude === 'number' && typeof evidence.longitude === 'number' && typeof evidence.accuracy_meters === 'number' && Boolean(evidence.road_reference);
+    }
+    return true;
+  }
+
+  function spatialEvidenceSummary(submission: Submission) {
+    const evidence = submission.spatial_evidence;
+    if (!evidence || Object.keys(evidence).length === 0) return 'No spatial evidence captured.';
+    if (evidence.geometry_type === 'LineString') {
+      return `${evidence.points?.length ?? 0} GPS points · ${evidence.calculated_length_km ?? '—'} km server-calculated stretch`;
+    }
+    if (evidence.geometry_type === 'Point') {
+      return `${evidence.latitude}, ${evidence.longitude} · ±${evidence.accuracy_meters ?? '—'}m · ${evidence.road_reference ?? 'no road reference'}`;
+    }
+    return 'Spatial evidence attached.';
+  }
+
   function reviewDisabledReason(submission: Submission, action: 'under-review' | 'approve' | 'reject' | 'rework') {
     if (!canReview) return 'Editor or admin required';
     if (busySubmissionId === submission.id) return 'Working…';
     if (action === 'under-review' && submission.review_status === 'under-review') return 'Already under review';
+    if (action === 'approve' && !hasRequiredSpatialEvidence(submission)) return 'Spatial evidence required';
     return null;
   }
 
@@ -238,9 +284,20 @@ export function VerificationWorkflowPanel({ submissions: initialSubmissions, sam
                     <p>
                       {submission.territory_name} · {submission.submitted_by}
                     </p>
+                    <div className={hasRequiredSpatialEvidence(submission) ? 'spatial-review-banner ok' : 'spatial-review-banner warn'}>
+                      <strong>{hasRequiredSpatialEvidence(submission) ? 'Spatial evidence ready' : 'Spatial evidence missing'}</strong>
+                      <span>{spatialEvidenceSummary(submission)}</span>
+                    </div>
                     <details className="inline-disclosure">
                       <summary>Review evidence and secondary actions</summary>
                       <p>{submission.notes}</p>
+                      {submission.spatial_evidence?.points?.length ? (
+                        <ol className="spatial-point-list">
+                          {submission.spatial_evidence.points.map((point, index) => (
+                            <li key={`${submission.id}-point-${index}`}>{point.role ?? `point ${index + 1}`}: {point.latitude}, {point.longitude}</li>
+                          ))}
+                        </ol>
+                      ) : null}
                       {submission.registry_entity_id ? (
                         <p className="institutional-note">
                           Registry record: <strong>{submission.registry_entity_id}</strong>

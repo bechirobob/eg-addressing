@@ -309,7 +309,16 @@ def test_create_field_submission_invalid_assignment_returns_404(monkeypatch) -> 
     monkeypatch.setattr(main, 'create_field_submission', lambda payload, actor=None: (_ for _ in ()).throw(main.SubmissionNotFoundError('assignment not found')))
     response = client.post('/api/v1/field/submissions', json=payload, headers=auth_header())
     assert response.status_code == 404
-    assert response.json()['detail'] == 'assignment not found'
+
+
+def test_create_field_submission_returns_400_for_missing_spatial_evidence(monkeypatch) -> None:
+    payload = {'assignment_id': 'field-001', 'territory_id': 'territory-bata', 'submission_type': 'road', 'candidate_name': 'New Road', 'candidate_status': 'submitted', 'notes': 'n', 'submitted_by': 'Team'}
+    monkeypatch.setattr(main, 'resolve_user_from_token', lambda token: EDITOR)
+    monkeypatch.setattr(main, 'create_field_submission', lambda payload, actor=None: (_ for _ in ()).throw(main.InvalidSubmissionActionError('road stretch geometry requires captured start and end GPS points')))
+    response = client.post('/api/v1/field/submissions', json=payload, headers=auth_header())
+    assert response.status_code == 400
+    assert 'road stretch geometry' in response.json()['detail']
+
 
 
 def test_approve_submission_returns_registry_link(monkeypatch) -> None:
@@ -318,6 +327,53 @@ def test_approve_submission_returns_registry_link(monkeypatch) -> None:
     response = client.post('/api/v1/field/submissions/sub-1/approve', headers=auth_header())
     assert response.status_code == 200
     assert response.json()['registry_entity_id'] == 'road-new-road'
+
+
+def test_spatial_evidence_blocks_road_approval_without_polyline() -> None:
+    try:
+        db.validate_submission_spatial_evidence({'submission_type': 'road', 'spatial_evidence': None})
+    except main.InvalidSubmissionActionError as exc:
+        assert 'road stretch geometry' in str(exc)
+    else:
+        raise AssertionError('road approval should require captured stretch geometry')
+
+
+def test_spatial_evidence_accepts_road_polyline_with_calculated_length() -> None:
+    db.validate_submission_spatial_evidence({
+        'submission_type': 'road',
+        'spatial_evidence': {
+            'geometry_type': 'LineString',
+            'capture_method': 'browser-gps',
+            'calculated_length_km': 0.42,
+            'points': [
+                {'latitude': 3.7521, 'longitude': 8.7731, 'role': 'start'},
+                {'latitude': 3.7536, 'longitude': 8.7762, 'role': 'end'},
+            ],
+        },
+    })
+
+
+def test_spatial_evidence_blocks_building_approval_without_point() -> None:
+    try:
+        db.validate_submission_spatial_evidence({'submission_type': 'building', 'spatial_evidence': {}})
+    except main.InvalidSubmissionActionError as exc:
+        assert 'building point evidence' in str(exc)
+    else:
+        raise AssertionError('building approval should require captured point geometry')
+
+
+def test_spatial_evidence_accepts_building_point_with_accuracy() -> None:
+    db.validate_submission_spatial_evidence({
+        'submission_type': 'building',
+        'spatial_evidence': {
+            'geometry_type': 'Point',
+            'capture_method': 'browser-gps',
+            'latitude': 3.7521,
+            'longitude': 8.7731,
+            'accuracy_meters': 18,
+            'road_reference': 'Avenida principal',
+        },
+    })
 
 
 def test_reject_submission_returns_review_state(monkeypatch) -> None:

@@ -8276,3 +8276,62 @@ textarea.territory-input,.territory-textarea { min-height:72px !important; }
     width: 100% !important;
   }
 }
+
+/* Geometry-first spatial evidence controls */
+.spatial-evidence-capture {
+  border: 1px solid rgba(11, 67, 98, 0.14);
+  border-radius: 10px;
+  background: #f8faf8;
+  padding: 10px;
+}
+
+.spatial-evidence-capture .calm-action-row {
+  margin-top: 6px;
+}
+
+.spatial-evidence-summary,
+.spatial-review-banner {
+  display: grid;
+  gap: 3px;
+  margin-top: 7px;
+  padding: 7px 8px;
+  border: 1px solid rgba(26, 78, 58, 0.16);
+  border-radius: 8px;
+  background: #ffffff;
+  color: #223229;
+  font-size: 0.75rem;
+  line-height: 1.35;
+}
+
+.spatial-evidence-summary strong,
+.spatial-review-banner strong {
+  font-size: 0.74rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #0f3d2e;
+}
+
+.spatial-review-banner.warn {
+  border-color: rgba(151, 88, 18, 0.24);
+  background: #fff9ed;
+}
+
+.spatial-review-banner.warn strong {
+  color: #875312;
+}
+
+.spatial-review-banner.ok {
+  border-color: rgba(26, 100, 70, 0.22);
+  background: #f3faf6;
+}
+
+.spatial-point-list {
+  margin: 6px 0 0;
+  padding-left: 18px;
+  color: #42534a;
+  font-size: 0.76rem;
+}
+
+.nested-field {
+  margin-top: 8px;
+}

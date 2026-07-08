@@ -73,8 +73,19 @@ const createSubmission = await jsonFetch('/api/v1/field/submissions', {
     submission_type: 'road',
     candidate_name: candidateName,
     candidate_status: 'submitted',
-    notes: 'Automated smoke flow submission.',
+    notes: 'Automated smoke flow submission with captured geometry evidence.',
     submitted_by: 'Smoke automation',
+    spatial_evidence: {
+      geometry_type: 'LineString',
+      capture_method: 'automated-smoke-gps-fixture',
+      evidence_source: 'smoke-test-fixture',
+      points: [
+        { role: 'start', latitude: 3.7521, longitude: 8.7731 },
+        { role: 'end', latitude: 3.7534, longitude: 8.7759 },
+      ],
+      calculated_length_km: 0.34,
+      accuracy_note: 'Disposable smoke fixture geometry; backend recalculates official length.',
+    },
   }),
 });
 

@@ -299,12 +299,14 @@ def _ensure_schema(cursor: psycopg.Cursor) -> None:
             territory_id TEXT NOT NULL REFERENCES territories(id),
             status TEXT NOT NULL,
             length_km TEXT NOT NULL,
+            spatial_evidence JSONB NOT NULL DEFAULT '{}'::jsonb,
             is_archived BOOLEAN NOT NULL DEFAULT FALSE,
             created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
             updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
         )
         '''
     )
+    cursor.execute("ALTER TABLE roads ADD COLUMN IF NOT EXISTS spatial_evidence JSONB NOT NULL DEFAULT '{}'::jsonb")
     cursor.execute("ALTER TABLE roads ADD COLUMN IF NOT EXISTS is_archived BOOLEAN NOT NULL DEFAULT FALSE")
     cursor.execute("ALTER TABLE roads ADD COLUMN IF NOT EXISTS updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()")
 
@@ -317,12 +319,14 @@ def _ensure_schema(cursor: psycopg.Cursor) -> None:
             road_id TEXT NOT NULL REFERENCES roads(id),
             status TEXT NOT NULL,
             usage TEXT NOT NULL,
+            spatial_evidence JSONB NOT NULL DEFAULT '{}'::jsonb,
             is_archived BOOLEAN NOT NULL DEFAULT FALSE,
             created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
             updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
         )
         '''
     )
+    cursor.execute("ALTER TABLE buildings ADD COLUMN IF NOT EXISTS spatial_evidence JSONB NOT NULL DEFAULT '{}'::jsonb")
     cursor.execute("ALTER TABLE buildings ADD COLUMN IF NOT EXISTS is_archived BOOLEAN NOT NULL DEFAULT FALSE")
     cursor.execute("ALTER TABLE buildings ADD COLUMN IF NOT EXISTS updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()")
 
@@ -540,6 +544,7 @@ def _ensure_schema(cursor: psycopg.Cursor) -> None:
             review_status TEXT NOT NULL DEFAULT 'submitted',
             reviewer_note TEXT NOT NULL DEFAULT '',
             registry_entity_id TEXT,
+            spatial_evidence JSONB NOT NULL DEFAULT '{}'::jsonb,
             created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
             updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
         )
@@ -547,6 +552,7 @@ def _ensure_schema(cursor: psycopg.Cursor) -> None:
     )
     cursor.execute("ALTER TABLE field_submissions ADD COLUMN IF NOT EXISTS reviewer_note TEXT NOT NULL DEFAULT ''")
     cursor.execute("ALTER TABLE field_submissions ADD COLUMN IF NOT EXISTS registry_entity_id TEXT")
+    cursor.execute("ALTER TABLE field_submissions ADD COLUMN IF NOT EXISTS spatial_evidence JSONB NOT NULL DEFAULT '{}'::jsonb")
     cursor.execute("ALTER TABLE field_submissions ADD COLUMN IF NOT EXISTS updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()")
 
     cursor.execute(
@@ -721,30 +727,32 @@ def init_db() -> None:
             for road in ROADS:
                 cursor.execute(
                     '''
-                    INSERT INTO roads (id, name, territory_id, status, length_km, is_archived)
-                    VALUES (%s, %s, %s, %s, %s, %s)
+                    INSERT INTO roads (id, name, territory_id, status, length_km, spatial_evidence, is_archived)
+                    VALUES (%s, %s, %s, %s, %s, %s::jsonb, %s)
                     ON CONFLICT (id) DO UPDATE SET
                         name = EXCLUDED.name,
                         territory_id = EXCLUDED.territory_id,
                         status = EXCLUDED.status,
                         length_km = EXCLUDED.length_km,
+                        spatial_evidence = COALESCE(NULLIF(roads.spatial_evidence, '{}'::jsonb), EXCLUDED.spatial_evidence),
                         is_archived = EXCLUDED.is_archived,
                         updated_at = NOW()
                     ''',
-                    (road['id'], road['name'], road['territory_id'], road['status'], road['length_km'], road.get('is_archived', False)),
+                    (road['id'], road['name'], road['territory_id'], road['status'], road['length_km'], json.dumps(road.get('spatial_evidence') or {}), road.get('is_archived', False)),
                 )
 
             for building in BUILDINGS:
                 cursor.execute(
                     '''
-                    INSERT INTO buildings (id, label, territory_id, road_id, status, usage, is_archived)
-                    VALUES (%s, %s, %s, %s, %s, %s, %s)
+                    INSERT INTO buildings (id, label, territory_id, road_id, status, usage, spatial_evidence, is_archived)
+                    VALUES (%s, %s, %s, %s, %s, %s, %s::jsonb, %s)
                     ON CONFLICT (id) DO UPDATE SET
                         label = EXCLUDED.label,
                         territory_id = EXCLUDED.territory_id,
                         road_id = EXCLUDED.road_id,
                         status = EXCLUDED.status,
                         usage = EXCLUDED.usage,
+                        spatial_evidence = COALESCE(NULLIF(buildings.spatial_evidence, '{}'::jsonb), EXCLUDED.spatial_evidence),
                         is_archived = EXCLUDED.is_archived,
                         updated_at = NOW()
                     ''',
@@ -755,6 +763,7 @@ def init_db() -> None:
                         building['road_id'],
                         building['status'],
                         building['usage'],
+                        json.dumps(building.get('spatial_evidence') or {}),
                         building.get('is_archived', False),
                     ),
                 )
@@ -827,9 +836,9 @@ def init_db() -> None:
                     '''
                     INSERT INTO field_submissions (
                         id, assignment_id, territory_id, submission_type, candidate_name,
-                        candidate_status, notes, submitted_by, review_status, registry_entity_id
+                        candidate_status, notes, submitted_by, review_status, registry_entity_id, spatial_evidence
                     )
-                    VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+                    VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s::jsonb)
                     ON CONFLICT (id) DO UPDATE SET
                         assignment_id = EXCLUDED.assignment_id,
                         territory_id = EXCLUDED.territory_id,
@@ -840,6 +849,7 @@ def init_db() -> None:
                         submitted_by = EXCLUDED.submitted_by,
                         review_status = EXCLUDED.review_status,
                         registry_entity_id = COALESCE(field_submissions.registry_entity_id, EXCLUDED.registry_entity_id),
+                        spatial_evidence = COALESCE(NULLIF(field_submissions.spatial_evidence, '{}'::jsonb), EXCLUDED.spatial_evidence),
                         updated_at = NOW()
                     ''',
                     (
@@ -853,6 +863,7 @@ def init_db() -> None:
                         submission['submitted_by'],
                         submission['review_status'],
                         submission.get('registry_entity_id'),
+                        json.dumps(submission.get('spatial_evidence') or {}),
                     ),
                 )
 
@@ -1398,16 +1409,16 @@ def create_road(payload: dict[str, str], actor: dict[str, str] | None = None) ->
                 raise DuplicateRoadError('duplicate road')
             cursor.execute(
                 '''
-                INSERT INTO roads (id, name, territory_id, status, length_km, is_archived)
-                VALUES (%s, %s, %s, %s, %s, FALSE)
-                RETURNING id, name, territory_id, status, length_km, is_archived
+                INSERT INTO roads (id, name, territory_id, status, length_km, spatial_evidence, is_archived)
+                VALUES (%s, %s, %s, %s, %s, %s::jsonb, FALSE)
+                RETURNING id, name, territory_id, status, length_km, spatial_evidence, is_archived
                 ''',
-                (road_id, payload['name'], payload['territory_id'], payload['status'], payload['length_km']),
+                (road_id, payload['name'], payload['territory_id'], payload['status'], payload['length_km'], json.dumps(payload.get('spatial_evidence') or {})),
             )
             created = cursor.fetchone()
             _log_action(cursor, actor=actor, action='create', entity_type='road', entity_id=road_id, details=payload)
         connection.commit()
-    return {**created, 'territory_name': territory['name']}
+    return {**_decode_spatial_evidence(dict(created)), 'territory_name': territory['name']}
 
 
 def update_road(road_id: str, payload: dict[str, str], actor: dict[str, str] | None = None) -> dict[str, Any]:
@@ -1542,16 +1553,16 @@ def create_building(payload: dict[str, str], actor: dict[str, str] | None = None
                 raise DuplicateBuildingError('duplicate building')
             cursor.execute(
                 '''
-                INSERT INTO buildings (id, label, territory_id, road_id, status, usage, is_archived)
-                VALUES (%s, %s, %s, %s, %s, %s, FALSE)
-                RETURNING id, label, territory_id, road_id, status, usage, is_archived
+                INSERT INTO buildings (id, label, territory_id, road_id, status, usage, spatial_evidence, is_archived)
+                VALUES (%s, %s, %s, %s, %s, %s, %s::jsonb, FALSE)
+                RETURNING id, label, territory_id, road_id, status, usage, spatial_evidence, is_archived
                 ''',
-                (building_id, payload['label'], payload['territory_id'], payload['road_id'], payload['status'], payload['usage']),
+                (building_id, payload['label'], payload['territory_id'], payload['road_id'], payload['status'], payload['usage'], json.dumps(payload.get('spatial_evidence') or {})),
             )
             created = cursor.fetchone()
             _log_action(cursor, actor=actor, action='create', entity_type='building', entity_id=building_id, details=payload)
         connection.commit()
-    return {**created, 'territory_name': territory['name'], 'road_name': road['name']}
+    return {**_decode_spatial_evidence(dict(created)), 'territory_name': territory['name'], 'road_name': road['name']}
 
 
 def update_building(building_id: str, payload: dict[str, str], actor: dict[str, str] | None = None) -> dict[str, Any]:
@@ -1857,6 +1868,109 @@ def list_field_assignments() -> list[dict[str, Any]]:
             return list(cursor.fetchall())
 
 
+
+def _coerce_json_object(value: Any) -> dict[str, Any]:
+    if value is None:
+        return {}
+    if isinstance(value, str):
+        if not value.strip():
+            return {}
+        parsed = json.loads(value)
+        return parsed if isinstance(parsed, dict) else {}
+    return value if isinstance(value, dict) else {}
+
+
+def _coordinate_value(point: dict[str, Any], key: str) -> float | None:
+    try:
+        value = float(point.get(key))
+    except (TypeError, ValueError):
+        return None
+    if key == 'latitude' and -90 <= value <= 90:
+        return value
+    if key == 'longitude' and -180 <= value <= 180:
+        return value
+    return None
+
+
+def _haversine_km(a: dict[str, Any], b: dict[str, Any]) -> float:
+    lat1 = math.radians(float(a['latitude']))
+    lon1 = math.radians(float(a['longitude']))
+    lat2 = math.radians(float(b['latitude']))
+    lon2 = math.radians(float(b['longitude']))
+    dlat = lat2 - lat1
+    dlon = lon2 - lon1
+    h = math.sin(dlat / 2) ** 2 + math.cos(lat1) * math.cos(lat2) * math.sin(dlon / 2) ** 2
+    return 6371.0088 * 2 * math.asin(min(1, math.sqrt(h)))
+
+
+def normalize_submission_spatial_evidence(submission_type: str, evidence: Any) -> dict[str, Any]:
+    payload = _coerce_json_object(evidence)
+    if submission_type == 'road':
+        raw_points = payload.get('points')
+        if not isinstance(raw_points, list):
+            raise InvalidSubmissionActionError('road stretch geometry requires captured start and end GPS points')
+        points: list[dict[str, Any]] = []
+        for index, raw_point in enumerate(raw_points):
+            if not isinstance(raw_point, dict):
+                continue
+            latitude = _coordinate_value(raw_point, 'latitude')
+            longitude = _coordinate_value(raw_point, 'longitude')
+            if latitude is None or longitude is None:
+                continue
+            role = str(raw_point.get('role') or ('start' if index == 0 else 'end' if index == len(raw_points) - 1 else 'midpoint'))
+            points.append({'latitude': latitude, 'longitude': longitude, 'role': role})
+        roles = {point['role'] for point in points}
+        if len(points) < 2 or 'start' not in roles or 'end' not in roles:
+            raise InvalidSubmissionActionError('road stretch geometry requires captured start and end GPS points')
+        length_km = sum(_haversine_km(points[i - 1], points[i]) for i in range(1, len(points)))
+        if length_km <= 0:
+            raise InvalidSubmissionActionError('road stretch geometry must calculate a positive length')
+        return {
+            'geometry_type': 'LineString',
+            'capture_method': str(payload.get('capture_method') or 'operator-gps'),
+            'points': points,
+            'calculated_length_km': round(length_km, 3),
+            'evidence_source': str(payload.get('evidence_source') or 'field-intake'),
+            'accuracy_note': str(payload.get('accuracy_note') or ''),
+        }
+    if submission_type == 'building':
+        latitude = _coordinate_value(payload, 'latitude')
+        longitude = _coordinate_value(payload, 'longitude')
+        try:
+            accuracy_meters = float(payload.get('accuracy_meters'))
+        except (TypeError, ValueError):
+            accuracy_meters = None
+        if latitude is None or longitude is None or accuracy_meters is None:
+            raise InvalidSubmissionActionError('building point evidence requires captured GPS point and accuracy')
+        if accuracy_meters < 0 or accuracy_meters > 5000:
+            raise InvalidSubmissionActionError('building point evidence has invalid accuracy')
+        road_reference = str(payload.get('road_reference') or '').strip()
+        if len(road_reference) < 2:
+            raise InvalidSubmissionActionError('building point evidence requires a road or frontage reference')
+        return {
+            'geometry_type': 'Point',
+            'capture_method': str(payload.get('capture_method') or 'operator-gps'),
+            'latitude': latitude,
+            'longitude': longitude,
+            'accuracy_meters': round(accuracy_meters, 2),
+            'road_reference': road_reference,
+            'evidence_source': str(payload.get('evidence_source') or 'field-intake'),
+            'accuracy_note': str(payload.get('accuracy_note') or ''),
+        }
+    return payload
+
+
+def validate_submission_spatial_evidence(submission: dict[str, Any]) -> None:
+    submission_type = str(submission.get('submission_type') or '')
+    if submission_type in {'road', 'building'}:
+        normalize_submission_spatial_evidence(submission_type, submission.get('spatial_evidence'))
+
+
+def _decode_spatial_evidence(item: dict[str, Any]) -> dict[str, Any]:
+    item['spatial_evidence'] = _coerce_json_object(item.get('spatial_evidence'))
+    return item
+
+
 def list_field_submissions(review_status: str | None = None, territory_id: str | None = None) -> list[dict[str, Any]]:
     where_clauses: list[str] = []
     params: list[Any] = []
@@ -1872,16 +1986,16 @@ def list_field_submissions(review_status: str | None = None, territory_id: str |
             cursor.execute(
                 '''
                 SELECT s.id, s.assignment_id, s.territory_id, t.name AS territory_name, s.submission_type, s.candidate_name,
-                       s.candidate_status, s.notes, s.submitted_by, s.review_status, s.reviewer_note, s.registry_entity_id, s.created_at
+                       s.candidate_status, s.notes, s.submitted_by, s.review_status, s.reviewer_note, s.registry_entity_id, s.spatial_evidence, s.created_at
                 FROM field_submissions s
                 JOIN territories t ON t.id = s.territory_id
                 ''' + where_sql + ' ORDER BY s.created_at DESC',
                 params,
             )
-            return list(cursor.fetchall())
+            return [_decode_spatial_evidence(dict(row)) for row in cursor.fetchall()]
 
 
-def create_field_submission(payload: dict[str, str], actor: dict[str, str] | None = None) -> dict[str, Any]:
+def create_field_submission(payload: dict[str, Any], actor: dict[str, str] | None = None) -> dict[str, Any]:
     submission_id = f"submission-{_slugify(payload['candidate_name'])}-{secrets.token_hex(3)}"
     with db_connection() as connection:
         with connection.cursor() as cursor:
@@ -1892,14 +2006,15 @@ def create_field_submission(payload: dict[str, str], actor: dict[str, str] | Non
             territory = cursor.fetchone()
             if not territory:
                 raise UnknownTerritoryError('unknown territory')
+            spatial_evidence = normalize_submission_spatial_evidence(payload['submission_type'], payload.get('spatial_evidence'))
             cursor.execute(
                 '''
                 INSERT INTO field_submissions (
                     id, assignment_id, territory_id, submission_type, candidate_name,
-                    candidate_status, notes, submitted_by, review_status, reviewer_note, registry_entity_id
-                ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, 'submitted', '', NULL)
+                    candidate_status, notes, submitted_by, review_status, reviewer_note, registry_entity_id, spatial_evidence
+                ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, 'submitted', '', NULL, %s::jsonb)
                 RETURNING id, assignment_id, territory_id, submission_type, candidate_name, candidate_status, notes,
-                          submitted_by, review_status, reviewer_note, registry_entity_id, created_at
+                          submitted_by, review_status, reviewer_note, registry_entity_id, spatial_evidence, created_at
                 ''',
                 (
                     submission_id,
@@ -1910,9 +2025,10 @@ def create_field_submission(payload: dict[str, str], actor: dict[str, str] | Non
                     payload['candidate_status'],
                     payload.get('notes', ''),
                     payload['submitted_by'],
+                    json.dumps(spatial_evidence),
                 ),
             )
-            created = cursor.fetchone()
+            created = _decode_spatial_evidence(dict(cursor.fetchone()))
             _log_action(cursor, actor=actor, action='create', entity_type='field_submission', entity_id=submission_id, details=payload)
         connection.commit()
     return {**created, 'territory_name': territory['name']}
@@ -1946,7 +2062,7 @@ def get_submission(submission_id: str) -> dict[str, Any]:
             cursor.execute(
                 '''
                 SELECT s.id, s.assignment_id, s.territory_id, t.name AS territory_name, s.submission_type, s.candidate_name,
-                       s.candidate_status, s.notes, s.submitted_by, s.review_status, s.reviewer_note, s.registry_entity_id, s.created_at
+                       s.candidate_status, s.notes, s.submitted_by, s.review_status, s.reviewer_note, s.registry_entity_id, s.spatial_evidence, s.created_at
                 FROM field_submissions s JOIN territories t ON t.id = s.territory_id WHERE s.id = %s
                 ''',
                 (submission_id,),
@@ -1954,7 +2070,7 @@ def get_submission(submission_id: str) -> dict[str, Any]:
             row = cursor.fetchone()
             if not row:
                 raise SubmissionNotFoundError('submission not found')
-            return dict(row)
+            return _decode_spatial_evidence(dict(row))
 
 
 def approve_submission(submission_id: str, actor: dict[str, str] | None = None) -> dict[str, Any]:
@@ -1965,17 +2081,20 @@ def approve_submission(submission_id: str, actor: dict[str, str] | None = None) 
             if not submission:
                 raise SubmissionNotFoundError('submission not found')
 
+            submission = _decode_spatial_evidence(dict(submission))
+            spatial_evidence = normalize_submission_spatial_evidence(submission['submission_type'], submission.get('spatial_evidence'))
             registry_entity_id = submission['registry_entity_id']
             candidate_payload = {
                 'territory_id': submission['territory_id'],
                 'status': submission['candidate_status'],
                 'notes': submission['notes'],
+                'spatial_evidence': spatial_evidence,
             }
 
             if submission['submission_type'] == 'road':
-                payload = {'name': submission['candidate_name'], 'territory_id': submission['territory_id'], 'status': submission['candidate_status'], 'length_km': '1.0'}
+                payload = {'name': submission['candidate_name'], 'territory_id': submission['territory_id'], 'status': submission['candidate_status'], 'length_km': str(spatial_evidence.get('calculated_length_km', '0')), 'spatial_evidence': spatial_evidence}
                 if registry_entity_id and _entity_exists(cursor, 'roads', registry_entity_id):
-                    cursor.execute('UPDATE roads SET status = %s, updated_at = NOW() WHERE id = %s', (payload['status'], registry_entity_id))
+                    cursor.execute('UPDATE roads SET status = %s, length_km = %s, spatial_evidence = %s::jsonb, updated_at = NOW() WHERE id = %s', (payload['status'], payload['length_km'], json.dumps(spatial_evidence), registry_entity_id))
                 else:
                     created = create_road(payload, actor=actor)
                     registry_entity_id = created['id']
@@ -1985,9 +2104,9 @@ def approve_submission(submission_id: str, actor: dict[str, str] | None = None) 
                 if not road:
                     road = create_road({'name': f"Support Road for {submission['candidate_name']}", 'territory_id': submission['territory_id'], 'status': 'verified', 'length_km': '0.5'}, actor=actor)
                 road_id = road['id'] if isinstance(road, dict) else road['id']
-                payload = {'label': submission['candidate_name'], 'territory_id': submission['territory_id'], 'road_id': road_id, 'status': submission['candidate_status'], 'usage': 'field-captured'}
+                payload = {'label': submission['candidate_name'], 'territory_id': submission['territory_id'], 'road_id': road_id, 'status': submission['candidate_status'], 'usage': 'field-captured', 'spatial_evidence': spatial_evidence}
                 if registry_entity_id and _entity_exists(cursor, 'buildings', registry_entity_id):
-                    cursor.execute('UPDATE buildings SET status = %s, updated_at = NOW() WHERE id = %s', (payload['status'], registry_entity_id))
+                    cursor.execute('UPDATE buildings SET status = %s, spatial_evidence = %s::jsonb, updated_at = NOW() WHERE id = %s', (payload['status'], json.dumps(spatial_evidence), registry_entity_id))
                 else:
                     created = create_building(payload, actor=actor)
                     registry_entity_id = created['id']

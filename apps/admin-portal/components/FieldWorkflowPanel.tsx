@@ -14,6 +14,26 @@ type Assignment = {
   priority: string;
 };
 
+type SpatialPoint = {
+  latitude: number;
+  longitude: number;
+  accuracy_meters?: number | null;
+  role?: 'start' | 'midpoint' | 'end';
+};
+
+type SpatialEvidence = {
+  geometry_type?: 'LineString' | 'Point';
+  capture_method?: string;
+  points?: SpatialPoint[];
+  calculated_length_km?: number;
+  latitude?: number;
+  longitude?: number;
+  accuracy_meters?: number | null;
+  road_reference?: string;
+  evidence_source?: string;
+  accuracy_note?: string;
+};
+
 type Submission = {
   id: string;
   assignment_id?: string | null;
@@ -27,6 +47,7 @@ type Submission = {
   review_status: string;
   reviewer_note: string;
   registry_entity_id?: string | null;
+  spatial_evidence?: SpatialEvidence | null;
 };
 
 type GeotagFieldTask = {
@@ -67,7 +88,6 @@ export function FieldWorkflowPanel({ assignments, submissions: initialSubmission
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const canSubmit = sessionUser?.role === 'editor' || sessionUser?.role === 'admin';
-  const submitDisabledReason = !canSubmit ? 'Editor or admin required' : isSubmitting ? 'Submitting…' : null;
   const [form, setForm] = useState({
     assignment_id: fieldAssignments[0]?.assignment_id ?? '',
     territory_id: fieldAssignments[0]?.territory_id ?? fieldTerritories[0]?.id ?? '',
@@ -77,6 +97,100 @@ export function FieldWorkflowPanel({ assignments, submissions: initialSubmission
     notes: '',
     submitted_by: 'Field team operator',
   });
+  const [roadPoints, setRoadPoints] = useState<SpatialPoint[]>([]);
+  const [buildingPoint, setBuildingPoint] = useState<SpatialPoint | null>(null);
+  const [roadReference, setRoadReference] = useState('');
+  const [isCapturingGeometry, setIsCapturingGeometry] = useState(false);
+
+  function segmentLengthKm(start: SpatialPoint, end: SpatialPoint) {
+    const toRadians = (value: number) => (value * Math.PI) / 180;
+    const lat1 = toRadians(start.latitude);
+    const lat2 = toRadians(end.latitude);
+    const dlat = lat2 - lat1;
+    const dlon = toRadians(end.longitude - start.longitude);
+    const h = Math.sin(dlat / 2) ** 2 + Math.cos(lat1) * Math.cos(lat2) * Math.sin(dlon / 2) ** 2;
+    return 6371.0088 * 2 * Math.asin(Math.min(1, Math.sqrt(h)));
+  }
+
+  function roadLengthKm(points = roadPoints) {
+    if (points.length < 2) return 0;
+    return points.slice(1).reduce((sum, point, index) => sum + segmentLengthKm(points[index], point), 0);
+  }
+
+  function buildSpatialEvidence(): SpatialEvidence | null {
+    if (form.submission_type === 'road') {
+      const hasStart = roadPoints.some((point) => point.role === 'start');
+      const hasEnd = roadPoints.some((point) => point.role === 'end');
+      if (roadPoints.length < 2 || !hasStart || !hasEnd) return null;
+      return {
+        geometry_type: 'LineString',
+        capture_method: 'browser-gps',
+        evidence_source: 'field-operator-gps',
+        points: roadPoints.map(({ latitude, longitude, role }) => ({ latitude, longitude, role })),
+        calculated_length_km: Number(roadLengthKm().toFixed(3)),
+        accuracy_note: roadPoints.map((point) => `${point.role ?? 'point'} ±${Math.round(point.accuracy_meters ?? 0)}m`).join(' · '),
+      };
+    }
+    if (form.submission_type === 'building') {
+      if (!buildingPoint || roadReference.trim().length < 2) return null;
+      return {
+        geometry_type: 'Point',
+        capture_method: 'browser-gps',
+        evidence_source: 'field-operator-gps',
+        latitude: buildingPoint.latitude,
+        longitude: buildingPoint.longitude,
+        accuracy_meters: buildingPoint.accuracy_meters ?? null,
+        road_reference: roadReference.trim(),
+        accuracy_note: `Captured GPS point ±${Math.round(buildingPoint.accuracy_meters ?? 0)}m`,
+      };
+    }
+    return {};
+  }
+
+  const spatialSubmitDisabledReason = (() => {
+    if (!canSubmit) return 'Editor or admin required';
+    if (isSubmitting) return 'Submitting…';
+    if (form.submission_type === 'road' && !buildSpatialEvidence()) return 'Capture road start and end GPS first';
+    if (form.submission_type === 'building' && !buildSpatialEvidence()) return 'Capture building GPS and road reference first';
+    return null;
+  })();
+
+  async function captureCurrentPosition(target: 'road-start' | 'road-midpoint' | 'road-end' | 'building') {
+    if (!navigator.geolocation) {
+      setError('This device/browser cannot capture GPS evidence. Use a field device with location services enabled.');
+      return;
+    }
+    setIsCapturingGeometry(true);
+    setError(null);
+    try {
+      const position = await new Promise<GeolocationPosition>((resolve, reject) => {
+        navigator.geolocation.getCurrentPosition(resolve, reject, { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 });
+      });
+      const point: SpatialPoint = {
+        latitude: Number(position.coords.latitude.toFixed(7)),
+        longitude: Number(position.coords.longitude.toFixed(7)),
+        accuracy_meters: Math.round(position.coords.accuracy),
+        role: target === 'road-start' ? 'start' : target === 'road-end' ? 'end' : 'midpoint',
+      };
+      if (target === 'building') {
+        setBuildingPoint(point);
+        setNotice('Building GPS point captured.');
+      } else {
+        setRoadPoints((current) => {
+          if (point.role === 'midpoint') return [...current.filter((item) => item.role !== 'end'), point, ...current.filter((item) => item.role === 'end')];
+          return [...current.filter((item) => item.role !== point.role), point].sort((a, b) => {
+            const order = { start: 0, midpoint: 1, end: 2 } as const;
+            return order[a.role ?? 'midpoint'] - order[b.role ?? 'midpoint'];
+          });
+        });
+        setNotice(`${point.role} GPS point captured.`);
+      }
+    } catch {
+      setError('Unable to capture GPS. Check browser location permission and field device signal.');
+    } finally {
+      setIsCapturingGeometry(false);
+    }
+  }
 
   useEffect(() => {
     if (!token) return;
@@ -205,6 +319,7 @@ export function FieldWorkflowPanel({ assignments, submissions: initialSubmission
         body: JSON.stringify({
           ...form,
           assignment_id: form.assignment_id || null,
+          spatial_evidence: buildSpatialEvidence(),
         }),
       });
       const payload = (await response.json()) as Submission | { detail?: string };
@@ -214,6 +329,9 @@ export function FieldWorkflowPanel({ assignments, submissions: initialSubmission
       }
       setNotice(`Field submission recorded: ${form.candidate_name}`);
       setForm((current) => ({ ...current, candidate_name: '', notes: '' }));
+      setRoadPoints([]);
+      setBuildingPoint(null);
+      setRoadReference('');
       await reloadSubmissions(token);
     } catch {
       setError('Unable to submit the field record.');
@@ -356,7 +474,7 @@ export function FieldWorkflowPanel({ assignments, submissions: initialSubmission
           </label>
           <label className="territory-field">
             <span className="territory-label">Submission type</span>
-            <select className="territory-input" value={form.submission_type} onChange={(event) => setForm({ ...form, submission_type: event.target.value as 'road' | 'building' | 'address' })}>
+            <select className="territory-input" value={form.submission_type} onChange={(event) => { setForm({ ...form, submission_type: event.target.value as 'road' | 'building' | 'address' }); setRoadPoints([]); setBuildingPoint(null); }}>
               <option value="road">Road proposal</option>
               <option value="building">Building proposal</option>
               <option value="address">Address proposal</option>
@@ -374,13 +492,55 @@ export function FieldWorkflowPanel({ assignments, submissions: initialSubmission
             <span className="territory-label">Submitted by</span>
             <input className="territory-input" value={form.submitted_by} onChange={(event) => setForm({ ...form, submitted_by: event.target.value })} required />
           </label>
+          {form.submission_type === 'road' ? (
+            <div className="territory-field territory-field-wide spatial-evidence-capture">
+              <span className="territory-label">Road stretch GPS evidence</span>
+              <div className="calm-action-row">
+                <button className="secondary-action" type="button" disabled={isCapturingGeometry} onClick={() => void captureCurrentPosition('road-start')}>Capture start</button>
+                <button className="secondary-action" type="button" disabled={isCapturingGeometry} onClick={() => void captureCurrentPosition('road-midpoint')}>Add midpoint</button>
+                <button className="secondary-action" type="button" disabled={isCapturingGeometry} onClick={() => void captureCurrentPosition('road-end')}>Capture end</button>
+              </div>
+              <p className="institutional-note compact-note">
+                Approval requires captured start and end points. Length is calculated from GPS geometry, not typed manually.
+              </p>
+              {roadPoints.length > 0 ? (
+                <div className="spatial-evidence-summary">
+                  <strong>{roadPoints.length} point{roadPoints.length === 1 ? '' : 's'} captured · {roadLengthKm().toFixed(3)} km calculated</strong>
+                  <span>{roadPoints.map((point) => `${point.role}: ${point.latitude}, ${point.longitude} ±${Math.round(point.accuracy_meters ?? 0)}m`).join(' · ')}</span>
+                </div>
+              ) : null}
+            </div>
+          ) : null}
+
+          {form.submission_type === 'building' ? (
+            <div className="territory-field territory-field-wide spatial-evidence-capture">
+              <span className="territory-label">Building GPS evidence</span>
+              <div className="calm-action-row">
+                <button className="secondary-action" type="button" disabled={isCapturingGeometry} onClick={() => void captureCurrentPosition('building')}>Capture building point</button>
+              </div>
+              <label className="territory-field territory-field-wide nested-field">
+                <span className="territory-label">Road/frontage reference</span>
+                <input className="territory-input" value={roadReference} onChange={(event) => setRoadReference(event.target.value)} placeholder="Road, frontage, or access path observed in the field" />
+              </label>
+              <p className="institutional-note compact-note">
+                Approval requires a captured GPS point and a road/frontage reference. Manual labels alone cannot enter the registry.
+              </p>
+              {buildingPoint ? (
+                <div className="spatial-evidence-summary">
+                  <strong>Building point captured</strong>
+                  <span>{buildingPoint.latitude}, {buildingPoint.longitude} ±{Math.round(buildingPoint.accuracy_meters ?? 0)}m</span>
+                </div>
+              ) : null}
+            </div>
+          ) : null}
+
           <label className="territory-field territory-field-wide">
             <span className="territory-label">Field notes</span>
             <textarea className="territory-input territory-textarea" value={form.notes} onChange={(event) => setForm({ ...form, notes: event.target.value })} rows={4} />
           </label>
           <div className="territory-form-actions">
-            <button className="verification-button" type="submit" disabled={Boolean(submitDisabledReason)}>
-              {submitDisabledReason ?? 'Submit to verification queue'}
+            <button className="verification-button" type="submit" disabled={Boolean(spatialSubmitDisabledReason)}>
+              {spatialSubmitDisabledReason ?? 'Submit to verification queue'}
             </button>
           </div>
           </form>
