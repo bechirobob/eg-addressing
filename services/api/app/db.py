@@ -1925,7 +1925,7 @@ def normalize_submission_spatial_evidence(submission_type: str, evidence: Any) -
         length_km = sum(_haversine_km(points[i - 1], points[i]) for i in range(1, len(points)))
         if length_km <= 0:
             raise InvalidSubmissionActionError('road stretch geometry must calculate a positive length')
-        return {
+        normalized = {
             'geometry_type': 'LineString',
             'capture_method': str(payload.get('capture_method') or 'operator-gps'),
             'points': points,
@@ -1933,6 +1933,12 @@ def normalize_submission_spatial_evidence(submission_type: str, evidence: Any) -
             'evidence_source': str(payload.get('evidence_source') or 'field-intake'),
             'accuracy_note': str(payload.get('accuracy_note') or ''),
         }
+        for optional_key in ('grid_cells', 'map_suggestion', 'stretch_midpoint', 'review_confidence', 'review_required'):
+            if optional_key in payload:
+                normalized[optional_key] = payload[optional_key]
+        if 'map_suggestion' in normalized:
+            normalized['review_required'] = True
+        return normalized
     if submission_type == 'building':
         latitude = _coordinate_value(payload, 'latitude')
         longitude = _coordinate_value(payload, 'longitude')
@@ -1947,7 +1953,7 @@ def normalize_submission_spatial_evidence(submission_type: str, evidence: Any) -
         road_reference = str(payload.get('road_reference') or '').strip()
         if len(road_reference) < 2:
             raise InvalidSubmissionActionError('building point evidence requires a road or frontage reference')
-        return {
+        normalized = {
             'geometry_type': 'Point',
             'capture_method': str(payload.get('capture_method') or 'operator-gps'),
             'latitude': latitude,
@@ -1957,6 +1963,10 @@ def normalize_submission_spatial_evidence(submission_type: str, evidence: Any) -
             'evidence_source': str(payload.get('evidence_source') or 'field-intake'),
             'accuracy_note': str(payload.get('accuracy_note') or ''),
         }
+        for optional_key in ('grid_cells', 'review_confidence', 'review_required'):
+            if optional_key in payload:
+                normalized[optional_key] = payload[optional_key]
+        return normalized
     return payload
 
 

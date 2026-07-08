@@ -21,6 +21,7 @@ from fastapi.responses import JSONResponse
 from pydantic import BaseModel, Field
 
 from app.data import MODULES
+from app.address_codes import coordinate_grid_cell
 from app.ops_status import migration_status
 from app.query_contracts import paginated_response
 from app.security_posture import apply_security_headers, production_readiness_status
@@ -117,6 +118,7 @@ from app.db import (
     update_road,
     update_submission_review_status,
     update_territory,
+    normalize_submission_spatial_evidence,
     verify_address,
 )
 
@@ -180,6 +182,12 @@ class FieldSubmissionCreate(BaseModel):
     notes: str = Field(default='', max_length=400)
     submitted_by: str = Field(min_length=3, max_length=120)
     spatial_evidence: dict[str, Any] | None = None
+
+
+class FieldSpatialEvidenceEnrichRequest(BaseModel):
+    territory_id: str = Field(min_length=3, max_length=120)
+    submission_type: str = Field(pattern='^(road|building)$')
+    spatial_evidence: dict[str, Any]
 
 
 class ReviewActionRequest(BaseModel):
@@ -464,6 +472,61 @@ def suggest_nearest_road_name(latitude: float, longitude: float) -> dict[str, An
         'requires_review': True,
         'status': 'suggested',
     }
+
+
+
+def _midpoint(points: list[dict[str, Any]]) -> dict[str, float]:
+    if not points:
+        raise InvalidSubmissionActionError('spatial evidence has no coordinate points')
+    return {
+        'latitude': round(sum(float(point['latitude']) for point in points) / len(points), 7),
+        'longitude': round(sum(float(point['longitude']) for point in points) / len(points), 7),
+    }
+
+
+def _unique_grid_cells(points: list[dict[str, Any]], province_code: str | None) -> list[dict[str, Any]]:
+    seen: set[str] = set()
+    cells: list[dict[str, Any]] = []
+    for point in points:
+        cell = coordinate_grid_cell(float(point['latitude']), float(point['longitude']), province_code)
+        key = cell['grid_code']
+        if key in seen:
+            continue
+        seen.add(key)
+        cells.append(cell)
+    return cells
+
+
+def enrich_field_spatial_evidence(submission_type: str, spatial_evidence: dict[str, Any], territory_id: str) -> dict[str, Any]:
+    normalized = normalize_submission_spatial_evidence(submission_type, spatial_evidence)
+    territory = get_territory(territory_id)
+    province_code = territory.get('province_code')
+    if submission_type == 'road':
+        points = normalized.get('points') or []
+        center = _midpoint(points)
+        suggestion = suggest_nearest_road_name(center['latitude'], center['longitude'])
+        normalized['map_suggestion'] = {
+            'suggested_road_name': suggestion.get('suggested_road_name'),
+            'suggested_local_area': suggestion.get('suggested_local_area'),
+            'suggested_place_name': suggestion.get('suggested_place_name'),
+            'display_name': suggestion.get('display_name'),
+            'source': suggestion.get('source'),
+            'source_attribution': suggestion.get('source_attribution'),
+            'distance_meters': suggestion.get('distance_meters'),
+            'confidence': suggestion.get('confidence', 'none'),
+            'requires_review': True,
+            'status': suggestion.get('status', 'unavailable'),
+        }
+        normalized['grid_cells'] = _unique_grid_cells(points, province_code)
+        normalized['stretch_midpoint'] = center
+        normalized['review_confidence'] = 'high' if normalized['map_suggestion']['suggested_road_name'] and len(normalized['grid_cells']) <= 6 else 'medium' if normalized['grid_cells'] else 'low'
+        normalized['review_required'] = True
+    elif submission_type == 'building':
+        point = {'latitude': normalized['latitude'], 'longitude': normalized['longitude']}
+        normalized['grid_cells'] = _unique_grid_cells([point], province_code)
+        normalized['review_confidence'] = 'medium'
+        normalized['review_required'] = True
+    return normalized
 
 
 @app.middleware('http')
@@ -1318,6 +1381,17 @@ def field_submissions(review_status: str | None = Query(default=None), territory
     _require_role(user, 'viewer', 'editor', 'admin')
     return paginated_response(list_field_submissions(review_status=review_status, territory_id=territory_id), page=page, per_page=per_page)
 
+
+
+@app.post('/api/v1/field/spatial-evidence/enrich')
+def enrich_field_spatial_evidence_endpoint(payload: FieldSpatialEvidenceEnrichRequest, authorization: str | None = Header(default=None)) -> dict[str, Any]:
+    user = _current_user(authorization)
+    _require_role(user, 'editor', 'admin')
+    try:
+        enriched = enrich_field_spatial_evidence(payload.submission_type, payload.spatial_evidence, payload.territory_id)
+    except (InvalidSubmissionActionError, UnknownTerritoryError, TerritoryNotFoundError) as exc:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(exc)) from exc
+    return {'spatial_evidence': enriched, 'review_required': True, 'actor': user['username']}
 
 @app.post('/api/v1/field/submissions', status_code=status.HTTP_201_CREATED)
 def create_field_submission_endpoint(payload: FieldSubmissionCreate, authorization: str | None = Header(default=None)) -> dict[str, Any]:

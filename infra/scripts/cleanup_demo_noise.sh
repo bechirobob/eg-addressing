@@ -34,9 +34,9 @@ COMPOSE=("${DOCKER[@]}" compose -p "$COMPOSE_PROJECT" --env-file "$ENV_FILE" -f 
 
 SQL_COUNTS="
 SELECT 'address_corrections_smoke' AS bucket, count(*) FROM address_corrections WHERE reporter_contact='smoke@example.invalid' OR reason='smoke-test-review'
-UNION ALL SELECT 'field_submissions_smoke', count(*) FROM field_submissions WHERE submitted_by='Smoke automation' OR candidate_name ILIKE 'Smoke Flow Road%'
-UNION ALL SELECT 'roads_smoke', count(*) FROM roads WHERE name ILIKE 'Smoke Flow Road%'
-UNION ALL SELECT 'audit_smoke', count(*) FROM audit_logs WHERE entity_id IN (SELECT id FROM field_submissions WHERE submitted_by='Smoke automation' OR candidate_name ILIKE 'Smoke Flow Road%') OR entity_id IN (SELECT id FROM address_corrections WHERE reporter_contact='smoke@example.invalid' OR reason='smoke-test-review') OR entity_id IN (SELECT id FROM roads WHERE name ILIKE 'Smoke Flow Road%');
+UNION ALL SELECT 'field_submissions_smoke', count(*) FROM field_submissions WHERE submitted_by IN ('Smoke automation', 'Browser smoke') OR candidate_name ILIKE 'Smoke Flow Road%' OR candidate_name ILIKE 'Smoke Map Grid Road%' OR candidate_name ILIKE 'Smoke Browser Map Grid%'
+UNION ALL SELECT 'roads_smoke', count(*) FROM roads WHERE name ILIKE 'Smoke Flow Road%' OR name ILIKE 'Smoke Map Grid Road%' OR name ILIKE 'Smoke Browser Map Grid%'
+UNION ALL SELECT 'audit_smoke', count(*) FROM audit_logs WHERE entity_id IN (SELECT id FROM field_submissions WHERE submitted_by IN ('Smoke automation', 'Browser smoke') OR candidate_name ILIKE 'Smoke Flow Road%' OR candidate_name ILIKE 'Smoke Map Grid Road%' OR candidate_name ILIKE 'Smoke Browser Map Grid%') OR entity_id IN (SELECT id FROM address_corrections WHERE reporter_contact='smoke@example.invalid' OR reason='smoke-test-review') OR entity_id IN (SELECT id FROM roads WHERE name ILIKE 'Smoke Flow Road%' OR name ILIKE 'Smoke Map Grid Road%' OR name ILIKE 'Smoke Browser Map Grid%');
 "
 
 echo "Demo-noise cleanup target counts before:"
@@ -57,16 +57,16 @@ BEGIN;
 CREATE TEMP TABLE cleanup_smoke_entities(entity_type TEXT, entity_id TEXT) ON COMMIT DROP;
 INSERT INTO cleanup_smoke_entities(entity_type, entity_id)
 SELECT 'address_correction', id FROM address_corrections WHERE reporter_contact='smoke@example.invalid' OR reason='smoke-test-review'
-UNION ALL SELECT 'field_submission', id FROM field_submissions WHERE submitted_by='Smoke automation' OR candidate_name ILIKE 'Smoke Flow Road%'
-UNION ALL SELECT 'road', id FROM roads WHERE name ILIKE 'Smoke Flow Road%';
+UNION ALL SELECT 'field_submission', id FROM field_submissions WHERE submitted_by IN ('Smoke automation', 'Browser smoke') OR candidate_name ILIKE 'Smoke Flow Road%' OR candidate_name ILIKE 'Smoke Map Grid Road%' OR candidate_name ILIKE 'Smoke Browser Map Grid%'
+UNION ALL SELECT 'road', id FROM roads WHERE name ILIKE 'Smoke Flow Road%' OR name ILIKE 'Smoke Map Grid Road%' OR name ILIKE 'Smoke Browser Map Grid%';
 
 DELETE FROM audit_logs
 WHERE (entity_type, entity_id) IN (SELECT entity_type, entity_id FROM cleanup_smoke_entities)
    OR entity_id IN (SELECT entity_id FROM cleanup_smoke_entities);
 
 DELETE FROM address_corrections WHERE reporter_contact='smoke@example.invalid' OR reason='smoke-test-review';
-DELETE FROM field_submissions WHERE submitted_by='Smoke automation' OR candidate_name ILIKE 'Smoke Flow Road%';
-DELETE FROM roads WHERE name ILIKE 'Smoke Flow Road%';
+DELETE FROM field_submissions WHERE submitted_by IN ('Smoke automation', 'Browser smoke') OR candidate_name ILIKE 'Smoke Flow Road%' OR candidate_name ILIKE 'Smoke Map Grid Road%' OR candidate_name ILIKE 'Smoke Browser Map Grid%';
+DELETE FROM roads WHERE name ILIKE 'Smoke Flow Road%' OR name ILIKE 'Smoke Map Grid Road%' OR name ILIKE 'Smoke Browser Map Grid%';
 COMMIT;
 SQL
 

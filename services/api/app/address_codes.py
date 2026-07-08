@@ -169,3 +169,16 @@ def validate_national_address_code(code: str) -> dict[str, Any]:
             'schema': ADDRESS_CODE_SCHEMA,
             'cell_size_meters': CELL_SIZE_METERS,
         }
+
+def coordinate_grid_cell(latitude: float, longitude: float, province_code: str | None) -> dict[str, Any]:
+    """Return the national grid cell metadata for a WGS84 coordinate without implying final address publication."""
+    code = generate_national_address_code(latitude, longitude, province_code)
+    decoded = decode_national_address_code(code).as_dict()
+    return {
+        'grid_code': code,
+        'latitude_cell': decoded['latitude_cell'],
+        'longitude_cell': decoded['longitude_cell'],
+        'cell_size_meters': decoded['cell_size_meters'],
+        'bbox': decoded['bbox'],
+    }
+

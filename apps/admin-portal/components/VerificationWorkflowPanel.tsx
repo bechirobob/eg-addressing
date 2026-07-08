@@ -11,6 +11,21 @@ type SpatialPoint = {
   role?: string;
 };
 
+type GridCell = {
+  grid_code: string;
+};
+
+type MapSuggestion = {
+  suggested_road_name?: string | null;
+  suggested_local_area?: string | null;
+  display_name?: string | null;
+  source?: string | null;
+  source_attribution?: string | null;
+  confidence?: string;
+  requires_review?: boolean;
+  status?: string;
+};
+
 type SpatialEvidence = {
   geometry_type?: 'LineString' | 'Point';
   points?: SpatialPoint[];
@@ -22,6 +37,10 @@ type SpatialEvidence = {
   capture_method?: string;
   evidence_source?: string;
   accuracy_note?: string;
+  grid_cells?: GridCell[];
+  map_suggestion?: MapSuggestion;
+  review_confidence?: string;
+  review_required?: boolean;
 };
 
 type Submission = {
@@ -105,7 +124,9 @@ export function VerificationWorkflowPanel({ submissions: initialSubmissions, sam
     const evidence = submission.spatial_evidence;
     if (!evidence || Object.keys(evidence).length === 0) return 'No spatial evidence captured.';
     if (evidence.geometry_type === 'LineString') {
-      return `${evidence.points?.length ?? 0} GPS points · ${evidence.calculated_length_km ?? '—'} km server-calculated stretch`;
+      const suggested = evidence.map_suggestion?.suggested_road_name ? ` · suggested ${evidence.map_suggestion.suggested_road_name}` : '';
+      const grid = evidence.grid_cells?.length ? ` · ${evidence.grid_cells.length} grid cell${evidence.grid_cells.length === 1 ? '' : 's'}` : '';
+      return `Map/grid-assisted · ${evidence.points?.length ?? 0} GPS points · ${evidence.calculated_length_km ?? '—'} km server-calculated stretch${grid}${suggested}`;
     }
     if (evidence.geometry_type === 'Point') {
       return `${evidence.latitude}, ${evidence.longitude} · ±${evidence.accuracy_meters ?? '—'}m · ${evidence.road_reference ?? 'no road reference'}`;
@@ -297,6 +318,16 @@ export function VerificationWorkflowPanel({ submissions: initialSubmissions, sam
                             <li key={`${submission.id}-point-${index}`}>{point.role ?? `point ${index + 1}`}: {point.latitude}, {point.longitude}</li>
                           ))}
                         </ol>
+                      ) : null}
+                      {submission.spatial_evidence?.grid_cells?.length || submission.spatial_evidence?.map_suggestion ? (
+                        <div className="spatial-analysis-summary reviewer">
+                          <strong>Map/grid intelligence · review required</strong>
+                          {submission.spatial_evidence.map_suggestion ? (
+                            <span>Suggested road: {submission.spatial_evidence.map_suggestion.suggested_road_name || 'not found'} · Source: {submission.spatial_evidence.map_suggestion.source_attribution || submission.spatial_evidence.map_suggestion.source || 'map-derived'}</span>
+                          ) : null}
+                          {submission.spatial_evidence.grid_cells?.length ? <span>Grid cells crossed: {submission.spatial_evidence.grid_cells.map((cell) => cell.grid_code).join(', ')}</span> : null}
+                          <span>Confidence: {submission.spatial_evidence.review_confidence || submission.spatial_evidence.map_suggestion?.confidence || 'pending'} · Not official until approved.</span>
+                        </div>
                       ) : null}
                       {submission.registry_entity_id ? (
                         <p className="institutional-note">

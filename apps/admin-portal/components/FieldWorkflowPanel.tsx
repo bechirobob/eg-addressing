@@ -21,6 +21,26 @@ type SpatialPoint = {
   role?: 'start' | 'midpoint' | 'end';
 };
 
+type GridCell = {
+  grid_code: string;
+  latitude_cell?: number;
+  longitude_cell?: number;
+  cell_size_meters?: number;
+};
+
+type MapSuggestion = {
+  suggested_road_name?: string | null;
+  suggested_local_area?: string | null;
+  suggested_place_name?: string | null;
+  display_name?: string | null;
+  source?: string | null;
+  source_attribution?: string | null;
+  distance_meters?: number | null;
+  confidence?: string;
+  requires_review?: boolean;
+  status?: string;
+};
+
 type SpatialEvidence = {
   geometry_type?: 'LineString' | 'Point';
   capture_method?: string;
@@ -32,6 +52,11 @@ type SpatialEvidence = {
   road_reference?: string;
   evidence_source?: string;
   accuracy_note?: string;
+  grid_cells?: GridCell[];
+  map_suggestion?: MapSuggestion;
+  stretch_midpoint?: { latitude: number; longitude: number };
+  review_confidence?: string;
+  review_required?: boolean;
 };
 
 type Submission = {
@@ -100,7 +125,9 @@ export function FieldWorkflowPanel({ assignments, submissions: initialSubmission
   const [roadPoints, setRoadPoints] = useState<SpatialPoint[]>([]);
   const [buildingPoint, setBuildingPoint] = useState<SpatialPoint | null>(null);
   const [roadReference, setRoadReference] = useState('');
+  const [spatialAnalysis, setSpatialAnalysis] = useState<SpatialEvidence | null>(null);
   const [isCapturingGeometry, setIsCapturingGeometry] = useState(false);
+  const [isAnalyzingSpatialEvidence, setIsAnalyzingSpatialEvidence] = useState(false);
 
   function segmentLengthKm(start: SpatialPoint, end: SpatialPoint) {
     const toRadians = (value: number) => (value * Math.PI) / 180;
@@ -122,19 +149,20 @@ export function FieldWorkflowPanel({ assignments, submissions: initialSubmission
       const hasStart = roadPoints.some((point) => point.role === 'start');
       const hasEnd = roadPoints.some((point) => point.role === 'end');
       if (roadPoints.length < 2 || !hasStart || !hasEnd) return null;
-      return {
-        geometry_type: 'LineString',
+      const baseEvidence = {
+        geometry_type: 'LineString' as const,
         capture_method: 'browser-gps',
         evidence_source: 'field-operator-gps',
         points: roadPoints.map(({ latitude, longitude, role }) => ({ latitude, longitude, role })),
         calculated_length_km: Number(roadLengthKm().toFixed(3)),
         accuracy_note: roadPoints.map((point) => `${point.role ?? 'point'} ±${Math.round(point.accuracy_meters ?? 0)}m`).join(' · '),
       };
+      return spatialAnalysis?.geometry_type === 'LineString' ? { ...baseEvidence, ...spatialAnalysis, points: baseEvidence.points } : baseEvidence;
     }
     if (form.submission_type === 'building') {
       if (!buildingPoint || roadReference.trim().length < 2) return null;
-      return {
-        geometry_type: 'Point',
+      const baseEvidence = {
+        geometry_type: 'Point' as const,
         capture_method: 'browser-gps',
         evidence_source: 'field-operator-gps',
         latitude: buildingPoint.latitude,
@@ -143,6 +171,7 @@ export function FieldWorkflowPanel({ assignments, submissions: initialSubmission
         road_reference: roadReference.trim(),
         accuracy_note: `Captured GPS point ±${Math.round(buildingPoint.accuracy_meters ?? 0)}m`,
       };
+      return spatialAnalysis?.geometry_type === 'Point' ? { ...baseEvidence, ...spatialAnalysis } : baseEvidence;
     }
     return {};
   }
@@ -154,6 +183,57 @@ export function FieldWorkflowPanel({ assignments, submissions: initialSubmission
     if (form.submission_type === 'building' && !buildSpatialEvidence()) return 'Capture building GPS and road reference first';
     return null;
   })();
+
+  function loadPilotSampleStretch() {
+    setForm((current) => ({
+      ...current,
+      submission_type: 'road',
+      territory_id: current.territory_id || 'territory-malabo-urban-core',
+      candidate_name: current.candidate_name || 'Pilot map/grid assisted road stretch',
+      notes: current.notes || 'Pilot sample stretch for map/grid-assisted review demonstration.',
+    }));
+    setRoadPoints([
+      { role: 'start', latitude: 3.7521, longitude: 8.7731, accuracy_meters: 8 },
+      { role: 'end', latitude: 3.7534, longitude: 8.7759, accuracy_meters: 9 },
+    ]);
+    setBuildingPoint(null);
+    setRoadReference('');
+    setSpatialAnalysis(null);
+    setNotice('Pilot road stretch loaded. Run Analyze map/grid to enrich it.');
+  }
+
+  async function analyzeSpatialEvidence() {
+    if (!token || !canSubmit) {
+      setError('Editor or admin access is required to analyze map/grid evidence.');
+      return;
+    }
+    const evidence = buildSpatialEvidence();
+    if (!evidence || form.submission_type === 'address') {
+      setError('Capture road/building spatial evidence before analysis.');
+      return;
+    }
+    setIsAnalyzingSpatialEvidence(true);
+    setError(null);
+    setNotice(null);
+    try {
+      const response = await fetch(`${browserApiBaseUrl}/api/v1/field/spatial-evidence/enrich`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', ...authorizationHeader(token) },
+        body: JSON.stringify({ territory_id: form.territory_id, submission_type: form.submission_type, spatial_evidence: evidence }),
+      });
+      const payload = (await response.json()) as { spatial_evidence?: SpatialEvidence; detail?: string };
+      if (!response.ok || !payload.spatial_evidence) {
+        setError(payload.detail ?? 'Unable to analyze map/grid evidence.');
+        return;
+      }
+      setSpatialAnalysis(payload.spatial_evidence);
+      setNotice('Map/grid analysis attached to the evidence bundle.');
+    } catch {
+      setError('Unable to analyze map/grid evidence.');
+    } finally {
+      setIsAnalyzingSpatialEvidence(false);
+    }
+  }
 
   async function captureCurrentPosition(target: 'road-start' | 'road-midpoint' | 'road-end' | 'building') {
     if (!navigator.geolocation) {
@@ -174,8 +254,10 @@ export function FieldWorkflowPanel({ assignments, submissions: initialSubmission
       };
       if (target === 'building') {
         setBuildingPoint(point);
+        setSpatialAnalysis(null);
         setNotice('Building GPS point captured.');
       } else {
+        setSpatialAnalysis(null);
         setRoadPoints((current) => {
           if (point.role === 'midpoint') return [...current.filter((item) => item.role !== 'end'), point, ...current.filter((item) => item.role === 'end')];
           return [...current.filter((item) => item.role !== point.role), point].sort((a, b) => {
@@ -332,6 +414,7 @@ export function FieldWorkflowPanel({ assignments, submissions: initialSubmission
       setRoadPoints([]);
       setBuildingPoint(null);
       setRoadReference('');
+      setSpatialAnalysis(null);
       await reloadSubmissions(token);
     } catch {
       setError('Unable to submit the field record.');
@@ -474,7 +557,7 @@ export function FieldWorkflowPanel({ assignments, submissions: initialSubmission
           </label>
           <label className="territory-field">
             <span className="territory-label">Submission type</span>
-            <select className="territory-input" value={form.submission_type} onChange={(event) => { setForm({ ...form, submission_type: event.target.value as 'road' | 'building' | 'address' }); setRoadPoints([]); setBuildingPoint(null); }}>
+            <select className="territory-input" value={form.submission_type} onChange={(event) => { setForm({ ...form, submission_type: event.target.value as 'road' | 'building' | 'address' }); setRoadPoints([]); setBuildingPoint(null); setSpatialAnalysis(null); }}>
               <option value="road">Road proposal</option>
               <option value="building">Building proposal</option>
               <option value="address">Address proposal</option>
@@ -499,6 +582,8 @@ export function FieldWorkflowPanel({ assignments, submissions: initialSubmission
                 <button className="secondary-action" type="button" disabled={isCapturingGeometry} onClick={() => void captureCurrentPosition('road-start')}>Capture start</button>
                 <button className="secondary-action" type="button" disabled={isCapturingGeometry} onClick={() => void captureCurrentPosition('road-midpoint')}>Add midpoint</button>
                 <button className="secondary-action" type="button" disabled={isCapturingGeometry} onClick={() => void captureCurrentPosition('road-end')}>Capture end</button>
+                <button className="secondary-action" type="button" onClick={loadPilotSampleStretch}>Load pilot sample</button>
+                <button className="primary-action compact-action" type="button" disabled={isAnalyzingSpatialEvidence || !buildSpatialEvidence()} onClick={() => void analyzeSpatialEvidence()}>{isAnalyzingSpatialEvidence ? 'Analyzing…' : 'Analyze map/grid'}</button>
               </div>
               <p className="institutional-note compact-note">
                 Approval requires captured start and end points. Length is calculated from GPS geometry, not typed manually.
@@ -509,6 +594,14 @@ export function FieldWorkflowPanel({ assignments, submissions: initialSubmission
                   <span>{roadPoints.map((point) => `${point.role}: ${point.latitude}, ${point.longitude} ±${Math.round(point.accuracy_meters ?? 0)}m`).join(' · ')}</span>
                 </div>
               ) : null}
+              {spatialAnalysis ? (
+                <div className="spatial-analysis-summary">
+                  <strong>Map/grid analysis · review required</strong>
+                  <span>Suggested road: {spatialAnalysis.map_suggestion?.suggested_road_name || 'not found'} · Confidence: {spatialAnalysis.review_confidence ?? spatialAnalysis.map_suggestion?.confidence ?? 'pending'}</span>
+                  <span>Grid cells: {spatialAnalysis.grid_cells?.map((cell) => cell.grid_code).join(', ') || 'pending'}</span>
+                  <span>Source: {spatialAnalysis.map_suggestion?.source_attribution || spatialAnalysis.map_suggestion?.source || 'server grid analysis'}</span>
+                </div>
+              ) : null}
             </div>
           ) : null}
 
@@ -517,6 +610,7 @@ export function FieldWorkflowPanel({ assignments, submissions: initialSubmission
               <span className="territory-label">Building GPS evidence</span>
               <div className="calm-action-row">
                 <button className="secondary-action" type="button" disabled={isCapturingGeometry} onClick={() => void captureCurrentPosition('building')}>Capture building point</button>
+                <button className="primary-action compact-action" type="button" disabled={isAnalyzingSpatialEvidence || !buildSpatialEvidence()} onClick={() => void analyzeSpatialEvidence()}>{isAnalyzingSpatialEvidence ? 'Analyzing…' : 'Analyze map/grid'}</button>
               </div>
               <label className="territory-field territory-field-wide nested-field">
                 <span className="territory-label">Road/frontage reference</span>
@@ -529,6 +623,13 @@ export function FieldWorkflowPanel({ assignments, submissions: initialSubmission
                 <div className="spatial-evidence-summary">
                   <strong>Building point captured</strong>
                   <span>{buildingPoint.latitude}, {buildingPoint.longitude} ±{Math.round(buildingPoint.accuracy_meters ?? 0)}m</span>
+                </div>
+              ) : null}
+              {spatialAnalysis ? (
+                <div className="spatial-analysis-summary">
+                  <strong>Grid analysis · review required</strong>
+                  <span>Grid cell: {spatialAnalysis.grid_cells?.map((cell) => cell.grid_code).join(', ') || 'pending'}</span>
+                  <span>Road/frontage: {spatialAnalysis.road_reference || roadReference || 'pending'}</span>
                 </div>
               ) : null}
             </div>

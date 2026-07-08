@@ -8335,3 +8335,35 @@ textarea.territory-input,.territory-textarea { min-height:72px !important; }
 .nested-field {
   margin-top: 8px;
 }
+
+/* Map/grid-assisted road intelligence */
+.spatial-analysis-summary {
+  display: grid;
+  gap: 4px;
+  margin-top: 8px;
+  padding: 8px 9px;
+  border: 1px solid rgba(21, 85, 120, 0.18);
+  border-radius: 8px;
+  background: #f4f9fb;
+  color: #263a43;
+  font-size: 0.74rem;
+  line-height: 1.35;
+}
+
+.spatial-analysis-summary strong {
+  color: #0b4362;
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.spatial-analysis-summary.reviewer {
+  background: #f8fbf9;
+  border-color: rgba(26, 78, 58, 0.18);
+}
+
+.compact-action {
+  min-height: 34px !important;
+  padding: 0.45rem 0.68rem !important;
+  font-size: 0.73rem !important;
+}

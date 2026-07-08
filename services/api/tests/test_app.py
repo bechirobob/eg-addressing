@@ -1978,3 +1978,75 @@ def test_route_auth_guard_has_no_unexpected_public_registry_reads() -> None:
             leaked.append((source, candidate, response.status_code))
     assert leaked == []
 
+
+
+
+def test_enrich_field_spatial_evidence_adds_grid_cells_and_map_suggestion(monkeypatch) -> None:
+    monkeypatch.setattr(main, 'resolve_user_from_token', lambda token: EDITOR)
+    monkeypatch.setattr(main, 'get_territory', lambda territory_id: {'id': territory_id, 'province_code': 'BN'})
+    monkeypatch.setattr(main, 'suggest_nearest_road_name', lambda latitude, longitude: {
+        'suggested_road_name': 'Airport Road',
+        'suggested_local_area': 'Malabo',
+        'suggested_place_name': None,
+        'display_name': 'Airport Road, Malabo',
+        'source': 'openstreetmap-nominatim',
+        'source_attribution': '© OpenStreetMap contributors',
+        'distance_meters': None,
+        'confidence': 'medium',
+        'requires_review': True,
+        'status': 'suggested',
+    })
+    response = client.post('/api/v1/field/spatial-evidence/enrich', json={
+        'territory_id': 'territory-malabo-urban-core',
+        'submission_type': 'road',
+        'spatial_evidence': {
+            'points': [
+                {'role': 'start', 'latitude': 3.7521, 'longitude': 8.7731},
+                {'role': 'end', 'latitude': 3.7534, 'longitude': 8.7759},
+            ],
+        },
+    }, headers=auth_header())
+    assert response.status_code == 200
+    evidence = response.json()['spatial_evidence']
+    assert evidence['map_suggestion']['suggested_road_name'] == 'Airport Road'
+    assert evidence['map_suggestion']['requires_review'] is True
+    assert evidence['grid_cells'][0]['grid_code'].startswith('EG-BN-N1-')
+    assert evidence['calculated_length_km'] == 0.343
+    assert evidence['review_required'] is True
+
+
+def test_enrich_field_spatial_evidence_fails_soft_when_map_unavailable(monkeypatch) -> None:
+    monkeypatch.setattr(main, 'resolve_user_from_token', lambda token: EDITOR)
+    monkeypatch.setattr(main, 'get_territory', lambda territory_id: {'id': territory_id, 'province_code': 'BN'})
+    monkeypatch.setattr(main, 'suggest_nearest_road_name', lambda latitude, longitude: main._road_suggestion_unavailable())
+    response = client.post('/api/v1/field/spatial-evidence/enrich', json={
+        'territory_id': 'territory-malabo-urban-core',
+        'submission_type': 'road',
+        'spatial_evidence': {
+            'points': [
+                {'role': 'start', 'latitude': 3.7521, 'longitude': 8.7731},
+                {'role': 'end', 'latitude': 3.7534, 'longitude': 8.7759},
+            ],
+        },
+    }, headers=auth_header())
+    assert response.status_code == 200
+    evidence = response.json()['spatial_evidence']
+    assert evidence['map_suggestion']['status'] == 'unavailable'
+    assert evidence['grid_cells']
+    assert evidence['review_required'] is True
+
+
+
+def test_spatial_evidence_preserves_map_grid_enrichment() -> None:
+    evidence = db.normalize_submission_spatial_evidence('road', {
+        'points': [
+            {'role': 'start', 'latitude': 3.7521, 'longitude': 8.7731},
+            {'role': 'end', 'latitude': 3.7534, 'longitude': 8.7759},
+        ],
+        'grid_cells': [{'grid_code': 'EG-BN-N1-TEST'}],
+        'map_suggestion': {'suggested_road_name': 'Airport Road', 'requires_review': True},
+        'review_confidence': 'high',
+    })
+    assert evidence['grid_cells'][0]['grid_code'] == 'EG-BN-N1-TEST'
+    assert evidence['map_suggestion']['suggested_road_name'] == 'Airport Road'
+    assert evidence['review_required'] is True
