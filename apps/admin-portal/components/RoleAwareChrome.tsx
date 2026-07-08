@@ -161,48 +161,21 @@ export function RoleAwareChrome({ apiBaseUrl, children }: RoleAwareChromeProps) 
           </nav>
         </div>
 
-        <div className="chrome-session-card" aria-live="polite">
+        <div className="chrome-session-card chrome-session-utility" aria-live="polite">
           {effectiveSessionStatus === 'ready' && effectiveSessionUser ? (
             <>
-              <div>
-                <strong>{effectiveSessionUser.full_name}</strong>
-                <p>
-                  {t('signedInAs')} <span className="session-role">{effectiveSessionUser.role}</span> · @{effectiveSessionUser.username}
-                </p>
-              </div>
-              <div className="chrome-session-actions">
-                {currentRoute !== workspaceHref ? (
-                  <Link href={workspaceHref} className="secondary-button chrome-link-button">
-                    {t('returnToWorkspace')}
-                  </Link>
-                ) : null}
-                <button className="secondary-button" type="button" onClick={() => void handleLogout()} disabled={isLoggingOut}>
-                  {isLoggingOut ? t('signingOut') : t('signOut')}
-                </button>
-              </div>
+              <span className="session-utility-role">{effectiveSessionUser.role}</span>
+              <button className="session-utility-logout" type="button" onClick={() => void handleLogout()} disabled={isLoggingOut}>
+                {isLoggingOut ? t('signingOut') : t('signOut')}
+              </button>
             </>
           ) : effectiveSessionStatus === 'loading' ? (
-            <>
-              <div>
-                <strong>{t('checkingSession')}</strong>
-                <p>{t('checkingSessionCopy')}</p>
-              </div>
-            </>
-          ) : (
-            <>
-              <div>
-                <strong>{t('guestReviewMode')}</strong>
-                <p>{t('guestReviewCopy')}</p>
-              </div>
-              {currentRoute !== '/login' ? (
-                <div className="chrome-session-actions">
-                  <Link href="/login" className="secondary-button chrome-link-button">
-                    {t('navSignIn')}
-                  </Link>
-                </div>
-              ) : null}
-            </>
-          )}
+            <span className="session-utility-role">{t('checkingSession')}</span>
+          ) : currentRoute !== '/login' ? (
+            <Link href="/login" className="session-utility-logout">
+              {t('navSignIn')}
+            </Link>
+          ) : null}
         </div>
       </div>
 

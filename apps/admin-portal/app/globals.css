@@ -7701,631 +7701,578 @@ textarea,
   }
 }
 
-
-/* Government-grade desktop utilization and compact action pass — 2026-07-08 */
+/* Ground-up civic workbench reset — 2026-07-08
+   One coherent system: compact official shell, dense workbench grids,
+   synced typography, compact actions, desktop canvas usage, mobile-safe stack. */
 :root {
-  --ops-shell-max: 1480px;
-  --ops-gap: clamp(14px, 1.35vw, 22px);
-  --ops-card-pad: clamp(16px, 1.35vw, 24px);
+  --gov-font-ui: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, Helvetica, sans-serif;
+  --gov-bg: #f6f1e7;
+  --gov-paper: #fffefa;
+  --gov-paper-2: #fbf7ee;
+  --gov-ink: #102235;
+  --gov-muted: #5c6873;
+  --gov-navy: #0b2f4f;
+  --gov-blue: #17507f;
+  --gov-gold: #a77d2e;
+  --gov-green: #236b45;
+  --gov-danger: #8f2d28;
+  --gov-line: rgba(11, 47, 79, 0.16);
+  --gov-line-strong: rgba(11, 47, 79, 0.28);
+  --gov-radius-panel: 10px;
+  --gov-radius-control: 7px;
+  --gov-shell: 1480px;
+  --gov-gap: clamp(10px, 1vw, 16px);
+  --gov-pad: clamp(12px, 1vw, 18px);
 }
+
+html { background: var(--gov-bg) !important; }
+body {
+  font-family: var(--gov-font-ui) !important;
+  background: var(--gov-bg) !important;
+  color: var(--gov-ink) !important;
+  font-size: 14px !important;
+}
+
+button, input, select, textarea, a { font-family: var(--gov-font-ui) !important; }
 
 .page-shell {
-  width: min(calc(100vw - 32px), var(--ops-shell-max)) !important;
-  max-width: var(--ops-shell-max) !important;
-  padding-inline: clamp(14px, 1.6vw, 24px) !important;
+  width: min(calc(100vw - 24px), var(--gov-shell)) !important;
+  max-width: var(--gov-shell) !important;
+  margin: 0 auto !important;
+  padding: 10px clamp(10px, 1vw, 18px) 38px !important;
 }
+
+.flag-ribbon { height: 6px !important; border-radius: 0 0 8px 8px !important; }
+.top-utility-bar { margin: 6px 0 !important; }
 
 .masthead-reference,
-.civic-service-strip,
-.chrome-session-card,
-.public-task-panel,
-.map-confirm-panel,
-.panel,
-.request-list-panel,
-.request-detail-panel {
-  padding: var(--ops-card-pad) !important;
+.masthead {
+  min-height: 0 !important;
+  margin: 0 !important;
+  padding: 12px 16px !important;
+  border: 1px solid var(--gov-line) !important;
+  border-radius: 10px !important;
+  background: var(--gov-paper) !important;
+  box-shadow: none !important;
+  overflow: hidden !important;
 }
 
-.primary-action,
-.secondary-action,
-.danger-action,
-.secondary-button,
-.verification-button,
-.mini-action-button,
-.chrome-link-button,
-.inline-link-button,
-button.primary-action,
-button.secondary-action,
-button.danger-action {
-  min-height: 38px !important;
-  padding: 0.55rem 0.9rem !important;
-  font-size: 0.86rem !important;
-  line-height: 1.1 !important;
-  width: auto !important;
-  max-width: 100%;
+.masthead-topline { margin-bottom: 4px !important; }
+.official-lockup { gap: 8px !important; }
+.crest-frame { width: 34px !important; height: 34px !important; }
+.crest { width: 24px !important; height: 24px !important; }
+
+.masthead-content-grid {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) 120px !important;
+  align-items: center !important;
+  gap: 10px !important;
+  margin: 0 !important;
 }
 
-.location-action {
-  min-height: 42px !important;
-  padding-inline: 1rem !important;
-  font-size: 0.92rem !important;
+.masthead-reference .masthead-copy,
+.masthead-copy { max-width: 780px !important; }
+
+.masthead-reference h1,
+.masthead h1 {
+  margin: 0 !important;
+  font-family: var(--gov-font-ui) !important;
+  font-size: clamp(1.55rem, 2.15vw, 2.15rem) !important;
+  line-height: 1.04 !important;
+  letter-spacing: -0.04em !important;
+  color: var(--gov-navy) !important;
+  font-weight: 780 !important;
 }
 
-.citizen-primary-actions,
-.compact-form-actions,
-.territory-form-actions,
-.button-row,
-.review-action-group,
-.review-action-section,
-.calm-action-row,
-.map-link-row {
-  display: flex !important;
-  flex-wrap: wrap;
-  gap: 0.55rem !important;
-  align-items: center;
+.masthead-subtitle {
+  max-width: 720px !important;
+  margin: 5px 0 0 !important;
+  font-size: 0.84rem !important;
+  line-height: 1.35 !important;
+  color: var(--gov-muted) !important;
 }
 
-.citizen-primary-actions > *,
-.compact-form-actions > *,
-.territory-form-actions > *,
-.button-row > *,
-.review-action-group > *,
-.review-action-section > * {
-  flex: 0 1 auto;
-}
-
-.section-grid,
-.territory-admin-grid,
-.operator-review-desk,
-.public-code-status-flow,
-.citizen-register-flow {
-  gap: var(--ops-gap) !important;
-}
-
-@media (min-width: 1024px) {
-  .section-grid,
-  .territory-admin-grid {
-    display: grid !important;
-    grid-template-columns: minmax(420px, 0.72fr) minmax(560px, 1fr) !important;
-    align-items: start;
-  }
-
-  .section-grid > .public-task-panel,
-  .territory-admin-grid > .public-task-panel,
-  .territory-admin-grid > .panel,
-  .section-grid > .panel {
-    width: 100%;
-    min-width: 0;
-  }
-
-  .operator-review-desk {
-    grid-template-columns: minmax(360px, 0.42fr) minmax(680px, 1fr) !important;
-  }
-
-  .public-code-status-flow {
-    grid-template-columns: minmax(520px, 0.78fr) minmax(420px, 0.62fr) !important;
-  }
-
-  .citizen-register-flow {
-    grid-template-columns: minmax(520px, 0.9fr) minmax(620px, 1.1fr) !important;
-    align-items: start;
-  }
-
-  .location-hero-panel {
-    grid-column: 1 / -1;
-    grid-template-columns: minmax(420px, 0.8fr) minmax(300px, 0.55fr) minmax(360px, 0.7fr) !important;
-    align-items: center;
-  }
-
-  .map-confirm-panel {
-    grid-column: 1;
-    grid-row: span 2;
-  }
-
-  .location-form-panel,
-  .address-preview-panel {
-    grid-column: 2;
-  }
-
-  .geotag-map {
-    min-height: clamp(340px, 40vh, 460px) !important;
-  }
-
-  .routing-first-block {
-    grid-template-columns: minmax(170px, 0.42fr) minmax(250px, 0.58fr) !important;
-  }
-
-  .routing-status-card {
-    grid-column: 1 / -1;
-    display: flex !important;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 0.5rem 0.8rem !important;
-    padding: 0.7rem 0.8rem !important;
-  }
-
-  .routing-evidence-disclosure:not([open]),
-  .compact-secondary-disclosure:not([open]) {
-    padding-block: 0.65rem !important;
-  }
-
-  .essential-form-block,
-  .citizen-form-grid,
-  .routing-evidence-grid,
-  .routing-confirmation-grid,
-  .filter-grid,
-  .import-row-grid,
-  .detail-grid,
-  .facts-grid,
-  .summary-grid,
-  .compact-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-    gap: 0.8rem !important;
-  }
-
-  .territory-field-wide,
-  .compact-form-actions,
-  .routing-confirmation-grid + .field-help {
-    grid-column: 1 / -1;
-  }
-
-  .selection-list,
-  .review-list,
-  .assignment-list,
-  .program-list {
-    gap: 0.75rem !important;
-  }
-
-  .verification-search-shell,
-  .territory-form {
-    gap: 0.85rem !important;
-  }
-}
-
-@media (min-width: 1280px) {
-  .section-grid,
-  .territory-admin-grid {
-    grid-template-columns: minmax(460px, 0.68fr) minmax(720px, 1.05fr) !important;
-  }
-
-  .operator-review-desk {
-    grid-template-columns: minmax(420px, 0.42fr) minmax(760px, 1fr) !important;
-  }
-}
-
-@media (max-width: 759px) {
-  .page-shell {
-    width: 100% !important;
-    max-width: 100% !important;
-    padding-inline: 12px !important;
-  }
-
-  .primary-action,
-  .secondary-action,
-  .danger-action,
-  .secondary-button,
-  .verification-button,
-  .mini-action-button,
-  .chrome-link-button,
-  .inline-link-button {
-    min-height: 42px !important;
-    width: 100% !important;
-    justify-content: center;
-  }
-
-  .citizen-primary-actions,
-  .compact-form-actions,
-  .territory-form-actions,
-  .button-row,
-  .review-action-group {
-    display: grid !important;
-    grid-template-columns: 1fr;
-  }
-
-  .public-task-panel,
-  .map-confirm-panel,
-  .panel,
-  .request-list-panel,
-  .request-detail-panel {
-    padding: 16px !important;
-  }
-}
-
-
-/* Territory route desktop workbench correction — 2026-07-08 */
-@media (min-width: 1024px) {
-  .territory-workspace {
-    display: grid !important;
-    grid-template-columns: minmax(420px, 0.48fr) minmax(620px, 0.72fr) !important;
-    align-items: start;
-    gap: var(--ops-gap) !important;
-  }
-
-  .territory-command-panel {
-    grid-column: 1 !important;
-    grid-row: 1 !important;
-  }
-
-  .territory-hierarchy-panel {
-    grid-column: 2 !important;
-    grid-row: 1 !important;
-  }
-
-  .territory-detail-panel {
-    grid-column: 1 !important;
-    grid-row: 2 !important;
-  }
-
-  .territory-list-panel {
-    grid-column: 2 !important;
-    grid-row: 2 !important;
-  }
-
-  .territory-hierarchy-grid {
-    display: grid !important;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 0.75rem !important;
-  }
-
-  .hierarchy-province {
-    padding: 0.7rem !important;
-  }
-
-  .hierarchy-chip-list {
-    display: flex !important;
-    flex-wrap: wrap;
-    gap: 0.45rem !important;
-  }
-
-  .hierarchy-chip-list .mini-action-button {
-    min-height: 32px !important;
-    padding: 0.42rem 0.65rem !important;
-    font-size: 0.78rem !important;
-  }
-
-  .territory-list {
-    display: grid !important;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 0.6rem !important;
-    max-height: min(760px, 76vh);
-    overflow-y: auto;
-    padding-right: 0.25rem;
-  }
-
-  .territory-record {
-    padding: 0.72rem !important;
-    gap: 0.55rem !important;
-  }
-
-  .territory-record h4 {
-    font-size: 0.95rem !important;
-    margin-bottom: 0.25rem !important;
-  }
-
-  .territory-record p {
-    font-size: 0.82rem !important;
-    line-height: 1.35 !important;
-  }
-
-  .territory-record .record-actions {
-    gap: 0.4rem !important;
-  }
-}
-
-@media (max-width: 759px) {
-  .territory-list {
-    max-height: 620px;
-    overflow-y: auto;
-    padding-right: 0.2rem;
-  }
-
-  .territory-record {
-    padding: 0.75rem !important;
-  }
-}
-
-
-/* Project-wide compact civic sync — 2026-07-08 */
-:root {
-  --sync-font: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, Helvetica, sans-serif;
-  --sync-h3: clamp(1rem, 0.92rem + 0.25vw, 1.16rem);
-  --sync-body: 0.9rem;
-  --sync-small: 0.76rem;
-  --sync-line: 1.42;
-  --sync-pad: clamp(14px, 1.15vw, 20px);
-  --sync-gap: clamp(12px, 1.05vw, 18px);
-}
-
-body,
-button,
-input,
-select,
-textarea {
-  font-family: var(--sync-font) !important;
-}
-
-body {
-  font-size: var(--sync-body) !important;
-  line-height: var(--sync-line) !important;
-}
-
-.masthead-reference h1 {
-  font-size: clamp(2rem, 3.4vw, 3.35rem) !important;
-  line-height: 1.02 !important;
-  letter-spacing: -0.055em !important;
-}
-
-.masthead-subtitle,
-.hero-copy,
-.institutional-note,
-.panel-state,
-.form-notice,
-.field-help,
-.public-task-panel p,
-.panel p,
-.review-card p,
-.assignment-card p,
-.result-card p,
-.territory-record p {
-  font-size: var(--sync-body) !important;
-  line-height: 1.42 !important;
-}
-
-.panel-head h2,
-.panel-head h3,
-.panel h2,
-.panel h3,
-.public-task-panel h3,
-.map-confirm-panel h3,
-.review-card h3,
-.result-card h3,
-.assignment-card h4,
-.result-card h4,
-.export-card h4,
-.territory-record h4,
-.review-card h4 {
-  font-family: var(--sync-font) !important;
-  font-size: var(--sync-h3) !important;
-  line-height: 1.16 !important;
-  letter-spacing: -0.035em !important;
-  font-weight: 760 !important;
-}
-
+.eyebrow,
 .kicker,
 .section-label,
-.assignment-kicker,
-.territory-label,
 .nav-group-label,
-.detail-grid dt,
-.routing-evidence-grid strong {
-  font-size: 0.68rem !important;
-  letter-spacing: 0.075em !important;
+.assignment-kicker,
+.territory-label {
+  font-size: 0.66rem !important;
+  line-height: 1.15 !important;
+  letter-spacing: 0.09em !important;
   font-weight: 820 !important;
+  text-transform: uppercase !important;
+  color: #153651 !important;
 }
 
+.civic-hero-illustration { width: 120px !important; height: 70px !important; max-height: 70px !important; opacity: 0.68 !important; overflow: hidden !important; }
+.map-slab { transform: scale(0.7) !important; transform-origin: center !important; }
+
+.civic-service-strip {
+  margin-top: 8px !important;
+  padding: 8px 12px !important;
+  border: 1px solid var(--gov-line) !important;
+  border-radius: 10px !important;
+  background: var(--gov-paper-2) !important;
+  box-shadow: none !important;
+}
+.civic-service-strip::after { display: none !important; }
+.civic-service-strip .hero-copy-block {
+  display: grid !important;
+  grid-template-columns: 30px minmax(0, 1fr) !important;
+  align-items: center !important;
+  gap: 9px !important;
+}
+.service-icon { width: 30px !important; height: 30px !important; }
+.civic-highlight-list { display:flex !important; flex-wrap:wrap !important; gap:5px !important; margin:0 !important; padding:0 !important; }
+.civic-highlight-list li { padding:4px 7px !important; font-size:0.72rem !important; line-height:1.2 !important; border:1px solid var(--gov-line) !important; background:#fff !important; border-radius:999px !important; }
+
+.chrome-shell {
+  display:grid !important;
+  grid-template-columns:minmax(0,1fr) minmax(230px,280px) !important;
+  gap:var(--gov-gap) !important;
+  align-items:start !important;
+  margin-top:8px !important;
+}
+.nav-cluster,
+.grouped-nav-cluster,
+.chrome-session-card {
+  padding:9px !important;
+  border:1px solid var(--gov-line) !important;
+  border-radius:10px !important;
+  background:var(--gov-paper) !important;
+  box-shadow:none !important;
+}
+.platform-overview-link { margin-bottom:6px !important; }
+.grouped-top-nav { display:grid !important; grid-template-columns:repeat(4,minmax(0,1fr)) !important; gap:7px !important; }
+.nav-group { display:grid !important; gap:4px !important; }
+.nav-group-links { display:grid !important; grid-template-columns:repeat(2,minmax(0,1fr)) !important; gap:4px !important; }
 .nav-link,
 .secondary-nav-link,
-.chrome-link-button,
-.status-chip,
-.status-pill,
-.territory-meta,
-.summary-card,
-.case-lane small,
-.case-lane span,
-.case-lane strong {
-  font-size: var(--sync-small) !important;
+.platform-overview-link {
+  min-height:28px !important;
+  padding:5px 7px !important;
+  border:1px solid var(--gov-line) !important;
+  border-radius:7px !important;
+  background:#fff !important;
+  color:var(--gov-navy) !important;
+  font-size:0.74rem !important;
+  line-height:1.1 !important;
+  box-shadow:none !important;
 }
+.nav-link-active { border-color:rgba(23,80,127,.55) !important; background:#edf5fb !important; }
+.nav-link-title,.nav-link-subtitle,.platform-overview-title { font-size:inherit !important; line-height:1.1 !important; }
+.chrome-session-card { display:grid !important; grid-template-columns:1fr !important; gap:7px !important; font-size:0.78rem !important; line-height:1.25 !important; }
+.chrome-session-card strong { font-size:0.86rem !important; }
+.chrome-session-card p { margin:3px 0 0 !important; font-size:0.78rem !important; line-height:1.25 !important; color:var(--gov-muted) !important; }
+.chrome-session-actions { display:flex !important; flex-wrap:wrap !important; gap:6px !important; }
 
 .public-task-panel,
 .panel,
 .map-confirm-panel,
 .review-card,
-.assignment-card,
 .result-card,
+.assignment-card,
 .territory-record,
 .operator-finding-card,
-.quiet-disclosure,
-.inline-disclosure,
-.disclosure-panel,
-.workbench-panel-disclosure,
-.routing-status-card,
-.routing-evidence-grid > span {
-  border-radius: 8px !important;
-  padding: var(--sync-pad) !important;
+.summary-card,
+.review-desk-header {
+  padding:var(--gov-pad) !important;
+  border:1px solid var(--gov-line) !important;
+  border-radius:10px !important;
+  background:var(--gov-paper) !important;
+  box-shadow:none !important;
+  overflow:visible !important;
+}
+.panel::before,.public-task-panel::before,.map-confirm-panel::before { display:none !important; }
+.panel-head { display:grid !important; gap:3px !important; margin-bottom:9px !important; padding-bottom:0 !important; }
+.panel-head h2,.panel-head h3,.panel h2,.panel h3,.public-task-panel h3,.map-confirm-panel h3,.review-card h3,.result-card h3,.review-card h4,.result-card h4,.assignment-card h4,.territory-record h4 {
+  margin:0 0 5px !important;
+  font-family:var(--gov-font-ui) !important;
+  font-size:0.98rem !important;
+  line-height:1.18 !important;
+  letter-spacing:-0.02em !important;
+  color:var(--gov-navy) !important;
+  font-weight:760 !important;
+}
+.institutional-note,.panel-state,.field-help,.territory-record p,.result-card p,.assignment-card p,.review-card p,.mini-list li span,.detail-grid dd,.facts-grid span { font-size:0.8rem !important; line-height:1.35 !important; color:var(--gov-muted) !important; }
+
+.primary-action,.secondary-action,.danger-action,.secondary-button,.verification-button,.mini-action-button,.chrome-link-button,.inline-link-button,button.primary-action,button.secondary-action,button.danger-action {
+  min-height:31px !important;
+  padding:6px 9px !important;
+  border-radius:7px !important;
+  font-size:0.77rem !important;
+  line-height:1.05 !important;
+  font-weight:760 !important;
+  letter-spacing:0 !important;
+  box-shadow:none !important;
+  width:auto !important;
+}
+.primary-action,.verification-button { background:var(--gov-navy) !important; border-color:var(--gov-navy) !important; color:#fff !important; }
+.secondary-action,.secondary-button,.chrome-link-button,.inline-link-button,.mini-action-button { background:#fff !important; border-color:var(--gov-line-strong) !important; color:var(--gov-navy) !important; }
+.danger-action { background:#fff8f4 !important; border-color:rgba(143,45,40,.36) !important; color:var(--gov-danger) !important; }
+
+.territory-input,.territory-textarea,input,select,textarea { min-height:35px !important; padding:7px 9px !important; border-radius:7px !important; font-size:0.84rem !important; line-height:1.2 !important; }
+textarea.territory-input,.territory-textarea { min-height:72px !important; }
+
+.section-grid,.territory-admin-grid,.verification-workspace,.field-workspace,.territory-workspace,.citizen-register-flow,.registry-simple-shell,.operator-review-shell,.operations-panel,.public-code-status-flow,.tracking-lookup-flow,.single-column-grid { gap:var(--gov-gap) !important; margin-top:10px !important; }
+
+.verification-workspace { grid-template-columns:minmax(620px,1.1fr) minmax(360px,.62fr) !important; align-items:start !important; }
+.verification-queue-panel { grid-column:1 !important; grid-row:1 / span 2 !important; }
+.verification-trust-panel { grid-column:2 !important; grid-row:1 !important; }
+.verification-workspace .review-list { max-height:640px !important; overflow-y:auto !important; padding-right:4px !important; }
+
+.field-workspace { grid-template-columns:minmax(420px,.72fr) minmax(620px,1fr) !important; align-items:start !important; }
+.field-assignments-panel { grid-column:1 !important; grid-row:1 !important; }
+.field-location-checks-panel { grid-column:2 !important; grid-row:1 !important; }
+.field-intake-panel { grid-column:1 !important; grid-row:2 !important; }
+.live-intake-panel { grid-column:2 !important; grid-row:2 !important; }
+.field-command-deck { grid-template-columns:repeat(3,minmax(0,1fr)) !important; gap:6px !important; }
+.case-lane,.selection-item { min-height:0 !important; padding:7px !important; font-size:.76rem !important; border-radius:7px !important; }
+.case-lane strong { font-size:1rem !important; }
+.assignment-list,.field-task-list,.live-intake-list,.review-list,.mini-list,.territory-list { gap:7px !important; }
+.workbench-panel-disclosure > summary,.quiet-disclosure > summary,.inline-disclosure > summary { min-height:32px !important; padding:6px 8px !important; font-size:.82rem !important; line-height:1.2 !important; border-radius:7px !important; }
+.workbench-panel-disclosure > summary { display:flex !important; align-items:center !important; justify-content:space-between !important; gap:8px !important; }
+.workbench-panel-disclosure > summary strong { font-size:.88rem !important; }
+
+.territory-workspace { grid-template-columns:minmax(420px,.48fr) minmax(620px,.72fr) !important; align-items:start !important; }
+.territory-command-panel { grid-column:1 !important; grid-row:1 !important; }
+.territory-hierarchy-panel { grid-column:2 !important; grid-row:1 !important; }
+.territory-detail-panel { grid-column:1 !important; grid-row:2 !important; }
+.territory-list-panel { grid-column:2 !important; grid-row:2 !important; }
+.territory-hierarchy-grid { grid-template-columns:repeat(2,minmax(0,1fr)) !important; gap:8px !important; }
+.hierarchy-province { padding:8px !important; }
+.hierarchy-chip-list { display:flex !important; flex-wrap:wrap !important; gap:5px !important; }
+.hierarchy-chip-list .mini-action-button { min-height:29px !important; padding:5px 7px !important; font-size:.72rem !important; }
+.territory-list { grid-template-columns:repeat(2,minmax(0,1fr)) !important; max-height:640px !important; overflow-y:auto !important; }
+.territory-record { padding:10px !important; gap:7px !important; }
+.territory-record h4 { font-size:.9rem !important; }
+
+.citizen-register-flow { grid-template-columns:minmax(520px,.85fr) minmax(620px,1fr) !important; align-items:start !important; }
+.location-hero-panel { grid-column:1 / -1 !important; grid-template-columns:minmax(420px,1fr) minmax(260px,.45fr) minmax(320px,.55fr) !important; min-height:0 !important; }
+.map-confirm-panel { grid-column:1 !important; grid-row:2 / span 2 !important; }
+.location-form-panel,.address-preview-panel { grid-column:2 !important; }
+.geotag-map { min-height:340px !important; }
+.routing-evidence-disclosure:not([open]),.technical-evidence-disclosure:not([open]) { padding-block:5px !important; }
+
+.registry-simple-shell,.operations-panel,.tracking-lookup-flow,.single-column-grid { width:100% !important; max-width:none !important; }
+.tracking-lookup-flow .public-task-panel,.single-column-grid .public-task-panel { width:100% !important; }
+
+.button-row,.territory-form-actions,.calm-action-row,.map-link-row,.compact-form-actions,.review-action-group,.review-action-section { display:flex !important; flex-wrap:wrap !important; gap:6px !important; align-items:center !important; }
+.filter-grid,.territory-form,.compact-field-form,.citizen-form-grid,.routing-first-block,.detail-grid,.facts-grid,.summary-grid,.compact-grid { gap:8px !important; }
+
+@media (max-width: 759px) {
+  .page-shell { width:100% !important; max-width:100% !important; padding:8px 12px 32px !important; }
+  .masthead-reference,.masthead { padding:11px 12px !important; }
+  .masthead-content-grid { grid-template-columns:1fr !important; }
+  .civic-hero-illustration { display:none !important; }
+  .masthead-reference h1,.masthead h1 { font-size:1.55rem !important; line-height:1.05 !important; }
+  .masthead-subtitle { font-size:.8rem !important; line-height:1.32 !important; }
+  .civic-service-strip { padding:8px 9px !important; }
+  .civic-service-strip .hero-copy-block { grid-template-columns:1fr !important; }
+  .service-icon { display:none !important; }
+  .civic-highlight-list li { font-size:.7rem !important; }
+  .chrome-shell { grid-template-columns:1fr !important; gap:8px !important; }
+  .grouped-top-nav { grid-template-columns:repeat(2,minmax(0,1fr)) !important; }
+  .nav-group-links { grid-template-columns:1fr !important; }
+  .verification-workspace,.field-workspace,.territory-workspace,.territory-admin-grid,.section-grid,.citizen-register-flow,.public-code-status-flow,.registry-simple-shell,.operations-panel,.operator-review-shell { grid-template-columns:1fr !important; }
+  .verification-queue-panel,.verification-trust-panel,.field-assignments-panel,.field-location-checks-panel,.field-intake-panel,.live-intake-panel,.territory-command-panel,.territory-hierarchy-panel,.territory-detail-panel,.territory-list-panel,.location-hero-panel,.map-confirm-panel,.location-form-panel,.address-preview-panel { grid-column:1 !important; grid-row:auto !important; }
+  .field-command-deck,.territory-hierarchy-grid,.territory-list { grid-template-columns:1fr !important; }
+  .territory-list,.review-list,.field-task-list,.live-intake-list { max-height:560px !important; overflow-y:auto !important; }
+  .primary-action,.secondary-action,.danger-action,.secondary-button,.verification-button,.mini-action-button,.chrome-link-button,.inline-link-button { min-height:36px !important; width:100% !important; justify-content:center !important; }
+  .button-row,.territory-form-actions,.calm-action-row,.map-link-row,.compact-form-actions,.review-action-group,.review-action-section { display:grid !important; grid-template-columns:1fr !important; }
 }
 
-.panel-head,
-.quiet-head {
-  margin-bottom: 0.75rem !important;
-  padding-bottom: 0.65rem !important;
+/* Admin session utility reset — remove dead card space */
+.chrome-shell {
+  grid-template-columns: minmax(0, 1fr) !important;
+  position: relative !important;
 }
 
-.territory-form,
-.compact-field-form,
-.filter-grid,
-.citizen-form-grid,
-.routing-first-block,
-.routing-evidence-grid,
-.review-list,
-.assignment-list,
-.mini-list,
-.selection-list,
-.detail-grid,
-.facts-grid,
-.summary-grid,
-.compact-grid {
-  gap: 0.7rem !important;
+.chrome-session-utility {
+  position: fixed !important;
+  inset-block-start: 10px !important;
+  inset-inline-end: max(12px, calc((100vw - min(calc(100vw - 24px), var(--gov-shell, 1480px))) / 2 + 18px)) !important;
+  z-index: 60 !important;
+  display: inline-flex !important;
+  width: auto !important;
+  min-width: 0 !important;
+  align-items: center !important;
+  gap: 6px !important;
+  padding: 4px 5px !important;
+  border: 1px solid rgba(11, 47, 79, 0.18) !important;
+  border-radius: 999px !important;
+  background: rgba(255, 254, 250, 0.94) !important;
+  box-shadow: none !important;
+  backdrop-filter: blur(6px);
 }
 
-.territory-input,
-.verification-input,
-input,
-select,
-textarea {
-  min-height: 38px !important;
-  padding: 0.56rem 0.72rem !important;
-  font-size: 0.86rem !important;
-  line-height: 1.2 !important;
+.session-utility-role {
+  display: inline-flex !important;
+  align-items: center !important;
+  min-height: 24px !important;
+  padding: 0 8px !important;
+  border-radius: 999px !important;
+  background: #eef6ef !important;
+  color: #1f633a !important;
+  font-size: 0.68rem !important;
+  font-weight: 850 !important;
+  letter-spacing: 0.07em !important;
+  text-transform: uppercase !important;
 }
 
-textarea.territory-input,
-.territory-textarea {
-  min-height: 82px !important;
+.session-utility-logout {
+  display: inline-flex !important;
+  min-height: 24px !important;
+  width: auto !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 0 9px !important;
+  border: 1px solid rgba(11, 47, 79, 0.2) !important;
+  border-radius: 999px !important;
+  background: #fff !important;
+  color: #102235 !important;
+  font-size: 0.7rem !important;
+  font-weight: 780 !important;
+  line-height: 1 !important;
+  text-decoration: none !important;
 }
 
-.primary-action,
-.secondary-action,
-.danger-action,
-.secondary-button,
-.verification-button,
-.mini-action-button,
-.chrome-link-button,
-.inline-link-button,
-button.primary-action,
-button.secondary-action,
-button.danger-action {
-  min-height: 34px !important;
-  padding: 0.48rem 0.76rem !important;
-  font-size: 0.8rem !important;
-  line-height: 1.08 !important;
-  border-radius: 7px !important;
-}
-
-.case-lane {
-  min-height: 108px !important;
-  padding: 0.72rem !important;
-  border-radius: 8px !important;
-}
-
-.case-lane strong {
-  font-size: 1.2rem !important;
-}
-
-.workbench-panel-disclosure {
-  display: grid;
-  gap: 0.75rem;
-  border: 1px solid var(--ref-line, rgba(11, 47, 79, 0.16));
-  background: rgba(255, 254, 250, 0.98);
-}
-
-.workbench-panel-disclosure > summary {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.8rem;
-  cursor: pointer;
-  list-style: none;
-}
-
-.workbench-panel-disclosure > summary::-webkit-details-marker {
-  display: none;
-}
-
-.workbench-panel-disclosure > summary span {
-  display: grid;
-  gap: 0.18rem;
-}
-
-.workbench-panel-disclosure > summary strong {
-  color: var(--ref-navy, #092742);
-  font-size: var(--sync-h3);
-  letter-spacing: -0.035em;
-  line-height: 1.16;
-}
-
-.workbench-panel-disclosure > summary em {
-  flex: 0 0 auto;
-  border: 1px solid var(--ref-line, rgba(11, 47, 79, 0.16));
-  border-radius: 999px;
-  padding: 0.28rem 0.55rem;
-  color: var(--ref-muted, #5b6874);
-  font-size: 0.72rem;
-  font-style: normal;
-  font-weight: 720;
-}
-
-.compact-note {
-  margin-top: -0.15rem !important;
-}
-
-@media (min-width: 1024px) {
-  .page-shell {
-    width: min(calc(100vw - 24px), 1500px) !important;
-    max-width: 1500px !important;
-  }
-
-  .section-grid.territory-admin-grid {
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important;
-    gap: var(--sync-gap) !important;
-  }
-
-  .field-assignments-panel {
-    grid-column: 1 !important;
-    grid-row: 1 !important;
-  }
-
-  .field-location-checks-panel {
-    grid-column: 2 !important;
-    grid-row: 1 !important;
-  }
-
-  .field-intake-panel {
-    grid-column: 1 !important;
-    grid-row: 2 !important;
-  }
-
-  .live-intake-panel {
-    grid-column: 2 !important;
-    grid-row: 2 !important;
-  }
-
-  .field-task-list,
-  .live-intake-list {
-    max-height: min(520px, 58vh);
-    overflow-y: auto;
-    padding-right: 0.25rem;
-  }
-
-  .compact-field-form {
-    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-  }
-
-  .compact-field-form .territory-field-wide,
-  .compact-field-form .territory-form-actions {
-    grid-column: 1 / -1;
-  }
-
-  .territory-workspace {
-    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr) !important;
-    gap: var(--sync-gap) !important;
-  }
-
-  .territory-list {
-    max-height: min(620px, 66vh) !important;
-  }
+.chrome-session-utility p,
+.chrome-session-utility strong,
+.chrome-session-utility .chrome-session-actions,
+.chrome-session-utility .chrome-link-button {
+  display: none !important;
 }
 
 @media (max-width: 759px) {
-  .masthead-reference h1 {
-    font-size: clamp(1.85rem, 11vw, 2.25rem) !important;
-  }
-
-  .public-task-panel,
-  .panel,
-  .map-confirm-panel,
-  .review-card,
-  .assignment-card,
-  .result-card,
-  .territory-record,
-  .workbench-panel-disclosure {
-    padding: 14px !important;
-  }
-
-  .field-task-list,
-  .live-intake-list,
-  .territory-list {
-    max-height: 560px;
-    overflow-y: auto;
+  .chrome-session-utility {
+    position: sticky !important;
+    inset-block-start: 6px !important;
+    inset-inline-end: auto !important;
+    justify-self: end !important;
+    margin-block: 4px 0 !important;
   }
 }
 
+/* Final civic shell hard reset — remove masthead/session vertical waste */
+.masthead-reference,
+.masthead {
+  display: block !important;
+  min-height: 0 !important;
+  height: auto !important;
+  padding: 10px 14px !important;
+  gap: 0 !important;
+}
+
+.masthead-reference .masthead-topline,
+.masthead-topline {
+  height: 26px !important;
+  min-height: 0 !important;
+  margin: 0 0 4px !important;
+  gap: 8px !important;
+}
+
+.masthead-reference .official-lockup,
+.official-lockup {
+  height: 26px !important;
+  min-height: 0 !important;
+  align-items: center !important;
+}
+
+.masthead-reference .crest-frame,
+.crest-frame {
+  width: 28px !important;
+  height: 28px !important;
+  padding: 3px !important;
+}
+
+.masthead-reference .crest,
+.crest {
+  width: 20px !important;
+  height: 20px !important;
+}
+
+.masthead-content-grid {
+  min-height: 0 !important;
+  height: auto !important;
+  grid-template-columns: minmax(0, 1fr) 76px !important;
+  align-items: center !important;
+}
+
+.masthead-reference .masthead-copy,
+.masthead-copy,
+.masthead-titles {
+  height: auto !important;
+  min-height: 0 !important;
+}
+
+.masthead-reference h1,
+.masthead h1 {
+  font-size: clamp(1.45rem, 1.85vw, 1.95rem) !important;
+  line-height: 1.04 !important;
+  margin: 0 !important;
+}
+
+.masthead-reference .masthead-subtitle,
+.masthead-subtitle {
+  margin: 4px 0 0 !important;
+  font-size: 0.8rem !important;
+  line-height: 1.28 !important;
+  max-width: 720px !important;
+}
+
+.civic-hero-illustration {
+  width: 76px !important;
+  height: 46px !important;
+  min-height: 0 !important;
+  max-height: 46px !important;
+  display: block !important;
+}
+
+.civic-hero-illustration .map-slab,
+.map-slab {
+  width: 76px !important;
+  height: 46px !important;
+  min-height: 0 !important;
+  transform: scale(0.42) !important;
+  transform-origin: top left !important;
+}
+
+.chrome-session-utility {
+  height: 34px !important;
+  max-height: 34px !important;
+  min-height: 0 !important;
+  padding: 4px 5px !important;
+  align-items: center !important;
+  align-content: center !important;
+}
+
+.chrome-session-utility .session-utility-role,
+.chrome-session-utility .session-utility-logout {
+  height: 24px !important;
+  max-height: 24px !important;
+  min-height: 24px !important;
+}
+
+@media (max-width: 759px) {
+  .masthead-reference,
+  .masthead {
+    padding: 10px 12px !important;
+  }
+
+  .masthead-content-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .civic-hero-illustration {
+    display: none !important;
+  }
+
+  .masthead-reference h1,
+  .masthead h1 {
+    font-size: 1.42rem !important;
+  }
+
+  .masthead-reference .masthead-subtitle,
+  .masthead-subtitle {
+    font-size: 0.78rem !important;
+  }
+
+  .chrome-session-utility {
+    position: sticky !important;
+    width: max-content !important;
+    height: 32px !important;
+    max-height: 32px !important;
+  }
+}
+
+/* Compact workbench navigation reset — make real work start in first viewport */
+.civic-service-strip {
+  min-height: 0 !important;
+  max-height: 54px !important;
+  height: auto !important;
+  padding: 7px 10px !important;
+  overflow: hidden !important;
+}
+
+.civic-service-strip .eyebrow,
+.civic-service-strip .service-icon {
+  display: none !important;
+}
+
+.civic-highlight-list {
+  display: flex !important;
+  flex-wrap: nowrap !important;
+  overflow: hidden !important;
+  gap: 5px !important;
+}
+
+.civic-highlight-list li {
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  max-width: 31% !important;
+}
+
+.nav-cluster,
+.grouped-nav-cluster {
+  padding: 7px !important;
+}
+
+.grouped-top-nav {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  align-items: center !important;
+  gap: 5px !important;
+}
+
+.nav-group,
+.nav-group-links {
+  display: contents !important;
+}
+
+.nav-group-label {
+  display: none !important;
+}
+
+.nav-link,
+.secondary-nav-link,
+.platform-overview-link {
+  min-height: 27px !important;
+  padding: 5px 8px !important;
+  font-size: 0.73rem !important;
+  flex: 0 1 auto !important;
+}
+
+.chrome-shell {
+  margin-top: 7px !important;
+}
+
+@media (max-width: 759px) {
+  .civic-service-strip {
+    max-height: none !important;
+    padding: 7px 9px !important;
+  }
+
+  .civic-highlight-list {
+    flex-wrap: wrap !important;
+  }
+
+  .civic-highlight-list li {
+    max-width: 100% !important;
+  }
+
+  .grouped-top-nav {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 5px !important;
+  }
+
+  .nav-link,
+  .secondary-nav-link,
+  .platform-overview-link {
+    width: 100% !important;
+  }
+}

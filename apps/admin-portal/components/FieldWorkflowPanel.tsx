@@ -223,7 +223,7 @@ export function FieldWorkflowPanel({ assignments, submissions: initialSubmission
   }
 
   return (
-    <section className="section-grid territory-admin-grid">
+    <section className="section-grid territory-admin-grid field-workspace">
       <article className="public-task-panel civic-panel-green field-assignments-panel">
         <div className="panel-head">
           <p className="section-label">Deployment queue</p>

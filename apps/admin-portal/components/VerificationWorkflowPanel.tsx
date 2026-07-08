@@ -169,8 +169,8 @@ export function VerificationWorkflowPanel({ submissions: initialSubmissions, sam
   }
 
   return (
-    <section className="section-grid territory-admin-grid">
-      <article className="public-task-panel civic-panel-blue territory-list-panel">
+    <section className="section-grid territory-admin-grid verification-workspace">
+      <article className="public-task-panel civic-panel-blue territory-list-panel verification-queue-panel">
         <div className="panel-head">
           <p className="section-label">Verification queue</p>
           <h3>Review field submissions before registry promotion</h3>
@@ -273,7 +273,7 @@ export function VerificationWorkflowPanel({ submissions: initialSubmissions, sam
         {error ? <p className="form-notice error">{error}</p> : null}
       </article>
 
-      <article className="public-task-panel civic-panel-green">
+      <article className="public-task-panel civic-panel-green verification-trust-panel">
         <div className="panel-head">
           <p className="section-label">Public trust check</p>
           <h3>Verify a published registry record</h3>
