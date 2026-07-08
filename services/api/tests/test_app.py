@@ -186,14 +186,37 @@ def test_territories_endpoint_returns_database_rows_for_authorized_viewer(monkey
     assert response.json()['items'] == expected
 
 
-def test_public_territory_options_returns_minimal_public_fields(monkeypatch) -> None:
-    expected = [{'id': 'territory-mongomo-core', 'name': 'Mongomo Core', 'province_code': 'WN', 'province': 'Wele-Nzas', 'admin_unit_id': 'admin-unit-wele-nzas', 'admin_unit_code': 'WN', 'admin_unit_name': 'Wele-Nzas', 'admin_unit_level': 'province', 'type': 'district-core', 'readiness': 'enumeration-ready', 'is_archived': False}]
+def test_public_territory_options_returns_safe_evidence_fields(monkeypatch) -> None:
+    expected = [{'id': 'territory-mongomo-core', 'name': 'Mongomo Core', 'province_code': 'WN', 'province': 'Wele-Nzas', 'admin_unit_id': 'admin-unit-wele-nzas', 'admin_unit_code': 'WN-M-MONGOMO', 'admin_unit_name': 'Mongomo', 'admin_unit_level': 'municipality', 'type': 'official-municipality', 'readiness': 'official-routing', 'is_archived': False}]
     monkeypatch.setattr(main, 'fetch_territories', lambda **kwargs: expected)
     response = client.get('/api/v1/public/territory-options')
     assert response.status_code == 200
-    assert response.json()['items'] == [{'id': 'territory-mongomo-core', 'name': 'Mongomo Core', 'province': 'Wele-Nzas', 'province_code': 'WN', 'readiness': 'enumeration-ready'}]
+    item = response.json()['items'][0]
+    assert item['id'] == 'territory-mongomo-core'
+    assert item['routing_status_label'] == 'Ruta administrativa oficial'
+    assert item['source_label'] == 'Tabla de división administrativa / fuente referenciada por INEGE'
+    assert item['confidence_label'] == 'Unidad administrativa confirmada'
+    assert item['geometry_status'] == 'Área de enrutamiento por nombre administrativo; límite topográfico no adjunto'
+    assert item['public_status'] == 'Enrutamiento interno hasta verificación del operador y publicación controlada'
+    assert item['admin_unit_name'] == 'Mongomo'
+    assert item['admin_unit_level'] == 'municipality'
     assert 'admin_unit_id' not in response.text
+    assert 'admin_unit_code' not in response.text
 
+
+
+
+def test_public_territory_options_can_filter_nationwide_official_routing(monkeypatch) -> None:
+    captured = {}
+    def fake_fetch_territories(**kwargs):
+        captured.update(kwargs)
+        return [{'id': 'territory-official-municipality-bata', 'name': 'Bata', 'province_code': 'LI', 'province': 'Litoral', 'admin_unit_name': 'Bata', 'admin_unit_level': 'municipality', 'type': 'official-municipality', 'readiness': 'official-routing', 'is_archived': False}]
+    monkeypatch.setattr(main, 'fetch_territories', fake_fetch_territories)
+    response = client.get('/api/v1/public/territory-options', params={'province_code': 'LI'})
+    assert response.status_code == 200
+    assert captured == {'province_code': 'LI', 'include_archived': False}
+    assert response.json()['items'][0]['name'] == 'Bata'
+    assert response.json()['items'][0]['source_label'].startswith('Tabla de división administrativa')
 
 def test_create_territory_requires_editor_role(monkeypatch) -> None:
     payload = {'name': 'Mongomo Core', 'province_code': 'WN', 'admin_unit_id': 'admin-unit-wele-nzas', 'type': 'district-core', 'readiness': 'enumeration-ready'}

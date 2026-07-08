@@ -7594,3 +7594,109 @@ textarea,
     grid-template-columns: 1fr;
   }
 }
+
+/* Government-grade routing UX release */
+.routing-first-block,
+.routing-evidence-grid,
+.territory-hierarchy-grid {
+  display: grid;
+  gap: 12px;
+}
+
+.routing-first-block {
+  grid-template-columns: minmax(0, 1fr);
+  border: 1px solid var(--gov-line);
+  background: #fff;
+  padding: 14px;
+}
+
+.routing-status-card {
+  display: grid;
+  gap: 6px;
+  border: 1px solid var(--gov-line);
+  background: var(--gov-paper-soft);
+  padding: 12px;
+  align-content: start;
+}
+
+.routing-status-card > strong {
+  color: var(--gov-navy);
+  font-size: 1rem;
+}
+
+.routing-status-card > span:not(.status-chip) {
+  color: var(--gov-muted);
+  font-size: 0.88rem;
+  line-height: 1.45;
+}
+
+.routing-evidence-grid {
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+}
+
+.routing-evidence-grid > span {
+  display: grid;
+  gap: 4px;
+  border: 1px solid var(--gov-line);
+  background: #fff;
+  padding: 10px;
+  color: var(--gov-muted);
+  line-height: 1.38;
+}
+
+.routing-evidence-grid strong {
+  color: var(--gov-ink);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.territory-hierarchy-panel {
+  grid-column: 1 / -1;
+}
+
+.territory-hierarchy-grid {
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+}
+
+.hierarchy-province {
+  align-self: start;
+}
+
+.hierarchy-lane {
+  display: grid;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.hierarchy-lane > strong {
+  color: var(--gov-ink);
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.hierarchy-chip-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+
+.hierarchy-chip-list .mini-action-button {
+  min-height: 34px;
+  padding: 7px 9px;
+  font-size: 0.78rem;
+  text-align: left;
+}
+
+.territory-evidence-disclosure,
+.routing-evidence-disclosure {
+  border-left: 3px solid var(--gov-navy);
+}
+
+@media (min-width: 760px) {
+  .routing-first-block {
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.15fr) minmax(220px, 0.75fr);
+    align-items: start;
+  }
+}

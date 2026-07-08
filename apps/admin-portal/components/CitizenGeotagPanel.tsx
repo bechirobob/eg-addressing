@@ -12,7 +12,21 @@ type Province = {
   name: string;
 };
 
-type Territory = { id: string; name: string; province?: string; province_code?: string; readiness?: string };
+type Territory = {
+  id: string;
+  name: string;
+  province?: string;
+  province_code?: string;
+  type?: string;
+  readiness?: string;
+  admin_unit_name?: string | null;
+  admin_unit_level?: string | null;
+  routing_status_label?: string;
+  source_label?: string;
+  confidence_label?: string;
+  geometry_status?: string;
+  public_status?: string;
+};
 
 type DuplicateHint = { source: string; id: string; label: string; code: string | null; distance_meters: number };
 
@@ -93,7 +107,7 @@ function preferredTerritoryId(territories: Territory[]): string {
   return '';
 }
 
-function territoryForPoint(territories: Territory[], latitude: number, longitude: number): string | null {
+function territoryForPunto(territories: Territory[], latitude: number, longitude: number): string | null {
   return null;
 }
 
@@ -105,7 +119,47 @@ function statusLabel(status: string): string {
   return status.replaceAll('-', ' ');
 }
 
-function normalizeAreaName(value: string): string {
+function readinessLabel(value?: string): string {
+  if (value === 'official-routing') return 'Ruta administrativa oficial';
+  if (value === 'intake-routing') return 'Área local para ingreso';
+  if (value === 'active-mapping') return 'Cartografía activa';
+  if (value === 'verification-prep') return 'Pendiente de verificación de campo';
+  if (value === 'survey-queue') return 'En cola de levantamiento';
+  return value ? statusLabel(value) : 'Pendiente de clasificación';
+}
+
+function territoryTypeLabel(value?: string): string {
+  if (value === 'official-municipality') return 'Municipio / ruta administrativa';
+  if (value === 'map-referenced-local-area') return 'Área local referenciada';
+  if (value === 'capital-urban-core') return 'Núcleo urbano capital';
+  if (value === 'urban-core') return 'Núcleo urbano';
+  return value ? statusLabel(value) : 'Área de enrutamiento';
+}
+
+function territoryStatusClass(territory?: Territory | null): string {
+  if (!territory) return 'warn';
+  if (territory.readiness === 'official-routing') return 'ok';
+  if (territory.readiness === 'verification-prep' || territory.readiness === 'survey-queue') return 'warn';
+  return '';
+}
+
+function sourceLabel(territory?: Territory | null): string {
+  return territory?.source_label ?? 'Registro interno de enrutamiento; confirmar antes de publicación';
+}
+
+function confidenceLabel(territory?: Territory | null): string {
+  return territory?.confidence_label ?? 'Registro interno; confirmar antes de publicación';
+}
+
+function geometryLabel(territory?: Territory | null): string {
+  return territory?.geometry_status ?? 'Registro de enrutamiento; geometría oficial levantada no adjunta';
+}
+
+function publicStatusLabel(territory?: Territory | null): string {
+  return territory?.public_status ?? 'Estado interno de revisión';
+}
+
+function normalizeAreaNombre(value: string): string {
   return value
     .normalize('NFD')
     .replace(/[\u0300-\u036f]/g, '')
@@ -114,16 +168,16 @@ function normalizeAreaName(value: string): string {
     .trim();
 }
 
-function territoryForMapArea(territories: Territory[], provinceCode: string, areaName?: string | null): string | null {
-  if (!areaName) return null;
-  const normalizedArea = normalizeAreaName(areaName);
+function territoryForMapArea(territories: Territory[], provinceCode: string, areaNombre?: string | null): string | null {
+  if (!areaNombre) return null;
+  const normalizedArea = normalizeAreaNombre(areaNombre);
   if (!normalizedArea) return null;
-  const exact = territories.find((territory) => territory.province_code === provinceCode && normalizeAreaName(territory.name) === normalizedArea);
+  const exact = territories.find((territory) => territory.province_code === provinceCode && normalizeAreaNombre(territory.name) === normalizedArea);
   if (exact) return exact.id;
   const contains = territories.find((territory) => {
     if (territory.province_code !== provinceCode) return false;
-    const territoryName = normalizeAreaName(territory.name);
-    return territoryName.includes(normalizedArea) || normalizedArea.includes(territoryName);
+    const territoryNombre = normalizeAreaNombre(territory.name);
+    return territoryNombre.includes(normalizedArea) || normalizedArea.includes(territoryNombre);
   });
   return contains?.id ?? null;
 }
@@ -137,12 +191,12 @@ export function CitizenGeotagPanel({ apiBaseUrl, provinces, territories }: Citiz
   const accuracyCircleRef = useRef<Circle | null>(null);
   const [latitude, setLatitude] = useState(DEFAULT_POINT.latitude);
   const [longitude, setLongitude] = useState(DEFAULT_POINT.longitude);
-  const [accuracyMeters, setAccuracyMeters] = useState<number | ''>('');
+  const [accuracyMeters, setPrecisiónMeters] = useState<number | ''>('');
   const [provinceCode, setProvinceCode] = useState(preferredProvinceCode(provinces));
   const [territoryId, setTerritoryId] = useState(preferredTerritoryId(territories));
   const [addressLabel, setAddressLabel] = useState('');
   const [landmark, setLandmark] = useState('');
-  const [citizenName, setCitizenName] = useState('');
+  const [citizenNombre, setCitizenNombre] = useState('');
   const [citizenContact, setCitizenContact] = useState('');
   const [dipLast4, setDipLast4] = useState('');
   const [captureMethod, setCaptureMethod] = useState('manual-map-pin');
@@ -159,14 +213,23 @@ export function CitizenGeotagPanel({ apiBaseUrl, provinces, territories }: Citiz
     () => territories.filter((territory) => !provinceCode || territory.province_code === provinceCode),
     [territories, provinceCode],
   );
+  const officialRoutingTerritories = useMemo(
+    () => filteredTerritories.filter((territory) => territory.readiness === 'official-routing'),
+    [filteredTerritories],
+  );
+  const localReferenceTerritories = useMemo(
+    () => filteredTerritories.filter((territory) => territory.readiness !== 'official-routing'),
+    [filteredTerritories],
+  );
   const selectedTerritory = useMemo(() => territories.find((territory) => territory.id === territoryId), [territories, territoryId]);
+  const selectedProvince = useMemo(() => provinces.find((province) => province.code === provinceCode), [provinceCode, provinces]);
   const mapSuggestedLocalArea = roadSuggestion?.suggested_local_area || roadSuggestion?.suggested_place_name || null;
   const displayedLocalArea = mapSuggestedLocalArea ?? selectedTerritory?.name ?? 'Area pending';
 
   useEffect(() => {
     const selected = territories.find((territory) => territory.id === territoryId);
     if (selected?.province_code && selected.province_code !== provinceCode) {
-      setProvinceCode(selected.province_code);
+      setTerritoryId('');
     }
   }, [provinceCode, territories, territoryId]);
 
@@ -202,7 +265,7 @@ export function CitizenGeotagPanel({ apiBaseUrl, provinces, territories }: Citiz
       map.on('click', (event: LeafletMouseEvent) => {
         setLatitude(Number(event.latlng.lat.toFixed(7)));
         setLongitude(Number(event.latlng.lng.toFixed(7)));
-        setAccuracyMeters('');
+        setPrecisiónMeters('');
         setCaptureMethod('manual-map-pin');
         setRoadSuggestion(null);
         setPreview(null);
@@ -259,9 +322,9 @@ export function CitizenGeotagPanel({ apiBaseUrl, provinces, territories }: Citiz
         const capturedLongitude = Number(position.coords.longitude.toFixed(7));
         setLatitude(capturedLatitude);
         setLongitude(capturedLongitude);
-        const matchedTerritory = territoryForPoint(territories, capturedLatitude, capturedLongitude);
+        const matchedTerritory = territoryForPunto(territories, capturedLatitude, capturedLongitude);
         if (matchedTerritory) setTerritoryId(matchedTerritory);
-        setAccuracyMeters(Math.round(position.coords.accuracy));
+        setPrecisiónMeters(Math.round(position.coords.accuracy));
         setCaptureMethod('browser-gps');
         setRoadSuggestion(null);
         setPreview(null);
@@ -307,7 +370,7 @@ export function CitizenGeotagPanel({ apiBaseUrl, provinces, territories }: Citiz
       } catch {
         setRoadSuggestion(null);
       }
-      setNotice('National address code generated. Review duplicates and any suggested road name before submitting.');
+      setNotice('Código nacional generado. Revise posibles duplicados y sugerencias antes de enviar.');
     } catch {
       setError('Unable to preview this point right now.');
     } finally {
@@ -334,7 +397,7 @@ export function CitizenGeotagPanel({ apiBaseUrl, provinces, territories }: Citiz
           territory_id: territoryId || null,
           province_code: provinceCode || null,
           address_label: addressLabel,
-          citizen_name: citizenName || null,
+          citizen_name: citizenNombre || null,
           citizen_contact: citizenContact || null,
           dip_last4: normalizedDipLast4 || null,
           landmark,
@@ -378,10 +441,10 @@ export function CitizenGeotagPanel({ apiBaseUrl, provinces, territories }: Citiz
           </p>
           <div className="citizen-primary-actions">
             <button className="primary-action location-action" type="button" onClick={() => void handleUseMyLocation()} disabled={isLocating}>
-              {isLocating ? 'Getting your location…' : t('useMyCurrentLocation')}
+              {isLocating ? 'Capturando ubicación…' : t('useMyCurrentLocation')}
             </button>
             <button className="secondary-action" type="button" onClick={() => void handlePreview()} disabled={isPreviewing}>
-              {isPreviewing ? 'Checking point…' : t('checkAddressCode')}
+              {isPreviewing ? 'Comprobando punto…' : t('checkAddressCode')}
             </button>
           </div>
         </div>
@@ -394,11 +457,11 @@ export function CitizenGeotagPanel({ apiBaseUrl, provinces, territories }: Citiz
         <div className="location-status-grid" aria-label="Captured location summary">
           <span className="location-metric latitude-metric"><strong>Latitude</strong>{latitude.toFixed(7)}</span>
           <span className="location-metric longitude-metric"><strong>Longitude</strong>{longitude.toFixed(7)}</span>
-          <span className="location-metric accuracy-metric"><strong>Accuracy</strong>{accuracyMeters === '' ? 'Not captured' : `${accuracyMeters}m`}</span>
+          <span className="location-metric accuracy-metric"><strong>Precisión</strong>{accuracyMeters === '' ? 'No capturada' : `${accuracyMeters}m`}</span>
         </div>
         {notice ? <p className="form-notice success">{notice}</p> : null}
         {!notice && preview ? (
-          <p className="form-notice success">National address code generated. Review duplicates and any suggested road name before submitting.</p>
+          <p className="form-notice success">Código nacional generado. Revise posibles duplicados y sugerencias antes de enviar.</p>
         ) : null}
         {error ? <p className="form-notice error">{error}</p> : null}
       </article>
@@ -418,84 +481,122 @@ export function CitizenGeotagPanel({ apiBaseUrl, provinces, territories }: Citiz
             <p className="section-label">{t('step3')}</p>
             <h3>{t('addPlaceDetails')}</h3>
           </div>
-          <span className="form-focus-badge">2 essentials + contact</span>
+          <span className="form-focus-badge">2 datos esenciales + contacto</span>
         </div>
-        <p className="public-task-copy compact-form-intro">Give the review team the local name and one landmark. Technical location data stays available below, but it does not crowd the main form.</p>
+        <p className="public-task-copy compact-form-intro">Seleccione primero la provincia y el municipio o área de enrutamiento. La posición GPS queda como evidencia técnica y será revisada por un operador autorizado antes de cualquier publicación.</p>
         <form id="citizen-location-form" className="territory-form citizen-form compact-location-form" onSubmit={handleSubmit}>
+          <div className="routing-first-block" aria-label="Province and official routing area">
+            <label className="territory-field important-field">
+              <span className="territory-label">Provincia</span>
+              <select className="territory-input" value={provinceCode} onChange={(event) => { setProvinceCode(event.target.value); setTerritoryId(''); setPreview(null); }} required>
+                {provinces.map((province) => (
+                  <option key={province.code} value={province.code}>{province.name}</option>
+                ))}
+              </select>
+              <span className="field-help">La provincia define el prefijo nacional del código y filtra las rutas disponibles.</span>
+            </label>
+            <label className="territory-field important-field routing-area-field">
+              <span className="territory-label">Distrito / municipio o área de enrutamiento</span>
+              <select className="territory-input" value={territoryId} onChange={(event) => { setTerritoryId(event.target.value); setPreview(null); }}>
+                <option value="">Pendiente de clasificación por operador</option>
+                {officialRoutingTerritories.length ? (
+                  <optgroup label="Rutas administrativas oficiales">
+                    {officialRoutingTerritories.map((territory) => (
+                      <option key={territory.id} value={territory.id}>{territory.name}</option>
+                    ))}
+                  </optgroup>
+                ) : null}
+                {localReferenceTerritories.length ? (
+                  <optgroup label="Áreas locales referenciadas">
+                    {localReferenceTerritories.map((territory) => (
+                      <option key={territory.id} value={territory.id}>{territory.name}</option>
+                    ))}
+                  </optgroup>
+                ) : null}
+              </select>
+              <span className="field-help">Si no está seguro, deje la clasificación pendiente. El operador confirmará el área antes de publicar.</span>
+            </label>
+            <div className="routing-status-card">
+              <span className={`status-chip ${territoryStatusClass(selectedTerritory)}`}>{selectedTerritory?.routing_status_label ?? 'Pendiente de verificación de campo'}</span>
+              <strong>{selectedTerritory?.name ?? 'Área pendiente'}</strong>
+              <span>{selectedTerritory ? territoryTypeLabel(selectedTerritory.type) : `Provincia seleccionada: ${selectedProvince?.name ?? provinceCode}`}</span>
+            </div>
+          </div>
+
+          <details className="quiet-disclosure routing-evidence-disclosure" open>
+            <summary>Fuente y alcance oficial del enrutamiento</summary>
+            <div className="routing-evidence-grid">
+              <span><strong>Fuente</strong>{sourceLabel(selectedTerritory)}</span>
+              <span><strong>Confianza</strong>{confidenceLabel(selectedTerritory)}</span>
+              <span><strong>Geometría</strong>{geometryLabel(selectedTerritory)}</span>
+              <span><strong>Publicación</strong>{publicStatusLabel(selectedTerritory)}</span>
+            </div>
+          </details>
+
           <div className="essential-form-block">
             <label className="territory-field important-field">
               <span className="territory-label">{t('placeLabel')}</span>
-              <input className="territory-input" value={addressLabel} onChange={(event) => setAddressLabel(event.target.value)} required placeholder="Example: House near Malabo civic area" />
+              <input className="territory-input" value={addressLabel} onChange={(event) => setAddressLabel(event.target.value)} required placeholder="Ejemplo: casa cerca de una referencia pública" />
             </label>
             <label className="territory-field important-field">
               <span className="territory-label">{t('landmarkLabel')}</span>
-              <input className="territory-input" value={landmark} onChange={(event) => setLandmark(event.target.value)} placeholder="Nearest road, gate color, public landmark" />
+              <input className="territory-input" value={landmark} onChange={(event) => setLandmark(event.target.value)} placeholder="Vía cercana, color de portón o referencia pública" />
             </label>
             <label className="territory-field important-field">
               <span className="territory-label">{t('contactLabel')}</span>
-              <input className="territory-input" value={citizenContact} onChange={(event) => setCitizenContact(event.target.value)} placeholder="Optional phone or email for follow-up" />
+              <input className="territory-input" value={citizenContact} onChange={(event) => setCitizenContact(event.target.value)} placeholder="Teléfono o correo opcional para seguimiento" />
             </label>
           </div>
 
           <div className="location-suggestion-strip" aria-label="Location capture summary">
-            <span><strong>Point</strong>{latitude.toFixed(5)}, {longitude.toFixed(5)}</span>
-            <span><strong>Accuracy</strong>{accuracyMeters === '' ? 'Not captured' : `${accuracyMeters}m`}</span>
-            <span><strong>Area</strong>{displayedLocalArea}</span>
+            <span><strong>Punto</strong>{latitude.toFixed(5)}, {longitude.toFixed(5)}</span>
+            <span><strong>Precisión</strong>{accuracyMeters === '' ? 'No capturada' : `${accuracyMeters}m`}</span>
+            <span><strong>Ruta</strong>{selectedTerritory?.name ?? displayedLocalArea}</span>
           </div>
 
           <details className="quiet-disclosure compact-secondary-disclosure">
-            <summary>Optional identity details</summary>
+            <summary>Datos de identidad opcionales</summary>
             <div className="citizen-form-grid">
               <label className="territory-field">
-                <span className="territory-label">Name</span>
-                <input className="territory-input" value={citizenName} onChange={(event) => setCitizenName(event.target.value)} placeholder="Optional" />
+                <span className="territory-label">Nombre</span>
+                <input className="territory-input" value={citizenNombre} onChange={(event) => setCitizenNombre(event.target.value)} placeholder="Opcional" />
               </label>
               <label className="territory-field">
                 <span className="territory-label">{t('dipLast4Label')}</span>
-                <input className="territory-input" inputMode="numeric" pattern="[0-9]{4}" maxLength={4} value={dipLast4} onChange={(event) => setDipLast4(event.target.value.replace(/\D/g, '').slice(0, 4))} placeholder="Optional" />
+                <input className="territory-input" inputMode="numeric" pattern="[0-9]{4}" maxLength={4} value={dipLast4} onChange={(event) => setDipLast4(event.target.value.replace(/\D/g, '').slice(0, 4))} placeholder="Opcional" />
                 <span className="field-help">{t('dipLast4Help')}</span>
               </label>
             </div>
           </details>
 
           <details className="quiet-disclosure compact-secondary-disclosure">
-            <summary>Confirm official routing area</summary>
+            <summary>Evidencia técnica capturada</summary>
             <div className="citizen-form-grid routing-confirmation-grid">
               <div className="territory-field locked-location-field" aria-label="Captured GPS coordinates">
-                <span className="territory-label">GPS point</span>
+                <span className="territory-label">Punto GPS</span>
                 <strong>{latitude.toFixed(7)}, {longitude.toFixed(7)}</strong>
-                <span className="field-help">Captured from the device GPS or map pin; not typed manually.</span>
+                <span className="field-help">Capturado desde GPS del dispositivo o marcador del mapa; no se publica sin revisión.</span>
               </div>
               <div className="territory-field locked-location-field" aria-label="Captured GPS accuracy">
-                <span className="territory-label">GPS accuracy</span>
-                <strong>{accuracyMeters === '' ? 'Not captured' : `${accuracyMeters}m`}</strong>
-                <span className="field-help">Accuracy is recorded as evidence and cannot be edited here.</span>
+                <span className="territory-label">Precisión GPS</span>
+                <strong>{accuracyMeters === '' ? 'No capturada' : `${accuracyMeters}m`}</strong>
+                <span className="field-help">La precisión se conserva como evidencia técnica.</span>
               </div>
               <div className="territory-field locked-location-field" aria-label="Province">
-                <span className="territory-label">Province</span>
-                <strong>{provinces.find((province) => province.code === provinceCode)?.name ?? provinceCode}</strong>
-                <span className="field-help">Province controls the national code prefix. Map-derived local names stay as suggestions below.</span>
+                <span className="territory-label">Provincia</span>
+                <strong>{selectedProvince?.name ?? provinceCode}</strong>
+                <span className="field-help">La provincia se revisa junto con el punto GPS y el área seleccionada.</span>
               </div>
-              <label className="territory-field routing-area-field">
-                <span className="territory-label">Official routing area</span>
-                <select className="territory-input" value={territoryId} onChange={(event) => setTerritoryId(event.target.value)}>
-                  <option value="">No local area selected yet</option>
-                  {filteredTerritories.map((territory) => (
-                    <option key={territory.id} value={territory.id}>{territory.name}</option>
-                  ))}
-                </select>
-                <span className="field-help">Optional internal review/dispatch area. Exact map-local-area matches are assigned automatically; broad or uncertain labels stay pending.</span>
-              </label>
             </div>
-            <span className="field-help">Coordinates and GPS accuracy stay locked. Exact official routing-area matches may be assigned automatically; unmatched map labels remain review-required suggestions.</span>
+            <span className="field-help">Los datos técnicos apoyan la revisión. La clasificación oficial y la publicación quedan bajo control de operadores autorizados.</span>
           </details>
 
           <div className="compact-form-actions">
             <button className="secondary-action" type="button" onClick={() => void handlePreview()} disabled={isPreviewing}>
-              {isPreviewing ? 'Checking point…' : t('checkAddressCode')}
+              {isPreviewing ? 'Comprobando punto…' : t('checkAddressCode')}
             </button>
             <button className="primary-action" type="submit" disabled={isSubmitting}>
-              {isSubmitting ? 'Submitting…' : t('submitLocation')}
+              {isSubmitting ? 'Enviando…' : t('submitLocation')}
             </button>
           </div>
         </form>
@@ -508,9 +609,9 @@ export function CitizenGeotagPanel({ apiBaseUrl, provinces, territories }: Citiz
         </div>
         {preview ? (
           <div className="address-code-summary">
-            <p>Provisional address code</p>
+            <p>Código provisional de dirección</p>
             <strong>{preview.grid_code}</strong>
-            <span>{selectedTerritory?.name ?? preview.territory_name ?? 'Area pending classification'}</span>
+            <span>{selectedTerritory?.name ?? preview.territory_name ?? 'Área pendiente de clasificación'}</span>
             {preview.address_code ? (
               <span>{preview.address_code.cell_size_meters}m location cell · checksum {preview.address_code.checksum}</span>
             ) : null}
@@ -520,44 +621,44 @@ export function CitizenGeotagPanel({ apiBaseUrl, provinces, territories }: Citiz
         )}
         {roadSuggestion ? (
           <div className="operator-finding-card">
-            <strong>Map suggestions</strong>
+            <strong>Sugerencias cartográficas</strong>
             {roadSuggestion.suggested_local_area || roadSuggestion.suggested_place_name ? (
-              <p>Local area: {roadSuggestion.suggested_local_area || roadSuggestion.suggested_place_name}</p>
+              <p>Área local: {roadSuggestion.suggested_local_area || roadSuggestion.suggested_place_name}</p>
             ) : (
-              <p>Local area not found from the map source.</p>
+              <p>El origen cartográfico no devolvió un área local.</p>
             )}
             {roadSuggestion.suggested_road_name ? (
-              <p>Road: {roadSuggestion.suggested_road_name}</p>
+              <p>Vía: {roadSuggestion.suggested_road_name}</p>
             ) : (
-              <p>Road name not found near this point.</p>
+              <p>No se encontró nombre de vía cerca del punto.</p>
             )}
-            <span className="status-chip warn">Map-derived suggestion · review required</span>
-            <p className="institutional-note">Source: {roadSuggestion.source_attribution}. These names are not official until reviewed.</p>
+            <span className="status-chip warn">Sugerencia cartográfica · requiere revisión</span>
+            <p className="institutional-note">Fuente: {roadSuggestion.source_attribution}. Estos nombres no son oficiales hasta que sean revisados.</p>
           </div>
         ) : null}
         {preview?.duplicate_hints?.length ? (
           <details className="quiet-disclosure">
-            <summary>Possible nearby match</summary>
+            <summary>Posible coincidencia cercana</summary>
             <ul className="mini-list">
               {preview.duplicate_hints.map((hint) => (
                 <li key={`${hint.source}-${hint.id}`}>
                   <strong>{hint.label}</strong>
-                  <span>{hint.distance_meters}m away · {hint.code ?? 'code pending'}</span>
+                  <span>{hint.distance_meters}m away · {hint.code ?? 'código pendiente'}</span>
                 </li>
               ))}
             </ul>
           </details>
         ) : (
-          <p className="institutional-note">No nearby match was found for this point.</p>
+          <p className="institutional-note">No se encontró coincidencia cercana para este punto.</p>
         )}
         {result ? (
           <div className="form-notice success">
-            Submitted for official review. Status: <strong>{result.automation?.process_stage ?? statusLabel(result.status)}</strong>. Keep this provisional code: <strong>{result.grid_code}</strong>.
-            {result.automation?.citizen_tracking?.tracking_code ? <> Tracking code: <strong>{result.automation.citizen_tracking.tracking_code}</strong>.</> : null}
+            Enviado para revisión oficial. Estado: <strong>{result.automation?.process_stage ?? statusLabel(result.status)}</strong>. Conserve este código provisional: <strong>{result.grid_code}</strong>.
+            {result.automation?.citizen_tracking?.tracking_code ? <> Código de seguimiento: <strong>{result.automation.citizen_tracking.tracking_code}</strong>.</> : null}
             <br />
-            Next step: {result.automation?.next_best_action_label ?? 'An operator will check the point, duplicates, and road-name suggestion before it becomes public.'}
+            Siguiente paso: {result.automation?.next_best_action_label ?? 'Un operador revisará el punto, duplicados y sugerencias de vía antes de cualquier publicación.'}
             {result.automation?.routing?.assigned ? (
-              <><br />Routing area assigned automatically: <strong>{result.automation.routing.territory_name}</strong>.</>
+              <><br />Área de enrutamiento asignada automáticamente: <strong>{result.automation.routing.territory_name}</strong>.</>
             ) : null}
             {result.automation?.reasons?.length ? (
               <ul>
@@ -566,7 +667,7 @@ export function CitizenGeotagPanel({ apiBaseUrl, provinces, territories }: Citiz
             ) : null}
           </div>
         ) : null}
-        <p className="submission-security-note">All submissions are encrypted and reviewed by authorized operators.</p>
+        <p className="submission-security-note">Todos los envíos se protegen y son revisados por operadores autorizados.</p>
       </article>
     </section>
   );

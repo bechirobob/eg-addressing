@@ -1001,6 +1001,44 @@ def admin_units(
     return {'items': list_admin_units_db(level=level, parent_id=parent_id, province_code=province_code)}
 
 
+def _public_territory_metadata(row: dict[str, Any]) -> dict[str, Any]:
+    is_official_municipality = row.get('type') == 'official-municipality' and row.get('readiness') == 'official-routing'
+    is_map_referenced = row.get('type') == 'map-referenced-local-area'
+    if is_official_municipality:
+        source_label = 'Tabla de división administrativa / fuente referenciada por INEGE'
+        confidence_label = 'Unidad administrativa confirmada'
+        geometry_status = 'Área de enrutamiento por nombre administrativo; límite topográfico no adjunto'
+        public_status = 'Enrutamiento interno hasta verificación del operador y publicación controlada'
+        routing_status_label = 'Ruta administrativa oficial'
+    elif is_map_referenced:
+        source_label = 'Referencia cartográfica/local usada para enrutamiento de ingreso'
+        confidence_label = 'Referencia local; requiere confirmación del operador'
+        geometry_status = 'Área de ingreso/punto solamente; no es límite oficial levantado'
+        public_status = 'Pendiente de verificación de campo antes de publicación'
+        routing_status_label = 'Área local referenciada'
+    else:
+        source_label = 'Registro de enrutamiento mantenido por el operador'
+        confidence_label = 'Registro interno; confirmar antes de publicación'
+        geometry_status = 'Registro de enrutamiento; geometría oficial no adjunta'
+        public_status = 'Estado interno de revisión'
+        routing_status_label = 'Pendiente de verificación de campo'
+    return {
+        'id': row['id'],
+        'name': row['name'],
+        'province': row.get('province'),
+        'province_code': row.get('province_code'),
+        'type': row.get('type'),
+        'readiness': row.get('readiness'),
+        'admin_unit_name': row.get('admin_unit_name'),
+        'admin_unit_level': row.get('admin_unit_level'),
+        'routing_status_label': routing_status_label,
+        'source_label': source_label,
+        'confidence_label': confidence_label,
+        'geometry_status': geometry_status,
+        'public_status': public_status,
+    }
+
+
 @app.get('/api/v1/public/territory-options')
 def public_territory_options(
     request: Request,
@@ -1008,18 +1046,7 @@ def public_territory_options(
 ) -> dict[str, list[dict[str, Any]]]:
     _check_public_rate_limit(request, 'public-territory-options')
     rows = fetch_territories(province_code=province_code, include_archived=False)
-    return {
-        'items': [
-            {
-                'id': row['id'],
-                'name': row['name'],
-                'province': row.get('province'),
-                'province_code': row.get('province_code'),
-                'readiness': row.get('readiness'),
-            }
-            for row in rows
-        ]
-    }
+    return {'items': [_public_territory_metadata(row) for row in rows]}
 
 
 @app.get('/api/v1/territories')

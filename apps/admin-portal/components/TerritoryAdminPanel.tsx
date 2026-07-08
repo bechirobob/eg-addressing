@@ -10,6 +10,8 @@ type Territory = {
   name: string;
   province_code: string;
   province: string;
+  admin_unit_name?: string | null;
+  admin_unit_level?: string | null;
   type: string;
   readiness: string;
   is_archived: boolean;
@@ -33,6 +35,47 @@ type FormState = {
   type: string;
   readiness: string;
 };
+
+
+function readinessLabel(value: string): string {
+  if (value === 'official-routing') return 'Ruta administrativa oficial';
+  if (value === 'intake-routing') return 'Área local para ingreso';
+  if (value === 'active-mapping') return 'Cartografía activa';
+  if (value === 'verification-prep') return 'Pendiente de verificación de campo';
+  if (value === 'survey-queue') return 'En cola de levantamiento';
+  return value.replaceAll('-', ' ');
+}
+
+function territoryTypeLabel(value: string): string {
+  if (value === 'official-municipality') return 'Municipio / ruta administrativa';
+  if (value === 'map-referenced-local-area') return 'Área local referenciada';
+  if (value === 'capital-urban-core') return 'Núcleo urbano capital';
+  if (value === 'urban-core') return 'Núcleo urbano';
+  return value.replaceAll('-', ' ');
+}
+
+function sourceLabel(territory: Territory): string {
+  if (territory.type === 'official-municipality' && territory.readiness === 'official-routing') return 'Tabla de división administrativa / fuente referenciada por INEGE';
+  if (territory.type === 'map-referenced-local-area') return 'Referencia cartográfica/local usada para enrutamiento de ingreso';
+  return 'Registro de enrutamiento mantenido por el operador';
+}
+
+function confidenceLabel(territory: Territory): string {
+  if (territory.type === 'official-municipality' && territory.readiness === 'official-routing') return 'Unidad administrativa confirmada';
+  if (territory.type === 'map-referenced-local-area') return 'Referencia local; requiere confirmación del operador';
+  return 'Registro interno; confirmar antes de publicación';
+}
+
+function geometryLabel(territory: Territory): string {
+  if (territory.type === 'official-municipality') return 'Área de enrutamiento por nombre administrativo; límite topográfico no adjunto';
+  return 'Registro de enrutamiento/ingreso; geometría oficial levantada no adjunta';
+}
+
+function publicationLabel(territory: Territory): string {
+  if (territory.readiness === 'official-routing') return 'Enrutamiento interno hasta verificación del operador y publicación controlada';
+  if (territory.readiness === 'intake-routing') return 'Pendiente de verificación de campo antes de publicación';
+  return 'Estado interno de revisión';
+}
 
 const emptyForm = (provinceCode: string): FormState => ({
   name: '',
@@ -65,9 +108,21 @@ export function TerritoryAdminPanel({ initialTerritories, provinces, apiBaseUrl 
       visible: territories.length,
       active: territories.filter((item) => !item.is_archived).length,
       provinces: new Set(territories.map((item) => item.province_code)).size,
+      official: territories.filter((item) => item.readiness === 'official-routing').length,
+      local: territories.filter((item) => item.type === 'map-referenced-local-area').length,
     }),
     [territories],
   );
+  const territoryHierarchy = useMemo(() => {
+    return provinces.map((province) => {
+      const items = territories.filter((territory) => territory.province_code === province.code && !territory.is_archived);
+      return {
+        province,
+        official: items.filter((territory) => territory.readiness === 'official-routing'),
+        local: items.filter((territory) => territory.readiness !== 'official-routing'),
+      };
+    }).filter((group) => group.official.length || group.local.length);
+  }, [provinces, territories]);
   const canWrite = sessionUser?.role === 'editor' || sessionUser?.role === 'admin';
   const canArchive = sessionUser?.role === 'admin';
   const writeDisabledReason = !canWrite ? 'Editor or admin required' : isSubmitting ? 'Working…' : null;
@@ -296,6 +351,8 @@ export function TerritoryAdminPanel({ initialTerritories, provinces, apiBaseUrl 
           <span><strong>{territorySummary.visible}</strong> visible records</span>
           <span><strong>{territorySummary.active}</strong> active areas</span>
           <span><strong>{territorySummary.provinces}</strong> provinces represented</span>
+          <span><strong>{territorySummary.official}</strong> official routing areas</span>
+          <span><strong>{territorySummary.local}</strong> local referenced areas</span>
         </div>
 
         <div className="filter-grid territory-filter-grid">
@@ -365,6 +422,41 @@ export function TerritoryAdminPanel({ initialTerritories, provinces, apiBaseUrl 
         {error ? <p className="form-notice error">{error}</p> : null}
       </article>
 
+      <article className="public-task-panel territory-hierarchy-panel">
+        <div className="panel-head">
+          <p className="section-label">Province hierarchy</p>
+          <h3>Province → municipality routing map</h3>
+        </div>
+        <p className="institutional-note">Official municipality routes are administrative names, not surveyed boundary geometry. Local referenced areas support intake and require operator confirmation.</p>
+        <div className="territory-hierarchy-grid">
+          {territoryHierarchy.map((group) => (
+            <details key={group.province.code} className="quiet-disclosure hierarchy-province" open={group.province.code === provinceFilter || (!provinceFilter && group.province.code === 'BN')}>
+              <summary>{group.province.name} · {group.official.length} official · {group.local.length} local</summary>
+              {group.official.length ? (
+                <div className="hierarchy-lane">
+                  <strong>Rutas administrativas oficiales</strong>
+                  <div className="hierarchy-chip-list">
+                    {group.official.map((territory) => (
+                      <button key={territory.id} className="mini-action-button" type="button" onClick={() => void loadTerritoryDetail(territory.id)}>{territory.name}</button>
+                    ))}
+                  </div>
+                </div>
+              ) : null}
+              {group.local.length ? (
+                <div className="hierarchy-lane">
+                  <strong>Áreas locales referenciadas</strong>
+                  <div className="hierarchy-chip-list">
+                    {group.local.map((territory) => (
+                      <button key={territory.id} className="mini-action-button" type="button" onClick={() => void loadTerritoryDetail(territory.id)}>{territory.name}</button>
+                    ))}
+                  </div>
+                </div>
+              ) : null}
+            </details>
+          ))}
+        </div>
+      </article>
+
       <article className="public-task-panel territory-detail-panel">
         <div className="panel-head">
           <p className="section-label">Territory detail</p>
@@ -376,9 +468,19 @@ export function TerritoryAdminPanel({ initialTerritories, provinces, apiBaseUrl 
             <div className="selection-summary compact-territory-summary">
               <strong>{selectedTerritory.name}</strong>
               <span className="status-chip">{selectedTerritory.province_code}</span>
-              <span className="status-chip warn">{selectedTerritory.is_archived ? 'archived' : selectedTerritory.readiness}</span>
-              <span className="status-chip">{selectedTerritory.type}</span>
+              <span className="status-chip warn">{selectedTerritory.is_archived ? 'archived' : readinessLabel(selectedTerritory.readiness)}</span>
+              <span className="status-chip">{territoryTypeLabel(selectedTerritory.type)}</span>
+              {selectedTerritory.admin_unit_name ? <span className="status-chip ok">{selectedTerritory.admin_unit_level}: {selectedTerritory.admin_unit_name}</span> : null}
             </div>
+            <details className="quiet-disclosure territory-evidence-disclosure" open>
+              <summary>Fuente, confianza y límite de publicación</summary>
+              <div className="routing-evidence-grid">
+                <span><strong>Fuente</strong>{sourceLabel(selectedTerritory)}</span>
+                <span><strong>Confianza</strong>{confidenceLabel(selectedTerritory)}</span>
+                <span><strong>Geometría</strong>{geometryLabel(selectedTerritory)}</span>
+                <span><strong>Publicación</strong>{publicationLabel(selectedTerritory)}</span>
+              </div>
+            </details>
             <details className="inline-disclosure territory-edit-disclosure">
               <summary>Edit selected territory details</summary>
               <form className="territory-form" onSubmit={handleUpdate}>
@@ -432,10 +534,10 @@ export function TerritoryAdminPanel({ initialTerritories, provinces, apiBaseUrl 
             <li key={territory.id} className="territory-record">
               <div>
                 <h4>{territory.name}</h4>
-                <p>{territory.province} ({territory.province_code}) · {territory.type}</p>
+                <p>{territory.province} ({territory.province_code}) · {territoryTypeLabel(territory.type)} · {territory.admin_unit_name ?? 'admin unit pending'}</p>
               </div>
               <div className="record-actions">
-                <span className="territory-meta">{territory.is_archived ? 'archived' : territory.readiness}</span>
+                <span className="territory-meta">{territory.is_archived ? 'archived' : readinessLabel(territory.readiness)}</span>
                 <button className="secondary-button" type="button" onClick={() => void loadTerritoryDetail(territory.id)}>
                   Inspect
                 </button>
