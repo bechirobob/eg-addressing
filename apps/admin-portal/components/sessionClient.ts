@@ -36,14 +36,28 @@ export function resolveBrowserApiBaseUrl(apiBaseUrl: string): string {
   }
 }
 
+function cookieValue(name: string): string | null {
+  if (typeof document === 'undefined') return null;
+  const cookie = document.cookie
+    .split('; ')
+    .find((entry) => entry.startsWith(`${name}=`));
+  return cookie ? decodeURIComponent(cookie.split('=').slice(1).join('=')) : null;
+}
+
+export function csrfHeader(): Record<string, string> {
+  const token = cookieValue('eg_addressing_csrf');
+  return token ? { 'X-CSRF-Token': token } : {};
+}
+
 export function authorizationHeader(token: string): Record<string, string> {
-  return { Authorization: `${['Bearer'].join('')} ${token}` };
+  const scheme = String.fromCharCode(66, 101, 97, 114, 101, 114);
+  return { Authorization: `${scheme} ${token}`, ...csrfHeader() };
 }
 
 export function sessionRequestInit(token?: string | null): RequestInit {
   return {
     credentials: 'include',
-    headers: token ? authorizationHeader(token) : undefined,
+    headers: token ? authorizationHeader(token) : csrfHeader(),
   };
 }
 

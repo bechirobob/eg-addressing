@@ -1,6 +1,9 @@
 import json
 import logging
 import os
+import secrets
+import hmac
+from contextvars import ContextVar
 import time
 import urllib.error
 import urllib.parse
@@ -14,6 +17,7 @@ from typing import Any
 
 from fastapi import Cookie, FastAPI, Header, HTTPException, Query, Request, Response, status
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
 from pydantic import BaseModel, Field
 
 from app.data import MODULES
@@ -63,9 +67,13 @@ from app.db import (
     demo_fixture_status,
     describe_address_code,
     fetch_addresses,
+    fetch_addresses_page,
     fetch_buildings,
+    fetch_buildings_page,
     fetch_roads,
+    fetch_roads_page,
     fetch_territories,
+    fetch_territories_page,
     get_address,
     get_address_record_case_file,
     get_building,
@@ -290,12 +298,15 @@ logger = logging.getLogger('eg-addressing-api')
 APP_ENV = os.getenv('APP_ENV', 'local').strip().lower() or 'local'
 SESSION_TTL_HOURS = max(1, int(os.getenv('SESSION_TTL_HOURS', '12')))
 SESSION_COOKIE_NAME = os.getenv('SESSION_COOKIE_NAME', 'eg_addressing_session')
+CSRF_COOKIE_NAME = os.getenv('CSRF_COOKIE_NAME', 'eg_addressing_csrf')
+CSRF_HEADER_NAME = 'x-csrf-token'
 SESSION_COOKIE_MODE = os.getenv('SESSION_COOKIE_MODE', 'bearer-local-storage').strip().lower()
 SESSION_COOKIE_SECURE = os.getenv('SESSION_COOKIE_SECURE', 'true').strip().lower() not in {'0', 'false', 'no'}
 PUBLIC_RATE_LIMIT_ENABLED = os.getenv('PUBLIC_RATE_LIMIT_ENABLED', 'true').strip().lower() not in {'0', 'false', 'no'}
 PUBLIC_RATE_LIMIT_MAX_REQUESTS = max(1, int(os.getenv('PUBLIC_RATE_LIMIT_MAX_REQUESTS', '30')))
 PUBLIC_RATE_LIMIT_WINDOW_SECONDS = max(1, int(os.getenv('PUBLIC_RATE_LIMIT_WINDOW_SECONDS', '60')))
 PUBLIC_RATE_LIMIT_BUCKETS: dict[str, deque[float]] = defaultdict(deque)
+REQUEST_SESSION_COOKIE: ContextVar[str | None] = ContextVar('REQUEST_SESSION_COOKIE', default=None)
 NOMINATIM_REVERSE_URL = os.getenv('NOMINATIM_REVERSE_URL', 'https://nominatim.openstreetmap.org/reverse')
 NOMINATIM_USER_AGENT = os.getenv('NOMINATIM_USER_AGENT', 'BeCoreOps-EG-Addressing-Pilot/0.1 contact: operator')
 NOMINATIM_LAST_REQUEST_AT = 0.0
@@ -342,6 +353,41 @@ def _check_public_rate_limit(request: Request, scope: str) -> None:
             headers={'Retry-After': str(PUBLIC_RATE_LIMIT_WINDOW_SECONDS)},
         )
     bucket.append(now)
+
+
+
+
+def _using_secure_cookie_mode() -> bool:
+    return SESSION_COOKIE_MODE == 'secure-http-only-cookie'
+
+
+def _has_bearer_authorization(request: Request) -> bool:
+    return request.headers.get('authorization', '').startswith('Bearer ')
+
+
+def _path_exempt_from_csrf(path: str) -> bool:
+    return (
+        path == '/api/v1/auth/login'
+        or path.startswith('/api/v1/public/')
+        or path in {'/api/v1/health', '/api/v1/meta'}
+    )
+
+
+def _require_csrf_token(request: Request) -> None:
+    if not _using_secure_cookie_mode():
+        return
+    if request.method not in {'POST', 'PATCH', 'DELETE'}:
+        return
+    if _path_exempt_from_csrf(request.url.path):
+        return
+    if _has_bearer_authorization(request):
+        return
+    if not request.cookies.get(SESSION_COOKIE_NAME):
+        return
+    csrf_cookie = request.cookies.get(CSRF_COOKIE_NAME, '')
+    csrf_header = request.headers.get(CSRF_HEADER_NAME, '')
+    if not csrf_cookie or not csrf_header or not hmac.compare_digest(csrf_cookie, csrf_header):
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail='csrf token required')
 
 
 def _road_suggestion_unavailable() -> dict[str, Any]:
@@ -424,10 +470,17 @@ async def request_context_middleware(request: Request, call_next):
     request_id = request.headers.get('x-request-id') or str(uuid.uuid4())
     started_at = time.perf_counter()
     response: Response | None = None
+    session_cookie_token = REQUEST_SESSION_COOKIE.set(request.cookies.get(SESSION_COOKIE_NAME))
     try:
+        try:
+            _require_csrf_token(request)
+        except HTTPException as exc:
+            response = JSONResponse(status_code=exc.status_code, content={'detail': exc.detail})
+            return response
         response = await call_next(request)
         return response
     finally:
+        REQUEST_SESSION_COOKIE.reset(session_cookie_token)
         elapsed_ms = round((time.perf_counter() - started_at) * 1000, 2)
         status_code = response.status_code if response else 500
         logger.info(
@@ -450,6 +503,9 @@ async def request_context_middleware(request: Request, call_next):
 def _session_token(authorization: str | None = None, session_cookie: str | None = None) -> str:
     if session_cookie:
         return session_cookie.strip()
+    contextual_cookie = REQUEST_SESSION_COOKIE.get()
+    if contextual_cookie:
+        return contextual_cookie.strip()
     if not authorization or not authorization.startswith('Bearer '):
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail='authentication required')
     return authorization.split(' ', 1)[1].strip()
@@ -885,11 +941,22 @@ def login(payload: LoginRequest, response: Response) -> dict[str, Any]:
         session['session_ttl_hours'] = SESSION_TTL_HOURS
         session['auth_mode'] = 'cookie_session' if SESSION_COOKIE_MODE == 'secure-http-only-cookie' else 'bearer_token'
         if SESSION_COOKIE_MODE == 'secure-http-only-cookie':
+            csrf_token = secrets.token_urlsafe(32)
+            session['csrf_token'] = csrf_token
             response.set_cookie(
                 key=SESSION_COOKIE_NAME,
                 value=session['token'],
                 max_age=SESSION_TTL_HOURS * 3600,
                 httponly=True,
+                secure=SESSION_COOKIE_SECURE,
+                samesite='lax',
+                path='/',
+            )
+            response.set_cookie(
+                key=CSRF_COOKIE_NAME,
+                value=csrf_token,
+                max_age=SESSION_TTL_HOURS * 3600,
+                httponly=False,
                 secure=SESSION_COOKIE_SECURE,
                 samesite='lax',
                 path='/',
@@ -911,6 +978,7 @@ def auth_logout(authorization: str | None = Header(default=None), eg_addressing_
     revoke_user_session(token, actor=user)
     response = Response(status_code=status.HTTP_204_NO_CONTENT)
     response.delete_cookie(SESSION_COOKIE_NAME, path='/')
+    response.delete_cookie(CSRF_COOKIE_NAME, path='/')
     return response
 
 
@@ -966,7 +1034,7 @@ def list_territories(
 ) -> dict[str, Any]:
     user = _current_user(authorization)
     _require_role(user, 'viewer', 'editor', 'admin')
-    return paginated_response(fetch_territories(q=q, province_code=province_code, readiness=readiness, include_archived=include_archived), page=page, per_page=per_page)
+    return fetch_territories_page(q=q, province_code=province_code, readiness=readiness, include_archived=include_archived, page=page, per_page=per_page)
 
 
 @app.get('/api/v1/territories/{territory_id}')
@@ -1026,7 +1094,7 @@ def audit_logs(entity_type: str | None = Query(default=None), entity_id: str | N
 def list_roads(q: str | None = Query(default=None), territory_id: str | None = Query(default=None), include_archived: bool = Query(default=False), page: int = Query(default=1), per_page: int = Query(default=100), authorization: str | None = Header(default=None)) -> dict[str, Any]:
     user = _current_user(authorization)
     _require_role(user, 'viewer', 'editor', 'admin')
-    return paginated_response(fetch_roads(q=q, territory_id=territory_id, include_archived=include_archived), page=page, per_page=per_page)
+    return fetch_roads_page(q=q, territory_id=territory_id, include_archived=include_archived, page=page, per_page=per_page)
 
 
 @app.get('/api/v1/roads/{road_id}')
@@ -1078,7 +1146,7 @@ def archive_road_endpoint(road_id: str, authorization: str | None = Header(defau
 def list_buildings(q: str | None = Query(default=None), territory_id: str | None = Query(default=None), include_archived: bool = Query(default=False), page: int = Query(default=1), per_page: int = Query(default=100), authorization: str | None = Header(default=None)) -> dict[str, Any]:
     user = _current_user(authorization)
     _require_role(user, 'viewer', 'editor', 'admin')
-    return paginated_response(fetch_buildings(q=q, territory_id=territory_id, include_archived=include_archived), page=page, per_page=per_page)
+    return fetch_buildings_page(q=q, territory_id=territory_id, include_archived=include_archived, page=page, per_page=per_page)
 
 
 @app.get('/api/v1/buildings/{building_id}')
@@ -1131,7 +1199,7 @@ def archive_building_endpoint(building_id: str, authorization: str | None = Head
 def list_addresses(q: str | None = Query(default=None), territory_id: str | None = Query(default=None), status_filter: str | None = Query(default=None, alias='status'), include_archived: bool = Query(default=False), page: int = Query(default=1), per_page: int = Query(default=100), authorization: str | None = Header(default=None)) -> dict[str, Any]:
     user = _current_user(authorization)
     _require_role(user, 'viewer', 'editor', 'admin')
-    return paginated_response(fetch_addresses(q=q, territory_id=territory_id, status=status_filter, include_archived=include_archived), page=page, per_page=per_page)
+    return fetch_addresses_page(q=q, territory_id=territory_id, status=status_filter, include_archived=include_archived, page=page, per_page=per_page)
 
 
 @app.get('/api/v1/addresses/{address_id}')

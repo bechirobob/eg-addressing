@@ -812,7 +812,7 @@ def init_db() -> None:
                     ),
                 )
 
-            for submissions in FIELD_SUBMISSIONS:
+            for submission in FIELD_SUBMISSIONS:
                 cursor.execute(
                     '''
                     INSERT INTO field_submissions (
@@ -1098,6 +1098,44 @@ def _territory_projection() -> str:
     '''
 
 
+
+
+def _paginated_query(
+    *,
+    select_sql: str,
+    count_sql: str,
+    where_sql: str,
+    params: list[Any],
+    order_sql: str,
+    page: int,
+    per_page: int,
+    max_per_page: int = 100,
+) -> dict[str, Any]:
+    safe_page = max(1, int(page or 1))
+    safe_per_page = max(1, min(int(per_page or 25), max_per_page))
+    offset = (safe_page - 1) * safe_per_page
+    with db_connection() as connection:
+        with connection.cursor() as cursor:
+            cursor.execute(count_sql + where_sql, params)
+            total_items = int(cursor.fetchone()['count'])
+            cursor.execute(
+                select_sql + where_sql + order_sql + ' LIMIT %s OFFSET %s',
+                [*params, safe_per_page, offset],
+            )
+            items = list(cursor.fetchall())
+    total_pages = max(1, math.ceil(total_items / safe_per_page)) if total_items else 0
+    return {
+        'items': items,
+        'pagination': {
+            'page': safe_page,
+            'per_page': safe_per_page,
+            'total_items': total_items,
+            'total_pages': total_pages,
+            'has_next': safe_page < total_pages,
+            'has_previous': safe_page > 1 and total_items > 0,
+        },
+    }
+
 def fetch_territories(*, q: str | None = None, province_code: str | None = None, readiness: str | None = None, include_archived: bool = False) -> list[dict[str, Any]]:
     where_clauses: list[str] = []
     params: list[Any] = []
@@ -1118,6 +1156,34 @@ def fetch_territories(*, q: str | None = None, province_code: str | None = None,
         with connection.cursor() as cursor:
             cursor.execute(_territory_projection() + where_sql + ' ORDER BY t.name ASC', params)
             return list(cursor.fetchall())
+
+
+
+def fetch_territories_page(*, q: str | None = None, province_code: str | None = None, readiness: str | None = None, include_archived: bool = False, page: int = 1, per_page: int = 100) -> dict[str, Any]:
+    where_clauses: list[str] = []
+    params: list[Any] = []
+    if q:
+        like = f'%{q.lower()}%'
+        where_clauses.append('(LOWER(t.name) LIKE %s OR LOWER(p.name) LIKE %s OR LOWER(COALESCE(au.name_es, '')) LIKE %s OR LOWER(t.type) LIKE %s OR LOWER(t.readiness) LIKE %s)')
+        params.extend([like, like, like, like, like])
+    if province_code:
+        where_clauses.append('t.province_code = %s')
+        params.append(province_code)
+    if readiness:
+        where_clauses.append('t.readiness = %s')
+        params.append(readiness)
+    if not include_archived:
+        where_clauses.append('t.is_archived = FALSE')
+    where_sql = f" WHERE {' AND '.join(where_clauses)}" if where_clauses else ''
+    return _paginated_query(
+        select_sql=_territory_projection(),
+        count_sql='SELECT COUNT(*) AS count FROM territories t JOIN provinces p ON p.code = t.province_code LEFT JOIN admin_units au ON au.id = t.admin_unit_id',
+        where_sql=where_sql,
+        params=params,
+        order_sql=' ORDER BY t.name ASC',
+        page=page,
+        per_page=per_page,
+    )
 
 
 def get_territory(territory_id: str) -> dict[str, Any]:
@@ -1259,6 +1325,35 @@ def fetch_roads(q: str | None = None, territory_id: str | None = None, include_a
             return list(cursor.fetchall())
 
 
+
+def fetch_roads_page(q: str | None = None, territory_id: str | None = None, include_archived: bool = False, page: int = 1, per_page: int = 100) -> dict[str, Any]:
+    where_clauses: list[str] = []
+    params: list[Any] = []
+    if q:
+        like = f'%{q.lower()}%'
+        where_clauses.append('(LOWER(r.name) LIKE %s OR LOWER(r.status) LIKE %s OR LOWER(t.name) LIKE %s)')
+        params.extend([like, like, like])
+    if territory_id:
+        where_clauses.append('r.territory_id = %s')
+        params.append(territory_id)
+    if not include_archived:
+        where_clauses.append('r.is_archived = FALSE')
+    where_sql = f" WHERE {' AND '.join(where_clauses)}" if where_clauses else ''
+    return _paginated_query(
+        select_sql='''
+                SELECT r.id, r.name, r.territory_id, t.name AS territory_name, r.status, r.length_km, r.is_archived
+                FROM roads r
+                JOIN territories t ON t.id = r.territory_id
+                ''',
+        count_sql='SELECT COUNT(*) AS count FROM roads r JOIN territories t ON t.id = r.territory_id',
+        where_sql=where_sql,
+        params=params,
+        order_sql=' ORDER BY r.name ASC',
+        page=page,
+        per_page=per_page,
+    )
+
+
 def get_road(road_id: str) -> dict[str, Any]:
     with db_connection() as connection:
         with connection.cursor() as cursor:
@@ -1362,6 +1457,36 @@ def fetch_buildings(q: str | None = None, territory_id: str | None = None, inclu
                 params,
             )
             return list(cursor.fetchall())
+
+
+
+def fetch_buildings_page(q: str | None = None, territory_id: str | None = None, include_archived: bool = False, page: int = 1, per_page: int = 100) -> dict[str, Any]:
+    where_clauses: list[str] = []
+    params: list[Any] = []
+    if q:
+        like = f'%{q.lower()}%'
+        where_clauses.append('(LOWER(b.label) LIKE %s OR LOWER(b.status) LIKE %s OR LOWER(b.usage) LIKE %s OR LOWER(r.name) LIKE %s)')
+        params.extend([like, like, like, like])
+    if territory_id:
+        where_clauses.append('b.territory_id = %s')
+        params.append(territory_id)
+    if not include_archived:
+        where_clauses.append('b.is_archived = FALSE')
+    where_sql = f" WHERE {' AND '.join(where_clauses)}" if where_clauses else ''
+    return _paginated_query(
+        select_sql='''
+                SELECT b.id, b.label, b.territory_id, t.name AS territory_name, b.road_id, r.name AS road_name, b.status, b.usage, b.is_archived
+                FROM buildings b
+                JOIN territories t ON t.id = b.territory_id
+                JOIN roads r ON r.id = b.road_id
+                ''',
+        count_sql='SELECT COUNT(*) AS count FROM buildings b JOIN territories t ON t.id = b.territory_id JOIN roads r ON r.id = b.road_id',
+        where_sql=where_sql,
+        params=params,
+        order_sql=' ORDER BY b.label ASC',
+        page=page,
+        per_page=per_page,
+    )
 
 
 def get_building(building_id: str) -> dict[str, Any]:
@@ -1528,6 +1653,41 @@ def fetch_addresses(q: str | None = None, territory_id: str | None = None, statu
                 params,
             )
             return list(cursor.fetchall())
+
+
+
+def fetch_addresses_page(q: str | None = None, territory_id: str | None = None, status: str | None = None, include_archived: bool = False, page: int = 1, per_page: int = 100) -> dict[str, Any]:
+    where_clauses: list[str] = []
+    params: list[Any] = []
+    if q:
+        like = f'%{q.lower()}%'
+        where_clauses.append('(LOWER(a.formatted) LIKE %s OR LOWER(a.status) LIKE %s OR LOWER(t.name) LIKE %s OR LOWER(b.label) LIKE %s)')
+        params.extend([like, like, like, like])
+    if territory_id:
+        where_clauses.append('a.territory_id = %s')
+        params.append(territory_id)
+    if status:
+        where_clauses.append('a.status = %s')
+        params.append(status)
+    if not include_archived:
+        where_clauses.append('a.is_archived = FALSE')
+    where_sql = f" WHERE {' AND '.join(where_clauses)}" if where_clauses else ''
+    return _paginated_query(
+        select_sql=_address_select_sql(''),
+        count_sql='''
+        SELECT COUNT(*) AS count
+        FROM addresses a
+        JOIN territories t ON t.id = a.territory_id
+        JOIN roads r ON r.id = a.road_id
+        JOIN buildings b ON b.id = a.building_id
+        LEFT JOIN address_points ap ON ap.address_id = a.id AND ap.is_active = TRUE
+        ''',
+        where_sql=where_sql,
+        params=params,
+        order_sql=' ORDER BY a.formatted ASC',
+        page=page,
+        per_page=per_page,
+    )
 
 
 def get_address(address_id: str) -> dict[str, Any]:

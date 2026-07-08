@@ -16,6 +16,9 @@ if ! docker info >/dev/null 2>&1; then
 fi
 SKIP_TESTS="${SKIP_TESTS:-false}"
 SKIP_BACKUP="${SKIP_BACKUP:-false}"
+MIN_AVAILABLE_MB="${MIN_AVAILABLE_MB:-1024}"
+MIN_SWAP_MB="${MIN_SWAP_MB:-1024}"
+export NODE_OPTIONS="${NODE_OPTIONS:---max-old-space-size=1536}"
 API_TEST_PYTEST="${API_TEST_PYTEST:-$ROOT_DIR/.venv-api-test/bin/pytest}"
 
 if [[ ! -f "$ENV_FILE" ]]; then
@@ -46,6 +49,19 @@ preflight() {
   command -v docker >/dev/null || { echo "docker is required" >&2; exit 1; }
   command -v curl >/dev/null || { echo "curl is required" >&2; exit 1; }
   "${COMPOSE[@]}" config >/dev/null
+
+  local available_mb swap_total_mb
+  available_mb="$(awk '/MemAvailable/ { printf "%d", $2 / 1024 }' /proc/meminfo)"
+  swap_total_mb="$(awk '/SwapTotal/ { printf "%d", $2 / 1024 }' /proc/meminfo)"
+  if (( available_mb < MIN_AVAILABLE_MB )); then
+    echo "Insufficient available memory for a safe build: ${available_mb}MiB available, need at least ${MIN_AVAILABLE_MB}MiB." >&2
+    exit 1
+  fi
+  if (( swap_total_mb < MIN_SWAP_MB )); then
+    echo "Swap guard failed: ${swap_total_mb}MiB swap configured, need at least ${MIN_SWAP_MB}MiB." >&2
+    exit 1
+  fi
+  echo "Memory guard passed: ${available_mb}MiB available, ${swap_total_mb}MiB swap, NODE_OPTIONS=$NODE_OPTIONS"
 }
 
 main() {

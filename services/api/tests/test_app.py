@@ -72,6 +72,55 @@ def test_auth_logout_revokes_current_token(monkeypatch) -> None:
     assert revoked['token'] == 'logout-token'
 
 
+def test_cookie_mode_protected_mutation_requires_csrf(monkeypatch) -> None:
+    monkeypatch.setattr(main, 'SESSION_COOKIE_MODE', 'secure-http-only-cookie')
+    monkeypatch.setattr(main, 'SESSION_COOKIE_SECURE', False)
+    monkeypatch.setattr(main, 'resolve_user_from_token', lambda token: EDITOR if token == 'cookie-token' else ADMIN)
+
+    response = client.post(
+        '/api/v1/territories',
+        json={'name': 'Mongomo Core', 'province_code': 'WN', 'admin_unit_id': 'admin-unit-wele-nzas', 'type': 'district-core', 'readiness': 'enumeration-ready'},
+        cookies={main.SESSION_COOKIE_NAME: 'cookie-token', main.CSRF_COOKIE_NAME: 'csrf-token'},
+    )
+
+    assert response.status_code == 403
+    assert response.json()['detail'] == 'csrf token required'
+
+
+def test_cookie_mode_protected_mutation_accepts_matching_csrf(monkeypatch) -> None:
+    monkeypatch.setattr(main, 'SESSION_COOKIE_MODE', 'secure-http-only-cookie')
+    monkeypatch.setattr(main, 'SESSION_COOKIE_SECURE', False)
+    monkeypatch.setattr(main, 'resolve_user_from_token', lambda token: EDITOR if token == 'cookie-token' else ADMIN)
+    monkeypatch.setattr(
+        main,
+        'create_territory',
+        lambda payload, actor=None: {'id': 'territory-mongomo-core', 'name': payload['name'], 'province_code': payload['province_code'], 'readiness': payload['readiness'], 'is_archived': False},
+    )
+
+    response = client.post(
+        '/api/v1/territories',
+        json={'name': 'Mongomo Core', 'province_code': 'WN', 'admin_unit_id': 'admin-unit-wele-nzas', 'type': 'district-core', 'readiness': 'enumeration-ready'},
+        headers={'X-CSRF-Token': 'csrf-token'},
+        cookies={main.SESSION_COOKIE_NAME: 'cookie-token', main.CSRF_COOKIE_NAME: 'csrf-token'},
+    )
+
+    assert response.status_code == 201
+    assert response.json()['id'] == 'territory-mongomo-core'
+
+
+def test_cookie_mode_public_submission_does_not_require_csrf(monkeypatch) -> None:
+    monkeypatch.setattr(main, 'SESSION_COOKIE_MODE', 'secure-http-only-cookie')
+    monkeypatch.setattr(main, 'preview_citizen_geotag', lambda latitude, longitude, territory_id=None, province_code=None: {'address_code': 'EG-BN-N1-TEST-AA', 'duplicate_hint': 'none'})
+
+    response = client.post(
+        '/api/v1/public/geotag/preview',
+        json={'latitude': 3.75, 'longitude': 8.77, 'province_code': 'BN'},
+        cookies={main.SESSION_COOKIE_NAME: 'cookie-token'},
+    )
+
+    assert response.status_code == 200
+
+
 def test_provinces_endpoint_returns_database_rows(monkeypatch) -> None:
     expected = [
         {'id': 'admin-unit-annobon', 'code': 'AN', 'name': 'Annobón'},
@@ -107,7 +156,7 @@ def test_territories_endpoint_requires_auth_for_full_registry(monkeypatch) -> No
 def test_territories_endpoint_returns_database_rows_for_authorized_viewer(monkeypatch) -> None:
     expected = [{'id': 'territory-mongomo-core', 'name': 'Mongomo Core', 'province_code': 'WN', 'province': 'Wele-Nzas', 'admin_unit_id': 'admin-unit-wele-nzas', 'admin_unit_code': 'WN', 'admin_unit_name': 'Wele-Nzas', 'admin_unit_level': 'province', 'type': 'district-core', 'readiness': 'enumeration-ready', 'is_archived': False}]
     monkeypatch.setattr(main, 'resolve_user_from_token', lambda token: VIEWER)
-    monkeypatch.setattr(main, 'fetch_territories', lambda **kwargs: expected)
+    monkeypatch.setattr(main, 'fetch_territories_page', lambda **kwargs: {'items': expected, 'pagination': {'page': kwargs.get('page', 1), 'per_page': kwargs.get('per_page', 100), 'total_items': len(expected), 'total_pages': 1, 'has_next': False, 'has_previous': False}})
     response = client.get('/api/v1/territories', headers=auth_header())
     assert response.status_code == 200
     assert response.json()['items'] == expected
@@ -1687,7 +1736,7 @@ def test_addresses_endpoint_returns_pagination_metadata(monkeypatch) -> None:
         for index in range(1, 6)
     ]
     monkeypatch.setattr(main, 'resolve_user_from_token', lambda token: VIEWER)
-    monkeypatch.setattr(main, 'fetch_addresses', lambda **kwargs: rows)
+    monkeypatch.setattr(main, 'fetch_addresses_page', lambda **kwargs: {'items': rows[(kwargs.get('page', 1) - 1) * kwargs.get('per_page', 100): kwargs.get('page', 1) * kwargs.get('per_page', 100)], 'pagination': {'page': kwargs.get('page', 1), 'per_page': kwargs.get('per_page', 100), 'total_items': len(rows), 'total_pages': 3, 'has_next': kwargs.get('page', 1) < 3, 'has_previous': kwargs.get('page', 1) > 1}})
 
     response = client.get('/api/v1/addresses', params={'page': 2, 'per_page': 2}, headers=auth_header())
 
@@ -1707,7 +1756,7 @@ def test_addresses_endpoint_returns_pagination_metadata(monkeypatch) -> None:
 def test_list_pagination_clamps_per_page_without_breaking_items(monkeypatch) -> None:
     rows = [{'id': f'road-{index}', 'name': f'Road {index}'} for index in range(1, 4)]
     monkeypatch.setattr(main, 'resolve_user_from_token', lambda token: VIEWER)
-    monkeypatch.setattr(main, 'fetch_roads', lambda **kwargs: rows)
+    monkeypatch.setattr(main, 'fetch_roads_page', lambda **kwargs: {'items': rows, 'pagination': {'page': 1, 'per_page': 100, 'total_items': len(rows), 'total_pages': 1, 'has_next': False, 'has_previous': False}})
 
     response = client.get('/api/v1/roads', params={'page': 0, 'per_page': 999}, headers=auth_header())
 
@@ -1780,6 +1829,7 @@ def test_data_command_deck_source_guard() -> None:
 
 
 def test_full_registry_read_endpoints_are_not_public() -> None:
+    client.cookies.clear()
     protected_paths = [
         '/api/v1/territories',
         '/api/v1/territories/territory-a',

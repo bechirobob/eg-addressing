@@ -23,6 +23,10 @@ def production_readiness_status() -> dict[str, Any]:
             'status': 'ready' if session_cookie_mode == 'secure-http-only-cookie' else 'needs_work',
             'detail': 'Use HttpOnly Secure SameSite cookies before broad production exposure.',
         },
+        'csrf_for_cookie_sessions': {
+            'status': 'ready',
+            'detail': 'Cookie-authenticated protected mutations require a matching X-CSRF-Token header; public citizen routes and bearer-token pilot flows remain compatible.',
+        },
         'explicit_migrations': {
             'status': 'ready',
             'detail': 'Schema migrations are tracked in schema_migrations and surfaced in the operator command center.',
