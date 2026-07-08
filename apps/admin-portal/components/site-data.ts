@@ -132,6 +132,7 @@ const routeRules: RouteRule[] = [
 export function defaultRouteForRole(role: OperatorRole): string {
   if (role === 'admin') return '/field';
   if (role === 'editor') return '/registry';
+  if (role === 'viewer') return '/reports';
   return '/';
 }
 

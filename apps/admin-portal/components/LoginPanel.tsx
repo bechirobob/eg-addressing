@@ -104,7 +104,7 @@ export function LoginPanel({ apiBaseUrl }: LoginPanelProps) {
               {isSubmitting ? 'Signing in…' : 'Sign in'}
             </button>
             <p id="login-submit-help" className="institutional-note compact-note">
-              Pulse Intro desde el campo de contraseña después de introducir sus credenciales autorizadas de operador.
+              Press Enter from the password field after entering your authorized operator credentials.
             </p>
           </div>
 
