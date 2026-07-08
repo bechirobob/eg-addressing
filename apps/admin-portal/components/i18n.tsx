@@ -480,34 +480,28 @@ const dictionaries = {
 
 export type DictionaryKey = keyof typeof dictionaries.en;
 
-function normalizeLocale(value: string | null): Locale {
-  return value === 'es' ? 'es' : 'en';
+function normalizeLocale(_value: string | null): Locale {
+  return 'en';
 }
 
 export function getStoredLocale(): Locale {
-  if (typeof window === 'undefined') return 'en';
-  return normalizeLocale(window.localStorage.getItem(STORAGE_KEY));
+  return 'en';
 }
 
-export function setStoredLocale(locale: Locale) {
+export function setStoredLocale(_locale: Locale) {
   if (typeof window === 'undefined') return;
-  window.localStorage.setItem(STORAGE_KEY, locale);
-  window.dispatchEvent(new CustomEvent(LOCALE_EVENT, { detail: locale }));
+  window.localStorage.removeItem(STORAGE_KEY);
+  window.dispatchEvent(new CustomEvent(LOCALE_EVENT, { detail: 'en' }));
 }
 
 export function useLocale() {
   const [locale, setLocale] = useState<Locale>('en');
 
   useEffect(() => {
-    setLocale(getStoredLocale());
-    const handleStorage = () => setLocale(getStoredLocale());
-    const handleLocale = (event: Event) => setLocale(normalizeLocale((event as CustomEvent<string>).detail));
-    window.addEventListener('storage', handleStorage);
-    window.addEventListener(LOCALE_EVENT, handleLocale);
-    return () => {
-      window.removeEventListener('storage', handleStorage);
-      window.removeEventListener(LOCALE_EVENT, handleLocale);
-    };
+    setLocale('en');
+    if (typeof window !== 'undefined') {
+      window.localStorage.removeItem(STORAGE_KEY);
+    }
   }, []);
 
   return locale;
@@ -1100,27 +1094,6 @@ function patchSpanishTextNodes(root: ParentNode = document.body) {
 }
 
 export function RemovedSpanishRuntimePatch() {
-  const locale = useLocale();
-  useEffect(() => {
-    if (locale !== 'es') return;
-    patchSpanishTextNodes();
-    const timers = [50, 250, 750, 1500].map((delay) => window.setTimeout(patchSpanishTextNodes, delay));
-    let scheduled = false;
-    const schedulePatch = () => {
-      if (scheduled) return;
-      scheduled = true;
-      window.requestAnimationFrame(() => {
-        scheduled = false;
-        patchSpanishTextNodes();
-      });
-    };
-    const observer = new MutationObserver(schedulePatch);
-    observer.observe(document.body, { childList: true, characterData: true, subtree: true });
-    return () => {
-      timers.forEach((timer) => window.clearTimeout(timer));
-      observer.disconnect();
-    };
-  }, [locale]);
   return null;
 }
 

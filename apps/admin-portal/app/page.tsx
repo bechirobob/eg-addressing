@@ -3,27 +3,6 @@ import { LocalizedText } from '../components/i18n';
 
 export const dynamic = 'force-dynamic';
 
-const publicServices = [
-  {
-    href: '/geotag',
-    labelKey: 'homeRegisterLabel',
-    descriptionKey: 'homeRegisterDescription',
-    actionKey: 'homeRegisterAction',
-  },
-  {
-    href: '/issue',
-    labelKey: 'homeCheckLabel',
-    descriptionKey: 'homeCheckDescription',
-    actionKey: 'homeCheckAction',
-  },
-  {
-    href: '/track',
-    labelKey: 'homeTrackLabel',
-    descriptionKey: 'homeTrackDescription',
-    actionKey: 'homeTrackAction',
-  },
-] as const;
-
 const operatingStages = ['stageCitizenCapture', 'stageOperatorReview', 'stageFieldVerification', 'stageOfficialPublication'] as const;
 
 export default function HomePage() {
@@ -36,57 +15,44 @@ export default function HomePage() {
       eyebrowKey="homeEyebrow"
       title="National Addressing Platform"
       titleKey="homeTitle"
-      subtitle="A public entry point for registering locations, checking official address codes, and tracking review progress across the national addressing workflow."
+      subtitle="Use this service to register a location, check an official address code, or track a submitted request."
       subtitleKey="homeSubtitle"
     >
-      <section className="section-grid national-platform-grid">
-        <article className="public-task-panel civic-panel-blue national-platform-overview">
-          <div className="panel-head">
-            <p className="section-label"><LocalizedText k="publicServices" /></p>
-            <h3><LocalizedText k="chooseCorrectService" /></h3>
+      <section className="service-start-page" aria-labelledby="public-services-heading">
+        <div className="service-start-actions" aria-label="Public addressing services">
+          <a className="button button-primary service-start-primary" href="/geotag">
+            <LocalizedText k="homeRegisterLabel" />
+          </a>
+          <div className="service-start-secondary-actions">
+            <a className="button button-secondary" href="/issue">
+              <LocalizedText k="homeCheckLabel" />
+            </a>
+            <a className="button button-secondary" href="/track">
+              <LocalizedText k="homeTrackAction" />
+            </a>
           </div>
-          <p className="institutional-note">
-            <LocalizedText k="homeIntro" />
-          </p>
-          <div className="summary-grid national-service-grid">
-            {publicServices.map((service) => (
-              <a className="national-service-card" href={service.href} key={service.href}>
-                <strong><LocalizedText k={service.labelKey} /></strong>
-                <span><LocalizedText k={service.descriptionKey} /></span>
-                <em><LocalizedText k={service.actionKey} /></em>
-              </a>
-            ))}
-          </div>
-        </article>
+        </div>
 
-        <article className="public-task-panel civic-panel-gold national-platform-workflow">
-          <div className="panel-head">
-            <p className="section-label"><LocalizedText k="workflow" /></p>
-            <h3><LocalizedText k="homeWorkflowTitle" /></h3>
-          </div>
-          <ol className="program-list national-workflow-list">
+        <section className="service-start-workflow" aria-labelledby="workflow-heading">
+          <p className="section-label"><LocalizedText k="workflow" /></p>
+          <h2 id="workflow-heading"><LocalizedText k="homeWorkflowTitle" /></h2>
+          <ol>
             {operatingStages.map((stage, index) => (
               <li key={stage}>
-                <span>{index + 1}. <LocalizedText k={stage} /></span>
+                <span>{index + 1}</span>
+                <LocalizedText k={stage} />
               </li>
             ))}
           </ol>
-          <details className="disclosure-panel">
-            <summary><LocalizedText k="whatMakesOfficial" /></summary>
-            <p>
-              <LocalizedText k="officialRecordExplanation" />
-            </p>
-          </details>
-        </article>
+        </section>
 
-        <article className="public-task-panel staff-sign-in-panel">
-          <div className="panel-head">
+        <section className="service-start-staff" aria-labelledby="staff-services-heading">
+          <div>
             <p className="section-label">Staff services</p>
-            <h3>Staff sign-in</h3>
+            <h2 id="staff-services-heading">Staff sign-in</h2>
           </div>
-          <p className="institutional-note">Authorized staff can continue field work, manage the address registry, prepare publication and signage, or review reports.</p>
-          <a className="secondary-action staff-sign-in-link" href="/login">Sign in to staff services</a>
-        </article>
+          <a className="button button-secondary" href="/login">Sign in</a>
+        </section>
       </section>
     </SiteChrome>
   );

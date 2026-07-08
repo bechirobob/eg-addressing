@@ -10204,3 +10204,490 @@ button[type="submit"] {
     overflow-wrap: anywhere !important;
   }
 }
+
+/* Homepage correction: flat government service start page, not boxed dashboard cards */
+.page-shell-platform {
+  max-width: 1120px !important;
+  padding: clamp(24px, 4vw, 48px) 24px 72px !important;
+}
+
+.page-shell-platform .flag-ribbon {
+  display: none !important;
+}
+
+.page-shell-platform .masthead-reference {
+  background: transparent !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  padding: 0 0 var(--space-6) !important;
+  margin: 0 0 var(--space-6) !important;
+  box-shadow: none !important;
+  overflow: visible !important;
+}
+
+.page-shell-platform .masthead-reference::after,
+.page-shell-platform .masthead-reference::before,
+.page-shell-platform .civic-hero-illustration {
+  display: none !important;
+}
+
+.page-shell-platform .masthead-topline {
+  border-bottom: 1px solid var(--border) !important;
+  padding-bottom: var(--space-3) !important;
+  margin-bottom: var(--space-6) !important;
+}
+
+.page-shell-platform .official-lockup {
+  gap: var(--space-3) !important;
+  align-items: center !important;
+}
+
+.page-shell-platform .crest-frame {
+  width: 42px !important;
+  min-width: 42px !important;
+  padding: 0 !important;
+  background: transparent !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+}
+
+.page-shell-platform .kicker {
+  max-width: none !important;
+  color: var(--text-muted) !important;
+  font-size: 0.88rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.16em !important;
+  line-height: 1.35 !important;
+  text-transform: uppercase !important;
+}
+
+.page-shell-platform .masthead-content-grid {
+  display: block !important;
+}
+
+.page-shell-platform .masthead-copy {
+  max-width: 760px !important;
+}
+
+.page-shell-platform .eyebrow {
+  color: var(--text-main) !important;
+  display: block !important;
+  font-size: 0.84rem !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.14em !important;
+  margin-bottom: var(--space-3) !important;
+  text-transform: uppercase !important;
+}
+
+.page-shell-platform .masthead-reference h1 {
+  color: var(--text-main) !important;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif !important;
+  font-size: clamp(2.15rem, 6vw, 4rem) !important;
+  font-weight: 800 !important;
+  letter-spacing: -0.045em !important;
+  line-height: 0.98 !important;
+  margin: 0 !important;
+}
+
+.page-shell-platform .masthead-subtitle {
+  color: var(--text-muted) !important;
+  font-size: clamp(1.05rem, 2.8vw, 1.22rem) !important;
+  font-weight: 500 !important;
+  line-height: 1.45 !important;
+  margin-top: var(--space-4) !important;
+  max-width: 680px !important;
+}
+
+.service-start-page {
+  display: grid !important;
+  gap: var(--space-8) !important;
+  max-width: 860px !important;
+}
+
+.service-start-actions,
+.service-start-workflow,
+.service-start-staff {
+  background: transparent !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+}
+
+.service-start-actions {
+  display: grid !important;
+  gap: var(--space-3) !important;
+}
+
+.button.service-start-primary {
+  justify-self: start !important;
+  min-width: min(100%, 280px) !important;
+}
+
+.service-start-secondary-actions {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: var(--space-3) !important;
+}
+
+.service-start-workflow {
+  border-top: 1px solid var(--border) !important;
+  padding-top: var(--space-5) !important;
+}
+
+.service-start-workflow h2,
+.service-start-staff h2 {
+  color: var(--text-main) !important;
+  font-size: clamp(1.28rem, 3vw, 1.7rem) !important;
+  line-height: 1.15 !important;
+  margin: var(--space-2) 0 var(--space-4) !important;
+}
+
+.service-start-workflow ol {
+  display: grid !important;
+  gap: var(--space-3) !important;
+  list-style: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.service-start-workflow li {
+  align-items: center !important;
+  border-bottom: 1px solid var(--border) !important;
+  color: var(--text-main) !important;
+  display: grid !important;
+  font-size: 1rem !important;
+  font-weight: 650 !important;
+  gap: var(--space-3) !important;
+  grid-template-columns: 34px minmax(0, 1fr) !important;
+  line-height: 1.35 !important;
+  padding: 0 0 var(--space-3) !important;
+}
+
+.service-start-workflow li span {
+  align-items: center !important;
+  background: var(--surface-muted) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: var(--radius-control) !important;
+  color: var(--text-main) !important;
+  display: inline-flex !important;
+  font-size: 0.86rem !important;
+  font-weight: 800 !important;
+  height: 34px !important;
+  justify-content: center !important;
+  width: 34px !important;
+}
+
+.service-start-staff {
+  align-items: center !important;
+  border-top: 1px solid var(--border) !important;
+  display: flex !important;
+  gap: var(--space-4) !important;
+  justify-content: space-between !important;
+  padding-top: var(--space-5) !important;
+}
+
+@media (max-width: 680px) {
+  .page-shell-platform {
+    padding: 28px 18px 88px !important;
+  }
+
+  .page-shell-platform .masthead-topline {
+    margin-bottom: var(--space-5) !important;
+  }
+
+  .page-shell-platform .official-lockup {
+    align-items: flex-start !important;
+  }
+
+  .page-shell-platform .crest-frame {
+    width: 34px !important;
+    min-width: 34px !important;
+  }
+
+  .page-shell-platform .kicker {
+    font-size: 0.74rem !important;
+    letter-spacing: 0.11em !important;
+  }
+
+  .page-shell-platform .eyebrow {
+    font-size: 0.76rem !important;
+    letter-spacing: 0.11em !important;
+  }
+
+  .page-shell-platform .masthead-reference h1 {
+    font-size: clamp(2rem, 12vw, 3.2rem) !important;
+    line-height: 1.02 !important;
+  }
+
+  .page-shell-platform .masthead-subtitle {
+    font-size: 1rem !important;
+    line-height: 1.45 !important;
+  }
+
+  .service-start-page {
+    gap: var(--space-6) !important;
+    max-width: none !important;
+  }
+
+  .service-start-actions .button,
+  .service-start-secondary-actions,
+  .service-start-secondary-actions .button {
+    width: 100% !important;
+  }
+
+  .service-start-secondary-actions {
+    display: grid !important;
+    gap: var(--space-2) !important;
+  }
+
+  .service-start-staff {
+    align-items: stretch !important;
+    display: grid !important;
+  }
+}
+
+/* Homepage correction: official buttons must not render as raw underlined links */
+.page-shell-platform .button,
+.page-shell-platform a.button,
+.page-shell-platform a.button:visited {
+  align-items: center !important;
+  border-radius: var(--radius-control) !important;
+  box-sizing: border-box !important;
+  display: inline-flex !important;
+  font-size: 0.98rem !important;
+  font-weight: 750 !important;
+  justify-content: center !important;
+  line-height: 1.2 !important;
+  min-height: 44px !important;
+  padding: 0.78rem 1rem !important;
+  text-align: center !important;
+  text-decoration: none !important;
+}
+
+.page-shell-platform a.button:hover,
+.page-shell-platform a.button:focus-visible {
+  text-decoration: none !important;
+}
+
+.page-shell-platform .button-primary,
+.page-shell-platform a.button-primary,
+.page-shell-platform a.button-primary:visited {
+  background: var(--text-main) !important;
+  border: 1px solid var(--text-main) !important;
+  color: #fffef9 !important;
+}
+
+.page-shell-platform .button-secondary,
+.page-shell-platform a.button-secondary,
+.page-shell-platform a.button-secondary:visited {
+  background: transparent !important;
+  border: 1px solid var(--border-strong) !important;
+  color: var(--text-main) !important;
+}
+
+@media (max-width: 680px) {
+  .page-shell-platform .button,
+  .page-shell-platform a.button {
+    justify-content: center !important;
+    min-height: 48px !important;
+  }
+}
+
+/* Route-wide correction: top-level government sections should not all read as dashboard containers */
+.page-shell-location .public-task-panel,
+.page-shell-code .public-task-panel,
+.page-shell-access .public-task-panel,
+.page-shell-reports .reports-intro-panel,
+.page-shell-reports .reports-section-panel,
+.page-shell-signage .review-desk-header.public-task-panel,
+.page-shell-registry .registry-simple-hero,
+.page-shell-registry .registry-simple-section {
+  background: transparent !important;
+  border-left: 0 !important;
+  border-right: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+
+.page-shell-location .public-task-panel,
+.page-shell-code .public-task-panel,
+.page-shell-access .public-task-panel,
+.page-shell-reports .reports-intro-panel,
+.page-shell-reports .reports-section-panel,
+.page-shell-signage .review-desk-header.public-task-panel,
+.page-shell-registry .registry-simple-hero,
+.page-shell-registry .registry-simple-section {
+  border-top: 1px solid var(--border) !important;
+  border-bottom: 0 !important;
+  padding: var(--space-5) 0 !important;
+}
+
+.page-shell-location .location-hero-panel,
+.page-shell-code .public-issuance-grid:first-of-type .public-task-panel:first-child,
+.page-shell-access .public-task-panel,
+.page-shell-reports .reports-intro-panel,
+.page-shell-registry .registry-simple-hero,
+.page-shell-signage .review-desk-header.public-task-panel {
+  border-top: 0 !important;
+  padding-top: 0 !important;
+}
+
+.page-shell-location .institutional-note,
+.page-shell-code .institutional-note,
+.page-shell-access .institutional-note,
+.page-shell-reports .institutional-note,
+.page-shell-registry .institutional-note,
+.page-shell-signage .institutional-note {
+  background: transparent !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  color: var(--text-muted) !important;
+  padding: 0 !important;
+}
+
+.page-shell-location .map-confirm-panel,
+.page-shell-location .location-form-panel,
+.page-shell-location .address-preview-panel,
+.page-shell-code .issuance-panel,
+.page-shell-code .public-task-panel:has(form),
+.page-shell-reports .reports-filter-panel,
+.page-shell-reports .reports-summary-panel {
+  background: var(--surface) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: var(--radius-card) !important;
+  padding: var(--space-5) !important;
+}
+
+@media (max-width: 680px) {
+  .page-shell-location .public-task-panel,
+  .page-shell-code .public-task-panel,
+  .page-shell-access .public-task-panel,
+  .page-shell-reports .reports-intro-panel,
+  .page-shell-reports .reports-section-panel,
+  .page-shell-signage .review-desk-header.public-task-panel,
+  .page-shell-registry .registry-simple-hero,
+  .page-shell-registry .registry-simple-section {
+    padding-block: var(--space-4) !important;
+  }
+
+  .page-shell-location .map-confirm-panel,
+  .page-shell-location .location-form-panel,
+  .page-shell-location .address-preview-panel,
+  .page-shell-code .issuance-panel,
+  .page-shell-code .public-task-panel:has(form),
+  .page-shell-reports .reports-filter-panel,
+  .page-shell-reports .reports-summary-panel {
+    padding: var(--space-4) !important;
+  }
+}
+
+/* Global correction: shared masthead must not render as a giant card on any route */
+.masthead-reference {
+  background: transparent !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  overflow: visible !important;
+  padding: 0 0 var(--space-6) !important;
+  margin: 0 0 var(--space-6) !important;
+}
+
+.masthead-reference::before,
+.masthead-reference::after,
+.masthead-reference .civic-hero-illustration {
+  display: none !important;
+}
+
+.masthead-reference .masthead-topline {
+  border-bottom: 1px solid var(--border) !important;
+  padding-bottom: var(--space-3) !important;
+  margin-bottom: var(--space-5) !important;
+}
+
+.masthead-reference .official-lockup {
+  gap: var(--space-3) !important;
+}
+
+.masthead-reference .crest-frame {
+  background: transparent !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  min-width: 38px !important;
+  padding: 0 !important;
+  width: 38px !important;
+}
+
+.masthead-reference .kicker {
+  color: var(--text-muted) !important;
+  font-size: 0.78rem !important;
+  font-weight: 750 !important;
+  letter-spacing: 0.12em !important;
+  line-height: 1.25 !important;
+  max-width: none !important;
+  text-transform: uppercase !important;
+}
+
+.masthead-reference .masthead-content-grid {
+  display: block !important;
+}
+
+.masthead-reference .masthead-copy {
+  max-width: 760px !important;
+}
+
+.masthead-reference .eyebrow {
+  color: var(--text-main) !important;
+  display: block !important;
+  font-size: 0.8rem !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.14em !important;
+  margin-bottom: var(--space-2) !important;
+  text-transform: uppercase !important;
+}
+
+.masthead-reference h1 {
+  color: var(--text-main) !important;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif !important;
+  font-size: clamp(2rem, 6vw, 3.6rem) !important;
+  font-weight: 800 !important;
+  letter-spacing: -0.04em !important;
+  line-height: 1 !important;
+  margin: 0 !important;
+}
+
+.masthead-reference .masthead-subtitle {
+  color: var(--text-muted) !important;
+  font-size: clamp(0.98rem, 2.5vw, 1.14rem) !important;
+  font-weight: 500 !important;
+  line-height: 1.42 !important;
+  margin-top: var(--space-3) !important;
+  max-width: 680px !important;
+}
+
+@media (max-width: 680px) {
+  .masthead-reference {
+    padding-bottom: var(--space-5) !important;
+    margin-bottom: var(--space-5) !important;
+  }
+
+  .masthead-reference .crest-frame {
+    min-width: 30px !important;
+    width: 30px !important;
+  }
+
+  .masthead-reference .kicker {
+    font-size: 0.68rem !important;
+    letter-spacing: 0.1em !important;
+  }
+
+  .masthead-reference .eyebrow {
+    font-size: 0.74rem !important;
+  }
+
+  .masthead-reference h1 {
+    font-size: clamp(2rem, 10vw, 3rem) !important;
+    line-height: 1.02 !important;
+  }
+}

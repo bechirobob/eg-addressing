@@ -58,7 +58,7 @@ type SiteChromeProps = {
 export function SiteChrome({ title, subtitle, eyebrow, titleKey, subtitleKey, eyebrowKey, apiBaseUrl, children }: SiteChromeProps) {
   const serviceMeta = serviceMetaForTitle(title);
   return (
-    <main className="page-shell">
+    <main className={`page-shell page-shell-${serviceMeta.key}`}>
       <div className="flag-ribbon" aria-hidden="true" />
       <header className="masthead masthead-reference" aria-label="National platform identity">
         <div className="masthead-topline">
