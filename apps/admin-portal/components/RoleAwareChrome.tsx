@@ -50,6 +50,8 @@ function navGroupKey(group: keyof typeof navGroupLabels) {
   return labels[group];
 }
 
+const STAFF_SESSION_ROUTES = new Set(['/field', '/registry', '/signage', '/reports', '/exports', '/territories', '/verify', '/records']);
+
 export function RoleAwareChrome({ apiBaseUrl, children }: RoleAwareChromeProps) {
   const { t } = useTranslation();
   const router = useRouter();
@@ -109,6 +111,7 @@ export function RoleAwareChrome({ apiBaseUrl, children }: RoleAwareChromeProps) 
   }, [browserApiBaseUrl, reloadSession, router]);
 
   const workspaceHref = defaultRouteForRole(role);
+  const staffSessionUser = effectiveSessionStatus === 'ready' && effectiveSessionUser && STAFF_SESSION_ROUTES.has(currentRoute) ? effectiveSessionUser : null;
   const controlNavItems = [
     { href: '/field', label: 'Field', iconClass: 'queue' },
     { href: '/registry', label: 'Registry', iconClass: 'case-files' },
@@ -161,22 +164,14 @@ export function RoleAwareChrome({ apiBaseUrl, children }: RoleAwareChromeProps) 
           </nav>
         </div>
 
-        <div className="chrome-session-card chrome-session-utility" aria-live="polite">
-          {effectiveSessionStatus === 'ready' && effectiveSessionUser ? (
-            <>
-              <span className="session-utility-role">{effectiveSessionUser.role}</span>
-              <button className="session-utility-logout" type="button" onClick={() => void handleLogout()} disabled={isLoggingOut}>
-                {isLoggingOut ? t('signingOut') : t('signOut')}
-              </button>
-            </>
-          ) : effectiveSessionStatus === 'loading' ? (
-            <span className="session-utility-role">{t('checkingSession')}</span>
-          ) : currentRoute !== '/login' ? (
-            <Link href="/login" className="session-utility-logout">
-              {t('navSignIn')}
-            </Link>
-          ) : null}
-        </div>
+        {staffSessionUser ? (
+          <div className="chrome-session-card chrome-session-utility" aria-live="polite">
+            <span className="session-utility-role">{staffSessionUser.role}</span>
+            <button className="session-utility-logout" type="button" onClick={() => void handleLogout()} disabled={isLoggingOut}>
+              {isLoggingOut ? t('signingOut') : t('signOut')}
+            </button>
+          </div>
+        ) : null}
       </div>
 
       {role !== 'guest' && ['/field', '/registry', '/signage', '/reports', '/exports', '/territories', '/verify'].includes(currentRoute) && controlNavItems.length ? (

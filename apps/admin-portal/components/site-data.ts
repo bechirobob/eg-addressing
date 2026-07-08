@@ -45,8 +45,8 @@ export const navItems: NavItem[] = [
   {
     href: '/login',
     label: 'Sign in',
-    visibleTo: ['guest'],
-    priorityFor: ['guest'],
+    visibleTo: [],
+    priorityFor: [],
     group: 'public',
   },
   {
