@@ -10691,3 +10691,811 @@ button[type="submit"] {
     line-height: 1.02 !important;
   }
 }
+
+/* Government-grade document/workbench flow reset: remove tile-everything UI */
+:root {
+  --gov-section-gap: var(--space-6);
+  --gov-row-gap: var(--space-3);
+}
+
+/* Top-level content sections are official page flow, not tiles */
+.public-task-panel,
+.map-confirm-panel,
+.request-list-panel,
+.review-glance-panel,
+.signage-export-panel,
+.registry-simple-hero,
+.registry-simple-section,
+.territory-command-panel,
+.territory-hierarchy-panel,
+.territory-detail-panel,
+.territory-list-panel,
+.verification-queue-panel,
+.verification-trust-panel,
+.field-assignments-panel,
+.field-location-checks-panel,
+.field-intake-panel,
+.live-intake-panel,
+.location-hero-panel,
+.location-form-panel,
+.address-preview-panel,
+.reports-filter-panel,
+.reports-summary-panel,
+.reports-section-panel,
+.reports-intro-panel,
+.review-desk-header {
+  background: transparent !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  outline: 0 !important;
+  overflow: visible !important;
+  padding: var(--space-5) 0 !important;
+  position: relative !important;
+}
+
+.public-task-panel::before,
+.public-task-panel::after,
+.map-confirm-panel::before,
+.map-confirm-panel::after,
+.request-list-panel::before,
+.request-list-panel::after,
+.review-glance-panel::before,
+.review-glance-panel::after,
+.signage-export-panel::before,
+.signage-export-panel::after {
+  display: none !important;
+  content: none !important;
+}
+
+.section-grid > .public-task-panel + .public-task-panel,
+.section-grid > .map-confirm-panel + .public-task-panel,
+.citizen-register-flow > .public-task-panel + .public-task-panel,
+.citizen-register-flow > .map-confirm-panel + .public-task-panel,
+.registry-simple-shell > .public-task-panel + .public-task-panel,
+.territory-workspace > .public-task-panel + .public-task-panel,
+.operator-review-shell > .public-task-panel + .public-task-panel,
+.public-issuance-grid + .public-issuance-grid,
+.reports-service-grid > .public-task-panel + .public-task-panel {
+  border-top: 1px solid var(--border) !important;
+}
+
+/* Functional canvases/forms retain a restrained boundary only where it helps action */
+.geotag-map,
+.territory-form,
+.compact-location-form,
+.tracking-form,
+.import-row-grid,
+.registry-table-wrap,
+.report-table-wrap,
+.publication-pack-list,
+.territory-list,
+.verification-list,
+.assignment-list,
+.review-list,
+.live-intake-list,
+.address-list,
+.signage-queue-list {
+  border-color: var(--border) !important;
+  border-radius: var(--radius-control) !important;
+  box-shadow: none !important;
+}
+
+/* Repeated cards become official rows, not mini-containers */
+.result-card,
+.assignment-card,
+.review-card,
+.compact-card,
+.import-row-card,
+.operator-finding-card,
+.routing-status-card,
+.approval-status-card,
+.summary-card,
+.case-lane,
+.report-section-card,
+.reports-summary-card,
+.metric-card,
+.registry-record-card,
+.publication-card,
+.address-code-summary,
+.selection-item,
+.status-card,
+.panel {
+  background: transparent !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  outline: 0 !important;
+  overflow: visible !important;
+  padding: var(--space-3) 0 !important;
+}
+
+.result-card + .result-card,
+.assignment-card + .assignment-card,
+.review-card + .review-card,
+.compact-card + .compact-card,
+.operator-finding-card + .operator-finding-card,
+.case-lane + .case-lane,
+.summary-card + .summary-card,
+.metric-card + .metric-card,
+.registry-record-card + .registry-record-card,
+.publication-card + .publication-card,
+.selection-item + .selection-item,
+.status-card + .status-card {
+  border-top: 1px solid var(--border) !important;
+}
+
+.result-card::before,
+.result-card::after,
+.assignment-card::before,
+.assignment-card::after,
+.review-card::before,
+.review-card::after,
+.compact-card::before,
+.compact-card::after,
+.operator-finding-card::before,
+.operator-finding-card::after,
+.summary-card::before,
+.summary-card::after,
+.case-lane::before,
+.case-lane::after,
+.panel::before,
+.panel::after,
+.status-card::before,
+.status-card::after {
+  display: none !important;
+  content: none !important;
+}
+
+/* Summary groups should read as compact rows/lists */
+.summary-grid,
+.facts-grid,
+.operator-summary-row,
+.location-status-grid,
+.routing-evidence-grid,
+.request-detail-grid,
+.field-today-summary,
+.data-command-deck,
+.report-metric-grid,
+.reports-summary-grid {
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  gap: var(--space-3) !important;
+}
+
+.operator-summary-row > *,
+.location-status-grid > *,
+.field-today-summary > *,
+.routing-evidence-grid > *,
+.reports-summary-grid > *,
+.report-metric-grid > * {
+  background: transparent !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  padding: var(--space-2) 0 !important;
+}
+
+.operator-summary-row > * + *,
+.location-status-grid > * + *,
+.field-today-summary > * + *,
+.routing-evidence-grid > * + *,
+.reports-summary-grid > * + *,
+.report-metric-grid > * + * {
+  border-top: 1px solid var(--border) !important;
+}
+
+/* Disclosures should be plain progressive disclosure rows */
+.disclosure-panel,
+details.disclosure-panel,
+.inline-disclosure,
+.quiet-disclosure,
+.workbench-panel-disclosure {
+  background: transparent !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  padding: var(--space-2) 0 !important;
+}
+
+.disclosure-panel summary,
+details.disclosure-panel summary,
+.inline-disclosure summary,
+.quiet-disclosure summary,
+.workbench-panel-disclosure summary {
+  background: transparent !important;
+  border: 0 !important;
+  border-top: 1px solid var(--border) !important;
+  border-radius: 0 !important;
+  color: var(--text-main) !important;
+  padding: var(--space-3) 0 !important;
+}
+
+/* Keep primary forms readable without enclosing the whole page in a tile */
+.territory-field,
+.locked-location-field {
+  background: transparent !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+
+.territory-input,
+select.territory-input,
+textarea.territory-input,
+input,
+select,
+textarea {
+  border-radius: var(--radius-control) !important;
+  box-shadow: none !important;
+}
+
+/* Login and tracking form pages should feel like forms on an official page */
+.page-shell-access .territory-form,
+.page-shell-track .tracking-form,
+.page-shell-code .territory-form,
+.page-shell-location .compact-location-form,
+.page-shell-reports .filter-grid,
+.page-shell-territories .territory-form,
+.page-shell-exports .territory-form {
+  background: transparent !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  padding: 0 !important;
+}
+
+/* Mobile rhythm: sections flow, rows scan */
+@media (max-width: 760px) {
+  .public-task-panel,
+  .map-confirm-panel,
+  .request-list-panel,
+  .review-glance-panel,
+  .signage-export-panel,
+  .registry-simple-hero,
+  .registry-simple-section,
+  .territory-command-panel,
+  .territory-hierarchy-panel,
+  .territory-detail-panel,
+  .territory-list-panel,
+  .verification-queue-panel,
+  .verification-trust-panel,
+  .field-assignments-panel,
+  .field-location-checks-panel,
+  .field-intake-panel,
+  .live-intake-panel,
+  .location-hero-panel,
+  .location-form-panel,
+  .address-preview-panel,
+  .reports-filter-panel,
+  .reports-summary-panel,
+  .reports-section-panel,
+  .reports-intro-panel,
+  .review-desk-header {
+    padding: var(--space-4) 0 !important;
+  }
+
+  .result-card,
+  .assignment-card,
+  .review-card,
+  .compact-card,
+  .import-row-card,
+  .operator-finding-card,
+  .routing-status-card,
+  .approval-status-card,
+  .summary-card,
+  .case-lane,
+  .report-section-card,
+  .reports-summary-card,
+  .metric-card,
+  .registry-record-card,
+  .publication-card,
+  .address-code-summary,
+  .selection-item,
+  .status-card,
+  .panel {
+    padding: var(--space-3) 0 !important;
+  }
+}
+
+/* Absolute government document-flow correction: no visual tiles/wrappers anywhere */
+.public-task-panel,
+.map-confirm-panel,
+.request-list-panel,
+.review-glance-panel,
+.signage-export-panel,
+.registry-simple-hero,
+.registry-simple-section,
+.territory-command-panel,
+.territory-hierarchy-panel,
+.territory-detail-panel,
+.territory-list-panel,
+.verification-queue-panel,
+.verification-trust-panel,
+.field-assignments-panel,
+.field-location-checks-panel,
+.field-intake-panel,
+.live-intake-panel,
+.location-hero-panel,
+.location-form-panel,
+.address-preview-panel,
+.reports-filter-panel,
+.reports-summary-panel,
+.reports-section-panel,
+.reports-intro-panel,
+.review-desk-header,
+.result-card,
+.assignment-card,
+.review-card,
+.compact-card,
+.import-row-card,
+.operator-finding-card,
+.routing-status-card,
+.approval-status-card,
+.summary-card,
+.case-lane,
+.report-section-card,
+.reports-summary-card,
+.metric-card,
+.registry-record-card,
+.publication-card,
+.address-code-summary,
+.selection-item,
+.status-card,
+.panel,
+.disclosure-panel,
+details.disclosure-panel,
+.inline-disclosure,
+.quiet-disclosure,
+.workbench-panel-disclosure,
+.territory-form,
+.compact-location-form,
+.tracking-form,
+.filter-grid,
+.import-row-grid,
+.registry-table-wrap,
+.report-table-wrap,
+.publication-pack-list,
+.territory-list,
+.verification-list,
+.assignment-list,
+.review-list,
+.live-intake-list,
+.address-list,
+.signage-queue-list,
+.request-detail-grid,
+.summary-grid,
+.facts-grid,
+.operator-summary-row,
+.location-status-grid,
+.routing-evidence-grid,
+.field-today-summary,
+.data-command-deck,
+.report-metric-grid,
+.reports-summary-grid,
+.routing-first-block,
+.essential-form-block,
+.location-suggestion-strip,
+.citizen-primary-actions,
+.compact-form-actions,
+.territory-form-actions,
+.panel-head,
+.review-glance-head,
+.review-desk-header,
+.chrome-session-card,
+.chrome-session-utility {
+  background: transparent !important;
+  border: 0 !important;
+  border-block: 0 !important;
+  border-inline: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  outline: 0 !important;
+  overflow: visible !important;
+}
+
+.public-task-panel::before,
+.public-task-panel::after,
+.map-confirm-panel::before,
+.map-confirm-panel::after,
+.request-list-panel::before,
+.request-list-panel::after,
+.review-glance-panel::before,
+.review-glance-panel::after,
+.signage-export-panel::before,
+.signage-export-panel::after,
+.result-card::before,
+.result-card::after,
+.assignment-card::before,
+.assignment-card::after,
+.review-card::before,
+.review-card::after,
+.compact-card::before,
+.compact-card::after,
+.operator-finding-card::before,
+.operator-finding-card::after,
+.summary-card::before,
+.summary-card::after,
+.case-lane::before,
+.case-lane::after,
+.panel::before,
+.panel::after,
+.status-card::before,
+.status-card::after,
+.chrome-session-card::before,
+.chrome-session-card::after {
+  display: none !important;
+  content: none !important;
+}
+
+.public-task-panel,
+.map-confirm-panel,
+.request-list-panel,
+.review-glance-panel,
+.signage-export-panel,
+.registry-simple-hero,
+.registry-simple-section,
+.territory-command-panel,
+.territory-hierarchy-panel,
+.territory-detail-panel,
+.territory-list-panel,
+.verification-queue-panel,
+.verification-trust-panel,
+.field-assignments-panel,
+.field-location-checks-panel,
+.field-intake-panel,
+.live-intake-panel,
+.location-hero-panel,
+.location-form-panel,
+.address-preview-panel,
+.reports-filter-panel,
+.reports-summary-panel,
+.reports-section-panel,
+.reports-intro-panel {
+  padding: var(--space-4) 0 !important;
+  margin: 0 !important;
+}
+
+.result-card,
+.assignment-card,
+.review-card,
+.compact-card,
+.import-row-card,
+.operator-finding-card,
+.routing-status-card,
+.approval-status-card,
+.summary-card,
+.case-lane,
+.report-section-card,
+.reports-summary-card,
+.metric-card,
+.registry-record-card,
+.publication-card,
+.address-code-summary,
+.selection-item,
+.status-card,
+.panel {
+  padding: var(--space-2) 0 !important;
+  margin: 0 !important;
+}
+
+/* Use text hierarchy and whitespace only; no card edge dividers masquerading as wrappers */
+.result-card + .result-card,
+.assignment-card + .assignment-card,
+.review-card + .review-card,
+.compact-card + .compact-card,
+.operator-finding-card + .operator-finding-card,
+.case-lane + .case-lane,
+.summary-card + .summary-card,
+.metric-card + .metric-card,
+.registry-record-card + .registry-record-card,
+.publication-card + .publication-card,
+.selection-item + .selection-item,
+.status-card + .status-card,
+.section-grid > .public-task-panel + .public-task-panel,
+.citizen-register-flow > .public-task-panel + .public-task-panel,
+.registry-simple-shell > .public-task-panel + .public-task-panel,
+.territory-workspace > .public-task-panel + .public-task-panel,
+.operator-review-shell > .public-task-panel + .public-task-panel,
+.reports-service-grid > .public-task-panel + .public-task-panel {
+  border-top: 0 !important;
+}
+
+.disclosure-panel summary,
+details.disclosure-panel summary,
+.inline-disclosure summary,
+.quiet-disclosure summary,
+.workbench-panel-disclosure summary {
+  background: transparent !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  padding-inline: 0 !important;
+}
+
+.geotag-map {
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+
+/* High-specificity no-tile override: beats old route-specific !important blocks */
+html body main.page-shell .public-task-panel.public-task-panel,
+html body main.page-shell .public-task-panel.civic-panel-blue,
+html body main.page-shell .public-task-panel.civic-panel-gold,
+html body main.page-shell .public-task-panel.civic-panel-green,
+html body main.page-shell .public-task-panel.location-form-panel,
+html body main.page-shell .public-task-panel.address-preview-panel,
+html body main.page-shell .public-task-panel.field-assignments-panel,
+html body main.page-shell .public-task-panel.field-location-checks-panel,
+html body main.page-shell .public-task-panel.field-intake-panel,
+html body main.page-shell .public-task-panel.live-intake-panel,
+html body main.page-shell .public-task-panel.review-glance-panel,
+html body main.page-shell .public-task-panel.signage-export-panel,
+html body main.page-shell .public-task-panel.reports-filter-panel,
+html body main.page-shell .public-task-panel.reports-summary-panel,
+html body main.page-shell .public-task-panel.verification-queue-panel,
+html body main.page-shell .public-task-panel.verification-trust-panel,
+html body main.page-shell .public-task-panel.public-task-panel.territory-command-panel,
+html body main.page-shell .public-task-panel.public-task-panel.territory-hierarchy-panel,
+html body main.page-shell .public-task-panel.public-task-panel.territory-detail-panel,
+html body main.page-shell .public-task-panel.public-task-panel.territory-list-panel,
+html body main.page-shell .map-confirm-panel.map-confirm-panel,
+html body main.page-shell .review-card.review-card,
+html body main.page-shell .assignment-card.assignment-card,
+html body main.page-shell .result-card.result-card,
+html body main.page-shell .compact-card.compact-card,
+html body main.page-shell .import-row-card.import-row-card,
+html body main.page-shell .operator-finding-card.operator-finding-card,
+html body main.page-shell .routing-status-card.routing-status-card,
+html body main.page-shell .approval-status-card.approval-status-card,
+html body main.page-shell .summary-card.summary-card,
+html body main.page-shell .case-lane.case-lane,
+html body main.page-shell .operator-summary-row.operator-summary-row,
+html body main.page-shell .disclosure-panel.disclosure-panel,
+html body main.page-shell details.disclosure-panel.disclosure-panel,
+html body main.page-shell .territory-form.territory-form,
+html body main.page-shell .tracking-form.tracking-form,
+html body main.page-shell .filter-grid.filter-grid,
+html body main.page-shell .registry-table-wrap.registry-table-wrap,
+html body main.page-shell .report-table-wrap.report-table-wrap,
+html body main.page-shell .request-detail-grid.request-detail-grid,
+html body main.page-shell .summary-grid.summary-grid,
+html body main.page-shell .facts-grid.facts-grid,
+html body main.page-shell .location-status-grid.location-status-grid,
+html body main.page-shell .routing-evidence-grid.routing-evidence-grid,
+html body main.page-shell .field-today-summary.field-today-summary,
+html body main.page-shell .data-command-deck.data-command-deck,
+html body main.page-shell .report-metric-grid.report-metric-grid,
+html body main.page-shell .reports-summary-grid.reports-summary-grid {
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+  border: 0 !important;
+  border-top: 0 !important;
+  border-right: 0 !important;
+  border-bottom: 0 !important;
+  border-left: 0 !important;
+  border-width: 0 !important;
+  border-color: transparent !important;
+  border-style: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  filter: none !important;
+  outline: 0 !important;
+}
+
+html body main.page-shell .public-task-panel.public-task-panel::before,
+html body main.page-shell .public-task-panel.public-task-panel::after,
+html body main.page-shell .map-confirm-panel.map-confirm-panel::before,
+html body main.page-shell .map-confirm-panel.map-confirm-panel::after,
+html body main.page-shell .review-card.review-card::before,
+html body main.page-shell .review-card.review-card::after,
+html body main.page-shell .assignment-card.assignment-card::before,
+html body main.page-shell .assignment-card.assignment-card::after,
+html body main.page-shell .result-card.result-card::before,
+html body main.page-shell .result-card.result-card::after,
+html body main.page-shell .operator-finding-card.operator-finding-card::before,
+html body main.page-shell .operator-finding-card.operator-finding-card::after,
+html body main.page-shell .operator-summary-row.operator-summary-row::before,
+html body main.page-shell .operator-summary-row.operator-summary-row::after {
+  display: none !important;
+  content: none !important;
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+
+html body main.page-shell .disclosure-panel.disclosure-panel summary,
+html body main.page-shell details.disclosure-panel.disclosure-panel summary,
+html body main.page-shell .quiet-disclosure.quiet-disclosure summary,
+html body main.page-shell .inline-disclosure.inline-disclosure summary,
+html body main.page-shell .workbench-panel-disclosure.workbench-panel-disclosure summary {
+  background: transparent !important;
+  background-color: transparent !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+
+/* Final no-wrapper sweep: structural content cannot render as tiles anywhere */
+html body main.page-shell article,
+html body main.page-shell section,
+html body main.page-shell div,
+html body main.page-shell details,
+html body main.page-shell summary,
+html body main.page-shell ul,
+html body main.page-shell ol,
+html body main.page-shell li,
+html body main.page-shell dl,
+html body main.page-shell dt,
+html body main.page-shell dd,
+html body main.page-shell fieldset,
+html body main.page-shell aside,
+html body main.page-shell header,
+html body main.page-shell footer {
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+  border: 0 !important;
+  border-top: 0 !important;
+  border-right: 0 !important;
+  border-bottom: 0 !important;
+  border-left: 0 !important;
+  border-width: 0 !important;
+  border-style: none !important;
+  border-color: transparent !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  outline: 0 !important;
+  filter: none !important;
+}
+
+html body main.page-shell article::before,
+html body main.page-shell article::after,
+html body main.page-shell section::before,
+html body main.page-shell section::after,
+html body main.page-shell div::before,
+html body main.page-shell div::after,
+html body main.page-shell details::before,
+html body main.page-shell details::after,
+html body main.page-shell summary::before,
+html body main.page-shell summary::after,
+html body main.page-shell li::before,
+html body main.page-shell li::after {
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  outline: 0 !important;
+}
+
+/* Restore only true controls, not layout wrappers */
+html body main.page-shell button,
+html body main.page-shell a.button,
+html body main.page-shell input,
+html body main.page-shell select,
+html body main.page-shell textarea {
+  border-radius: var(--radius-control) !important;
+}
+
+html body main.page-shell button.primary-action,
+html body main.page-shell button.verification-button,
+html body main.page-shell button.secondary-action,
+html body main.page-shell button.secondary-button,
+html body main.page-shell a.button,
+html body main.page-shell .button-primary,
+html body main.page-shell .button-secondary {
+  background-image: none !important;
+  box-shadow: none !important;
+}
+
+html body main.page-shell .form-notice,
+html body main.page-shell .institutional-note,
+html body main.page-shell .field-help,
+html body main.page-shell .submission-security-note,
+html body main.page-shell .panel-state,
+html body main.page-shell .status-chip,
+html body main.page-shell .status-pill,
+html body main.page-shell .form-focus-badge {
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  padding-inline: 0 !important;
+}
+
+/* Final exact leftovers: accordions, list rows, request panels, and masthead divider */
+html body main.page-shell .masthead-topline.masthead-topline,
+html body main.page-shell details.quiet-disclosure.quiet-disclosure,
+html body main.page-shell details.inline-disclosure.inline-disclosure,
+html body main.page-shell details.workbench-panel-disclosure.workbench-panel-disclosure,
+html body main.page-shell details.technical-evidence-disclosure.technical-evidence-disclosure,
+html body main.page-shell details.compact-review-disclosure.compact-review-disclosure,
+html body main.page-shell details.hierarchy-province.hierarchy-province,
+html body main.page-shell details.registry-create-disclosure.registry-create-disclosure,
+html body main.page-shell details.territory-create-disclosure.territory-create-disclosure,
+html body main.page-shell details.territory-edit-disclosure.territory-edit-disclosure,
+html body main.page-shell details.territory-evidence-disclosure.territory-evidence-disclosure,
+html body main.page-shell details.routing-evidence-disclosure.routing-evidence-disclosure,
+html body main.page-shell details.review-secondary-actions.review-secondary-actions,
+html body main.page-shell aside.request-list-panel.request-list-panel,
+html body main.page-shell article.request-detail-panel.request-detail-panel,
+html body main.page-shell li.territory-record.territory-record,
+html body main.page-shell ul.program-list li,
+html body main.page-shell ul.mini-list li,
+html body main.page-shell ul.review-list li,
+html body main.page-shell ul.assignment-list li,
+html body main.page-shell ul.live-intake-list li,
+html body main.page-shell ul.territory-list li,
+html body main.page-shell ul.signage-queue-list li,
+html body main.page-shell ul.publication-pack-list li,
+html body main.page-shell ol li,
+html body main.page-shell li:nth-child(n) {
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+  border: 0 !important;
+  border-top: 0 !important;
+  border-right: 0 !important;
+  border-bottom: 0 !important;
+  border-left: 0 !important;
+  border-width: 0 !important;
+  border-style: none !important;
+  border-color: transparent !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  outline: 0 !important;
+}
+
+html body main.page-shell details.quiet-disclosure.quiet-disclosure summary,
+html body main.page-shell details.inline-disclosure.inline-disclosure summary,
+html body main.page-shell details.workbench-panel-disclosure.workbench-panel-disclosure summary,
+html body main.page-shell details.compact-review-disclosure.compact-review-disclosure summary,
+html body main.page-shell details.hierarchy-province.hierarchy-province summary,
+html body main.page-shell details.registry-create-disclosure.registry-create-disclosure summary,
+html body main.page-shell details.territory-create-disclosure.territory-create-disclosure summary,
+html body main.page-shell details.territory-edit-disclosure.territory-edit-disclosure summary,
+html body main.page-shell details.territory-evidence-disclosure.territory-evidence-disclosure summary,
+html body main.page-shell details.routing-evidence-disclosure.routing-evidence-disclosure summary,
+html body main.page-shell details.review-secondary-actions.review-secondary-actions summary {
+  background: transparent !important;
+  background-color: transparent !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  outline: 0 !important;
+  padding-inline: 0 !important;
+}
+
+html body main.page-shell li:nth-child(n)::before,
+html body main.page-shell li:nth-child(n)::after,
+html body main.page-shell details:nth-child(n)::before,
+html body main.page-shell details:nth-child(n)::after,
+html body main.page-shell aside.request-list-panel.request-list-panel::before,
+html body main.page-shell aside.request-list-panel.request-list-panel::after,
+html body main.page-shell article.request-detail-panel.request-detail-panel::before,
+html body main.page-shell article.request-detail-panel.request-detail-panel::after {
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  content: none !important;
+  display: none !important;
+}
+
+/* Remove final section divider wrapper on public issuance */
+html body main.page-shell section.section-grid.public-issuance-grid,
+html body main.page-shell section.section-grid.public-issuance-grid + section.section-grid.public-issuance-grid {
+  border: 0 !important;
+  border-top: 0 !important;
+  border-right: 0 !important;
+  border-bottom: 0 !important;
+  border-left: 0 !important;
+  border-width: 0 !important;
+  border-style: none !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+}
