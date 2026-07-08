@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta, timezone
+from pathlib import Path
 from typing import Any
 
 from fastapi.testclient import TestClient
@@ -98,12 +99,27 @@ def test_admin_units_endpoint_supports_level_filter(monkeypatch) -> None:
     assert response.json()['items'] == expected
 
 
-def test_territories_endpoint_returns_database_rows(monkeypatch) -> None:
-    expected = [{'id': 'territory-mongomo-core', 'name': 'Mongomo Core', 'province_code': 'WN', 'province': 'Wele-Nzas', 'admin_unit_id': 'admin-unit-wele-nzas', 'admin_unit_code': 'WN', 'admin_unit_name': 'Wele-Nzas', 'admin_unit_level': 'province', 'type': 'district-core', 'readiness': 'enumeration-ready', 'is_archived': False}]
-    monkeypatch.setattr(main, 'fetch_territories', lambda **kwargs: expected)
+def test_territories_endpoint_requires_auth_for_full_registry(monkeypatch) -> None:
     response = client.get('/api/v1/territories')
+    assert response.status_code == 401
+
+
+def test_territories_endpoint_returns_database_rows_for_authorized_viewer(monkeypatch) -> None:
+    expected = [{'id': 'territory-mongomo-core', 'name': 'Mongomo Core', 'province_code': 'WN', 'province': 'Wele-Nzas', 'admin_unit_id': 'admin-unit-wele-nzas', 'admin_unit_code': 'WN', 'admin_unit_name': 'Wele-Nzas', 'admin_unit_level': 'province', 'type': 'district-core', 'readiness': 'enumeration-ready', 'is_archived': False}]
+    monkeypatch.setattr(main, 'resolve_user_from_token', lambda token: VIEWER)
+    monkeypatch.setattr(main, 'fetch_territories', lambda **kwargs: expected)
+    response = client.get('/api/v1/territories', headers=auth_header())
     assert response.status_code == 200
     assert response.json()['items'] == expected
+
+
+def test_public_territory_options_returns_minimal_public_fields(monkeypatch) -> None:
+    expected = [{'id': 'territory-mongomo-core', 'name': 'Mongomo Core', 'province_code': 'WN', 'province': 'Wele-Nzas', 'admin_unit_id': 'admin-unit-wele-nzas', 'admin_unit_code': 'WN', 'admin_unit_name': 'Wele-Nzas', 'admin_unit_level': 'province', 'type': 'district-core', 'readiness': 'enumeration-ready', 'is_archived': False}]
+    monkeypatch.setattr(main, 'fetch_territories', lambda **kwargs: expected)
+    response = client.get('/api/v1/public/territory-options')
+    assert response.status_code == 200
+    assert response.json()['items'] == [{'id': 'territory-mongomo-core', 'name': 'Mongomo Core', 'province': 'Wele-Nzas', 'province_code': 'WN', 'readiness': 'enumeration-ready'}]
+    assert 'admin_unit_id' not in response.text
 
 
 def test_create_territory_requires_editor_role(monkeypatch) -> None:
@@ -138,9 +154,15 @@ def test_create_territory_accepts_admin_unit_id(monkeypatch) -> None:
     assert response.json()['admin_unit_id'] == 'admin-unit-wele-nzas'
 
 
-def test_road_detail_returns_record(monkeypatch) -> None:
-    monkeypatch.setattr(main, 'get_road', lambda road_id: {'id': road_id, 'name': 'Avenida', 'territory_id': 'territory-bata', 'territory_name': 'Bata', 'status': 'verified', 'length_km': '2.1', 'is_archived': False})
+def test_road_detail_requires_auth(monkeypatch) -> None:
     response = client.get('/api/v1/roads/road-a')
+    assert response.status_code == 401
+
+
+def test_road_detail_returns_record_for_authorized_viewer(monkeypatch) -> None:
+    monkeypatch.setattr(main, 'resolve_user_from_token', lambda token: VIEWER)
+    monkeypatch.setattr(main, 'get_road', lambda road_id: {'id': road_id, 'name': 'Avenida', 'territory_id': 'territory-bata', 'territory_name': 'Bata', 'status': 'verified', 'length_km': '2.1', 'is_archived': False})
+    response = client.get('/api/v1/roads/road-a', headers=auth_header())
     assert response.status_code == 200
     assert response.json()['name'] == 'Avenida'
 
@@ -157,9 +179,15 @@ def test_archive_address_requires_admin(monkeypatch) -> None:
     assert response.status_code == 403
 
 
-def test_field_assignments_returns_items(monkeypatch) -> None:
-    monkeypatch.setattr(main, 'list_field_assignments', lambda: [{'assignment_id': 'field-001', 'territory_id': 'territory-bata', 'territory': 'Bata', 'task': 'Task', 'team': 'Team', 'priority': 'critical'}])
+def test_field_assignments_requires_auth(monkeypatch) -> None:
     response = client.get('/api/v1/field/assignments')
+    assert response.status_code == 401
+
+
+def test_field_assignments_returns_items_for_authorized_viewer(monkeypatch) -> None:
+    monkeypatch.setattr(main, 'resolve_user_from_token', lambda token: VIEWER)
+    monkeypatch.setattr(main, 'list_field_assignments', lambda: [{'assignment_id': 'field-001', 'territory_id': 'territory-bata', 'territory': 'Bata', 'task': 'Task', 'team': 'Team', 'priority': 'critical'}])
+    response = client.get('/api/v1/field/assignments', headers=auth_header())
     assert response.status_code == 200
     assert response.json()['items'][0]['priority'] == 'critical'
 
@@ -1557,6 +1585,7 @@ def test_operator_command_center_groups_key_operational_lanes(monkeypatch) -> No
     monkeypatch.setattr(main, 'geotag_duplicate_summary', lambda: {'groups': [{'grid_code': 'EG-BN-N1-TEST', 'active_count': 2}]})
     monkeypatch.setattr(main, 'demo_fixture_status', lambda: {'buckets': [{'bucket': 'roads_smoke', 'count': 0}], 'total': 0, 'clean': True})
     monkeypatch.setattr(main, 'latest_restore_drill_report', lambda: {'status': 'passed', 'backup_file': 'addressing_latest.dump', 'restored_counts': [{'table_name': 'addresses', 'rows': 3}]})
+    monkeypatch.setattr(main, 'migration_status', lambda: {'status': 'current', 'applied_count': 4, 'pending_count': 0, 'latest_version': '004'})
 
     response = client.get('/api/v1/operator/command-center', headers=auth_header())
 
@@ -1567,6 +1596,8 @@ def test_operator_command_center_groups_key_operational_lanes(monkeypatch) -> No
     assert body['risk_lanes']['duplicate_groups'] == 1
     assert body['demo_fixtures']['clean'] is True
     assert body['restore_drill']['status'] == 'passed'
+    assert body['migrations']['status'] == 'current'
+    assert body['migrations']['pending_count'] == 0
     assert body['walkthrough'][0]['route'] == '/geotag'
 
 
@@ -1608,3 +1639,189 @@ def test_restore_drill_report_missing_file_has_not_run_status(monkeypatch) -> No
     response = client.get('/api/v1/operator/restore-drill/latest', headers=auth_header())
     assert response.status_code == 200
     assert response.json()['status'] == 'not-run'
+
+
+def test_operator_migration_status_requires_authenticated_viewer(monkeypatch) -> None:
+    response = client.get('/api/v1/operator/migrations/status')
+    assert response.status_code == 401
+
+
+def test_operator_migration_status_returns_safe_summary(monkeypatch) -> None:
+    monkeypatch.setattr(main, 'resolve_user_from_token', lambda token: VIEWER)
+    monkeypatch.setattr(main, 'migration_status', lambda: {
+        'status': 'current',
+        'applied_count': 4,
+        'pending_count': 0,
+        'latest_version': '004',
+        'latest_filename': '004_registry_ready_not_signage_ready.sql',
+    })
+
+    response = client.get('/api/v1/operator/migrations/status', headers=auth_header())
+
+    assert response.status_code == 200
+    body = response.json()
+    assert body['status'] == 'current'
+    assert body['pending_count'] == 0
+    assert 'password' not in str(body).lower()
+
+
+def test_migration_status_uses_configured_migration_directory(monkeypatch, tmp_path) -> None:
+    migrations = tmp_path / 'migrations'
+    migrations.mkdir()
+    (migrations / '001_schema_migration_baseline.sql').write_text('-- baseline\n', encoding='utf-8')
+    monkeypatch.setenv('MIGRATIONS_DIR', str(migrations))
+    monkeypatch.delenv('DATABASE_URL', raising=False)
+    monkeypatch.delenv('POSTGRES_HOST', raising=False)
+
+    body = main.migration_status()
+
+    assert body['status'] == 'not-configured'
+    assert body['expected_count'] == 1
+    assert body['pending_count'] == 1
+    assert body['latest_filename'] == '001_schema_migration_baseline.sql'
+
+
+def test_addresses_endpoint_returns_pagination_metadata(monkeypatch) -> None:
+    rows = [
+        {'id': f'addr-{index}', 'formatted': f'Address {index}', 'status': 'active'}
+        for index in range(1, 6)
+    ]
+    monkeypatch.setattr(main, 'resolve_user_from_token', lambda token: VIEWER)
+    monkeypatch.setattr(main, 'fetch_addresses', lambda **kwargs: rows)
+
+    response = client.get('/api/v1/addresses', params={'page': 2, 'per_page': 2}, headers=auth_header())
+
+    assert response.status_code == 200
+    body = response.json()
+    assert [item['id'] for item in body['items']] == ['addr-3', 'addr-4']
+    assert body['pagination'] == {
+        'page': 2,
+        'per_page': 2,
+        'total_items': 5,
+        'total_pages': 3,
+        'has_next': True,
+        'has_previous': True,
+    }
+
+
+def test_list_pagination_clamps_per_page_without_breaking_items(monkeypatch) -> None:
+    rows = [{'id': f'road-{index}', 'name': f'Road {index}'} for index in range(1, 4)]
+    monkeypatch.setattr(main, 'resolve_user_from_token', lambda token: VIEWER)
+    monkeypatch.setattr(main, 'fetch_roads', lambda **kwargs: rows)
+
+    response = client.get('/api/v1/roads', params={'page': 0, 'per_page': 999}, headers=auth_header())
+
+    assert response.status_code == 200
+    body = response.json()
+    assert len(body['items']) == 3
+    assert body['pagination']['page'] == 1
+    assert body['pagination']['per_page'] == 100
+
+
+def test_api_responses_include_security_headers() -> None:
+    response = client.get('/api/v1/health')
+
+    assert response.status_code == 200
+    assert response.headers['x-content-type-options'] == 'nosniff'
+    assert response.headers['referrer-policy'] == 'no-referrer'
+    assert response.headers['cache-control'] == 'no-store'
+
+
+def test_production_readiness_endpoint_is_auth_protected_and_honest(monkeypatch) -> None:
+    monkeypatch.setattr(main, 'resolve_user_from_token', lambda token: VIEWER)
+
+    unauthenticated = client.get('/api/v1/operator/production-readiness')
+    assert unauthenticated.status_code == 401
+
+    response = client.get('/api/v1/operator/production-readiness', headers=auth_header())
+    assert response.status_code == 200
+    body = response.json()
+    assert body['status'] in {'ready', 'needs_work'}
+    assert 'secure_cookie_sessions' in body['checks']
+    assert body['checks']['secure_cookie_sessions']['status'] == 'needs_work'
+
+
+def test_login_can_issue_secure_session_cookie(monkeypatch) -> None:
+    monkeypatch.setattr(main, 'SESSION_COOKIE_MODE', 'secure-http-only-cookie')
+    monkeypatch.setattr(main, 'SESSION_COOKIE_SECURE', True)
+    monkeypatch.setattr(main, 'authenticate_user_session', lambda username, password: {'token': 'cookie-token', 'user': ADMIN})
+    response = client.post('/api/v1/auth/login', json={'username': 'admin', 'password': 'admin123'})
+
+    assert response.status_code == 200
+    set_cookie = response.headers.get('set-cookie', '')
+    assert 'eg_addressing_session=' in set_cookie
+    assert 'HttpOnly' in set_cookie
+    assert 'Secure' in set_cookie
+    assert 'SameSite=lax' in set_cookie
+
+
+def test_auth_me_accepts_session_cookie(monkeypatch) -> None:
+    monkeypatch.setattr(main, 'SESSION_COOKIE_MODE', 'secure-http-only-cookie')
+    monkeypatch.setattr(main, 'SESSION_COOKIE_SECURE', False)
+    monkeypatch.setattr(main, 'authenticate_user_session', lambda username, password: {'token': 'cookie-token', 'user': ADMIN})
+    monkeypatch.setattr(main, 'resolve_user_from_token', lambda token: ADMIN if token == 'cookie-token' else (_ for _ in ()).throw(main.AuthenticationError('bad token')))
+    login_response = client.post('/api/v1/auth/login', json={'username': 'admin', 'password': 'admin123'})
+    assert login_response.status_code == 200
+
+    response = client.get('/api/v1/auth/me', cookies=login_response.cookies)
+
+    assert response.status_code == 200
+    assert response.json()['user']['username'] == 'admin'
+
+
+def test_data_command_deck_source_guard() -> None:
+    registry_source = Path('../../apps/admin-portal/components/RegistryCorePanel.tsx').resolve().read_text()
+    reporting_source = Path('../../apps/admin-portal/components/ReportingDashboardPanel.tsx').resolve().read_text()
+    assert 'data-command-deck' in registry_source
+    assert 'case-lane' in registry_source
+    assert 'information scent' in registry_source.lower()
+    assert 'data-command-deck' in reporting_source
+    assert 'risk lane' in reporting_source.lower()
+
+
+def test_full_registry_read_endpoints_are_not_public() -> None:
+    protected_paths = [
+        '/api/v1/territories',
+        '/api/v1/territories/territory-a',
+        '/api/v1/roads',
+        '/api/v1/roads/road-a',
+        '/api/v1/buildings',
+        '/api/v1/buildings/building-a',
+        '/api/v1/addresses',
+        '/api/v1/addresses/address-a',
+        '/api/v1/field/assignments',
+    ]
+    for path in protected_paths:
+        response = client.get(path)
+        assert response.status_code == 401, path
+
+
+def test_route_auth_guard_has_no_unexpected_public_registry_reads() -> None:
+    client.cookies.clear()
+    allowed_public = {
+        '/api/v1/health',
+        '/api/v1/meta',
+        '/api/v1/auth/login',
+        '/api/v1/territories/provinces',
+        '/api/v1/provinces',
+        '/api/v1/admin-units',
+        '/api/v1/verification/lookup',
+        '/api/v1/public/territory-options',
+    }
+    allowed_prefixes = ('/api/v1/public/',)
+    leaked = []
+    for route in main.app.routes:
+        path = getattr(route, 'path', '')
+        methods = set(getattr(route, 'methods', set()))
+        if not path.startswith('/api/v1') or 'GET' not in methods:
+            continue
+        if path in allowed_public or path.startswith(allowed_prefixes):
+            continue
+        source = getattr(route.endpoint, '__name__', '')
+        # Exercise likely registry/ops reads without auth; path params are replaced with safe dummy values.
+        candidate = path.replace('{territory_id}', 'territory-a').replace('{road_id}', 'road-a').replace('{building_id}', 'building-a').replace('{address_id}', 'address-a').replace('{submission_id}', 'submission-a').replace('{address_code}', 'EG-BN-N1-TEST').replace('{job_id}', 'job-a').replace('{pack_id}', 'pack-a').replace('{correction_id}', 'correction-a')
+        response = client.get(candidate)
+        if response.status_code != 401:
+            leaked.append((source, candidate, response.status_code))
+    assert leaked == []
+

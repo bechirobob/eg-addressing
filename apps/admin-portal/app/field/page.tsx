@@ -29,47 +29,11 @@ type Submission = {
 
 type Territory = { id: string; name: string };
 
-async function getAssignments(baseUrl: string): Promise<Assignment[]> {
-  try {
-    const response = await fetch(`${baseUrl}/api/v1/field/assignments`, { cache: 'no-store' });
-    if (!response.ok) return [];
-    const payload = (await response.json()) as { items: Assignment[] };
-    return payload.items ?? [];
-  } catch {
-    return [];
-  }
-}
-
-async function getSubmissions(baseUrl: string): Promise<Submission[]> {
-  try {
-    const response = await fetch(`${baseUrl}/api/v1/field/submissions`, { cache: 'no-store' });
-    if (!response.ok) return [];
-    const payload = (await response.json()) as { items: Submission[] };
-    return payload.items ?? [];
-  } catch {
-    return [];
-  }
-}
-
-async function getTerritories(baseUrl: string): Promise<Territory[]> {
-  try {
-    const response = await fetch(`${baseUrl}/api/v1/territories`, { cache: 'no-store' });
-    if (!response.ok) return [];
-    const payload = (await response.json()) as { items: Territory[] };
-    return payload.items ?? [];
-  } catch {
-    return [];
-  }
-}
-
 export default async function FieldPage() {
-  const apiBaseUrl = process.env.INTERNAL_API_BASE_URL ?? 'http://api:8100';
   const publicApiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL ?? '';
-  const [assignments, submissions, territories] = await Promise.all([
-    getAssignments(apiBaseUrl),
-    getSubmissions(apiBaseUrl),
-    getTerritories(apiBaseUrl),
-  ]);
+  const assignments: Assignment[] = [];
+  const submissions: Submission[] = [];
+  const territories: Territory[] = [];
 
   return (
     <SiteChrome

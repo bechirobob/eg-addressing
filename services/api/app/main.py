@@ -12,11 +12,14 @@ from contextlib import asynccontextmanager
 from datetime import datetime, timezone
 from typing import Any
 
-from fastapi import FastAPI, Header, HTTPException, Query, Request, Response, status
+from fastapi import Cookie, FastAPI, Header, HTTPException, Query, Request, Response, status
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 
 from app.data import MODULES
+from app.ops_status import migration_status
+from app.query_contracts import paginated_response
+from app.security_posture import apply_security_headers, production_readiness_status
 from app.db import (
     AdminUnitProvinceMismatchError,
     AddressCorrectionNotFoundError,
@@ -286,6 +289,9 @@ logger = logging.getLogger('eg-addressing-api')
 
 APP_ENV = os.getenv('APP_ENV', 'local').strip().lower() or 'local'
 SESSION_TTL_HOURS = max(1, int(os.getenv('SESSION_TTL_HOURS', '12')))
+SESSION_COOKIE_NAME = os.getenv('SESSION_COOKIE_NAME', 'eg_addressing_session')
+SESSION_COOKIE_MODE = os.getenv('SESSION_COOKIE_MODE', 'bearer-local-storage').strip().lower()
+SESSION_COOKIE_SECURE = os.getenv('SESSION_COOKIE_SECURE', 'true').strip().lower() not in {'0', 'false', 'no'}
 PUBLIC_RATE_LIMIT_ENABLED = os.getenv('PUBLIC_RATE_LIMIT_ENABLED', 'true').strip().lower() not in {'0', 'false', 'no'}
 PUBLIC_RATE_LIMIT_MAX_REQUESTS = max(1, int(os.getenv('PUBLIC_RATE_LIMIT_MAX_REQUESTS', '30')))
 PUBLIC_RATE_LIMIT_WINDOW_SECONDS = max(1, int(os.getenv('PUBLIC_RATE_LIMIT_WINDOW_SECONDS', '60')))
@@ -306,7 +312,7 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=['http://localhost:3100', 'http://127.0.0.1:3100'],
     allow_origin_regex=r'^https?://([a-zA-Z0-9.-]+|\[[0-9a-fA-F:]+\]):3100$',
-    allow_credentials=False,
+    allow_credentials=True,
     allow_methods=['GET', 'POST', 'PATCH', 'DELETE', 'OPTIONS'],
     allow_headers=['*'],
 )
@@ -438,16 +444,23 @@ async def request_context_middleware(request: Request, call_next):
         )
         if response is not None:
             response.headers['X-Request-ID'] = request_id
+            apply_security_headers(response, path=request.url.path)
 
 
-def _bearer_token(authorization: str | None) -> str:
+def _session_token(authorization: str | None = None, session_cookie: str | None = None) -> str:
+    if session_cookie:
+        return session_cookie.strip()
     if not authorization or not authorization.startswith('Bearer '):
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail='authentication required')
     return authorization.split(' ', 1)[1].strip()
 
 
-def _current_user(authorization: str | None) -> dict[str, str]:
-    token = _bearer_token(authorization)
+def _bearer_token(authorization: str | None) -> str:
+    return _session_token(authorization=authorization)
+
+
+def _current_user(authorization: str | None, session_cookie: str | None = None) -> dict[str, str]:
+    token = _session_token(authorization=authorization, session_cookie=session_cookie)
     try:
         return resolve_user_from_token(token)
     except AuthenticationError as exc:
@@ -866,25 +879,39 @@ def meta() -> dict[str, Any]:
 
 
 @app.post('/api/v1/auth/login')
-def login(payload: LoginRequest) -> dict[str, Any]:
+def login(payload: LoginRequest, response: Response) -> dict[str, Any]:
     try:
         session = authenticate_user_session(payload.username, payload.password)
         session['session_ttl_hours'] = SESSION_TTL_HOURS
+        session['auth_mode'] = 'cookie_session' if SESSION_COOKIE_MODE == 'secure-http-only-cookie' else 'bearer_token'
+        if SESSION_COOKIE_MODE == 'secure-http-only-cookie':
+            response.set_cookie(
+                key=SESSION_COOKIE_NAME,
+                value=session['token'],
+                max_age=SESSION_TTL_HOURS * 3600,
+                httponly=True,
+                secure=SESSION_COOKIE_SECURE,
+                samesite='lax',
+                path='/',
+            )
         return session
     except AuthenticationError as exc:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail=str(exc)) from exc
 
 
 @app.get('/api/v1/auth/me')
-def auth_me(authorization: str | None = Header(default=None)) -> dict[str, Any]:
-    return {'user': _current_user(authorization), 'session_ttl_hours': SESSION_TTL_HOURS}
+def auth_me(authorization: str | None = Header(default=None), eg_addressing_session: str | None = Cookie(default=None)) -> dict[str, Any]:
+    return {'user': _current_user(authorization, eg_addressing_session), 'session_ttl_hours': SESSION_TTL_HOURS}
 
 
 @app.post('/api/v1/auth/logout', status_code=status.HTTP_204_NO_CONTENT)
-def auth_logout(authorization: str | None = Header(default=None)) -> Response:
-    user = _current_user(authorization)
-    revoke_user_session(_bearer_token(authorization), actor=user)
-    return Response(status_code=status.HTTP_204_NO_CONTENT)
+def auth_logout(authorization: str | None = Header(default=None), eg_addressing_session: str | None = Cookie(default=None)) -> Response:
+    token = _session_token(authorization=authorization, session_cookie=eg_addressing_session)
+    user = resolve_user_from_token(token)
+    revoke_user_session(token, actor=user)
+    response = Response(status_code=status.HTTP_204_NO_CONTENT)
+    response.delete_cookie(SESSION_COOKIE_NAME, path='/')
+    return response
 
 
 @app.get('/api/v1/territories/provinces')
@@ -906,18 +933,46 @@ def admin_units(
     return {'items': list_admin_units_db(level=level, parent_id=parent_id, province_code=province_code)}
 
 
+@app.get('/api/v1/public/territory-options')
+def public_territory_options(
+    request: Request,
+    province_code: str | None = Query(default=None),
+) -> dict[str, list[dict[str, Any]]]:
+    _check_public_rate_limit(request, 'public-territory-options')
+    rows = fetch_territories(province_code=province_code, include_archived=False)
+    return {
+        'items': [
+            {
+                'id': row['id'],
+                'name': row['name'],
+                'province': row.get('province'),
+                'province_code': row.get('province_code'),
+                'readiness': row.get('readiness'),
+            }
+            for row in rows
+        ]
+    }
+
+
 @app.get('/api/v1/territories')
 def list_territories(
     q: str | None = Query(default=None),
     province_code: str | None = Query(default=None),
     readiness: str | None = Query(default=None),
     include_archived: bool = Query(default=False),
-) -> dict[str, list[dict[str, Any]]]:
-    return {'items': fetch_territories(q=q, province_code=province_code, readiness=readiness, include_archived=include_archived)}
+    page: int = Query(default=1),
+    per_page: int = Query(default=100),
+    authorization: str | None = Header(default=None),
+) -> dict[str, Any]:
+    user = _current_user(authorization)
+    _require_role(user, 'viewer', 'editor', 'admin')
+    return paginated_response(fetch_territories(q=q, province_code=province_code, readiness=readiness, include_archived=include_archived), page=page, per_page=per_page)
 
 
 @app.get('/api/v1/territories/{territory_id}')
-def territory_detail(territory_id: str) -> dict[str, Any]:
+def territory_detail(territory_id: str, authorization: str | None = Header(default=None)) -> dict[str, Any]:
+    user = _current_user(authorization)
+    _require_role(user, 'viewer', 'editor', 'admin')
     try:
         return get_territory(territory_id)
     except TerritoryNotFoundError as exc:
@@ -968,12 +1023,16 @@ def audit_logs(entity_type: str | None = Query(default=None), entity_id: str | N
 
 
 @app.get('/api/v1/roads')
-def list_roads(q: str | None = Query(default=None), territory_id: str | None = Query(default=None), include_archived: bool = Query(default=False)) -> dict[str, list[dict[str, Any]]]:
-    return {'items': fetch_roads(q=q, territory_id=territory_id, include_archived=include_archived)}
+def list_roads(q: str | None = Query(default=None), territory_id: str | None = Query(default=None), include_archived: bool = Query(default=False), page: int = Query(default=1), per_page: int = Query(default=100), authorization: str | None = Header(default=None)) -> dict[str, Any]:
+    user = _current_user(authorization)
+    _require_role(user, 'viewer', 'editor', 'admin')
+    return paginated_response(fetch_roads(q=q, territory_id=territory_id, include_archived=include_archived), page=page, per_page=per_page)
 
 
 @app.get('/api/v1/roads/{road_id}')
-def road_detail(road_id: str) -> dict[str, Any]:
+def road_detail(road_id: str, authorization: str | None = Header(default=None)) -> dict[str, Any]:
+    user = _current_user(authorization)
+    _require_role(user, 'viewer', 'editor', 'admin')
     try:
         return get_road(road_id)
     except RoadNotFoundError as exc:
@@ -1016,12 +1075,16 @@ def archive_road_endpoint(road_id: str, authorization: str | None = Header(defau
 
 
 @app.get('/api/v1/buildings')
-def list_buildings(q: str | None = Query(default=None), territory_id: str | None = Query(default=None), include_archived: bool = Query(default=False)) -> dict[str, list[dict[str, Any]]]:
-    return {'items': fetch_buildings(q=q, territory_id=territory_id, include_archived=include_archived)}
+def list_buildings(q: str | None = Query(default=None), territory_id: str | None = Query(default=None), include_archived: bool = Query(default=False), page: int = Query(default=1), per_page: int = Query(default=100), authorization: str | None = Header(default=None)) -> dict[str, Any]:
+    user = _current_user(authorization)
+    _require_role(user, 'viewer', 'editor', 'admin')
+    return paginated_response(fetch_buildings(q=q, territory_id=territory_id, include_archived=include_archived), page=page, per_page=per_page)
 
 
 @app.get('/api/v1/buildings/{building_id}')
-def building_detail(building_id: str) -> dict[str, Any]:
+def building_detail(building_id: str, authorization: str | None = Header(default=None)) -> dict[str, Any]:
+    user = _current_user(authorization)
+    _require_role(user, 'viewer', 'editor', 'admin')
     try:
         return get_building(building_id)
     except BuildingNotFoundError as exc:
@@ -1065,12 +1128,16 @@ def archive_building_endpoint(building_id: str, authorization: str | None = Head
 
 
 @app.get('/api/v1/addresses')
-def list_addresses(q: str | None = Query(default=None), territory_id: str | None = Query(default=None), status_filter: str | None = Query(default=None, alias='status'), include_archived: bool = Query(default=False)) -> dict[str, list[dict[str, Any]]]:
-    return {'items': fetch_addresses(q=q, territory_id=territory_id, status=status_filter, include_archived=include_archived)}
+def list_addresses(q: str | None = Query(default=None), territory_id: str | None = Query(default=None), status_filter: str | None = Query(default=None, alias='status'), include_archived: bool = Query(default=False), page: int = Query(default=1), per_page: int = Query(default=100), authorization: str | None = Header(default=None)) -> dict[str, Any]:
+    user = _current_user(authorization)
+    _require_role(user, 'viewer', 'editor', 'admin')
+    return paginated_response(fetch_addresses(q=q, territory_id=territory_id, status=status_filter, include_archived=include_archived), page=page, per_page=per_page)
 
 
 @app.get('/api/v1/addresses/{address_id}')
-def address_detail(address_id: str) -> dict[str, Any]:
+def address_detail(address_id: str, authorization: str | None = Header(default=None)) -> dict[str, Any]:
+    user = _current_user(authorization)
+    _require_role(user, 'viewer', 'editor', 'admin')
     try:
         return get_address(address_id)
     except AddressNotFoundError as exc:
@@ -1114,7 +1181,9 @@ def archive_address_endpoint(address_id: str, authorization: str | None = Header
 
 
 @app.get('/api/v1/field/assignments')
-def field_assignments() -> dict[str, list[dict[str, Any]]]:
+def field_assignments(authorization: str | None = Header(default=None)) -> dict[str, list[dict[str, Any]]]:
+    user = _current_user(authorization)
+    _require_role(user, 'viewer', 'editor', 'admin')
     return {'items': list_field_assignments()}
 
 
@@ -1148,10 +1217,10 @@ def record_field_geotag_task_evidence(submission_id: str, payload: GeotagFieldEv
 
 
 @app.get('/api/v1/field/submissions')
-def field_submissions(review_status: str | None = Query(default=None), territory_id: str | None = Query(default=None), authorization: str | None = Header(default=None)) -> dict[str, list[dict[str, Any]]]:
+def field_submissions(review_status: str | None = Query(default=None), territory_id: str | None = Query(default=None), page: int = Query(default=1), per_page: int = Query(default=100), authorization: str | None = Header(default=None)) -> dict[str, Any]:
     user = _current_user(authorization)
     _require_role(user, 'viewer', 'editor', 'admin')
-    return {'items': list_field_submissions(review_status=review_status, territory_id=territory_id)}
+    return paginated_response(list_field_submissions(review_status=review_status, territory_id=territory_id), page=page, per_page=per_page)
 
 
 @app.post('/api/v1/field/submissions', status_code=status.HTTP_201_CREATED)
@@ -1731,8 +1800,23 @@ def operator_command_center(authorization: str | None = Header(default=None)) ->
         },
         'demo_fixtures': demo_fixture_status(),
         'restore_drill': latest_restore_drill_report(),
+        'migrations': migration_status(),
         'walkthrough': _ministry_walkthrough_steps(),
     }
+
+
+@app.get('/api/v1/operator/migrations/status')
+def operator_migration_status(authorization: str | None = Header(default=None)) -> dict[str, Any]:
+    user = _current_user(authorization)
+    _require_role(user, 'viewer', 'editor', 'admin')
+    return migration_status()
+
+
+@app.get('/api/v1/operator/production-readiness')
+def operator_production_readiness(authorization: str | None = Header(default=None)) -> dict[str, Any]:
+    user = _current_user(authorization)
+    _require_role(user, 'viewer', 'editor', 'admin')
+    return production_readiness_status()
 
 
 @app.get('/api/v1/operator/demo-fixtures/status')

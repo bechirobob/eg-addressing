@@ -29,7 +29,7 @@ async function getProvinces(baseUrl: string): Promise<Province[]> {
 
 async function getTerritories(baseUrl: string): Promise<Territory[]> {
   try {
-    const response = await fetch(`${baseUrl}/api/v1/territories`, { cache: 'no-store' });
+    const response = await fetch(`${baseUrl}/api/v1/public/territory-options`, { cache: 'no-store' });
     if (!response.ok) return [];
     const payload = (await response.json()) as { items: Territory[] };
     return payload.items ?? [];

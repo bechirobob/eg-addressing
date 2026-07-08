@@ -79,7 +79,7 @@ export function TerritoryAdminPanel({ initialTerritories, provinces, apiBaseUrl 
 
   useEffect(() => {
     void loadTerritories();
-  }, [search, provinceFilter, readinessFilter, includeArchived]);
+  }, [search, provinceFilter, readinessFilter, includeArchived, token]);
 
   useEffect(() => {
     if (selectedTerritory) {
@@ -128,7 +128,12 @@ export function TerritoryAdminPanel({ initialTerritories, provinces, apiBaseUrl 
     if (includeArchived) params.set('include_archived', 'true');
 
     try {
-      const response = await fetch(`${browserApiBaseUrl}/api/v1/territories?${params.toString()}`);
+      if (!token) {
+        setTerritories([]);
+        setSelectedTerritory(null);
+        return;
+      }
+      const response = await fetch(`${browserApiBaseUrl}/api/v1/territories?${params.toString()}`, { headers: authorizationHeader(token) });
       const payload = (await response.json()) as { items: Territory[] };
       const items = payload.items ?? [];
       setTerritories(items);
@@ -155,7 +160,8 @@ export function TerritoryAdminPanel({ initialTerritories, provinces, apiBaseUrl 
 
   async function loadTerritoryDetail(territoryId: string) {
     try {
-      const response = await fetch(`${browserApiBaseUrl}/api/v1/territories/${territoryId}`);
+      if (!token) return;
+      const response = await fetch(`${browserApiBaseUrl}/api/v1/territories/${territoryId}`, { headers: authorizationHeader(token) });
       if (!response.ok) {
         setError('Unable to load territory detail.');
         return;
@@ -315,8 +321,8 @@ export function TerritoryAdminPanel({ initialTerritories, provinces, apiBaseUrl 
               ))}
             </select>
           </label>
-          <label className="checkbox-row">
-            <input type="checkbox" checked={includeArchived} onChange={(event) => setIncludeArchived(event.target.checked)} />
+          <label className="checkbox-row" htmlFor="include-archived-territories">
+            <input id="include-archived-territories" type="checkbox" checked={includeArchived} onChange={(event) => setIncludeArchived(event.target.checked)} />
             <span>Include archived territories</span>
           </label>
         </div>

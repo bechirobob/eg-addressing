@@ -29,17 +29,20 @@ export function LoginPanel({ apiBaseUrl }: LoginPanelProps) {
     try {
       const response = await fetch(`${browserApiBaseUrl}/api/v1/auth/login`, {
         method: 'POST',
+        credentials: 'include',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username, password }),
       });
-      const payload = (await response.json()) as { token?: string; user?: { role: string }; detail?: string };
+      const payload = (await response.json()) as { token?: string; auth_mode?: string; user?: { role: string }; detail?: string };
 
       if (!response.ok || !payload.token) {
         setError(payload.detail ?? 'Login failed.');
         return;
       }
 
-      setStoredToken(payload.token);
+      if (payload.auth_mode !== 'cookie_session') {
+        setStoredToken(payload.token);
+      }
       const nextRoute = defaultRouteForRole((payload.user?.role as 'viewer' | 'editor' | 'admin' | undefined) ?? 'viewer');
       setNotice(`Signed in as ${username} (${payload.user?.role ?? 'unknown role'}). Opening your administration workspace…`);
       router.push(nextRoute);

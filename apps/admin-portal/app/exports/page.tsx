@@ -30,24 +30,11 @@ type PublicationPack = {
   address_count: number;
 };
 
-async function safeFetch<T>(url: string, fallback: T, headers?: Record<string, string>): Promise<T> {
-  try {
-    const response = await fetch(url, { cache: 'no-store', headers });
-    if (!response.ok) return fallback;
-    return (await response.json()) as T;
-  } catch {
-    return fallback;
-  }
-}
-
 export default async function ExportsPage() {
-  const apiBaseUrl = process.env.INTERNAL_API_BASE_URL ?? 'http://api:8100';
   const publicApiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL ?? '';
-  const [addressesPayload, importJobsPayload, publicationPacksPayload] = await Promise.all([
-    safeFetch<{ items: Address[] }>(`${apiBaseUrl}/api/v1/addresses`, { items: [] }),
-    Promise.resolve({ items: [] as ImportJob[] }),
-    Promise.resolve({ items: [] as PublicationPack[] }),
-  ]);
+  const addressesPayload = { items: [] as Address[] };
+  const importJobsPayload = { items: [] as ImportJob[] };
+  const publicationPacksPayload = { items: [] as PublicationPack[] };
 
   return (
     <SiteChrome

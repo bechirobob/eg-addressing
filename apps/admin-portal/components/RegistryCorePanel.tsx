@@ -54,7 +54,7 @@ export function RegistryCorePanel({
 }: RegistryCorePanelProps) {
   const browserApiBaseUrl = resolveBrowserApiBaseUrl(apiBaseUrl);
   const { token, sessionUser, sessionStatus } = useStoredSession(browserApiBaseUrl);
-  const [territories] = useState(initialTerritories.filter((item) => !item.is_archived));
+  const [territories, setTerritories] = useState(initialTerritories.filter((item) => !item.is_archived));
   const [roads, setRoads] = useState(initialRoads);
   const [buildings, setBuildings] = useState(initialBuildings);
   const [addresses, setAddresses] = useState(initialAddresses);
@@ -121,6 +121,33 @@ export function RegistryCorePanel({
     [addresses],
   );
 
+  const caseLanes = useMemo(
+    () => [
+      {
+        key: 'internal-hold',
+        label: 'Internal holds',
+        count: registryCounts.internalHold,
+        tone: 'warn',
+        scent: 'Records ready for protected review but not public release.',
+      },
+      {
+        key: 'published',
+        label: 'Published cases',
+        count: registryCounts.published,
+        tone: 'ok',
+        scent: 'Public-facing records; changes require careful audit trail.',
+      },
+      {
+        key: 'archive',
+        label: 'Archive lane',
+        count: registryCounts.archived,
+        tone: '',
+        scent: 'Hidden records available only for history and cleanup review.',
+      },
+    ],
+    [registryCounts],
+  );
+
   useEffect(() => {
     if (!highlightEntityId) return;
 
@@ -148,24 +175,45 @@ export function RegistryCorePanel({
     }
   }, [addresses, buildings, highlightEntityId, roads]);
 
+  useEffect(() => {
+    if (token) {
+      void reloadAll();
+    }
+  }, [token]);
+
   async function reloadAll() {
+    if (!token) {
+      setError('Sign in to load protected registry lists.');
+      return;
+    }
     setIsRefreshing(true);
     try {
-      const [roadsResponse, buildingsResponse, addressesResponse] = await Promise.all([
-        fetch(`${browserApiBaseUrl}/api/v1/roads?include_archived=true`),
-        fetch(`${browserApiBaseUrl}/api/v1/buildings?include_archived=true`),
-        fetch(`${browserApiBaseUrl}/api/v1/addresses?include_archived=true`),
+      const auth = authorizationHeader(token);
+      const [territoriesResponse, roadsResponse, buildingsResponse, addressesResponse] = await Promise.all([
+        fetch(`${browserApiBaseUrl}/api/v1/territories?include_archived=true`, { headers: auth }),
+        fetch(`${browserApiBaseUrl}/api/v1/roads?include_archived=true`, { headers: auth }),
+        fetch(`${browserApiBaseUrl}/api/v1/buildings?include_archived=true`, { headers: auth }),
+        fetch(`${browserApiBaseUrl}/api/v1/addresses?include_archived=true`, { headers: auth }),
       ]);
-      if (!roadsResponse.ok || !buildingsResponse.ok || !addressesResponse.ok) {
+      if (!territoriesResponse.ok || !roadsResponse.ok || !buildingsResponse.ok || !addressesResponse.ok) {
         setError('Unable to refresh the registry lists.');
         return;
       }
+      const territoriesPayload = (await territoriesResponse.json()) as { items: Territory[] };
       const roadsPayload = (await roadsResponse.json()) as { items: Road[] };
       const buildingsPayload = (await buildingsResponse.json()) as { items: Building[] };
       const addressesPayload = (await addressesResponse.json()) as { items: Address[] };
-      setRoads(roadsPayload.items ?? []);
-      setBuildings(buildingsPayload.items ?? []);
-      setAddresses(addressesPayload.items ?? []);
+      const nextTerritories = territoriesPayload.items ?? [];
+      const nextRoads = roadsPayload.items ?? [];
+      const nextBuildings = buildingsPayload.items ?? [];
+      const nextAddresses = addressesPayload.items ?? [];
+      setTerritories(nextTerritories.filter((item) => !item.is_archived));
+      setRoads(nextRoads);
+      setBuildings(nextBuildings);
+      setAddresses(nextAddresses);
+      if (!roadForm.territory_id && nextTerritories[0]) setRoadForm((current) => ({ ...current, territory_id: nextTerritories[0].id }));
+      if (!buildingForm.territory_id && nextTerritories[0]) setBuildingForm((current) => ({ ...current, territory_id: nextTerritories[0].id, road_id: nextRoads[0]?.id ?? current.road_id }));
+      if (!addressForm.territory_id && nextTerritories[0]) setAddressForm((current) => ({ ...current, territory_id: nextTerritories[0].id, road_id: nextRoads[0]?.id ?? current.road_id, building_id: nextBuildings[0]?.id ?? current.building_id }));
     } catch {
       setError('Unable to refresh the registry lists.');
     } finally {
@@ -230,13 +278,30 @@ export function RegistryCorePanel({
           <span className="status-chip ok">Published: {registryCounts.published}</span>
           <span className="status-chip">Archived hidden: {registryCounts.archived}</span>
         </div>
+        <div className="data-command-deck" aria-label="Registry information scent command deck">
+          {caseLanes.map((lane) => (
+            <button
+              key={lane.key}
+              className={`case-lane ${lane.tone}`}
+              type="button"
+              onClick={() => {
+                setActiveTab('addresses');
+                if (lane.key === 'archive') setIncludeArchived(true);
+              }}
+            >
+              <span>{lane.label}</span>
+              <strong>{lane.count}</strong>
+              <small>Information scent: {lane.scent}</small>
+            </button>
+          ))}
+        </div>
         <div className="registry-job-tabs" role="tablist" aria-label="Registry sections">
           <button className={activeTab === 'addresses' ? 'active' : ''} type="button" onClick={() => setActiveTab('addresses')}>Addresses</button>
           <button className={activeTab === 'roads' ? 'active' : ''} type="button" onClick={() => setActiveTab('roads')}>Roads</button>
           <button className={activeTab === 'buildings' ? 'active' : ''} type="button" onClick={() => setActiveTab('buildings')}>Buildings</button>
         </div>
-        <label className="checkbox-row registry-archive-toggle">
-          <input type="checkbox" checked={includeArchived} onChange={(event) => setIncludeArchived(event.target.checked)} />
+        <label className="checkbox-row registry-archive-toggle" htmlFor="include-archived-registry">
+          <input id="include-archived-registry" type="checkbox" checked={includeArchived} onChange={(event) => setIncludeArchived(event.target.checked)} />
           <span>Show archived records</span>
         </label>
         {sessionStatus === 'loading' ? <p className="panel-state">Checking access before enabling registry actions…</p> : null}

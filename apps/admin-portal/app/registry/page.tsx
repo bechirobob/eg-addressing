@@ -8,31 +8,17 @@ type Address = { id: string; formatted: string; territory_id: string; territory_
 
 export const dynamic = 'force-dynamic';
 
-async function fetchItems<T>(baseUrl: string, path: string): Promise<T[]> {
-  try {
-    const response = await fetch(`${baseUrl}${path}`, { cache: 'no-store' });
-    if (!response.ok) return [];
-    const payload = (await response.json()) as { items: T[] };
-    return payload.items;
-  } catch {
-    return [];
-  }
-}
-
 export default async function RegistryPage({
   searchParams,
 }: {
   searchParams?: Promise<{ entity?: string }>;
 }) {
-  const baseUrl = process.env.INTERNAL_API_BASE_URL ?? 'http://api:8100';
   const publicApiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL ?? '';
   const resolvedSearchParams = (await searchParams) ?? {};
-  const [territories, roads, buildings, addresses] = await Promise.all([
-    fetchItems<Territory>(baseUrl, '/api/v1/territories'),
-    fetchItems<Road>(baseUrl, '/api/v1/roads'),
-    fetchItems<Building>(baseUrl, '/api/v1/buildings'),
-    fetchItems<Address>(baseUrl, '/api/v1/addresses'),
-  ]);
+  const territories: Territory[] = [];
+  const roads: Road[] = [];
+  const buildings: Building[] = [];
+  const addresses: Address[] = [];
 
   return (
     <SiteChrome

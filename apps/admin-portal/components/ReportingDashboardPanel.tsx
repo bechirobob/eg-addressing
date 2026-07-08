@@ -2,7 +2,8 @@
 
 import { useEffect, useMemo, useState } from 'react';
 
-import { translateUiText, useTranslation } from './i18n';
+import { apiJson, apiPath } from './apiClient';
+import { translateUiText, type Locale, useTranslation } from './i18n';
 import { authorizationHeader, resolveBrowserApiBaseUrl, useStoredSession } from './sessionClient';
 
 type ReportingSummary = {
@@ -84,6 +85,15 @@ type OperatorCommandCenter = {
     restored_counts?: Array<{ table_name: string; rows: number }>;
     operator_note?: string;
   };
+  migrations: {
+    status: string;
+    applied_count: number;
+    expected_count: number;
+    pending_count: number;
+    latest_version?: string | null;
+    latest_filename?: string | null;
+    operator_note?: string;
+  };
   walkthrough: Array<{ step: string; title: string; route: string; operator_message: string }>;
 };
 
@@ -129,6 +139,14 @@ function localizedCountLabel(count: number, singular: string, plural: string, lo
   return locale === 'es' ? translateUiText(label, locale) : label;
 }
 
+function localizedAutomationLabel(value: string, locale: Locale): string {
+  return translateUiText(value.replaceAll('-', ' '), locale);
+}
+
+function apiUrl(baseUrl: string, path: Parameters<typeof apiPath>[0]): string {
+  return `${baseUrl}${apiPath(path)}`;
+}
+
 export function ReportingDashboardPanel({ summary: initialSummary, readinessSummary, apiBaseUrl }: ReportingDashboardPanelProps) {
   const { locale } = useTranslation();
   const browserApiBaseUrl = resolveBrowserApiBaseUrl(apiBaseUrl);
@@ -155,46 +173,22 @@ export function ReportingDashboardPanel({ summary: initialSummary, readinessSumm
   }
 
   async function loadSummary(currentToken: string) {
-    const response = await fetch(`${browserApiBaseUrl}/api/v1/reporting/summary`, {
-      headers: authorizationHeader(currentToken),
-    });
-    if (!response.ok) {
-      throw new Error('summary failed');
-    }
-    const payload = (await response.json()) as ReportingSummary;
+    const payload = await apiJson<ReportingSummary>(apiUrl(browserApiBaseUrl, '/api/v1/reporting/summary'), { token: currentToken });
     setSummary(payload);
   }
 
   async function loadReadiness(currentToken: string) {
-    const response = await fetch(`${browserApiBaseUrl}/api/v1/pilot-readiness/summary`, {
-      headers: authorizationHeader(currentToken),
-    });
-    if (!response.ok) {
-      throw new Error('readiness failed');
-    }
-    const payload = (await response.json()) as PilotReadinessSummary;
+    const payload = await apiJson<PilotReadinessSummary>(apiUrl(browserApiBaseUrl, '/api/v1/pilot-readiness/summary'), { token: currentToken });
     setReadiness(payload);
   }
 
   async function loadAutomationSummary(currentToken: string) {
-    const response = await fetch(`${browserApiBaseUrl}/api/v1/geotag-submissions/automation/summary`, {
-      headers: authorizationHeader(currentToken),
-    });
-    if (!response.ok) {
-      throw new Error('automation summary failed');
-    }
-    const payload = (await response.json()) as AutomationSummary;
+    const payload = await apiJson<AutomationSummary>(apiUrl(browserApiBaseUrl, '/api/v1/geotag-submissions/automation/summary'), { token: currentToken });
     setAutomationSummary(payload);
   }
 
   async function loadCommandCenter(currentToken: string) {
-    const response = await fetch(`${browserApiBaseUrl}/api/v1/operator/command-center`, {
-      headers: authorizationHeader(currentToken),
-    });
-    if (!response.ok) {
-      throw new Error('command center failed');
-    }
-    const payload = (await response.json()) as OperatorCommandCenter;
+    const payload = await apiJson<OperatorCommandCenter>(apiUrl(browserApiBaseUrl, '/api/v1/operator/command-center'), { token: currentToken });
     setCommandCenter(payload);
   }
 
@@ -283,6 +277,33 @@ export function ReportingDashboardPanel({ summary: initialSummary, readinessSumm
     [summary],
   );
 
+
+  const riskLanes = commandCenter
+    ? [
+        {
+          key: 'overdue-sla',
+          label: 'Overdue SLA',
+          count: commandCenter.risk_lanes.overdue_sla,
+          route: '/field',
+          scent: 'Time-sensitive records that may block ministry confidence.',
+        },
+        {
+          key: 'publication-holds',
+          label: 'Publication holds',
+          count: commandCenter.risk_lanes.publication_holds,
+          route: '/signage',
+          scent: 'Registry-ready items intentionally held before public/signage release.',
+        },
+        {
+          key: 'duplicate-groups',
+          label: 'Duplicate groups',
+          count: commandCenter.risk_lanes.duplicate_groups,
+          route: '/geotag',
+          scent: 'Possible repeated locations needing operator decision.',
+        },
+      ]
+    : [];
+
   async function handleCorrectionAction(correctionId: string, action: 'under-review' | 'resolved' | 'rejected') {
     if (!token) return;
     setActiveActionId(correctionId);
@@ -329,13 +350,22 @@ export function ReportingDashboardPanel({ summary: initialSummary, readinessSumm
               <div className="summary-card"><strong>{commandCenter.demo_fixtures.clean ? translateUiText('Clean', locale) : commandCenter.demo_fixtures.total}</strong><span>Demo fixture state</span></div>
               <div className="summary-card"><strong>{localizedStatusLabel(commandCenter.restore_drill.status, locale)}</strong><span>Restore drill</span></div>
             </div>
+            <div className="data-command-deck" aria-label="Operator risk lane command deck">
+              {riskLanes.map((lane) => (
+                <a className="case-lane warn" href={lane.route} key={lane.key}>
+                  <span>{lane.label}</span>
+                  <strong>{lane.count}</strong>
+                  <small>Risk lane: {lane.scent}</small>
+                </a>
+              ))}
+            </div>
             <details className="disclosure-panel">
               <summary>Ministry walkthrough and continuity proof</summary>
               <ol className="mini-list">
                 {commandCenter.walkthrough.map((step) => (
                   <li key={step.step}>
                     <strong>{step.step}. {step.title}</strong>
-                    <span>{step.operator_message} · <a className="inline-link" href={step.route}>Open {step.route}</a></span>
+                    <span>{step.operator_message} · <a className="inline-link" href={step.route} aria-label={`Open ministry walkthrough route ${step.route}`}>Open {step.route}</a></span>
                   </li>
                 ))}
               </ol>
@@ -416,12 +446,12 @@ export function ReportingDashboardPanel({ summary: initialSummary, readinessSumm
             <summary>Show process automation lanes</summary>
             <div className="summary-grid">
               <div className="summary-card"><strong>{automationSummary.field_required}</strong><span>Need field verification</span></div>
-              <div className="summary-card"><strong>{automationSummary.signage_ready}</strong><span>Ready for signage/export</span></div>
+              <div className="summary-card"><strong>{automationSummary.signage_ready}</strong><span>{translateUiText('Ready for signage/export', locale)}</span></div>
               <div className="summary-card"><strong>{automationSummary.partner_api_ready}</strong><span>Public/API-ready records</span></div>
             </div>
             <ul className="program-list">
               {automationSummary.triage_buckets.map((row) => (
-                <li key={row.bucket}><span>{row.bucket.replaceAll('-', ' ')}</span><span>{row.count}</span></li>
+                <li key={row.bucket}><span>{localizedAutomationLabel(row.bucket, locale)}</span><span>{row.count}</span></li>
               ))}
             </ul>
           </details>
@@ -447,7 +477,7 @@ export function ReportingDashboardPanel({ summary: initialSummary, readinessSumm
                       <span>{translateUiText(gate.status, locale)}</span>
                     </summary>
                     <p>{translateUiText(gate.evidence, locale)}</p>
-                    <p>{translateUiText(`Next: ${gate.next_step}`, locale)}</p>
+                    <p>{translateUiText('Next:', locale)} {translateUiText(gate.next_step, locale)}</p>
                   </details>
                 </li>
               ))}
@@ -545,6 +575,7 @@ export function ReportingDashboardPanel({ summary: initialSummary, readinessSumm
                 key={card.key}
                 type="button"
                 className={`selection-item${activeFilter === card.key ? ' active' : ''}`}
+                aria-label={`Show correction queue filter ${card.label}`}
                 onClick={() => setActiveFilter(card.key as typeof activeFilter)}
               >
                 <strong>{card.label}</strong>
@@ -595,9 +626,10 @@ export function ReportingDashboardPanel({ summary: initialSummary, readinessSumm
                         <span>{item.note}</span>
                       </div>
                     ) : null}
-                    <label className="form-field">
+                    <label className="form-field" htmlFor={`reviewer-note-${item.id}`}>
                       <span>Reviewer note</span>
                       <textarea
+                        id={`reviewer-note-${item.id}`}
                         className="territory-textarea"
                         value={reviewerNotes[item.id] ?? ''}
                         onChange={(event) =>

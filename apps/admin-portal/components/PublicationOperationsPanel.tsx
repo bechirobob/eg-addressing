@@ -117,7 +117,7 @@ export function PublicationOperationsPanel({
     const [jobsResponse, packsResponse, addressesResponse] = await Promise.all([
       fetch(`${browserApiBaseUrl}/api/v1/imports/jobs`, { headers: authorizationHeader(activeToken) }),
       fetch(`${browserApiBaseUrl}/api/v1/publication/packs`, { headers: authorizationHeader(activeToken) }),
-      fetch(`${browserApiBaseUrl}/api/v1/addresses`),
+      fetch(`${browserApiBaseUrl}/api/v1/addresses`, { headers: authorizationHeader(activeToken) }),
     ]);
 
     if (!jobsResponse.ok || !packsResponse.ok || !addressesResponse.ok) {
@@ -377,7 +377,9 @@ export function PublicationOperationsPanel({
         <p className="institutional-note">
           Simulation is locked: it does not create public records, certificates, or physical signage. Use it to demonstrate the approval path for a registry-ready geotag case.
         </p>
-        <form className="territory-form" onSubmit={simulatePublication}>
+        <details className="quiet-disclosure compact-review-disclosure">
+          <summary>Open simulation form</summary>
+          <form className="territory-form" onSubmit={simulatePublication}>
           <label className="territory-field territory-field-wide">
             <span className="territory-label">Registry-ready geotag submission ID</span>
             <input className="territory-input" value={simulationSubmissionId} onChange={(event) => setSimulationSubmissionId(event.target.value)} placeholder="citizen-geotag-…" />
@@ -391,7 +393,8 @@ export function PublicationOperationsPanel({
               {!canWrite ? 'Editor or admin required' : isSubmitting ? 'Working…' : 'Run simulation only'}
             </button>
           </div>
-        </form>
+          </form>
+        </details>
         {publicationSimulation ? (
           <div className="result-card">
             <span className="status-pill warn">Simulation only</span>
@@ -427,9 +430,9 @@ export function PublicationOperationsPanel({
               {importForm.rows.map((row, index) => (
                 <div key={row.id} className="review-card compact-card import-row-card">
                   <div className="import-row-grid">
-                    <label className="territory-field">
+                    <label className="territory-field" htmlFor={`intake-row-type-${row.id}`}>
                       <span className="territory-label">Row {index + 1} type</span>
-                      <select className="territory-input" value={row.submission_type} onChange={(event) => updateImportRow(row.id, 'submission_type', event.target.value)}>
+                      <select id={`intake-row-type-${row.id}`} className="territory-input" value={row.submission_type} onChange={(event) => updateImportRow(row.id, 'submission_type', event.target.value)}>
                         <option value="road">Road</option>
                         <option value="building">Building</option>
                         <option value="address">Address</option>
@@ -457,7 +460,7 @@ export function PublicationOperationsPanel({
                     </label>
                   </div>
                   <div className="button-stack">
-                    <button className="mini-action-button danger" type="button" onClick={() => removeImportRow(row.id)} disabled={importForm.rows.length === 1 || isSubmitting}>
+                    <button className="mini-action-button danger" type="button" aria-label={`Remove intake row ${index + 1}`} onClick={() => removeImportRow(row.id)} disabled={importForm.rows.length === 1 || isSubmitting}>
                       Remove row
                     </button>
                   </div>
@@ -503,7 +506,9 @@ export function PublicationOperationsPanel({
           <p className="section-label">Publication packs</p>
           <h3>Prepare official output groups</h3>
         </div>
-        <form className="territory-form" onSubmit={createPack}>
+        <details className="quiet-disclosure compact-review-disclosure">
+          <summary>Create publication pack</summary>
+          <form className="territory-form" onSubmit={createPack}>
           <label className="territory-field">
             <span className="territory-label">Pack name</span>
             <input className="territory-input" value={packName} onChange={(event) => setPackName(event.target.value)} required />
@@ -541,7 +546,8 @@ export function PublicationOperationsPanel({
               {!canWrite ? 'Editor or admin required' : isSubmitting ? 'Working…' : 'Create publication pack'}
             </button>
           </div>
-        </form>
+          </form>
+        </details>
         <ul className="review-list compact-review-list">
           {publicationPacks.map((pack) => (
             <li key={pack.id} className="review-card compact-card">

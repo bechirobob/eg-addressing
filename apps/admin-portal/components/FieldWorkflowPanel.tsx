@@ -56,6 +56,8 @@ export function FieldWorkflowPanel({ assignments, submissions: initialSubmission
   const { locale } = useTranslation();
   const browserApiBaseUrl = resolveBrowserApiBaseUrl(apiBaseUrl);
   const { token, sessionUser, sessionStatus } = useStoredSession(browserApiBaseUrl);
+  const [fieldAssignments, setFieldAssignments] = useState(assignments);
+  const [fieldTerritories, setFieldTerritories] = useState(territories);
   const [submissions, setSubmissions] = useState(initialSubmissions);
   const [geotagTasks, setGeotagTasks] = useState<GeotagFieldTask[]>([]);
   const [fieldNote, setFieldNote] = useState('Coordinates checked at property entrance.');
@@ -67,8 +69,8 @@ export function FieldWorkflowPanel({ assignments, submissions: initialSubmission
   const canSubmit = sessionUser?.role === 'editor' || sessionUser?.role === 'admin';
   const submitDisabledReason = !canSubmit ? 'Editor or admin required' : isSubmitting ? 'Submitting…' : null;
   const [form, setForm] = useState({
-    assignment_id: assignments[0]?.assignment_id ?? '',
-    territory_id: assignments[0]?.territory_id ?? territories[0]?.id ?? '',
+    assignment_id: fieldAssignments[0]?.assignment_id ?? '',
+    territory_id: fieldAssignments[0]?.territory_id ?? fieldTerritories[0]?.id ?? '',
     submission_type: 'road' as 'road' | 'building' | 'address',
     candidate_name: '',
     candidate_status: 'submitted',
@@ -78,9 +80,33 @@ export function FieldWorkflowPanel({ assignments, submissions: initialSubmission
 
   useEffect(() => {
     if (!token) return;
+    void reloadProtectedLookups(token);
     void reloadSubmissions(token);
     void reloadGeotagTasks(token);
   }, [token]);
+
+  useEffect(() => {
+    if (!form.assignment_id && fieldAssignments[0]) {
+      setForm((current) => ({ ...current, assignment_id: fieldAssignments[0].assignment_id, territory_id: fieldAssignments[0].territory_id }));
+    } else if (!form.territory_id && fieldTerritories[0]) {
+      setForm((current) => ({ ...current, territory_id: fieldTerritories[0].id }));
+    }
+  }, [fieldAssignments, fieldTerritories, form.assignment_id, form.territory_id]);
+
+  async function reloadProtectedLookups(activeToken: string) {
+    const [assignmentsResponse, territoriesResponse] = await Promise.all([
+      fetch(`${browserApiBaseUrl}/api/v1/field/assignments`, { headers: authorizationHeader(activeToken) }),
+      fetch(`${browserApiBaseUrl}/api/v1/territories`, { headers: authorizationHeader(activeToken) }),
+    ]);
+    if (!assignmentsResponse.ok || !territoriesResponse.ok) {
+      setError('Unable to refresh protected field lookup lists.');
+      return;
+    }
+    const assignmentsPayload = (await assignmentsResponse.json()) as { items: Assignment[] };
+    const territoriesPayload = (await territoriesResponse.json()) as { items: Territory[] };
+    setFieldAssignments(assignmentsPayload.items ?? []);
+    setFieldTerritories(territoriesPayload.items ?? []);
+  }
 
   async function reloadSubmissions(activeToken: string) {
     const response = await fetch(`${browserApiBaseUrl}/api/v1/field/submissions`, { headers: authorizationHeader(activeToken) });
@@ -203,8 +229,25 @@ export function FieldWorkflowPanel({ assignments, submissions: initialSubmission
           <p className="section-label">Deployment queue</p>
           <h3>Priority field assignments</h3>
         </div>
+        <div className="data-command-deck field-command-deck" aria-label="Field operation command lanes">
+          <button className="case-lane warn" type="button">
+            <span>Assignments</span>
+            <strong>{fieldAssignments.length}</strong>
+            <small>Risk lane: priority deployment tasks assigned to field teams.</small>
+          </button>
+          <button className="case-lane" type="button">
+            <span>Location checks</span>
+            <strong>{geotagTasks.length}</strong>
+            <small>Case lane: citizen geotags waiting for field confirmation.</small>
+          </button>
+          <button className="case-lane ok" type="button">
+            <span>Recent intake</span>
+            <strong>{submissions.length}</strong>
+            <small>Evidence lane: records already submitted into verification.</small>
+          </button>
+        </div>
         <ul className="assignment-list">
-          {assignments.map((assignment) => (
+          {fieldAssignments.map((assignment) => (
             <li key={assignment.assignment_id} className="assignment-card">
               <div>
                 <p className="assignment-kicker">{translateUiText(`${assignment.priority} priority`, locale)}</p>
@@ -222,15 +265,18 @@ export function FieldWorkflowPanel({ assignments, submissions: initialSubmission
           <p className="section-label">Assigned location checks</p>
           <h3>Citizen geotag verification tasks</h3>
         </div>
-        <label className="territory-field territory-field-wide">
-          <span className="territory-label">Shared field note for status updates</span>
-          <textarea className="territory-input territory-textarea" value={fieldNote} onChange={(event) => setFieldNote(event.target.value)} rows={3} />
-        </label>
-        <label className="territory-field territory-field-wide">
-          <span className="territory-label">Evidence reference</span>
-          <input className="territory-input" value={evidenceReference} onChange={(event) => setEvidenceReference(event.target.value)} placeholder="Photo/file reference, not a private credential" />
-          <span className="field-help">Records an auditable field evidence reference. Do not paste passwords, D.I.P. scans, or private identity files here.</span>
-        </label>
+        <details className="quiet-disclosure compact-review-disclosure">
+          <summary>Shared field evidence settings</summary>
+          <label className="territory-field territory-field-wide">
+            <span className="territory-label">Shared field note for status updates</span>
+            <textarea className="territory-input territory-textarea" value={fieldNote} onChange={(event) => setFieldNote(event.target.value)} rows={3} />
+          </label>
+          <label className="territory-field territory-field-wide">
+            <span className="territory-label">Evidence reference</span>
+            <input className="territory-input" value={evidenceReference} onChange={(event) => setEvidenceReference(event.target.value)} placeholder="Photo/file reference, not a private credential" />
+            <span className="field-help">Records an auditable field evidence reference. Do not paste passwords, D.I.P. scans, or private identity files here.</span>
+          </label>
+        </details>
         {geotagTasks.length ? (
           <ul className="mini-list field-task-list">
             {geotagTasks.map((task) => {
@@ -280,7 +326,7 @@ export function FieldWorkflowPanel({ assignments, submissions: initialSubmission
               className="territory-input"
               value={form.assignment_id}
               onChange={(event) => {
-                const assignment = assignments.find((item) => item.assignment_id === event.target.value);
+                const assignment = fieldAssignments.find((item) => item.assignment_id === event.target.value);
                 setForm({
                   ...form,
                   assignment_id: event.target.value,
@@ -289,7 +335,7 @@ export function FieldWorkflowPanel({ assignments, submissions: initialSubmission
                 });
               }}
             >
-              {assignments.map((assignment) => (
+              {fieldAssignments.map((assignment) => (
                 <option key={assignment.assignment_id} value={assignment.assignment_id}>
                   {assignment.task} · {assignment.team}
                 </option>
@@ -299,7 +345,7 @@ export function FieldWorkflowPanel({ assignments, submissions: initialSubmission
           <label className="territory-field">
             <span className="territory-label">Territory</span>
             <select className="territory-input" value={form.territory_id} onChange={(event) => setForm({ ...form, territory_id: event.target.value })}>
-              {territories.map((territory) => (
+              {fieldTerritories.map((territory) => (
                 <option key={territory.id} value={territory.id}>
                   {territory.name}
                 </option>

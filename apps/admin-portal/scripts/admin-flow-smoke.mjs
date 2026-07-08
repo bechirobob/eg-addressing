@@ -90,7 +90,7 @@ assert(approveSubmission.response.ok, `submission approve failed: ${approveSubmi
 assert(approveSubmission.data?.review_status === 'approved', 'submission was not approved');
 assert(approveSubmission.data?.registry_entity_id, 'approval did not return registry entity id');
 
-const roads = await jsonFetch('/api/v1/roads');
+const roads = await jsonFetch('/api/v1/roads', { headers: authHeader(login.data.token) });
 assert(roads.response.ok, `roads fetch failed: ${roads.response.status}`);
 assert(Array.isArray(roads.data?.items), 'roads payload missing items');
 assert(roads.data.items.some((road) => road.name === candidateName), 'approved road was not found in registry list');

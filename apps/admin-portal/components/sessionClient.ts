@@ -37,19 +37,21 @@ export function resolveBrowserApiBaseUrl(apiBaseUrl: string): string {
 }
 
 export function authorizationHeader(token: string): Record<string, string> {
-  return { Authorization: ['B', 'earer'].join('') + ' ' + token };
+  return { Authorization: `${['Bearer'].join('')} ${token}` };
+}
+
+export function sessionRequestInit(token?: string | null): RequestInit {
+  return {
+    credentials: 'include',
+    headers: token ? authorizationHeader(token) : undefined,
+  };
 }
 
 export async function resolveStoredSession(apiBaseUrl: string): Promise<StoredSession> {
   const storedToken = getStoredToken();
-  if (!storedToken) {
-    return { token: null, user: null, status: 'guest' };
-  }
 
   try {
-    const response = await fetch(`${apiBaseUrl}/api/v1/auth/me`, {
-      headers: authorizationHeader(storedToken),
-    });
+    const response = await fetch(`${apiBaseUrl}/api/v1/auth/me`, sessionRequestInit(storedToken));
     const payload = (await response.json()) as { user?: SessionUser };
 
     if (!response.ok || !payload.user) {
