@@ -15,7 +15,7 @@
   --eg-paper: #fffdf8;
   --eg-white: #ffffff;
   --eg-shadow: none;
-  --radius-xl: 14px;
+  --radius-xl: var(--radius-card);
   --radius-lg: 12px;
   --radius-md: 10px;
 
@@ -36,8 +36,8 @@
   --gov-green-soft: #edf7f1;
   --gov-gold-soft: var(--eg-gold-soft);
   --gov-red-soft: #f7eded;
-  --gov-radius: 14px;
-  --gov-radius-sm: 10px;
+  --gov-radius: var(--radius-card);
+  --gov-radius-sm: var(--radius-control);
   --gov-gap: 16px;
   --gov-gap-sm: 10px;
   --gov-control-height: 44px;
@@ -56,13 +56,11 @@ body {
 }
 
 body {
-  font-family: Inter, Arial, Helvetica, sans-serif;
-  background:
-    linear-gradient(90deg, rgba(23, 79, 130, 0.035) 1px, transparent 1px),
-    linear-gradient(180deg, rgba(23, 79, 130, 0.025) 1px, transparent 1px),
-    var(--eg-ivory);
-  background-size: 44px 44px, 44px 44px, auto;
-  color: var(--eg-ink);
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: var(--page-bg);
+  background-image: none !important;
+  background-size: auto;
+  color: var(--text-main);
 }
 
 img {
@@ -4408,7 +4406,7 @@ body * {
   overflow: hidden;
   background: transparent !important;
   border: 1px solid rgba(6, 59, 99, 0.24);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   color: var(--gov-navy);
 }
 
@@ -8913,7 +8911,7 @@ details.review-secondary-actions[open] > summary {
 .registry-simple-hero {
   background: var(--registry-card) !important;
   border: 1px solid var(--registry-line) !important;
-  border-radius: 14px !important;
+  border-radius: var(--radius-card) !important;
   box-shadow: none !important;
   padding: 24px !important;
 }
@@ -8975,7 +8973,7 @@ details.review-secondary-actions[open] > summary {
   gap: 0 !important;
   width: 100% !important;
   border: 1px solid var(--registry-line) !important;
-  border-radius: 14px !important;
+  border-radius: var(--radius-card) !important;
   background: #fff !important;
   overflow: clip !important;
 }
@@ -9023,7 +9021,7 @@ details.review-secondary-actions[open] > summary {
   grid-template-columns: 1fr !important;
   gap: 0 !important;
   border: 1px solid var(--registry-line) !important;
-  border-radius: 14px !important;
+  border-radius: var(--radius-card) !important;
   background: #fff !important;
   overflow: clip !important;
 }
@@ -9103,7 +9101,7 @@ details.review-secondary-actions[open] > summary {
   grid-template-columns: 1fr !important;
   gap: 0 !important;
   border: 1px solid var(--registry-line) !important;
-  border-radius: 14px !important;
+  border-radius: var(--radius-card) !important;
   overflow: clip !important;
   background: #fff !important;
 }
@@ -9153,7 +9151,7 @@ details.review-secondary-actions[open] > summary {
   grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)) !important;
   gap: 0 !important;
   border: 1px solid var(--registry-line) !important;
-  border-radius: 14px !important;
+  border-radius: var(--radius-card) !important;
   overflow: clip !important;
   background: #fff !important;
 }
@@ -9244,7 +9242,7 @@ details.review-secondary-actions[open] > summary {
   .chrome-session-card { position: fixed !important; top: 22px !important; right: 22px !important; z-index: 40 !important; border: 0 !important; background: transparent !important; padding: 0 !important; }
   .session-utility-role { display: none !important; }
   .session-utility-logout { width: 34px !important; height: 34px !important; overflow: hidden !important; color: transparent !important; border-radius: 999px !important; border: 2px solid #444 !important; background: transparent !important; }
-  .session-utility-logout::before { content: ''; display: block; width: 18px; height: 18px; margin: 6px auto; border: 2px solid #444; border-radius: 14px; }
+  .session-utility-logout::before { content: ''; display: block; width: 18px; height: 18px; margin: 6px auto; border: 2px solid #444; border-radius: var(--radius-card); }
 
   .mobile-control-nav {
     position: fixed;
@@ -9286,7 +9284,7 @@ details.review-secondary-actions[open] > summary {
   .operator-review-desk .request-list-panel,
   .operator-review-desk .request-detail-panel {
     padding: 18px !important;
-    border-radius: 14px !important;
+    border-radius: var(--radius-card) !important;
   }
   .review-glance-head { display: grid !important; grid-template-columns: 1fr !important; }
   .operator-review-shell .review-desk-header > .operator-summary-row,
@@ -9455,7 +9453,7 @@ details.review-secondary-actions[open] > summary {
     height: 18px !important;
     margin: 6px auto !important;
     border: 2px solid #444 !important;
-    border-radius: 14px !important;
+    border-radius: var(--radius-card) !important;
     box-sizing: border-box !important;
   }
   .session-utility-logout::after {
@@ -9526,7 +9524,7 @@ details.review-secondary-actions[open] > summary {
 .reports-section-panel {
   background: #fffdf8;
   border: 1px solid #dfe5ec;
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   box-shadow: none;
 }
 
@@ -9606,7 +9604,7 @@ details.review-secondary-actions[open] > summary {
   background: #fffdf8;
   border: 1px solid #dfe5ec;
   box-shadow: none;
-  border-radius: 14px;
+  border-radius: var(--radius-card);
 }
 
 .civic-hero-illustration {
@@ -9815,5 +9813,394 @@ body {
 @media (max-width: 640px) {
   .field-today-summary {
     grid-template-columns: 1fr;
+  }
+}
+
+/* National Addressing Visual Design Guide — exact shared system reset */
+:root {
+  --page-bg: #f7f4ec;
+  --surface: #fffef9;
+  --surface-muted: #f4f1e8;
+  --text-main: #16324f;
+  --text-muted: #667085;
+  --text-soft: #8a94a3;
+  --border: #d7dde5;
+  --border-strong: #b9c3cf;
+  --blue: #245f9f;
+  --blue-soft: #eaf3fb;
+  --green: #2f7d52;
+  --green-soft: #eaf6ef;
+  --gold: #9a7026;
+  --gold-soft: #fff6df;
+  --red: #a33b35;
+  --red-soft: #fff1ef;
+  --radius-card: 12px;
+  --radius-control: 8px;
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+
+  --eg-green: var(--green);
+  --eg-red: var(--red);
+  --eg-blue: var(--blue);
+  --eg-blue-deep: var(--text-main);
+  --eg-gold: var(--gold);
+  --eg-gold-soft: var(--gold-soft);
+  --eg-focus: #f4b300;
+  --eg-ink: var(--text-main);
+  --eg-muted: var(--text-muted);
+  --eg-line: var(--border);
+  --eg-line-strong: var(--border-strong);
+  --eg-ivory: var(--page-bg);
+  --eg-paper: var(--surface);
+  --eg-white: #ffffff;
+  --eg-shadow: none;
+  --radius-xl: var(--radius-card);
+  --radius-lg: var(--radius-card);
+  --radius-md: var(--radius-control);
+
+  --gov-bg: var(--page-bg);
+  --gov-surface: var(--surface);
+  --gov-surface-raised: #ffffff;
+  --gov-ink: var(--text-main);
+  --gov-ink-strong: var(--text-main);
+  --gov-muted: var(--text-muted);
+  --gov-line: var(--border);
+  --gov-line-soft: var(--border);
+  --gov-blue: var(--blue);
+  --gov-green: var(--green);
+  --gov-gold: var(--gold);
+  --gov-red: var(--red);
+  --gov-blue-soft: var(--blue-soft);
+  --gov-green-soft: var(--green-soft);
+  --gov-gold-soft: var(--gold-soft);
+  --gov-red-soft: var(--red-soft);
+  --gov-radius: var(--radius-card);
+  --gov-radius-sm: var(--radius-control);
+  --gov-gap: var(--space-4);
+  --gov-gap-sm: var(--space-3);
+  --gov-control-height: 44px;
+  --gov-shadow: none;
+}
+
+html,
+body {
+  background: var(--page-bg) !important;
+  color: var(--text-main) !important;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif !important;
+  line-height: 1.5;
+}
+
+body {
+  background-image: none !important;
+  background-size: auto !important;
+}
+
+.page-shell,
+.official-header-inner,
+.masthead-reference,
+.service-start-page,
+.control-workbench,
+.site-shell {
+  max-width: 1120px !important;
+}
+
+.page-shell {
+  padding: var(--space-6) !important;
+}
+
+.flag-ribbon,
+.civic-ribbon,
+.hero-ribbon,
+.platform-overview-strip,
+.overview-strip,
+.top-utility-bar {
+  display: none !important;
+}
+
+.masthead,
+.page-header,
+.service-hero,
+.masthead-reference {
+  margin: var(--space-8) 0 var(--space-6) !important;
+  padding: 0 0 var(--space-5) !important;
+  background: transparent !important;
+  border: 0 !important;
+  border-bottom: 1px solid var(--border) !important;
+  box-shadow: none !important;
+}
+
+.masthead h1,
+.page-title,
+.hero-card h2,
+.service-hero h1 {
+  margin: 0 !important;
+  max-width: 760px;
+  color: var(--text-main) !important;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif !important;
+  font-size: clamp(2rem, 5vw, 3.5rem) !important;
+  line-height: 1.05 !important;
+  letter-spacing: -0.03em !important;
+}
+
+.masthead-subtitle,
+.lead,
+.institutional-note,
+.public-task-copy,
+.panel-state,
+.meta,
+.field-help {
+  color: var(--text-muted) !important;
+}
+
+.kicker,
+.section-label,
+.eyebrow {
+  margin: 0 0 var(--space-2) !important;
+  color: var(--text-muted) !important;
+  font-size: 0.78rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.08em !important;
+  text-transform: uppercase !important;
+}
+
+.public-task-panel,
+.panel,
+.service-card,
+.public-service-card,
+.case-card,
+.assignment-card,
+.record-row,
+.release-panel,
+.report-panel,
+.reports-intro-panel,
+.reports-filter-panel,
+.reports-summary-panel,
+.reports-section-panel,
+.staff-sign-in-panel,
+.registry-search,
+.workbench-panel-disclosure,
+.quiet-disclosure,
+.inline-disclosure,
+.automation-check,
+.metric-card,
+.status-card,
+.hero-card,
+.masthead-reference,
+.login-card {
+  background: var(--surface) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: var(--radius-card) !important;
+  box-shadow: none !important;
+}
+
+.public-task-panel,
+.panel,
+.service-card,
+.public-service-card,
+.case-card,
+.assignment-card,
+.record-row,
+.release-panel,
+.report-panel,
+.reports-intro-panel,
+.reports-filter-panel,
+.reports-summary-panel,
+.reports-section-panel,
+.staff-sign-in-panel,
+.registry-search,
+.workbench-panel-disclosure,
+.quiet-disclosure,
+.inline-disclosure,
+.automation-check,
+.metric-card,
+.status-card,
+.hero-card,
+.login-card {
+  padding: var(--space-5) !important;
+}
+
+button,
+.button,
+.primary-action,
+.secondary-action,
+.danger-action,
+.verification-button,
+.territory-input,
+select,
+input,
+textarea {
+  border-radius: var(--radius-control) !important;
+  box-shadow: none !important;
+}
+
+.primary-action,
+.button-primary,
+.verification-button.primary,
+button[type="submit"] {
+  min-height: 44px !important;
+  background: var(--text-main) !important;
+  color: #ffffff !important;
+  border: 1px solid var(--text-main) !important;
+}
+
+.secondary-action,
+.button-secondary,
+.verification-button.secondary {
+  min-height: 44px !important;
+  background: var(--surface) !important;
+  color: var(--text-main) !important;
+  border: 1px solid var(--border-strong) !important;
+}
+
+.status,
+.status-pill,
+.step-chip,
+.assignment-kicker,
+.readiness-badge {
+  border-radius: 999px !important;
+  box-shadow: none !important;
+}
+
+.metric-row,
+.metric-row-list > div,
+.report-row-list li,
+.record-row,
+.assignment-card {
+  border-color: var(--border) !important;
+}
+
+.metric-card strong,
+.metric-value,
+.metric-row-list dd,
+.report-row-list strong {
+  color: var(--text-main) !important;
+}
+
+.metric-card span,
+.metric-label,
+.metric-row-list dt,
+.report-row-list span {
+  color: var(--text-muted) !important;
+}
+
+*[style*="box-shadow"],
+*[class*="glow"],
+*[class*="floating"] {
+  box-shadow: none !important;
+}
+
+@media (max-width: 760px) {
+  .page-shell {
+    padding: var(--space-4) !important;
+  }
+
+  .service-grid,
+  .metric-grid,
+  .hero-actions,
+  .public-action-grid,
+  .reports-filter-grid,
+  .field-today-summary {
+    grid-template-columns: 1fr !important;
+  }
+
+  .button,
+  .primary-action,
+  .secondary-action,
+  .danger-action,
+  .verification-button {
+    width: 100%;
+  }
+
+  .public-task-panel,
+  .panel,
+  .service-card,
+  .case-card,
+  .record-row,
+  .release-panel,
+  .report-panel {
+    padding: var(--space-4) !important;
+  }
+}
+
+/* Visual guide mobile fix: status badges must not overflow registry cards */
+@media (max-width: 760px) {
+  .registry-simple-hero .operator-summary-row,
+  .registry-simple-section .operator-summary-row,
+  .registry-simple-hero .review-glance-chips,
+  .registry-simple-section .review-glance-chips {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: var(--space-2) !important;
+    width: 100% !important;
+    overflow: hidden !important;
+  }
+
+  .registry-simple-hero .status-chip,
+  .registry-simple-section .status-chip,
+  .registry-simple-hero .status-pill,
+  .registry-simple-section .status-pill {
+    min-width: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    justify-content: space-between !important;
+    white-space: normal !important;
+    overflow-wrap: anywhere !important;
+  }
+}
+
+/* Visual guide: Publication & signage release-gate mobile alignment */
+@media (max-width: 760px) {
+  .review-desk-header .operator-summary-row,
+  .publication-glance-panel .operator-summary-row,
+  .review-glance-head .operator-summary-row {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: var(--space-2) !important;
+    width: 100% !important;
+  }
+
+  .review-desk-header .operator-summary-row .status-chip,
+  .publication-glance-panel .operator-summary-row .status-chip,
+  .review-glance-head .operator-summary-row .status-chip {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-height: 44px !important;
+    white-space: normal !important;
+    overflow-wrap: anywhere !important;
+  }
+}
+
+/* Visual guide: hard stop for mobile release-summary chip overflow */
+@media (max-width: 760px) {
+  .review-desk-header.public-task-panel {
+    overflow: hidden !important;
+  }
+
+  .review-desk-header.public-task-panel > .operator-summary-row,
+  .review-desk-header.public-task-panel .operator-summary-row {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) !important;
+    gap: var(--space-2) !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  .review-desk-header.public-task-panel > .operator-summary-row > .status-chip,
+  .review-desk-header.public-task-panel .operator-summary-row > .status-chip,
+  .review-desk-header.public-task-panel .status-chip {
+    box-sizing: border-box !important;
+    display: flex !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    justify-content: space-between !important;
+    white-space: normal !important;
+    overflow-wrap: anywhere !important;
   }
 }

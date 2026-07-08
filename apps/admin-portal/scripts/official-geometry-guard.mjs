@@ -15,9 +15,11 @@ function tokenValue(name) {
 }
 
 function resolveRadius(value) {
-  if (value === 'var(--gov-radius)') return tokenValue('--gov-radius');
-  if (value === 'var(--gov-radius-sm)') return tokenValue('--gov-radius-sm');
-  if (value === 'var(--registry-radius)') return tokenValue('--gov-radius');
+  if (value === 'var(--gov-radius)') return tokenValue('--radius-card');
+  if (value === 'var(--gov-radius-sm)') return tokenValue('--radius-control');
+  if (value === 'var(--radius-card)') return tokenValue('--radius-card');
+  if (value === 'var(--radius-control)') return tokenValue('--radius-control');
+  if (value === 'var(--registry-radius)') return tokenValue('--radius-card');
   return value;
 }
 
@@ -26,13 +28,13 @@ for (const original of radiusValues) {
   const value = resolveRadius(original);
   if (!value || value === '0' || value === '0px' || value === '50%' || value.includes('999px') || value.includes('circle') || value.startsWith('var(--ref-radius') || value.startsWith('var(--radius')) continue;
   const px = Number.parseFloat(value);
-  assert(Number.isFinite(px) && px <= 14, `Reference UI geometry allows only restrained radii up to 14px, found: ${original}`);
+  assert(Number.isFinite(px) && px <= 12, `Visual guide allows only restrained radii up to 12px except status badges, found: ${original}`);
 }
 assert(css.includes('--radius-xl:'), 'Radius XL token must exist');
 assert(css.includes('--radius-lg:'), 'Radius LG token must exist');
 assert(css.includes('--radius-md:'), 'Radius MD token must exist');
-assert(tokenValue('--gov-radius') === '14px', 'Shared government radius token must stay at 14px');
-assert(tokenValue('--gov-radius-sm') === '10px', 'Shared government small radius token must stay at 10px');
+assert(tokenValue('--radius-card') === '12px', 'Visual guide card radius token must stay at 12px');
+assert(tokenValue('--radius-control') === '8px', 'Visual guide control radius token must stay at 8px');
 const egShadow = (css.match(/--eg-shadow:\s*([^;]+);/)?.[1]?.trim() ?? 'none').replace(/\s*!important$/, '');
 const govShadow = (tokenValue('--gov-shadow') ?? 'none').replace(/\s*!important$/, '');
 const boxShadowValues = [...css.matchAll(/box-shadow:\s*([^;]+);/g)].map((match) =>
@@ -47,5 +49,9 @@ for (const value of boxShadowValues) {
 }
 assert(!/transform:\s*translate/i.test(css), 'Official UI must not use button/card translate motion');
 assert(!/transition:\s*(?!none\s*!important;)/.test(css.replace(/transition:\s+none/g, 'transition:none')), 'Official UI must not rely on animated interaction styling');
+const bodyBlocks = [...css.matchAll(/(?:^|\n)(?:html,\s*\n)?body\s*\{[\s\S]*?\}/g)].map((match) => match[0]);
+assert(bodyBlocks.some((block) => block.includes('background-image: none !important')), 'Visual guide requires no decorative grid background on body');
+assert(css.includes('--page-bg: #f7f4ec'), 'Visual guide page background token must exist');
+assert(css.includes('--surface: #fffef9'), 'Visual guide surface token must exist');
 assert(!/linear-gradient\(135deg/.test(css), 'Official UI must not use diagonal SaaS background gradients');
 console.log('official-geometry-guard passed');

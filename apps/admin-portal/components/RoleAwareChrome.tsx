@@ -179,7 +179,7 @@ export function RoleAwareChrome({ apiBaseUrl, children }: RoleAwareChromeProps) 
         </div>
       </div>
 
-      {role !== 'guest' && controlNavItems.length ? (
+      {role !== 'guest' && ['/field', '/registry', '/signage', '/reports', '/exports', '/territories', '/verify'].includes(currentRoute) && controlNavItems.length ? (
         <nav className="mobile-control-nav" aria-label="Operator control navigation">
           {controlNavItems.map((item) => {
             const isActive = currentRoute === item.href;
