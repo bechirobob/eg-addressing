@@ -193,11 +193,11 @@ def test_public_territory_options_returns_safe_evidence_fields(monkeypatch) -> N
     assert response.status_code == 200
     item = response.json()['items'][0]
     assert item['id'] == 'territory-mongomo-core'
-    assert item['routing_status_label'] == 'Ruta administrativa oficial'
-    assert item['source_label'] == 'Tabla de división administrativa / fuente referenciada por INEGE'
-    assert item['confidence_label'] == 'Unidad administrativa confirmada'
-    assert item['geometry_status'] == 'Área de enrutamiento por nombre administrativo; límite topográfico no adjunto'
-    assert item['public_status'] == 'Enrutamiento interno hasta verificación del operador y publicación controlada'
+    assert item['routing_status_label'] == 'Official administrative route'
+    assert item['source_label'] == 'Administrative division table / INEGE-referenced source'
+    assert item['confidence_label'] == 'Administrative unit confirmed'
+    assert item['geometry_status'] == 'Name-based routing area; surveyed boundary not attached'
+    assert item['public_status'] == 'Internal routing only until operator verification and controlled publication'
     assert item['admin_unit_name'] == 'Mongomo'
     assert item['admin_unit_level'] == 'municipality'
     assert 'admin_unit_id' not in response.text
@@ -216,7 +216,7 @@ def test_public_territory_options_can_filter_nationwide_official_routing(monkeyp
     assert response.status_code == 200
     assert captured == {'province_code': 'LI', 'include_archived': False}
     assert response.json()['items'][0]['name'] == 'Bata'
-    assert response.json()['items'][0]['source_label'].startswith('Tabla de división administrativa')
+    assert response.json()['items'][0]['source_label'].startswith('Administrative division table')
 
 def test_create_territory_requires_editor_role(monkeypatch) -> None:
     payload = {'name': 'Mongomo Core', 'province_code': 'WN', 'admin_unit_id': 'admin-unit-wele-nzas', 'type': 'district-core', 'readiness': 'enumeration-ready'}

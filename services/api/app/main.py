@@ -1005,23 +1005,23 @@ def _public_territory_metadata(row: dict[str, Any]) -> dict[str, Any]:
     is_official_municipality = row.get('type') == 'official-municipality' and row.get('readiness') == 'official-routing'
     is_map_referenced = row.get('type') == 'map-referenced-local-area'
     if is_official_municipality:
-        source_label = 'Tabla de división administrativa / fuente referenciada por INEGE'
-        confidence_label = 'Unidad administrativa confirmada'
-        geometry_status = 'Área de enrutamiento por nombre administrativo; límite topográfico no adjunto'
-        public_status = 'Enrutamiento interno hasta verificación del operador y publicación controlada'
-        routing_status_label = 'Ruta administrativa oficial'
+        source_label = 'Administrative division table / INEGE-referenced source'
+        confidence_label = 'Administrative unit confirmed'
+        geometry_status = 'Name-based routing area; surveyed boundary not attached'
+        public_status = 'Internal routing only until operator verification and controlled publication'
+        routing_status_label = 'Official administrative route'
     elif is_map_referenced:
-        source_label = 'Referencia cartográfica/local usada para enrutamiento de ingreso'
-        confidence_label = 'Referencia local; requiere confirmación del operador'
-        geometry_status = 'Área de ingreso/punto solamente; no es límite oficial levantado'
-        public_status = 'Pendiente de verificación de campo antes de publicación'
-        routing_status_label = 'Área local referenciada'
+        source_label = 'Map/local reference used for intake routing'
+        confidence_label = 'Local reference; requires operator confirmation'
+        geometry_status = 'Point/intake area only; not an official surveyed boundary'
+        public_status = 'Pending field verification before publication'
+        routing_status_label = 'Referenced local area'
     else:
-        source_label = 'Registro de enrutamiento mantenido por el operador'
-        confidence_label = 'Registro interno; confirmar antes de publicación'
-        geometry_status = 'Registro de enrutamiento; geometría oficial no adjunta'
-        public_status = 'Estado interno de revisión'
-        routing_status_label = 'Pendiente de verificación de campo'
+        source_label = 'Registry seed / operator-maintained routing record'
+        confidence_label = 'Registry record; confirm before publication'
+        geometry_status = 'Routing record; official geometry not attached'
+        public_status = 'Internal review state'
+        routing_status_label = 'Pending field verification'
     return {
         'id': row['id'],
         'name': row['name'],
