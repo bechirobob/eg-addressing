@@ -9,11 +9,11 @@ export default function SignagePage() {
   return (
     <SiteChrome
       apiBaseUrl={publicApiBaseUrl}
-      eyebrow="Review desk"
+      eyebrow="Publication"
       eyebrowKey="signageEyebrow"
-      title="Location Review and Registry Readiness"
+      title="Publication & signage"
       titleKey="signageTitle"
-      subtitle="Check new location requests, route field confirmation, and approve internal address case files. Physical signage waits for full project approval."
+      subtitle="Review approved address records before public release and physical signage."
       subtitleKey="signageSubtitle"
     >
       <SignageOperationsPanel apiBaseUrl={publicApiBaseUrl} />

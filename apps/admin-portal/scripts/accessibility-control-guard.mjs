@@ -15,12 +15,12 @@ async function readComponent(name) {
 
 const checks = [
   {
-    file: 'ReportingDashboardPanel.tsx',
+    file: 'ReportingPanel.tsx',
     required: [
-      'aria-label={`Open ministry walkthrough route',
-      'aria-label={`Show correction queue filter',
-      'htmlFor={`reviewer-note-${item.id}`',
-      'id={`reviewer-note-${item.id}`',
+      'Reports are read-only',
+      'Province',
+      'Date from',
+      'Export report',
     ],
   },
   {

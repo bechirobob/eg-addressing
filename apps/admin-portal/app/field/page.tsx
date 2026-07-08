@@ -38,11 +38,11 @@ export default async function FieldPage() {
   return (
     <SiteChrome
       apiBaseUrl={publicApiBaseUrl}
-      eyebrow="Field operations"
+      eyebrow="Staff service"
       eyebrowKey="fieldEyebrow"
-      title="Field Submission Workflow"
+      title="Field work"
       titleKey="fieldTitle"
-      subtitle="Operational intake for survey teams, route coordinators, and field officers feeding the national addressing verification queue."
+      subtitle="Complete assigned location checks and submit field evidence for review."
       subtitleKey="fieldSubtitle"
     >
       <FieldWorkflowPanel

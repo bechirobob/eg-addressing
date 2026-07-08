@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 
-import { LanguageSwitcher, LocalizedText, SpanishUiTextPatcher } from './i18n';
+import { LocalizedText } from './i18n';
 import type { DictionaryKey } from './i18n';
 import { RoleAwareChrome } from './RoleAwareChrome';
 type ServiceMeta = {
@@ -60,10 +60,6 @@ export function SiteChrome({ title, subtitle, eyebrow, titleKey, subtitleKey, ey
   return (
     <main className="page-shell">
       <div className="flag-ribbon" aria-hidden="true" />
-      <div className="top-utility-bar" aria-label="Language selection">
-        <LanguageSwitcher />
-      </div>
-
       <header className="masthead masthead-reference" aria-label="National platform identity">
         <div className="masthead-topline">
           <div className="official-lockup">
@@ -103,22 +99,8 @@ export function SiteChrome({ title, subtitle, eyebrow, titleKey, subtitleKey, ey
         </div>
       </header>
 
-      <section className={`hero-card compact-hero civic-service-strip service-strip-${serviceMeta.key}`} aria-label="Service commitments">
-        <div className="hero-copy-block">
-          <span className={`service-icon service-icon-${serviceMeta.key}`} aria-hidden="true" />
-          <div className="service-copy">
-            <span className="eyebrow"><LocalizedText k={serviceMeta.labelKey} /></span>
-            <ul className="highlight-list civic-highlight-list" aria-label="Service commitments">
-              {serviceMeta.highlightKeys.map((item) => (
-                <li key={item}><LocalizedText k={item} /></li>
-              ))}
-            </ul>
-          </div>
-        </div>
-      </section>
 
       <RoleAwareChrome apiBaseUrl={apiBaseUrl}>{children}</RoleAwareChrome>
-      <SpanishUiTextPatcher />
     </main>
   );
 }

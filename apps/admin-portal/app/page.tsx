@@ -78,6 +78,15 @@ export default function HomePage() {
             </p>
           </details>
         </article>
+
+        <article className="public-task-panel staff-sign-in-panel">
+          <div className="panel-head">
+            <p className="section-label">Staff services</p>
+            <h3>Staff sign-in</h3>
+          </div>
+          <p className="institutional-note">Authorized staff can continue field work, manage the address registry, prepare publication and signage, or review reports.</p>
+          <a className="secondary-action staff-sign-in-link" href="/login">Sign in to staff services</a>
+        </article>
       </section>
     </SiteChrome>
   );

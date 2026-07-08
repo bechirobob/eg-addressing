@@ -23,11 +23,11 @@ export default async function RegistryPage({
   return (
     <SiteChrome
       apiBaseUrl={publicApiBaseUrl}
-      eyebrow="Admin center"
+      eyebrow="Staff service"
       eyebrowKey="registryEyebrow"
-      title="Registry Administration"
+      title="Address registry"
       titleKey="registryTitle"
-      subtitle="Simple daily workspace for addresses, roads, and buildings. Start with addresses; open roads or buildings only when needed."
+      subtitle="Search, update, and manage official address records."
       subtitleKey="registrySubtitle"
     >
       <RegistryCorePanel

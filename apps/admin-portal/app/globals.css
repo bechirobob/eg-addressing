@@ -14,10 +14,34 @@
   --eg-ivory: #f5f0e5;
   --eg-paper: #fffdf8;
   --eg-white: #ffffff;
-  --eg-shadow: 8px 8px 0 rgba(13, 47, 79, 0.07);
-  --radius-xl: 12px;
-  --radius-lg: 10px;
-  --radius-md: 8px;
+  --eg-shadow: none;
+  --radius-xl: 14px;
+  --radius-lg: 12px;
+  --radius-md: 10px;
+
+  /* Shared government-service design tokens. Use these for all current/future revamp surfaces. */
+  --gov-bg: var(--eg-ivory);
+  --gov-surface: var(--eg-paper);
+  --gov-surface-raised: var(--eg-white);
+  --gov-ink: var(--eg-ink);
+  --gov-ink-strong: var(--eg-blue-deep);
+  --gov-muted: var(--eg-muted);
+  --gov-line: var(--eg-line);
+  --gov-line-soft: #e7ebf0;
+  --gov-blue: var(--eg-blue);
+  --gov-green: var(--eg-green);
+  --gov-gold: var(--eg-gold);
+  --gov-red: var(--eg-red);
+  --gov-blue-soft: #edf4fb;
+  --gov-green-soft: #edf7f1;
+  --gov-gold-soft: var(--eg-gold-soft);
+  --gov-red-soft: #f7eded;
+  --gov-radius: 14px;
+  --gov-radius-sm: 10px;
+  --gov-gap: 16px;
+  --gov-gap-sm: 10px;
+  --gov-control-height: 44px;
+  --gov-shadow: none;
 }
 
 * {
@@ -9486,5 +9510,310 @@ details.review-secondary-actions[open] > summary {
   .review-glance-panel .operator-summary-row.review-glance-chips .status-chip::after {
     flex: 0 0 auto !important;
     margin-left: auto !important;
+  }
+}
+
+/* National Addressing Platform — government-service reports rows */
+.reports-service-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 16px;
+}
+
+.reports-intro-panel,
+.reports-filter-panel,
+.reports-summary-panel,
+.reports-section-panel {
+  background: #fffdf8;
+  border: 1px solid #dfe5ec;
+  border-radius: 14px;
+  box-shadow: none;
+}
+
+.reports-filter-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px;
+}
+
+.metric-row-list,
+.report-row-list {
+  display: grid;
+  gap: 0;
+  margin: 0;
+  padding: 0;
+}
+
+.metric-row-list > div,
+.report-row-list > li {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 16px;
+  min-height: 46px;
+  padding: 11px 0;
+  border-bottom: 1px solid #e7ebf0;
+}
+
+.metric-row-list > div:last-child,
+.report-row-list > li:last-child {
+  border-bottom: 0;
+}
+
+.metric-row-list dt,
+.report-row-list span {
+  color: #33475b;
+  font-size: 0.93rem;
+  line-height: 1.35;
+}
+
+.metric-row-list dd,
+.report-row-list strong {
+  margin: 0;
+  color: #102943;
+  font-size: 1.02rem;
+  font-weight: 760;
+  white-space: nowrap;
+}
+
+@media (min-width: 900px) {
+  .reports-service-grid {
+    grid-template-columns: minmax(0, 1.1fr) minmax(340px, 0.9fr);
+    align-items: start;
+  }
+
+  .reports-intro-panel,
+  .reports-filter-panel,
+  .reports-summary-panel {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 640px) {
+  .reports-filter-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .metric-row-list > div,
+  .report-row-list > li {
+    min-height: 42px;
+    padding-block: 10px;
+  }
+}
+
+/* National Addressing Platform — full government-service compact shell */
+.masthead-reference {
+  background: #fffdf8;
+  border: 1px solid #dfe5ec;
+  box-shadow: none;
+  border-radius: 14px;
+}
+
+.civic-hero-illustration {
+  display: none !important;
+}
+
+.masthead-content-grid {
+  grid-template-columns: minmax(0, 1fr) !important;
+}
+
+.masthead-copy,
+.masthead-titles,
+.location-hero-content,
+.panel-head,
+.public-task-copy,
+.citizen-primary-actions,
+.location-status-grid {
+  min-width: 0;
+  max-width: 100%;
+}
+
+.staff-sign-in-panel {
+  background: #fffdf8;
+  border-color: #dfe5ec;
+}
+
+.staff-sign-in-link {
+  width: fit-content;
+  text-decoration: none;
+}
+
+.native-map-preview,
+.native-map-viewport,
+.map-slab {
+  overflow: hidden;
+  contain: paint;
+}
+
+.native-map-road,
+.map-road {
+  max-width: 100%;
+}
+
+@media (max-width: 640px) {
+  .page-shell,
+  .masthead,
+  .public-task-panel,
+  .location-hero-content,
+  .panel-head,
+  .public-task-copy,
+  .citizen-primary-actions,
+  .location-status-grid {
+    max-width: 100%;
+  }
+
+  .citizen-primary-actions {
+    grid-template-columns: 1fr;
+  }
+
+  .citizen-primary-actions > *,
+  .primary-action.location-action,
+  .secondary-action {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .location-status-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .location-metric {
+    max-width: 100%;
+  }
+}
+
+/* National Addressing Platform — final mobile location overflow guard */
+@media (max-width: 640px) {
+  .location-hero-panel {
+    grid-template-columns: minmax(0, 1fr) !important;
+    gap: 14px !important;
+    overflow: hidden;
+  }
+
+  .location-hero-content,
+  .location-hero-content > *,
+  .location-hero-content .panel-head,
+  .location-hero-content .public-task-copy,
+  .location-hero-content .citizen-primary-actions,
+  .location-hero-content .primary-action,
+  .location-hero-content .secondary-action,
+  .location-hero-content .location-status-grid,
+  .location-hero-content .location-status-grid > span,
+  .location-metric {
+    width: auto !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    justify-self: stretch !important;
+  }
+
+  .location-hero-content .citizen-primary-actions,
+  .location-hero-content .location-status-grid {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+
+  .location-hero-content .location-status-grid > span {
+    grid-template-columns: 34px minmax(0, 1fr) !important;
+    padding: 12px 14px !important;
+    box-sizing: border-box;
+  }
+}
+
+/* National Addressing Platform — shared government-token bridge */
+:root {
+  --registry-bg: var(--gov-bg);
+  --registry-card: var(--gov-surface);
+  --registry-line: var(--gov-line);
+  --registry-line-soft: var(--gov-line-soft);
+  --registry-ink: var(--gov-ink-strong);
+  --registry-muted: var(--gov-muted);
+  --registry-blue: var(--gov-blue);
+  --registry-green: var(--gov-green);
+  --registry-gold: var(--gov-gold);
+  --registry-red: var(--gov-red);
+  --registry-radius: var(--gov-radius);
+  --ref-line: var(--gov-line);
+  --ref-green: var(--gov-green);
+  --ref-blue: var(--gov-blue);
+  --ref-gold: var(--gov-gold);
+  --ref-green-soft: var(--gov-green-soft);
+}
+
+.masthead-reference,
+.public-task-panel,
+.reports-intro-panel,
+.reports-filter-panel,
+.reports-summary-panel,
+.reports-section-panel,
+.staff-sign-in-panel {
+  background: var(--gov-surface);
+  border-color: var(--gov-line);
+  border-radius: var(--gov-radius);
+  box-shadow: var(--gov-shadow);
+}
+
+body {
+  background: var(--gov-bg);
+}
+
+.section-label,
+.eyebrow,
+.kicker {
+  color: var(--gov-blue);
+}
+
+.masthead h1,
+.hero-card h2,
+.panel-head h3,
+.metric-row-list dd,
+.report-row-list strong {
+  color: var(--gov-ink-strong);
+}
+
+.masthead-subtitle,
+.institutional-note,
+.public-task-copy,
+.metric-row-list dt,
+.report-row-list span {
+  color: var(--gov-muted);
+}
+
+.territory-input,
+.verification-button,
+.secondary-action {
+  min-height: var(--gov-control-height);
+  border-radius: var(--gov-radius-sm);
+}
+
+/* Field work summary uses shared government-service tokens */
+.field-today-summary {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--gov-gap-sm);
+  margin: 10px 0;
+}
+
+.field-today-summary > div {
+  display: grid;
+  gap: 4px;
+  padding: 10px 12px;
+  border: 1px solid var(--gov-line-soft);
+  border-radius: var(--gov-radius-sm);
+  background: var(--gov-surface-raised);
+}
+
+.field-today-summary span {
+  color: var(--gov-muted);
+  font-size: 0.78rem;
+  line-height: 1.25;
+}
+
+.field-today-summary strong {
+  color: var(--gov-ink-strong);
+  font-size: 1.05rem;
+}
+
+@media (max-width: 640px) {
+  .field-today-summary {
+    grid-template-columns: 1fr;
   }
 }

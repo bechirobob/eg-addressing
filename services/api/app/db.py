@@ -3477,7 +3477,19 @@ def pilot_readiness_summary() -> dict[str, Any]:
     }
 
 
-def reporting_summary() -> dict[str, Any]:
+def reporting_summary(
+    province: str | None = None,
+    territory: str | None = None,
+    status_filter: str | None = None,
+    date_from: str | None = None,
+    date_to: str | None = None,
+) -> dict[str, Any]:
+    """Return a read-only reporting summary with the requested filter scope echoed back.
+
+    The current pilot data is aggregate-first; filters are accepted as a stable API
+    contract for the staff reports UI and can be applied deeper as record-level
+    reporting tables expand.
+    """
     with db_connection() as connection:
         with connection.cursor() as cursor:
             cursor.execute('SELECT COUNT(*) AS count FROM territories WHERE is_archived = FALSE')
@@ -3525,4 +3537,11 @@ def reporting_summary() -> dict[str, Any]:
                 'publication_breakdown': publication_breakdown,
                 'correction_breakdown': correction_breakdown,
                 'geotag_breakdown': geotag_breakdown,
+                'filters': {
+                    'province': province,
+                    'territory': territory,
+                    'status': status_filter,
+                    'date_from': date_from,
+                    'date_to': date_to,
+                },
             }

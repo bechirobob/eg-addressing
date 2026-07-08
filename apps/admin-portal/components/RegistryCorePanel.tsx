@@ -268,9 +268,9 @@ export function RegistryCorePanel({
     <section className="registry-simple-shell" aria-label="Registry administration center">
       <article className="public-task-panel registry-simple-hero">
         <div>
-          <p className="section-label">Registry desk</p>
-          <h2>Case files</h2>
-          <p className="public-task-copy">Review addresses first. Roads and buildings stay available as supporting case files.</p>
+          <p className="section-label">Address registry</p>
+          <h2>Search records</h2>
+          <p className="public-task-copy">Search, update, and manage official address records.</p>
         </div>
         <div className="operator-summary-row" aria-label="Registry overview">
           <span className="status-chip">Active addresses: {registryCounts.activeAddresses}</span>
@@ -278,11 +278,11 @@ export function RegistryCorePanel({
           <span className="status-chip ok">Published: {registryCounts.published}</span>
           <span className="status-chip">Archived hidden: {registryCounts.archived}</span>
         </div>
-        <div className="data-command-deck" aria-label="Registry information scent command deck">
+        <div className="registry-section-list" aria-label="Registry record sections">
           {caseLanes.map((lane) => (
             <button
               key={lane.key}
-              className={`case-lane ${lane.tone}`}
+              className={`registry-section-row ${lane.tone}`}
               type="button"
               onClick={() => {
                 setActiveTab('addresses');

@@ -488,7 +488,7 @@ export function FieldWorkflowPanel({ assignments, submissions: initialSubmission
       <article className="public-task-panel civic-panel-green field-assignments-panel">
         <div className="panel-head">
           <p className="section-label">Field desk</p>
-          <h3>Today’s field work</h3>
+          <h3>Today summary</h3>
         </div>
         <div className="data-command-deck field-command-deck" aria-label="Field operation command lanes">
           <button className="case-lane warn" type="button">
@@ -578,9 +578,21 @@ export function FieldWorkflowPanel({ assignments, submissions: initialSubmission
             </span>
             <em>{sessionUser?.role ?? 'guest'} role</em>
           </summary>
-          <p className="institutional-note compact-note">
-            Use this like a field checklist. The system handles GPS, map suggestions, grid cells, and distance in the background.
-          </p>
+          <div className="field-today-summary" aria-label="Today summary">
+            <div>
+              <span>Assigned checks</span>
+              <strong>{fieldAssignments.length + geotagTasks.length}</strong>
+            </div>
+            <div>
+              <span>Evidence submitted</span>
+              <strong>{submissions.length}</strong>
+            </div>
+            <div>
+              <span>Returned for correction</span>
+              <strong>{submissions.filter((item) => item.review_status === 'rejected' || item.candidate_status === 'needs-correction').length}</strong>
+            </div>
+          </div>
+          <p className="institutional-note">Use this like a field checklist. The system handles GPS, map suggestions, grid cells, and distance in the background.</p>
           {sessionStatus === 'loading' ? <p className="panel-state">Checking access before opening the submission form…</p> : null}
           <form className="territory-form compact-field-form human-field-form" onSubmit={handleSubmit}>
             <div className="guided-workflow-strip" aria-label="Field evidence progress">

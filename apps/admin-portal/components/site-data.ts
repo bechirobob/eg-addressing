@@ -1,6 +1,6 @@
 export type OperatorRole = 'guest' | 'viewer' | 'editor' | 'admin';
 
-export type NavGroup = 'public' | 'review' | 'operations' | 'oversight';
+export type NavGroup = 'public' | 'staff';
 
 type NavItem = {
   href: string;
@@ -17,9 +17,7 @@ type RouteRule = {
 
 export const navGroupLabels: Record<NavGroup, string> = {
   public: 'Public',
-  review: 'Review',
-  operations: 'Operations',
-  oversight: 'Oversight',
+  staff: 'Staff services',
 };
 
 export const navItems: NavItem[] = [
@@ -53,59 +51,59 @@ export const navItems: NavItem[] = [
   },
   {
     href: '/signage',
-    label: 'Location review',
+    label: 'Publication & signage',
     visibleTo: ['editor', 'admin'],
     priorityFor: ['admin', 'editor'],
-    group: 'review',
+    group: 'staff',
   },
   {
     href: '/verify',
-    label: 'Evidence desk',
-    visibleTo: ['editor', 'admin'],
+    label: 'Review queue',
+    visibleTo: [],
     priorityFor: ['admin'],
-    group: 'review',
+    group: 'staff',
   },
   {
     href: '/field',
     label: 'Field work',
     visibleTo: ['editor', 'admin'],
     priorityFor: ['editor'],
-    group: 'operations',
+    group: 'staff',
   },
   {
     href: '/registry',
     label: 'Address registry',
     visibleTo: ['editor', 'admin'],
     priorityFor: ['editor', 'admin'],
-    group: 'operations',
+    group: 'staff',
   },
   {
     href: '/records',
     label: 'Case files',
-    visibleTo: ['viewer', 'editor', 'admin'],
+    visibleTo: [],
     priorityFor: ['viewer', 'editor', 'admin'],
-    group: 'operations',
+    group: 'staff',
   },
   {
     href: '/territories',
     label: 'Territories',
-    visibleTo: ['editor', 'admin'],
+    visibleTo: [],
     priorityFor: ['editor'],
-    group: 'operations',
+    group: 'staff',
   },
   {
     href: '/reports',
     label: 'Reports',
     visibleTo: ['guest', 'viewer', 'editor', 'admin'],
     priorityFor: ['guest', 'viewer', 'editor', 'admin'],
-    group: 'oversight',
+    group: 'staff',
   },
   {
     href: '/exports',
-    label: 'Publication packs',
-    visibleTo: ['admin'],
+    label: 'Publication & signage',
+    visibleTo: [],
     priorityFor: ['admin'],
-    group: 'oversight',
+    group: 'staff',
   },
 ];
 
@@ -132,9 +130,9 @@ const routeRules: RouteRule[] = [
 ];
 
 export function defaultRouteForRole(role: OperatorRole): string {
-  if (role === 'admin') return '/verify';
+  if (role === 'admin') return '/field';
   if (role === 'editor') return '/registry';
-  return '/reports';
+  return '/';
 }
 
 export function isRouteAccessible(pathname: string, role: OperatorRole): boolean {

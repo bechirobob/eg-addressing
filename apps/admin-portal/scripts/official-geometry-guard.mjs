@@ -10,18 +10,33 @@ function assert(condition, message) {
   if (!condition) throw new Error(message);
 }
 
+function tokenValue(name) {
+  return css.match(new RegExp(`${name}:\\s*([^;]+);`))?.[1]?.trim() ?? null;
+}
+
+function resolveRadius(value) {
+  if (value === 'var(--gov-radius)') return tokenValue('--gov-radius');
+  if (value === 'var(--gov-radius-sm)') return tokenValue('--gov-radius-sm');
+  if (value === 'var(--registry-radius)') return tokenValue('--gov-radius');
+  return value;
+}
+
 const radiusValues = [...css.matchAll(/border-radius:\s*([^;]+);/g)].map((match) => match[1].trim());
-for (const value of radiusValues) {
-  if (value === '0' || value === '0px' || value === '50%' || value.includes('999px') || value.includes('circle') || value.startsWith('var(--ref-radius') || value.startsWith('var(--radius')) continue;
+for (const original of radiusValues) {
+  const value = resolveRadius(original);
+  if (!value || value === '0' || value === '0px' || value === '50%' || value.includes('999px') || value.includes('circle') || value.startsWith('var(--ref-radius') || value.startsWith('var(--radius')) continue;
   const px = Number.parseFloat(value);
-  assert(Number.isFinite(px) && px <= 14, `Reference UI geometry allows only restrained radii up to 14px, found: ${value}`);
+  assert(Number.isFinite(px) && px <= 14, `Reference UI geometry allows only restrained radii up to 14px, found: ${original}`);
 }
 assert(css.includes('--radius-xl:'), 'Radius XL token must exist');
 assert(css.includes('--radius-lg:'), 'Radius LG token must exist');
 assert(css.includes('--radius-md:'), 'Radius MD token must exist');
+assert(tokenValue('--gov-radius') === '14px', 'Shared government radius token must stay at 14px');
+assert(tokenValue('--gov-radius-sm') === '10px', 'Shared government small radius token must stay at 10px');
 const egShadow = (css.match(/--eg-shadow:\s*([^;]+);/)?.[1]?.trim() ?? 'none').replace(/\s*!important$/, '');
+const govShadow = (tokenValue('--gov-shadow') ?? 'none').replace(/\s*!important$/, '');
 const boxShadowValues = [...css.matchAll(/box-shadow:\s*([^;]+);/g)].map((match) =>
-  match[1].trim().replace(/\s*!important$/, '').replace('var(--eg-shadow)', egShadow),
+  match[1].trim().replace(/\s*!important$/, '').replace('var(--eg-shadow)', egShadow).replace('var(--gov-shadow)', govShadow),
 );
 for (const value of boxShadowValues) {
   if (value === 'none' || value === 'var(--ref-shadow)') continue;

@@ -24,9 +24,9 @@ assert(/(^|\n)knowledge\//.test(gitignore), 'knowledge/ must stay ignored so mis
 assert(/(^|\n)\.hermes\//.test(gitignore), 'local tooling state should stay ignored');
 assert(!/NEXT_PUBLIC_API_BASE_URL:\s*http:\/\/localhost/.test(composeConfig), 'public browser API base must not be wired to localhost in docker compose');
 
-assert(/if \(role === 'admin'\) return '\/verify';/.test(siteData), 'admin default route must remain /verify');
+assert(/if \(role === 'admin'\) return '\/field';/.test(siteData), 'admin default route must be /field for the Field work staff service');
 assert(/if \(role === 'editor'\) return '\/registry';/.test(siteData), 'editor default route must remain /registry');
-assert(/return '\/reports';/.test(siteData), 'viewer\/guest default route must remain /reports');
+assert(/return '\/';/.test(siteData), 'viewer\/guest default route must return to the public service start page');
 assert(/\{ path: '\/exports', allowedRoles: \['admin'\] \}/.test(siteData), 'exports route must stay admin-only');
 assert(/\{ path: '\/verify', allowedRoles: \['editor', 'admin'\] \}/.test(siteData), 'verify route must stay editor\/admin only');
 assert(/\{\s*href: '\/login',[\s\S]*visibleTo: \['guest'\]/.test(siteData), 'login nav item must stay guest-only');

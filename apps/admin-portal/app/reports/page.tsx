@@ -1,5 +1,5 @@
 import { SiteChrome } from '../../components/SiteChrome';
-import { ReportingDashboardPanel } from '../../components/ReportingDashboardPanel';
+import { ReportingPanel } from '../../components/ReportingPanel';
 
 export const dynamic = 'force-dynamic';
 
@@ -80,14 +80,14 @@ export default async function ReportsPage() {
   return (
     <SiteChrome
       apiBaseUrl={publicApiBaseUrl}
-      eyebrow="Reporting dashboard"
+      eyebrow="Staff service"
       eyebrowKey="reportsEyebrow"
-      title="Operational Reporting Dashboard"
+      title="Reports"
       titleKey="reportsTitle"
-      subtitle="A single operational picture of territory readiness, field intake, verification queue load, publication progress, and intake activity."
+      subtitle="Track workload, review progress, field activity, and publication readiness."
       subtitleKey="reportsSubtitle"
     >
-      <ReportingDashboardPanel
+      <ReportingPanel
         summary={summary}
         readinessSummary={readinessSummary}
         apiBaseUrl={publicApiBaseUrl}

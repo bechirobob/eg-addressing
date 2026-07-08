@@ -1921,14 +1921,20 @@ def test_auth_me_accepts_session_cookie(monkeypatch) -> None:
     assert response.json()['user']['username'] == 'admin'
 
 
-def test_data_command_deck_source_guard() -> None:
+def test_government_service_source_guard() -> None:
     registry_source = Path('../../apps/admin-portal/components/RegistryCorePanel.tsx').resolve().read_text()
-    reporting_source = Path('../../apps/admin-portal/components/ReportingDashboardPanel.tsx').resolve().read_text()
-    assert 'data-command-deck' in registry_source
-    assert 'case-lane' in registry_source
-    assert 'information scent' in registry_source.lower()
-    assert 'data-command-deck' in reporting_source
-    assert 'risk lane' in reporting_source.lower()
+    reporting_source = Path('../../apps/admin-portal/components/ReportingPanel.tsx').resolve().read_text()
+    chrome_source = Path('../../apps/admin-portal/components/SiteChrome.tsx').resolve().read_text()
+    role_chrome_source = Path('../../apps/admin-portal/components/RoleAwareChrome.tsx').resolve().read_text()
+
+    assert 'Address registry' in registry_source or 'Address register' in registry_source
+    assert 'Search, update, and manage official address records' in registry_source
+    assert 'Reports are read-only' in reporting_source
+    assert 'Export report' in reporting_source
+    forbidden = ['command center', 'risk lane', 'information scent', 'LanguageSwitcher', 'SpanishUiTextPatcher', 'Dashboard label']
+    combined = '\n'.join([reporting_source, chrome_source, role_chrome_source])
+    for term in forbidden:
+        assert term.lower() not in combined.lower()
 
 
 def test_full_registry_read_endpoints_are_not_public() -> None:

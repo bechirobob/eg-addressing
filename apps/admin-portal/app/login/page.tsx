@@ -9,11 +9,11 @@ export default function LoginPage() {
   return (
     <SiteChrome
       apiBaseUrl={publicApiBaseUrl}
-      eyebrow="Access control"
+      eyebrow="Staff services"
       eyebrowKey="loginEyebrow"
-      title="Administrative Sign-In"
+      title="Staff sign-in"
       titleKey="loginTitle"
-      subtitle="Role-aware access point for protected registry actions, audit review, and administrative write operations."
+      subtitle="Sign in to perform protected registry actions."
       subtitleKey="loginSubtitle"
     >
       <LoginPanel apiBaseUrl={publicApiBaseUrl} />

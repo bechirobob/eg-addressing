@@ -35,13 +35,9 @@ function navLabelKey(href: string) {
     '/track': 'navTrackRequest',
     '/login': 'navSignIn',
     '/signage': 'navLocationReview',
-    '/verify': 'navVerificationDesk',
     '/field': 'navFieldWork',
     '/registry': 'navAddressRegistry',
-    '/records': 'navCaseFiles',
-    '/territories': 'navTerritories',
     '/reports': 'navReports',
-    '/exports': 'navPublicationPacks',
   };
   return labels[href];
 }
@@ -49,9 +45,7 @@ function navLabelKey(href: string) {
 function navGroupKey(group: keyof typeof navGroupLabels) {
   const labels: Record<keyof typeof navGroupLabels, Parameters<ReturnType<typeof useTranslation>['t']>[0]> = {
     public: 'navPublic',
-    review: 'navReview',
-    operations: 'navOperations',
-    oversight: 'navOversight',
+    staff: 'navStaff',
   };
   return labels[group];
 }
@@ -116,9 +110,9 @@ export function RoleAwareChrome({ apiBaseUrl, children }: RoleAwareChromeProps) 
 
   const workspaceHref = defaultRouteForRole(role);
   const controlNavItems = [
-    { href: '/verify', label: 'Dashboard', iconClass: 'dashboard' },
-    { href: '/signage', label: 'Queue', iconClass: 'queue' },
-    { href: '/registry', label: 'Case files', iconClass: 'case-files' },
+    { href: '/field', label: 'Field', iconClass: 'queue' },
+    { href: '/registry', label: 'Registry', iconClass: 'case-files' },
+    { href: '/signage', label: 'Signage', iconClass: 'signage' },
     { href: '/reports', label: 'Reports', iconClass: 'reports' },
   ].filter((item) => isRouteAccessible(item.href, role));
 
@@ -128,7 +122,7 @@ export function RoleAwareChrome({ apiBaseUrl, children }: RoleAwareChromeProps) 
         <div className="nav-cluster grouped-nav-cluster">
           {currentRoute !== '/' ? (
             <Link href="/" className="platform-overview-link">
-              <span className="platform-overview-title">{t('platformOverview')}</span>
+              <span className="platform-overview-title">Home</span>
             </Link>
           ) : null}
           <nav className="top-nav grouped-top-nav" aria-label="Main platform navigation">

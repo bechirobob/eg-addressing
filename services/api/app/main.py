@@ -2011,10 +2011,25 @@ def operator_restore_drill_latest(authorization: str | None = Header(default=Non
 
 
 @app.get('/api/v1/reporting/summary')
-def reporting_summary_endpoint(authorization: str | None = Header(default=None)) -> dict[str, Any]:
+def reporting_summary_endpoint(
+    authorization: str | None = Header(default=None),
+    province: str | None = Query(default=None),
+    territory: str | None = Query(default=None),
+    status_filter: str | None = Query(default=None),
+    date_from: str | None = Query(default=None),
+    date_to: str | None = Query(default=None),
+) -> dict[str, Any]:
     user = _current_user(authorization)
     _require_role(user, 'viewer', 'editor', 'admin')
-    return reporting_summary()
+    if not any([province, territory, status_filter, date_from, date_to]):
+        return reporting_summary()
+    return reporting_summary(
+        province=province,
+        territory=territory,
+        status_filter=status_filter,
+        date_from=date_from,
+        date_to=date_to,
+    )
 
 
 @app.get('/api/v1/pilot-readiness/summary')

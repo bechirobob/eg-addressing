@@ -1,22 +1,28 @@
-import { readFile } from 'node:fs/promises';
-import path from 'node:path';
-import { fileURLToPath } from 'node:url';
-
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const portalRoot = path.resolve(__dirname, '..');
+import { readFileSync } from 'node:fs';
 
 function assert(condition, message) {
   if (!condition) throw new Error(message);
 }
 
-const reporting = await readFile(path.join(portalRoot, 'components/ReportingDashboardPanel.tsx'), 'utf8');
-const i18n = await readFile(path.join(portalRoot, 'components/i18n.tsx'), 'utf8');
+const siteChrome = readFileSync(new URL('../components/SiteChrome.tsx', import.meta.url), 'utf8');
+const roleChrome = readFileSync(new URL('../components/RoleAwareChrome.tsx', import.meta.url), 'utf8');
+const reporting = readFileSync(new URL('../components/ReportingPanel.tsx', import.meta.url), 'utf8');
+const registry = readFileSync(new URL('../components/RegistryCorePanel.tsx', import.meta.url), 'utf8');
+const field = readFileSync(new URL('../components/FieldWorkflowPanel.tsx', import.meta.url), 'utf8');
+const signage = readFileSync(new URL('../components/SignageOperationsPanel.tsx', import.meta.url), 'utf8');
 
-assert(!reporting.includes('translateUiText(`Next:'), 'Reports readiness details must not construct an English `Next:` prefix before translation.');
-assert(i18n.includes("'Next:'") || i18n.includes("'Next action'"), 'Spanish dictionary must include next-action wording used in operational panels.');
-assert(!/Listo for signage\/export/.test(i18n), 'Spanish dictionary must not contain mixed-language signage/export output.');
-assert(!/operator vía review/.test(i18n), 'Spanish dictionary must not contain mixed-language operator road-review output.');
-assert(reporting.includes("translateUiText('Ready for signage/export'"), 'Reports automation labels must translate Ready for signage/export before the runtime patcher sees it.');
-assert(reporting.includes('localizedAutomationLabel(row.bucket, locale)'), 'Reports automation bucket labels must be localized before rendering.');
+const combined = [siteChrome, roleChrome, reporting, registry, field, signage].join('\n');
 
-console.log('spanish-leak-guard passed');
+assert(!siteChrome.includes('LanguageSwitcher'), 'English-only build must not render a language switcher.');
+assert(!siteChrome.includes('SpanishUiTextPatcher'), 'English-only build must not run Spanish UI patcher.');
+
+for (const forbidden of ['command center', 'mission control', 'operational cockpit', 'smart review', 'AI dashboard']) {
+  assert(!combined.toLowerCase().includes(forbidden), `Forbidden government-service wording found: ${forbidden}`);
+}
+
+assert(reporting.includes('Reports are read-only'), 'Reports page must state that reports are read-only.');
+assert(reporting.includes('Province') && reporting.includes('Date from') && reporting.includes('Status'), 'Reports page must expose province/date/status filters.');
+assert(registry.includes('Search, update, and manage official address records.'), 'Registry page must state the government-service purpose.');
+assert(field.includes('Today summary') && field.includes('Assigned checks') && field.includes('Evidence submitted') && field.includes('Returned for correction'), 'Field work must expose the required Today summary rows.');
+
+console.log('english-service-guard passed');
