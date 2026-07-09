@@ -14328,3 +14328,198 @@ html body .guided-workflow-strip.guided-workflow-strip .step-chip {
   color: var(--gov-muted, var(--eg-muted));
   font-size: 0.78rem;
 }
+
+/* Permanent /field desktop workbench contract: desktop is not mobile stretched wide. */
+@media (min-width: 1024px) {
+  html body main.page-shell:has(.field-workspace) .desktop-main-content {
+    max-width: 1420px !important;
+    padding-inline: 36px !important;
+  }
+
+  html body main.page-shell .field-workspace {
+    --field-workbench-gap: 28px;
+    grid-template-columns: repeat(12, minmax(0, 1fr)) !important;
+    gap: var(--field-workbench-gap) !important;
+    align-items: start !important;
+  }
+
+  html body main.page-shell .field-workspace .public-task-panel,
+  html body main.page-shell .field-workspace .workbench-panel-disclosure,
+  html body main.page-shell .field-workspace .compact-review-disclosure,
+  html body main.page-shell .field-workspace .spatial-evidence-capture,
+  html body main.page-shell .field-workspace .human-capture-card,
+  html body main.page-shell .field-workspace .field-upload-workbench {
+    background: transparent !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+  }
+
+  html body main.page-shell .field-workspace .public-task-panel {
+    padding: 0 !important;
+  }
+
+  html body main.page-shell .field-workspace .field-assignments-panel {
+    grid-column: 1 / -1 !important;
+  }
+
+  html body main.page-shell .field-workspace .field-location-checks-panel {
+    grid-column: 1 / span 4 !important;
+  }
+
+  html body main.page-shell .field-workspace .field-intake-panel {
+    grid-column: 5 / -1 !important;
+  }
+
+  html body main.page-shell .field-workspace .live-intake-panel {
+    grid-column: 1 / -1 !important;
+  }
+
+  html body main.page-shell .field-workspace .desktop-table-wrap,
+  html body main.page-shell .field-workspace .table-wrap,
+  html body main.page-shell .field-workspace .field-assignment-table-wrap,
+  html body main.page-shell .field-workspace .live-intake-table-wrap {
+    background: transparent !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    overflow: visible !important;
+    margin-block: 14px 0 !important;
+  }
+
+  html body main.page-shell .field-workspace .desktop-data-table {
+    table-layout: fixed !important;
+  }
+
+  html body main.page-shell .field-workspace .live-intake-table-wrap .desktop-data-table th:nth-child(1),
+  html body main.page-shell .field-workspace .live-intake-table-wrap .desktop-data-table td:nth-child(1) {
+    width: 28% !important;
+  }
+
+  html body main.page-shell .field-workspace .live-intake-table-wrap .desktop-data-table th:nth-child(5),
+  html body main.page-shell .field-workspace .live-intake-table-wrap .desktop-data-table td:nth-child(5) {
+    width: 22% !important;
+  }
+
+  html body main.page-shell .field-workspace .field-summary-ledger {
+    display: grid !important;
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: 28px !important;
+    max-width: none !important;
+  }
+
+  html body main.page-shell .field-workspace .workbench-panel-disclosure > summary {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) auto !important;
+    align-items: start !important;
+    gap: 20px !important;
+    padding: 0 !important;
+    border: 0 !important;
+    background: transparent !important;
+  }
+
+  html body main.page-shell .field-workspace .human-field-form {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) minmax(260px, 0.74fr) !important;
+    gap: 18px 28px !important;
+    max-width: none !important;
+  }
+
+  html body main.page-shell .field-workspace .human-field-form > .field-checklist,
+  html body main.page-shell .field-workspace .human-field-form > .human-form-grid,
+  html body main.page-shell .field-workspace .human-field-form > .evidence-reference-fields,
+  html body main.page-shell .field-workspace .human-field-form > .territory-form-actions {
+    grid-column: 1 / -1 !important;
+  }
+
+  html body main.page-shell .field-workspace .human-field-form > .spatial-evidence-capture {
+    grid-column: 1 / span 1 !important;
+    padding: 0 !important;
+  }
+
+  html body main.page-shell .field-workspace .human-field-form > label.territory-field-wide {
+    grid-column: 2 / span 1 !important;
+  }
+
+  html body main.page-shell .field-workspace .field-checklist,
+  html body main.page-shell .field-workspace .field-checklist li,
+  html body main.page-shell .field-workspace .field-status-text {
+    border: 0 !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+  }
+
+  html body main.page-shell .field-workspace .field-upload-workbench {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) auto !important;
+    gap: 18px !important;
+    align-items: end !important;
+    margin: 14px 0 10px !important;
+    padding-bottom: 14px !important;
+    border-bottom: 1px solid var(--desktop-border) !important;
+  }
+
+  html body main.page-shell .field-workspace .field-upload-workbench h4,
+  html body main.page-shell .field-workspace .field-upload-workbench p {
+    margin: 0 !important;
+  }
+
+  html body main.page-shell .field-workspace .controlled-file-upload {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    min-height: 34px !important;
+    padding: 0 12px !important;
+    border: 1px solid var(--desktop-border-strong) !important;
+    border-radius: 8px !important;
+    background: #ffffff !important;
+    color: var(--desktop-text-main) !important;
+    font-size: 0.82rem !important;
+    font-weight: 800 !important;
+    cursor: pointer !important;
+  }
+
+  html body main.page-shell .field-workspace .controlled-file-upload input[type='file'] {
+    position: absolute !important;
+    inline-size: 1px !important;
+    block-size: 1px !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+  }
+
+  html body main.page-shell .field-workspace .table-file-upload,
+  html body main.page-shell .field-workspace .table-file-upload input[type='file'] {
+    display: none !important;
+  }
+
+  html body main.page-shell .field-workspace .step-chip,
+  html body main.page-shell .field-workspace .readiness-pill,
+  html body main.page-shell .field-workspace .status-pill,
+  html body main.page-shell .field-workspace .status-chip {
+    display: none !important;
+  }
+}
+
+@media (max-width: 1023px) {
+  html body main.page-shell .field-workspace .field-upload-workbench {
+    display: grid;
+    gap: 10px;
+    margin-top: 12px;
+  }
+
+  html body main.page-shell .field-workspace .controlled-file-upload {
+    display: inline-flex;
+    width: 100%;
+    justify-content: center;
+    min-height: 40px;
+  }
+
+  html body main.page-shell .field-workspace .controlled-file-upload input[type='file'] {
+    position: absolute;
+    inline-size: 1px;
+    block-size: 1px;
+    opacity: 0;
+    pointer-events: none;
+  }
+}

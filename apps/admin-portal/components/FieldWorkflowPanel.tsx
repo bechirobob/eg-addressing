@@ -133,6 +133,7 @@ export function FieldWorkflowPanel({ assignments, submissions: initialSubmission
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [uploadingEvidenceId, setUploadingEvidenceId] = useState<string | null>(null);
+  const [selectedEvidenceUploadId, setSelectedEvidenceUploadId] = useState<string | null>(initialSubmissions[0]?.id ?? null);
   const canSubmit = sessionUser?.role === 'editor' || sessionUser?.role === 'admin';
   const [form, setForm] = useState({
     assignment_id: fieldAssignments[0]?.assignment_id ?? '',
@@ -559,6 +560,10 @@ export function FieldWorkflowPanel({ assignments, submissions: initialSubmission
     }
   }
 
+  const selectedEvidenceUpload = submissions.find((submission) => submission.id === selectedEvidenceUploadId) ?? submissions[0] ?? null;
+  const selectedEvidenceAttachment = selectedEvidenceUpload?.spatial_evidence?.evidence_attachments?.[0] ?? null;
+  const selectedEvidenceFiles = selectedEvidenceAttachment?.files ?? [];
+
   return (
     <section className="section-grid territory-admin-grid field-workspace">
       <article className="public-task-panel civic-panel-green field-assignments-panel">
@@ -866,6 +871,17 @@ export function FieldWorkflowPanel({ assignments, submissions: initialSubmission
           </summary>
         {submissions.length > 0 ? (
           <>
+            <section className="field-upload-workbench" aria-label="Protected evidence file upload">
+              <div>
+                <p className="section-label">Protected file upload</p>
+                <h4>{selectedEvidenceUpload ? selectedEvidenceUpload.candidate_name : 'Select a submitted record'}</h4>
+                <p>{selectedEvidenceAttachment ? `${selectedEvidenceAttachment.reference} · ${selectedEvidenceFiles.length} protected file${selectedEvidenceFiles.length === 1 ? '' : 's'}` : 'Select a row with an evidence reference before uploading.'}</p>
+              </div>
+              <label className="controlled-file-upload">
+                <span>{uploadingEvidenceId === selectedEvidenceUpload?.id ? 'Uploading protected file…' : 'Choose protected evidence file'}</span>
+                <input type="file" accept="image/jpeg,image/png,image/webp,application/pdf,text/plain" disabled={!canSubmit || !selectedEvidenceUpload || !selectedEvidenceAttachment || uploadingEvidenceId === selectedEvidenceUpload.id} onChange={(event) => void uploadEvidenceFile(selectedEvidenceUpload!, event.target.files?.[0] ?? null)} />
+              </label>
+            </section>
             <div className="table-wrap desktop-table-wrap live-intake-table-wrap" aria-label="Recently submitted field records table">
               <table className="data-table desktop-data-table">
                 <caption>Recently submitted field records</caption>
@@ -876,7 +892,8 @@ export function FieldWorkflowPanel({ assignments, submissions: initialSubmission
                     <th scope="col">Type</th>
                     <th scope="col">Status</th>
                     <th scope="col">Evidence reference</th>
-                    <th scope="col">Protected file</th>
+                    <th scope="col">Files</th>
+                    <th scope="col">Action</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -889,12 +906,12 @@ export function FieldWorkflowPanel({ assignments, submissions: initialSubmission
                         <td>{submission.territory_name}</td>
                         <td>{submission.submission_type}</td>
                         <td>{submission.review_status}</td>
-                        <td>{evidenceReference}{evidenceFiles.length ? ` · ${evidenceFiles.length} file${evidenceFiles.length === 1 ? '' : 's'}` : ''}</td>
+                        <td>{evidenceReference}</td>
+                        <td>{evidenceFiles.length ? `${evidenceFiles.length} protected` : 'None'}</td>
                         <td>
-                          <label className="table-file-upload">
-                            <span>{uploadingEvidenceId === submission.id ? 'Uploading…' : 'Upload file'}</span>
-                            <input type="file" accept="image/jpeg,image/png,image/webp,application/pdf,text/plain" disabled={!canSubmit || uploadingEvidenceId === submission.id || evidenceReference === 'Pending'} onChange={(event) => void uploadEvidenceFile(submission, event.target.files?.[0] ?? null)} />
-                          </label>
+                          <button className="table-action" type="button" disabled={evidenceReference === 'Pending'} onClick={() => setSelectedEvidenceUploadId(submission.id)}>
+                            Select
+                          </button>
                         </td>
                       </tr>
                     );
