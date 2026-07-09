@@ -3132,6 +3132,11 @@ def public_address_code_record_lookup(code: str) -> dict[str, Any]:
             )
             geotag = cursor.fetchone()
             if geotag:
+                if not result.get('is_valid'):
+                    result.update({
+                        'is_valid': True,
+                        'registry_identifier_type': 'published-registry-code',
+                    })
                 if geotag['status'] == 'published':
                     result['publication_status'] = 'published'
                     result['record'] = dict(geotag)
@@ -3153,11 +3158,17 @@ def public_address_code_record_lookup(code: str) -> dict[str, Any]:
                 (code,),
             )
             address = cursor.fetchone()
-            if address and address['status'] == 'published':
-                result['publication_status'] = 'published'
-                result['record'] = dict(address)
-            elif address:
-                result['publication_status'] = 'not_public'
+            if address:
+                if not result.get('is_valid'):
+                    result.update({
+                        'is_valid': True,
+                        'registry_identifier_type': 'published-registry-code',
+                    })
+                if address['status'] == 'published':
+                    result['publication_status'] = 'published'
+                    result['record'] = dict(address)
+                else:
+                    result['publication_status'] = 'not_public'
     return result
 
 
