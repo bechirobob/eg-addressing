@@ -5899,7 +5899,7 @@ textarea {
 }
 
 .territory-filter-grid {
-  align-items: end;
+  align-items: flex-end;
 }
 
 .territory-create-disclosure,
@@ -12713,4 +12713,794 @@ html body .guided-workflow-strip.guided-workflow-strip .step-chip {
   background: transparent !important;
   border-radius: 0 !important;
   box-shadow: none !important;
+}
+
+/* Desktop replication guide implementation: government-service workspace, not stretched mobile. */
+:root {
+  --desktop-page-bg: #f7f4ec;
+  --desktop-surface: #fffef9;
+  --desktop-surface-muted: #f4f1e8;
+  --desktop-text-main: #16324f;
+  --desktop-text-muted: #667085;
+  --desktop-text-soft: #8a94a3;
+  --desktop-border: #d7dde5;
+  --desktop-border-strong: #b9c3cf;
+  --desktop-blue: #245f9f;
+  --desktop-blue-soft: #eaf3fb;
+  --desktop-green: #2f7d52;
+  --desktop-green-soft: #eaf6ef;
+  --desktop-gold: #9a7026;
+  --desktop-gold-soft: #fff6df;
+  --desktop-red: #a33b35;
+  --desktop-red-soft: #fff1ef;
+  --desktop-radius-card: 12px;
+  --desktop-radius-control: 8px;
+  --desktop-container: 1200px;
+  --desktop-gap: 24px;
+}
+
+.skip-link {
+  position: absolute;
+  left: -999px;
+  top: 8px;
+  z-index: 1000;
+  background: #ffffff;
+  color: var(--desktop-text-main);
+  padding: 8px 12px;
+  border: 1px solid var(--desktop-border-strong);
+  border-radius: 8px;
+}
+.skip-link:focus { left: 8px; }
+
+.desktop-table-wrap { display: none; }
+
+@media (min-width: 901px) {
+  html body {
+    background: var(--desktop-page-bg) !important;
+    color: var(--desktop-text-main) !important;
+  }
+
+  html body main.page-shell {
+    max-width: none !important;
+    width: 100% !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    background: var(--desktop-page-bg) !important;
+  }
+
+  html body main.page-shell .flag-ribbon,
+  html body main.page-shell .masthead-reference::before,
+  html body main.page-shell .masthead-reference::after,
+  html body main.page-shell .civic-hero-illustration {
+    display: none !important;
+  }
+
+  html body main.page-shell .masthead-reference {
+    max-width: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: var(--desktop-surface) !important;
+    border: 0 !important;
+    border-bottom: 1px solid var(--desktop-border) !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+  }
+
+  html body main.page-shell .masthead-topline,
+  html body main.page-shell .masthead-content-grid {
+    max-width: var(--desktop-container) !important;
+    margin: 0 auto !important;
+    padding: 0 32px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 24px !important;
+  }
+
+  html body main.page-shell .masthead-topline {
+    padding-top: 16px !important;
+    padding-bottom: 4px !important;
+  }
+
+  html body main.page-shell .masthead-content-grid {
+    padding-top: 0 !important;
+    padding-bottom: 16px !important;
+  }
+
+  html body main.page-shell .official-lockup {
+    display: flex !important;
+    align-items: center !important;
+    gap: 12px !important;
+  }
+
+  html body main.page-shell .crest-frame {
+    width: 42px !important;
+    height: 42px !important;
+    border: 0 !important;
+    background: transparent !important;
+    padding: 0 !important;
+    flex: 0 0 42px !important;
+  }
+
+  html body main.page-shell .kicker {
+    max-width: none !important;
+    font-size: 0.78rem !important;
+    letter-spacing: 0.08em !important;
+    color: var(--desktop-text-muted) !important;
+    white-space: nowrap !important;
+  }
+
+  html body main.page-shell .masthead-copy {
+    max-width: none !important;
+    width: 100% !important;
+  }
+
+  html body main.page-shell .masthead-reference .eyebrow {
+    display: none !important;
+  }
+
+  html body main.page-shell .masthead-reference h1 {
+    margin: 0 !important;
+    font-size: 1.55rem !important;
+    line-height: 1.15 !important;
+    letter-spacing: -0.01em !important;
+    color: var(--desktop-text-main) !important;
+  }
+
+  html body main.page-shell .masthead-reference .masthead-subtitle {
+    margin: 4px 0 0 !important;
+    max-width: 760px !important;
+    font-size: 0.95rem !important;
+    line-height: 1.4 !important;
+    color: var(--desktop-text-muted) !important;
+  }
+
+  html body main.page-shell .chrome-shell {
+    max-width: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: var(--desktop-surface) !important;
+    border: 0 !important;
+    border-bottom: 1px solid var(--desktop-border) !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    display: block !important;
+  }
+
+  html body main.page-shell .nav-cluster {
+    max-width: var(--desktop-container) !important;
+    margin: 0 auto !important;
+    padding: 0 32px !important;
+  }
+
+  html body main.page-shell .chrome-role-guest .platform-overview-link {
+    display: none !important;
+  }
+
+  html body main.page-shell .chrome-role-viewer .platform-overview-link,
+  html body main.page-shell .chrome-role-editor .platform-overview-link,
+  html body main.page-shell .chrome-role-admin .platform-overview-link {
+    display: inline-flex !important;
+    align-items: center !important;
+    min-height: 48px !important;
+    padding: 0 !important;
+    border-bottom: 3px solid transparent !important;
+    color: var(--desktop-text-main) !important;
+    text-decoration: none !important;
+    font-weight: 650 !important;
+  }
+
+  html body main.page-shell .grouped-top-nav,
+  html body main.page-shell .nav-group,
+  html body main.page-shell .nav-group-links {
+    display: flex !important;
+    align-items: center !important;
+    gap: 24px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: transparent !important;
+    border: 0 !important;
+  }
+
+  html body main.page-shell .nav-group-label {
+    display: none !important;
+  }
+
+  html body main.page-shell .nav-link {
+    min-height: 48px !important;
+    padding: 0 !important;
+    border: 0 !important;
+    border-bottom: 3px solid transparent !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    color: var(--desktop-text-main) !important;
+    box-shadow: none !important;
+    font-weight: 650 !important;
+    text-decoration: none !important;
+  }
+
+  html body main.page-shell .nav-link-active {
+    border-bottom-color: var(--desktop-text-main) !important;
+  }
+
+  html body main.page-shell .nav-link-title {
+    font-size: 0.95rem !important;
+    letter-spacing: 0 !important;
+    text-transform: none !important;
+  }
+
+  html body main.page-shell .chrome-session-utility {
+    position: absolute !important;
+    top: 18px !important;
+    right: max(32px, calc((100vw - var(--desktop-container)) / 2 + 32px)) !important;
+    z-index: 5 !important;
+    display: inline-flex !important;
+    gap: 10px !important;
+    background: transparent !important;
+    border: 0 !important;
+    padding: 0 !important;
+  }
+
+  html body main.page-shell .desktop-main-content {
+    max-width: var(--desktop-container) !important;
+    margin: 0 auto !important;
+    padding: 32px !important;
+  }
+
+  html body main.page-shell .section-grid,
+  html body main.page-shell .desktop-grid {
+    display: grid !important;
+    grid-template-columns: repeat(12, minmax(0, 1fr)) !important;
+    gap: var(--desktop-gap) !important;
+  }
+
+  html body main.page-shell .public-task-panel,
+  html body main.page-shell .map-confirm-panel,
+  html body main.page-shell .operator-finding-card,
+  html body main.page-shell .request-list-panel,
+  html body main.page-shell .request-detail-panel {
+    background: var(--desktop-surface) !important;
+    border: 1px solid var(--desktop-border) !important;
+    border-radius: 12px !important;
+    padding: 24px !important;
+    box-shadow: none !important;
+  }
+
+  html body main.page-shell .public-task-panel::before,
+  html body main.page-shell .public-task-panel::after,
+  html body main.page-shell .operator-finding-card::before,
+  html body main.page-shell .operator-finding-card::after {
+    content: none !important;
+    display: none !important;
+  }
+
+  html body main.page-shell .panel-head,
+  html body main.page-shell .quiet-head {
+    align-items: flex-start !important;
+    gap: 16px !important;
+    margin-bottom: 18px !important;
+  }
+
+  html body main.page-shell .desktop-table-wrap {
+    display: block !important;
+    overflow-x: auto !important;
+    background: var(--desktop-surface) !important;
+    border: 1px solid var(--desktop-border) !important;
+    border-radius: 12px !important;
+    margin-block: 18px !important;
+  }
+
+  html body main.page-shell .data-table {
+    width: 100% !important;
+    border-collapse: collapse !important;
+    font-size: 0.95rem !important;
+  }
+
+  html body main.page-shell .data-table caption {
+    text-align: left !important;
+    padding: 14px 16px !important;
+    color: var(--desktop-text-main) !important;
+    font-weight: 800 !important;
+  }
+
+  html body main.page-shell .data-table th,
+  html body main.page-shell .data-table td {
+    padding: 14px 16px !important;
+    text-align: left !important;
+    border-bottom: 1px solid var(--desktop-border) !important;
+    vertical-align: top !important;
+  }
+
+  html body main.page-shell .data-table th {
+    color: var(--desktop-text-muted) !important;
+    font-size: 0.78rem !important;
+    font-weight: 800 !important;
+    letter-spacing: 0.04em !important;
+    text-transform: uppercase !important;
+    background: var(--desktop-surface-muted) !important;
+  }
+
+  html body main.page-shell .data-table tr:last-child td {
+    border-bottom: 0 !important;
+  }
+
+  html body main.page-shell .data-table .selected-row,
+  html body main.page-shell .data-table tr.selected-row td {
+    background: #fbf7ed !important;
+  }
+
+  html body main.page-shell .table-action {
+    min-height: 34px !important;
+    padding: 0 12px !important;
+    border: 1px solid var(--desktop-border-strong) !important;
+    border-radius: 8px !important;
+    background: #ffffff !important;
+    color: var(--desktop-text-main) !important;
+    font: inherit !important;
+    font-weight: 700 !important;
+    cursor: pointer !important;
+  }
+
+  html body main.page-shell .mobile-card-list {
+    display: none !important;
+  }
+
+  /* Homepage: public service start page. */
+  html body main.page-shell .desktop-home-start {
+    display: grid !important;
+    gap: 32px !important;
+  }
+
+  html body main.page-shell .desktop-home-intro {
+    display: grid !important;
+    grid-template-columns: minmax(0, 2fr) minmax(280px, 1fr) !important;
+    gap: 32px !important;
+    align-items: start !important;
+  }
+
+  html body main.page-shell .desktop-home-copy,
+  html body main.page-shell .desktop-before-start {
+    background: var(--desktop-surface) !important;
+    border: 1px solid var(--desktop-border) !important;
+    border-radius: 12px !important;
+    padding: 24px !important;
+  }
+
+  html body main.page-shell .desktop-home-copy h2 {
+    margin: 0 !important;
+    font-size: clamp(2rem, 4vw, 3.25rem) !important;
+    line-height: 1.05 !important;
+    letter-spacing: -0.03em !important;
+  }
+
+  html body main.page-shell .desktop-service-choices {
+    display: grid !important;
+    gap: 16px !important;
+  }
+
+  html body main.page-shell .desktop-service-card-grid {
+    display: grid !important;
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: 18px !important;
+  }
+
+  html body main.page-shell .desktop-service-card {
+    display: grid !important;
+    gap: 8px !important;
+    min-height: 132px !important;
+    padding: 20px !important;
+    background: var(--desktop-surface) !important;
+    border: 1px solid var(--desktop-border) !important;
+    border-radius: 12px !important;
+    color: var(--desktop-text-main) !important;
+    text-decoration: none !important;
+  }
+
+  html body main.page-shell .service-start-workflow ol {
+    display: grid !important;
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+    gap: 16px !important;
+  }
+
+  /* Field work: task management screen. */
+  html body main.page-shell .field-workspace .field-assignments-panel,
+  html body main.page-shell .field-workspace .field-intake-panel {
+    grid-column: span 8 !important;
+  }
+
+  html body main.page-shell .field-workspace .field-location-checks-panel,
+  html body main.page-shell .field-workspace .live-intake-panel {
+    grid-column: span 4 !important;
+  }
+
+  html body main.page-shell .field-command-deck,
+  html body main.page-shell .data-command-deck {
+    display: grid !important;
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: 16px !important;
+  }
+
+  /* Registry: search-first database workspace. */
+  html body main.page-shell .registry-simple-shell {
+    display: grid !important;
+    grid-template-columns: repeat(12, minmax(0, 1fr)) !important;
+    gap: var(--desktop-gap) !important;
+  }
+
+  html body main.page-shell .registry-simple-hero {
+    grid-column: 1 / -1 !important;
+    display: grid !important;
+    grid-template-columns: minmax(0, 7fr) minmax(320px, 5fr) !important;
+    gap: 18px 24px !important;
+    align-items: start !important;
+  }
+
+  html body main.page-shell .registry-search-control {
+    grid-column: 1 / -1 !important;
+    max-width: none !important;
+  }
+
+  html body main.page-shell .registry-search-control .territory-input {
+    min-height: 54px !important;
+    font-size: 1.05rem !important;
+  }
+
+  html body main.page-shell .registry-count-line,
+  html body main.page-shell .registry-section-list {
+    grid-column: 1 / -1 !important;
+  }
+
+  html body main.page-shell .registry-job-tabs,
+  html body main.page-shell .registry-archive-toggle {
+    grid-column: 1 / -1 !important;
+  }
+
+  html body main.page-shell .registry-simple-section {
+    grid-column: 1 / -1 !important;
+  }
+
+  html body main.page-shell .registry-simple-layout {
+    display: grid !important;
+    grid-template-columns: minmax(0, 8fr) minmax(280px, 4fr) !important;
+    gap: var(--desktop-gap) !important;
+  }
+
+  html body main.page-shell .registry-simple-detail {
+    display: block !important;
+  }
+
+  /* Publication/signage: release gate. */
+  html body main.page-shell .release-status-panel {
+    margin-top: 18px !important;
+    padding: 20px !important;
+    background: var(--desktop-red-soft) !important;
+    border: 1px solid rgba(163, 59, 53, 0.25) !important;
+    border-radius: 12px !important;
+    display: grid !important;
+    gap: 6px !important;
+  }
+
+  html body main.page-shell .release-status-panel strong {
+    color: var(--desktop-red) !important;
+    font-size: 1.2rem !important;
+  }
+
+  html body main.page-shell .operator-review-desk {
+    display: grid !important;
+    grid-template-columns: minmax(0, 4fr) minmax(0, 8fr) !important;
+    gap: var(--desktop-gap) !important;
+  }
+
+  html body main.page-shell .request-list {
+    max-height: 720px !important;
+    overflow: auto !important;
+  }
+
+  /* Reports: filters, metrics, tables. */
+  html body main.page-shell .reports-service-grid {
+    display: grid !important;
+    grid-template-columns: repeat(12, minmax(0, 1fr)) !important;
+    gap: var(--desktop-gap) !important;
+  }
+
+  html body main.page-shell .reports-intro-panel,
+  html body main.page-shell .reports-filter-panel,
+  html body main.page-shell .reports-summary-panel {
+    grid-column: 1 / -1 !important;
+  }
+
+  html body main.page-shell .reports-section-panel {
+    grid-column: span 6 !important;
+  }
+
+  html body main.page-shell .reports-filter-grid {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    align-items: flex-end !important;
+    gap: 16px !important;
+  }
+
+  html body main.page-shell .reports-filter-grid .territory-field {
+    min-width: 180px !important;
+    flex: 1 1 180px !important;
+  }
+
+  html body main.page-shell .metric-row-list {
+    display: grid !important;
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+    gap: 0 !important;
+  }
+}
+
+@media (max-width: 900px) {
+  .desktop-table-wrap { display: none !important; }
+  .desktop-home-intro,
+  .desktop-service-card-grid {
+    display: grid;
+    gap: 16px;
+  }
+}
+
+/* Desktop replication final visual fixes: task/table first, no mobile residue on desktop. */
+@media (min-width: 901px) {
+  html body main.page-shell .field-workspace.field-workspace {
+    display: grid !important;
+    grid-template-columns: repeat(12, minmax(0, 1fr)) !important;
+    grid-auto-flow: row !important;
+    align-items: start !important;
+  }
+
+  html body main.page-shell .field-workspace .field-assignments-panel.field-assignments-panel {
+    grid-column: 1 / span 8 !important;
+    grid-row: 1 !important;
+    order: 1 !important;
+  }
+
+  html body main.page-shell .field-workspace .field-location-checks-panel.field-location-checks-panel {
+    grid-column: 9 / span 4 !important;
+    grid-row: 1 / span 2 !important;
+    order: 2 !important;
+  }
+
+  html body main.page-shell .field-workspace .field-intake-panel.field-intake-panel {
+    grid-column: 1 / span 8 !important;
+    grid-row: 2 !important;
+    order: 3 !important;
+  }
+
+  html body main.page-shell .field-workspace .live-intake-panel.live-intake-panel {
+    grid-column: 1 / span 8 !important;
+    grid-row: 3 !important;
+    order: 4 !important;
+  }
+
+  html body main.page-shell .field-location-checks-panel .field-task-list,
+  html body main.page-shell .field-location-checks-panel .mini-list {
+    display: grid !important;
+    gap: 10px !important;
+    margin: 0 !important;
+  }
+
+  html body main.page-shell .field-location-checks-panel li,
+  html body main.page-shell .live-intake-panel li {
+    display: block !important;
+    min-height: 0 !important;
+    padding: 8px 0 !important;
+  }
+
+  html body main.page-shell .field-location-checks-panel summary,
+  html body main.page-shell .live-intake-panel summary {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) !important;
+    gap: 3px !important;
+  }
+
+  html body main.page-shell .field-location-checks-panel summary strong,
+  html body main.page-shell .live-intake-panel summary strong,
+  html body main.page-shell .field-location-checks-panel summary span,
+  html body main.page-shell .live-intake-panel summary span {
+    display: block !important;
+    min-width: 0 !important;
+    overflow-wrap: anywhere !important;
+    line-height: 1.25 !important;
+  }
+
+  html body main.page-shell .registry-simple-list.mobile-card-list,
+  html body main.page-shell .registry-simple-list-full.mobile-card-list,
+  html body main.page-shell .registry-simple-layout > .mobile-card-list,
+  html body main.page-shell .mobile-card-list.registry-simple-list,
+  html body main.page-shell .mobile-card-list.registry-simple-list-full,
+  html body main.page-shell .mobile-card-list.report-row-list,
+  html body main.page-shell .mobile-card-list.signage-export-list,
+  html body main.page-shell .mobile-card-list.assignment-list {
+    display: none !important;
+    visibility: hidden !important;
+    height: 0 !important;
+    overflow: hidden !important;
+  }
+
+  html body main.page-shell .registry-simple-layout.registry-simple-layout {
+    grid-template-columns: minmax(0, 8fr) minmax(280px, 4fr) !important;
+  }
+
+  html body main.page-shell .registry-simple-layout .registry-simple-detail {
+    grid-column: 2 !important;
+  }
+}
+
+/* Field desktop right rail: no zero-width summary columns, no overlapping text. */
+@media (min-width: 901px) {
+  html body main.page-shell .field-location-checks-panel .field-task-list {
+    display: grid !important;
+    gap: 12px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  html body main.page-shell .field-location-checks-panel .field-task-list > li {
+    display: block !important;
+    min-height: 0 !important;
+    padding: 0 0 12px 0 !important;
+    border: 0 !important;
+    border-bottom: 1px solid var(--desktop-border) !important;
+    background: transparent !important;
+  }
+
+  html body main.page-shell .field-location-checks-panel .field-task-list > li:nth-child(n + 5) {
+    display: none !important;
+  }
+
+  html body main.page-shell .field-location-checks-panel .field-task-list details,
+  html body main.page-shell .field-location-checks-panel .field-task-list .inline-disclosure {
+    display: block !important;
+    border: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+  }
+
+  html body main.page-shell .field-location-checks-panel .field-task-list summary,
+  html body main.page-shell .field-location-checks-panel .field-task-list .inline-disclosure > summary {
+    display: block !important;
+    grid-template-columns: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    list-style: none !important;
+    cursor: pointer !important;
+  }
+
+  html body main.page-shell .field-location-checks-panel .field-task-list summary::-webkit-details-marker {
+    display: none !important;
+  }
+
+  html body main.page-shell .field-location-checks-panel .field-task-list summary::before,
+  html body main.page-shell .field-location-checks-panel .field-task-list summary::after {
+    content: none !important;
+    display: none !important;
+  }
+
+  html body main.page-shell .field-location-checks-panel .field-task-list summary strong,
+  html body main.page-shell .field-location-checks-panel .field-task-list summary span {
+    display: block !important;
+    width: auto !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    margin: 0 !important;
+    overflow-wrap: anywhere !important;
+    word-break: normal !important;
+    white-space: normal !important;
+    line-height: 1.3 !important;
+  }
+
+  html body main.page-shell .field-location-checks-panel .field-task-list summary strong {
+    font-size: 0.92rem !important;
+    font-weight: 750 !important;
+    color: var(--desktop-text-main) !important;
+  }
+
+  html body main.page-shell .field-location-checks-panel .field-task-list summary span {
+    margin-top: 3px !important;
+    font-size: 0.82rem !important;
+    color: var(--desktop-text-muted) !important;
+  }
+}
+
+/* Field assignment table: keep desktop action column visible. */
+@media (min-width: 901px) {
+  html body main.page-shell .field-assignment-table-wrap.field-assignment-table-wrap {
+    max-width: 100% !important;
+    overflow-x: visible !important;
+  }
+
+  html body main.page-shell .field-assignment-table-wrap .desktop-data-table {
+    table-layout: fixed !important;
+    width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  html body main.page-shell .field-assignment-table-wrap th,
+  html body main.page-shell .field-assignment-table-wrap td {
+    padding: 12px 10px !important;
+    font-size: 0.88rem !important;
+    line-height: 1.32 !important;
+    overflow-wrap: anywhere !important;
+  }
+
+  html body main.page-shell .field-assignment-table-wrap th:nth-child(1),
+  html body main.page-shell .field-assignment-table-wrap td:nth-child(1) { width: 20% !important; }
+  html body main.page-shell .field-assignment-table-wrap th:nth-child(2),
+  html body main.page-shell .field-assignment-table-wrap td:nth-child(2) { width: 15% !important; }
+  html body main.page-shell .field-assignment-table-wrap th:nth-child(3),
+  html body main.page-shell .field-assignment-table-wrap td:nth-child(3) { width: 13% !important; }
+  html body main.page-shell .field-assignment-table-wrap th:nth-child(4),
+  html body main.page-shell .field-assignment-table-wrap td:nth-child(4) { width: 18% !important; }
+  html body main.page-shell .field-assignment-table-wrap th:nth-child(5),
+  html body main.page-shell .field-assignment-table-wrap td:nth-child(5) { width: 9% !important; }
+  html body main.page-shell .field-assignment-table-wrap th:nth-child(6),
+  html body main.page-shell .field-assignment-table-wrap td:nth-child(6) { width: 15% !important; }
+  html body main.page-shell .field-assignment-table-wrap th:nth-child(7),
+  html body main.page-shell .field-assignment-table-wrap td:nth-child(7) {
+    width: 10% !important;
+    text-align: right !important;
+  }
+
+  html body main.page-shell .field-assignment-table-wrap .secondary-action,
+  html body main.page-shell .field-assignment-table-wrap .primary-action,
+  html body main.page-shell .field-assignment-table-wrap button,
+  html body main.page-shell .field-assignment-table-wrap a {
+    min-width: 0 !important;
+    white-space: nowrap !important;
+    padding: 7px 10px !important;
+    font-size: 0.86rem !important;
+  }
+}
+
+/* Field desktop final layout: full-width assignment table first, secondary panels below. */
+@media (min-width: 901px) {
+  html body main.page-shell .field-workspace.field-workspace {
+    display: grid !important;
+    grid-template-columns: repeat(12, minmax(0, 1fr)) !important;
+    gap: 40px 32px !important;
+    align-items: start !important;
+  }
+
+  html body main.page-shell .field-workspace .field-assignments-panel.field-assignments-panel {
+    grid-column: 1 / -1 !important;
+    grid-row: 1 !important;
+    order: 1 !important;
+  }
+
+  html body main.page-shell .field-workspace .field-location-checks-panel.field-location-checks-panel {
+    grid-column: 1 / span 4 !important;
+    grid-row: 2 !important;
+    order: 2 !important;
+  }
+
+  html body main.page-shell .field-workspace .field-intake-panel.field-intake-panel {
+    grid-column: 5 / span 8 !important;
+    grid-row: 2 !important;
+    order: 3 !important;
+  }
+
+  html body main.page-shell .field-workspace .live-intake-panel.live-intake-panel {
+    grid-column: 1 / -1 !important;
+    grid-row: 3 !important;
+    order: 4 !important;
+  }
+
+  html body main.page-shell .field-assignment-table-wrap.field-assignment-table-wrap {
+    overflow-x: visible !important;
+    width: 100% !important;
+  }
+
+  html body main.page-shell .field-assignment-table-wrap .desktop-data-table {
+    table-layout: auto !important;
+    width: 100% !important;
+  }
+
+  html body main.page-shell .field-assignment-table-wrap th,
+  html body main.page-shell .field-assignment-table-wrap td {
+    padding: 14px 16px !important;
+    font-size: 0.95rem !important;
+  }
 }

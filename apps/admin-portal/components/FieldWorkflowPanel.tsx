@@ -507,7 +507,36 @@ export function FieldWorkflowPanel({ assignments, submissions: initialSubmission
             <small>Records already submitted for review.</small>
           </button>
         </div>
-        <ul className="assignment-list">
+        <div className="table-wrap desktop-table-wrap field-assignment-table-wrap" aria-label="Assigned checks table">
+          <table className="data-table desktop-data-table">
+            <caption>Assigned checks</caption>
+            <thead>
+              <tr>
+                <th scope="col">Location</th>
+                <th scope="col">Territory</th>
+                <th scope="col">Status</th>
+                <th scope="col">Required evidence</th>
+                <th scope="col">Due</th>
+                <th scope="col">Assigned officer</th>
+                <th scope="col">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {fieldAssignments.map((assignment) => (
+                <tr key={assignment.assignment_id}>
+                  <td><strong>{assignment.task}</strong></td>
+                  <td>{assignment.territory}</td>
+                  <td>{translateUiText(`${assignment.priority} priority`, locale)}</td>
+                  <td>GPS point, frontage photo, officer note</td>
+                  <td>{assignment.priority === 'critical' ? 'Today' : 'This week'}</td>
+                  <td>{assignment.team}</td>
+                  <td><button className="table-action" type="button">Open</button></td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <ul className="assignment-list mobile-card-list">
           {fieldAssignments.map((assignment) => (
             <li key={assignment.assignment_id} className="assignment-card">
               <div>

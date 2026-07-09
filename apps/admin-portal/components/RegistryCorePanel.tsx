@@ -412,8 +412,38 @@ export function RegistryCorePanel({
             </form>
           </details>
 
+          <div className="table-wrap desktop-table-wrap registry-record-table-wrap" aria-label="Address records table">
+            <table className="data-table desktop-data-table">
+              <caption>Official address records</caption>
+              <thead>
+                <tr>
+                  <th scope="col">Code</th>
+                  <th scope="col">Name</th>
+                  <th scope="col">Territory</th>
+                  <th scope="col">Type</th>
+                  <th scope="col">Status</th>
+                  <th scope="col">Updated</th>
+                  <th scope="col">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {visibleAddresses.map((address) => (
+                  <tr key={address.id} className={selectedAddressId === address.id ? 'selected-row' : undefined}>
+                    <td>{address.id}</td>
+                    <td><strong>{address.formatted}</strong></td>
+                    <td>{address.territory_name || 'Routing pending'}</td>
+                    <td>Address</td>
+                    <td>{publicationLabel(address)}</td>
+                    <td>{address.is_archived ? 'Archived' : 'Active'}</td>
+                    <td><button className="table-action" type="button" onClick={() => setSelectedAddressId(address.id)}>Open</button></td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
           <div className="registry-simple-layout">
-            <aside className="registry-simple-list" aria-label="Address records">
+            <aside className="registry-simple-list mobile-card-list" aria-label="Address records">
               {visibleAddresses.length ? visibleAddresses.map((address) => (
                 <button key={address.id} className={`registry-simple-row ${selectedAddressId === address.id ? 'active' : ''}`} type="button" onClick={() => setSelectedAddressId(address.id)}>
                   <strong>{address.formatted}</strong>
@@ -502,7 +532,20 @@ export function RegistryCorePanel({
               <div className="territory-form-actions"><button className="verification-button" type="submit" disabled={!canWrite || isSubmitting}>{!canWrite ? 'Editor or admin required' : isSubmitting ? 'Working…' : 'Create road'}</button></div>
             </form>
           </details>
-          <div className="registry-simple-list registry-simple-list-full">
+          <div className="table-wrap desktop-table-wrap registry-record-table-wrap" aria-label="Road records table">
+            <table className="data-table desktop-data-table">
+              <caption>Road records</caption>
+              <thead><tr><th scope="col">Code</th><th scope="col">Name</th><th scope="col">Territory</th><th scope="col">Type</th><th scope="col">Status</th><th scope="col">Updated</th><th scope="col">Action</th></tr></thead>
+              <tbody>
+                {visibleRoads.map((road) => (
+                  <tr key={road.id} className={selectedRoadId === road.id ? 'selected-row' : undefined}>
+                    <td>{road.id}</td><td><strong>{road.name}</strong></td><td>{road.territory_name}</td><td>Road</td><td>{road.is_archived ? 'Archived' : plainStatus(road.status)}</td><td>{road.length_km} km</td><td><button className="table-action" type="button" onClick={() => setSelectedRoadId(road.id)}>Open</button></td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <div className="registry-simple-list registry-simple-list-full mobile-card-list">
             {visibleRoads.length ? visibleRoads.map((road) => (
               <button key={road.id} className={`registry-simple-row ${selectedRoadId === road.id ? 'active' : ''}`} type="button" onClick={() => setSelectedRoadId(road.id)}>
                 <strong>{road.name}</strong><span>{road.territory_name}</span><small>{road.is_archived ? 'Archived' : plainStatus(road.status)}</small>
@@ -545,7 +588,20 @@ export function RegistryCorePanel({
               <div className="territory-form-actions"><button className="verification-button" type="submit" disabled={!canWrite || isSubmitting}>{!canWrite ? 'Editor or admin required' : isSubmitting ? 'Working…' : 'Create building'}</button></div>
             </form>
           </details>
-          <div className="registry-simple-list registry-simple-list-full">
+          <div className="table-wrap desktop-table-wrap registry-record-table-wrap" aria-label="Building records table">
+            <table className="data-table desktop-data-table">
+              <caption>Building records</caption>
+              <thead><tr><th scope="col">Code</th><th scope="col">Name</th><th scope="col">Territory</th><th scope="col">Type</th><th scope="col">Status</th><th scope="col">Updated</th><th scope="col">Action</th></tr></thead>
+              <tbody>
+                {visibleBuildings.map((building) => (
+                  <tr key={building.id} className={selectedBuildingId === building.id ? 'selected-row' : undefined}>
+                    <td>{building.id}</td><td><strong>{building.label}</strong></td><td>{building.territory_name}</td><td>Building</td><td>{building.is_archived ? 'Archived' : plainStatus(building.status)}</td><td>{plainStatus(building.usage)}</td><td><button className="table-action" type="button" onClick={() => setSelectedBuildingId(building.id)}>Open</button></td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <div className="registry-simple-list registry-simple-list-full mobile-card-list">
             {visibleBuildings.length ? visibleBuildings.map((building) => (
               <button key={building.id} className={`registry-simple-row ${selectedBuildingId === building.id ? 'active' : ''}`} type="button" onClick={() => setSelectedBuildingId(building.id)}>
                 <strong>{building.label}</strong><span>{building.road_name}</span><small>{building.is_archived ? 'Archived' : `${plainStatus(building.usage)} · ${plainStatus(building.status)}`}</small>

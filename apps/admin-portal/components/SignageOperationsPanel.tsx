@@ -565,6 +565,26 @@ export function SignageOperationsPanel({ apiBaseUrl }: SignageOperationsPanelPro
             <span className="status-chip danger">Public release locked</span>
           </div>
         </div>
+        <div className="release-status-panel" role="status" aria-label="Public release status">
+          <strong>Public release locked</strong>
+          <span>Clear {automationSummary?.sla?.overdue ?? 0} overdue reviews before publishing.</span>
+        </div>
+        <div className="table-wrap desktop-table-wrap blocked-items-table-wrap" aria-label="Blocked items table">
+          <table className="data-table desktop-data-table">
+            <caption>Blocked items</caption>
+            <thead><tr><th scope="col">Location</th><th scope="col">Blocker</th><th scope="col">Owner</th><th scope="col">Action</th></tr></thead>
+            <tbody>
+              {submissions.slice(0, 6).map((submission) => (
+                <tr key={submission.id}>
+                  <td><strong>{submission.address_label}</strong></td>
+                  <td>{qualityLabel(submission.quality_flags)}</td>
+                  <td>{submission.territory_name || 'Registry'}</td>
+                  <td><button className="table-action" type="button" onClick={() => setSelectedId(submission.id)}>Open</button></td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
         <details className="quiet-disclosure compact-review-disclosure">
           <summary>View queue details</summary>
           <div className="compact-review-grid">
@@ -687,7 +707,7 @@ export function SignageOperationsPanel({ apiBaseUrl }: SignageOperationsPanelPro
                 </div>
                 {selectedSubmission.automation ? (
                   <div className="operator-finding-card">
-                    <strong>Automation command</strong>
+                    <strong>Automation check</strong>
                     <span className="status-chip warn">Score {selectedSubmission.automation.quality_score}/100 · {selectedSubmission.automation.triage_bucket.replaceAll('-', ' ')}</span>
                     <p>{translateUiText(selectedSubmission.automation.next_best_action_label, locale)}</p>
                     <ul>
@@ -828,14 +848,29 @@ export function SignageOperationsPanel({ apiBaseUrl }: SignageOperationsPanelPro
           <button className="secondary-action" type="button" onClick={() => window.print()} disabled={!exportRows.length}>Print list</button>
         </div>
         {exportRows.length ? (
-          <ul className="mini-list signage-export-list">
-            {exportRows.map((row) => (
-              <li key={`${row.grid_code}-${row.batch ?? 'batch'}`}>
-                <strong>{row.signage_text}</strong>
-                <span>{row.address_label} · {row.territory_name ?? 'Area pending'} · {row.latitude}, {row.longitude}</span>
-              </li>
-            ))}
-          </ul>
+          <>
+            <div className="table-wrap desktop-table-wrap signage-batch-table-wrap" aria-label="Signage batches table">
+              <table className="data-table desktop-data-table">
+                <caption>Signage batches</caption>
+                <thead><tr><th scope="col">Batch ID</th><th scope="col">Territory</th><th scope="col">Records</th><th scope="col">Status</th><th scope="col">Approver</th><th scope="col">Date</th></tr></thead>
+                <tbody>
+                  {exportRows.map((row) => (
+                    <tr key={`${row.grid_code}-${row.batch ?? 'batch-table'}`}>
+                      <td>{row.batch ?? 'Pending batch'}</td><td>{row.territory_name ?? 'Area pending'}</td><td>{row.address_label}</td><td>{statusLabel(row.status)}</td><td>Project approval required</td><td>Not released</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            <ul className="mini-list signage-export-list mobile-card-list">
+              {exportRows.map((row) => (
+                <li key={`${row.grid_code}-${row.batch ?? 'batch'}`}>
+                  <strong>{row.signage_text}</strong>
+                  <span>{row.address_label} · {row.territory_name ?? 'Area pending'} · {row.latitude}, {row.longitude}</span>
+                </li>
+              ))}
+            </ul>
+          </>
         ) : (
           <p className="panel-state">No records are published for physical signage yet.</p>
         )}

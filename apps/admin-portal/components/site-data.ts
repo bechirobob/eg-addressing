@@ -94,7 +94,7 @@ export const navItems: NavItem[] = [
   {
     href: '/reports',
     label: 'Reports',
-    visibleTo: ['guest', 'viewer', 'editor', 'admin'],
+    visibleTo: ['viewer', 'editor', 'admin'],
     priorityFor: ['guest', 'viewer', 'editor', 'admin'],
     group: 'staff',
   },
@@ -116,7 +116,7 @@ export const statusHighlights = [
 const routeRules: RouteRule[] = [
   { path: '/', allowedRoles: ['guest', 'viewer', 'editor', 'admin'] },
   { path: '/login', allowedRoles: ['guest', 'viewer', 'editor', 'admin'] },
-  { path: '/reports', allowedRoles: ['guest', 'viewer', 'editor', 'admin'] },
+  { path: '/reports', allowedRoles: ['viewer', 'editor', 'admin'] },
   { path: '/issue', allowedRoles: ['guest', 'viewer', 'editor', 'admin'] },
   { path: '/track', allowedRoles: ['guest', 'viewer', 'editor', 'admin'] },
   { path: '/geotag', allowedRoles: ['guest', 'viewer', 'editor', 'admin'] },

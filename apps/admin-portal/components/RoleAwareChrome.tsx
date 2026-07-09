@@ -70,7 +70,7 @@ export function RoleAwareChrome({ apiBaseUrl, children }: RoleAwareChromeProps) 
   const accessAllowed = effectiveSessionStatus === 'loading' ? true : isRouteAccessible(currentRoute, role);
 
   const visibleItems = useMemo(
-    () => navItems.filter((item) => item.visibleTo.includes(role)),
+    () => navItems.filter((item) => item.visibleTo.includes(role) && (role === 'guest' ? item.group === 'public' : item.group === 'staff')),
     [role],
   );
 
@@ -121,7 +121,7 @@ export function RoleAwareChrome({ apiBaseUrl, children }: RoleAwareChromeProps) 
 
   return (
     <>
-      <div className="chrome-shell">
+      <div className={`chrome-shell chrome-role-${role}`}>
         <div className="nav-cluster grouped-nav-cluster">
           {currentRoute !== '/' ? (
             <Link href="/" className="platform-overview-link">

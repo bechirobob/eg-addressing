@@ -147,7 +147,7 @@ const dictionaries = {
     fieldSubtitle: 'Complete assigned location checks and submit field evidence for review.',
     reportsEyebrow: 'Staff service',
     reportsTitle: 'Reports',
-    reportsSubtitle: 'Track workload, review progress, field activity, and publication readiness.',
+    reportsSubtitle: 'Reports are read-only. Track workload, review progress, field activity, and publication readiness.',
     registryEyebrow: 'Staff service',
     registryTitle: 'Address registry',
     registrySubtitle: 'Search, update, and manage official address records.',

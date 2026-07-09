@@ -59,6 +59,7 @@ export function SiteChrome({ title, subtitle, eyebrow, titleKey, subtitleKey, ey
   const serviceMeta = serviceMetaForTitle(title);
   return (
     <main className={`page-shell page-shell-${serviceMeta.key}`}>
+      <a className="skip-link" href="#main-content">Skip to main content</a>
       <div className="flag-ribbon" aria-hidden="true" />
       <header className="masthead masthead-reference" aria-label="National platform identity">
         <div className="masthead-topline">
@@ -100,7 +101,11 @@ export function SiteChrome({ title, subtitle, eyebrow, titleKey, subtitleKey, ey
       </header>
 
 
-      <RoleAwareChrome apiBaseUrl={apiBaseUrl}>{children}</RoleAwareChrome>
+      <RoleAwareChrome apiBaseUrl={apiBaseUrl}>
+        <div id="main-content" className="desktop-main-content">
+          {children}
+        </div>
+      </RoleAwareChrome>
     </main>
   );
 }

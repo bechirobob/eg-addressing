@@ -84,7 +84,7 @@ export default async function ReportsPage() {
       eyebrowKey="reportsEyebrow"
       title="Reports"
       titleKey="reportsTitle"
-      subtitle="Track workload, review progress, field activity, and publication readiness."
+      subtitle="Reports are read-only. Track workload, review progress, field activity, and publication readiness."
       subtitleKey="reportsSubtitle"
     >
       <ReportingPanel

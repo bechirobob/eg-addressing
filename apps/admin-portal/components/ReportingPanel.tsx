@@ -195,22 +195,26 @@ export function ReportingPanel({ summary: initialSummary, readinessSummary, apiB
 
       <article className="public-task-panel reports-section-panel">
         <div className="panel-head"><p className="section-label">Workload</p><h3>Review queue</h3></div>
-        <ul className="report-row-list">{reviewRows.map((row) => <li key={row.label}><span>{row.label}</span><strong>{row.count}</strong></li>)}</ul>
+        <div className="table-wrap desktop-table-wrap report-table-wrap"><table className="data-table desktop-data-table"><caption>Review queue</caption><thead><tr><th scope="col">Status</th><th scope="col">Count</th></tr></thead><tbody>{reviewRows.map((row) => <tr key={row.label}><td>{row.label}</td><td>{row.count}</td></tr>)}</tbody></table></div>
+        <ul className="report-row-list mobile-card-list">{reviewRows.map((row) => <li key={row.label}><span>{row.label}</span><strong>{row.count}</strong></li>)}</ul>
       </article>
 
       <article className="public-task-panel reports-section-panel">
         <div className="panel-head"><p className="section-label">Field activity</p><h3>Submitted locations</h3></div>
-        <ul className="report-row-list">{fieldRows.length ? fieldRows.map((row) => <li key={row.label}><span>{row.label}</span><strong>{row.count}</strong></li>) : <li><span>No field activity in this report scope</span><strong>0</strong></li>}</ul>
+        <div className="table-wrap desktop-table-wrap report-table-wrap"><table className="data-table desktop-data-table"><caption>Field activity</caption><thead><tr><th scope="col">Status</th><th scope="col">Count</th></tr></thead><tbody>{fieldRows.length ? fieldRows.map((row) => <tr key={row.label}><td>{row.label}</td><td>{row.count}</td></tr>) : <tr><td>No field activity in this report scope</td><td>0</td></tr>}</tbody></table></div>
+        <ul className="report-row-list mobile-card-list">{fieldRows.length ? fieldRows.map((row) => <li key={row.label}><span>{row.label}</span><strong>{row.count}</strong></li>) : <li><span>No field activity in this report scope</span><strong>0</strong></li>}</ul>
       </article>
 
       <article className="public-task-panel reports-section-panel">
         <div className="panel-head"><p className="section-label">Publication status</p><h3>Release progress</h3></div>
-        <ul className="report-row-list">{publicationRows.map((row) => <li key={row.label}><span>{row.label}</span><strong>{row.count}</strong></li>)}</ul>
+        <div className="table-wrap desktop-table-wrap report-table-wrap"><table className="data-table desktop-data-table"><caption>Publication status</caption><thead><tr><th scope="col">Status</th><th scope="col">Count</th></tr></thead><tbody>{publicationRows.map((row) => <tr key={row.label}><td>{row.label}</td><td>{row.count}</td></tr>)}</tbody></table></div>
+        <ul className="report-row-list mobile-card-list">{publicationRows.map((row) => <li key={row.label}><span>{row.label}</span><strong>{row.count}</strong></li>)}</ul>
       </article>
 
       <article className="public-task-panel reports-section-panel">
         <div className="panel-head"><p className="section-label">Correction reports</p><h3>Public reports</h3></div>
-        <ul className="report-row-list">{correctionRows.map((row) => <li key={row.label}><span>{row.label}</span><strong>{row.count}</strong></li>)}</ul>
+        <div className="table-wrap desktop-table-wrap report-table-wrap"><table className="data-table desktop-data-table"><caption>Correction reports</caption><thead><tr><th scope="col">Status</th><th scope="col">Count</th></tr></thead><tbody>{correctionRows.map((row) => <tr key={row.label}><td>{row.label}</td><td>{row.count}</td></tr>)}</tbody></table></div>
+        <ul className="report-row-list mobile-card-list">{correctionRows.map((row) => <li key={row.label}><span>{row.label}</span><strong>{row.count}</strong></li>)}</ul>
       </article>
 
       {readinessSummary || readinessSummary === null ? (
