@@ -77,6 +77,15 @@ export function ReportingPanel({ summary: initialSummary, readinessSummary, apiB
   const publicationRows = rowsFromBreakdown(summary.publication_breakdown, 'status');
   const correctionRows = rowsFromBreakdown(summary.correction_breakdown, 'status');
   const fieldRows = rowsFromBreakdown(summary.geotag_breakdown ?? [], 'status');
+  const pendingReviewCount = reviewRows
+    .filter((row) => ['Submitted', 'Under Review', 'Needs Field Check', 'Evidence Received'].includes(row.label))
+    .reduce((total, row) => total + row.count, 0);
+  const blockedPublicationCount = readinessSummary?.gates.filter((gate) => gate.status !== 'passed').length ?? publicationRows
+    .filter((row) => !['Published', 'Public'].includes(row.label))
+    .reduce((total, row) => total + row.count, 0);
+  const fieldQueueCount = summary.totals.geotag_queue ?? fieldRows
+    .filter((row) => !['Published', 'Registry Ready', 'Rejected'].includes(row.label))
+    .reduce((total, row) => total + row.count, 0);
 
   async function loadSummary(currentToken: string | null) {
     const params = new URLSearchParams();
@@ -140,6 +149,26 @@ export function ReportingPanel({ summary: initialSummary, readinessSummary, apiB
         {error ? <p className="form-notice error">{error}</p> : null}
       </article>
 
+      <article className="public-task-panel reports-summary-panel">
+        <div className="panel-head">
+          <p className="section-label">Summary</p>
+          <h3>What needs action</h3>
+        </div>
+        <div className="reports-action-strip" aria-label="Operational action summary">
+          <div><strong>{pendingReviewCount}</strong><span>Need operator review</span></div>
+          <div><strong>{fieldQueueCount}</strong><span>Need field/geo follow-up</span></div>
+          <div><strong>{blockedPublicationCount}</strong><span>Publication gates not clear</span></div>
+        </div>
+        <dl className="metric-row-list">
+          <div><dt>Active territories</dt><dd>{summary.totals.territories}</dd></div>
+          <div><dt>Total submissions</dt><dd>{summary.totals.submissions}</dd></div>
+          <div><dt>Verification queue</dt><dd>{summary.totals.review_queue}</dd></div>
+          <div><dt>Published addresses</dt><dd>{summary.totals.published_addresses}</dd></div>
+          <div><dt>Correction reports</dt><dd>{summary.totals.public_corrections}</dd></div>
+          <div><dt>Field activity</dt><dd>{summary.totals.citizen_geotags ?? 0}</dd></div>
+        </dl>
+      </article>
+
       <article className="public-task-panel reports-filter-panel">
         <div className="panel-head">
           <p className="section-label">Filters</p>
@@ -176,21 +205,6 @@ export function ReportingPanel({ summary: initialSummary, readinessSummary, apiB
           <button className="verification-button" type="button" onClick={() => void handleApplyFilters()} disabled={isRefreshing}>Apply filters</button>
           <button className="secondary-action" type="button" onClick={handleExportReport}>Export report</button>
         </div>
-      </article>
-
-      <article className="public-task-panel reports-summary-panel">
-        <div className="panel-head">
-          <p className="section-label">Summary</p>
-          <h3>Current workload</h3>
-        </div>
-        <dl className="metric-row-list">
-          <div><dt>Active territories</dt><dd>{summary.totals.territories}</dd></div>
-          <div><dt>Total submissions</dt><dd>{summary.totals.submissions}</dd></div>
-          <div><dt>Verification queue</dt><dd>{summary.totals.review_queue}</dd></div>
-          <div><dt>Published addresses</dt><dd>{summary.totals.published_addresses}</dd></div>
-          <div><dt>Correction reports</dt><dd>{summary.totals.public_corrections}</dd></div>
-          <div><dt>Field activity</dt><dd>{summary.totals.citizen_geotags ?? 0}</dd></div>
-        </dl>
       </article>
 
       <article className="public-task-panel reports-section-panel">

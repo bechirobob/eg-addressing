@@ -223,6 +223,7 @@ export function CitizenGeotagPanel({ apiBaseUrl, provinces, territories }: Citiz
   const mapRef = useRef<LeafletMap | null>(null);
   const markerRef = useRef<CircleMarker | null>(null);
   const accuracyCircleRef = useRef<Circle | null>(null);
+  const receiptRef = useRef<HTMLDivElement | null>(null);
   const [latitude, setLatitude] = useState(DEFAULT_POINT.latitude);
   const [longitude, setLongitude] = useState(DEFAULT_POINT.longitude);
   const [accuracyMeters, setAccuracyMeters] = useState<number | ''>('');
@@ -259,6 +260,7 @@ export function CitizenGeotagPanel({ apiBaseUrl, provinces, territories }: Citiz
   const selectedProvince = useMemo(() => provinces.find((province) => province.code === provinceCode), [provinceCode, provinces]);
   const mapSuggestedLocalArea = roadSuggestion?.suggested_local_area || roadSuggestion?.suggested_place_name || null;
   const displayedLocalArea = mapSuggestedLocalArea ?? selectedTerritory?.name ?? 'Area pending';
+  const receiptTrackingCode = result?.automation?.citizen_tracking?.tracking_code ?? result?.id ?? null;
 
   useEffect(() => {
     const selected = territories.find((territory) => territory.id === territoryId);
@@ -337,6 +339,11 @@ export function CitizenGeotagPanel({ apiBaseUrl, provinces, territories }: Citiz
       mapRef.current.setView([latitude, longitude], mapRef.current.getZoom() || 15);
     }
   }, [latitude, longitude, accuracyMeters]);
+
+  useEffect(() => {
+    if (!result) return;
+    window.setTimeout(() => receiptRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 80);
+  }, [result]);
 
   async function handleUseMyLocation() {
     setNotice(null);
@@ -473,6 +480,12 @@ export function CitizenGeotagPanel({ apiBaseUrl, provinces, territories }: Citiz
           <p className="public-task-copy">
             {t('geotagStep1Copy')}
           </p>
+          <ol className="citizen-flow-steps" aria-label={locale === 'es' ? 'Pasos de registro' : 'Registration steps'}>
+            <li><strong>1</strong><span>{locale === 'es' ? 'Capturar GPS' : 'Capture GPS'}</span></li>
+            <li><strong>2</strong><span>{locale === 'es' ? 'Confirmar marcador' : 'Confirm pin'}</span></li>
+            <li><strong>3</strong><span>{locale === 'es' ? 'Añadir referencia' : 'Add landmark'}</span></li>
+            <li><strong>4</strong><span>{locale === 'es' ? 'Enviar y seguir' : 'Submit and track'}</span></li>
+          </ol>
           <div className="citizen-primary-actions">
             <button className="primary-action location-action" type="button" onClick={() => void handleUseMyLocation()} disabled={isLocating}>
               {isLocating ? (locale === 'es' ? 'Capturando ubicación…' : 'Getting your location…') : t('useMyCurrentLocation')}
@@ -692,19 +705,27 @@ export function CitizenGeotagPanel({ apiBaseUrl, provinces, territories }: Citiz
           <p className="institutional-note">{locale === 'es' ? 'No se encontró coincidencia cercana para este punto.' : 'No nearby match was found for this point.'}</p>
         )}
         {result ? (
-          <div className="form-notice success">
-            {locale === 'es' ? 'Enviado para revisión oficial. Estado:' : 'Submitted for official review. Status:'} <strong>{result.automation?.process_stage ?? localizedStatusLabel(result.status)}</strong>. {locale === 'es' ? 'Conserve este código provisional:' : 'Keep this provisional code:'} <strong>{result.grid_code}</strong>.
-            {result.automation?.citizen_tracking?.tracking_code ? <> {locale === 'es' ? 'Código de seguimiento:' : 'Tracking code:'} <strong>{result.automation.citizen_tracking.tracking_code}</strong>.</> : null}
-            <br />
-            {locale === 'es' ? 'Siguiente paso:' : 'Next step:'} {result.automation?.next_best_action_label ?? (locale === 'es' ? 'Un operador revisará el punto, duplicados y sugerencias de vía antes de cualquier publicación.' : 'An operator will review the point, duplicates, and road suggestions before any publication.')}
+          <div className="submission-receipt-card" ref={receiptRef} role="status" aria-live="polite" tabIndex={-1}>
+            <div>
+              <p className="section-label">{locale === 'es' ? 'Recibo de registro' : 'Submission receipt'}</p>
+              <h4>{locale === 'es' ? 'Ubicación enviada para revisión oficial' : 'Location submitted for official review'}</h4>
+              <p>{locale === 'es' ? 'El registro no se publica automáticamente. Un operador revisará el punto, duplicados, área de enrutamiento y sugerencias de vía.' : 'This record is not published automatically. An operator will review the point, duplicates, routing area, and road suggestions.'}</p>
+            </div>
+            <dl className="receipt-code-list">
+              <div><dt>{locale === 'es' ? 'Código provisional' : 'Provisional address code'}</dt><dd>{result.grid_code}</dd></div>
+              <div><dt>{locale === 'es' ? 'Código de seguimiento' : 'Tracking code'}</dt><dd>{receiptTrackingCode ?? (locale === 'es' ? 'Pendiente' : 'Pending')}</dd></div>
+              <div><dt>{locale === 'es' ? 'Estado' : 'Status'}</dt><dd>{result.automation?.process_stage ?? localizedStatusLabel(result.status)}</dd></div>
+            </dl>
+            <p className="institutional-note"><strong>{locale === 'es' ? 'Siguiente paso:' : 'Next step:'}</strong> {result.automation?.next_best_action_label ?? (locale === 'es' ? 'Un operador revisará el punto antes de cualquier publicación.' : 'An operator will review the point before any publication.')}</p>
             {result.automation?.routing?.assigned ? (
-              <><br />{locale === 'es' ? 'Área de enrutamiento asignada automáticamente:' : 'Routing area assigned automatically:'} <strong>{result.automation.routing.territory_name}</strong>.</>
+              <p className="institutional-note"><strong>{locale === 'es' ? 'Área asignada:' : 'Assigned route:'}</strong> {result.automation.routing.territory_name}</p>
             ) : null}
-            {result.automation?.reasons?.length ? (
-              <ul>
-                {result.automation.reasons.slice(0, 3).map((reason) => <li key={reason}>{reason}</li>)}
-              </ul>
-            ) : null}
+            <div className="receipt-actions">
+              {receiptTrackingCode ? (
+                <a className="primary-action inline-action-link" href={`/track?code=${encodeURIComponent(receiptTrackingCode)}`}>{locale === 'es' ? 'Seguir esta solicitud' : 'Track this request'}</a>
+              ) : null}
+              <button className="secondary-action" type="button" onClick={() => { setResult(null); setPreview(null); setNotice(null); }}>{locale === 'es' ? 'Registrar otra ubicación' : 'Register another location'}</button>
+            </div>
           </div>
         ) : null}
         <p className="submission-security-note">{locale === 'es' ? 'Todos los envíos se protegen y son revisados por operadores autorizados.' : 'All submissions are protected and reviewed by authorized operators.'}</p>

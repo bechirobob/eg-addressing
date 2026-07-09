@@ -13668,3 +13668,231 @@ html body .guided-workflow-strip.guided-workflow-strip .step-chip {
     text-decoration: none !important;
   }
 }
+
+/* Product hardening tranche: citizen receipt, GPS steps, reports action summary. */
+.citizen-flow-steps {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+}
+
+.citizen-flow-steps li {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: 8px;
+  min-height: 42px;
+  padding: 8px 10px;
+  border: 1px solid var(--desktop-border, #d7dde5);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.74);
+  color: var(--desktop-text-main, #16324f);
+}
+
+.citizen-flow-steps strong {
+  display: inline-grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 999px;
+  background: var(--desktop-blue, #123a5a);
+  color: #fff;
+  font-size: 0.78rem;
+}
+
+.citizen-flow-steps span {
+  font-size: 0.82rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.submission-receipt-card {
+  display: grid;
+  gap: 14px;
+  margin-top: 16px;
+  padding: 16px;
+  border: 1px solid color-mix(in srgb, var(--desktop-green, #2f6f4e), #ffffff 54%);
+  border-radius: 12px;
+  background: #f7fbf7;
+  color: var(--desktop-text-main, #16324f);
+}
+
+.submission-receipt-card h4,
+.submission-receipt-card p {
+  margin: 0;
+}
+
+.receipt-code-list {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  margin: 0;
+}
+
+.receipt-code-list div {
+  display: grid;
+  gap: 4px;
+  padding: 10px;
+  border: 1px solid var(--desktop-border, #d7dde5);
+  border-radius: 10px;
+  background: #fff;
+}
+
+.receipt-code-list dt {
+  color: var(--desktop-text-muted, #536574);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.receipt-code-list dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.9rem;
+  font-weight: 800;
+}
+
+.receipt-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+.receipt-actions .inline-action-link {
+  width: max-content;
+  text-decoration: none;
+}
+
+.reports-action-strip {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  margin-block: 10px 14px;
+}
+
+.reports-action-strip div {
+  display: grid;
+  gap: 3px;
+  padding: 10px 12px;
+  border: 1px solid var(--desktop-border, #d7dde5);
+  border-radius: 10px;
+  background: var(--desktop-surface, #fffef9);
+}
+
+.reports-action-strip strong {
+  color: var(--desktop-blue, #123a5a);
+  font-size: 1.45rem;
+  line-height: 1;
+}
+
+.reports-action-strip span {
+  color: var(--desktop-text-muted, #536574);
+  font-size: 0.78rem;
+  font-weight: 800;
+  line-height: 1.25;
+}
+
+@media (max-width: 900px) {
+  .citizen-flow-steps,
+  .receipt-code-list,
+  .reports-action-strip {
+    grid-template-columns: 1fr;
+  }
+
+  .receipt-actions,
+  .receipt-actions .primary-action,
+  .receipt-actions .secondary-action {
+    width: 100%;
+  }
+}
+
+/* Product hardening layout corrections: tracking result and reports metrics must not collide. */
+.tracking-lookup-flow .summary-grid,
+.reports-summary-panel .metric-row-list {
+  display: grid;
+  gap: 10px;
+}
+
+.tracking-lookup-flow .summary-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.tracking-lookup-flow .summary-card,
+.reports-summary-panel .metric-row-list > div {
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+  padding: 10px 12px;
+  border: 1px solid var(--desktop-border, #d7dde5);
+  border-radius: 10px;
+  background: var(--desktop-surface, #fffef9);
+}
+
+.tracking-lookup-flow .summary-card strong,
+.tracking-lookup-flow .summary-card span,
+.reports-summary-panel .metric-row-list dt,
+.reports-summary-panel .metric-row-list dd {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  line-height: 1.25;
+}
+
+.tracking-lookup-flow .summary-card span,
+.reports-summary-panel .metric-row-list dt {
+  color: var(--desktop-text-muted, #536574);
+  font-size: 0.74rem;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.tracking-lookup-flow .summary-card strong,
+.reports-summary-panel .metric-row-list dd {
+  margin: 0;
+  color: var(--desktop-text-main, #16324f);
+  font-weight: 900;
+}
+
+.reports-summary-panel .metric-row-list {
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+}
+
+@media (max-width: 900px) {
+  .tracking-lookup-flow .summary-grid,
+  .reports-summary-panel .metric-row-list {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Mobile tracking result: force readable single-column status cards. */
+@media (max-width: 900px) {
+  html body main.page-shell .tracking-lookup-flow .summary-grid.summary-grid {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) !important;
+    gap: 10px !important;
+  }
+
+  html body main.page-shell .tracking-lookup-flow .summary-grid.summary-grid > .summary-card.summary-card {
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    grid-column: 1 / -1 !important;
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+
+  html body main.page-shell .tracking-lookup-flow .summary-card.summary-card strong,
+  html body main.page-shell .tracking-lookup-flow .summary-card.summary-card span {
+    display: block !important;
+    width: 100% !important;
+    white-space: normal !important;
+    overflow-wrap: anywhere !important;
+    word-break: normal !important;
+  }
+}
