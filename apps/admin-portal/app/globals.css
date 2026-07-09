@@ -14565,3 +14565,131 @@ html body .guided-workflow-strip.guided-workflow-strip .step-chip {
     box-shadow: none !important;
   }
 }
+
+/* Permanent /verify desktop workbench contract: no squeezed public-trust rail, no vertical text. */
+@media (min-width: 1024px) {
+  html body main.page-shell:has(.verification-workspace) .desktop-main-content {
+    max-width: 1420px !important;
+    padding-inline: 36px !important;
+  }
+
+  html body main.page-shell .verification-workspace.verification-workspace {
+    display: grid !important;
+    grid-template-columns: repeat(12, minmax(0, 1fr)) !important;
+    gap: 32px !important;
+    align-items: start !important;
+  }
+
+  html body main.page-shell .verification-workspace .verification-queue-panel.verification-queue-panel,
+  html body main.page-shell .verification-workspace .verification-trust-panel.verification-trust-panel {
+    grid-column: 1 / -1 !important;
+    width: 100% !important;
+    max-width: none !important;
+    min-width: 0 !important;
+  }
+
+  html body main.page-shell .verification-workspace .verification-queue-panel.verification-queue-panel {
+    grid-row: 1 !important;
+    order: 1 !important;
+  }
+
+  html body main.page-shell .verification-workspace .verification-trust-panel.verification-trust-panel {
+    grid-row: 2 !important;
+    order: 2 !important;
+    display: grid !important;
+    grid-template-columns: minmax(280px, 0.34fr) minmax(0, 0.66fr) !important;
+    gap: 22px 32px !important;
+    align-items: start !important;
+  }
+
+  html body main.page-shell .verification-workspace .verification-trust-panel .panel-head,
+  html body main.page-shell .verification-workspace .verification-trust-panel .territory-form,
+  html body main.page-shell .verification-workspace .verification-trust-panel .result-card {
+    min-width: 0 !important;
+    max-width: 100% !important;
+  }
+
+  html body main.page-shell .verification-workspace .verification-trust-panel .panel-head {
+    grid-column: 1 / -1 !important;
+  }
+
+  html body main.page-shell .verification-workspace .verification-trust-panel .territory-form {
+    grid-column: 1 !important;
+  }
+
+  html body main.page-shell .verification-workspace .verification-trust-panel .result-card {
+    grid-column: 2 !important;
+    display: grid !important;
+    grid-template-columns: auto minmax(0, 1fr) !important;
+    gap: 14px !important;
+    align-items: start !important;
+    width: 100% !important;
+  }
+
+  html body main.page-shell .verification-workspace .review-list {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(420px, 1fr)) !important;
+    gap: 24px !important;
+    max-height: none !important;
+    overflow: visible !important;
+    padding: 0 !important;
+  }
+
+  html body main.page-shell .verification-workspace .review-card.review-card {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) auto !important;
+    gap: 18px !important;
+    align-items: start !important;
+    min-width: 0 !important;
+  }
+
+  html body main.page-shell .verification-workspace .review-card:has(.technical-evidence-disclosure[open]) {
+    grid-column: 1 / -1 !important;
+  }
+
+  html body main.page-shell .verification-workspace .review-card > div:first-child,
+  html body main.page-shell .verification-workspace .technical-evidence-disclosure,
+  html body main.page-shell .verification-workspace .evidence-reference-list,
+  html body main.page-shell .verification-workspace .protected-file-list,
+  html body main.page-shell .verification-workspace .evidence-history-list {
+    min-width: 0 !important;
+    max-width: 100% !important;
+  }
+
+  html body main.page-shell .verification-workspace .protected-file-list li {
+    display: grid !important;
+    grid-template-columns: minmax(220px, 1fr) auto minmax(140px, 0.38fr) !important;
+    gap: 10px !important;
+    align-items: start !important;
+  }
+
+  html body main.page-shell .verification-workspace .protected-file-actions {
+    justify-content: start !important;
+    min-width: 0 !important;
+  }
+
+  html body main.page-shell .verification-workspace .protected-file-list small {
+    min-width: 0 !important;
+    overflow-wrap: anywhere !important;
+  }
+
+  html body main.page-shell .verification-workspace,
+  html body main.page-shell .verification-workspace * {
+    word-break: normal !important;
+    overflow-wrap: anywhere !important;
+    writing-mode: horizontal-tb !important;
+    text-orientation: mixed !important;
+  }
+}
+
+@media (max-width: 1023px) {
+  html body main.page-shell .verification-workspace.verification-workspace,
+  html body main.page-shell .verification-workspace .verification-trust-panel.verification-trust-panel,
+  html body main.page-shell .verification-workspace .review-list,
+  html body main.page-shell .verification-workspace .review-card.review-card,
+  html body main.page-shell .verification-workspace .protected-file-list li {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 14px !important;
+  }
+}
