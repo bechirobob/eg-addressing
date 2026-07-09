@@ -13930,3 +13930,121 @@ html body .guided-workflow-strip.guided-workflow-strip .step-chip {
     word-break: normal !important;
   }
 }
+
+/* Phase 1B public proof / QR route */
+.public-proof-flow {
+  display: grid;
+  gap: 1rem;
+}
+
+.public-proof-sheet {
+  display: grid;
+  gap: 1.1rem;
+  border: 1px solid rgba(11, 47, 79, 0.14);
+  border-radius: 12px;
+  background: #fff;
+  padding: clamp(1.25rem, 3vw, 2rem);
+  box-shadow: none;
+}
+
+.public-proof-header,
+.public-proof-body {
+  display: grid;
+  gap: 1rem;
+}
+
+.public-proof-header {
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: start;
+  border-bottom: 1px solid rgba(11, 47, 79, 0.1);
+  padding-bottom: 1rem;
+}
+
+.public-proof-header h3,
+.public-proof-record h4 {
+  margin: 0;
+  color: var(--civic-navy);
+}
+
+.public-proof-body {
+  grid-template-columns: minmax(0, 1fr) minmax(240px, 320px);
+  align-items: start;
+}
+
+.public-proof-record,
+.public-proof-qr {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.public-proof-qr {
+  justify-items: center;
+  border: 1px solid rgba(11, 47, 79, 0.12);
+  border-radius: 12px;
+  background: #f8fbff;
+  padding: 1rem;
+  text-align: center;
+}
+
+.qr-code-frame {
+  display: grid;
+  place-items: center;
+  width: min(100%, 270px);
+  background: #fff;
+  border: 1px solid rgba(11, 47, 79, 0.08);
+  padding: 0.75rem;
+}
+
+.qr-code-frame svg {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+.public-proof-qr p,
+.public-proof-qr a {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.public-proof-qr a {
+  color: var(--civic-navy);
+  font-size: 0.82rem;
+  font-weight: 750;
+}
+
+.public-proof-actions {
+  border-top: 1px solid rgba(11, 47, 79, 0.1);
+  padding-top: 1rem;
+}
+
+@media (max-width: 760px) {
+  .public-proof-header,
+  .public-proof-body {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media print {
+  .no-print,
+  .language-toggle,
+  .site-nav,
+  .staff-services-block,
+  .public-profile-actions.no-print {
+    display: none !important;
+  }
+
+  body {
+    background: #fff !important;
+  }
+
+  .public-proof-sheet {
+    box-shadow: none !important;
+    border-color: #0b2f4f !important;
+    border-radius: 0 !important;
+  }
+
+  .public-proof-body {
+    grid-template-columns: 1fr 260px;
+  }
+}

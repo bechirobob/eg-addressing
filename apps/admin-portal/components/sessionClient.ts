@@ -79,20 +79,27 @@ export async function resolveStoredSession(apiBaseUrl: string): Promise<StoredSe
   }
 }
 
-export function useStoredSession(apiBaseUrl: string) {
+export function useStoredSession(apiBaseUrl: string, options: { enabled?: boolean } = {}) {
   const browserApiBaseUrl = resolveBrowserApiBaseUrl(apiBaseUrl);
+  const enabled = options.enabled ?? true;
   const [token, setToken] = useState<string | null>(null);
   const [sessionUser, setSessionUser] = useState<SessionUser | null>(null);
-  const [sessionStatus, setSessionStatus] = useState<SessionStatus>('loading');
+  const [sessionStatus, setSessionStatus] = useState<SessionStatus>(enabled ? 'loading' : 'guest');
 
   const reloadSession = useCallback(async () => {
+    if (!enabled) {
+      setToken(null);
+      setSessionUser(null);
+      setSessionStatus('guest');
+      return { token: null, user: null, status: 'guest' as const };
+    }
     setSessionStatus('loading');
     const nextSession = await resolveStoredSession(browserApiBaseUrl);
     setToken(nextSession.token);
     setSessionUser(nextSession.user);
     setSessionStatus(nextSession.status);
     return nextSession;
-  }, [browserApiBaseUrl]);
+  }, [browserApiBaseUrl, enabled]);
 
   useEffect(() => {
     void reloadSession();

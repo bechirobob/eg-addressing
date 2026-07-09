@@ -52,10 +52,11 @@ type SiteChromeProps = {
   subtitleKey?: DictionaryKey;
   eyebrowKey?: DictionaryKey;
   apiBaseUrl: string;
+  skipSessionLookup?: boolean;
   children: ReactNode;
 };
 
-export function SiteChrome({ title, subtitle, eyebrow, titleKey, subtitleKey, eyebrowKey, apiBaseUrl, children }: SiteChromeProps) {
+export function SiteChrome({ title, subtitle, eyebrow, titleKey, subtitleKey, eyebrowKey, apiBaseUrl, skipSessionLookup = false, children }: SiteChromeProps) {
   const serviceMeta = serviceMetaForTitle(title);
   return (
     <main className={`page-shell page-shell-${serviceMeta.key}`}>
@@ -101,7 +102,7 @@ export function SiteChrome({ title, subtitle, eyebrow, titleKey, subtitleKey, ey
       </header>
 
 
-      <RoleAwareChrome apiBaseUrl={apiBaseUrl}>
+      <RoleAwareChrome apiBaseUrl={apiBaseUrl} skipSessionLookup={skipSessionLookup}>
         <div id="main-content" className="desktop-main-content">
           {children}
         </div>

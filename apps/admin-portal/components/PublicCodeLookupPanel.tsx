@@ -77,6 +77,7 @@ export function PublicCodeLookupPanel({ apiBaseUrl, code }: PublicCodeLookupPane
   const [copyNotice, setCopyNotice] = useState<string | null>(null);
   const mapsLink = useMemo(() => (payload ? mapUrl(payload) : null), [payload]);
   const correctionUrl = `/issue?code=${encodeURIComponent(code)}`;
+  const proofUrl = `/proof/${encodeURIComponent(code)}`;
 
   useEffect(() => {
     if (typeof window !== 'undefined') setProfileUrl(window.location.href);
@@ -158,6 +159,7 @@ export function PublicCodeLookupPanel({ apiBaseUrl, code }: PublicCodeLookupPane
           <button className="secondary-action" type="button" onClick={() => copyText(code, 'Address code')}>Copy code</button>
           <button className="secondary-action" type="button" onClick={shareProfile} disabled={!profileUrl}>Share link</button>
           <button className="secondary-action" type="button" onClick={() => window.print()}>Print profile</button>
+          <a className="secondary-action" href={proofUrl}>Proof / QR</a>
           <a className="secondary-action" href={correctionUrl}>Extract or correction</a>
           {mapsLink ? <a className="primary-action" href={mapsLink} target="_blank" rel="noreferrer">Open map</a> : null}
         </div>

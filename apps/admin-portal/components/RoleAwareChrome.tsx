@@ -20,6 +20,7 @@ import { authorizationHeader, resolveBrowserApiBaseUrl, useStoredSession } from 
 type RoleAwareChromeProps = {
   apiBaseUrl: string;
   children: ReactNode;
+  skipSessionLookup?: boolean;
 };
 
 function roleFromSession(role: 'viewer' | 'editor' | 'admin' | undefined, status: 'loading' | 'ready' | 'guest'): OperatorRole {
@@ -52,12 +53,12 @@ function navGroupKey(group: keyof typeof navGroupLabels) {
 
 const STAFF_SESSION_ROUTES = new Set(['/field', '/registry', '/signage', '/reports', '/exports', '/territories', '/verify', '/records']);
 
-export function RoleAwareChrome({ apiBaseUrl, children }: RoleAwareChromeProps) {
+export function RoleAwareChrome({ apiBaseUrl, children, skipSessionLookup = false }: RoleAwareChromeProps) {
   const { t } = useTranslation();
   const router = useRouter();
   const pathname = usePathname();
   const browserApiBaseUrl = resolveBrowserApiBaseUrl(apiBaseUrl);
-  const { sessionUser, sessionStatus, reloadSession } = useStoredSession(browserApiBaseUrl);
+  const { sessionUser, sessionStatus, reloadSession } = useStoredSession(browserApiBaseUrl, { enabled: !skipSessionLookup });
   const [isLoggingOut, setIsLoggingOut] = useState(false);
   const [forcedGuest, setForcedGuest] = useState(false);
 
