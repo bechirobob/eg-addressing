@@ -37,6 +37,15 @@ run_tests() {
     echo "Missing pytest runner: $API_TEST_PYTEST" >&2
     exit 1
   fi
+  set -a
+  # shellcheck disable=SC1090
+  source "$ENV_FILE"
+  set +a
+  export SMOKE_ADMIN_USERNAME="${SMOKE_ADMIN_USERNAME:-${OPERATOR_USERNAME:-admin}}"
+  if [[ -z "${SMOKE_ADMIN_PASSWORD:-}" ]]; then
+    echo "SMOKE_ADMIN_PASSWORD must be set in $ENV_FILE for strict admin smoke tests." >&2
+    exit 1
+  fi
   (cd "$ROOT_DIR/services/api" && "$API_TEST_PYTEST" -q)
 
   echo "Running frontend typecheck/tests/build..."

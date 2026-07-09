@@ -2318,3 +2318,22 @@ def test_default_demo_password_policy_can_reject_seeded_passwords(monkeypatch) -
     assert db.default_demo_password_rejected('admin', 'admin123') is True
     assert db.default_demo_password_rejected('admin', 'not-the-default') is False
     assert db.default_demo_password_rejected('unknown', 'admin123') is False
+
+
+def test_user_seed_preserves_existing_password_hash_and_active_state() -> None:
+    source = Path(db.__file__).read_text()
+    seed_section = source[source.index('for user in DEMO_USERS:'):source.index('for territory in TERRITORIES:')]
+
+    assert 'password_hash = users.password_hash' in seed_section
+    assert 'is_active = users.is_active' in seed_section
+    assert 'password_hash = EXCLUDED.password_hash' not in seed_section
+    assert 'is_active = TRUE' not in seed_section
+
+
+def test_admin_smoke_uses_environment_supplied_credentials() -> None:
+    source = Path('/home/ubuntu/projects/eg-addressing/apps/admin-portal/scripts/admin-flow-smoke.mjs').read_text()
+
+    assert 'SMOKE_ADMIN_USERNAME' in source
+    assert 'SMOKE_ADMIN_PASSWORD' in source
+    assert "password: 'admin123'" not in source
+    assert "username: 'admin'" not in source

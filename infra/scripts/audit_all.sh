@@ -2,6 +2,7 @@
 set -Eeuo pipefail
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
+ENV_FILE="${ENV_FILE:-$ROOT_DIR/.env}"
 RUN_LIVE_HEALTH="${RUN_LIVE_HEALTH:-YES}"
 CLEAN_SMOKE_ROWS="${CLEAN_SMOKE_ROWS:-YES}"
 
@@ -34,6 +35,17 @@ section "Frontend production build"
 npm run build
 
 section "Frontend guards"
+if [[ -f "$ENV_FILE" ]]; then
+  set -a
+  # shellcheck disable=SC1090
+  source "$ENV_FILE"
+  set +a
+fi
+export SMOKE_ADMIN_USERNAME="${SMOKE_ADMIN_USERNAME:-${OPERATOR_USERNAME:-admin}}"
+if [[ -z "${SMOKE_ADMIN_PASSWORD:-}" ]]; then
+  echo "SMOKE_ADMIN_PASSWORD must be set in $ENV_FILE for strict admin smoke tests." >&2
+  exit 1
+fi
 npm run test:copy
 npm run test:role-auth
 npm run test:registry-actions

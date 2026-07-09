@@ -682,8 +682,8 @@ def init_db() -> None:
                         username = EXCLUDED.username,
                         full_name = EXCLUDED.full_name,
                         role = EXCLUDED.role,
-                        password_hash = EXCLUDED.password_hash,
-                        is_active = TRUE
+                        password_hash = users.password_hash,
+                        is_active = users.is_active
                     ''',
                     (user['id'], user['username'], user['full_name'], user['role'], _hash_password(user['password'])),
                 )

@@ -1,4 +1,10 @@
 const apiBaseUrl = process.env.SMOKE_API_BASE_URL ?? 'http://127.0.0.1:8100';
+const smokeAdminUsername = process.env.SMOKE_ADMIN_USERNAME ?? 'admin';
+const smokeAdminPassword = process.env.SMOKE_ADMIN_PASSWORD;
+
+if (!smokeAdminPassword) {
+  throw new Error('SMOKE_ADMIN_PASSWORD is required for admin smoke tests');
+}
 
 function assert(condition, message) {
   if (!condition) throw new Error(message);
@@ -37,7 +43,7 @@ async function jsonFetch(path, init = {}) {
 const login = await jsonFetch('/api/v1/auth/login', {
   method: 'POST',
   headers: { 'Content-Type': 'application/json' },
-  body: JSON.stringify({ username: 'admin', password: 'admin123' }),
+  body: JSON.stringify({ username: smokeAdminUsername, password: smokeAdminPassword }),
 });
 
 assert(login.response.ok, `login failed: ${login.response.status}`);
