@@ -1484,6 +1484,8 @@ def test_public_address_code_record_accepts_published_legacy_registry_code(monke
     payload = db.public_address_code_record_lookup(legacy_code)
 
     assert payload['is_valid'] is True
+    assert payload['schema'] == 'registry-public-code'
+    assert 'error' not in payload
     assert payload['publication_status'] == 'published'
     assert payload['registry_identifier_type'] == 'published-registry-code'
     assert payload['record']['address_label'] == 'Avenida de la Independencia, Malabo'

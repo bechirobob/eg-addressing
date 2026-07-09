@@ -3094,10 +3094,11 @@ def public_address_code_record_lookup(code: str) -> dict[str, Any]:
     if exact_record and not address_code.get('is_valid'):
         result.update({
             'is_valid': True,
-            'schema': address_code.get('schema') or 'registry',
+            'schema': 'registry-public-code',
             'publication_status': 'not_found',
             'registry_identifier_type': 'published-registry-code',
         })
+        result.pop('error', None)
     if exact_record:
         if exact_record['status'] == 'published':
             result['publication_status'] = 'published'
@@ -3135,8 +3136,10 @@ def public_address_code_record_lookup(code: str) -> dict[str, Any]:
                 if not result.get('is_valid'):
                     result.update({
                         'is_valid': True,
+                        'schema': 'registry-public-code',
                         'registry_identifier_type': 'published-registry-code',
                     })
+                    result.pop('error', None)
                 if geotag['status'] == 'published':
                     result['publication_status'] = 'published'
                     result['record'] = dict(geotag)
@@ -3162,8 +3165,10 @@ def public_address_code_record_lookup(code: str) -> dict[str, Any]:
                 if not result.get('is_valid'):
                     result.update({
                         'is_valid': True,
+                        'schema': 'registry-public-code',
                         'registry_identifier_type': 'published-registry-code',
                     })
+                    result.pop('error', None)
                 if address['status'] == 'published':
                     result['publication_status'] = 'published'
                     result['record'] = dict(address)
