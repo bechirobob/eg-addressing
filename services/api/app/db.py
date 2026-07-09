@@ -2354,10 +2354,11 @@ def approve_submission(submission_id: str, actor: dict[str, str] | None = None) 
                 raise SubmissionNotFoundError('submission not found')
 
             submission = _decode_spatial_evidence(dict(submission))
-            spatial_evidence = normalize_submission_spatial_evidence(submission['submission_type'], submission.get('spatial_evidence'))
-            spatial_evidence['evidence_review_status'] = _field_evidence_review_status(spatial_evidence)
-            if not _field_evidence_approval_ready(spatial_evidence):
+            stored_spatial_evidence = _coerce_json_object(submission.get('spatial_evidence'))
+            if not _field_evidence_approval_ready(stored_spatial_evidence):
                 raise InvalidSubmissionActionError('protected evidence review must be accepted before approval')
+            spatial_evidence = normalize_submission_spatial_evidence(submission['submission_type'], stored_spatial_evidence)
+            spatial_evidence['evidence_review_status'] = _field_evidence_review_status(stored_spatial_evidence)
             registry_entity_id = submission['registry_entity_id']
             candidate_payload = {
                 'territory_id': submission['territory_id'],
