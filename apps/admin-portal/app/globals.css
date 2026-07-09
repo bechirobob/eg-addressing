@@ -2144,16 +2144,50 @@ img {
 
 .approval-status-card h4 {
   margin: 0.45rem 0 0;
-  color: var(--civic-navy);
-  font-family: Georgia, 'Times New Roman', serif;
-  font-size: clamp(1.35rem, 2.5vw, 2rem);
+  color: var(--text-main);
 }
 
 .approval-status-card p,
 .approved-record-copy p {
-  margin: 0.35rem 0 0;
-  color: var(--civic-muted);
-  line-height: 1.6;
+  margin: 0.4rem 0 0;
+  color: var(--text-muted);
+}
+
+.public-address-profile-flow {
+  align-items: start;
+}
+
+.public-profile-panel {
+  border-top: 4px solid var(--gov-blue);
+}
+
+.public-profile-detail-panel,
+.public-code-guide-panel {
+  border-top: 4px solid var(--gov-gold);
+}
+
+.public-profile-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.public-profile-actions > * {
+  min-height: var(--gov-control-height);
+}
+
+.public-profile-disclaimer {
+  margin-top: 18px;
+  border-left: 4px solid var(--gov-gold);
+}
+
+.public-profile-facts {
+  margin-top: 0;
+}
+
+.public-code-guide-list strong {
+  color: var(--gov-ink-strong);
 }
 
 .calm-facts-grid div {

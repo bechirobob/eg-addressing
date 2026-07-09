@@ -1464,6 +1464,31 @@ def test_public_approved_address_code_lookup_returns_published_record(monkeypatc
     assert response.json()['record']['address_label'] == 'Abaceria Makeda Torrejon'
 
 
+def test_public_address_code_record_accepts_published_legacy_registry_code(monkeypatch) -> None:
+    legacy_code = 'EG-BN-MALABO-001A'
+    monkeypatch.setattr(db, 'search_address_records', lambda q, limit=5, **kwargs: [
+        {
+            'id': 'addr-malabo-001',
+            'address_code': legacy_code,
+            'address_label': 'Avenida de la Independencia, Malabo',
+            'record_bundle': {'routing': {'territory_name': 'Malabo Urban Core'}},
+            'territory_id': 'territory-malabo-core',
+            'latitude': 3.7528,
+            'longitude': 8.7832,
+            'accuracy_meters': 4.8,
+            'status': 'published',
+            'updated_at': '2026-07-09T00:00:00Z',
+        }
+    ])
+
+    payload = db.public_address_code_record_lookup(legacy_code)
+
+    assert payload['is_valid'] is True
+    assert payload['publication_status'] == 'published'
+    assert payload['registry_identifier_type'] == 'published-registry-code'
+    assert payload['record']['address_label'] == 'Avenida de la Independencia, Malabo'
+
+
 def test_geotag_certificate_requires_operator_and_omits_identity(monkeypatch) -> None:
     monkeypatch.setattr(main, 'resolve_user_from_token', lambda token: VIEWER)
     monkeypatch.setattr(main, 'build_geotag_certificate', lambda submission_id: {

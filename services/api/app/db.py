@@ -3089,10 +3089,15 @@ def public_address_code_record_lookup(code: str) -> dict[str, Any]:
         'publication_status': 'invalid' if not address_code.get('is_valid') else 'not_found',
         'record': None,
     }
-    if not address_code.get('is_valid'):
-        return result
     canonical = search_address_records(q=code, limit=5)
     exact_record = next((record for record in canonical if record['address_code'].lower() == code.lower()), None)
+    if exact_record and not address_code.get('is_valid'):
+        result.update({
+            'is_valid': True,
+            'schema': address_code.get('schema') or 'registry',
+            'publication_status': 'not_found',
+            'registry_identifier_type': 'published-registry-code',
+        })
     if exact_record:
         if exact_record['status'] == 'published':
             result['publication_status'] = 'published'

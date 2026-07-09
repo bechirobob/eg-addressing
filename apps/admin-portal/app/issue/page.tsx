@@ -26,38 +26,42 @@ type PublicExtract = {
   extract_status?: string;
 };
 
-async function getSampleExtract(baseUrl: string): Promise<PublicExtract> {
-  const sampleQuery = 'EG-BN-MALABO-001A';
+type IssuePageProps = {
+  searchParams?: Promise<{ code?: string }>;
+};
 
+async function getPublicExtract(baseUrl: string, query: string): Promise<PublicExtract> {
   try {
-    const response = await fetch(`${baseUrl}/api/v1/public/issuance/${encodeURIComponent(sampleQuery)}`, {
+    const response = await fetch(`${baseUrl}/api/v1/public/issuance/${encodeURIComponent(query)}`, {
       cache: 'no-store',
     });
     if (!response.ok) throw new Error('issuance lookup failed');
     return (await response.json()) as PublicExtract;
   } catch {
     return {
-      query: sampleQuery,
+      query,
       match_status: 'not-found',
-      public_code: sampleQuery,
+      public_code: query,
       address_label: 'Published registry extract unavailable',
       jurisdiction: 'National addressing public service',
       verification_status: 'not-found',
       publication_state: 'unpublished',
       verification_note: 'Public extract service is temporarily unavailable.',
       document_title: 'Official Address Registry Extract',
-      document_reference: `EXTRACT-${sampleQuery}`,
-      record_locator: sampleQuery,
+      document_reference: `EXTRACT-${query}`,
+      record_locator: query,
       issuing_authority: 'Republic of Equatorial Guinea · National Digital Addressing Platform',
       extract_status: 'not-available',
     };
   }
 }
 
-export default async function IssuePage() {
+export default async function IssuePage({ searchParams }: IssuePageProps) {
   const apiBaseUrl = process.env.INTERNAL_API_BASE_URL ?? 'http://api:8100';
   const publicApiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL ?? '';
-  const sampleExtract = await getSampleExtract(apiBaseUrl);
+  const params = searchParams ? await searchParams : {};
+  const requestedCode = params.code?.trim() || 'EG-BN-MALABO-001A';
+  const sampleExtract = await getPublicExtract(apiBaseUrl, requestedCode);
 
   return (
     <SiteChrome
