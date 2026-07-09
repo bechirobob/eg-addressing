@@ -14693,3 +14693,81 @@ html body .guided-workflow-strip.guided-workflow-strip .step-chip {
     gap: 14px !important;
   }
 }
+
+/* Permanent /login desktop access contract: staff sign-in must not collapse into a 12-column sliver. */
+@media (min-width: 1024px) {
+  html body main.page-shell-access .desktop-main-content {
+    width: min(100%, 1180px) !important;
+    max-width: 1180px !important;
+    padding-inline: 32px !important;
+  }
+
+  html body main.page-shell-access .login-workspace.login-workspace {
+    display: grid !important;
+    grid-template-columns: minmax(420px, 620px) minmax(320px, 1fr) !important;
+    gap: 36px !important;
+    align-items: start !important;
+    width: 100% !important;
+    max-width: 1040px !important;
+    margin: 30px auto 0 !important;
+  }
+
+  html body main.page-shell-access .login-access-panel.login-access-panel {
+    grid-column: 1 / 2 !important;
+    width: 100% !important;
+    min-width: 420px !important;
+    max-width: 620px !important;
+    padding: 28px !important;
+  }
+
+  html body main.page-shell-access .login-access-panel .panel-head,
+  html body main.page-shell-access .login-access-panel .institutional-note,
+  html body main.page-shell-access .login-access-panel .territory-form,
+  html body main.page-shell-access .login-access-panel .territory-field,
+  html body main.page-shell-access .login-access-panel .territory-input,
+  html body main.page-shell-access .login-access-panel .territory-form-actions,
+  html body main.page-shell-access .login-access-panel .form-notice {
+    width: 100% !important;
+    max-width: 100% !important;
+    writing-mode: horizontal-tb !important;
+    text-orientation: mixed !important;
+  }
+
+  html body main.page-shell-access .login-access-panel .territory-input {
+    min-width: 0 !important;
+    min-height: 48px !important;
+  }
+
+  html body main.page-shell-access .login-access-panel .territory-form-actions {
+    display: grid !important;
+    grid-template-columns: max-content minmax(260px, 1fr) !important;
+    gap: 14px !important;
+    align-items: center !important;
+  }
+
+  html body main.page-shell-access .login-access-panel .verification-button {
+    min-width: 132px !important;
+    white-space: nowrap !important;
+  }
+
+  html body main.page-shell-access .login-access-panel .compact-note {
+    margin: 0 !important;
+    line-height: 1.45 !important;
+  }
+}
+
+@media (max-width: 760px) {
+  html body main.page-shell-access .login-workspace.login-workspace {
+    grid-template-columns: 1fr !important;
+    margin-top: 18px !important;
+  }
+
+  html body main.page-shell-access .login-access-panel.login-access-panel {
+    min-width: 0 !important;
+  }
+
+  html body main.page-shell-access .login-access-panel .territory-form-actions {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+  }
+}

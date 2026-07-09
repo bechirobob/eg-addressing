@@ -60,8 +60,8 @@ export function LoginPanel({ apiBaseUrl }: LoginPanelProps) {
   }
 
   return (
-    <section className="section-grid single-column-grid">
-      <article className="public-task-panel civic-panel-blue">
+    <section className="login-workspace section-grid single-column-grid">
+      <article className="login-access-panel public-task-panel civic-panel-blue">
         <div className="panel-head">
           <p className="section-label">Platform access</p>
           <h3>Sign in to perform protected registry actions</h3>
