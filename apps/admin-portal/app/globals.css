@@ -13504,3 +13504,167 @@ html body .guided-workflow-strip.guided-workflow-strip .step-chip {
     font-size: 0.95rem !important;
   }
 }
+
+/* Fresh desktop audit fixes: public issuance must not collapse into one grid column. */
+@media (min-width: 901px) {
+  html body main.page-shell .public-issuance-grid.public-issuance-grid {
+    display: grid !important;
+    grid-template-columns: repeat(12, minmax(0, 1fr)) !important;
+    gap: var(--desktop-gap) !important;
+    align-items: start !important;
+  }
+
+  html body main.page-shell .public-issuance-grid:first-of-type > .public-task-panel:first-child {
+    grid-column: 1 / span 4 !important;
+    width: auto !important;
+    min-width: 0 !important;
+  }
+
+  html body main.page-shell .public-issuance-grid:first-of-type > .issuance-panel {
+    grid-column: 5 / span 8 !important;
+    width: auto !important;
+    min-width: 0 !important;
+  }
+
+  html body main.page-shell .public-issuance-grid:nth-of-type(2) > .public-task-panel {
+    grid-column: span 6 !important;
+    width: auto !important;
+    min-width: 0 !important;
+  }
+
+  html body main.page-shell .page-shell-code .public-task-panel,
+  html body main.page-shell .page-shell-code .issuance-panel,
+  html body main.page-shell .public-issuance-grid .public-task-panel,
+  html body main.page-shell .public-issuance-grid .issuance-panel {
+    max-width: none !important;
+  }
+
+  html body main.page-shell .public-issuance-grid .territory-form,
+  html body main.page-shell .public-issuance-grid .territory-field,
+  html body main.page-shell .public-issuance-grid .territory-input,
+  html body main.page-shell .public-issuance-grid .territory-form-actions {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  html body main.page-shell .platform-overview-link.platform-overview-link {
+    display: inline-flex !important;
+    align-items: center !important;
+    width: auto !important;
+    min-height: 32px !important;
+    margin: 0 0 8px 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+    border-bottom: 0 !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    color: var(--desktop-text-main) !important;
+    font-size: 0.86rem !important;
+    font-weight: 700 !important;
+    text-decoration: none !important;
+  }
+
+  html body main.page-shell .platform-overview-link::before {
+    margin-right: 0.35rem !important;
+  }
+}
+
+@media (max-width: 900px) {
+  html body main.page-shell .public-issuance-grid.public-issuance-grid {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+  }
+
+  html body main.page-shell .public-issuance-grid > .public-task-panel,
+  html body main.page-shell .public-issuance-grid > .issuance-panel {
+    grid-column: 1 / -1 !important;
+    width: auto !important;
+  }
+}
+
+/* Fresh desktop audit interaction-target fixes. */
+@media (min-width: 901px) {
+  html body main.page-shell .platform-overview-link.platform-overview-link {
+    width: max-content !important;
+    max-width: max-content !important;
+    flex: 0 0 auto !important;
+    justify-self: start !important;
+    align-self: flex-start !important;
+  }
+
+  html body main.page-shell .registry-job-tabs.registry-job-tabs {
+    display: flex !important;
+    align-items: center !important;
+    gap: 16px !important;
+    border-bottom: 1px solid var(--desktop-border) !important;
+  }
+
+  html body main.page-shell .registry-job-tabs button {
+    min-height: 36px !important;
+    padding: 0 2px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    border-radius: 0 !important;
+  }
+
+  html body main.page-shell .registry-archive-toggle {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 10px !important;
+    min-height: 40px !important;
+    width: max-content !important;
+    max-width: 100% !important;
+    cursor: pointer !important;
+  }
+
+  html body main.page-shell .registry-archive-toggle input[type='checkbox'] {
+    width: 18px !important;
+    height: 18px !important;
+    flex: 0 0 18px !important;
+  }
+}
+
+@media (max-width: 900px) {
+  html body main.page-shell .platform-overview-link.platform-overview-link {
+    width: max-content !important;
+    max-width: 100% !important;
+    flex: 0 0 auto !important;
+  }
+
+  html body main.page-shell .registry-job-tabs button {
+    min-height: 36px !important;
+  }
+
+  html body main.page-shell .registry-archive-toggle {
+    min-height: 40px !important;
+  }
+}
+
+/* Homepage responsive service cards: keep service choices as real tap targets below desktop. */
+@media (max-width: 900px) {
+  html body main.page-shell .desktop-service-card-grid.desktop-service-card-grid {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 12px !important;
+  }
+
+  html body main.page-shell .desktop-service-card.desktop-service-card {
+    display: grid !important;
+    gap: 6px !important;
+    min-height: 72px !important;
+    padding: 16px !important;
+    border: 1px solid var(--desktop-border) !important;
+    border-radius: 12px !important;
+    background: var(--desktop-surface) !important;
+    color: var(--desktop-text-main) !important;
+    text-decoration: none !important;
+  }
+
+  html body main.page-shell .desktop-service-card strong,
+  html body main.page-shell .desktop-service-card span {
+    display: block !important;
+    text-decoration: none !important;
+  }
+}
