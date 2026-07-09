@@ -26,6 +26,14 @@ type MapSuggestion = {
   status?: string;
 };
 
+type EvidenceAttachment = {
+  type: string;
+  reference: string;
+  note?: string;
+  captured_by?: string;
+  captured_at?: string;
+};
+
 type SpatialEvidence = {
   geometry_type?: 'LineString' | 'Point';
   points?: SpatialPoint[];
@@ -37,6 +45,8 @@ type SpatialEvidence = {
   capture_method?: string;
   evidence_source?: string;
   accuracy_note?: string;
+  evidence_attachments?: EvidenceAttachment[];
+  evidence_attachment_count?: number;
   grid_cells?: GridCell[];
   map_suggestion?: MapSuggestion;
   review_confidence?: string;
@@ -339,6 +349,22 @@ export function VerificationWorkflowPanel({ submissions: initialSubmissions, sam
                           <span>Review confidence: {submission.spatial_evidence.review_confidence || submission.spatial_evidence.map_suggestion?.confidence || 'pending'} · Not official until approved.</span>
                         </div>
                       ) : null}
+                      {submission.spatial_evidence?.evidence_attachments?.length ? (
+                        <div className="spatial-analysis-summary reviewer">
+                          <strong>Evidence references</strong>
+                          <ul className="evidence-reference-list">
+                            {submission.spatial_evidence.evidence_attachments.map((item, index) => (
+                              <li key={`${submission.id}-review-evidence-${index}`}>
+                                <strong>{item.reference}</strong>
+                                <span>{item.type.replace(/-/g, ' ')}{item.captured_by ? ` · ${item.captured_by}` : ''}</span>
+                                {item.note ? <small>{item.note}</small> : null}
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      ) : (
+                        <p className="institutional-note">No protected evidence reference has been attached yet.</p>
+                      )}
                       {submission.registry_entity_id ? (
                         <p className="institutional-note">
                           Registry record: <strong>{submission.registry_entity_id}</strong>

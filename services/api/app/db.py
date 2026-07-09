@@ -1903,6 +1903,59 @@ def _haversine_km(a: dict[str, Any], b: dict[str, Any]) -> float:
     return 6371.0088 * 2 * math.asin(min(1, math.sqrt(h)))
 
 
+FIELD_EVIDENCE_ATTACHMENT_TYPES = {
+    'photo-reference',
+    'site-note',
+    'landmark-confirmation',
+    'coordinate-confirmation',
+}
+
+SENSITIVE_EVIDENCE_REFERENCE_PATTERN = re.compile(r'(password|secret|token|api[_-]?key|private[_-]?key|dip|passport|credential)', re.IGNORECASE)
+
+
+def normalize_field_evidence_attachments(value: Any) -> list[dict[str, str]]:
+    if value is None:
+        return []
+    if not isinstance(value, list):
+        raise InvalidSubmissionActionError('field evidence attachments must be a list')
+    if len(value) > 6:
+        raise InvalidSubmissionActionError('field evidence attachments are limited to 6 items')
+
+    normalized: list[dict[str, str]] = []
+    for item in value:
+        if not isinstance(item, dict):
+            raise InvalidSubmissionActionError('field evidence attachment must be an object')
+        evidence_type = str(item.get('type') or item.get('evidence_type') or '').strip()
+        if evidence_type not in FIELD_EVIDENCE_ATTACHMENT_TYPES:
+            raise InvalidSubmissionActionError('field evidence attachment type is not supported')
+        reference = str(item.get('reference') or item.get('evidence_reference') or '').strip()
+        if len(reference) < 3 or len(reference) > 120:
+            raise InvalidSubmissionActionError('field evidence reference must be 3-120 characters')
+        if SENSITIVE_EVIDENCE_REFERENCE_PATTERN.search(reference):
+            raise InvalidSubmissionActionError('field evidence reference must not include private credentials or identity document labels')
+        note = str(item.get('note') or item.get('evidence_note') or '').strip()
+        if len(note) > 300:
+            raise InvalidSubmissionActionError('field evidence note is too long')
+        captured_by = str(item.get('captured_by') or '').strip()[:120]
+        captured_at = str(item.get('captured_at') or '').strip()[:80]
+        normalized.append({
+            'type': evidence_type,
+            'reference': reference,
+            'note': note,
+            'captured_by': captured_by,
+            'captured_at': captured_at,
+        })
+    return normalized
+
+
+def _attach_field_evidence_metadata(normalized: dict[str, Any], payload: dict[str, Any]) -> dict[str, Any]:
+    attachments = normalize_field_evidence_attachments(payload.get('evidence_attachments'))
+    if attachments:
+        normalized['evidence_attachments'] = attachments
+        normalized['evidence_attachment_count'] = len(attachments)
+    return normalized
+
+
 def normalize_submission_spatial_evidence(submission_type: str, evidence: Any) -> dict[str, Any]:
     payload = _coerce_json_object(evidence)
     if submission_type == 'road':
@@ -1938,7 +1991,7 @@ def normalize_submission_spatial_evidence(submission_type: str, evidence: Any) -
                 normalized[optional_key] = payload[optional_key]
         if 'map_suggestion' in normalized:
             normalized['review_required'] = True
-        return normalized
+        return _attach_field_evidence_metadata(normalized, payload)
     if submission_type == 'building':
         latitude = _coordinate_value(payload, 'latitude')
         longitude = _coordinate_value(payload, 'longitude')
@@ -1966,7 +2019,7 @@ def normalize_submission_spatial_evidence(submission_type: str, evidence: Any) -
         for optional_key in ('grid_cells', 'review_confidence', 'review_required'):
             if optional_key in payload:
                 normalized[optional_key] = payload[optional_key]
-        return normalized
+        return _attach_field_evidence_metadata(normalized, payload)
     return payload
 
 

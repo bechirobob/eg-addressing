@@ -349,8 +349,68 @@ def test_spatial_evidence_accepts_road_polyline_with_calculated_length() -> None
                 {'latitude': 3.7521, 'longitude': 8.7731, 'role': 'start'},
                 {'latitude': 3.7536, 'longitude': 8.7762, 'role': 'end'},
             ],
+            'evidence_attachments': [
+                {
+                    'type': 'photo-reference',
+                    'reference': 'FIELD-PHOTO-20260709-001',
+                    'note': 'Frontage photo stored in protected field drive.',
+                    'captured_by': 'Field Team A',
+                    'captured_at': '2026-07-09T20:00:00+01:00',
+                },
+            ],
         },
     })
+    normalized = db.normalize_submission_spatial_evidence(
+        'road',
+        {
+            'geometry_type': 'LineString',
+            'points': [
+                {'latitude': 3.7521, 'longitude': 8.7731, 'role': 'start'},
+                {'latitude': 3.7536, 'longitude': 8.7762, 'role': 'end'},
+            ],
+            'evidence_attachments': [{'type': 'site-note', 'reference': 'NOTE-001', 'note': 'Gate confirmed.'}],
+        },
+    )
+    assert normalized['evidence_attachment_count'] == 1
+    assert normalized['evidence_attachments'][0]['reference'] == 'NOTE-001'
+
+
+def test_spatial_evidence_rejects_sensitive_evidence_references() -> None:
+    try:
+        db.normalize_submission_spatial_evidence(
+            'building',
+            {
+                'geometry_type': 'Point',
+                'latitude': 3.7521,
+                'longitude': 8.7731,
+                'accuracy_meters': 18,
+                'road_reference': 'Avenida principal',
+                'evidence_attachments': [{'type': 'photo-reference', 'reference': 'DIP-scan-private'}],
+            },
+        )
+    except main.InvalidSubmissionActionError as exc:
+        assert 'private credentials or identity document' in str(exc)
+    else:
+        raise AssertionError('sensitive evidence references must be rejected')
+
+
+def test_spatial_evidence_rejects_too_many_evidence_references() -> None:
+    try:
+        db.normalize_submission_spatial_evidence(
+            'road',
+            {
+                'geometry_type': 'LineString',
+                'points': [
+                    {'latitude': 3.7521, 'longitude': 8.7731, 'role': 'start'},
+                    {'latitude': 3.7536, 'longitude': 8.7762, 'role': 'end'},
+                ],
+                'evidence_attachments': [{'type': 'site-note', 'reference': f'NOTE-{index:03d}'} for index in range(7)],
+            },
+        )
+    except main.InvalidSubmissionActionError as exc:
+        assert 'limited to 6 items' in str(exc)
+    else:
+        raise AssertionError('too many evidence references must be rejected')
 
 
 def test_spatial_evidence_blocks_building_approval_without_point() -> None:

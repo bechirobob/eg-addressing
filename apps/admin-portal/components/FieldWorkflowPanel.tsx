@@ -41,6 +41,14 @@ type MapSuggestion = {
   status?: string;
 };
 
+type EvidenceAttachment = {
+  type: 'photo-reference' | 'site-note' | 'landmark-confirmation' | 'coordinate-confirmation';
+  reference: string;
+  note?: string;
+  captured_by?: string;
+  captured_at?: string;
+};
+
 type SpatialEvidence = {
   geometry_type?: 'LineString' | 'Point';
   capture_method?: string;
@@ -52,6 +60,8 @@ type SpatialEvidence = {
   road_reference?: string;
   evidence_source?: string;
   accuracy_note?: string;
+  evidence_attachments?: EvidenceAttachment[];
+  evidence_attachment_count?: number;
   grid_cells?: GridCell[];
   map_suggestion?: MapSuggestion;
   stretch_midpoint?: { latitude: number; longitude: number };
@@ -125,9 +135,28 @@ export function FieldWorkflowPanel({ assignments, submissions: initialSubmission
   const [roadPoints, setRoadPoints] = useState<SpatialPoint[]>([]);
   const [buildingPoint, setBuildingPoint] = useState<SpatialPoint | null>(null);
   const [roadReference, setRoadReference] = useState('');
+  const [evidenceAttachment, setEvidenceAttachment] = useState<EvidenceAttachment>({
+    type: 'photo-reference',
+    reference: 'FIELD-PHOTO-REF-001',
+    note: 'Protected field photo/reference confirmed by officer.',
+    captured_by: 'Field team operator',
+    captured_at: '',
+  });
   const [spatialAnalysis, setSpatialAnalysis] = useState<SpatialEvidence | null>(null);
   const [isCapturingGeometry, setIsCapturingGeometry] = useState(false);
   const [isAnalyzingSpatialEvidence, setIsAnalyzingSpatialEvidence] = useState(false);
+
+  function activeEvidenceAttachments(): EvidenceAttachment[] {
+    const reference = evidenceAttachment.reference.trim();
+    if (reference.length < 3) return [];
+    return [{
+      type: evidenceAttachment.type,
+      reference,
+      note: evidenceAttachment.note?.trim() ?? '',
+      captured_by: evidenceAttachment.captured_by?.trim() || form.submitted_by,
+      captured_at: evidenceAttachment.captured_at?.trim() || new Date().toISOString(),
+    }];
+  }
 
   function segmentLengthKm(start: SpatialPoint, end: SpatialPoint) {
     const toRadians = (value: number) => (value * Math.PI) / 180;
@@ -156,6 +185,7 @@ export function FieldWorkflowPanel({ assignments, submissions: initialSubmission
         points: roadPoints.map(({ latitude, longitude, role }) => ({ latitude, longitude, role })),
         calculated_length_km: Number(roadLengthKm().toFixed(3)),
         accuracy_note: roadPoints.map((point) => `${point.role ?? 'point'} ±${Math.round(point.accuracy_meters ?? 0)}m`).join(' · '),
+        evidence_attachments: activeEvidenceAttachments(),
       };
       return spatialAnalysis?.geometry_type === 'LineString' ? { ...baseEvidence, ...spatialAnalysis, points: baseEvidence.points } : baseEvidence;
     }
@@ -170,6 +200,7 @@ export function FieldWorkflowPanel({ assignments, submissions: initialSubmission
         accuracy_meters: buildingPoint.accuracy_meters ?? null,
         road_reference: roadReference.trim(),
         accuracy_note: `Captured GPS point ±${Math.round(buildingPoint.accuracy_meters ?? 0)}m`,
+        evidence_attachments: activeEvidenceAttachments(),
       };
       return spatialAnalysis?.geometry_type === 'Point' ? { ...baseEvidence, ...spatialAnalysis } : baseEvidence;
     }
@@ -686,6 +717,34 @@ export function FieldWorkflowPanel({ assignments, submissions: initialSubmission
               <input type="hidden" value={form.candidate_status} readOnly />
             </details>
 
+            <details className="quiet-disclosure compact-review-disclosure" open>
+              <summary>Evidence reference</summary>
+              <div className="human-form-grid">
+                <label className="territory-field">
+                  <span className="territory-label">Evidence type</span>
+                  <select className="territory-input" value={evidenceAttachment.type} onChange={(event) => setEvidenceAttachment({ ...evidenceAttachment, type: event.target.value as EvidenceAttachment['type'] })}>
+                    <option value="photo-reference">Protected photo reference</option>
+                    <option value="site-note">Site note</option>
+                    <option value="landmark-confirmation">Landmark confirmation</option>
+                    <option value="coordinate-confirmation">Coordinate confirmation</option>
+                  </select>
+                </label>
+                <label className="territory-field">
+                  <span className="territory-label">Reference code</span>
+                  <input className="territory-input" value={evidenceAttachment.reference} onChange={(event) => setEvidenceAttachment({ ...evidenceAttachment, reference: event.target.value })} placeholder="FIELD-PHOTO-REF-001" />
+                </label>
+                <label className="territory-field">
+                  <span className="territory-label">Captured by</span>
+                  <input className="territory-input" value={evidenceAttachment.captured_by ?? ''} onChange={(event) => setEvidenceAttachment({ ...evidenceAttachment, captured_by: event.target.value })} placeholder="Field team or officer" />
+                </label>
+              </div>
+              <label className="territory-field territory-field-wide">
+                <span className="territory-label">Evidence note</span>
+                <textarea className="territory-input territory-textarea" rows={2} value={evidenceAttachment.note ?? ''} onChange={(event) => setEvidenceAttachment({ ...evidenceAttachment, note: event.target.value })} />
+                <span className="field-help">Reference protected field evidence only. Do not paste passwords, private identity documents, full D.I.P. numbers, or public file links here.</span>
+              </label>
+            </details>
+
             {form.submission_type === 'road' ? (
               <div className="territory-field territory-field-wide spatial-evidence-capture human-capture-card">
                 <div className="human-capture-head">
@@ -770,6 +829,17 @@ export function FieldWorkflowPanel({ assignments, submissions: initialSubmission
                     <span>{submission.territory_name} · {submission.submission_type} · {submission.review_status}</span>
                   </summary>
                   <p>{submission.notes || 'No field notes supplied.'}</p>
+                  {submission.spatial_evidence?.evidence_attachments?.length ? (
+                    <ul className="evidence-reference-list" aria-label="Field evidence references">
+                      {submission.spatial_evidence.evidence_attachments.map((item, index) => (
+                        <li key={`${submission.id}-evidence-${index}`}>
+                          <strong>{item.reference}</strong>
+                          <span>{item.type.replace(/-/g, ' ')}{item.captured_by ? ` · ${item.captured_by}` : ''}</span>
+                          {item.note ? <small>{item.note}</small> : null}
+                        </li>
+                      ))}
+                    </ul>
+                  ) : <p>Evidence reference pending.</p>}
                   <p>Submitted by {submission.submitted_by}{submission.registry_entity_id ? ` · Registry link: ${submission.registry_entity_id}` : ''}</p>
                 </details>
               </li>
