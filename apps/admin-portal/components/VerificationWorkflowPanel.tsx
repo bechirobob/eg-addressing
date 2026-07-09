@@ -26,12 +26,22 @@ type MapSuggestion = {
   status?: string;
 };
 
+type EvidenceAttachmentFile = {
+  file_id: string;
+  file_name: string;
+  content_type: string;
+  size_bytes: number;
+  access: 'protected';
+};
+
 type EvidenceAttachment = {
   type: string;
   reference: string;
   note?: string;
   captured_by?: string;
   captured_at?: string;
+  files?: EvidenceAttachmentFile[];
+  file_count?: number;
 };
 
 type SpatialEvidence = {
@@ -236,6 +246,33 @@ export function VerificationWorkflowPanel({ submissions: initialSubmissions, sam
     }
   }
 
+  async function downloadEvidenceFile(submissionId: string, file: EvidenceAttachmentFile) {
+    if (!token) {
+      setError('Sign in before downloading protected evidence.');
+      return;
+    }
+    setError(null);
+    try {
+      const response = await fetch(`${browserApiBaseUrl}/api/v1/field/submissions/${encodeURIComponent(submissionId)}/evidence-files/${encodeURIComponent(file.file_id)}`, {
+        headers: authorizationHeader(token),
+      });
+      if (!response.ok) {
+        setError('Unable to download protected evidence file.');
+        return;
+      }
+      const blob = await response.blob();
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = file.file_name;
+      link.click();
+      URL.revokeObjectURL(url);
+      setNotice(`Downloaded protected evidence: ${file.file_name}.`);
+    } catch {
+      setError('Unable to download protected evidence file.');
+    }
+  }
+
   async function handleLookup(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setIsLookupLoading(true);
@@ -358,6 +395,16 @@ export function VerificationWorkflowPanel({ submissions: initialSubmissions, sam
                                 <strong>{item.reference}</strong>
                                 <span>{item.type.replace(/-/g, ' ')}{item.captured_by ? ` · ${item.captured_by}` : ''}</span>
                                 {item.note ? <small>{item.note}</small> : null}
+                                {item.files?.length ? (
+                                  <ul className="protected-file-list" aria-label="Protected evidence files">
+                                    {item.files.map((file) => (
+                                      <li key={file.file_id}>
+                                        <span>{file.file_name} · {Math.ceil(file.size_bytes / 1024)} KB · protected</span>
+                                        <button className="table-action" type="button" onClick={() => void downloadEvidenceFile(submission.id, file)}>Download</button>
+                                      </li>
+                                    ))}
+                                  </ul>
+                                ) : null}
                               </li>
                             ))}
                           </ul>

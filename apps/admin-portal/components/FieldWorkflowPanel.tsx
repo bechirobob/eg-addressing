@@ -41,12 +41,22 @@ type MapSuggestion = {
   status?: string;
 };
 
+type EvidenceAttachmentFile = {
+  file_id: string;
+  file_name: string;
+  content_type: string;
+  size_bytes: number;
+  access: 'protected';
+};
+
 type EvidenceAttachment = {
   type: 'photo-reference' | 'site-note' | 'landmark-confirmation' | 'coordinate-confirmation';
   reference: string;
   note?: string;
   captured_by?: string;
   captured_at?: string;
+  files?: EvidenceAttachmentFile[];
+  file_count?: number;
 };
 
 type SpatialEvidence = {
@@ -122,6 +132,7 @@ export function FieldWorkflowPanel({ assignments, submissions: initialSubmission
   const [notice, setNotice] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [uploadingEvidenceId, setUploadingEvidenceId] = useState<string | null>(null);
   const canSubmit = sessionUser?.role === 'editor' || sessionUser?.role === 'admin';
   const [form, setForm] = useState({
     assignment_id: fieldAssignments[0]?.assignment_id ?? '',
@@ -472,6 +483,40 @@ export function FieldWorkflowPanel({ assignments, submissions: initialSubmission
       setError('Unable to record field evidence.');
     } finally {
       setBusyTaskId(null);
+    }
+  }
+
+  async function uploadEvidenceFile(submission: Submission, file: File | null) {
+    if (!file) return;
+    if (!token || !canSubmit) {
+      setError('Editor or admin access is required to upload protected field evidence.');
+      return;
+    }
+    const attachmentIndex = submission.spatial_evidence?.evidence_attachments?.length ? 0 : -1;
+    if (attachmentIndex < 0) {
+      setError('Add an evidence reference before uploading a protected file.');
+      return;
+    }
+    setUploadingEvidenceId(submission.id);
+    setNotice(null);
+    setError(null);
+    try {
+      const response = await fetch(`${browserApiBaseUrl}/api/v1/field/submissions/${encodeURIComponent(submission.id)}/evidence-files?attachment_index=${attachmentIndex}&file_name=${encodeURIComponent(file.name)}`, {
+        method: 'POST',
+        headers: { 'Content-Type': file.type || 'application/octet-stream', ...authorizationHeader(token) },
+        body: file,
+      });
+      const payload = (await response.json()) as { detail?: string; submission?: Submission };
+      if (!response.ok) {
+        setError(payload.detail ?? 'Unable to upload protected evidence file.');
+        return;
+      }
+      setNotice('Protected evidence file uploaded.');
+      await reloadSubmissions(token);
+    } catch {
+      setError('Unable to upload protected evidence file.');
+    } finally {
+      setUploadingEvidenceId(null);
     }
   }
 
@@ -831,18 +876,26 @@ export function FieldWorkflowPanel({ assignments, submissions: initialSubmission
                     <th scope="col">Type</th>
                     <th scope="col">Status</th>
                     <th scope="col">Evidence reference</th>
+                    <th scope="col">Protected file</th>
                   </tr>
                 </thead>
                 <tbody>
                   {submissions.map((submission) => {
                     const evidenceReference = submission.spatial_evidence?.evidence_attachments?.[0]?.reference ?? 'Pending';
+                    const evidenceFiles = submission.spatial_evidence?.evidence_attachments?.[0]?.files ?? [];
                     return (
                       <tr key={submission.id}>
                         <td><strong>{submission.candidate_name}</strong></td>
                         <td>{submission.territory_name}</td>
                         <td>{submission.submission_type}</td>
                         <td>{submission.review_status}</td>
-                        <td>{evidenceReference}</td>
+                        <td>{evidenceReference}{evidenceFiles.length ? ` · ${evidenceFiles.length} file${evidenceFiles.length === 1 ? '' : 's'}` : ''}</td>
+                        <td>
+                          <label className="table-file-upload">
+                            <span>{uploadingEvidenceId === submission.id ? 'Uploading…' : 'Upload file'}</span>
+                            <input type="file" accept="image/jpeg,image/png,image/webp,application/pdf,text/plain" disabled={!canSubmit || uploadingEvidenceId === submission.id || evidenceReference === 'Pending'} onChange={(event) => void uploadEvidenceFile(submission, event.target.files?.[0] ?? null)} />
+                          </label>
+                        </td>
                       </tr>
                     );
                   })}

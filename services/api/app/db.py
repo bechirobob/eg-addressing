@@ -111,6 +111,10 @@ class SubmissionNotFoundError(ValueError):
     pass
 
 
+class EvidenceAttachmentNotFoundError(ValueError):
+    pass
+
+
 class InvalidSubmissionActionError(ValueError):
     pass
 
@@ -2134,6 +2138,93 @@ def get_submission(submission_id: str) -> dict[str, Any]:
             if not row:
                 raise SubmissionNotFoundError('submission not found')
             return _decode_spatial_evidence(dict(row))
+
+
+def attach_field_submission_evidence_file(submission_id: str, attachment_index: int, file_metadata: dict[str, Any], actor: dict[str, str] | None = None) -> dict[str, Any]:
+    if attachment_index < 0:
+        raise EvidenceAttachmentNotFoundError('evidence attachment not found')
+    public_metadata = {
+        'file_id': file_metadata['file_id'],
+        'file_name': file_metadata['file_name'],
+        'content_type': file_metadata['content_type'],
+        'size_bytes': file_metadata['size_bytes'],
+        'sha256': file_metadata['sha256'],
+        'object_key': file_metadata['object_key'],
+        'uploaded_by': actor['username'] if actor else file_metadata.get('uploaded_by', 'system'),
+        'uploaded_at': file_metadata.get('uploaded_at') or datetime.now(timezone.utc).isoformat(),
+        'access': 'protected',
+    }
+    with db_connection() as connection:
+        with connection.cursor() as cursor:
+            cursor.execute('SELECT spatial_evidence FROM field_submissions WHERE id = %s FOR UPDATE', (submission_id,))
+            row = cursor.fetchone()
+            if not row:
+                raise SubmissionNotFoundError('submission not found')
+            spatial_evidence = _coerce_json_object(row.get('spatial_evidence'))
+            attachments = spatial_evidence.get('evidence_attachments')
+            if not isinstance(attachments, list) or attachment_index >= len(attachments):
+                raise EvidenceAttachmentNotFoundError('evidence attachment not found')
+            attachment = attachments[attachment_index]
+            if not isinstance(attachment, dict):
+                raise EvidenceAttachmentNotFoundError('evidence attachment not found')
+            files = attachment.get('files')
+            if not isinstance(files, list):
+                files = []
+            if len(files) >= 4:
+                raise InvalidSubmissionActionError('evidence attachment file limit reached')
+            files.append(public_metadata)
+            attachment['files'] = files
+            attachment['file_count'] = len(files)
+            attachments[attachment_index] = attachment
+            spatial_evidence['evidence_attachments'] = attachments
+            spatial_evidence['evidence_file_count'] = sum(len(item.get('files', [])) for item in attachments if isinstance(item, dict))
+            cursor.execute(
+                'UPDATE field_submissions SET spatial_evidence = %s::jsonb, updated_at = NOW() WHERE id = %s',
+                (json.dumps(spatial_evidence), submission_id),
+            )
+            _log_action(
+                cursor,
+                actor=actor,
+                action='upload-evidence-file',
+                entity_type='field_submission',
+                entity_id=submission_id,
+                details={
+                    'file_id': public_metadata['file_id'],
+                    'file_name': public_metadata['file_name'],
+                    'content_type': public_metadata['content_type'],
+                    'size_bytes': public_metadata['size_bytes'],
+                    'attachment_index': attachment_index,
+                    'access': 'protected',
+                },
+            )
+        connection.commit()
+    return get_submission(submission_id)
+
+
+def get_field_submission_evidence_file(submission_id: str, file_id: str, actor: dict[str, str] | None = None) -> dict[str, Any]:
+    with db_connection() as connection:
+        with connection.cursor() as cursor:
+            cursor.execute('SELECT spatial_evidence FROM field_submissions WHERE id = %s', (submission_id,))
+            row = cursor.fetchone()
+            if not row:
+                raise SubmissionNotFoundError('submission not found')
+            spatial_evidence = _coerce_json_object(row.get('spatial_evidence'))
+            for attachment in spatial_evidence.get('evidence_attachments', []):
+                if not isinstance(attachment, dict):
+                    continue
+                for file_metadata in attachment.get('files', []):
+                    if isinstance(file_metadata, dict) and file_metadata.get('file_id') == file_id:
+                        _log_action(
+                            cursor,
+                            actor=actor,
+                            action='download-evidence-file',
+                            entity_type='field_submission',
+                            entity_id=submission_id,
+                            details={'file_id': file_id, 'file_name': file_metadata.get('file_name'), 'access': 'protected'},
+                        )
+                        connection.commit()
+                        return file_metadata
+            raise EvidenceAttachmentNotFoundError('evidence file not found')
 
 
 def approve_submission(submission_id: str, actor: dict[str, str] | None = None) -> dict[str, Any]:

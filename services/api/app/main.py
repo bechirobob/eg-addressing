@@ -17,10 +17,11 @@ from typing import Any
 
 from fastapi import Cookie, FastAPI, Header, HTTPException, Query, Request, Response, status
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, StreamingResponse
 from pydantic import BaseModel, Field
 
 from app.data import MODULES
+from app.evidence_storage import EvidenceObjectNotFound, EvidenceStorageError, read_evidence_object, store_evidence_object
 from app.address_codes import coordinate_grid_cell
 from app.ops_status import migration_status
 from app.query_contracts import paginated_response
@@ -37,6 +38,7 @@ from app.db import (
     DuplicatePublicationPackError,
     DuplicateRoadError,
     DuplicateTerritoryError,
+    EvidenceAttachmentNotFoundError,
     ImportJobNotFoundError,
     InvalidSubmissionActionError,
     PublicationPackNotFoundError,
@@ -53,6 +55,7 @@ from app.db import (
     archive_building,
     archive_road,
     archive_territory,
+    attach_field_submission_evidence_file,
     authenticate_user_session,
     commit_import_job,
     cleanup_demo_fixtures,
@@ -78,6 +81,7 @@ from app.db import (
     get_address,
     get_address_record_case_file,
     get_building,
+    get_field_submission_evidence_file,
     get_import_rows,
     get_road,
     get_submission,
@@ -315,6 +319,15 @@ PUBLIC_RATE_LIMIT_ENABLED = os.getenv('PUBLIC_RATE_LIMIT_ENABLED', 'true').strip
 PUBLIC_RATE_LIMIT_MAX_REQUESTS = max(1, int(os.getenv('PUBLIC_RATE_LIMIT_MAX_REQUESTS', '30')))
 PUBLIC_RATE_LIMIT_WINDOW_SECONDS = max(1, int(os.getenv('PUBLIC_RATE_LIMIT_WINDOW_SECONDS', '60')))
 PUBLIC_RATE_LIMIT_BUCKETS: dict[str, deque[float]] = defaultdict(deque)
+EVIDENCE_FILE_MAX_BYTES = int(os.getenv('EVIDENCE_FILE_MAX_BYTES', str(5 * 1024 * 1024)))
+EVIDENCE_ALLOWED_CONTENT_TYPES = {
+    'image/jpeg': 'jpg',
+    'image/png': 'png',
+    'image/webp': 'webp',
+    'application/pdf': 'pdf',
+    'text/plain': 'txt',
+}
+EVIDENCE_BLOCKED_EXTENSIONS = {'.exe', '.dll', '.sh', '.bash', '.bat', '.cmd', '.js', '.mjs', '.py', '.php', '.jar', '.zip', '.7z', '.rar'}
 REQUEST_SESSION_COOKIE: ContextVar[str | None] = ContextVar('REQUEST_SESSION_COOKIE', default=None)
 NOMINATIM_REVERSE_URL = os.getenv('NOMINATIM_REVERSE_URL', 'https://nominatim.openstreetmap.org/reverse')
 NOMINATIM_USER_AGENT = os.getenv('NOMINATIM_USER_AGENT', 'BeCoreOps-EG-Addressing-Pilot/0.1 contact: operator')
@@ -1403,6 +1416,93 @@ def create_field_submission_endpoint(payload: FieldSubmissionCreate, authorizati
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(exc)) from exc
     except SubmissionNotFoundError as exc:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(exc)) from exc
+
+
+def _safe_evidence_file_name(file_name: str) -> str:
+    name = Path(file_name).name.strip().replace('\x00', '')
+    if not name or len(name) > 120:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail='invalid evidence file name')
+    suffix = Path(name).suffix.lower()
+    if suffix in EVIDENCE_BLOCKED_EXTENSIONS:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail='evidence file type is not allowed')
+    return name
+
+
+def _validate_evidence_upload(file_name: str, content_type: str, content: bytes) -> str:
+    safe_name = _safe_evidence_file_name(file_name)
+    normalized_type = (content_type or '').split(';', 1)[0].strip().lower()
+    if normalized_type not in EVIDENCE_ALLOWED_CONTENT_TYPES:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail='evidence content type is not allowed')
+    if not content:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail='evidence file is empty')
+    if len(content) > EVIDENCE_FILE_MAX_BYTES:
+        raise HTTPException(status_code=status.HTTP_413_REQUEST_ENTITY_TOO_LARGE, detail='evidence file is too large')
+    signature = content[:8]
+    if normalized_type == 'application/pdf' and not content.startswith(b'%PDF-'):
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail='invalid PDF evidence file')
+    if normalized_type == 'image/png' and signature != b'\x89PNG\r\n\x1a\n':
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail='invalid PNG evidence file')
+    if normalized_type == 'image/jpeg' and not content.startswith(b'\xff\xd8\xff'):
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail='invalid JPEG evidence file')
+    if normalized_type == 'image/webp' and not (content.startswith(b'RIFF') and content[8:12] == b'WEBP'):
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail='invalid WEBP evidence file')
+    return safe_name
+
+
+@app.post('/api/v1/field/submissions/{submission_id}/evidence-files', status_code=status.HTTP_201_CREATED)
+async def upload_field_submission_evidence_file(
+    submission_id: str,
+    request: Request,
+    attachment_index: int = Query(default=0, ge=0, le=5),
+    file_name: str = Query(min_length=3, max_length=120),
+    authorization: str | None = Header(default=None),
+) -> dict[str, Any]:
+    user = _current_user(authorization)
+    _require_role(user, 'editor', 'admin')
+    content = await request.body()
+    content_type = request.headers.get('content-type', '')
+    safe_name = _validate_evidence_upload(file_name, content_type, content)
+    file_id = f'evidence-{uuid.uuid4().hex[:12]}'
+    object_key = f'field-submissions/{submission_id}/{file_id}/{safe_name}'
+    try:
+        storage_metadata = store_evidence_object(object_key, content, content_type.split(';', 1)[0].strip().lower())
+        updated = attach_field_submission_evidence_file(
+            submission_id,
+            attachment_index,
+            {
+                **storage_metadata,
+                'file_id': file_id,
+                'file_name': safe_name,
+                'uploaded_at': _now_utc().isoformat(),
+            },
+            actor=user,
+        )
+    except EvidenceStorageError as exc:
+        raise HTTPException(status_code=status.HTTP_503_SERVICE_UNAVAILABLE, detail=str(exc)) from exc
+    except SubmissionNotFoundError as exc:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(exc)) from exc
+    except EvidenceAttachmentNotFoundError as exc:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(exc)) from exc
+    except InvalidSubmissionActionError as exc:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(exc)) from exc
+    return {'file': {'file_id': file_id, 'file_name': safe_name, 'content_type': storage_metadata['content_type'], 'size_bytes': storage_metadata['size_bytes'], 'access': 'protected'}, 'submission': updated}
+
+
+@app.get('/api/v1/field/submissions/{submission_id}/evidence-files/{file_id}')
+def download_field_submission_evidence_file(submission_id: str, file_id: str, authorization: str | None = Header(default=None)) -> StreamingResponse:
+    user = _current_user(authorization)
+    _require_role(user, 'viewer', 'editor', 'admin')
+    try:
+        metadata = get_field_submission_evidence_file(submission_id, file_id, actor=user)
+        content = read_evidence_object(str(metadata['object_key']))
+    except SubmissionNotFoundError as exc:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(exc)) from exc
+    except (EvidenceAttachmentNotFoundError, EvidenceObjectNotFound) as exc:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(exc)) from exc
+    except EvidenceStorageError as exc:
+        raise HTTPException(status_code=status.HTTP_503_SERVICE_UNAVAILABLE, detail=str(exc)) from exc
+    headers = {'Content-Disposition': f'attachment; filename="{Path(str(metadata.get("file_name") or "evidence-file")).name}"'}
+    return StreamingResponse(iter([content]), media_type=str(metadata.get('content_type') or 'application/octet-stream'), headers=headers)
 
 
 @app.post('/api/v1/field/submissions/{submission_id}/under-review')

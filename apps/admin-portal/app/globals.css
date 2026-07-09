@@ -14291,3 +14291,40 @@ html body .guided-workflow-strip.guided-workflow-strip .step-chip {
     padding-left: 0 !important;
   }
 }
+
+/* Phase 2B protected field evidence files */
+.table-file-upload {
+  display: inline-grid;
+  gap: 4px;
+  color: var(--gov-ink-strong, var(--eg-ink));
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
+.table-file-upload input {
+  max-width: 190px;
+  font-size: 0.72rem;
+}
+
+.protected-file-list {
+  display: grid;
+  gap: 6px;
+  margin: 8px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.protected-file-list li {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  justify-content: space-between;
+  border: 0 !important;
+  background: transparent !important;
+  padding: 0 !important;
+}
+
+.protected-file-list span {
+  color: var(--gov-muted, var(--eg-muted));
+  font-size: 0.78rem;
+}

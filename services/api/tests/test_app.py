@@ -2144,3 +2144,67 @@ def test_spatial_evidence_preserves_map_grid_enrichment() -> None:
     assert evidence['grid_cells'][0]['grid_code'] == 'EG-BN-N1-TEST'
     assert evidence['map_suggestion']['suggested_road_name'] == 'Airport Road'
     assert evidence['review_required'] is True
+
+def test_evidence_file_upload_requires_authenticated_editor(monkeypatch) -> None:
+    monkeypatch.setattr(main, 'resolve_user_from_token', lambda token: EDITOR)
+    response = client.post(
+        '/api/v1/field/submissions/submission-a/evidence-files?attachment_index=0&file_name=frontage.txt',
+        content=b'field evidence note',
+        headers={'Content-Type': 'text/plain'},
+    )
+    assert response.status_code == 401
+
+
+def test_evidence_file_upload_rejects_executable_extension(monkeypatch) -> None:
+    monkeypatch.setattr(main, 'resolve_user_from_token', lambda token: EDITOR)
+    response = client.post(
+        '/api/v1/field/submissions/submission-a/evidence-files?attachment_index=0&file_name=malware.sh',
+        content=b'echo bad',
+        headers={**auth_header(), 'Content-Type': 'text/plain'},
+    )
+    assert response.status_code == 400
+    assert 'not allowed' in response.json()['detail']
+
+
+def test_evidence_file_upload_attaches_private_metadata(monkeypatch) -> None:
+    monkeypatch.setattr(main, 'resolve_user_from_token', lambda token: EDITOR)
+    stored: dict[str, Any] = {}
+
+    def fake_store(object_key: str, content: bytes, content_type: str) -> dict[str, Any]:
+        stored.update({'object_key': object_key, 'content': content, 'content_type': content_type})
+        return {'bucket': 'eg-field-evidence', 'object_key': object_key, 'size_bytes': len(content), 'sha256': 'hash123', 'content_type': content_type, 'etag': 'etag123'}
+
+    def fake_attach(submission_id: str, attachment_index: int, file_metadata: dict[str, Any], actor=None) -> dict[str, Any]:
+        assert submission_id == 'submission-a'
+        assert attachment_index == 0
+        assert actor == EDITOR
+        assert file_metadata['file_name'] == 'frontage.txt'
+        assert file_metadata['object_key'].startswith('field-submissions/submission-a/evidence-')
+        return {'id': submission_id, 'spatial_evidence': {'evidence_attachments': [{'reference': 'FIELD-REF-1', 'files': [file_metadata]}]}}
+
+    monkeypatch.setattr(main, 'store_evidence_object', fake_store)
+    monkeypatch.setattr(main, 'attach_field_submission_evidence_file', fake_attach)
+    response = client.post(
+        '/api/v1/field/submissions/submission-a/evidence-files?attachment_index=0&file_name=frontage.txt',
+        content=b'field evidence note',
+        headers={**auth_header(), 'Content-Type': 'text/plain'},
+    )
+    assert response.status_code == 201
+    body = response.json()
+    assert body['file']['access'] == 'protected'
+    assert body['file']['file_name'] == 'frontage.txt'
+    assert stored['content'] == b'field evidence note'
+
+
+def test_evidence_file_download_requires_auth_and_streams_private_object(monkeypatch) -> None:
+    monkeypatch.setattr(main, 'resolve_user_from_token', lambda token: VIEWER)
+    monkeypatch.setattr(main, 'get_field_submission_evidence_file', lambda submission_id, file_id, actor=None: {'file_id': file_id, 'file_name': 'frontage.txt', 'content_type': 'text/plain', 'object_key': 'field-submissions/submission-a/evidence-1/frontage.txt'})
+    monkeypatch.setattr(main, 'read_evidence_object', lambda object_key: b'field evidence note')
+
+    blocked = client.get('/api/v1/field/submissions/submission-a/evidence-files/evidence-1')
+    assert blocked.status_code == 401
+
+    response = client.get('/api/v1/field/submissions/submission-a/evidence-files/evidence-1', headers=auth_header())
+    assert response.status_code == 200
+    assert response.content == b'field evidence note'
+    assert response.headers['content-type'].startswith('text/plain')
