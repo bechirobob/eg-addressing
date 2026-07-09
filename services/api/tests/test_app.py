@@ -2208,3 +2208,74 @@ def test_evidence_file_download_requires_auth_and_streams_private_object(monkeyp
     assert response.status_code == 200
     assert response.content == b'field evidence note'
     assert response.headers['content-type'].startswith('text/plain')
+
+def test_evidence_review_requires_editor_or_admin(monkeypatch) -> None:
+    monkeypatch.setattr(main, 'resolve_user_from_token', lambda token: VIEWER)
+    response = client.post(
+        '/api/v1/field/submissions/submission-a/evidence-review',
+        json={'attachment_index': 0, 'file_id': 'evidence-1', 'decision': 'accepted', 'reviewer_note': 'ok'},
+        headers=auth_header(),
+    )
+    assert response.status_code == 403
+
+
+def test_evidence_review_updates_protected_file_metadata(monkeypatch) -> None:
+    monkeypatch.setattr(main, 'resolve_user_from_token', lambda token: EDITOR)
+    captured: dict[str, Any] = {}
+
+    def fake_review(submission_id, attachment_index, decision, reviewer_note, file_id=None, actor=None):
+        captured.update({
+            'submission_id': submission_id,
+            'attachment_index': attachment_index,
+            'decision': decision,
+            'reviewer_note': reviewer_note,
+            'file_id': file_id,
+            'actor': actor,
+        })
+        return {
+            'id': submission_id,
+            'review_status': 'under-review',
+            'spatial_evidence': {
+                'evidence_review_status': 'accepted',
+                'evidence_attachments': [{'files': [{'file_id': file_id, 'review_status': decision}]}],
+            },
+        }
+
+    monkeypatch.setattr(main, 'review_field_submission_evidence', fake_review)
+    response = client.post(
+        '/api/v1/field/submissions/submission-a/evidence-review',
+        json={'attachment_index': 0, 'file_id': 'evidence-1', 'decision': 'accepted', 'reviewer_note': 'frontage confirmed'},
+        headers=auth_header(),
+    )
+    assert response.status_code == 200
+    assert response.json()['spatial_evidence']['evidence_review_status'] == 'accepted'
+    assert captured['file_id'] == 'evidence-1'
+    assert captured['actor']['username'] == 'editor'
+
+
+def test_evidence_history_requires_auth_and_returns_audit_entries(monkeypatch) -> None:
+    monkeypatch.setattr(main, 'resolve_user_from_token', lambda token: VIEWER)
+    captured: dict[str, Any] = {}
+
+    def fake_history(submission_id, limit=50):
+        captured.update({'submission_id': submission_id, 'limit': limit})
+        return [{'id': 1, 'action': 'download-evidence-file', 'entity_id': submission_id, 'details': {'file_id': 'evidence-1'}}]
+
+    monkeypatch.setattr(main, 'list_field_submission_evidence_history', fake_history)
+    unauth = client.get('/api/v1/field/submissions/submission-a/evidence-history')
+    assert unauth.status_code == 401
+    response = client.get('/api/v1/field/submissions/submission-a/evidence-history?limit=7', headers=auth_header())
+    assert response.status_code == 200
+    assert response.json()['items'][0]['action'] == 'download-evidence-file'
+    assert captured == {'submission_id': 'submission-a', 'limit': 7}
+
+
+def test_field_evidence_review_status_blocks_unaccepted_files() -> None:
+    pending = {'evidence_attachments': [{'files': [{'file_id': 'evidence-1'}]}]}
+    accepted = {'evidence_attachments': [{'files': [{'file_id': 'evidence-1', 'review_status': 'accepted'}]}]}
+    recapture = {'evidence_attachments': [{'files': [{'file_id': 'evidence-1', 'review_status': 'needs-recapture'}]}]}
+    assert db._field_evidence_review_status(pending) == 'pending'
+    assert db._field_evidence_review_status(accepted) == 'accepted'
+    assert db._field_evidence_review_status(recapture) == 'blocked'
+    assert db._field_evidence_approval_ready(pending) is False
+    assert db._field_evidence_approval_ready(accepted) is True

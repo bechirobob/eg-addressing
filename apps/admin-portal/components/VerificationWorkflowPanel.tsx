@@ -32,6 +32,12 @@ type EvidenceAttachmentFile = {
   content_type: string;
   size_bytes: number;
   access: 'protected';
+  uploaded_by?: string;
+  uploaded_at?: string;
+  review_status?: 'accepted' | 'needs-recapture' | 'rejected' | 'escalated' | 'pending';
+  reviewer_note?: string;
+  reviewed_by?: string;
+  reviewed_at?: string;
 };
 
 type EvidenceAttachment = {
@@ -42,6 +48,10 @@ type EvidenceAttachment = {
   captured_at?: string;
   files?: EvidenceAttachmentFile[];
   file_count?: number;
+  review_status?: 'accepted' | 'needs-recapture' | 'rejected' | 'escalated' | 'pending';
+  reviewer_note?: string;
+  reviewed_by?: string;
+  reviewed_at?: string;
 };
 
 type SpatialEvidence = {
@@ -61,6 +71,7 @@ type SpatialEvidence = {
   map_suggestion?: MapSuggestion;
   review_confidence?: string;
   review_required?: boolean;
+  evidence_review_status?: 'accepted' | 'not-required' | 'pending' | 'blocked' | 'escalated';
 };
 
 type Submission = {
@@ -112,6 +123,18 @@ type SlaDrilldownItem = {
   next_best_action_label?: string | null;
 };
 
+type EvidenceAuditLog = {
+  id: number;
+  actor_username?: string | null;
+  actor_role?: string | null;
+  action: string;
+  entity_id: string;
+  details?: Record<string, unknown>;
+  created_at?: string;
+};
+
+type EvidenceReviewDecision = 'accepted' | 'needs-recapture' | 'rejected' | 'escalated';
+
 export function VerificationWorkflowPanel({ submissions: initialSubmissions, sampleLookup, apiBaseUrl }: VerificationWorkflowPanelProps) {
   const browserApiBaseUrl = resolveBrowserApiBaseUrl(apiBaseUrl);
   const { token, sessionUser, sessionStatus } = useStoredSession(browserApiBaseUrl);
@@ -126,6 +149,7 @@ export function VerificationWorkflowPanel({ submissions: initialSubmissions, sam
   const [isQueueRefreshing, setIsQueueRefreshing] = useState(false);
   const [isLookupLoading, setIsLookupLoading] = useState(false);
   const [busySubmissionId, setBusySubmissionId] = useState<string | null>(null);
+  const [evidenceHistory, setEvidenceHistory] = useState<Record<string, EvidenceAuditLog[]>>({});
   const canReview = sessionUser?.role === 'editor' || sessionUser?.role === 'admin';
 
   function hasRequiredSpatialEvidence(submission: Submission) {
@@ -166,7 +190,23 @@ export function VerificationWorkflowPanel({ submissions: initialSubmissions, sam
     if (busySubmissionId === submission.id) return 'Working…';
     if (action === 'under-review' && submission.review_status === 'under-review') return 'Already under review';
     if (action === 'approve' && !hasRequiredSpatialEvidence(submission)) return 'Spatial evidence required';
+    if (action === 'approve' && evidenceReviewStatus(submission) !== 'accepted' && evidenceReviewStatus(submission) !== 'not-required') return 'Accept evidence first';
     return null;
+  }
+
+  function evidenceReviewStatus(submission: Submission) {
+    return submission.spatial_evidence?.evidence_review_status ?? 'pending';
+  }
+
+  function fileReviewStatus(file: EvidenceAttachmentFile) {
+    return file.review_status ?? 'pending';
+  }
+
+  function evidenceHistoryLabel(item: EvidenceAuditLog) {
+    const details = item.details ?? {};
+    const fileName = typeof details.file_name === 'string' ? ` · ${details.file_name}` : '';
+    const actor = item.actor_username ? ` by ${item.actor_username}` : '';
+    return `${item.action.replace(/-/g, ' ')}${fileName}${actor}`;
   }
 
   const actionableQueue = useMemo(
@@ -188,7 +228,9 @@ export function VerificationWorkflowPanel({ submissions: initialSubmissions, sam
         return;
       }
       const payload = (await response.json()) as { items: Submission[] };
-      setSubmissions(payload.items ?? []);
+      const queueItems = payload.items ?? [];
+      setSubmissions(queueItems);
+      await reloadEvidenceHistory(activeToken, queueItems);
       const slaResponse = await fetch(`${browserApiBaseUrl}/api/v1/geotag-submissions/automation/sla-drilldown?state=overdue`, { headers: authorizationHeader(activeToken) });
       if (slaResponse.ok) {
         const slaPayload = (await slaResponse.json()) as { items: SlaDrilldownItem[] };
@@ -199,6 +241,17 @@ export function VerificationWorkflowPanel({ submissions: initialSubmissions, sam
     } finally {
       setIsQueueRefreshing(false);
     }
+  }
+
+  async function reloadEvidenceHistory(activeToken: string, queueItems: Submission[]) {
+    const withEvidence = queueItems.filter((submission) => submission.spatial_evidence?.evidence_attachments?.length);
+    const entries = await Promise.all(withEvidence.slice(0, 20).map(async (submission) => {
+      const response = await fetch(`${browserApiBaseUrl}/api/v1/field/submissions/${encodeURIComponent(submission.id)}/evidence-history?limit=20`, { headers: authorizationHeader(activeToken) });
+      if (!response.ok) return [submission.id, []] as const;
+      const payload = (await response.json()) as { items: EvidenceAuditLog[] };
+      return [submission.id, payload.items ?? []] as const;
+    }));
+    setEvidenceHistory(Object.fromEntries(entries));
   }
 
   async function sendAction(submission: Submission, action: 'under-review' | 'approve' | 'reject' | 'rework') {
@@ -270,6 +323,34 @@ export function VerificationWorkflowPanel({ submissions: initialSubmissions, sam
       setNotice(`Downloaded protected evidence: ${file.file_name}.`);
     } catch {
       setError('Unable to download protected evidence file.');
+    }
+  }
+
+  async function reviewEvidenceFile(submission: Submission, attachmentIndex: number, file: EvidenceAttachmentFile, decision: EvidenceReviewDecision) {
+    if (!token || !canReview) {
+      setError('Editor or admin access is required to review protected evidence.');
+      return;
+    }
+    setBusySubmissionId(submission.id);
+    setNotice(null);
+    setError(null);
+    try {
+      const response = await fetch(`${browserApiBaseUrl}/api/v1/field/submissions/${encodeURIComponent(submission.id)}/evidence-review`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', ...authorizationHeader(token) },
+        body: JSON.stringify({ attachment_index: attachmentIndex, file_id: file.file_id, decision, reviewer_note: reviewerNote }),
+      });
+      const payload = (await response.json()) as Submission | { detail?: string };
+      if (!response.ok) {
+        setError('detail' in payload && payload.detail ? payload.detail : 'Unable to review protected evidence.');
+        return;
+      }
+      setNotice(`Evidence ${decision.replace('-', ' ')}: ${file.file_name}.`);
+      await reloadQueue(token);
+    } catch {
+      setError('Unable to review protected evidence.');
+    } finally {
+      setBusySubmissionId(null);
     }
   }
 
@@ -388,7 +469,7 @@ export function VerificationWorkflowPanel({ submissions: initialSubmissions, sam
                       ) : null}
                       {submission.spatial_evidence?.evidence_attachments?.length ? (
                         <div className="spatial-analysis-summary reviewer">
-                          <strong>Evidence references</strong>
+                          <strong>Evidence references · {evidenceReviewStatus(submission).replace(/-/g, ' ')}</strong>
                           <ul className="evidence-reference-list">
                             {submission.spatial_evidence.evidence_attachments.map((item, index) => (
                               <li key={`${submission.id}-review-evidence-${index}`}>
@@ -399,8 +480,14 @@ export function VerificationWorkflowPanel({ submissions: initialSubmissions, sam
                                   <ul className="protected-file-list" aria-label="Protected evidence files">
                                     {item.files.map((file) => (
                                       <li key={file.file_id}>
-                                        <span>{file.file_name} · {Math.ceil(file.size_bytes / 1024)} KB · protected</span>
-                                        <button className="table-action" type="button" onClick={() => void downloadEvidenceFile(submission.id, file)}>Download</button>
+                                        <span>{file.file_name} · {Math.ceil(file.size_bytes / 1024)} KB · {fileReviewStatus(file).replace(/-/g, ' ')}</span>
+                                        <div className="protected-file-actions">
+                                          <button className="table-action" type="button" onClick={() => void downloadEvidenceFile(submission.id, file)}>Download</button>
+                                          <button className="table-action" type="button" disabled={!canReview || isBusy} onClick={() => void reviewEvidenceFile(submission, index, file, 'accepted')}>Accept</button>
+                                          <button className="table-action" type="button" disabled={!canReview || isBusy} onClick={() => void reviewEvidenceFile(submission, index, file, 'needs-recapture')}>Recapture</button>
+                                          <button className="table-action" type="button" disabled={!canReview || isBusy} onClick={() => void reviewEvidenceFile(submission, index, file, 'escalated')}>Escalate</button>
+                                        </div>
+                                        {file.reviewer_note ? <small>{file.reviewer_note}</small> : null}
                                       </li>
                                     ))}
                                   </ul>
@@ -412,6 +499,19 @@ export function VerificationWorkflowPanel({ submissions: initialSubmissions, sam
                       ) : (
                         <p className="institutional-note">No protected evidence reference has been attached yet.</p>
                       )}
+                      {evidenceHistory[submission.id]?.length ? (
+                        <div className="spatial-analysis-summary reviewer evidence-history-summary">
+                          <strong>Protected evidence access history</strong>
+                          <ul className="evidence-history-list">
+                            {evidenceHistory[submission.id].slice(0, 6).map((item) => (
+                              <li key={item.id}>
+                                <span>{evidenceHistoryLabel(item)}</span>
+                                {item.created_at ? <small>{new Date(item.created_at).toLocaleString()}</small> : null}
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      ) : null}
                       {submission.registry_entity_id ? (
                         <p className="institutional-note">
                           Registry record: <strong>{submission.registry_entity_id}</strong>

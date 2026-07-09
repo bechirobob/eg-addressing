@@ -2201,6 +2201,124 @@ def attach_field_submission_evidence_file(submission_id: str, attachment_index: 
     return get_submission(submission_id)
 
 
+def _field_evidence_review_status(spatial_evidence: dict[str, Any]) -> str:
+    attachments = spatial_evidence.get('evidence_attachments')
+    if not isinstance(attachments, list) or not attachments:
+        return 'not-required'
+    decisions: list[str] = []
+    for attachment in attachments:
+        if not isinstance(attachment, dict):
+            continue
+        files = attachment.get('files')
+        if isinstance(files, list) and files:
+            decisions.extend(str(file_metadata.get('review_status') or 'pending') for file_metadata in files if isinstance(file_metadata, dict))
+        else:
+            decisions.append(str(attachment.get('review_status') or 'pending'))
+    if not decisions:
+        return 'not-required'
+    if any(decision in {'rejected', 'needs-recapture'} for decision in decisions):
+        return 'blocked'
+    if any(decision == 'escalated' for decision in decisions):
+        return 'escalated'
+    if all(decision == 'accepted' for decision in decisions):
+        return 'accepted'
+    return 'pending'
+
+
+def _field_evidence_approval_ready(spatial_evidence: dict[str, Any]) -> bool:
+    return _field_evidence_review_status(spatial_evidence) in {'accepted', 'not-required'}
+
+
+def review_field_submission_evidence(
+    submission_id: str,
+    attachment_index: int,
+    decision: str,
+    reviewer_note: str,
+    file_id: str | None = None,
+    actor: dict[str, str] | None = None,
+) -> dict[str, Any]:
+    if attachment_index < 0:
+        raise EvidenceAttachmentNotFoundError('evidence attachment not found')
+    if decision not in {'accepted', 'needs-recapture', 'rejected', 'escalated'}:
+        raise InvalidSubmissionActionError('unsupported evidence review decision')
+    reviewed_at = datetime.now(timezone.utc).isoformat()
+    with db_connection() as connection:
+        with connection.cursor() as cursor:
+            cursor.execute('SELECT spatial_evidence FROM field_submissions WHERE id = %s FOR UPDATE', (submission_id,))
+            row = cursor.fetchone()
+            if not row:
+                raise SubmissionNotFoundError('submission not found')
+            spatial_evidence = _coerce_json_object(row.get('spatial_evidence'))
+            attachments = spatial_evidence.get('evidence_attachments')
+            if not isinstance(attachments, list) or attachment_index >= len(attachments):
+                raise EvidenceAttachmentNotFoundError('evidence attachment not found')
+            attachment = attachments[attachment_index]
+            if not isinstance(attachment, dict):
+                raise EvidenceAttachmentNotFoundError('evidence attachment not found')
+            reviewed_file_name = None
+            if file_id:
+                files = attachment.get('files')
+                if not isinstance(files, list):
+                    raise EvidenceAttachmentNotFoundError('evidence file not found')
+                matched = False
+                for file_metadata in files:
+                    if isinstance(file_metadata, dict) and file_metadata.get('file_id') == file_id:
+                        file_metadata['review_status'] = decision
+                        file_metadata['reviewer_note'] = reviewer_note
+                        file_metadata['reviewed_by'] = actor['username'] if actor else 'system'
+                        file_metadata['reviewed_at'] = reviewed_at
+                        reviewed_file_name = file_metadata.get('file_name')
+                        matched = True
+                        break
+                if not matched:
+                    raise EvidenceAttachmentNotFoundError('evidence file not found')
+                attachment['files'] = files
+            else:
+                attachment['review_status'] = decision
+                attachment['reviewer_note'] = reviewer_note
+                attachment['reviewed_by'] = actor['username'] if actor else 'system'
+                attachment['reviewed_at'] = reviewed_at
+            attachments[attachment_index] = attachment
+            spatial_evidence['evidence_attachments'] = attachments
+            spatial_evidence['evidence_review_status'] = _field_evidence_review_status(spatial_evidence)
+            cursor.execute(
+                '''
+                UPDATE field_submissions
+                SET spatial_evidence = %s::jsonb,
+                    reviewer_note = COALESCE(NULLIF(%s, ''), reviewer_note),
+                    updated_at = NOW()
+                WHERE id = %s
+                ''',
+                (json.dumps(spatial_evidence), reviewer_note, submission_id),
+            )
+            _log_action(
+                cursor,
+                actor=actor,
+                action=f'evidence-{decision}',
+                entity_type='field_submission',
+                entity_id=submission_id,
+                details={
+                    'attachment_index': attachment_index,
+                    'file_id': file_id,
+                    'file_name': reviewed_file_name,
+                    'decision': decision,
+                    'reviewer_note': reviewer_note,
+                    'access': 'protected',
+                },
+            )
+        connection.commit()
+    return get_submission(submission_id)
+
+
+def list_field_submission_evidence_history(submission_id: str, limit: int = 50) -> list[dict[str, Any]]:
+    get_submission(submission_id)
+    evidence_actions = {'upload-evidence-file', 'download-evidence-file', 'evidence-accepted', 'evidence-needs-recapture', 'evidence-rejected', 'evidence-escalated'}
+    return [
+        item for item in list_audit_logs(entity_type='field_submission', entity_id=submission_id, limit=limit)
+        if item.get('action') in evidence_actions
+    ]
+
+
 def get_field_submission_evidence_file(submission_id: str, file_id: str, actor: dict[str, str] | None = None) -> dict[str, Any]:
     with db_connection() as connection:
         with connection.cursor() as cursor:
@@ -2237,6 +2355,9 @@ def approve_submission(submission_id: str, actor: dict[str, str] | None = None) 
 
             submission = _decode_spatial_evidence(dict(submission))
             spatial_evidence = normalize_submission_spatial_evidence(submission['submission_type'], submission.get('spatial_evidence'))
+            spatial_evidence['evidence_review_status'] = _field_evidence_review_status(spatial_evidence)
+            if not _field_evidence_approval_ready(spatial_evidence):
+                raise InvalidSubmissionActionError('protected evidence review must be accepted before approval')
             registry_entity_id = submission['registry_entity_id']
             candidate_payload = {
                 'territory_id': submission['territory_id'],

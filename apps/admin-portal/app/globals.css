@@ -14523,3 +14523,45 @@ html body .guided-workflow-strip.guided-workflow-strip .step-chip {
     pointer-events: none;
   }
 }
+
+/* Phase 2C protected evidence review/accountability */
+.protected-file-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 6px;
+}
+
+.evidence-history-list {
+  display: grid;
+  gap: 6px;
+  margin: 8px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.evidence-history-list li {
+  display: grid;
+  gap: 2px;
+  padding-block: 6px;
+  border-bottom: 1px solid color-mix(in srgb, var(--desktop-border, #d7dde5) 68%, transparent);
+}
+
+.evidence-history-list li:last-child {
+  border-bottom: 0;
+}
+
+.evidence-history-list small,
+.protected-file-list small {
+  color: var(--desktop-text-muted, #667085);
+}
+
+@media (min-width: 1024px) {
+  html body main.page-shell .verification-workspace .evidence-history-summary,
+  html body main.page-shell .verification-workspace .protected-file-list {
+    background: transparent !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+  }
+}

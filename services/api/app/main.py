@@ -92,6 +92,7 @@ from app.db import (
     list_admin_units as list_admin_units_db,
     list_audit_logs,
     list_field_assignments,
+    list_field_submission_evidence_history,
     list_field_submissions,
     list_geotag_field_tasks as list_field_geotag_tasks,
     list_import_jobs,
@@ -108,6 +109,7 @@ from app.db import (
     reporting_summary,
     resolve_user_from_token,
     revoke_user_session,
+    review_field_submission_evidence,
     review_geotag_road_suggestion,
     search_address_records,
     simulate_geotag_publication_path,
@@ -196,6 +198,13 @@ class FieldSpatialEvidenceEnrichRequest(BaseModel):
 
 class ReviewActionRequest(BaseModel):
     reviewer_note: str = Field(default='', max_length=300)
+
+
+class EvidenceReviewActionRequest(BaseModel):
+    decision: str = Field(pattern='^(accepted|needs-recapture|rejected|escalated)$')
+    reviewer_note: str = Field(default='', max_length=500)
+    attachment_index: int = Field(default=0, ge=0, le=5)
+    file_id: str | None = Field(default=None, min_length=3, max_length=80)
 
 
 class AddressCorrectionCreate(BaseModel):
@@ -1486,6 +1495,30 @@ async def upload_field_submission_evidence_file(
     except InvalidSubmissionActionError as exc:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(exc)) from exc
     return {'file': {'file_id': file_id, 'file_name': safe_name, 'content_type': storage_metadata['content_type'], 'size_bytes': storage_metadata['size_bytes'], 'access': 'protected'}, 'submission': updated}
+
+
+@app.get('/api/v1/field/submissions/{submission_id}/evidence-history')
+def field_submission_evidence_history(submission_id: str, limit: int = Query(default=50, ge=1, le=100), authorization: str | None = Header(default=None)) -> dict[str, list[dict[str, Any]]]:
+    user = _current_user(authorization)
+    _require_role(user, 'viewer', 'editor', 'admin')
+    try:
+        return {'items': list_field_submission_evidence_history(submission_id, limit=limit)}
+    except SubmissionNotFoundError as exc:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(exc)) from exc
+
+
+@app.post('/api/v1/field/submissions/{submission_id}/evidence-review')
+def review_field_submission_evidence_endpoint(submission_id: str, payload: EvidenceReviewActionRequest, authorization: str | None = Header(default=None)) -> dict[str, Any]:
+    user = _current_user(authorization)
+    _require_role(user, 'editor', 'admin')
+    try:
+        return review_field_submission_evidence(submission_id, payload.attachment_index, payload.decision, payload.reviewer_note, file_id=payload.file_id, actor=user)
+    except SubmissionNotFoundError as exc:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(exc)) from exc
+    except EvidenceAttachmentNotFoundError as exc:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(exc)) from exc
+    except InvalidSubmissionActionError as exc:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(exc)) from exc
 
 
 @app.get('/api/v1/field/submissions/{submission_id}/evidence-files/{file_id}')
