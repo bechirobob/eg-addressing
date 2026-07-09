@@ -18,6 +18,7 @@ def apply_security_headers(response: Response, *, path: str) -> None:
 def production_readiness_status() -> dict[str, Any]:
     app_env = os.getenv('APP_ENV', 'development')
     session_cookie_mode = os.getenv('SESSION_COOKIE_MODE', 'bearer-local-storage')
+    default_demo_passwords_allowed = os.getenv('ALLOW_DEFAULT_DEMO_PASSWORDS', 'true').strip().lower() not in {'0', 'false', 'no'}
     checks = {
         'secure_cookie_sessions': {
             'status': 'ready' if session_cookie_mode == 'secure-http-only-cookie' else 'needs_work',
@@ -26,6 +27,10 @@ def production_readiness_status() -> dict[str, Any]:
         'csrf_for_cookie_sessions': {
             'status': 'ready',
             'detail': 'Cookie-authenticated protected mutations require a matching X-CSRF-Token header; public citizen routes and bearer-token pilot flows remain compatible.',
+        },
+        'default_demo_passwords_disabled': {
+            'status': 'needs_work' if default_demo_passwords_allowed else 'ready',
+            'detail': 'Set ALLOW_DEFAULT_DEMO_PASSWORDS=false after replacing seeded demo passwords with real operator credentials.',
         },
         'explicit_migrations': {
             'status': 'ready',

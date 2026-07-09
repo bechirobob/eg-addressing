@@ -44,5 +44,9 @@ assert(/isRouteAccessible\(currentRoute, role\)/.test(roleAwareChrome), 'route a
 
 assert(/defaultRouteForRole\(/.test(loginPanel), 'login success redirect must stay centralized through defaultRouteForRole');
 assert(/router\.push\(nextRoute\);/.test(loginPanel), 'login must navigate to the role-owned workspace');
+assert(!/!payload\.token/.test(loginPanel), 'cookie-session login must not require a bearer token in the JSON payload');
+assert(/auth_mode\?: string/.test(loginPanel), 'login payload typing must include auth_mode for cookie-session handling');
+assert(/sessionRequestInit/.test(roleAwareChrome), 'logout must use sessionRequestInit so cookie-only sessions can revoke server-side');
+assert(!/if \(storedToken\) \{[\s\S]*auth\/logout[\s\S]*\}/.test(roleAwareChrome), 'logout must not skip server revoke when localStorage token is absent');
 
 console.log('role-auth-guard passed');

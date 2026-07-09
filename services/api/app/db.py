@@ -33,6 +33,13 @@ from app.data import (
 
 PASSWORD_SALT = 'eg-addressing-demo-salt'
 SESSION_TTL_HOURS = max(1, int(os.getenv('SESSION_TTL_HOURS', '12')))
+ALLOW_DEFAULT_DEMO_PASSWORDS = os.getenv('ALLOW_DEFAULT_DEMO_PASSWORDS', 'true').strip().lower() not in {'0', 'false', 'no'}
+
+
+def default_demo_password_rejected(username: str, password: str) -> bool:
+    if ALLOW_DEFAULT_DEMO_PASSWORDS:
+        return False
+    return any(user['username'] == username and user['password'] == password for user in DEMO_USERS)
 
 
 class UnknownProvinceError(ValueError):
@@ -982,6 +989,8 @@ def init_db() -> None:
 
 
 def authenticate_user_session(username: str, password: str) -> dict[str, Any]:
+    if default_demo_password_rejected(username, password):
+        raise AuthenticationError('default demo password disabled')
     expires_at = datetime.now(timezone.utc) + timedelta(hours=SESSION_TTL_HOURS)
     with db_connection() as connection:
         with connection.cursor() as cursor:

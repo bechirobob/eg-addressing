@@ -392,6 +392,10 @@ def _using_secure_cookie_mode() -> bool:
     return SESSION_COOKIE_MODE == 'secure-http-only-cookie'
 
 
+def _auth_mode() -> str:
+    return 'cookie_session' if _using_secure_cookie_mode() else 'bearer_token'
+
+
 def _has_bearer_authorization(request: Request) -> bool:
     return request.headers.get('authorization', '').startswith('Bearer ')
 
@@ -1024,14 +1028,14 @@ def meta() -> dict[str, Any]:
 def login(payload: LoginRequest, response: Response) -> dict[str, Any]:
     try:
         session = authenticate_user_session(payload.username, payload.password)
+        token = session['token']
         session['session_ttl_hours'] = SESSION_TTL_HOURS
-        session['auth_mode'] = 'cookie_session' if SESSION_COOKIE_MODE == 'secure-http-only-cookie' else 'bearer_token'
-        if SESSION_COOKIE_MODE == 'secure-http-only-cookie':
+        session['auth_mode'] = _auth_mode()
+        if _using_secure_cookie_mode():
             csrf_token = secrets.token_urlsafe(32)
-            session['csrf_token'] = csrf_token
             response.set_cookie(
                 key=SESSION_COOKIE_NAME,
-                value=session['token'],
+                value=token,
                 max_age=SESSION_TTL_HOURS * 3600,
                 httponly=True,
                 secure=SESSION_COOKIE_SECURE,
@@ -1047,6 +1051,7 @@ def login(payload: LoginRequest, response: Response) -> dict[str, Any]:
                 samesite='lax',
                 path='/',
             )
+            session.pop('token', None)
         return session
     except AuthenticationError as exc:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail=str(exc)) from exc
@@ -1054,7 +1059,7 @@ def login(payload: LoginRequest, response: Response) -> dict[str, Any]:
 
 @app.get('/api/v1/auth/me')
 def auth_me(authorization: str | None = Header(default=None), eg_addressing_session: str | None = Cookie(default=None)) -> dict[str, Any]:
-    return {'user': _current_user(authorization, eg_addressing_session), 'session_ttl_hours': SESSION_TTL_HOURS}
+    return {'user': _current_user(authorization, eg_addressing_session), 'session_ttl_hours': SESSION_TTL_HOURS, 'auth_mode': _auth_mode()}
 
 
 @app.post('/api/v1/auth/logout', status_code=status.HTTP_204_NO_CONTENT)

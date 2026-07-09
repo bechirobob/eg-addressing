@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 import { defaultRouteForRole } from './site-data';
-import { setStoredToken } from './demoAuth';
+import { clearStoredToken, setStoredToken } from './demoAuth';
 import { resolveBrowserApiBaseUrl } from './sessionClient';
 
 type LoginPanelProps = {
@@ -35,13 +35,18 @@ export function LoginPanel({ apiBaseUrl }: LoginPanelProps) {
       });
       const payload = (await response.json()) as { token?: string; auth_mode?: string; user?: { role: string }; detail?: string };
 
-      if (!response.ok || !payload.token) {
+      if (!response.ok) {
         setError(payload.detail ?? 'Login failed.');
         return;
       }
 
-      if (payload.auth_mode !== 'cookie_session') {
+      if (payload.auth_mode === 'cookie_session') {
+        clearStoredToken();
+      } else if (payload.token) {
         setStoredToken(payload.token);
+      } else {
+        setError('Login failed: session token was not returned.');
+        return;
       }
       const nextRoute = defaultRouteForRole((payload.user?.role as 'viewer' | 'editor' | 'admin' | undefined) ?? 'viewer');
       setNotice(`Signed in as ${username} (${payload.user?.role ?? 'unknown role'}). Opening your administration workspace…`);

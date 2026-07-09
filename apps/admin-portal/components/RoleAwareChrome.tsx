@@ -15,7 +15,7 @@ import {
   routeNeedsResolvedSession,
   type OperatorRole,
 } from './site-data';
-import { authorizationHeader, resolveBrowserApiBaseUrl, useStoredSession } from './sessionClient';
+import { resolveBrowserApiBaseUrl, sessionRequestInit, useStoredSession } from './sessionClient';
 
 type RoleAwareChromeProps = {
   apiBaseUrl: string;
@@ -96,12 +96,10 @@ export function RoleAwareChrome({ apiBaseUrl, children, skipSessionLookup = fals
     setForcedGuest(true);
     try {
       const storedToken = typeof window === 'undefined' ? null : window.localStorage.getItem('egAddressingToken');
-      if (storedToken) {
-        await fetch(`${browserApiBaseUrl}/api/v1/auth/logout`, {
-          method: 'POST',
-          headers: authorizationHeader(storedToken),
-        });
-      }
+      await fetch(`${browserApiBaseUrl}/api/v1/auth/logout`, {
+        method: 'POST',
+        ...sessionRequestInit(storedToken),
+      });
     } catch {
       // Best-effort revoke; local cleanup still proceeds.
     }

@@ -1979,6 +1979,8 @@ def test_production_readiness_endpoint_is_auth_protected_and_honest(monkeypatch)
     assert body['status'] in {'ready', 'needs_work'}
     assert 'secure_cookie_sessions' in body['checks']
     assert body['checks']['secure_cookie_sessions']['status'] == 'needs_work'
+    assert 'default_demo_passwords_disabled' in body['checks']
+    assert body['checks']['default_demo_passwords_disabled']['status'] == 'needs_work'
 
 
 def test_login_can_issue_secure_session_cookie(monkeypatch) -> None:
@@ -2279,3 +2281,40 @@ def test_field_evidence_review_status_blocks_unaccepted_files() -> None:
     assert db._field_evidence_review_status(recapture) == 'blocked'
     assert db._field_evidence_approval_ready(pending) is False
     assert db._field_evidence_approval_ready(accepted) is True
+
+def test_cookie_mode_login_sets_cookies_without_exposing_bearer_token(monkeypatch) -> None:
+    monkeypatch.setattr(main, 'SESSION_COOKIE_MODE', 'secure-http-only-cookie')
+    monkeypatch.setattr(main, 'SESSION_COOKIE_SECURE', False)
+    monkeypatch.setattr(main, 'authenticate_user_session', lambda username, password: {'token': 'cookie-only-token', 'expires_at': '2026-07-09T00:00:00+00:00', 'user': ADMIN})
+
+    response = client.post('/api/v1/auth/login', json={'username': 'admin', 'password': 'admin123'})
+
+    assert response.status_code == 200
+    payload = response.json()
+    assert payload['auth_mode'] == 'cookie_session'
+    assert 'token' not in payload
+    assert 'csrf_token' not in payload
+    set_cookie = response.headers.get('set-cookie', '')
+    assert main.SESSION_COOKIE_NAME in set_cookie
+    assert main.CSRF_COOKIE_NAME in set_cookie
+    assert 'HttpOnly' in set_cookie
+
+
+def test_auth_me_reports_auth_mode_for_cookie_session(monkeypatch) -> None:
+    monkeypatch.setattr(main, 'SESSION_COOKIE_MODE', 'secure-http-only-cookie')
+    monkeypatch.setattr(main, 'SESSION_COOKIE_SECURE', False)
+    monkeypatch.setattr(main, 'resolve_user_from_token', lambda token: ADMIN)
+
+    response = client.get('/api/v1/auth/me', cookies={main.SESSION_COOKIE_NAME: 'cookie-only-token'})
+
+    assert response.status_code == 200
+    assert response.json()['auth_mode'] == 'cookie_session'
+    assert response.json()['user']['role'] == 'admin'
+
+
+def test_default_demo_password_policy_can_reject_seeded_passwords(monkeypatch) -> None:
+    monkeypatch.setattr(db, 'ALLOW_DEFAULT_DEMO_PASSWORDS', False, raising=False)
+
+    assert db.default_demo_password_rejected('admin', 'admin123') is True
+    assert db.default_demo_password_rejected('admin', 'not-the-default') is False
+    assert db.default_demo_password_rejected('unknown', 'admin123') is False
