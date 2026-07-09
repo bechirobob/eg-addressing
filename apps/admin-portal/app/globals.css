@@ -14080,3 +14080,214 @@ html body .guided-workflow-strip.guided-workflow-strip .step-chip {
 .evidence-reference-list small {
   color: var(--eg-muted);
 }
+
+/* Phase 2 field desktop correction: no pills, no inner containers */
+.field-workspace .public-task-panel {
+  border: 0 !important;
+  background: transparent !important;
+  padding: 0 !important;
+  box-shadow: none !important;
+}
+
+.field-workspace .panel-head {
+  border-bottom: 0 !important;
+  padding-bottom: 4px !important;
+}
+
+.field-summary-ledger,
+.field-today-summary {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
+  margin: 10px 0 18px;
+}
+
+.field-summary-ledger div,
+.field-today-summary div {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 2px 10px;
+  align-items: baseline;
+  border: 0 !important;
+  background: transparent !important;
+  padding: 0 !important;
+}
+
+.field-summary-ledger dt,
+.field-today-summary span {
+  color: var(--gov-ink-strong, var(--eg-ink));
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.field-summary-ledger dd,
+.field-today-summary strong {
+  margin: 0;
+  color: var(--gov-ink-strong, var(--eg-ink));
+  font-size: 1rem;
+  font-weight: 800;
+}
+
+.field-summary-ledger small {
+  grid-column: 1 / -1;
+  color: var(--gov-muted, var(--eg-muted));
+  font-size: 0.76rem;
+  line-height: 1.35;
+}
+
+.field-checklist {
+  display: flex;
+  gap: 14px;
+  grid-column: 1 / -1;
+  margin: 0 0 8px;
+  padding: 0;
+  list-style: none;
+  color: var(--gov-muted, var(--eg-muted));
+  font-size: 0.82rem;
+  font-weight: 650;
+}
+
+.field-checklist li {
+  border: 0 !important;
+  background: transparent !important;
+  padding: 0 !important;
+}
+
+.field-checklist li::before {
+  content: counter(list-item) ". ";
+  color: var(--gov-ink-strong, var(--eg-ink));
+  font-weight: 800;
+}
+
+.field-checklist li[aria-current="step"],
+.field-checklist li[data-complete="true"] {
+  color: var(--gov-ink-strong, var(--eg-ink));
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.evidence-reference-fields {
+  display: grid;
+  gap: 8px;
+  grid-column: 1 / -1;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  min-inline-size: 0;
+}
+
+.evidence-reference-fields legend {
+  margin-bottom: 8px;
+  padding: 0;
+  color: var(--gov-ink-strong, var(--eg-ink));
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
+.field-status-text {
+  color: var(--gov-muted, var(--eg-muted));
+  font-size: 0.72rem;
+  font-weight: 800;
+}
+
+.human-capture-card,
+.human-evidence-summary {
+  border: 0 !important;
+  background: transparent !important;
+  padding: 0 !important;
+  box-shadow: none !important;
+}
+
+.human-evidence-summary {
+  margin-top: 10px;
+}
+
+.field-workspace .guided-workflow-strip,
+.field-workspace .step-chip,
+.field-workspace .readiness-pill {
+  display: none !important;
+}
+
+.live-intake-table-wrap {
+  margin-top: 8px;
+}
+
+.field-workspace .mobile-card-list.live-intake-list {
+  display: none !important;
+}
+
+@media (max-width: 860px) {
+  .field-summary-ledger,
+  .field-today-summary {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .field-checklist {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px 12px;
+  }
+
+  .live-intake-table-wrap {
+    display: none !important;
+  }
+
+  .field-workspace .mobile-card-list.live-intake-list {
+    display: grid !important;
+  }
+}
+
+/* Phase 2 field desktop table correction: tables are rows, not card containers */
+@media (min-width: 861px) {
+  .field-workspace .table-wrap,
+  .field-workspace .desktop-table-wrap {
+    border: 0 !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    overflow: visible !important;
+  }
+
+  .field-workspace .data-table {
+    border: 1px solid var(--gov-line, var(--eg-line)) !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+  }
+
+  .field-workspace .data-table caption {
+    background: transparent !important;
+    border: 0 !important;
+    padding-left: 0 !important;
+  }
+
+  .field-workspace .guided-primary-action {
+    width: min(100%, 420px) !important;
+  }
+}
+
+/* Phase 2 field desktop table specificity correction */
+@media (min-width: 861px) {
+  html body main.page-shell .field-workspace .desktop-table-wrap,
+  html body main.page-shell .field-workspace .table-wrap {
+    border: 0 !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    overflow: visible !important;
+  }
+
+  html body main.page-shell .field-workspace .desktop-table-wrap .data-table {
+    border: 1px solid var(--desktop-border) !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+  }
+
+  html body main.page-shell .field-workspace .desktop-table-wrap .data-table caption {
+    background: transparent !important;
+    border: 0 !important;
+    padding-left: 0 !important;
+  }
+}

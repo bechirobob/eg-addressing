@@ -521,23 +521,23 @@ export function FieldWorkflowPanel({ assignments, submissions: initialSubmission
           <p className="section-label">Field desk</p>
           <h3>Today summary</h3>
         </div>
-        <div className="data-command-deck field-command-deck" aria-label="Field operation command lanes">
-          <button className="case-lane warn" type="button">
-            <span>Assignments</span>
-            <strong>{fieldAssignments.length}</strong>
+        <dl className="field-summary-ledger" aria-label="Field operation summary">
+          <div>
+            <dt>Assignments</dt>
+            <dd>{fieldAssignments.length}</dd>
             <small>Priority assignments waiting for field teams.</small>
-          </button>
-          <button className="case-lane" type="button">
-            <span>Location checks</span>
-            <strong>{geotagTasks.length}</strong>
+          </div>
+          <div>
+            <dt>Location checks</dt>
+            <dd>{geotagTasks.length}</dd>
             <small>Citizen locations waiting for field confirmation.</small>
-          </button>
-          <button className="case-lane ok" type="button">
-            <span>Recent intake</span>
-            <strong>{submissions.length}</strong>
+          </div>
+          <div>
+            <dt>Recent intake</dt>
+            <dd>{submissions.length}</dd>
             <small>Records already submitted for review.</small>
-          </button>
-        </div>
+          </div>
+        </dl>
         <div className="table-wrap desktop-table-wrap field-assignment-table-wrap" aria-label="Assigned checks table">
           <table className="data-table desktop-data-table">
             <caption>Assigned checks</caption>
@@ -655,12 +655,12 @@ export function FieldWorkflowPanel({ assignments, submissions: initialSubmission
           <p className="institutional-note">Use this like a field checklist. The system handles GPS, map suggestions, grid cells, and distance in the background.</p>
           {sessionStatus === 'loading' ? <p className="panel-state">Checking access before opening the submission form…</p> : null}
           <form className="territory-form compact-field-form human-field-form" onSubmit={handleSubmit}>
-            <div className="guided-workflow-strip" aria-label="Field evidence progress">
-              <span className="step-chip active">1. Identify</span>
-              <span className={buildSpatialEvidence() ? 'step-chip active' : 'step-chip'}>2. Capture location</span>
-              <span className={spatialAnalysis || form.submission_type === 'address' ? 'step-chip active' : 'step-chip'}>3. System check</span>
-              <span className={spatialSubmitDisabledReason ? 'step-chip' : 'step-chip active'}>4. Submit</span>
-            </div>
+            <ol className="field-checklist" aria-label="Field evidence progress">
+              <li aria-current="step">Identify</li>
+              <li data-complete={buildSpatialEvidence() ? 'true' : undefined}>Capture location</li>
+              <li data-complete={spatialAnalysis || form.submission_type === 'address' ? 'true' : undefined}>System check</li>
+              <li data-complete={spatialSubmitDisabledReason ? undefined : 'true'}>Submit</li>
+            </ol>
             <div className="human-form-grid">
               <label className="territory-field">
                 <span className="territory-label">What are you registering?</span>
@@ -717,8 +717,8 @@ export function FieldWorkflowPanel({ assignments, submissions: initialSubmission
               <input type="hidden" value={form.candidate_status} readOnly />
             </details>
 
-            <details className="quiet-disclosure compact-review-disclosure" open>
-              <summary>Evidence reference</summary>
+            <fieldset className="evidence-reference-fields">
+              <legend>Evidence reference</legend>
               <div className="human-form-grid">
                 <label className="territory-field">
                   <span className="territory-label">Evidence type</span>
@@ -743,13 +743,13 @@ export function FieldWorkflowPanel({ assignments, submissions: initialSubmission
                 <textarea className="territory-input territory-textarea" rows={2} value={evidenceAttachment.note ?? ''} onChange={(event) => setEvidenceAttachment({ ...evidenceAttachment, note: event.target.value })} />
                 <span className="field-help">Reference protected field evidence only. Do not paste passwords, private identity documents, full D.I.P. numbers, or public file links here.</span>
               </label>
-            </details>
+            </fieldset>
 
             {form.submission_type === 'road' ? (
               <div className="territory-field territory-field-wide spatial-evidence-capture human-capture-card">
                 <div className="human-capture-head">
                   <span className="territory-label">Road stretch</span>
-                  <span className={`readiness-pill ${readinessState().tone}`}>{readinessState().label}</span>
+                  <span className="field-status-text">{readinessState().label}</span>
                 </div>
                 <button className="primary-action guided-primary-action" type="button" disabled={isCapturingGeometry || isAnalyzingSpatialEvidence || Boolean(spatialAnalysis)} onClick={() => void continueRoadCapture()}>{roadStepLabel()}</button>
                 <p className="field-help">Stand at the beginning of the stretch, tap once. Move to the end, tap again. The system checks the road name, grid cells, and distance automatically.</p>
@@ -775,7 +775,7 @@ export function FieldWorkflowPanel({ assignments, submissions: initialSubmission
               <div className="territory-field territory-field-wide spatial-evidence-capture human-capture-card">
                 <div className="human-capture-head">
                   <span className="territory-label">Building location</span>
-                  <span className={`readiness-pill ${readinessState().tone}`}>{readinessState().label}</span>
+                  <span className="field-status-text">{readinessState().label}</span>
                 </div>
                 <button className="primary-action guided-primary-action" type="button" disabled={isCapturingGeometry || isAnalyzingSpatialEvidence || Boolean(spatialAnalysis && buildingPoint)} onClick={() => void continueBuildingCapture()}>{buildingStepLabel()}</button>
                 <label className="territory-field territory-field-wide nested-field">
@@ -820,31 +820,61 @@ export function FieldWorkflowPanel({ assignments, submissions: initialSubmission
             <em>{submissions.length} records</em>
           </summary>
         {submissions.length > 0 ? (
-          <ul className="mini-list live-intake-list">
-            {submissions.map((submission) => (
-              <li key={submission.id}>
-                <details className="inline-disclosure">
-                  <summary>
-                    <strong>{submission.candidate_name}</strong>
-                    <span>{submission.territory_name} · {submission.submission_type} · {submission.review_status}</span>
-                  </summary>
-                  <p>{submission.notes || 'No field notes supplied.'}</p>
-                  {submission.spatial_evidence?.evidence_attachments?.length ? (
-                    <ul className="evidence-reference-list" aria-label="Field evidence references">
-                      {submission.spatial_evidence.evidence_attachments.map((item, index) => (
-                        <li key={`${submission.id}-evidence-${index}`}>
-                          <strong>{item.reference}</strong>
-                          <span>{item.type.replace(/-/g, ' ')}{item.captured_by ? ` · ${item.captured_by}` : ''}</span>
-                          {item.note ? <small>{item.note}</small> : null}
-                        </li>
-                      ))}
-                    </ul>
-                  ) : <p>Evidence reference pending.</p>}
-                  <p>Submitted by {submission.submitted_by}{submission.registry_entity_id ? ` · Registry link: ${submission.registry_entity_id}` : ''}</p>
-                </details>
-              </li>
-            ))}
-          </ul>
+          <>
+            <div className="table-wrap desktop-table-wrap live-intake-table-wrap" aria-label="Recently submitted field records table">
+              <table className="data-table desktop-data-table">
+                <caption>Recently submitted field records</caption>
+                <thead>
+                  <tr>
+                    <th scope="col">Record</th>
+                    <th scope="col">Territory</th>
+                    <th scope="col">Type</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Evidence reference</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {submissions.map((submission) => {
+                    const evidenceReference = submission.spatial_evidence?.evidence_attachments?.[0]?.reference ?? 'Pending';
+                    return (
+                      <tr key={submission.id}>
+                        <td><strong>{submission.candidate_name}</strong></td>
+                        <td>{submission.territory_name}</td>
+                        <td>{submission.submission_type}</td>
+                        <td>{submission.review_status}</td>
+                        <td>{evidenceReference}</td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+            <ul className="mini-list live-intake-list mobile-card-list">
+              {submissions.map((submission) => (
+                <li key={submission.id}>
+                  <details className="inline-disclosure">
+                    <summary>
+                      <strong>{submission.candidate_name}</strong>
+                      <span>{submission.territory_name} · {submission.submission_type} · {submission.review_status}</span>
+                    </summary>
+                    <p>{submission.notes || 'No field notes supplied.'}</p>
+                    {submission.spatial_evidence?.evidence_attachments?.length ? (
+                      <ul className="evidence-reference-list" aria-label="Field evidence references">
+                        {submission.spatial_evidence.evidence_attachments.map((item, index) => (
+                          <li key={`${submission.id}-evidence-${index}`}>
+                            <strong>{item.reference}</strong>
+                            <span>{item.type.replace(/-/g, ' ')}{item.captured_by ? ` · ${item.captured_by}` : ''}</span>
+                            {item.note ? <small>{item.note}</small> : null}
+                          </li>
+                        ))}
+                      </ul>
+                    ) : <p>Evidence reference pending.</p>}
+                    <p>Submitted by {submission.submitted_by}{submission.registry_entity_id ? ` · Registry link: ${submission.registry_entity_id}` : ''}</p>
+                  </details>
+                </li>
+              ))}
+            </ul>
+          </>
         ) : (
           <p className="panel-state">No field submissions have been recorded yet.</p>
         )}
