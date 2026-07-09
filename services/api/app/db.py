@@ -3082,10 +3082,18 @@ def build_geotag_certificate(submission_id: str) -> dict[str, Any]:
     }
 
 
+def _province_code_from_public_code(code: str) -> str | None:
+    parts = code.upper().strip().split('-')
+    if len(parts) >= 2 and parts[0] == 'EG' and re.fullmatch(r'[A-Z]{2}', parts[1]):
+        return parts[1]
+    return None
+
+
 def public_address_code_record_lookup(code: str) -> dict[str, Any]:
     address_code = describe_address_code(code)
     result: dict[str, Any] = {
         **address_code,
+        'province_code': address_code.get('province_code') or _province_code_from_public_code(code),
         'publication_status': 'invalid' if not address_code.get('is_valid') else 'not_found',
         'record': None,
     }
