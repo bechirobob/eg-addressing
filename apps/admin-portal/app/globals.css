@@ -12015,3 +12015,702 @@ html body main.page-shell details.inline-disclosure > summary em {
     justify-self: start !important;
   }
 }
+
+/* Registry/search and no-pill correction: real search, compact rows, flat status text */
+html body main.page-shell .registry-search-control {
+  display: grid !important;
+  gap: 8px !important;
+  margin-block: 4px 6px !important;
+  max-width: 100% !important;
+}
+
+html body main.page-shell .registry-search-control .territory-input[type='search'] {
+  min-height: 48px !important;
+  font-size: clamp(1rem, 3.8vw, 1.12rem) !important;
+}
+
+html body main.page-shell .registry-count-line,
+html body main.page-shell .registry-selected-meta {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  align-items: baseline !important;
+  gap: 8px 18px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+html body main.page-shell .registry-count-line span,
+html body main.page-shell .registry-selected-meta span {
+  display: inline !important;
+  width: auto !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  color: var(--gov-muted, #52616f) !important;
+  font-size: clamp(0.88rem, 3.5vw, 0.96rem) !important;
+  line-height: 1.45 !important;
+}
+
+html body main.page-shell .registry-count-line strong {
+  color: var(--gov-ink, #12324a) !important;
+  font-size: inherit !important;
+}
+
+html body main.page-shell .registry-section-list {
+  display: grid !important;
+  gap: 6px !important;
+  margin-block: 2px 8px !important;
+}
+
+html body main.page-shell .registry-section-row,
+html body main.page-shell button.registry-section-row {
+  display: grid !important;
+  grid-template-columns: minmax(0, 0.9fr) auto !important;
+  gap: 2px 10px !important;
+  align-items: baseline !important;
+  min-height: 0 !important;
+  width: 100% !important;
+  padding: 4px 0 !important;
+  margin: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  text-align: start !important;
+}
+
+html body main.page-shell .registry-section-row span,
+html body main.page-shell .registry-section-row strong,
+html body main.page-shell .registry-section-row small {
+  min-width: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+html body main.page-shell .registry-section-row span {
+  color: var(--gov-ink, #12324a) !important;
+  font-weight: 780 !important;
+}
+
+html body main.page-shell .registry-section-row strong {
+  color: var(--gov-ink, #12324a) !important;
+  font-size: 1rem !important;
+}
+
+html body main.page-shell .registry-section-row small {
+  grid-column: 1 / -1 !important;
+  color: var(--gov-muted, #52616f) !important;
+  font-size: 0.86rem !important;
+  line-height: 1.35 !important;
+}
+
+html body main.page-shell .registry-job-tabs {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 18px !important;
+  border-block: 1px solid rgba(18, 50, 74, 0.16) !important;
+  padding-block: 10px !important;
+}
+
+html body main.page-shell .registry-job-tabs button,
+html body main.page-shell .guided-workflow-strip .step-chip,
+html body main.page-shell .readiness-pill,
+html body main.page-shell .form-focus-badge,
+html body main.page-shell .status-chip,
+html body main.page-shell .status-pill,
+html body main.page-shell .deployment-badge,
+html body main.page-shell [class*='badge'] {
+  display: inline !important;
+  width: auto !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+  min-height: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  outline: 0 !important;
+  color: var(--gov-ink, #12324a) !important;
+  font-size: inherit !important;
+  line-height: inherit !important;
+  text-transform: none !important;
+  letter-spacing: normal !important;
+  white-space: normal !important;
+}
+
+html body main.page-shell .registry-job-tabs button,
+html body main.page-shell .guided-workflow-strip .step-chip {
+  font-weight: 780 !important;
+  color: var(--gov-muted, #52616f) !important;
+}
+
+html body main.page-shell .registry-job-tabs button.active,
+html body main.page-shell .guided-workflow-strip .step-chip.active {
+  color: var(--gov-ink, #12324a) !important;
+  text-decoration: underline !important;
+  text-decoration-thickness: 2px !important;
+  text-underline-offset: 5px !important;
+}
+
+html body main.page-shell .guided-workflow-strip {
+  display: grid !important;
+  grid-template-columns: 1fr !important;
+  gap: 6px !important;
+  padding: 0 !important;
+  margin-block: 12px !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+html body main.page-shell .guided-workflow-strip .step-chip::before {
+  content: '' !important;
+  display: none !important;
+}
+
+html body main.page-shell .human-capture-head {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  align-items: baseline !important;
+  justify-content: space-between !important;
+  gap: 6px 12px !important;
+}
+
+html body main.page-shell .readiness-pill {
+  color: var(--gov-muted, #52616f) !important;
+  font-weight: 760 !important;
+}
+
+html body main.page-shell .status-chip::before,
+html body main.page-shell .status-chip::after,
+html body main.page-shell .status-pill::before,
+html body main.page-shell .status-pill::after,
+html body main.page-shell .readiness-pill::before,
+html body main.page-shell .readiness-pill::after,
+html body main.page-shell .form-focus-badge::before,
+html body main.page-shell .form-focus-badge::after {
+  content: none !important;
+  display: none !important;
+}
+
+html body main.page-shell .registry-simple-row,
+html body main.page-shell button.registry-simple-row {
+  padding: 8px 0 !important;
+  min-height: 0 !important;
+  border: 0 !important;
+  border-block-end: 1px solid rgba(18, 50, 74, 0.12) !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+html body main.page-shell .registry-simple-row.active {
+  border-inline-start: 3px solid var(--gov-ink, #12324a) !important;
+  padding-inline-start: 10px !important;
+}
+
+html body main.page-shell .registry-selected-card {
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+html body main.page-shell .registry-result-count {
+  color: var(--gov-muted, #52616f) !important;
+  font-size: 0.92rem !important;
+  font-weight: 760 !important;
+}
+
+/* Final staff-workflow pill cleanup: assignment labels are text, not capsules. */
+html body main.page-shell .assignment-kicker,
+html body main.page-shell .session-role,
+html body main.page-shell .review-head > strong {
+  display: inline !important;
+  width: auto !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+  min-height: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  outline: 0 !important;
+  color: var(--gov-muted, #52616f) !important;
+  font-size: 0.88rem !important;
+  line-height: 1.35 !important;
+  text-transform: none !important;
+  letter-spacing: normal !important;
+  white-space: normal !important;
+}
+
+/* High-specificity final no-pill override for signage/review status chips. */
+html body main.page-shell .operator-summary-row .status-chip,
+html body main.page-shell .review-glance-chips .status-chip,
+html body main.page-shell .request-detail-grid .status-chip,
+html body main.page-shell .request-list-item .status-chip,
+html body main.page-shell .operator-finding-card .status-chip,
+html body main.page-shell .duplicate-summary-list .status-chip,
+html body main.page-shell .status-chip.status-chip,
+html body main.page-shell span.status-chip,
+html body main.page-shell span.status-chip.ok,
+html body main.page-shell span.status-chip.warn,
+html body main.page-shell span.status-chip.danger,
+html body main.page-shell span.status-pill,
+html body main.page-shell span.status-pill.ok,
+html body main.page-shell span.status-pill.warn,
+html body main.page-shell span.status-pill.danger {
+  display: inline !important;
+  width: auto !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+  min-height: 0 !important;
+  height: auto !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  background-color: transparent !important;
+  box-shadow: none !important;
+  outline: 0 !important;
+  color: inherit !important;
+  font-size: inherit !important;
+  line-height: inherit !important;
+  text-transform: none !important;
+  letter-spacing: normal !important;
+  white-space: normal !important;
+}
+
+html body main.page-shell .operator-summary-row {
+  align-items: baseline !important;
+  gap: 8px 18px !important;
+}
+
+/* Route-specific signage status cleanup: these status labels must never render as cards/pills. */
+html body main.page-shell.page-shell-signage.page-shell-signage .operator-review-shell .review-desk-header.public-task-panel .operator-summary-row span.status-chip.status-chip,
+html body main.page-shell.page-shell-signage.page-shell-signage .operator-review-shell .review-glance-chips.operator-summary-row span.status-chip.status-chip,
+html body main.page-shell.page-shell-signage.page-shell-signage .operator-review-shell span.status-chip.status-chip,
+html body main.page-shell.page-shell-signage.page-shell-signage span.status-chip.status-chip.warn,
+html body main.page-shell.page-shell-signage.page-shell-signage span.status-chip.status-chip.danger,
+html body main.page-shell.page-shell-signage.page-shell-signage span.status-chip.status-chip.ok,
+html body main.page-shell.page-shell-signage.page-shell-signage span.status-chip.status-chip {
+  display: inline !important;
+  width: auto !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+  min-height: 0 !important;
+  height: auto !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  background-color: transparent !important;
+  box-shadow: none !important;
+  color: inherit !important;
+  font-size: inherit !important;
+  line-height: inherit !important;
+  text-transform: none !important;
+  letter-spacing: normal !important;
+}
+
+/* Registry/search density fix: search must be visible before record summaries; no record tiles or pills. */
+html body main.page-shell .registry-simple-hero {
+  row-gap: 12px !important;
+}
+
+html body main.page-shell .registry-simple-hero > div:first-child {
+  display: grid !important;
+  gap: 6px !important;
+}
+
+html body main.page-shell .registry-search-control.registry-search-control {
+  margin-block: 2px 4px !important;
+  display: grid !important;
+  gap: 5px !important;
+}
+
+html body main.page-shell .registry-search-control .territory-label {
+  font-size: 0.72rem !important;
+  letter-spacing: 0.12em !important;
+}
+
+html body main.page-shell .registry-search-control .territory-input {
+  min-height: 42px !important;
+  height: 42px !important;
+  padding: 8px 10px !important;
+  font-size: 0.98rem !important;
+}
+
+html body main.page-shell .registry-count-line.registry-count-line,
+html body main.page-shell .operator-summary-row.registry-count-line {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  align-items: baseline !important;
+  gap: 4px 12px !important;
+  margin-block: 4px !important;
+  padding: 0 !important;
+  background: transparent !important;
+  border: 0 !important;
+}
+
+html body main.page-shell .registry-count-line span {
+  display: inline !important;
+  width: auto !important;
+  min-height: 0 !important;
+  padding: 0 !important;
+  background: transparent !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  color: var(--eg-muted) !important;
+  font-size: 0.82rem !important;
+  line-height: 1.35 !important;
+  font-weight: 500 !important;
+}
+
+html body main.page-shell .registry-count-line strong {
+  color: var(--eg-blue-deep) !important;
+  font-size: inherit !important;
+  font-weight: 800 !important;
+}
+
+html body main.page-shell .registry-section-list.registry-section-list {
+  display: grid !important;
+  gap: 4px !important;
+  margin-block: 6px 8px !important;
+}
+
+html body main.page-shell .registry-section-row.registry-section-row {
+  min-height: 0 !important;
+  height: auto !important;
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) auto !important;
+  align-items: baseline !important;
+  gap: 0 10px !important;
+  padding: 5px 0 !important;
+  background: transparent !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  text-align: left !important;
+}
+
+html body main.page-shell .registry-section-row span,
+html body main.page-shell .registry-section-row strong {
+  display: inline !important;
+  margin: 0 !important;
+  font-size: 0.94rem !important;
+  line-height: 1.25 !important;
+}
+
+html body main.page-shell .registry-section-row small {
+  grid-column: 1 / -1 !important;
+  display: block !important;
+  margin: 1px 0 0 !important;
+  color: var(--eg-muted) !important;
+  font-size: 0.78rem !important;
+  line-height: 1.25 !important;
+}
+
+html body main.page-shell .registry-simple-layout.registry-simple-layout {
+  gap: 14px !important;
+}
+
+html body main.page-shell .registry-simple-list.registry-simple-list {
+  display: grid !important;
+  gap: 0 !important;
+}
+
+html body main.page-shell .registry-simple-row.registry-simple-row {
+  min-height: 0 !important;
+  height: auto !important;
+  display: grid !important;
+  gap: 2px !important;
+  padding: 9px 0 !important;
+  background: transparent !important;
+  border: 0 !important;
+  border-bottom: 1px solid rgba(11, 47, 79, 0.14) !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  text-align: left !important;
+}
+
+html body main.page-shell .registry-simple-row strong {
+  font-size: 0.96rem !important;
+  line-height: 1.25 !important;
+}
+
+html body main.page-shell .registry-simple-row span,
+html body main.page-shell .registry-simple-row small {
+  font-size: 0.78rem !important;
+  line-height: 1.25 !important;
+  color: var(--eg-muted) !important;
+}
+
+html body main.page-shell .registry-simple-row.active {
+  border-left: 0 !important;
+  padding-left: 0 !important;
+  background: transparent !important;
+}
+
+html body main.page-shell .registry-result-count.registry-result-count {
+  display: inline !important;
+  width: auto !important;
+  padding: 0 !important;
+  background: transparent !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  color: var(--eg-muted) !important;
+  font-size: 0.76rem !important;
+  letter-spacing: 0.08em !important;
+  text-transform: uppercase !important;
+}
+
+/* No pills/chips anywhere: render status as plain inline text, not rounded badges. */
+html body main.page-shell .status-chip,
+html body main.page-shell .status-pill,
+html body main.page-shell .readiness-pill,
+html body main.page-shell .step-chip,
+html body main.page-shell .tag,
+html body main.page-shell .assignment-kicker {
+  display: inline !important;
+  width: auto !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+  min-height: 0 !important;
+  height: auto !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  background: transparent !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  color: var(--eg-muted) !important;
+  font-size: 0.78rem !important;
+  line-height: 1.35 !important;
+  font-weight: 750 !important;
+  text-transform: none !important;
+  letter-spacing: 0.01em !important;
+  text-align: inherit !important;
+}
+
+html body main.page-shell .status-chip.ok,
+html body main.page-shell .status-pill.ok,
+html body main.page-shell .readiness-pill.ok,
+html body main.page-shell .step-chip.active {
+  color: #174f36 !important;
+}
+
+html body main.page-shell .status-chip.warn,
+html body main.page-shell .status-pill.warn,
+html body main.page-shell .readiness-pill.warn {
+  color: #6f541b !important;
+}
+
+html body main.page-shell .status-chip.danger,
+html body main.page-shell .status-pill.danger {
+  color: var(--eg-red) !important;
+}
+
+html body main.page-shell .guided-workflow-strip.guided-workflow-strip {
+  display: grid !important;
+  gap: 4px !important;
+  margin-block: 10px 16px !important;
+  padding: 0 !important;
+  background: transparent !important;
+  border: 0 !important;
+}
+
+html body main.page-shell .guided-workflow-strip .step-chip {
+  display: block !important;
+  border-bottom: 1px solid rgba(11, 47, 79, 0.12) !important;
+  padding-bottom: 4px !important;
+}
+
+html body main.page-shell .human-capture-head.human-capture-head {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) !important;
+  gap: 3px !important;
+  align-items: start !important;
+}
+
+/* Registry final density: remove inherited button pseudo-row and keep search immediately usable. */
+html body main.page-shell .registry-simple-hero.registry-simple-hero {
+  display: grid !important;
+  gap: 10px !important;
+  min-height: 0 !important;
+}
+
+html body main.page-shell .registry-simple-hero .public-task-copy {
+  margin-block: 0 !important;
+  font-size: 0.96rem !important;
+  line-height: 1.35 !important;
+}
+
+html body main.page-shell .registry-simple-row::before,
+html body main.page-shell .registry-simple-row::after,
+html body main.page-shell .registry-section-row::before,
+html body main.page-shell .registry-section-row::after,
+html body main.page-shell .status-chip::before,
+html body main.page-shell .status-chip::after,
+html body main.page-shell .status-pill::before,
+html body main.page-shell .status-pill::after,
+html body main.page-shell .readiness-pill::before,
+html body main.page-shell .readiness-pill::after,
+html body main.page-shell .step-chip::before,
+html body main.page-shell .step-chip::after,
+html body main.page-shell .tag::before,
+html body main.page-shell .tag::after {
+  content: none !important;
+  display: none !important;
+}
+
+html body main.page-shell .registry-simple-row.registry-simple-row {
+  grid-template-rows: none !important;
+  grid-auto-rows: auto !important;
+  align-content: start !important;
+  padding-block: 7px !important;
+}
+
+html body main.page-shell .registry-section-row.registry-section-row {
+  grid-template-rows: none !important;
+  grid-auto-rows: auto !important;
+  align-content: start !important;
+}
+
+html body main.page-shell .registry-simple-section.registry-simple-section {
+  padding-top: 8px !important;
+}
+
+html body main.page-shell .registry-simple-section .quiet-head {
+  margin-bottom: 8px !important;
+}
+
+html body main.page-shell .registry-create-disclosure.registry-create-disclosure {
+  margin-block: 4px 8px !important;
+}
+
+html body main.page-shell .registry-job-tabs.registry-job-tabs {
+  margin-block: 8px 4px !important;
+}
+
+html body main.page-shell .registry-archive-toggle.registry-archive-toggle {
+  margin-block: 4px 0 !important;
+}
+
+@media (max-width: 759px) {
+  html body main.page-shell .registry-simple-hero.registry-simple-hero {
+    gap: 8px !important;
+  }
+
+  html body main.page-shell .registry-section-list.registry-section-list {
+    gap: 2px !important;
+  }
+
+  html body main.page-shell .registry-simple-row.registry-simple-row {
+    padding-block: 6px !important;
+  }
+}
+
+/* Absolute no-chip residue: remove inherited chip pseudo-icons globally, including chrome/workbench elements outside main. */
+.status-chip::before,
+.status-chip::after,
+.status-pill::before,
+.status-pill::after,
+.readiness-pill::before,
+.readiness-pill::after,
+.step-chip::before,
+.step-chip::after,
+.tag::before,
+.tag::after,
+.assignment-kicker::before,
+.assignment-kicker::after {
+  content: none !important;
+  display: none !important;
+}
+
+.status-chip,
+.status-pill,
+.readiness-pill,
+.step-chip,
+.tag,
+.assignment-kicker {
+  background: transparent !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+}
+
+.guided-workflow-strip .step-chip {
+  border: 0 !important;
+  padding: 0 !important;
+}
+
+.operator-summary-row .status-chip + .status-chip::before,
+.operator-summary-row .status-pill + .status-pill::before {
+  content: none !important;
+}
+
+.operator-summary-row {
+  column-gap: 12px !important;
+  row-gap: 4px !important;
+}
+
+/* Exact no-chip specificity override: remove legacy warning/arrow pseudo-icons. */
+html body .review-glance-chips .status-chip::before,
+html body .review-glance-chips .status-chip::after,
+html body .operator-summary-row.review-glance-chips .status-chip::before,
+html body .operator-summary-row.review-glance-chips .status-chip::after,
+html body .review-glance-panel .review-glance-chips .status-chip::before,
+html body .review-glance-panel .review-glance-chips .status-chip::after,
+html body .review-glance-panel .operator-summary-row.review-glance-chips .status-chip::before,
+html body .review-glance-panel .operator-summary-row.review-glance-chips .status-chip::after,
+html body main.page-shell .guided-workflow-strip .step-chip::before,
+html body main.page-shell .guided-workflow-strip .step-chip::after {
+  content: none !important;
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+}
+
+html body .review-glance-chips .status-chip,
+html body .operator-summary-row.review-glance-chips .status-chip {
+  display: inline !important;
+  background: transparent !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  padding: 0 !important;
+  min-height: 0 !important;
+}
+
+/* No progress-pill residue: workflow steps are plain text only. */
+html body main.page-shell .guided-workflow-strip.guided-workflow-strip .step-chip,
+html body .guided-workflow-strip.guided-workflow-strip .step-chip {
+  display: block !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-bottom: 0 !important;
+  background: transparent !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}

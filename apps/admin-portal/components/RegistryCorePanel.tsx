@@ -37,13 +37,6 @@ function publicationLabel(address: Address) {
   return 'Draft';
 }
 
-function publicationTone(address: Address) {
-  if (address.is_archived) return '';
-  if (address.publication_state === 'published') return 'ok';
-  if (address.publication_state === 'internal-registry' || address.status === 'registry-ready') return 'warn';
-  return '';
-}
-
 export function RegistryCorePanel({
   initialTerritories,
   initialRoads,
@@ -65,6 +58,7 @@ export function RegistryCorePanel({
   const [registryFocus, setRegistryFocus] = useState<RegistryFocus>(null);
   const [activeTab, setActiveTab] = useState<RegisterTab>('addresses');
   const [includeArchived, setIncludeArchived] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
 
   const [roadForm, setRoadForm] = useState({ name: '', territory_id: territories[0]?.id ?? '', status: 'draft', length_km: '1.0' });
   const [buildingForm, setBuildingForm] = useState({
@@ -85,9 +79,22 @@ export function RegistryCorePanel({
   const [selectedBuildingId, setSelectedBuildingId] = useState(initialBuildings.find((item) => !item.is_archived)?.id ?? initialBuildings[0]?.id ?? '');
   const [selectedAddressId, setSelectedAddressId] = useState(initialAddresses.find((item) => !item.is_archived)?.id ?? initialAddresses[0]?.id ?? '');
 
-  const visibleRoads = useMemo(() => roads.filter((item) => includeArchived || !item.is_archived), [roads, includeArchived]);
-  const visibleBuildings = useMemo(() => buildings.filter((item) => includeArchived || !item.is_archived), [buildings, includeArchived]);
-  const visibleAddresses = useMemo(() => addresses.filter((item) => includeArchived || !item.is_archived), [addresses, includeArchived]);
+  const normalizedSearchQuery = searchQuery.trim().toLowerCase();
+  const visibleRoads = useMemo(() => roads.filter((item) => {
+    if (!includeArchived && item.is_archived) return false;
+    if (!normalizedSearchQuery) return true;
+    return [item.name, item.territory_name, item.status, item.length_km].some((value) => value?.toLowerCase().includes(normalizedSearchQuery));
+  }), [roads, includeArchived, normalizedSearchQuery]);
+  const visibleBuildings = useMemo(() => buildings.filter((item) => {
+    if (!includeArchived && item.is_archived) return false;
+    if (!normalizedSearchQuery) return true;
+    return [item.label, item.territory_name, item.road_name, item.status, item.usage].some((value) => value?.toLowerCase().includes(normalizedSearchQuery));
+  }), [buildings, includeArchived, normalizedSearchQuery]);
+  const visibleAddresses = useMemo(() => addresses.filter((item) => {
+    if (!includeArchived && item.is_archived) return false;
+    if (!normalizedSearchQuery) return true;
+    return [item.formatted, item.territory_name, item.road_name, item.building_label, item.status, item.publication_state, item.province_code].some((value) => value?.toLowerCase().includes(normalizedSearchQuery));
+  }), [addresses, includeArchived, normalizedSearchQuery]);
 
   const selectedRoad = roads.find((item) => item.id === selectedRoadId) ?? null;
   const selectedBuilding = buildings.find((item) => item.id === selectedBuildingId) ?? null;
@@ -272,11 +279,22 @@ export function RegistryCorePanel({
           <h2>Search records</h2>
           <p className="public-task-copy">Search, update, and manage official address records.</p>
         </div>
-        <div className="operator-summary-row" aria-label="Registry overview">
-          <span className="status-chip">Active addresses: {registryCounts.activeAddresses}</span>
-          <span className="status-chip warn">Internal hold: {registryCounts.internalHold}</span>
-          <span className="status-chip ok">Published: {registryCounts.published}</span>
-          <span className="status-chip">Archived hidden: {registryCounts.archived}</span>
+        <label className="territory-field territory-field-wide registry-search-control">
+          <span className="territory-label">Search registry records</span>
+          <input
+            className="territory-input"
+            type="search"
+            value={searchQuery}
+            onChange={(event) => setSearchQuery(event.target.value)}
+            placeholder="Search addresses, roads, buildings, status, or territory"
+            autoComplete="off"
+          />
+        </label>
+        <div className="operator-summary-row registry-count-line" aria-label="Registry overview">
+          <span>Active addresses: <strong>{registryCounts.activeAddresses}</strong></span>
+          <span>Internal hold: <strong>{registryCounts.internalHold}</strong></span>
+          <span>Published: <strong>{registryCounts.published}</strong></span>
+          <span>Archived hidden: <strong>{registryCounts.archived}</strong></span>
         </div>
         <div className="registry-section-list" aria-label="Registry record sections">
           {caseLanes.map((lane) => (
@@ -318,7 +336,7 @@ export function RegistryCorePanel({
               <p className="section-label">Address register</p>
               <h3>Official address records</h3>
             </div>
-            <span className="status-chip">{visibleAddresses.length} shown</span>
+            <span className="registry-result-count">{visibleAddresses.length} shown</span>
           </div>
 
           <details className="quiet-disclosure registry-create-disclosure">
@@ -402,7 +420,7 @@ export function RegistryCorePanel({
                   <span>{address.territory_name || 'Routing area pending'}</span>
                   <small>{publicationLabel(address)} · {address.is_archived ? 'hidden from daily work' : 'active record'}</small>
                 </button>
-              )) : <p className="panel-state">No address records to show.</p>}
+              )) : <p className="panel-state">No address records match this search.</p>}
             </aside>
 
             <div className="registry-simple-detail">
@@ -411,10 +429,10 @@ export function RegistryCorePanel({
                   <div className="registry-selected-card">
                     <p className="section-label">Selected address</p>
                     <h3>{selectedAddress.formatted}</h3>
-                    <div className="operator-summary-row">
-                      <span className={`status-chip ${publicationTone(selectedAddress)}`}>{publicationLabel(selectedAddress)}</span>
-                      <span className="status-chip">{selectedAddress.territory_name || 'Routing pending'}</span>
-                      <span className="status-chip">{plainStatus(selectedAddress.status)}</span>
+                    <div className="operator-summary-row registry-selected-meta">
+                      <span>{publicationLabel(selectedAddress)}</span>
+                      <span>{selectedAddress.territory_name || 'Routing pending'}</span>
+                      <span>{plainStatus(selectedAddress.status)}</span>
                     </div>
                     <p className="public-task-copy">
                       {selectedAddress.is_archived
@@ -460,7 +478,7 @@ export function RegistryCorePanel({
               <p className="section-label">Road register</p>
               <h3>Roads support address creation</h3>
             </div>
-            <span className="status-chip">{visibleRoads.length} shown</span>
+            <span className="registry-result-count">{visibleRoads.length} shown</span>
           </div>
           <details className="quiet-disclosure registry-create-disclosure">
             <summary>Create a new road</summary>
@@ -485,11 +503,11 @@ export function RegistryCorePanel({
             </form>
           </details>
           <div className="registry-simple-list registry-simple-list-full">
-            {visibleRoads.map((road) => (
+            {visibleRoads.length ? visibleRoads.map((road) => (
               <button key={road.id} className={`registry-simple-row ${selectedRoadId === road.id ? 'active' : ''}`} type="button" onClick={() => setSelectedRoadId(road.id)}>
                 <strong>{road.name}</strong><span>{road.territory_name}</span><small>{road.is_archived ? 'Archived' : plainStatus(road.status)}</small>
               </button>
-            ))}
+            )) : <p className="panel-state">No road records match this search.</p>}
           </div>
           {selectedRoad ? <details className="quiet-disclosure"><summary>Admin-only archive action</summary><button className="mini-action-button danger" type="button" disabled={!canArchive || isSubmitting || selectedRoad.is_archived} onClick={() => archiveEntity('roads', selectedRoad.id, selectedRoad.name)}>{selectedRoad.is_archived ? 'Already archived' : 'Archive road'}</button></details> : null}
         </article>
@@ -502,7 +520,7 @@ export function RegistryCorePanel({
               <p className="section-label">Building register</p>
               <h3>Buildings connect roads to addresses</h3>
             </div>
-            <span className="status-chip">{visibleBuildings.length} shown</span>
+            <span className="registry-result-count">{visibleBuildings.length} shown</span>
           </div>
           <details className="quiet-disclosure registry-create-disclosure">
             <summary>Create a new building</summary>
@@ -528,11 +546,11 @@ export function RegistryCorePanel({
             </form>
           </details>
           <div className="registry-simple-list registry-simple-list-full">
-            {visibleBuildings.map((building) => (
+            {visibleBuildings.length ? visibleBuildings.map((building) => (
               <button key={building.id} className={`registry-simple-row ${selectedBuildingId === building.id ? 'active' : ''}`} type="button" onClick={() => setSelectedBuildingId(building.id)}>
                 <strong>{building.label}</strong><span>{building.road_name}</span><small>{building.is_archived ? 'Archived' : `${plainStatus(building.usage)} · ${plainStatus(building.status)}`}</small>
               </button>
-            ))}
+            )) : <p className="panel-state">No building records match this search.</p>}
           </div>
           {selectedBuilding ? <details className="quiet-disclosure"><summary>Admin-only archive action</summary><button className="mini-action-button danger" type="button" disabled={!canArchive || isSubmitting || selectedBuilding.is_archived} onClick={() => archiveEntity('buildings', selectedBuilding.id, selectedBuilding.label)}>{selectedBuilding.is_archived ? 'Already archived' : 'Archive building'}</button></details> : null}
         </article>
