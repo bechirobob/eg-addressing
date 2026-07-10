@@ -3464,12 +3464,6 @@ body {
   line-height: 1;
 }
 
-.secondary-action::before {
-  content: '⌘';
-  color: #657689;
-  font-size: 0.94rem;
-}
-
 .public-task-panel,
 .map-confirm-panel {
   padding: 32px;
@@ -14769,5 +14763,194 @@ html body .guided-workflow-strip.guided-workflow-strip .step-chip {
   html body main.page-shell-access .login-access-panel .territory-form-actions {
     display: grid !important;
     grid-template-columns: 1fr !important;
+  }
+}
+
+/* Public address profile discipline: compact official mobile, no decorative command-key controls. */
+.secondary-action::before {
+  content: none !important;
+  display: none !important;
+}
+
+.public-profile-actions {
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px !important;
+  margin-top: 14px !important;
+}
+
+.public-profile-actions > .secondary-action,
+.public-profile-actions > .primary-action {
+  width: 100%;
+  min-height: 40px !important;
+  padding: 0.58rem 0.72rem !important;
+  border-radius: 0 !important;
+  font-size: 0.82rem;
+  line-height: 1.15;
+  text-align: center;
+}
+
+.public-profile-actions > .primary-action {
+  grid-column: 1 / -1;
+  min-height: 44px !important;
+}
+
+.public-profile-actions > .secondary-action:nth-child(4),
+.public-profile-actions > .secondary-action:nth-child(5) {
+  grid-column: span 3;
+}
+
+.public-profile-summary {
+  margin-top: 0 !important;
+}
+
+.public-profile-summary .status-chip {
+  margin-bottom: 8px;
+}
+
+.public-profile-summary h4 {
+  margin: 0 0 8px !important;
+}
+
+.public-profile-disclaimer {
+  margin-top: 14px !important;
+  padding: 12px 14px !important;
+}
+
+@media (max-width: 640px) {
+  html body main.page-shell.page-shell-code {
+    padding: 18px 16px 36px !important;
+  }
+
+  html body main.page-shell.page-shell-code .flag-ribbon,
+  html body main.page-shell.page-shell-code .civic-hero-illustration {
+    display: none !important;
+  }
+
+  html body main.page-shell.page-shell-code .masthead-reference {
+    margin-bottom: 18px !important;
+    padding: 0 0 20px !important;
+    background: transparent !important;
+  }
+
+  html body main.page-shell.page-shell-code .masthead-reference::before,
+  html body main.page-shell.page-shell-code .masthead-reference::after {
+    content: none !important;
+    display: none !important;
+  }
+
+  html body main.page-shell.page-shell-code .official-lockup {
+    display: grid !important;
+    justify-items: center !important;
+    gap: 8px !important;
+    margin-bottom: 30px !important;
+  }
+
+  html body main.page-shell.page-shell-code .masthead-reference .crest-frame {
+    width: 42px !important;
+    padding: 2px !important;
+    border: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+  }
+
+  html body main.page-shell.page-shell-code .masthead-reference .kicker {
+    max-width: 190px !important;
+    color: #627084 !important;
+    text-align: center !important;
+    font-size: 0.72rem !important;
+    letter-spacing: 0.15em !important;
+    line-height: 1.2 !important;
+  }
+
+  html body main.page-shell.page-shell-code .masthead-content-grid {
+    display: block !important;
+  }
+
+  html body main.page-shell.page-shell-code .masthead-reference .eyebrow {
+    display: block !important;
+    margin: 0 0 8px !important;
+    padding: 0 !important;
+    border: 0 !important;
+    background: transparent !important;
+    color: var(--eg-blue-deep) !important;
+    font-size: 0.75rem !important;
+    letter-spacing: 0.16em !important;
+  }
+
+  html body main.page-shell.page-shell-code .masthead-reference h1 {
+    color: var(--eg-blue-deep) !important;
+    font-size: clamp(2.28rem, 11vw, 2.95rem) !important;
+    line-height: 0.96 !important;
+  }
+
+  html body main.page-shell.page-shell-code .masthead-reference .masthead-subtitle {
+    margin-top: 14px !important;
+    color: var(--eg-muted) !important;
+    font-size: 1rem !important;
+    line-height: 1.48 !important;
+  }
+
+  html body main.page-shell.page-shell-code .desktop-main-content {
+    margin-top: 0 !important;
+  }
+
+  html body main.page-shell.page-shell-code .public-address-profile-flow {
+    gap: 12px !important;
+  }
+
+  html body main.page-shell.page-shell-code .public-task-panel.public-profile-panel {
+    padding: 0 !important;
+    border: 0 !important;
+    border-top: 0 !important;
+    background: transparent !important;
+  }
+
+  html body main.page-shell.page-shell-code .public-profile-panel .panel-head {
+    margin-bottom: 14px !important;
+    padding-bottom: 0 !important;
+    border: 0 !important;
+  }
+
+  html body main.page-shell.page-shell-code .public-profile-panel .section-label {
+    font-size: 0.76rem !important;
+    letter-spacing: 0.18em !important;
+    color: #647086 !important;
+  }
+
+  html body main.page-shell.page-shell-code .public-profile-panel h3 {
+    margin-top: 16px !important;
+    font-size: 0.95rem !important;
+    letter-spacing: 0 !important;
+  }
+
+  html body main.page-shell.page-shell-code .approval-status-card.public-profile-summary {
+    padding: 0 !important;
+    border: 0 !important;
+    background: transparent !important;
+  }
+
+  html body main.page-shell.page-shell-code .approved-record-copy {
+    gap: 6px !important;
+  }
+
+  html body main.page-shell.page-shell-code .public-profile-actions {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: 8px !important;
+    margin-top: 16px !important;
+  }
+
+  html body main.page-shell.page-shell-code .public-profile-actions > .secondary-action,
+  html body main.page-shell.page-shell-code .public-profile-actions > .primary-action {
+    min-height: 40px !important;
+    padding: 0.62rem 0.5rem !important;
+    font-size: 0.78rem !important;
+    font-weight: 780 !important;
+  }
+
+  html body main.page-shell.page-shell-code .public-profile-actions > .secondary-action:nth-child(4),
+  html body main.page-shell.page-shell-code .public-profile-actions > .secondary-action:nth-child(5),
+  html body main.page-shell.page-shell-code .public-profile-actions > .primary-action {
+    grid-column: 1 / -1 !important;
   }
 }
