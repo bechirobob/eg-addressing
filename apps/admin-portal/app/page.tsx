@@ -68,7 +68,11 @@ export default function HomePage() {
             <p className="section-label">Staff services</p>
             <h2 id="staff-services-heading">Staff sign-in</h2>
           </div>
-          <a className="button button-secondary" href="/login">Sign in</a>
+          <p className="service-start-secondary-actions public-task-copy">
+            <a className="inline-action-link" href="/operations-runbook">Operations runbook</a>
+            <span aria-hidden="true"> · </span>
+            <a className="inline-action-link" href="/login">Staff sign-in</a>
+          </p>
         </section>
       </section>
     </SiteChrome>
