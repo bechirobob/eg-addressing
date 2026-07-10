@@ -6,7 +6,7 @@ const here = dirname(fileURLToPath(import.meta.url));
 const source = readFileSync(join(here, '../app/operations-runbook/page.tsx'), 'utf8');
 
 const required = [
-  'Benji — BeCoreOps',
+  'BeCore',
   'Pending ministry appointment',
   'Operations Runbook',
   'Internal services remain private',

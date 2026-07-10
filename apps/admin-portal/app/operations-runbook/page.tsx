@@ -5,7 +5,7 @@ export const dynamic = 'force-dynamic';
 const escalationContacts = [
   {
     role: 'Incident owner / first point of contact',
-    name: 'Benji — BeCoreOps',
+    name: 'BeCore',
     status: 'Primary contact for controlled pilot coordination, incident decisions, and ministry-facing handoff.',
   },
   {
@@ -29,7 +29,7 @@ const dailyChecks = [
 
 const incidentSteps = [
   'Pause publication, export, signage, or certificate actions until the issue is understood.',
-  'Notify Benji first, then technical escalation if the issue affects access, privacy, evidence, or uptime.',
+  'Notify BeCore first, then technical escalation if the issue affects access, privacy, evidence, or uptime.',
   'Preserve logs, request references, screenshots, and incident notes before making destructive changes.',
   'Rotate credentials and revoke sessions if account exposure is suspected.',
   'Record the resolution and verification evidence before reopening the pilot workflow.',
