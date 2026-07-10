@@ -21,6 +21,8 @@ assert(reporting.includes('Export report'), 'Reports must provide export report 
 assert(reporting.includes("sessionStatus !== 'ready'"), 'Reports must refresh protected data after cookie-session auth resolves, not only when a bearer token exists.');
 assert(reporting.includes('loadReadiness(token)'), 'Reports must refresh readiness evidence after session resolution.');
 assert(reporting.includes('Readiness gates') && reporting.includes('Recent audit events') && reporting.includes('Governance boundary'), 'Reports must expose readiness gates, recent audit events, and governance boundaries.');
+assert(reporting.includes('auditEntityLabel') && reporting.includes('session: [protected]'), 'Reports must mask protected audit entity identifiers such as session IDs.');
+assert(reporting.includes('formatEvidence'), 'Reports must format readiness evidence instead of rendering raw backend dictionaries.');
 assert(css.includes('.metric-row-list') && css.includes('.report-row-list'), 'Reports must use row-based metric styling.');
 
 console.log('data-command-guard passed');

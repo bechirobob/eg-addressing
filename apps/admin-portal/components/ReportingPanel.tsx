@@ -63,6 +63,26 @@ function readinessStatusLabel(value: string | undefined): string {
   return statusText(value);
 }
 
+function formatEvidence(value: string): string {
+  return value
+    .replaceAll("{'", '')
+    .replaceAll("':", ':')
+    .replaceAll("',", ',')
+    .replaceAll("'}", '')
+    .replaceAll("'", '')
+    .replaceAll('{', '')
+    .replaceAll('}', '')
+    .replaceAll(',', ';')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+function auditEntityLabel(event: { entity_type: string; entity_id: string }): string {
+  if (event.entity_type === 'session') return 'session: [protected]';
+  if (event.entity_id.length > 28) return `${event.entity_type}: ${event.entity_id.slice(0, 12)}…${event.entity_id.slice(-6)}`;
+  return `${event.entity_type}: ${event.entity_id}`;
+}
+
 function rowsFromBreakdown(rows: Array<{ [key: string]: string | number }>, keyName: string) {
   return rows.map((row) => ({ label: statusText(String(row[keyName] ?? 'Unknown')), count: Number(row.count ?? 0) }));
 }
@@ -262,7 +282,7 @@ export function ReportingPanel({ summary: initialSummary, readinessSummary, apiB
                       <tr key={gate.name}>
                         <td>{gate.name}</td>
                         <td>{statusText(gate.status)}</td>
-                        <td>{gate.evidence}</td>
+                        <td>{formatEvidence(gate.evidence)}</td>
                         <td>{gate.next_step}</td>
                       </tr>
                     ))}
@@ -270,7 +290,7 @@ export function ReportingPanel({ summary: initialSummary, readinessSummary, apiB
                 </table>
               </div>
               <ul className="report-row-list mobile-card-list">
-                {readiness.gates.map((gate) => <li key={gate.name}><span>{gate.name} · {gate.evidence}</span><strong>{statusText(gate.status)}</strong></li>)}
+                {readiness.gates.map((gate) => <li key={gate.name}><span>{gate.name} · {formatEvidence(gate.evidence)}</span><strong>{statusText(gate.status)}</strong></li>)}
               </ul>
             </>
           ) : null}
@@ -288,7 +308,7 @@ export function ReportingPanel({ summary: initialSummary, readinessSummary, apiB
                 {readiness.recent_audit_events.map((event, index) => (
                   <tr key={`${event.action}-${event.entity_id}-${index}`}>
                     <td>{statusText(event.action)}</td>
-                    <td>{event.entity_type}: {event.entity_id}</td>
+                    <td>{auditEntityLabel(event)}</td>
                     <td>{event.actor_username ?? 'system'}</td>
                     <td>{event.created_at ? new Date(event.created_at).toLocaleString() : 'not recorded'}</td>
                   </tr>
