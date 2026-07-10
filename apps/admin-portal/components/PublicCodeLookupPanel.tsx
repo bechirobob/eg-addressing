@@ -139,10 +139,10 @@ export function PublicCodeLookupPanel({ apiBaseUrl, code }: PublicCodeLookupPane
             {record ? <p className="public-task-copy">{record.territory_name ?? 'Area pending'} · accuracy {record.accuracy_meters ?? 'not recorded'}m · {approvalLabel(payload.publication_status)}</p> : null}
             {!record ? <p className="public-task-copy">Full address details appear only after official approval.</p> : null}
             <div className="service-start-actions public-code-service-actions" aria-label="Public address profile actions">
-              {mapsLink ? <a className="button button-primary service-start-primary" href={mapsLink} target="_blank" rel="noreferrer">Open map</a> : null}
+              {mapsLink ? <a className="primary-action" href={mapsLink} target="_blank" rel="noreferrer">Open map</a> : null}
               <div className="service-start-secondary-actions">
-                <a className="button button-secondary" href={proofUrl}>Proof / QR</a>
-                <button className="button button-secondary" type="button" onClick={() => copyText(code, 'Address code')}>Copy code</button>
+                <a className="secondary-action" href={proofUrl}>Proof / QR</a>
+                <button className="secondary-action" type="button" onClick={() => copyText(code, 'Address code')}>Copy code</button>
               </div>
             </div>
             <p className="public-task-copy public-code-secondary-links">
