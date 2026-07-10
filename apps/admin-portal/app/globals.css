@@ -14943,8 +14943,12 @@ html body main.page-shell.page-shell-code .approval-status-card.public-profile-s
 html body main.page-shell.page-shell-code .public-profile-summary .status-chip {
   grid-column: 2 !important;
   grid-row: 1 !important;
+  justify-self: end !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  width: fit-content !important;
+  max-width: max-content !important;
   margin: 0 !important;
-  width: auto !important;
   border-radius: 999px !important;
   padding: 0.24rem 0.54rem !important;
   background: var(--gov-green-soft, rgba(37, 99, 58, 0.08)) !important;
@@ -15099,6 +15103,10 @@ html body main.page-shell.page-shell-code .public-profile-disclaimer {
   html body main.page-shell.page-shell-code .approved-record-copy {
     grid-column: 1 !important;
     grid-row: auto !important;
+  }
+
+  html body main.page-shell.page-shell-code .public-profile-summary .status-chip {
+    justify-self: start !important;
   }
 
   html body main.page-shell.page-shell-code .public-profile-actions {
