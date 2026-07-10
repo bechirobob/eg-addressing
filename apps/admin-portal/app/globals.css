@@ -10508,6 +10508,33 @@ button[type="submit"] {
   line-height: 1.2 !important;
 }
 
+.runbook-contact-chain li {
+  align-items: start !important;
+  grid-template-columns: 34px minmax(0, 1fr) !important;
+}
+
+.runbook-contact-chain li strong,
+.runbook-contact-chain li small {
+  grid-column: 2 !important;
+  min-width: 0 !important;
+}
+
+.runbook-contact-chain li strong {
+  color: var(--text-main) !important;
+  font-size: 1rem !important;
+  line-height: 1.25 !important;
+}
+
+.runbook-contact-chain li small {
+  color: var(--text-muted) !important;
+  display: block !important;
+  font-size: 0.9rem !important;
+  font-weight: 600 !important;
+  line-height: 1.45 !important;
+  overflow-wrap: normal !important;
+  word-break: normal !important;
+}
+
 .service-start-staff {
   align-items: center !important;
   border-top: 1px solid var(--border) !important;

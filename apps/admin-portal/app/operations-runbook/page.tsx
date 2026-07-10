@@ -83,7 +83,7 @@ export default function OperationsRunbookPage() {
           </aside>
         </div>
 
-        <section className="service-start-workflow" aria-labelledby="contacts-heading">
+        <section className="service-start-workflow runbook-contact-chain" aria-labelledby="contacts-heading">
           <p className="section-label">Escalation chain</p>
           <h2 id="contacts-heading">Named contacts and decision authority</h2>
           <ol>
