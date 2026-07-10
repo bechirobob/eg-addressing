@@ -4,15 +4,17 @@ set -Eeuo pipefail
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 ENV_FILE="${ENV_FILE:-$ROOT_DIR/.env}"
 COMPOSE_FILE="${COMPOSE_FILE:-$ROOT_DIR/infra/docker/docker-compose.yml}"
-RESTORE_DB="${RESTORE_DRILL_DB:-addressing_restore_drill}"
-REPORT_FILE="${RESTORE_DRILL_REPORT_FILE:-$ROOT_DIR/artifacts/operator-digests/restore_drill_latest.json}"
+BACKUP_DIR="${BACKUP_DIR:-$ROOT_DIR/backups/postgres}"
+RESTORE_DB="${RESTORE_DB:-addressing_restore_drill_$(date -u +%Y%m%d%H%M%S)}"
+REPORT_DIR="${REPORT_DIR:-$ROOT_DIR/artifacts/restore-drills}"
+REPORT_FILE="$REPORT_DIR/restore_drill_$(date -u +%Y%m%dT%H%M%SZ).json"
 
 DOCKER=(docker)
 if ! docker info >/dev/null 2>&1; then
   if sudo -n docker info >/dev/null 2>&1; then
     DOCKER=(sudo -n docker)
   else
-    echo "Docker daemon is not accessible. Use a fresh docker-group shell or passwordless sudo for docker." >&2
+    echo "Docker daemon is not accessible." >&2
     exit 1
   fi
 fi
@@ -33,70 +35,87 @@ LIVE_PROJECT="$("${DOCKER[@]}" inspect -f '{{ index .Config.Labels "com.docker.c
 COMPOSE_PROJECT="${COMPOSE_PROJECT_OVERRIDE:-${LIVE_PROJECT:-${COMPOSE_PROJECT_NAME:-eg_addressing}}}"
 COMPOSE=("${DOCKER[@]}" compose -p "$COMPOSE_PROJECT" --env-file "$ENV_FILE" -f "$COMPOSE_FILE")
 
+mkdir -p "$REPORT_DIR"
+
 cleanup() {
-  "${COMPOSE[@]}" exec -T postgres dropdb -U "$POSTGRES_USER" --if-exists "$RESTORE_DB" >/dev/null 2>&1 || true
+  set +e
+  "${COMPOSE[@]}" exec -T postgres dropdb -U "$POSTGRES_USER" --if-exists "$RESTORE_DB" >/dev/null 2>&1
 }
 trap cleanup EXIT
 
-echo "Creating fresh backup for restore drill..."
-"$ROOT_DIR/infra/scripts/backup_database.sh" >/tmp/eg-addressing-restore-drill-backup.log
-cat /tmp/eg-addressing-restore-drill-backup.log
-BACKUP_FILE="$(readlink -f "$ROOT_DIR/backups/postgres/${POSTGRES_DB}_latest.dump")"
-if [[ ! -s "$BACKUP_FILE" ]]; then
-  echo "Latest backup is missing or empty: $BACKUP_FILE" >&2
+"$ROOT_DIR/infra/scripts/backup_database.sh" >/tmp/eg_restore_backup.log
+BACKUP_PATH="$(awk '/Backup complete:/ {print $3}' /tmp/eg_restore_backup.log | tail -n 1)"
+if [[ -z "$BACKUP_PATH" || ! -s "$BACKUP_PATH" ]]; then
+  echo "Backup did not produce a non-empty dump." >&2
+  cat /tmp/eg_restore_backup.log >&2
+  exit 1
+fi
+BACKUP_BYTES="$(stat -c '%s' "$BACKUP_PATH")"
+BACKUP_SHA256="$(sha256sum "$BACKUP_PATH" | awk '{print $1}')"
+
+# Refuse unsafe target names and live DB names.
+if [[ "$RESTORE_DB" == "$POSTGRES_DB" || ! "$RESTORE_DB" =~ ^[a-zA-Z0-9_]+$ ]]; then
+  echo "Unsafe restore target name: $RESTORE_DB" >&2
   exit 1
 fi
 
-echo "Preparing temporary restore database: $RESTORE_DB"
-cleanup
+"${COMPOSE[@]}" exec -T postgres dropdb -U "$POSTGRES_USER" --if-exists "$RESTORE_DB" >/dev/null
 "${COMPOSE[@]}" exec -T postgres createdb -U "$POSTGRES_USER" "$RESTORE_DB"
+"${COMPOSE[@]}" exec -T postgres pg_restore -U "$POSTGRES_USER" -d "$RESTORE_DB" --no-owner --no-privileges < "$BACKUP_PATH"
 
-echo "Restoring backup into temporary database..."
-"${COMPOSE[@]}" exec -T postgres pg_restore -U "$POSTGRES_USER" -d "$RESTORE_DB" --no-owner --no-privileges < "$BACKUP_FILE"
-
-echo "Verifying restored data counts..."
-COUNTS_FILE="$(mktemp)"
-"${COMPOSE[@]}" exec -T postgres psql -U "$POSTGRES_USER" -d "$RESTORE_DB" -v ON_ERROR_STOP=1 -At -F $'\t' <<'SQL' | tee "$COUNTS_FILE"
-SELECT 'provinces' AS table_name, count(*) AS rows FROM provinces
-UNION ALL SELECT 'territories', count(*) FROM territories
-UNION ALL SELECT 'addresses', count(*) FROM addresses
-UNION ALL SELECT 'citizen_geotag_submissions', count(*) FROM citizen_geotag_submissions
-UNION ALL SELECT 'field_submissions', count(*) FROM field_submissions
-UNION ALL SELECT 'audit_logs', count(*) FROM audit_logs
-ORDER BY table_name;
+COUNTS_JSON="$(${COMPOSE[@]} exec -T postgres psql -U "$POSTGRES_USER" -d "$RESTORE_DB" -At -F $'\t' <<'SQL'
+WITH counts AS (
+  SELECT 'users' AS table_name, COUNT(*)::int AS row_count FROM users
+  UNION ALL SELECT 'territories', COUNT(*)::int FROM territories
+  UNION ALL SELECT 'roads', COUNT(*)::int FROM roads
+  UNION ALL SELECT 'buildings', COUNT(*)::int FROM buildings
+  UNION ALL SELECT 'address_records', COUNT(*)::int FROM address_records
+  UNION ALL SELECT 'field_submissions', COUNT(*)::int FROM field_submissions
+  UNION ALL SELECT 'audit_logs', COUNT(*)::int FROM audit_logs
+)
+SELECT jsonb_object_agg(table_name, row_count)::text FROM counts;
 SQL
+)"
 
-mkdir -p "$(dirname "$REPORT_FILE")"
-BACKUP_BYTES="$(wc -c < "$BACKUP_FILE" | tr -d ' ')"
-BACKUP_SHA256="$(sha256sum "$BACKUP_FILE" | awk '{print $1}')"
-python3 - "$REPORT_FILE" "$BACKUP_FILE" "$BACKUP_BYTES" "$BACKUP_SHA256" "$RESTORE_DB" "$COUNTS_FILE" <<'PY'
+LIVE_COUNTS_JSON="$(${COMPOSE[@]} exec -T postgres psql -U "$POSTGRES_USER" -d "$POSTGRES_DB" -At -F $'\t' <<'SQL'
+WITH counts AS (
+  SELECT 'users' AS table_name, COUNT(*)::int AS row_count FROM users
+  UNION ALL SELECT 'territories', COUNT(*)::int FROM territories
+  UNION ALL SELECT 'roads', COUNT(*)::int FROM roads
+  UNION ALL SELECT 'buildings', COUNT(*)::int FROM buildings
+  UNION ALL SELECT 'address_records', COUNT(*)::int FROM address_records
+  UNION ALL SELECT 'field_submissions', COUNT(*)::int FROM field_submissions
+  UNION ALL SELECT 'audit_logs', COUNT(*)::int FROM audit_logs
+)
+SELECT jsonb_object_agg(table_name, row_count)::text FROM counts;
+SQL
+)"
+
+# Drop now and verify removal before reporting success.
+"${COMPOSE[@]}" exec -T postgres dropdb -U "$POSTGRES_USER" --if-exists "$RESTORE_DB" >/dev/null
+trap - EXIT
+
+REMOVED_STATUS="$(${COMPOSE[@]} exec -T postgres psql -U "$POSTGRES_USER" -d postgres -At -c "SELECT COUNT(*) FROM pg_database WHERE datname = '$RESTORE_DB';")"
+if [[ "$REMOVED_STATUS" != "0" ]]; then
+  echo "Restore target still exists after cleanup: $RESTORE_DB" >&2
+  exit 1
+fi
+
+python3 - <<PY
 import json
-import sys
-from datetime import datetime, timezone
-report_file, backup_file, backup_bytes, backup_sha256, restore_db, counts_file = sys.argv[1:]
-counts = []
-with open(counts_file, 'r', encoding='utf-8') as handle:
-    for line in handle:
-        if not line.strip():
-            continue
-        table_name, rows = line.rstrip('\n').split('\t', 1)
-        counts.append({'table_name': table_name, 'rows': int(rows)})
+from pathlib import Path
 report = {
-    'status': 'passed',
-    'generated_at': datetime.now(timezone.utc).replace(microsecond=0).isoformat().replace('+00:00', 'Z'),
-    'backup_file': backup_file,
-    'backup_bytes': int(backup_bytes),
-    'backup_sha256': backup_sha256,
-    'restore_target': restore_db,
-    'temporary_target_removed': True,
-    'restored_counts': counts,
-    'operator_note': 'Non-destructive restore drill passed against a temporary database; live pilot data was not overwritten.',
+  'status': 'passed',
+  'compose_project': '$COMPOSE_PROJECT',
+  'source_database': '$POSTGRES_DB',
+  'restore_target': '$RESTORE_DB',
+  'backup_path': '$BACKUP_PATH',
+  'backup_bytes': int('$BACKUP_BYTES'),
+  'backup_sha256': '$BACKUP_SHA256',
+  'restored_counts': json.loads('''$COUNTS_JSON'''),
+  'live_counts_at_drill': json.loads('''$LIVE_COUNTS_JSON'''),
+  'restore_target_removed': True,
 }
-with open(report_file, 'w', encoding='utf-8') as handle:
-    json.dump(report, handle, indent=2, sort_keys=True)
-    handle.write('\n')
-print(f"Restore drill report written: {report_file}")
+Path('$REPORT_FILE').write_text(json.dumps(report, indent=2, sort_keys=True) + '\n')
+print(json.dumps(report, indent=2, sort_keys=True))
 PY
-rm -f "$COUNTS_FILE"
-
-echo "Restore drill passed. Temporary database will be dropped: $RESTORE_DB"
