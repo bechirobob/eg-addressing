@@ -13085,10 +13085,10 @@ html body .guided-workflow-strip.guided-workflow-strip .step-chip {
 
   html body main.page-shell .desktop-home-copy,
   html body main.page-shell .desktop-before-start {
-    background: var(--desktop-surface) !important;
-    border: 1px solid var(--desktop-border) !important;
-    border-radius: 12px !important;
-    padding: 24px !important;
+    background: transparent !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    padding: 0 !important;
   }
 
   html body main.page-shell .desktop-home-copy h2 {
@@ -13096,29 +13096,6 @@ html body .guided-workflow-strip.guided-workflow-strip .step-chip {
     font-size: clamp(2rem, 4vw, 3.25rem) !important;
     line-height: 1.05 !important;
     letter-spacing: -0.03em !important;
-  }
-
-  html body main.page-shell .desktop-service-choices {
-    display: grid !important;
-    gap: 16px !important;
-  }
-
-  html body main.page-shell .desktop-service-card-grid {
-    display: grid !important;
-    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
-    gap: 18px !important;
-  }
-
-  html body main.page-shell .desktop-service-card {
-    display: grid !important;
-    gap: 8px !important;
-    min-height: 132px !important;
-    padding: 20px !important;
-    background: var(--desktop-surface) !important;
-    border: 1px solid var(--desktop-border) !important;
-    border-radius: 12px !important;
-    color: var(--desktop-text-main) !important;
-    text-decoration: none !important;
   }
 
   html body main.page-shell .service-start-workflow ol {
