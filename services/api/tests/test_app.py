@@ -2003,6 +2003,13 @@ def test_migration_status_uses_configured_migration_directory(monkeypatch, tmp_p
     assert body['latest_filename'] == '001_schema_migration_baseline.sql'
 
 
+def test_migration_runner_rejects_malformed_filenames_before_sql_execution() -> None:
+    source = Path('../../infra/scripts/run_migrations.sh').read_text()
+    assert 'validate_migration_name()' in source
+    assert "^[0-9]{3}_[A-Za-z0-9_]+\\.sql$" in source
+    assert 'Invalid migration filename' in source
+
+
 def test_addresses_endpoint_returns_pagination_metadata(monkeypatch) -> None:
     rows = [
         {'id': f'addr-{index}', 'formatted': f'Address {index}', 'status': 'active'}

@@ -56,6 +56,15 @@ migration_checksum() {
   sha256sum "$1" | awk '{print $1}'
 }
 
+validate_migration_name() {
+  local name="$1"
+  if [[ ! "$name" =~ ^[0-9]{3}_[A-Za-z0-9_]+\.sql$ ]]; then
+    echo "Invalid migration filename: $name" >&2
+    echo "Expected format: 001_descriptive_name.sql" >&2
+    exit 1
+  fi
+}
+
 already_applied() {
   local version="$1"
   psql_exec -At -c "SELECT checksum FROM schema_migrations WHERE version = '$version'" | tr -d '[:space:]'
@@ -65,6 +74,7 @@ apply_one() {
   local file="$1"
   local name version checksum existing
   name="$(basename "$file")"
+  validate_migration_name "$name"
   version="${name%%_*}"
   checksum="$(migration_checksum "$file")"
   existing="$(already_applied "$version")"
