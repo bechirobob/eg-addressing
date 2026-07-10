@@ -10513,6 +10513,11 @@ button[type="submit"] {
   grid-template-columns: 34px minmax(0, 1fr) !important;
 }
 
+.runbook-contact-chain ol {
+  grid-template-columns: 1fr !important;
+  max-width: 760px !important;
+}
+
 .runbook-contact-chain li strong,
 .runbook-contact-chain li small {
   grid-column: 2 !important;
@@ -14984,4 +14989,17 @@ html body main.page-shell .publication-operations-grid.publication-operations-gr
   .publication-summary-list div:first-child {
     border-block-start: 0 !important;
   }
+}
+
+/* Runbook authority chain must stay readable; do not inherit generic 4-column workflow rails. */
+html body main.page-shell .runbook-contact-chain.runbook-contact-chain ol {
+  display: grid !important;
+  grid-template-columns: 1fr !important;
+  max-width: 760px !important;
+}
+
+html body main.page-shell .runbook-contact-chain.runbook-contact-chain li {
+  display: grid !important;
+  grid-template-columns: 34px minmax(0, 1fr) !important;
+  width: 100% !important;
 }
