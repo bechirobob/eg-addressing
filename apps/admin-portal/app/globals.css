@@ -14763,14 +14763,17 @@ html body .guided-workflow-strip.guided-workflow-strip .step-chip {
 }
 
 /* Permanent desktop workbench contract: operation-heavy admin pages must not inherit cramped 3-column card grids. */
-.desktop-workbench-grid,
-.publication-operations-grid {
+html body main.page-shell .desktop-workbench-grid.desktop-workbench-grid,
+html body main.page-shell .publication-operations-grid.publication-operations-grid {
+  display: grid !important;
   grid-template-columns: 1fr !important;
+  grid-auto-flow: row !important;
   gap: 18px !important;
+  align-items: start !important;
 }
 
-.desktop-workbench-grid > .public-task-panel,
-.publication-operations-grid > .public-task-panel {
+html body main.page-shell .desktop-workbench-grid.desktop-workbench-grid > .public-task-panel,
+html body main.page-shell .publication-operations-grid.publication-operations-grid > .public-task-panel {
   grid-column: 1 / -1 !important;
   width: 100% !important;
   border-radius: 0 !important;

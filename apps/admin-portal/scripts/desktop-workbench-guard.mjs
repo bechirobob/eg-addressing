@@ -46,7 +46,8 @@ for (const item of workbenchFiles) {
 
 const requiredCssMarkers = [
   'Permanent desktop workbench contract',
-  '.desktop-workbench-grid',
+  'html body main.page-shell .desktop-workbench-grid.desktop-workbench-grid',
+  'html body main.page-shell .publication-operations-grid.publication-operations-grid',
   '.publication-operations-grid .publication-release-head',
   '.publication-summary-list',
   'grid-template-columns: 1fr !important;',
