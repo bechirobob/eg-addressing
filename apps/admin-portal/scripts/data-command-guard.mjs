@@ -26,5 +26,6 @@ assert(reporting.includes('formatEvidence'), 'Reports must format readiness evid
 assert(reporting.includes('national-addressing-report-audit.csv') && reporting.includes('Governance boundaries') && reporting.includes('Recent audit events'), 'Report export must include audit/readiness/governance evidence, not only top-line metrics.');
 assert(reporting.includes('/^[=+\\-@\\t\\r]/'), 'Report export must neutralize spreadsheet formula injection prefixes in CSV cells.');
 assert(css.includes('.metric-row-list') && css.includes('.report-row-list'), 'Reports must use row-based metric styling.');
+assert(css.includes('html body main.page-shell .reports-readiness-panel') && css.includes('html body main.page-shell .reports-audit-panel') && css.includes('html body main.page-shell .reports-boundary-panel'), 'Reports readiness, audit, and governance evidence must stay full-width on desktop.');
 
 console.log('data-command-guard passed');

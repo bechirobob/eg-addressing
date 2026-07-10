@@ -13240,6 +13240,12 @@ html body .guided-workflow-strip.guided-workflow-strip .step-chip {
     grid-column: span 6 !important;
   }
 
+  html body main.page-shell .reports-readiness-panel,
+  html body main.page-shell .reports-audit-panel,
+  html body main.page-shell .reports-boundary-panel {
+    grid-column: 1 / -1 !important;
+  }
+
   html body main.page-shell .reports-filter-grid {
     display: flex !important;
     flex-wrap: wrap !important;
