@@ -657,6 +657,25 @@ def test_publish_publication_pack_requires_release_gate(monkeypatch) -> None:
     assert response.json()['detail'] == 'publication release gate is disabled'
 
 
+def test_audit_logs_endpoint_returns_pagination_metadata(monkeypatch) -> None:
+    monkeypatch.setattr(main, 'resolve_user_from_token', lambda token: ADMIN)
+    captured = {}
+
+    def fake_audit_logs_page(entity_type=None, entity_id=None, page=1, per_page=50):
+        captured.update({'entity_type': entity_type, 'entity_id': entity_id, 'page': page, 'per_page': per_page})
+        return {
+            'items': [{'id': 1, 'action': 'login', 'entity_type': 'session'}],
+            'pagination': {'page': page, 'per_page': per_page, 'total_items': 1, 'total_pages': 1, 'has_next': False, 'has_previous': False},
+        }
+
+    monkeypatch.setattr(main, 'list_audit_logs_page', fake_audit_logs_page)
+    response = client.get('/api/v1/audit-logs?page=2&per_page=25&entity_type=session', headers=auth_header())
+
+    assert response.status_code == 200
+    assert captured == {'entity_type': 'session', 'entity_id': None, 'page': 2, 'per_page': 25}
+    assert response.json()['pagination']['per_page'] == 25
+
+
 def test_reporting_summary_returns_totals(monkeypatch) -> None:
     monkeypatch.setattr(main, 'resolve_user_from_token', lambda token: VIEWER)
     monkeypatch.setattr(

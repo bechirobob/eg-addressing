@@ -91,6 +91,7 @@ from app.db import (
     list_citizen_geotag_submissions,
     list_admin_units as list_admin_units_db,
     list_audit_logs,
+    list_audit_logs_page,
     list_field_assignments,
     list_field_submission_evidence_history,
     list_field_submissions,
@@ -1206,10 +1207,10 @@ def archive_territory_endpoint(territory_id: str, authorization: str | None = He
 
 
 @app.get('/api/v1/audit-logs')
-def audit_logs(entity_type: str | None = Query(default=None), entity_id: str | None = Query(default=None), limit: int = Query(default=50, ge=1, le=200), authorization: str | None = Header(default=None)) -> dict[str, list[dict[str, Any]]]:
+def audit_logs(entity_type: str | None = Query(default=None), entity_id: str | None = Query(default=None), page: int = Query(default=1), per_page: int = Query(default=50, ge=1, le=100), authorization: str | None = Header(default=None)) -> dict[str, Any]:
     user = _current_user(authorization)
     _require_role(user, 'admin')
-    return {'items': list_audit_logs(entity_type=entity_type, entity_id=entity_id, limit=limit)}
+    return list_audit_logs_page(entity_type=entity_type, entity_id=entity_id, page=page, per_page=per_page)
 
 
 @app.get('/api/v1/roads')

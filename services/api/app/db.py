@@ -1333,6 +1333,41 @@ def list_audit_logs(entity_type: str | None = None, entity_id: str | None = None
             return list(cursor.fetchall())
 
 
+def list_audit_logs_page(entity_type: str | None = None, entity_id: str | None = None, page: int = 1, per_page: int = 50) -> dict[str, Any]:
+    safe_page = max(1, int(page or 1))
+    safe_per_page = max(1, min(int(per_page or 50), 100))
+    offset = (safe_page - 1) * safe_per_page
+    where_clauses: list[str] = []
+    params: list[Any] = []
+    if entity_type:
+        where_clauses.append('entity_type = %s')
+        params.append(entity_type)
+    if entity_id:
+        where_clauses.append('entity_id = %s')
+        params.append(entity_id)
+    where_sql = f" WHERE {' AND '.join(where_clauses)}" if where_clauses else ''
+    with db_connection() as connection:
+        with connection.cursor() as cursor:
+            cursor.execute('SELECT COUNT(*) AS count FROM audit_logs' + where_sql, params)
+            total_items = int(cursor.fetchone()['count'])
+            cursor.execute(
+                'SELECT id, actor_username, actor_role, action, entity_type, entity_id, details, created_at FROM audit_logs' + where_sql + ' ORDER BY created_at DESC LIMIT %s OFFSET %s',
+                [*params, safe_per_page, offset],
+            )
+            total_pages = max(1, math.ceil(total_items / safe_per_page)) if total_items else 0
+            return {
+                'items': list(cursor.fetchall()),
+                'pagination': {
+                    'page': safe_page,
+                    'per_page': safe_per_page,
+                    'total_items': total_items,
+                    'total_pages': total_pages,
+                    'has_next': safe_page < total_pages,
+                    'has_previous': safe_page > 1 and total_items > 0,
+                },
+            }
+
+
 def _entity_exists(cursor: psycopg.Cursor, table: str, entity_id: str) -> bool:
     cursor.execute(f'SELECT 1 FROM {table} WHERE id = %s', (entity_id,))
     return cursor.fetchone() is not None
