@@ -24,6 +24,13 @@ artifacts/generated/
 artifacts/operator-digests/
 artifacts/qa/
 artifacts/reference-pdfs/
+artifacts/containment-backups/
+artifacts/restore-drills/
+artifacts/manuals/
+artifacts/*.html
+artifacts/*.pdf
+artifacts/*audit*.md
+artifacts/*closeout*.md
 *.tsbuildinfo
 
 # generated media/share artifacts; keep proposal text/PDF docs in git, not videos/audio/frames
