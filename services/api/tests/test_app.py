@@ -2465,6 +2465,16 @@ def test_production_readiness_reports_strict_phase3_auth_ready(monkeypatch) -> N
     assert body['checks']['default_demo_passwords_disabled']['status'] == 'ready'
 
 
+def test_production_readiness_blocks_staging_label_in_production(monkeypatch) -> None:
+    monkeypatch.setenv('APP_ENV', 'production')
+    monkeypatch.setenv('NEXT_PUBLIC_DEPLOYMENT_LABEL', 'STAGING / NOT OFFICIAL PRODUCTION RECORD')
+
+    body = production_readiness_status()
+
+    assert body['checks']['deployment_identity']['status'] == 'needs_work'
+    assert body['status'] == 'needs_work'
+
+
 def test_publish_geotag_submission_requires_admin(monkeypatch) -> None:
     monkeypatch.setattr(main, 'resolve_user_from_token', lambda token: EDITOR)
     response = client.post('/api/v1/geotag-submissions/geo-ready/publish', json={'reviewer_note': 'Approved by institutional release authority.'}, headers=auth_header())

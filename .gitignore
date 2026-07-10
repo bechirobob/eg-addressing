@@ -2,6 +2,9 @@
 .env
 .env.*
 !.env.example
+!env/.env.example
+!env/.env.staging.example
+!env/.env.production.example
 
 # runtime data
 data/
