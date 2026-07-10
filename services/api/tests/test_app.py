@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta, timezone
+import json
 from pathlib import Path
 from typing import Any
 
@@ -1961,6 +1962,30 @@ def test_restore_drill_report_missing_file_has_not_run_status(monkeypatch) -> No
     response = client.get('/api/v1/operator/restore-drill/latest', headers=auth_header())
     assert response.status_code == 200
     assert response.json()['status'] == 'not-run'
+
+
+def test_restore_drill_report_sanitizes_local_backup_paths(monkeypatch, tmp_path) -> None:
+    report = tmp_path / 'restore_drill_latest.json'
+    report.write_text(json.dumps({
+        'status': 'passed',
+        'backup_path': 'private_storage/backups/postgres/addressing_20260710T002016Z.dump',
+        'backup_bytes': 123,
+        'backup_sha256': 'abc123',
+        'restored_counts': {'users': 3},
+    }), encoding='utf-8')
+    monkeypatch.setenv('RESTORE_DRILL_REPORT_PATH', str(report))
+
+    body = main.latest_restore_drill_report()
+
+    assert body['backup_file'] == 'addressing_20260710T002016Z.dump'
+    assert 'backup_path' not in body
+    assert 'private_storage' not in json.dumps(body)
+
+
+def test_restore_drill_script_writes_operator_latest_digest() -> None:
+    source = Path('../../infra/scripts/restore_drill.sh').read_text()
+    assert 'LATEST_REPORT_FILE' in source
+    assert 'artifacts/operator-digests/restore_drill_latest.json' in source
 
 
 def test_operator_migration_status_requires_authenticated_viewer(monkeypatch) -> None:

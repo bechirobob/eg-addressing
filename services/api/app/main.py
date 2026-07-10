@@ -2088,7 +2088,11 @@ def latest_restore_drill_report() -> dict[str, Any]:
         return {'status': 'unreadable', 'operator_note': 'Restore drill proof exists but could not be parsed.'}
     if not isinstance(payload, dict):
         return {'status': 'unreadable', 'operator_note': 'Restore drill proof has an invalid shape.'}
-    return payload
+    sanitized = dict(payload)
+    backup_path = sanitized.pop('backup_path', None)
+    if isinstance(backup_path, str) and backup_path:
+        sanitized.setdefault('backup_file', Path(backup_path).name)
+    return sanitized
 
 
 @app.get('/api/v1/operator/command-center')

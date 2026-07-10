@@ -8,6 +8,7 @@ BACKUP_DIR="${BACKUP_DIR:-$ROOT_DIR/backups/postgres}"
 RESTORE_DB="${RESTORE_DB:-addressing_restore_drill_$(date -u +%Y%m%d%H%M%S)}"
 REPORT_DIR="${REPORT_DIR:-$ROOT_DIR/artifacts/restore-drills}"
 REPORT_FILE="$REPORT_DIR/restore_drill_$(date -u +%Y%m%dT%H%M%SZ).json"
+LATEST_REPORT_FILE="${LATEST_REPORT_FILE:-$ROOT_DIR/artifacts/operator-digests/restore_drill_latest.json}"
 
 DOCKER=(docker)
 if ! docker info >/dev/null 2>&1; then
@@ -35,7 +36,7 @@ LIVE_PROJECT="$("${DOCKER[@]}" inspect -f '{{ index .Config.Labels "com.docker.c
 COMPOSE_PROJECT="${COMPOSE_PROJECT_OVERRIDE:-${LIVE_PROJECT:-${COMPOSE_PROJECT_NAME:-eg_addressing}}}"
 COMPOSE=("${DOCKER[@]}" compose -p "$COMPOSE_PROJECT" --env-file "$ENV_FILE" -f "$COMPOSE_FILE")
 
-mkdir -p "$REPORT_DIR"
+mkdir -p "$REPORT_DIR" "$(dirname "$LATEST_REPORT_FILE")"
 
 cleanup() {
   set +e
@@ -50,6 +51,7 @@ if [[ -z "$BACKUP_PATH" || ! -s "$BACKUP_PATH" ]]; then
   cat /tmp/eg_restore_backup.log >&2
   exit 1
 fi
+BACKUP_FILE="$(basename "$BACKUP_PATH")"
 BACKUP_BYTES="$(stat -c '%s' "$BACKUP_PATH")"
 BACKUP_SHA256="$(sha256sum "$BACKUP_PATH" | awk '{print $1}')"
 
@@ -109,7 +111,7 @@ report = {
   'compose_project': '$COMPOSE_PROJECT',
   'source_database': '$POSTGRES_DB',
   'restore_target': '$RESTORE_DB',
-  'backup_path': '$BACKUP_PATH',
+  'backup_file': '$BACKUP_FILE',
   'backup_bytes': int('$BACKUP_BYTES'),
   'backup_sha256': '$BACKUP_SHA256',
   'restored_counts': json.loads('''$COUNTS_JSON'''),
@@ -117,5 +119,6 @@ report = {
   'restore_target_removed': True,
 }
 Path('$REPORT_FILE').write_text(json.dumps(report, indent=2, sort_keys=True) + '\n')
+Path('$LATEST_REPORT_FILE').write_text(json.dumps(report, indent=2, sort_keys=True) + '\n')
 print(json.dumps(report, indent=2, sort_keys=True))
 PY
