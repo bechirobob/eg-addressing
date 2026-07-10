@@ -18,6 +18,8 @@ assert(registry.includes('Addresses') && registry.includes('Roads') && registry.
 assert(reporting.includes('Reports are read-only'), 'Reports must be read-only.');
 assert(reporting.includes('Province') && reporting.includes('Date from') && reporting.includes('Status'), 'Reports must provide filter controls.');
 assert(reporting.includes('Export report'), 'Reports must provide export report action.');
+assert(reporting.includes("sessionStatus !== 'ready'"), 'Reports must refresh protected data after cookie-session auth resolves, not only when a bearer token exists.');
+assert(reporting.includes('loadReadiness(token)'), 'Reports must refresh readiness evidence after session resolution.');
 assert(css.includes('.metric-row-list') && css.includes('.report-row-list'), 'Reports must use row-based metric styling.');
 
 console.log('data-command-guard passed');

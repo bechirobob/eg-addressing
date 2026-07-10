@@ -64,6 +64,7 @@ export function ReportingPanel({ summary: initialSummary, readinessSummary, apiB
   const browserApiBaseUrl = resolveBrowserApiBaseUrl(apiBaseUrl);
   const { token, sessionStatus } = useStoredSession(browserApiBaseUrl);
   const [summary, setSummary] = useState(initialSummary);
+  const [readiness, setReadiness] = useState(readinessSummary ?? null);
   const [province, setProvince] = useState('');
   const [territory, setTerritory] = useState('');
   const [status, setStatus] = useState('');
@@ -80,7 +81,7 @@ export function ReportingPanel({ summary: initialSummary, readinessSummary, apiB
   const pendingReviewCount = reviewRows
     .filter((row) => ['Submitted', 'Under Review', 'Needs Field Check', 'Evidence Received'].includes(row.label))
     .reduce((total, row) => total + row.count, 0);
-  const blockedPublicationCount = readinessSummary?.gates.filter((gate) => gate.status !== 'passed').length ?? publicationRows
+  const blockedPublicationCount = readiness?.gates.filter((gate) => gate.status !== 'passed').length ?? publicationRows
     .filter((row) => !['Published', 'Public'].includes(row.label))
     .reduce((total, row) => total + row.count, 0);
   const fieldQueueCount = summary.totals.geotag_queue ?? fieldRows
@@ -99,11 +100,16 @@ export function ReportingPanel({ summary: initialSummary, readinessSummary, apiB
     setSummary(payload);
   }
 
+  async function loadReadiness(currentToken: string | null) {
+    const payload = await apiJson<PilotReadinessSummary>(apiUrl(browserApiBaseUrl, '/api/v1/pilot-readiness/summary'), { token: currentToken ?? undefined });
+    setReadiness(payload);
+  }
+
   useEffect(() => {
-    if (!token) return;
-    void loadSummary(token).catch(() => setError('Reports unavailable. Sign in to view reporting data.'));
+    if (sessionStatus !== 'ready') return;
+    void Promise.all([loadSummary(token), loadReadiness(token)]).catch(() => setError('Reports unavailable. Sign in to view reporting data.'));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [browserApiBaseUrl, token]);
+  }, [browserApiBaseUrl, sessionStatus, token]);
 
   async function handleApplyFilters() {
     setIsRefreshing(true);
@@ -231,10 +237,10 @@ export function ReportingPanel({ summary: initialSummary, readinessSummary, apiB
         <ul className="report-row-list mobile-card-list">{correctionRows.map((row) => <li key={row.label}><span>{row.label}</span><strong>{row.count}</strong></li>)}</ul>
       </article>
 
-      {readinessSummary || readinessSummary === null ? (
+      {readiness || readiness === null ? (
         <article className="public-task-panel reports-section-panel">
-          <div className="panel-head"><p className="section-label">Publication readiness</p><h3>{readinessSummary ? statusText(readinessSummary.readiness_status) : 'Readiness unavailable'}</h3></div>
-          {readinessSummary ? <p className="institutional-note">{readinessSummary.passed_gates}/{readinessSummary.total_gates} checks passed. Publication and signage remain controlled until approval.</p> : null}
+          <div className="panel-head"><p className="section-label">Publication readiness</p><h3>{readiness ? statusText(readiness.readiness_status) : 'Readiness unavailable'}</h3></div>
+          {readiness ? <p className="institutional-note">{readiness.passed_gates}/{readiness.total_gates} checks passed. Publication and signage remain controlled until approval.</p> : null}
         </article>
       ) : null}
     </section>
