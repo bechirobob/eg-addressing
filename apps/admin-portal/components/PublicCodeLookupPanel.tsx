@@ -43,12 +43,6 @@ function statusCopy(payload: PublicCodeLookup | null) {
   return 'Valid code, no approved record yet';
 }
 
-function statusClass(payload: PublicCodeLookup | null) {
-  if (!payload || !payload.is_valid) return 'danger';
-  if (payload.publication_status === 'published') return 'ok';
-  return 'warn';
-}
-
 function approvalLabel(status: PublicCodeLookup['publication_status']) {
   if (status === 'published') return 'Published';
   if (status === 'internal_registry') return 'Internal case file ready';
@@ -141,30 +135,29 @@ export function PublicCodeLookupPanel({ apiBaseUrl, code }: PublicCodeLookupPane
         {isLoading ? <p className="panel-state">Checking address code…</p> : null}
         {error ? <p className="form-notice error">{error}</p> : null}
         {payload ? (
-          <div className="approval-status-card public-profile-summary">
-            <span className={`status-chip ${statusClass(payload)}`}>{approvalLabel(payload.publication_status)}</span>
-            <h4>{statusCopy(payload)}</h4>
-            {record ? (
-              <div className="approved-record-copy">
-                <p>{record.address_label}</p>
-                <p>{record.territory_name ?? 'Area pending'} · accuracy {record.accuracy_meters ?? 'not recorded'}m</p>
-              </div>
-            ) : (
-              <p>This code can be checked, but full address details appear only after official approval.</p>
-            )}
-          </div>
+          <>
+            <ul className="stack-list public-profile-record-list">
+              <li><span>Publication state</span><strong>{approvalLabel(payload.publication_status)}</strong></li>
+              <li><span>Registry result</span><strong>{statusCopy(payload)}</strong></li>
+              {record ? <li><span>Address</span><strong>{record.address_label}</strong></li> : null}
+              {record ? <li><span>Area</span><strong>{record.territory_name ?? 'Area pending'} · accuracy {record.accuracy_meters ?? 'not recorded'}m</strong></li> : null}
+              {!record ? <li><span>Public details</span><strong>Appear only after official approval</strong></li> : null}
+            </ul>
+            <div className="territory-form-actions public-profile-actions" aria-label="Public address profile actions">
+              {mapsLink ? <a className="primary-action" href={mapsLink} target="_blank" rel="noreferrer">Open map</a> : null}
+              <a className="secondary-action" href={proofUrl}>Proof / QR</a>
+              <button className="secondary-action" type="button" onClick={() => copyText(code, 'Address code')}>Copy code</button>
+            </div>
+            <p className="public-task-copy public-profile-secondary-links">
+              <button className="inline-action-link" type="button" onClick={shareProfile} disabled={!profileUrl}>Share link</button>
+              <span aria-hidden="true"> · </span>
+              <button className="inline-action-link" type="button" onClick={() => window.print()}>Print profile</button>
+              <span aria-hidden="true"> · </span>
+              <a className="inline-action-link" href={correctionUrl}>Report correction</a>
+            </p>
+          </>
         ) : null}
 
-        <div className="public-profile-actions" aria-label="Public address profile actions">
-          {mapsLink ? <a className="primary-action" href={mapsLink} target="_blank" rel="noreferrer">Open map</a> : null}
-          <a className="secondary-action" href={proofUrl}>Proof / QR</a>
-          <button className="secondary-action" type="button" onClick={() => copyText(code, 'Address code')}>Copy code</button>
-        </div>
-        <div className="public-profile-utility-row" aria-label="Additional profile actions">
-          <button type="button" onClick={shareProfile} disabled={!profileUrl}>Share link</button>
-          <button type="button" onClick={() => window.print()}>Print profile</button>
-          <a href={correctionUrl}>Report correction</a>
-        </div>
         {copyNotice ? <p className="form-notice success" role="status">{copyNotice}</p> : null}
         <p className="institutional-note public-profile-disclaimer">
           This page confirms public address-code status only. It is not proof of ownership, private title, or a property-rights certificate.
