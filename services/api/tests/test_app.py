@@ -6,6 +6,7 @@ from fastapi.testclient import TestClient
 
 import app.db as db
 import app.main as main
+from app.security_posture import production_readiness_status
 from app.main import app
 
 client = TestClient(app)
@@ -1969,6 +1970,8 @@ def test_api_responses_include_security_headers() -> None:
 
 def test_production_readiness_endpoint_is_auth_protected_and_honest(monkeypatch) -> None:
     monkeypatch.setattr(main, 'resolve_user_from_token', lambda token: VIEWER)
+    monkeypatch.setenv('SESSION_COOKIE_MODE', 'bearer-local-storage')
+    monkeypatch.setenv('ALLOW_DEFAULT_DEMO_PASSWORDS', 'true')
 
     unauthenticated = client.get('/api/v1/operator/production-readiness')
     assert unauthenticated.status_code == 401
@@ -2337,3 +2340,13 @@ def test_admin_smoke_uses_environment_supplied_credentials() -> None:
     assert 'SMOKE_ADMIN_PASSWORD' in source
     assert "password: 'admin123'" not in source
     assert "username: 'admin'" not in source
+
+
+def test_production_readiness_reports_strict_phase3_auth_ready(monkeypatch) -> None:
+    monkeypatch.setenv('SESSION_COOKIE_MODE', 'secure-http-only-cookie')
+    monkeypatch.setenv('ALLOW_DEFAULT_DEMO_PASSWORDS', 'false')
+
+    body = production_readiness_status()
+
+    assert body['checks']['secure_cookie_sessions']['status'] == 'ready'
+    assert body['checks']['default_demo_passwords_disabled']['status'] == 'ready'
