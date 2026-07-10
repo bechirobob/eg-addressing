@@ -79,7 +79,7 @@ function formatEvidence(value: string): string {
 
 function auditEntityLabel(event: { entity_type: string; entity_id: string }): string {
   if (event.entity_type === 'session') return 'session: [protected]';
-  if (event.entity_id.length > 28) return `${event.entity_type}: ${event.entity_id.slice(0, 12)}…${event.entity_id.slice(-6)}`;
+  if (event.entity_id.length > 28) return `${event.entity_type}: [protected-id]`;
   return `${event.entity_type}: ${event.entity_id}`;
 }
 
@@ -91,6 +91,16 @@ function csvCell(value: string | number | null | undefined): string {
   const text = String(value ?? '');
   const safeText = /^[=+\-@\t\r]/.test(text) ? `'${text}` : text;
   return `"${safeText.replaceAll('"', '""')}"`;
+}
+
+function safeIsoDate(value: string | null | undefined): string {
+  if (!value) return 'not recorded';
+  const parsed = new Date(value);
+  return Number.isNaN(parsed.getTime()) ? 'not recorded' : parsed.toISOString();
+}
+
+function filterDisplayValue(value: string | null | undefined, fallback: string): string {
+  return value && value.trim() ? value : fallback;
 }
 
 export function ReportingPanel({ summary: initialSummary, readinessSummary, apiBaseUrl }: ReportingPanelProps) {
@@ -148,7 +158,7 @@ export function ReportingPanel({ summary: initialSummary, readinessSummary, apiB
     setIsRefreshing(true);
     setError(null);
     try {
-      await loadSummary(token ?? null);
+      await Promise.all([loadSummary(token ?? null), loadReadiness(token ?? null)]);
     } catch {
       setError('Unable to refresh report data.');
     } finally {
@@ -158,12 +168,13 @@ export function ReportingPanel({ summary: initialSummary, readinessSummary, apiB
 
   function handleExportReport() {
     const generatedAt = new Date().toISOString();
+    const appliedFilters = summary.filters ?? {};
     const filterRows = [
-      ['Province', province || 'All provinces'],
-      ['Territory', territory.trim() || 'All territories'],
-      ['Status', status || 'All statuses'],
-      ['Date from', dateFrom || 'Not set'],
-      ['Date to', dateTo || 'Not set'],
+      ['Province', filterDisplayValue(appliedFilters.province, 'All provinces')],
+      ['Territory', filterDisplayValue(appliedFilters.territory, 'All territories')],
+      ['Status', filterDisplayValue(appliedFilters.status ? statusText(appliedFilters.status) : null, 'All statuses')],
+      ['Date from', filterDisplayValue(appliedFilters.date_from, 'Not set')],
+      ['Date to', filterDisplayValue(appliedFilters.date_to, 'Not set')],
     ];
     const metricRows = [
       ['Active territories', summary.totals.territories],
@@ -226,7 +237,7 @@ export function ReportingPanel({ summary: initialSummary, readinessSummary, apiB
             statusText(event.action),
             auditEntityLabel(event),
             event.actor_username ?? 'system',
-            event.created_at ? new Date(event.created_at).toISOString() : 'not recorded',
+            safeIsoDate(event.created_at),
           ]),
         );
       }
