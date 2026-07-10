@@ -2312,6 +2312,46 @@ body {
   background: linear-gradient(90deg, var(--civic-blue) 0 18%, var(--eg-green) 18% 47%, #fff 47% 73%, var(--eg-red) 73% 100%);
 }
 
+.staging-notice {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin: 0 -18px;
+  padding: 10px 18px;
+  border-bottom: 1px solid rgba(151, 88, 18, 0.28);
+  background: #fff3d1;
+  color: #5f3907;
+  font-size: 0.82rem;
+  line-height: 1.35;
+  text-align: center;
+}
+
+.staging-notice strong {
+  color: #3b2506;
+  font-size: 0.76rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.staging-notice span {
+  max-width: 760px;
+}
+
+@media (max-width: 680px) {
+  .staging-notice {
+    display: grid;
+    gap: 5px;
+    padding: 9px 14px;
+    font-size: 0.74rem;
+  }
+
+  .staging-notice strong {
+    white-space: normal;
+  }
+}
+
 .top-utility-bar {
   position: absolute;
   right: max(18px, calc((100vw - 1120px) / 2 + 18px));

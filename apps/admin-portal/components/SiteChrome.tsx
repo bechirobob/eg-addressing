@@ -58,10 +58,19 @@ type SiteChromeProps = {
 
 export function SiteChrome({ title, subtitle, eyebrow, titleKey, subtitleKey, eyebrowKey, apiBaseUrl, skipSessionLookup = false, children }: SiteChromeProps) {
   const serviceMeta = serviceMetaForTitle(title);
+  const deploymentLabel = process.env.NEXT_PUBLIC_DEPLOYMENT_LABEL || 'Controlled staging';
+  const showStagingNotice = process.env.NEXT_PUBLIC_APP_ENV !== 'production';
+
   return (
     <main className={`page-shell page-shell-${serviceMeta.key}`}>
       <a className="skip-link" href="#main-content">Skip to main content</a>
       <div className="flag-ribbon" aria-hidden="true" />
+      {showStagingNotice ? (
+        <aside className="staging-notice" aria-label="Staging environment notice">
+          <strong>STAGING / NOT AN OFFICIAL PRODUCTION RECORD</strong>
+          <span>{deploymentLabel}. This environment is for controlled pilot review; public records here are not final government publication.</span>
+        </aside>
+      ) : null}
       <header className="masthead masthead-reference" aria-label="National platform identity">
         <div className="masthead-topline">
           <div className="official-lockup">

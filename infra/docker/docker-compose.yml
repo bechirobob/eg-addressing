@@ -82,7 +82,7 @@ services:
       args:
         NEXT_PUBLIC_API_BASE_URL: ${NEXT_PUBLIC_API_BASE_URL:-}
         NEXT_PUBLIC_APP_ENV: ${APP_ENV:-staging}
-        NEXT_PUBLIC_DEPLOYMENT_LABEL: ${NEXT_PUBLIC_DEPLOYMENT_LABEL:-Controlled staging}
+        NEXT_PUBLIC_DEPLOYMENT_LABEL: ${NEXT_PUBLIC_DEPLOYMENT_LABEL:-STAGING / NOT OFFICIAL PRODUCTION RECORD}
     container_name: eg-addressing-admin
     restart: unless-stopped
     env_file:
