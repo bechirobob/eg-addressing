@@ -129,7 +129,8 @@ export function PublicCodeLookupPanel({ apiBaseUrl, code }: PublicCodeLookupPane
     <section className="service-start-page public-code-service-page" aria-labelledby="public-code-profile-heading">
       <div className="desktop-home-copy public-code-profile-copy">
         <p className="section-label">Public address profile</p>
-        <h2 id="public-code-profile-heading">{code}</h2>
+        <h2 id="public-code-profile-heading">Address profile</h2>
+        <p className="public-task-copy public-code-value"><strong>Address code</strong><span>{code}</span></p>
         {isLoading ? <p className="public-task-copy">Checking address code…</p> : null}
         {error ? <p className="form-notice error">{error}</p> : null}
         {payload ? (
