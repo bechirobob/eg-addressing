@@ -29,6 +29,12 @@ assert(/if \(role === 'admin'\) return '\/field';/.test(siteData), 'admin defaul
 assert(/if \(role === 'editor'\) return '\/registry';/.test(siteData), 'editor default route must remain /registry');
 assert(/if \(role === 'viewer' \|\| role === 'agency_viewer'\) return '\/reports';/.test(siteData), 'viewer and agency viewer default routes must land on reports');
 assert(/return '\/';/.test(siteData), 'guest default route must return to the public service start page');
+assert(/const PUBLIC_PREFIXES = \['\/code\/', '\/proof\/'\];/.test(siteData), 'public dynamic code/proof routes must be explicitly whitelisted');
+assert(/const PROTECTED_PREFIXES = \['\/reports', '\/exports', '\/registry', '\/verify', '\/field', '\/signage', '\/records', '\/territories'\];/.test(siteData), 'staff route prefixes must be deny-by-default governed');
+assert(/normalized\.startsWith\(`\$\{prefix\}\/`\)/.test(siteData), 'nested staff routes must inherit base route permissions');
+assert(/return Boolean\(baseRule\?\.allowedRoles\.includes\(role\)\);/.test(siteData), 'unknown nested staff routes must not default open');
+assert(/routeNeedsResolvedSession\(pathname: string\)/.test(siteData) && /return Boolean\(baseRule && !baseRule\.allowedRoles\.includes\('guest'\)\);/.test(siteData), 'nested staff routes must wait for session resolution');
+
 assert(/\{ path: '\/reports', allowedRoles: \['viewer', 'editor', 'admin', 'agency_viewer'\] \}/.test(siteData), 'reports route must allow read-only agency reviewers');
 assert(/\{ path: '\/exports', allowedRoles: \['admin'\] \}/.test(siteData), 'exports route must stay admin-only');
 assert(/\{ path: '\/verify', allowedRoles: \['editor', 'admin'\] \}/.test(siteData), 'verify route must stay editor\/admin only');

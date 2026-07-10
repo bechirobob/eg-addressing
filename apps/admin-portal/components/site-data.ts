@@ -129,6 +129,15 @@ const routeRules: RouteRule[] = [
   { path: '/signage', allowedRoles: ['editor', 'admin'] },
 ];
 
+const PUBLIC_PREFIXES = ['/code/', '/proof/'];
+const PROTECTED_PREFIXES = ['/reports', '/exports', '/registry', '/verify', '/field', '/signage', '/records', '/territories'];
+
+function normalizePathname(pathname: string): string {
+  const [withoutQuery] = pathname.split(/[?#]/, 1);
+  if (withoutQuery.length > 1 && withoutQuery.endsWith('/')) return withoutQuery.slice(0, -1);
+  return withoutQuery || '/';
+}
+
 export function defaultRouteForRole(role: OperatorRole): string {
   if (role === 'admin') return '/field';
   if (role === 'editor') return '/registry';
@@ -137,17 +146,32 @@ export function defaultRouteForRole(role: OperatorRole): string {
 }
 
 export function isRouteAccessible(pathname: string, role: OperatorRole): boolean {
-  const rule = routeRules.find((item) => item.path === pathname || pathname.startsWith('/code/'));
-  if (!rule) {
+  const normalized = normalizePathname(pathname);
+  const rule = routeRules.find((item) => item.path === normalized);
+  if (rule) {
+    return rule.allowedRoles.includes(role);
+  }
+  if (PUBLIC_PREFIXES.some((prefix) => normalized.startsWith(prefix))) {
     return true;
   }
-  return rule.allowedRoles.includes(role);
+  const protectedPrefix = PROTECTED_PREFIXES.find((prefix) => normalized === prefix || normalized.startsWith(`${prefix}/`));
+  if (protectedPrefix) {
+    const baseRule = routeRules.find((item) => item.path === protectedPrefix);
+    return Boolean(baseRule?.allowedRoles.includes(role));
+  }
+  return true;
 }
 
 export function routeNeedsResolvedSession(pathname: string): boolean {
-  const rule = routeRules.find((item) => item.path === pathname);
-  if (!rule) {
+  const normalized = normalizePathname(pathname);
+  const rule = routeRules.find((item) => item.path === normalized);
+  if (rule) {
+    return !rule.allowedRoles.includes('guest');
+  }
+  const protectedPrefix = PROTECTED_PREFIXES.find((prefix) => normalized === prefix || normalized.startsWith(`${prefix}/`));
+  if (!protectedPrefix) {
     return false;
   }
-  return !rule.allowedRoles.includes('guest');
+  const baseRule = routeRules.find((item) => item.path === protectedPrefix);
+  return Boolean(baseRule && !baseRule.allowedRoles.includes('guest'));
 }
