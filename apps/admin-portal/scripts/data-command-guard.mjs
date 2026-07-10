@@ -20,6 +20,7 @@ assert(reporting.includes('Province') && reporting.includes('Date from') && repo
 assert(reporting.includes('Export report'), 'Reports must provide export report action.');
 assert(reporting.includes("sessionStatus !== 'ready'"), 'Reports must refresh protected data after cookie-session auth resolves, not only when a bearer token exists.');
 assert(reporting.includes('loadReadiness(token)'), 'Reports must refresh readiness evidence after session resolution.');
+assert(reporting.includes('Readiness gates') && reporting.includes('Recent audit events') && reporting.includes('Governance boundary'), 'Reports must expose readiness gates, recent audit events, and governance boundaries.');
 assert(css.includes('.metric-row-list') && css.includes('.report-row-list'), 'Reports must use row-based metric styling.');
 
 console.log('data-command-guard passed');

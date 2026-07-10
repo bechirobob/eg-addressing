@@ -36,6 +36,7 @@ type PilotReadinessSummary = {
   passed_gates: number;
   total_gates: number;
   gates: Array<{ name: string; status: string; evidence: string; next_step: string }>;
+  recent_audit_events?: Array<{ action: string; entity_type: string; entity_id: string; actor_username?: string | null; created_at?: string | null }>;
   boundaries: string[];
 };
 
@@ -54,6 +55,12 @@ function apiUrl(baseUrl: string, path: Parameters<typeof apiPath>[0]): string {
 function statusText(value: string | undefined): string {
   if (!value) return 'Unknown';
   return value.replaceAll('-', ' ').replace(/\b\w/g, (char) => char.toUpperCase());
+}
+
+function readinessStatusLabel(value: string | undefined): string {
+  if (value === 'pilot-ready') return 'Ready for controlled review';
+  if (value === 'pilot-prep') return 'Preparation required';
+  return statusText(value);
 }
 
 function rowsFromBreakdown(rows: Array<{ [key: string]: string | number }>, keyName: string) {
@@ -238,9 +245,69 @@ export function ReportingPanel({ summary: initialSummary, readinessSummary, apiB
       </article>
 
       {readiness || readiness === null ? (
-        <article className="public-task-panel reports-section-panel">
-          <div className="panel-head"><p className="section-label">Publication readiness</p><h3>{readiness ? statusText(readiness.readiness_status) : 'Readiness unavailable'}</h3></div>
-          {readiness ? <p className="institutional-note">{readiness.passed_gates}/{readiness.total_gates} checks passed. Publication and signage remain controlled until approval.</p> : null}
+        <article className="public-task-panel reports-section-panel reports-readiness-panel">
+          <div className="panel-head">
+            <p className="section-label">Publication readiness</p>
+            <h3>{readiness ? readinessStatusLabel(readiness.readiness_status) : 'Readiness unavailable'}</h3>
+          </div>
+          {readiness ? (
+            <>
+              <p className="institutional-note">{readiness.passed_gates}/{readiness.total_gates} checks passed. Publication and signage remain controlled until approval.</p>
+              <div className="table-wrap desktop-table-wrap report-table-wrap">
+                <table className="data-table desktop-data-table">
+                  <caption>Readiness gates</caption>
+                  <thead><tr><th scope="col">Gate</th><th scope="col">Status</th><th scope="col">Evidence</th><th scope="col">Next step</th></tr></thead>
+                  <tbody>
+                    {readiness.gates.map((gate) => (
+                      <tr key={gate.name}>
+                        <td>{gate.name}</td>
+                        <td>{statusText(gate.status)}</td>
+                        <td>{gate.evidence}</td>
+                        <td>{gate.next_step}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+              <ul className="report-row-list mobile-card-list">
+                {readiness.gates.map((gate) => <li key={gate.name}><span>{gate.name} · {gate.evidence}</span><strong>{statusText(gate.status)}</strong></li>)}
+              </ul>
+            </>
+          ) : null}
+        </article>
+      ) : null}
+
+      {readiness?.recent_audit_events?.length ? (
+        <article className="public-task-panel reports-section-panel reports-audit-panel">
+          <div className="panel-head"><p className="section-label">Audit trail</p><h3>Recent accountability events</h3></div>
+          <div className="table-wrap desktop-table-wrap report-table-wrap">
+            <table className="data-table desktop-data-table">
+              <caption>Recent audit events</caption>
+              <thead><tr><th scope="col">Action</th><th scope="col">Entity</th><th scope="col">Actor</th><th scope="col">Time</th></tr></thead>
+              <tbody>
+                {readiness.recent_audit_events.map((event, index) => (
+                  <tr key={`${event.action}-${event.entity_id}-${index}`}>
+                    <td>{statusText(event.action)}</td>
+                    <td>{event.entity_type}: {event.entity_id}</td>
+                    <td>{event.actor_username ?? 'system'}</td>
+                    <td>{event.created_at ? new Date(event.created_at).toLocaleString() : 'not recorded'}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <ul className="report-row-list mobile-card-list">
+            {readiness.recent_audit_events.map((event, index) => <li key={`${event.action}-${event.entity_id}-mobile-${index}`}><span>{statusText(event.action)} · {event.entity_type}</span><strong>{event.actor_username ?? 'system'}</strong></li>)}
+          </ul>
+        </article>
+      ) : null}
+
+      {readiness?.boundaries?.length ? (
+        <article className="public-task-panel reports-section-panel reports-boundary-panel">
+          <div className="panel-head"><p className="section-label">Governance boundary</p><h3>What this report does not approve</h3></div>
+          <ul className="mini-list">
+            {readiness.boundaries.map((boundary) => <li key={boundary}><strong>Boundary</strong><span>{boundary}</span></li>)}
+          </ul>
         </article>
       ) : null}
     </section>

@@ -9636,7 +9636,10 @@ details.review-secondary-actions[open] > summary {
 
   .reports-intro-panel,
   .reports-filter-panel,
-  .reports-summary-panel {
+  .reports-summary-panel,
+  .reports-readiness-panel,
+  .reports-audit-panel,
+  .reports-boundary-panel {
     grid-column: 1 / -1;
   }
 }
