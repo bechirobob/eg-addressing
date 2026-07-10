@@ -5,12 +5,14 @@ on:
     branches: [main]
     paths:
       - 'apps/admin-portal/**'
+      - 'services/api/**'
       - 'infra/docker/**'
       - '.github/workflows/frontend-ci.yml'
   pull_request:
     branches: [main]
     paths:
       - 'apps/admin-portal/**'
+      - 'services/api/**'
       - 'infra/docker/**'
       - '.github/workflows/frontend-ci.yml'
 
@@ -32,8 +34,24 @@ jobs:
           cache: npm
           cache-dependency-path: apps/admin-portal/package-lock.json
 
+      - name: Setup Python for API contract generation
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
       - name: Install dependencies
         run: npm ci
+
+      - name: Install API dependencies for OpenAPI generation
+        run: |
+          python -m venv services/api/.venv
+          services/api/.venv/bin/python -m pip install -r services/api/requirements.txt
+        working-directory: .
+
+      - name: Verify generated API types are current
+        run: |
+          npm run generate:api-types
+          git diff --exit-code components/apiTypes.ts
 
       - name: Run frontend CI checks
         run: npm run test:ci

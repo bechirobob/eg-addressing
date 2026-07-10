@@ -14,7 +14,7 @@
     "test:official-geometry": "node scripts/official-geometry-guard.mjs",
     "test:spanish-leaks": "node scripts/spanish-leak-guard.mjs",
     "test:a11y-controls": "node scripts/accessibility-control-guard.mjs",
-    "test:ci": "npm run build && npm run test:role-auth",
+    "test:ci": "npm run build && npm run test:role-auth && npm run test:registry-actions && npm run test:api-types",
     "test": "npm run test:copy && npm run test:role-auth && npm run test:registry-actions && npm run test:verification-queue && npm run test:official-geometry && npm run test:spanish-leaks && npm run test:a11y-controls && npm run test:api-types && npm run test:data-command && npm run test:smoke",
     "test:design-system": "node scripts/design-system-freeze-guard.mjs",
     "test:quality": "npm run test:spanish-leaks && npm run test:a11y-controls && npm run test:official-geometry && npm run test:api-types && npm run test:data-command && npm run test:density && npm run test:field-desktop && npm run test:verify-desktop && npm run test:desktop-workbench && npm run test:login-desktop && npm run test:design-system && npm run test:public-proof && npm run test:operations-runbook",

@@ -5,12 +5,16 @@ on:
     branches: [main]
     paths:
       - 'services/api/**'
+      - 'infra/migrations/**'
+      - 'infra/scripts/**'
       - 'infra/docker/**'
       - '.github/workflows/api-ci.yml'
   pull_request:
     branches: [main]
     paths:
       - 'services/api/**'
+      - 'infra/migrations/**'
+      - 'infra/scripts/**'
       - 'infra/docker/**'
       - '.github/workflows/api-ci.yml'
 
