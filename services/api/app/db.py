@@ -1001,14 +1001,15 @@ def init_db() -> None:
 
 
 def authenticate_user_session(username: str, password: str) -> dict[str, Any]:
-    if default_demo_password_rejected(username, password):
+    normalized_username = username.strip().lower()
+    if default_demo_password_rejected(normalized_username, password):
         raise AuthenticationError('default demo password disabled')
     expires_at = datetime.now(timezone.utc) + timedelta(hours=SESSION_TTL_HOURS)
     with db_connection() as connection:
         with connection.cursor() as cursor:
             cursor.execute(
                 'SELECT id, username, full_name, role, password_hash, is_active FROM users WHERE username = %s',
-                (username,),
+                (normalized_username,),
             )
             user = cursor.fetchone()
             if not user or not user['is_active']:
@@ -1019,7 +1020,7 @@ def authenticate_user_session(username: str, password: str) -> dict[str, Any]:
             token = secrets.token_urlsafe(24)
             cursor.execute('DELETE FROM auth_tokens WHERE user_id = %s AND (revoked_at IS NOT NULL OR expires_at <= NOW())', (user['id'],))
             cursor.execute('INSERT INTO auth_tokens (token, user_id, expires_at, last_seen_at) VALUES (%s, %s, %s, NOW())', (token, user['id'], expires_at))
-            _log_action(cursor, actor=user, action='login', entity_type='session', entity_id=token, details={'username': username, 'expires_at': expires_at.isoformat()})
+            _log_action(cursor, actor=user, action='login', entity_type='session', entity_id=token, details={'username': normalized_username, 'expires_at': expires_at.isoformat()})
         connection.commit()
 
     return {
@@ -1078,6 +1079,19 @@ def _validate_staff_role(role: str) -> None:
         raise InvalidUserRoleError('invalid staff role')
 
 
+def _staff_roles_param() -> list[str]:
+    return sorted(STAFF_USER_ROLES)
+
+
+def _active_admin_count(cursor: Any, exclude_user_id: str | None = None) -> int:
+    if exclude_user_id:
+        cursor.execute("SELECT COUNT(*)::int AS count FROM users WHERE role = 'admin' AND is_active = TRUE AND id <> %s", (exclude_user_id,))
+    else:
+        cursor.execute("SELECT COUNT(*)::int AS count FROM users WHERE role = 'admin' AND is_active = TRUE")
+    row = cursor.fetchone()
+    return int((row or {}).get('count') or 0)
+
+
 def _project_staff_user(row: dict[str, Any]) -> dict[str, Any]:
     return {
         'id': row['id'],
@@ -1099,9 +1113,11 @@ def list_staff_users() -> list[dict[str, Any]]:
                        COUNT(t.token) FILTER (WHERE t.revoked_at IS NULL AND t.expires_at > NOW())::int AS active_sessions
                 FROM users u
                 LEFT JOIN auth_tokens t ON t.user_id = u.id
+                WHERE u.role = ANY(%s)
                 GROUP BY u.id, u.username, u.full_name, u.role, u.is_active, u.created_at
                 ORDER BY u.username ASC
-                '''
+                ''',
+                (_staff_roles_param(),),
             )
             return [_project_staff_user(row) for row in cursor.fetchall()]
 
@@ -1115,10 +1131,10 @@ def get_staff_user(user_id: str) -> dict[str, Any]:
                        COUNT(t.token) FILTER (WHERE t.revoked_at IS NULL AND t.expires_at > NOW())::int AS active_sessions
                 FROM users u
                 LEFT JOIN auth_tokens t ON t.user_id = u.id
-                WHERE u.id = %s
+                WHERE u.id = %s AND u.role = ANY(%s)
                 GROUP BY u.id, u.username, u.full_name, u.role, u.is_active, u.created_at
                 ''',
-                (user_id,),
+                (user_id, _staff_roles_param()),
             )
             row = cursor.fetchone()
             if not row:
@@ -1156,31 +1172,45 @@ def update_staff_user(user_id: str, payload: dict[str, Any], actor: dict[str, st
     updates: list[str] = []
     params: list[Any] = []
     details: dict[str, Any] = {}
+    should_revoke_sessions = False
+    requested_role = None
+    requested_active = None
     if payload.get('full_name') is not None:
         updates.append('full_name = %s')
         params.append(str(payload['full_name']).strip())
         details['full_name_updated'] = True
     if payload.get('role') is not None:
-        role = str(payload['role']).strip()
-        _validate_staff_role(role)
+        requested_role = str(payload['role']).strip()
+        _validate_staff_role(requested_role)
         updates.append('role = %s')
-        params.append(role)
-        details['role'] = role
+        params.append(requested_role)
+        details['role'] = requested_role
     if payload.get('is_active') is not None:
+        requested_active = bool(payload['is_active'])
         updates.append('is_active = %s')
-        params.append(bool(payload['is_active']))
-        details['is_active'] = bool(payload['is_active'])
+        params.append(requested_active)
+        details['is_active'] = requested_active
+        should_revoke_sessions = should_revoke_sessions or requested_active is False
     if payload.get('password'):
         updates.append('password_hash = %s')
         params.append(_hash_password(str(payload['password'])))
         details['password_rotated'] = True
+        should_revoke_sessions = True
     if not updates:
         return get_staff_user(user_id)
     with db_connection() as connection:
         with connection.cursor() as cursor:
-            cursor.execute(f"UPDATE users SET {', '.join(updates)} WHERE id = %s RETURNING id", [*params, user_id])
-            if not cursor.fetchone():
+            cursor.execute('SELECT id, role, is_active FROM users WHERE id = %s AND role = ANY(%s)', (user_id, _staff_roles_param()))
+            current = cursor.fetchone()
+            if not current:
                 raise UserNotFoundError('staff user not found')
+            would_remove_active_admin = current['role'] == 'admin' and current['is_active'] and (requested_role not in {None, 'admin'} or requested_active is False)
+            if would_remove_active_admin and _active_admin_count(cursor, exclude_user_id=user_id) == 0:
+                raise InvalidUserRoleError('cannot remove the last active admin')
+            cursor.execute(f"UPDATE users SET {', '.join(updates)} WHERE id = %s RETURNING id", [*params, user_id])
+            if should_revoke_sessions:
+                cursor.execute('UPDATE auth_tokens SET revoked_at = NOW() WHERE user_id = %s AND revoked_at IS NULL AND expires_at > NOW()', (user_id,))
+                details['revoked_sessions'] = cursor.rowcount
             _log_action(cursor, actor=actor, action='update-staff-user', entity_type='user', entity_id=user_id, details=details)
         connection.commit()
     return get_staff_user(user_id)
@@ -1195,9 +1225,12 @@ def disable_staff_user(user_id: str, actor: dict[str, str] | None = None) -> dic
 def revoke_staff_user_sessions(user_id: str, actor: dict[str, str] | None = None) -> dict[str, Any]:
     with db_connection() as connection:
         with connection.cursor() as cursor:
-            cursor.execute('SELECT 1 FROM users WHERE id = %s', (user_id,))
-            if not cursor.fetchone():
+            cursor.execute('SELECT id, role, is_active FROM users WHERE id = %s AND role = ANY(%s)', (user_id, _staff_roles_param()))
+            user = cursor.fetchone()
+            if not user:
                 raise UserNotFoundError('staff user not found')
+            if user['role'] == 'admin' and user['is_active'] and _active_admin_count(cursor, exclude_user_id=user_id) == 0:
+                raise InvalidUserRoleError('cannot revoke sessions for the last active admin')
             cursor.execute('UPDATE auth_tokens SET revoked_at = NOW() WHERE user_id = %s AND revoked_at IS NULL AND expires_at > NOW()', (user_id,))
             revoked = cursor.rowcount
             _log_action(cursor, actor=actor, action='revoke-staff-sessions', entity_type='user', entity_id=user_id, details={'revoked_sessions': revoked})

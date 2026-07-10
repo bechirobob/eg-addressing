@@ -156,6 +156,21 @@ def test_admin_cannot_deactivate_or_revoke_own_account(monkeypatch) -> None:
     assert revoke.status_code == 400
 
 
+def test_admin_user_routes_return_clear_last_admin_errors(monkeypatch) -> None:
+    monkeypatch.setattr(main, 'resolve_user_from_token', lambda token: ADMIN)
+    monkeypatch.setattr(main, 'update_staff_user', lambda *args, **kwargs: (_ for _ in ()).throw(main.InvalidUserRoleError('cannot remove the last active admin')))
+    monkeypatch.setattr(main, 'disable_staff_user', lambda *args, **kwargs: (_ for _ in ()).throw(main.InvalidUserRoleError('cannot remove the last active admin')))
+    monkeypatch.setattr(main, 'revoke_staff_user_sessions', lambda *args, **kwargs: (_ for _ in ()).throw(main.InvalidUserRoleError('cannot revoke sessions for the last active admin')))
+
+    demote = client.patch('/api/v1/admin/users/user-other-admin', json={'role': 'viewer'}, headers=auth_header())
+    disable = client.post('/api/v1/admin/users/user-other-admin/disable', headers=auth_header())
+    revoke = client.post('/api/v1/admin/users/user-other-admin/revoke-sessions', headers=auth_header())
+
+    assert demote.status_code == 400
+    assert disable.status_code == 400
+    assert revoke.status_code == 400
+
+
 def test_cookie_mode_protected_mutation_requires_csrf(monkeypatch) -> None:
     monkeypatch.setattr(main, 'SESSION_COOKIE_MODE', 'secure-http-only-cookie')
     monkeypatch.setattr(main, 'SESSION_COOKIE_SECURE', False)
@@ -1488,7 +1503,15 @@ def test_address_record_case_file_includes_masked_timeline(monkeypatch) -> None:
                 'entity_type': 'citizen_geotag_submission',
                 'entity_id': 'citizen-geotag-1',
                 'actor_username': 'editor',
-                'details': {'session_token': 'private-session-placeholder', 'reviewer_note': 'approved'},
+                'details': {
+                    'session_token': 'private-session-placeholder',
+                    'AccessToken': 'private-access-token',
+                    'refreshToken': 'private-refresh-token',
+                    'Authorization': 'private authorization placeholder',
+                    'Cookie': 'session=private-cookie',
+                    'apiSecret': 'private-secret',
+                    'reviewer_note': 'approved',
+                },
             }
         ],
     })
@@ -1499,7 +1522,16 @@ def test_address_record_case_file_includes_masked_timeline(monkeypatch) -> None:
     body = response.json()
     assert body['timeline'][0]['event_type'] == 'registry-ready'
     assert 'private-session-placeholder' not in json.dumps(body)
+    assert 'private-access-token' not in json.dumps(body)
+    assert 'private-refresh-token' not in json.dumps(body)
+    assert 'private-cookie' not in json.dumps(body)
+    assert 'private-secret' not in json.dumps(body)
     assert body['timeline'][0]['details']['session_token'] == '[protected]'
+    assert body['timeline'][0]['details']['AccessToken'] == '[protected]'
+    assert body['timeline'][0]['details']['refreshToken'] == '[protected]'
+    assert body['timeline'][0]['details']['Authorization'] == '[protected]'
+    assert body['timeline'][0]['details']['Cookie'] == '[protected]'
+    assert body['timeline'][0]['details']['apiSecret'] == '[protected]'
 
 
 

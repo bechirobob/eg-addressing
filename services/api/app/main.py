@@ -1,6 +1,7 @@
 import json
 import logging
 import os
+import re
 import secrets
 import hmac
 from contextvars import ContextVar
@@ -657,12 +658,18 @@ def _staff_user_public(user: dict[str, Any]) -> dict[str, Any]:
     }
 
 
-SENSITIVE_DETAIL_KEYS = {'token', 'session_token', 'auth_token', 'password', 'password_hash', 'csrf_token'}
+SENSITIVE_DETAIL_KEYS = {'token', 'session_token', 'auth_token', 'access_token', 'refresh_token', 'authorization', 'cookie', 'password', 'password_hash', 'csrf_token', 'secret'}
+SENSITIVE_DETAIL_PATTERN = re.compile(r'(token|password|secret|authorization|cookie|csrf)', re.IGNORECASE)
+
+
+def _is_sensitive_detail_key(key: Any) -> bool:
+    normalized = re.sub(r'[^a-z0-9]+', '_', str(key).strip().lower())
+    return normalized in SENSITIVE_DETAIL_KEYS or bool(SENSITIVE_DETAIL_PATTERN.search(str(key)))
 
 
 def _sanitize_timeline_value(value: Any) -> Any:
     if isinstance(value, dict):
-        return {key: ('[protected]' if key in SENSITIVE_DETAIL_KEYS else _sanitize_timeline_value(inner)) for key, inner in value.items()}
+        return {key: ('[protected]' if _is_sensitive_detail_key(key) else _sanitize_timeline_value(inner)) for key, inner in value.items()}
     if isinstance(value, list):
         return [_sanitize_timeline_value(item) for item in value]
     return value
@@ -1173,6 +1180,8 @@ def admin_disable_user(user_id: str, authorization: str | None = Header(default=
         return _staff_user_public(disable_staff_user(user_id, actor=user))
     except UserNotFoundError as exc:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(exc)) from exc
+    except InvalidUserRoleError as exc:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(exc)) from exc
 
 
 @app.post('/api/v1/admin/users/{user_id}/revoke-sessions')
@@ -1185,6 +1194,8 @@ def admin_revoke_user_sessions(user_id: str, authorization: str | None = Header(
         return revoke_staff_user_sessions(user_id, actor=user)
     except UserNotFoundError as exc:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(exc)) from exc
+    except InvalidUserRoleError as exc:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(exc)) from exc
 
 
 
