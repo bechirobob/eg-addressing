@@ -15073,3 +15073,91 @@ html body main.page-shell.page-shell-code .public-profile-disclaimer {
     gap: 9px !important;
   }
 }
+
+/* Public code typography correction: calm official service type, no startup-title heaviness. */
+html body main.page-shell.page-shell-code,
+html body main.page-shell.page-shell-code * {
+  font-family: "Segoe UI", Arial, Helvetica, sans-serif !important;
+}
+
+html body main.page-shell.page-shell-code .masthead-reference .kicker {
+  font-size: 0.66rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.12em !important;
+}
+
+html body main.page-shell.page-shell-code .masthead-reference .eyebrow,
+html body main.page-shell.page-shell-code .public-profile-panel .section-label,
+html body main.page-shell.page-shell-code .quiet-head .section-label {
+  font-size: 0.72rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.13em !important;
+}
+
+html body main.page-shell.page-shell-code .masthead-reference h1 {
+  max-width: 11ch !important;
+  font-family: Georgia, "Times New Roman", serif !important;
+  font-size: clamp(2.08rem, 9.5vw, 2.5rem) !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.026em !important;
+  line-height: 1.02 !important;
+}
+
+html body main.page-shell.page-shell-code .masthead-reference .masthead-subtitle {
+  max-width: 31rem !important;
+  font-size: 0.96rem !important;
+  font-weight: 400 !important;
+  line-height: 1.48 !important;
+}
+
+html body main.page-shell.page-shell-code .public-profile-panel h3 {
+  font-size: 0.92rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.01em !important;
+}
+
+html body main.page-shell.page-shell-code .public-profile-summary .status-chip {
+  font-size: 0.72rem !important;
+  font-weight: 720 !important;
+  letter-spacing: 0.01em !important;
+}
+
+html body main.page-shell.page-shell-code .public-profile-summary h4,
+html body main.page-shell.page-shell-code .code-detail-panel h3,
+html body main.page-shell.page-shell-code .public-code-guide-panel h3 {
+  font-size: 0.98rem !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.006em !important;
+}
+
+html body main.page-shell.page-shell-code .approved-record-copy p,
+html body main.page-shell.page-shell-code .public-profile-disclaimer,
+html body main.page-shell.page-shell-code .public-profile-facts dd,
+html body main.page-shell.page-shell-code .public-code-guide-list li {
+  font-size: 0.93rem !important;
+  line-height: 1.48 !important;
+}
+
+html body main.page-shell.page-shell-code .approved-record-copy p:first-child {
+  font-weight: 600 !important;
+}
+
+html body main.page-shell.page-shell-code .public-profile-actions > .secondary-action,
+html body main.page-shell.page-shell-code .public-profile-actions > .primary-action {
+  font-size: 0.8rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 0 !important;
+}
+
+html body main.page-shell.page-shell-code .public-profile-facts dt {
+  font-size: 0.72rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.10em !important;
+}
+
+@media (min-width: 901px) {
+  html body main.page-shell.page-shell-code .masthead-reference h1 {
+    max-width: none !important;
+    font-size: 1.72rem !important;
+  }
+}
