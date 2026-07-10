@@ -14989,3 +14989,87 @@ html body .guided-workflow-strip.guided-workflow-strip .step-chip {
     margin-bottom: 6px !important;
   }
 }
+
+/* Public code final visual alignment: soft official controls, not harsh wireframe boxes. */
+html body main.page-shell.page-shell-code .approval-status-card.public-profile-summary {
+  border: 1px solid rgba(18, 40, 62, 0.12) !important;
+  border-left: 4px solid var(--gov-gold, #b08839) !important;
+  border-radius: 10px !important;
+  background: rgba(255, 253, 247, 0.78) !important;
+  padding: 14px 15px !important;
+}
+
+html body main.page-shell.page-shell-code .public-profile-summary .status-chip {
+  margin-bottom: 10px !important;
+  border-color: rgba(37, 99, 58, 0.28) !important;
+  border-radius: 999px !important;
+  background: rgba(37, 99, 58, 0.09) !important;
+  color: #1f6b40 !important;
+  padding: 0.28rem 0.62rem !important;
+  font-size: 0.74rem !important;
+  font-weight: 830 !important;
+  line-height: 1.15 !important;
+}
+
+html body main.page-shell.page-shell-code .public-profile-summary h4 {
+  color: var(--eg-blue-deep, #102b48) !important;
+  font-size: 0.95rem !important;
+  line-height: 1.32 !important;
+}
+
+html body main.page-shell.page-shell-code .approved-record-copy {
+  margin-top: 14px !important;
+  padding-top: 12px !important;
+  border-top: 1px solid rgba(18, 40, 62, 0.10) !important;
+}
+
+html body main.page-shell.page-shell-code .approved-record-copy p {
+  margin-top: 0 !important;
+  color: #667085 !important;
+  line-height: 1.45 !important;
+}
+
+html body main.page-shell.page-shell-code .approved-record-copy p:first-child {
+  color: #445066 !important;
+  font-weight: 620 !important;
+}
+
+html body main.page-shell.page-shell-code .public-profile-actions > .secondary-action,
+html body main.page-shell.page-shell-code .public-profile-actions > .primary-action {
+  border-radius: 8px !important;
+  border-width: 1px !important;
+  box-shadow: none !important;
+}
+
+html body main.page-shell.page-shell-code .public-profile-actions > .secondary-action {
+  border-color: rgba(18, 40, 62, 0.20) !important;
+  background: rgba(255, 253, 247, 0.88) !important;
+  color: var(--eg-blue-deep, #102b48) !important;
+}
+
+html body main.page-shell.page-shell-code .public-profile-actions > .secondary-action:hover,
+html body main.page-shell.page-shell-code .public-profile-actions > .secondary-action:focus-visible {
+  background: #fff8e8 !important;
+  border-color: rgba(176, 136, 57, 0.46) !important;
+}
+
+html body main.page-shell.page-shell-code .public-profile-actions > .primary-action {
+  border-color: var(--eg-blue-deep, #102b48) !important;
+  background: var(--eg-blue-deep, #102b48) !important;
+}
+
+html body main.page-shell.page-shell-code .public-profile-disclaimer {
+  border-radius: 10px !important;
+  border: 1px solid rgba(18, 40, 62, 0.10) !important;
+  background: rgba(255, 253, 247, 0.62) !important;
+}
+
+@media (max-width: 640px) {
+  html body main.page-shell.page-shell-code .approval-status-card.public-profile-summary {
+    padding: 13px 14px !important;
+  }
+
+  html body main.page-shell.page-shell-code .public-profile-actions {
+    gap: 9px !important;
+  }
+}
