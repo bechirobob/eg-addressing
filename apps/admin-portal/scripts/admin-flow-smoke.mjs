@@ -74,7 +74,8 @@ assert(me.data?.user?.role === 'admin', 'admin login did not resolve an admin se
 
 const issuance = await jsonFetch('/api/v1/public/issuance/EG-BN-MALABO-001A');
 assert(issuance.response.ok, `public issuance lookup failed: ${issuance.response.status}`);
-assert(issuance.data?.extract_status === 'ready', 'public issuance did not return a ready extract');
+assert(issuance.data?.extract_status === 'staging-reference', 'public issuance must remain a staging reference in controlled demo mode');
+assert(issuance.data?.issuing_authority?.includes('Not an official production record'), 'public issuance must not imply official production authority');
 
 const correction = await jsonFetch('/api/v1/public/corrections', {
   method: 'POST',
@@ -87,6 +88,7 @@ const correction = await jsonFetch('/api/v1/public/corrections', {
     note: 'Automated smoke correction report for public correction flow.',
     reporter_name: 'Smoke automation',
     reporter_contact: 'smoke@example.invalid',
+    privacy_notice_acknowledged: true,
   }),
 });
 assert(correction.response.status === 201, `public correction submit failed: ${correction.response.status}`);
