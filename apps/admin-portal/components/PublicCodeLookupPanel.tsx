@@ -156,12 +156,14 @@ export function PublicCodeLookupPanel({ apiBaseUrl, code }: PublicCodeLookupPane
         ) : null}
 
         <div className="public-profile-actions" aria-label="Public address profile actions">
-          <button className="secondary-action" type="button" onClick={() => copyText(code, 'Address code')}>Copy code</button>
-          <button className="secondary-action" type="button" onClick={shareProfile} disabled={!profileUrl}>Share link</button>
-          <button className="secondary-action" type="button" onClick={() => window.print()}>Print profile</button>
-          <a className="secondary-action" href={proofUrl}>Proof / QR</a>
-          <a className="secondary-action" href={correctionUrl}>Extract or correction</a>
           {mapsLink ? <a className="primary-action" href={mapsLink} target="_blank" rel="noreferrer">Open map</a> : null}
+          <a className="secondary-action" href={proofUrl}>Proof / QR</a>
+          <button className="secondary-action" type="button" onClick={() => copyText(code, 'Address code')}>Copy code</button>
+        </div>
+        <div className="public-profile-utility-row" aria-label="Additional profile actions">
+          <button type="button" onClick={shareProfile} disabled={!profileUrl}>Share link</button>
+          <button type="button" onClick={() => window.print()}>Print profile</button>
+          <a href={correctionUrl}>Report correction</a>
         </div>
         {copyNotice ? <p className="form-notice success" role="status">{copyNotice}</p> : null}
         <p className="institutional-note public-profile-disclaimer">
