@@ -14,6 +14,7 @@ client = TestClient(app)
 ADMIN = {'id': 'user-admin', 'username': 'admin', 'full_name': 'National Platform Administrator', 'role': 'admin'}
 EDITOR = {'id': 'user-editor', 'username': 'editor', 'full_name': 'Registry Editor', 'role': 'editor'}
 VIEWER = {'id': 'user-viewer', 'username': 'viewer', 'full_name': 'Program Viewer', 'role': 'viewer'}
+AGENCY_VIEWER = {'id': 'user-agency-viewer', 'username': 'agency_viewer', 'full_name': 'Agency Review Viewer', 'role': 'agency_viewer'}
 
 
 def auth_header(token: str = 'demo-token') -> dict[str, str]:
@@ -666,6 +667,25 @@ def test_reporting_summary_returns_totals(monkeypatch) -> None:
     assert response.json()['totals']['citizen_geotags'] == 5
 
 
+def test_reporting_summary_allows_agency_viewer(monkeypatch) -> None:
+    monkeypatch.setattr(main, 'resolve_user_from_token', lambda token: AGENCY_VIEWER)
+    monkeypatch.setattr(
+        main,
+        'reporting_summary',
+        lambda: {
+            'totals': {'territories': 3, 'submissions': 2, 'review_queue': 1, 'published_addresses': 1, 'import_jobs': 1, 'public_corrections': 4, 'correction_queue': 2, 'citizen_geotags': 5, 'geotag_queue': 3},
+            'territories_by_province': [],
+            'review_breakdown': [],
+            'publication_breakdown': [],
+            'correction_breakdown': [],
+            'geotag_breakdown': [],
+        },
+    )
+    response = client.get('/api/v1/reporting/summary', headers=auth_header())
+    assert response.status_code == 200
+    assert response.json()['totals']['territories'] == 3
+
+
 def test_pilot_readiness_summary_requires_viewer_role(monkeypatch) -> None:
     monkeypatch.setattr(main, 'resolve_user_from_token', lambda token: {'id': 'public-user', 'username': 'public', 'full_name': 'Public User', 'role': 'public'})
     response = client.get('/api/v1/pilot-readiness/summary', headers=auth_header())
@@ -694,6 +714,35 @@ def test_pilot_readiness_summary_returns_gates(monkeypatch) -> None:
     assert payload['readiness_status'] == 'pilot-ready'
     assert payload['gates'][0]['name'] == 'Citizen capture intake'
     assert payload['boundaries'][0] == 'Government approval still required.'
+
+
+def test_agency_viewer_can_read_readiness_and_signage_but_not_protected_operations(monkeypatch) -> None:
+    monkeypatch.setattr(main, 'resolve_user_from_token', lambda token: AGENCY_VIEWER)
+    monkeypatch.setattr(
+        main,
+        'pilot_readiness_summary',
+        lambda: {
+            'readiness_status': 'pilot-ready',
+            'passed_gates': 6,
+            'total_gates': 6,
+            'gates': [],
+            'recent_audit_events': [{'action': 'login', 'entity_type': 'session', 'entity_id': 'session-secret-token', 'actor_username': 'agency_viewer'}],
+            'boundaries': ['Government approval still required.'],
+        },
+    )
+    monkeypatch.setattr(main, 'signage_export', lambda status='published': {'status': status, 'count': 0, 'items': []})
+
+    readiness = client.get('/api/v1/pilot-readiness/summary', headers=auth_header())
+    signage = client.get('/api/v1/signage/export', headers=auth_header())
+    registry = client.get('/api/v1/geotag-submissions', headers=auth_header())
+    mutation = client.post('/api/v1/imports/jobs', json={'name': 'Agency blocked', 'source_name': 'phase-6', 'rows': [{'submission_type': 'road', 'territory_id': 'territory-malabo-urban-core', 'candidate_name': 'Agency blocked road', 'candidate_status': 'submitted', 'notes': 'agency role negative test'}]}, headers=auth_header())
+    audit = client.get('/api/v1/audit-logs', headers=auth_header())
+
+    assert readiness.status_code == 200
+    assert signage.status_code == 200
+    assert registry.status_code == 403
+    assert mutation.status_code == 403
+    assert audit.status_code == 403
 
 
 def test_cors_preflight_allows_admin_origin() -> None:

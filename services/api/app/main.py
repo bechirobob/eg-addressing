@@ -1021,7 +1021,7 @@ def meta() -> dict[str, Any]:
         'platform': {'name': 'Equatorial Guinea National Digital Addressing Platform', 'mode': 'operational-readiness'},
         'stack': {'backend': 'FastAPI', 'frontend': 'Next.js', 'database': 'PostgreSQL + PostGIS', 'cache': 'Redis', 'storage': 'MinIO'},
         'modules': MODULES,
-        'roles': ['viewer', 'editor', 'admin'],
+        'roles': ['viewer', 'editor', 'admin', 'agency_viewer'],
     }
 
 
@@ -1913,7 +1913,7 @@ def geotag_road_suggestion_review(submission_id: str, payload: RoadSuggestionRev
 @app.get('/api/v1/signage/export')
 def signage_export_endpoint(status: str = Query(default='published'), authorization: str | None = Header(default=None)) -> dict[str, Any]:
     user = _current_user(authorization)
-    _require_role(user, 'viewer', 'editor', 'admin')
+    _require_role(user, 'viewer', 'editor', 'admin', 'agency_viewer')
     return signage_export(status=status)
 
 
@@ -2170,7 +2170,7 @@ def reporting_summary_endpoint(
     date_to: str | None = Query(default=None),
 ) -> dict[str, Any]:
     user = _current_user(authorization)
-    _require_role(user, 'viewer', 'editor', 'admin')
+    _require_role(user, 'viewer', 'editor', 'admin', 'agency_viewer')
     if not any([province, territory, status_filter, date_from, date_to]):
         return reporting_summary()
     return reporting_summary(
@@ -2185,5 +2185,5 @@ def reporting_summary_endpoint(
 @app.get('/api/v1/pilot-readiness/summary')
 def pilot_readiness_summary_endpoint(authorization: str | None = Header(default=None)) -> dict[str, Any]:
     user = _current_user(authorization)
-    _require_role(user, 'viewer', 'editor', 'admin')
+    _require_role(user, 'viewer', 'editor', 'admin', 'agency_viewer')
     return pilot_readiness_summary()

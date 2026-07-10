@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 
-import { defaultRouteForRole } from './site-data';
+import { defaultRouteForRole, type OperatorRole } from './site-data';
 import { clearStoredToken, setStoredToken } from './demoAuth';
 import { resolveBrowserApiBaseUrl } from './sessionClient';
 
@@ -48,7 +48,7 @@ export function LoginPanel({ apiBaseUrl }: LoginPanelProps) {
         setError('Login failed: session token was not returned.');
         return;
       }
-      const nextRoute = defaultRouteForRole((payload.user?.role as 'viewer' | 'editor' | 'admin' | undefined) ?? 'viewer');
+      const nextRoute = defaultRouteForRole((payload.user?.role as OperatorRole | undefined) ?? 'viewer');
       setNotice(`Signed in as ${username} (${payload.user?.role ?? 'unknown role'}). Opening your administration workspace…`);
       router.push(nextRoute);
       router.refresh();

@@ -27,8 +27,9 @@ assert(!/NEXT_PUBLIC_API_BASE_URL:\s*http:\/\/localhost/.test(composeConfig), 'p
 
 assert(/if \(role === 'admin'\) return '\/field';/.test(siteData), 'admin default route must be /field for the Field work staff service');
 assert(/if \(role === 'editor'\) return '\/registry';/.test(siteData), 'editor default route must remain /registry');
-assert(/if \(role === 'viewer'\) return '\/reports';/.test(siteData), 'viewer default route must land on reports, not citizen flow');
+assert(/if \(role === 'viewer' \|\| role === 'agency_viewer'\) return '\/reports';/.test(siteData), 'viewer and agency viewer default routes must land on reports');
 assert(/return '\/';/.test(siteData), 'guest default route must return to the public service start page');
+assert(/\{ path: '\/reports', allowedRoles: \['viewer', 'editor', 'admin', 'agency_viewer'\] \}/.test(siteData), 'reports route must allow read-only agency reviewers');
 assert(/\{ path: '\/exports', allowedRoles: \['admin'\] \}/.test(siteData), 'exports route must stay admin-only');
 assert(/\{ path: '\/verify', allowedRoles: \['editor', 'admin'\] \}/.test(siteData), 'verify route must stay editor\/admin only');
 assert(/\{\s*href: '\/login',[\s\S]*visibleTo: \[\]/.test(siteData), 'login must not appear in shared public navigation');
@@ -48,5 +49,7 @@ assert(!/!payload\.token/.test(loginPanel), 'cookie-session login must not requi
 assert(/auth_mode\?: string/.test(loginPanel), 'login payload typing must include auth_mode for cookie-session handling');
 assert(/sessionRequestInit/.test(roleAwareChrome), 'logout must use sessionRequestInit so cookie-only sessions can revoke server-side');
 assert(!/if \(storedToken\) \{[\s\S]*auth\/logout[\s\S]*\}/.test(roleAwareChrome), 'logout must not skip server revoke when localStorage token is absent');
+
+assert(/role: 'viewer' \| 'editor' \| 'admin' \| 'agency_viewer';/.test(await read('components/demoAuth.ts')), 'session user typing must include agency_viewer');
 
 console.log('role-auth-guard passed');

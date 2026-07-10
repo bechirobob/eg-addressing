@@ -23,7 +23,7 @@ type RoleAwareChromeProps = {
   skipSessionLookup?: boolean;
 };
 
-function roleFromSession(role: 'viewer' | 'editor' | 'admin' | undefined, status: 'loading' | 'ready' | 'guest'): OperatorRole {
+function roleFromSession(role: Exclude<OperatorRole, 'guest'> | undefined, status: 'loading' | 'ready' | 'guest'): OperatorRole {
   if (status === 'guest' || !role) return 'guest';
   return role;
 }

@@ -1,4 +1,4 @@
-export type OperatorRole = 'guest' | 'viewer' | 'editor' | 'admin';
+export type OperatorRole = 'guest' | 'viewer' | 'editor' | 'admin' | 'agency_viewer';
 
 export type NavGroup = 'public' | 'staff';
 
@@ -24,21 +24,21 @@ export const navItems: NavItem[] = [
   {
     href: '/geotag',
     label: 'Register location',
-    visibleTo: ['guest', 'viewer', 'editor', 'admin'],
+    visibleTo: ['guest', 'viewer', 'editor', 'admin', 'agency_viewer'],
     priorityFor: ['guest'],
     group: 'public',
   },
   {
     href: '/issue',
     label: 'Check address code',
-    visibleTo: ['guest', 'viewer', 'editor', 'admin'],
+    visibleTo: ['guest', 'viewer', 'editor', 'admin', 'agency_viewer'],
     priorityFor: ['viewer'],
     group: 'public',
   },
   {
     href: '/track',
     label: 'Track request',
-    visibleTo: ['guest', 'viewer', 'editor', 'admin'],
+    visibleTo: ['guest', 'viewer', 'editor', 'admin', 'agency_viewer'],
     priorityFor: ['guest', 'viewer'],
     group: 'public',
   },
@@ -94,8 +94,8 @@ export const navItems: NavItem[] = [
   {
     href: '/reports',
     label: 'Reports',
-    visibleTo: ['viewer', 'editor', 'admin'],
-    priorityFor: ['guest', 'viewer', 'editor', 'admin'],
+    visibleTo: ['viewer', 'editor', 'admin', 'agency_viewer'],
+    priorityFor: ['guest', 'viewer', 'editor', 'admin', 'agency_viewer'],
     group: 'staff',
   },
   {
@@ -114,12 +114,12 @@ export const statusHighlights = [
 ];
 
 const routeRules: RouteRule[] = [
-  { path: '/', allowedRoles: ['guest', 'viewer', 'editor', 'admin'] },
-  { path: '/login', allowedRoles: ['guest', 'viewer', 'editor', 'admin'] },
-  { path: '/reports', allowedRoles: ['viewer', 'editor', 'admin'] },
-  { path: '/issue', allowedRoles: ['guest', 'viewer', 'editor', 'admin'] },
-  { path: '/track', allowedRoles: ['guest', 'viewer', 'editor', 'admin'] },
-  { path: '/geotag', allowedRoles: ['guest', 'viewer', 'editor', 'admin'] },
+  { path: '/', allowedRoles: ['guest', 'viewer', 'editor', 'admin', 'agency_viewer'] },
+  { path: '/login', allowedRoles: ['guest', 'viewer', 'editor', 'admin', 'agency_viewer'] },
+  { path: '/reports', allowedRoles: ['viewer', 'editor', 'admin', 'agency_viewer'] },
+  { path: '/issue', allowedRoles: ['guest', 'viewer', 'editor', 'admin', 'agency_viewer'] },
+  { path: '/track', allowedRoles: ['guest', 'viewer', 'editor', 'admin', 'agency_viewer'] },
+  { path: '/geotag', allowedRoles: ['guest', 'viewer', 'editor', 'admin', 'agency_viewer'] },
   { path: '/verify', allowedRoles: ['editor', 'admin'] },
   { path: '/field', allowedRoles: ['editor', 'admin'] },
   { path: '/registry', allowedRoles: ['editor', 'admin'] },
@@ -132,7 +132,7 @@ const routeRules: RouteRule[] = [
 export function defaultRouteForRole(role: OperatorRole): string {
   if (role === 'admin') return '/field';
   if (role === 'editor') return '/registry';
-  if (role === 'viewer') return '/reports';
+  if (role === 'viewer' || role === 'agency_viewer') return '/reports';
   return '/';
 }
 

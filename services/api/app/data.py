@@ -568,6 +568,13 @@ DEMO_USERS = [
         'role': 'viewer',
         'password': 'viewer123',
     },
+    {
+        'id': 'user-agency-viewer',
+        'username': 'agency_viewer',
+        'full_name': 'Agency Review Viewer',
+        'role': 'agency_viewer',
+        'password': 'agency123',
+    },
 ]
 
 MODULES = [

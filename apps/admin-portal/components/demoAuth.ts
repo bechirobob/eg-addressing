@@ -2,7 +2,7 @@ export type SessionUser = {
   id: string;
   username: string;
   full_name: string;
-  role: 'viewer' | 'editor' | 'admin';
+  role: 'viewer' | 'editor' | 'admin' | 'agency_viewer';
 };
 
 export function getStoredToken(): string | null {
