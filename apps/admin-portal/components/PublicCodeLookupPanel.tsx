@@ -141,12 +141,12 @@ export function PublicCodeLookupPanel({ apiBaseUrl, code }: PublicCodeLookupPane
             {!record ? <p className="public-task-copy">Full address details appear only after official approval.</p> : null}
             <div className="service-start-actions public-code-service-actions" aria-label="Public address profile actions">
               {mapsLink ? <a className="primary-action" href={mapsLink} target="_blank" rel="noreferrer">Open map</a> : null}
-              <div className="service-start-secondary-actions">
-                <a className="secondary-action" href={proofUrl}>Proof / QR</a>
-                <button className="secondary-action" type="button" onClick={() => copyText(code, 'Address code')}>Copy code</button>
-              </div>
             </div>
             <p className="public-task-copy public-code-secondary-links">
+              <a className="inline-action-link" href={proofUrl}>Proof / QR</a>
+              <span aria-hidden="true"> · </span>
+              <button className="inline-action-link" type="button" onClick={() => copyText(code, 'Address code')}>Copy code</button>
+              <span aria-hidden="true"> · </span>
               <button className="inline-action-link" type="button" onClick={shareProfile} disabled={!profileUrl}>Share link</button>
               <span aria-hidden="true"> · </span>
               <button className="inline-action-link" type="button" onClick={() => window.print()}>Print profile</button>
