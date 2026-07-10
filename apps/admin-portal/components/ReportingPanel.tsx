@@ -87,6 +87,12 @@ function rowsFromBreakdown(rows: Array<{ [key: string]: string | number }>, keyN
   return rows.map((row) => ({ label: statusText(String(row[keyName] ?? 'Unknown')), count: Number(row.count ?? 0) }));
 }
 
+function csvCell(value: string | number | null | undefined): string {
+  const text = String(value ?? '');
+  const safeText = /^[=+\-@\t\r]/.test(text) ? `'${text}` : text;
+  return `"${safeText.replaceAll('"', '""')}"`;
+}
+
 export function ReportingPanel({ summary: initialSummary, readinessSummary, apiBaseUrl }: ReportingPanelProps) {
   const browserApiBaseUrl = resolveBrowserApiBaseUrl(apiBaseUrl);
   const { token, sessionStatus } = useStoredSession(browserApiBaseUrl);
@@ -151,21 +157,95 @@ export function ReportingPanel({ summary: initialSummary, readinessSummary, apiB
   }
 
   function handleExportReport() {
-    const lines = [
-      ['Metric', 'Value'],
+    const generatedAt = new Date().toISOString();
+    const filterRows = [
+      ['Province', province || 'All provinces'],
+      ['Territory', territory.trim() || 'All territories'],
+      ['Status', status || 'All statuses'],
+      ['Date from', dateFrom || 'Not set'],
+      ['Date to', dateTo || 'Not set'],
+    ];
+    const metricRows = [
       ['Active territories', summary.totals.territories],
       ['Total submissions', summary.totals.submissions],
       ['Verification queue', summary.totals.review_queue],
       ['Published addresses', summary.totals.published_addresses],
       ['Correction reports', summary.totals.public_corrections],
-      ['Field requests', summary.totals.citizen_geotags ?? 0],
+      ['Field activity', summary.totals.citizen_geotags ?? 0],
+      ['Need operator review', pendingReviewCount],
+      ['Need field/geo follow-up', fieldQueueCount],
+      ['Publication gates not clear', blockedPublicationCount],
     ];
-    const csv = lines.map((line) => line.map((cell) => `"${String(cell).replaceAll('"', '""')}"`).join(',')).join('\n');
+    const rows: Array<Array<string | number | null | undefined>> = [
+      ['National Digital Addressing Pilot — Reports and audit export'],
+      ['Generated at', generatedAt],
+      ['Scope note', 'Read-only operational report. Public lookup remains limited to published records.'],
+      [],
+      ['Filters'],
+      ['Filter', 'Value'],
+      ...filterRows,
+      [],
+      ['Summary metrics'],
+      ['Metric', 'Value'],
+      ...metricRows,
+      [],
+      ['Workload review queue'],
+      ['Status', 'Count'],
+      ...reviewRows.map((row) => [row.label, row.count]),
+      [],
+      ['Field activity'],
+      ['Status', 'Count'],
+      ...fieldRows.map((row) => [row.label, row.count]),
+      [],
+      ['Publication status'],
+      ['Status', 'Count'],
+      ...publicationRows.map((row) => [row.label, row.count]),
+      [],
+      ['Correction reports'],
+      ['Status', 'Count'],
+      ...correctionRows.map((row) => [row.label, row.count]),
+    ];
+
+    if (readiness) {
+      rows.push(
+        [],
+        ['Publication readiness'],
+        ['Status', readinessStatusLabel(readiness.readiness_status)],
+        ['Checks passed', `${readiness.passed_gates}/${readiness.total_gates}`],
+        [],
+        ['Readiness gates'],
+        ['Gate', 'Status', 'Evidence', 'Next step'],
+        ...readiness.gates.map((gate) => [gate.name, statusText(gate.status), formatEvidence(gate.evidence), gate.next_step]),
+      );
+      if (readiness.recent_audit_events?.length) {
+        rows.push(
+          [],
+          ['Recent audit events'],
+          ['Action', 'Entity', 'Actor', 'Time'],
+          ...readiness.recent_audit_events.map((event) => [
+            statusText(event.action),
+            auditEntityLabel(event),
+            event.actor_username ?? 'system',
+            event.created_at ? new Date(event.created_at).toISOString() : 'not recorded',
+          ]),
+        );
+      }
+      if (readiness.boundaries.length) {
+        rows.push(
+          [],
+          ['Governance boundaries'],
+          ['Boundary'],
+          ...readiness.boundaries.map((boundary) => [boundary]),
+        );
+      }
+    }
+
+    const csv = rows.map((line) => line.map(csvCell).join(',')).join('\n');
     const blob = new Blob([csv], { type: 'text/csv;charset=utf-8' });
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
-    link.download = 'national-addressing-report.csv';
+    link.download = 'national-addressing-report-audit.csv';
     link.click();
     URL.revokeObjectURL(url);
   }
