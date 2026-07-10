@@ -51,6 +51,8 @@ const requiredCssMarkers = [
   '.publication-operations-grid .publication-release-head',
   '.publication-summary-list',
   'grid-template-columns: 1fr !important;',
+  'grid-row: auto !important;',
+  'order: 0 !important;',
   'grid-template-columns: repeat(4, minmax(0, 1fr)) !important;',
 ];
 

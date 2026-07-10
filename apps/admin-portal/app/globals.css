@@ -14775,6 +14775,8 @@ html body main.page-shell .publication-operations-grid.publication-operations-gr
 html body main.page-shell .desktop-workbench-grid.desktop-workbench-grid > .public-task-panel,
 html body main.page-shell .publication-operations-grid.publication-operations-grid > .public-task-panel {
   grid-column: 1 / -1 !important;
+  grid-row: auto !important;
+  order: 0 !important;
   width: 100% !important;
   border-radius: 0 !important;
 }
