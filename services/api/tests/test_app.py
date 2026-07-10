@@ -649,6 +649,14 @@ def test_publish_publication_pack_requires_admin(monkeypatch) -> None:
     assert response.status_code == 403
 
 
+def test_publish_publication_pack_requires_release_gate(monkeypatch) -> None:
+    monkeypatch.setattr(main, 'resolve_user_from_token', lambda token: ADMIN)
+    monkeypatch.setattr(main, 'PUBLICATION_RELEASE_ENABLED', False)
+    response = client.post('/api/v1/publication/packs/pack-1/publish', headers=auth_header())
+    assert response.status_code == 403
+    assert response.json()['detail'] == 'publication release gate is disabled'
+
+
 def test_reporting_summary_returns_totals(monkeypatch) -> None:
     monkeypatch.setattr(main, 'resolve_user_from_token', lambda token: VIEWER)
     monkeypatch.setattr(
@@ -2481,8 +2489,19 @@ def test_publish_geotag_submission_requires_admin(monkeypatch) -> None:
     assert response.status_code == 403
 
 
+def test_publish_geotag_submission_requires_release_gate(monkeypatch) -> None:
+    monkeypatch.setattr(main, 'resolve_user_from_token', lambda token: ADMIN)
+    monkeypatch.setattr(main, 'PUBLICATION_RELEASE_ENABLED', False)
+
+    response = client.post('/api/v1/geotag-submissions/geo-ready/publish', json={'reviewer_note': 'Approved by institutional release authority.'}, headers=auth_header())
+
+    assert response.status_code == 403
+    assert response.json()['detail'] == 'publication release gate is disabled'
+
+
 def test_admin_can_publish_registry_ready_geotag_and_gets_public_record(monkeypatch) -> None:
     monkeypatch.setattr(main, 'resolve_user_from_token', lambda token: ADMIN)
+    monkeypatch.setattr(main, 'PUBLICATION_RELEASE_ENABLED', True)
     captured = {}
 
     def fake_publish(submission_id, reviewer_note, actor=None):

@@ -327,6 +327,7 @@ CSRF_COOKIE_NAME = os.getenv('CSRF_COOKIE_NAME', 'eg_addressing_csrf')
 CSRF_HEADER_NAME = 'x-csrf-token'
 SESSION_COOKIE_MODE = os.getenv('SESSION_COOKIE_MODE', 'bearer-local-storage').strip().lower()
 SESSION_COOKIE_SECURE = os.getenv('SESSION_COOKIE_SECURE', 'true').strip().lower() not in {'0', 'false', 'no'}
+PUBLICATION_RELEASE_ENABLED = os.getenv('PUBLICATION_RELEASE_ENABLED', 'false').strip().lower() in {'1', 'true', 'yes'}
 PUBLIC_RATE_LIMIT_ENABLED = os.getenv('PUBLIC_RATE_LIMIT_ENABLED', 'true').strip().lower() not in {'0', 'false', 'no'}
 PUBLIC_RATE_LIMIT_MAX_REQUESTS = max(1, int(os.getenv('PUBLIC_RATE_LIMIT_MAX_REQUESTS', '30')))
 PUBLIC_RATE_LIMIT_WINDOW_SECONDS = max(1, int(os.getenv('PUBLIC_RATE_LIMIT_WINDOW_SECONDS', '60')))
@@ -1877,6 +1878,8 @@ def simulate_geotag_publication(submission_id: str, payload: GeotagReviewActionR
 def publish_geotag_case_file(submission_id: str, payload: GeotagReviewActionRequest, authorization: str | None = Header(default=None)) -> dict[str, Any]:
     user = _current_user(authorization)
     _require_role(user, 'admin')
+    if not PUBLICATION_RELEASE_ENABLED:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail='publication release gate is disabled')
     try:
         return _strip_identity_fields(publish_geotag_submission(submission_id, payload.reviewer_note, actor=user))
     except (SubmissionNotFoundError, InvalidSubmissionActionError, UnknownTerritoryError) as exc:
@@ -2037,6 +2040,8 @@ def create_publication_pack_endpoint(payload: PublicationPackCreate, authorizati
 def publish_publication_pack_endpoint(pack_id: str, authorization: str | None = Header(default=None)) -> dict[str, Any]:
     user = _current_user(authorization)
     _require_role(user, 'admin')
+    if not PUBLICATION_RELEASE_ENABLED:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail='publication release gate is disabled')
     try:
         return publish_publication_pack(pack_id, actor=user)
     except PublicationPackNotFoundError as exc:

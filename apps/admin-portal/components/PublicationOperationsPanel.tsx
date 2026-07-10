@@ -76,6 +76,7 @@ export function PublicationOperationsPanel({
 }: PublicationOperationsPanelProps) {
   const browserApiBaseUrl = resolveBrowserApiBaseUrl(apiBaseUrl);
   const { token, sessionUser, sessionStatus } = useStoredSession(browserApiBaseUrl);
+  const publicationReleaseEnabled = process.env.NEXT_PUBLIC_PUBLICATION_RELEASE_ENABLED === 'true';
   const [addresses, setAddresses] = useState(initialAddresses);
   const [importJobs, setImportJobs] = useState(initialImportJobs);
   const [publicationPacks, setPublicationPacks] = useState(initialPublicationPacks);
@@ -99,7 +100,7 @@ export function PublicationOperationsPanel({
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const canWrite = sessionUser?.role === 'editor' || sessionUser?.role === 'admin';
-  const canPublish = sessionUser?.role === 'admin';
+  const canPublish = sessionUser?.role === 'admin' && publicationReleaseEnabled;
   const publicationSummary = {
     intakeJobs: importJobs.length,
     packs: publicationPacks.length,
@@ -213,10 +214,18 @@ export function PublicationOperationsPanel({
   }
 
   function publishDisabledReason(pack: PublicationPack) {
+    if (!publicationReleaseEnabled) return 'Institutional release gate locked';
     if (!canPublish) return 'Admin required';
     if (isSubmitting) return 'Working…';
     if (pack.status === 'published') return 'Already published';
     if (pack.address_count <= 0) return 'No linked addresses';
+    return null;
+  }
+
+  function publishCaseDisabledReason() {
+    if (!publicationReleaseEnabled) return 'Institutional release gate locked';
+    if (!canPublish) return 'Admin required';
+    if (isSubmitting) return 'Working…';
     return null;
   }
 
@@ -288,7 +297,7 @@ export function PublicationOperationsPanel({
   async function publishRegistryReadyCase(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (!token || !canPublish) {
-      setError('Admin required before publishing a registry-ready case file.');
+      setError(publicationReleaseEnabled ? 'Admin required before publishing a registry-ready case file.' : 'Institutional release gate is locked. Keep records registry-ready until formal approval.');
       return;
     }
     const submissionId = publishSubmissionId.trim();
@@ -461,8 +470,8 @@ export function PublicationOperationsPanel({
             <textarea className="territory-input territory-textarea" value={publishNote} onChange={(event) => setPublishNote(event.target.value)} rows={3} />
           </label>
           <div className="territory-form-actions">
-            <button className="verification-button" type="submit" disabled={!canPublish || isSubmitting}>
-              {!canPublish ? 'Admin required' : isSubmitting ? 'Working…' : 'Publish registry-ready case file'}
+            <button className="verification-button" type="submit" disabled={Boolean(publishCaseDisabledReason())}>
+              {publishCaseDisabledReason() ?? 'Publish registry-ready case file'}
             </button>
           </div>
         </form>
