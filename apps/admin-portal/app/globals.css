@@ -10397,17 +10397,11 @@ button[type="submit"] {
 }
 
 .service-start-workflow li span {
-  align-items: center !important;
-  background: var(--surface-muted) !important;
-  border: 1px solid var(--border) !important;
-  border-radius: var(--radius-control) !important;
   color: var(--text-main) !important;
-  display: inline-flex !important;
+  display: inline-block !important;
   font-size: 0.86rem !important;
   font-weight: 800 !important;
-  height: 34px !important;
-  justify-content: center !important;
-  width: 34px !important;
+  line-height: 1.2 !important;
 }
 
 .service-start-staff {
@@ -10462,15 +10456,14 @@ button[type="submit"] {
     max-width: none !important;
   }
 
-  .service-start-actions .button,
-  .service-start-secondary-actions,
-  .service-start-secondary-actions .button {
+  .service-start-actions .button {
     width: 100% !important;
   }
 
   .service-start-secondary-actions {
-    display: grid !important;
-    gap: var(--space-2) !important;
+    display: flex !important;
+    width: auto !important;
+    gap: 0.2rem 0.45rem !important;
   }
 
   .service-start-staff {

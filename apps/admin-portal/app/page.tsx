@@ -28,14 +28,15 @@ export default function HomePage() {
               <a className="button button-primary service-start-primary" href="/geotag">
                 <LocalizedText k="homeRegisterLabel" />
               </a>
-              <div className="service-start-secondary-actions">
-                <a className="button button-secondary" href="/issue">
+              <p className="service-start-secondary-actions public-task-copy">
+                <a className="inline-action-link" href="/issue">
                   <LocalizedText k="homeCheckLabel" />
                 </a>
-                <a className="button button-secondary" href="/track">
+                <span aria-hidden="true"> · </span>
+                <a className="inline-action-link" href="/track">
                   <LocalizedText k="homeTrackAction" />
                 </a>
-              </div>
+              </p>
             </div>
           </div>
           <aside className="desktop-before-start" aria-labelledby="before-start-heading">
@@ -48,16 +49,6 @@ export default function HomePage() {
             </ul>
           </aside>
         </div>
-
-        <section className="desktop-service-choices" aria-labelledby="choose-service-heading">
-          <p className="section-label">Choose a service</p>
-          <h2 id="choose-service-heading">Start with the task you need</h2>
-          <div className="desktop-service-card-grid">
-            <a className="desktop-service-card" href="/geotag"><strong>Register location</strong><span>Submit a property point for official review.</span></a>
-            <a className="desktop-service-card" href="/issue"><strong>Check address code</strong><span>Look up published public registry information.</span></a>
-            <a className="desktop-service-card" href="/track"><strong>Track request</strong><span>Check public-safe progress for a submitted request.</span></a>
-          </div>
-        </section>
 
         <section className="service-start-workflow" aria-labelledby="workflow-heading">
           <p className="section-label"><LocalizedText k="workflow" /></p>
