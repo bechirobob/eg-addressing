@@ -2183,8 +2183,32 @@ img {
 .public-profile-actions {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
-  margin-top: 18px;
+  gap: 0.65rem;
+  align-items: center;
+  margin-top: 1rem;
+}
+
+.public-profile-record-list {
+  margin-top: 0.9rem;
+}
+
+.public-profile-record-list li {
+  display: grid;
+  grid-template-columns: minmax(7.5rem, 0.34fr) minmax(0, 1fr);
+  gap: 0.75rem;
+  align-items: baseline;
+  padding-block: 0.58rem;
+}
+
+.public-profile-record-list strong {
+  color: var(--civic-navy);
+  overflow-wrap: anywhere;
+}
+
+.public-profile-secondary-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.2rem 0.4rem;
 }
 
 .public-profile-actions > * {
