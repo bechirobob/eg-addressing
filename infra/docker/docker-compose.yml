@@ -6,7 +6,7 @@ services:
     env_file:
       - ../../.env
     ports:
-      - "${POSTGRES_PORT:-5434}:5432"
+      - "127.0.0.1:${POSTGRES_PORT:-5434}:5432"
     environment:
       POSTGRES_DB: ${POSTGRES_DB:-addressing}
       POSTGRES_USER: ${POSTGRES_USER:-addressing}
@@ -25,7 +25,7 @@ services:
     container_name: eg-addressing-redis
     restart: unless-stopped
     ports:
-      - "${REDIS_PORT:-6384}:6379"
+      - "127.0.0.1:${REDIS_PORT:-6384}:6379"
     volumes:
       - ../../data/redis:/data
     healthcheck:
@@ -41,8 +41,8 @@ services:
     env_file:
       - ../../.env
     ports:
-      - "${MINIO_PORT:-9100}:9000"
-      - "${MINIO_CONSOLE_PORT:-9101}:9001"
+      - "127.0.0.1:${MINIO_PORT:-9100}:9000"
+      - "127.0.0.1:${MINIO_CONSOLE_PORT:-9101}:9001"
     environment:
       MINIO_ROOT_USER: ${S3_ACCESS_KEY:-minioadmin}
       MINIO_ROOT_PASSWORD: ${S3_SECRET_KEY:-minioadmin}
@@ -59,7 +59,7 @@ services:
     env_file:
       - ../../.env
     ports:
-      - "${API_PORT:-8100}:8100"
+      - "127.0.0.1:${API_PORT:-8100}:8100"
     volumes:
       - ../../artifacts:/app/artifacts:ro
     depends_on:
@@ -91,7 +91,7 @@ services:
       INTERNAL_API_BASE_URL: http://api:8100
       NEXT_PUBLIC_API_BASE_URL: ${NEXT_PUBLIC_API_BASE_URL:-}
     ports:
-      - "${ADMIN_PORT:-3100}:3100"
+      - "127.0.0.1:${ADMIN_PORT:-3100}:3100"
     depends_on:
       api:
         condition: service_healthy
