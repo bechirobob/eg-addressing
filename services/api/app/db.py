@@ -102,6 +102,18 @@ class AuthenticationError(ValueError):
     pass
 
 
+class DuplicateUserError(ValueError):
+    pass
+
+
+class UserNotFoundError(ValueError):
+    pass
+
+
+class InvalidUserRoleError(ValueError):
+    pass
+
+
 class ImportJobNotFoundError(ValueError):
     pass
 
@@ -1056,6 +1068,141 @@ def revoke_user_session(token: str, actor: dict[str, str] | None = None) -> None
             if actor:
                 _log_action(cursor, actor=actor, action='logout', entity_type='session', entity_id=token, details={'revoked': True})
         connection.commit()
+
+
+STAFF_USER_ROLES = {'admin', 'editor', 'viewer', 'agency_viewer'}
+
+
+def _validate_staff_role(role: str) -> None:
+    if role not in STAFF_USER_ROLES:
+        raise InvalidUserRoleError('invalid staff role')
+
+
+def _project_staff_user(row: dict[str, Any]) -> dict[str, Any]:
+    return {
+        'id': row['id'],
+        'username': row['username'],
+        'full_name': row['full_name'],
+        'role': row['role'],
+        'is_active': row['is_active'],
+        'created_at': row.get('created_at'),
+        'active_sessions': int(row.get('active_sessions') or 0),
+    }
+
+
+def list_staff_users() -> list[dict[str, Any]]:
+    with db_connection() as connection:
+        with connection.cursor() as cursor:
+            cursor.execute(
+                '''
+                SELECT u.id, u.username, u.full_name, u.role, u.is_active, u.created_at,
+                       COUNT(t.token) FILTER (WHERE t.revoked_at IS NULL AND t.expires_at > NOW())::int AS active_sessions
+                FROM users u
+                LEFT JOIN auth_tokens t ON t.user_id = u.id
+                GROUP BY u.id, u.username, u.full_name, u.role, u.is_active, u.created_at
+                ORDER BY u.username ASC
+                '''
+            )
+            return [_project_staff_user(row) for row in cursor.fetchall()]
+
+
+def get_staff_user(user_id: str) -> dict[str, Any]:
+    with db_connection() as connection:
+        with connection.cursor() as cursor:
+            cursor.execute(
+                '''
+                SELECT u.id, u.username, u.full_name, u.role, u.is_active, u.created_at,
+                       COUNT(t.token) FILTER (WHERE t.revoked_at IS NULL AND t.expires_at > NOW())::int AS active_sessions
+                FROM users u
+                LEFT JOIN auth_tokens t ON t.user_id = u.id
+                WHERE u.id = %s
+                GROUP BY u.id, u.username, u.full_name, u.role, u.is_active, u.created_at
+                ''',
+                (user_id,),
+            )
+            row = cursor.fetchone()
+            if not row:
+                raise UserNotFoundError('staff user not found')
+            return _project_staff_user(row)
+
+
+def create_staff_user(payload: dict[str, Any], actor: dict[str, str] | None = None) -> dict[str, Any]:
+    username = str(payload['username']).strip().lower()
+    full_name = str(payload['full_name']).strip()
+    role = str(payload['role']).strip()
+    password = str(payload['password'])
+    _validate_staff_role(role)
+    user_id = payload.get('id') or f'user-{_slugify(username)}'
+    with db_connection() as connection:
+        with connection.cursor() as cursor:
+            cursor.execute(
+                '''
+                INSERT INTO users (id, username, full_name, role, password_hash, is_active)
+                VALUES (%s, %s, %s, %s, %s, TRUE)
+                ON CONFLICT DO NOTHING
+                RETURNING id
+                ''',
+                (user_id, username, full_name, role, _hash_password(password)),
+            )
+            inserted = cursor.fetchone()
+            if not inserted:
+                raise DuplicateUserError('staff user already exists')
+            _log_action(cursor, actor=actor, action='create-staff-user', entity_type='user', entity_id=user_id, details={'username': username, 'role': role})
+        connection.commit()
+    return get_staff_user(user_id)
+
+
+def update_staff_user(user_id: str, payload: dict[str, Any], actor: dict[str, str] | None = None) -> dict[str, Any]:
+    updates: list[str] = []
+    params: list[Any] = []
+    details: dict[str, Any] = {}
+    if payload.get('full_name') is not None:
+        updates.append('full_name = %s')
+        params.append(str(payload['full_name']).strip())
+        details['full_name_updated'] = True
+    if payload.get('role') is not None:
+        role = str(payload['role']).strip()
+        _validate_staff_role(role)
+        updates.append('role = %s')
+        params.append(role)
+        details['role'] = role
+    if payload.get('is_active') is not None:
+        updates.append('is_active = %s')
+        params.append(bool(payload['is_active']))
+        details['is_active'] = bool(payload['is_active'])
+    if payload.get('password'):
+        updates.append('password_hash = %s')
+        params.append(_hash_password(str(payload['password'])))
+        details['password_rotated'] = True
+    if not updates:
+        return get_staff_user(user_id)
+    with db_connection() as connection:
+        with connection.cursor() as cursor:
+            cursor.execute(f"UPDATE users SET {', '.join(updates)} WHERE id = %s RETURNING id", [*params, user_id])
+            if not cursor.fetchone():
+                raise UserNotFoundError('staff user not found')
+            _log_action(cursor, actor=actor, action='update-staff-user', entity_type='user', entity_id=user_id, details=details)
+        connection.commit()
+    return get_staff_user(user_id)
+
+
+def disable_staff_user(user_id: str, actor: dict[str, str] | None = None) -> dict[str, Any]:
+    user = update_staff_user(user_id, {'is_active': False}, actor=actor)
+    revoke_staff_user_sessions(user_id, actor=actor)
+    return {**user, 'is_active': False, 'active_sessions': 0}
+
+
+def revoke_staff_user_sessions(user_id: str, actor: dict[str, str] | None = None) -> dict[str, Any]:
+    with db_connection() as connection:
+        with connection.cursor() as cursor:
+            cursor.execute('SELECT 1 FROM users WHERE id = %s', (user_id,))
+            if not cursor.fetchone():
+                raise UserNotFoundError('staff user not found')
+            cursor.execute('UPDATE auth_tokens SET revoked_at = NOW() WHERE user_id = %s AND revoked_at IS NULL AND expires_at > NOW()', (user_id,))
+            revoked = cursor.rowcount
+            _log_action(cursor, actor=actor, action='revoke-staff-sessions', entity_type='user', entity_id=user_id, details={'revoked_sessions': revoked})
+        connection.commit()
+    return {'user_id': user_id, 'revoked_sessions': revoked}
 
 
 def list_provinces() -> list[dict[str, str]]:
@@ -3400,6 +3547,22 @@ def get_address_record_case_file(address_code: str) -> dict[str, Any]:
                 if isinstance(event.get('details'), str):
                     event['details'] = json.loads(event['details'])
                 timeline.append(event)
+            if exact.get('source_submission_id'):
+                cursor.execute(
+                    '''
+                    SELECT action AS event_type, action, entity_type, entity_id, actor_username, actor_role, details, created_at
+                    FROM audit_logs
+                    WHERE entity_type = 'citizen_geotag_submission' AND entity_id = %s
+                    ORDER BY created_at ASC
+                    ''',
+                    (exact['source_submission_id'],),
+                )
+                for row in cursor.fetchall():
+                    event = dict(row)
+                    if isinstance(event.get('details'), str):
+                        event['details'] = json.loads(event['details'])
+                    timeline.append(event)
+    timeline.sort(key=lambda item: item.get('created_at') or '')
     exact['timeline'] = timeline
     return exact
 

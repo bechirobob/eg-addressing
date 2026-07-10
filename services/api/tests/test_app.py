@@ -75,6 +75,87 @@ def test_auth_logout_revokes_current_token(monkeypatch) -> None:
     assert revoked['token'] == 'logout-token'
 
 
+def test_admin_can_list_staff_users_without_hashes_or_tokens(monkeypatch) -> None:
+    monkeypatch.setattr(main, 'resolve_user_from_token', lambda token: ADMIN)
+    monkeypatch.setattr(main, 'list_staff_users', lambda: [
+        {
+            'id': 'user-editor',
+            'username': 'editor',
+            'full_name': 'Registry Editor',
+            'role': 'editor',
+            'is_active': True,
+            'created_at': '2026-07-10T00:00:00+00:00',
+            'active_sessions': 1,
+            'password_hash': 'must-not-leak',
+        }
+    ])
+
+    response = client.get('/api/v1/admin/users', headers=auth_header())
+
+    assert response.status_code == 200
+    body = response.json()
+    assert body['items'][0]['username'] == 'editor'
+    assert 'password_hash' not in body['items'][0]
+    assert 'token' not in json.dumps(body)
+
+
+def test_non_admin_cannot_manage_staff_users(monkeypatch) -> None:
+    monkeypatch.setattr(main, 'resolve_user_from_token', lambda token: EDITOR)
+
+    response = client.get('/api/v1/admin/users', headers=auth_header())
+
+    assert response.status_code == 403
+
+
+def test_admin_can_create_update_disable_and_revoke_staff_user(monkeypatch) -> None:
+    monkeypatch.setattr(main, 'resolve_user_from_token', lambda token: ADMIN)
+    calls: list[tuple[Any, ...]] = []
+
+    def fake_create(payload, actor=None):
+        calls.append(('create', payload, actor))
+        return {'id': 'user-field-lead', 'username': payload['username'], 'full_name': payload['full_name'], 'role': payload['role'], 'is_active': True, 'created_at': '2026-07-10T00:00:00+00:00', 'active_sessions': 0}
+
+    def fake_update(user_id, payload, actor=None):
+        calls.append(('update', user_id, payload, actor))
+        return {'id': user_id, 'username': 'field_lead', 'full_name': payload['full_name'], 'role': payload['role'], 'is_active': payload['is_active'], 'created_at': '2026-07-10T00:00:00+00:00', 'active_sessions': 0}
+
+    def fake_disable(user_id, actor=None):
+        calls.append(('disable', user_id, actor))
+        return {'id': user_id, 'username': 'field_lead', 'full_name': 'Field Lead', 'role': 'viewer', 'is_active': False, 'created_at': '2026-07-10T00:00:00+00:00', 'active_sessions': 0}
+
+    def fake_revoke(user_id, actor=None):
+        calls.append(('revoke', user_id, actor))
+        return {'user_id': user_id, 'revoked_sessions': 2}
+
+    monkeypatch.setattr(main, 'create_staff_user', fake_create)
+    monkeypatch.setattr(main, 'update_staff_user', fake_update)
+    monkeypatch.setattr(main, 'disable_staff_user', fake_disable)
+    monkeypatch.setattr(main, 'revoke_staff_user_sessions', fake_revoke)
+
+    created = client.post('/api/v1/admin/users', json={'username': 'field_lead', 'full_name': 'Field Lead', 'role': 'viewer', 'password': 'temporary-strong-pass'}, headers=auth_header())
+    updated = client.patch('/api/v1/admin/users/user-field-lead', json={'full_name': 'Field Operations Lead', 'role': 'editor', 'is_active': True}, headers=auth_header())
+    disabled = client.post('/api/v1/admin/users/user-field-lead/disable', headers=auth_header())
+    revoked = client.post('/api/v1/admin/users/user-field-lead/revoke-sessions', headers=auth_header())
+
+    assert created.status_code == 201
+    assert updated.status_code == 200
+    assert disabled.json()['is_active'] is False
+    assert revoked.json()['revoked_sessions'] == 2
+    assert [call[0] for call in calls] == ['create', 'update', 'disable', 'revoke']
+
+
+def test_admin_cannot_deactivate_or_revoke_own_account(monkeypatch) -> None:
+    monkeypatch.setattr(main, 'resolve_user_from_token', lambda token: ADMIN)
+
+    deactivate = client.patch('/api/v1/admin/users/user-admin', json={'is_active': False}, headers=auth_header())
+    disable = client.post('/api/v1/admin/users/user-admin/disable', headers=auth_header())
+    revoke = client.post('/api/v1/admin/users/user-admin/revoke-sessions', headers=auth_header())
+
+    assert deactivate.status_code == 400
+    assert disable.status_code == 400
+    assert revoke.status_code == 400
+
+
 def test_cookie_mode_protected_mutation_requires_csrf(monkeypatch) -> None:
     monkeypatch.setattr(main, 'SESSION_COOKIE_MODE', 'secure-http-only-cookie')
     monkeypatch.setattr(main, 'SESSION_COOKIE_SECURE', False)
@@ -1392,6 +1473,34 @@ def test_address_record_search_requires_auth_and_returns_case_files(monkeypatch)
     body = response.json()
     assert body['items'][0]['address_code'] == 'EG-BN-N1-CASE000003-AA'
     assert body['items'][0]['record_bundle']['identity']['address_code'] == 'EG-BN-N1-CASE000003-AA'
+
+
+def test_address_record_case_file_includes_masked_timeline(monkeypatch) -> None:
+    monkeypatch.setattr(main, 'resolve_user_from_token', lambda token: VIEWER)
+    monkeypatch.setattr(main, 'get_address_record_case_file', lambda code: {
+        'id': 'address-record-1',
+        'address_code': code,
+        'status': 'registry-ready',
+        'timeline': [
+            {
+                'event_type': 'registry-ready',
+                'action': 'registry-ready',
+                'entity_type': 'citizen_geotag_submission',
+                'entity_id': 'citizen-geotag-1',
+                'actor_username': 'editor',
+                'details': {'session_token': 'private-session-placeholder', 'reviewer_note': 'approved'},
+            }
+        ],
+    })
+
+    response = client.get('/api/v1/address-records/EG-BN-N1-CASE000003-AA', headers=auth_header())
+
+    assert response.status_code == 200
+    body = response.json()
+    assert body['timeline'][0]['event_type'] == 'registry-ready'
+    assert 'private-session-placeholder' not in json.dumps(body)
+    assert body['timeline'][0]['details']['session_token'] == '[protected]'
+
 
 
 def test_address_record_case_file_history_requires_auth(monkeypatch) -> None:

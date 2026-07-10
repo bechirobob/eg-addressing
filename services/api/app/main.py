@@ -38,9 +38,11 @@ from app.db import (
     DuplicatePublicationPackError,
     DuplicateRoadError,
     DuplicateTerritoryError,
+    DuplicateUserError,
     EvidenceAttachmentNotFoundError,
     ImportJobNotFoundError,
     InvalidSubmissionActionError,
+    InvalidUserRoleError,
     PublicationPackNotFoundError,
     RoadNotFoundError,
     SubmissionNotFoundError,
@@ -50,6 +52,7 @@ from app.db import (
     UnknownProvinceError,
     UnknownRoadError,
     UnknownTerritoryError,
+    UserNotFoundError,
     approve_submission,
     archive_address,
     archive_building,
@@ -61,6 +64,7 @@ from app.db import (
     cleanup_demo_fixtures,
     create_address,
     create_address_correction,
+    create_staff_user,
     create_citizen_geotag_submission,
     create_building,
     create_field_submission,
@@ -95,6 +99,7 @@ from app.db import (
     list_field_assignments,
     list_field_submission_evidence_history,
     list_field_submissions,
+    list_staff_users,
     list_geotag_field_tasks as list_field_geotag_tasks,
     list_import_jobs,
     list_provinces as list_provinces_db,
@@ -119,6 +124,9 @@ from app.db import (
     signage_export,
     update_address,
     update_address_correction_status,
+    update_staff_user,
+    disable_staff_user,
+    revoke_staff_user_sessions,
     update_citizen_geotag_status,
     upsert_address_record_from_geotag,
     update_geotag_field_status,
@@ -134,6 +142,20 @@ from app.db import (
 class LoginRequest(BaseModel):
     username: str = Field(min_length=3, max_length=40)
     password: str = Field(min_length=3, max_length=80)
+
+
+class StaffUserCreateRequest(BaseModel):
+    username: str = Field(min_length=3, max_length=40, pattern='^[a-zA-Z0-9_.-]+$')
+    full_name: str = Field(min_length=3, max_length=120)
+    role: str = Field(pattern='^(admin|editor|viewer|agency_viewer)$')
+    password: str = Field(min_length=12, max_length=120)
+
+
+class StaffUserUpdateRequest(BaseModel):
+    full_name: str | None = Field(default=None, min_length=3, max_length=120)
+    role: str | None = Field(default=None, pattern='^(admin|editor|viewer|agency_viewer)$')
+    is_active: bool | None = None
+    password: str | None = Field(default=None, min_length=12, max_length=120)
 
 
 class TerritoryCreate(BaseModel):
@@ -623,6 +645,35 @@ def _require_role(user: dict[str, str], *roles: str) -> None:
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail='insufficient role')
 
 
+def _staff_user_public(user: dict[str, Any]) -> dict[str, Any]:
+    return {
+        'id': user.get('id'),
+        'username': user.get('username'),
+        'full_name': user.get('full_name'),
+        'role': user.get('role'),
+        'is_active': user.get('is_active'),
+        'created_at': user.get('created_at'),
+        'active_sessions': user.get('active_sessions', 0),
+    }
+
+
+SENSITIVE_DETAIL_KEYS = {'token', 'session_token', 'auth_token', 'password', 'password_hash', 'csrf_token'}
+
+
+def _sanitize_timeline_value(value: Any) -> Any:
+    if isinstance(value, dict):
+        return {key: ('[protected]' if key in SENSITIVE_DETAIL_KEYS else _sanitize_timeline_value(inner)) for key, inner in value.items()}
+    if isinstance(value, list):
+        return [_sanitize_timeline_value(item) for item in value]
+    return value
+
+
+def _sanitize_case_file(case_file: dict[str, Any]) -> dict[str, Any]:
+    safe = dict(case_file)
+    safe['timeline'] = [_sanitize_timeline_value(item) for item in safe.get('timeline', [])]
+    return safe
+
+
 def _geotag_quality_flags(item: dict[str, Any], duplicate_count: int) -> dict[str, Any]:
     accuracy = item.get('accuracy_meters')
     if accuracy is None:
@@ -1076,6 +1127,65 @@ def auth_logout(authorization: str | None = Header(default=None), eg_addressing_
     response.delete_cookie(SESSION_COOKIE_NAME, path='/')
     response.delete_cookie(CSRF_COOKIE_NAME, path='/')
     return response
+
+
+@app.get('/api/v1/admin/users')
+def admin_list_users(authorization: str | None = Header(default=None)) -> dict[str, list[dict[str, Any]]]:
+    user = _current_user(authorization)
+    _require_role(user, 'admin')
+    return {'items': [_staff_user_public(item) for item in list_staff_users()]}
+
+
+@app.post('/api/v1/admin/users', status_code=status.HTTP_201_CREATED)
+def admin_create_user(payload: StaffUserCreateRequest, authorization: str | None = Header(default=None)) -> dict[str, Any]:
+    user = _current_user(authorization)
+    _require_role(user, 'admin')
+    try:
+        return _staff_user_public(create_staff_user(payload.model_dump(), actor=user))
+    except DuplicateUserError as exc:
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail=str(exc)) from exc
+    except InvalidUserRoleError as exc:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(exc)) from exc
+
+
+@app.patch('/api/v1/admin/users/{user_id}')
+def admin_update_user(user_id: str, payload: StaffUserUpdateRequest, authorization: str | None = Header(default=None)) -> dict[str, Any]:
+    user = _current_user(authorization)
+    _require_role(user, 'admin')
+    update_payload = payload.model_dump(exclude_unset=True)
+    if user_id == user['id'] and (update_payload.get('is_active') is False or update_payload.get('role') not in {None, 'admin'}):
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail='cannot deactivate or downgrade current admin account')
+    try:
+        return _staff_user_public(update_staff_user(user_id, update_payload, actor=user))
+    except UserNotFoundError as exc:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(exc)) from exc
+    except InvalidUserRoleError as exc:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(exc)) from exc
+
+
+@app.post('/api/v1/admin/users/{user_id}/disable')
+def admin_disable_user(user_id: str, authorization: str | None = Header(default=None)) -> dict[str, Any]:
+    user = _current_user(authorization)
+    _require_role(user, 'admin')
+    if user_id == user['id']:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail='cannot disable current admin account')
+    try:
+        return _staff_user_public(disable_staff_user(user_id, actor=user))
+    except UserNotFoundError as exc:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(exc)) from exc
+
+
+@app.post('/api/v1/admin/users/{user_id}/revoke-sessions')
+def admin_revoke_user_sessions(user_id: str, authorization: str | None = Header(default=None)) -> dict[str, Any]:
+    user = _current_user(authorization)
+    _require_role(user, 'admin')
+    if user_id == user['id']:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail='cannot revoke current admin sessions')
+    try:
+        return revoke_staff_user_sessions(user_id, actor=user)
+    except UserNotFoundError as exc:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(exc)) from exc
+
 
 
 @app.get('/api/v1/territories/provinces')
@@ -1764,7 +1874,7 @@ def address_record_case_file(address_code: str, authorization: str | None = Head
     user = _current_user(authorization)
     _require_role(user, 'viewer', 'editor', 'admin')
     try:
-        return get_address_record_case_file(address_code)
+        return _sanitize_case_file(get_address_record_case_file(address_code))
     except AddressNotFoundError as exc:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(exc)) from exc
 
