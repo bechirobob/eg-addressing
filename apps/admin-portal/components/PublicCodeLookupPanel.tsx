@@ -126,29 +126,26 @@ export function PublicCodeLookupPanel({ apiBaseUrl, code }: PublicCodeLookupPane
   const longitude = record?.longitude ?? payload?.longitude ?? null;
 
   return (
-    <section className="public-code-status-flow public-address-profile-flow">
-      <article className="public-task-panel code-status-panel public-profile-panel">
-        <div className="panel-head">
-          <p className="section-label">Public address profile</p>
-          <h3>{code}</h3>
-        </div>
-        {isLoading ? <p className="panel-state">Checking address code…</p> : null}
+    <section className="service-start-page public-code-service-page" aria-labelledby="public-code-profile-heading">
+      <div className="desktop-home-copy public-code-profile-copy">
+        <p className="section-label">Public address profile</p>
+        <h2 id="public-code-profile-heading">{code}</h2>
+        {isLoading ? <p className="public-task-copy">Checking address code…</p> : null}
         {error ? <p className="form-notice error">{error}</p> : null}
         {payload ? (
           <>
-            <ul className="stack-list public-profile-record-list">
-              <li><span>Publication state</span><strong>{approvalLabel(payload.publication_status)}</strong></li>
-              <li><span>Registry result</span><strong>{statusCopy(payload)}</strong></li>
-              {record ? <li><span>Address</span><strong>{record.address_label}</strong></li> : null}
-              {record ? <li><span>Area</span><strong>{record.territory_name ?? 'Area pending'} · accuracy {record.accuracy_meters ?? 'not recorded'}m</strong></li> : null}
-              {!record ? <li><span>Public details</span><strong>Appear only after official approval</strong></li> : null}
-            </ul>
-            <div className="territory-form-actions public-profile-actions" aria-label="Public address profile actions">
-              {mapsLink ? <a className="primary-action" href={mapsLink} target="_blank" rel="noreferrer">Open map</a> : null}
-              <a className="secondary-action" href={proofUrl}>Proof / QR</a>
-              <button className="secondary-action" type="button" onClick={() => copyText(code, 'Address code')}>Copy code</button>
+            <p className="public-task-copy public-code-status-copy">{statusCopy(payload)}</p>
+            {record ? <p className="public-code-address-line">{record.address_label}</p> : null}
+            {record ? <p className="public-task-copy">{record.territory_name ?? 'Area pending'} · accuracy {record.accuracy_meters ?? 'not recorded'}m · {approvalLabel(payload.publication_status)}</p> : null}
+            {!record ? <p className="public-task-copy">Full address details appear only after official approval.</p> : null}
+            <div className="service-start-actions public-code-service-actions" aria-label="Public address profile actions">
+              {mapsLink ? <a className="button button-primary service-start-primary" href={mapsLink} target="_blank" rel="noreferrer">Open map</a> : null}
+              <div className="service-start-secondary-actions">
+                <a className="button button-secondary" href={proofUrl}>Proof / QR</a>
+                <button className="button button-secondary" type="button" onClick={() => copyText(code, 'Address code')}>Copy code</button>
+              </div>
             </div>
-            <p className="public-task-copy public-profile-secondary-links">
+            <p className="public-task-copy public-code-secondary-links">
               <button className="inline-action-link" type="button" onClick={shareProfile} disabled={!profileUrl}>Share link</button>
               <span aria-hidden="true"> · </span>
               <button className="inline-action-link" type="button" onClick={() => window.print()}>Print profile</button>
@@ -157,45 +154,32 @@ export function PublicCodeLookupPanel({ apiBaseUrl, code }: PublicCodeLookupPane
             </p>
           </>
         ) : null}
-
         {copyNotice ? <p className="form-notice success" role="status">{copyNotice}</p> : null}
-        <p className="institutional-note public-profile-disclaimer">
-          This page confirms public address-code status only. It is not proof of ownership, private title, or a property-rights certificate.
-        </p>
-      </article>
+      </div>
 
-      <article className="public-task-panel code-detail-panel public-profile-detail-panel">
-        <div className="panel-head quiet-head">
-          <p className="section-label">Verification details</p>
-          <h3>Public record data</h3>
-        </div>
+      <section className="service-start-workflow public-code-record-section" aria-labelledby="public-code-record-heading">
+        <p className="section-label">Public record data</p>
+        <h2 id="public-code-record-heading">Verification details</h2>
         {payload ? (
-          <dl className="facts-grid issuance-facts-grid calm-facts-grid public-profile-facts">
-            <div><dt>Valid code</dt><dd>{payload.is_valid ? 'Yes' : 'No'}</dd></div>
+          <dl className="facts-grid issuance-facts-grid public-code-facts-grid">
+            <div><dt>Publication state</dt><dd>{approvalLabel(payload.publication_status)}</dd></div>
             <div><dt>Province</dt><dd>{payload.province_code ?? 'Unknown'}</dd></div>
             <div><dt>Address-code version</dt><dd>{payload.schema ?? 'Unknown'}</dd></div>
             <div><dt>Location cell</dt><dd>{payload.cell_size_meters ? `${payload.cell_size_meters}m` : 'Unknown'}</dd></div>
             <div><dt>Check characters</dt><dd>{payload.checksum ?? 'Unknown'}</dd></div>
             <div><dt>Latitude</dt><dd>{displayCoordinate(latitude)}</dd></div>
             <div><dt>Longitude</dt><dd>{displayCoordinate(longitude)}</dd></div>
-            <div><dt>Publication state</dt><dd>{approvalLabel(payload.publication_status)}</dd></div>
           </dl>
         ) : null}
-      </article>
+      </section>
 
-      <article className="public-task-panel public-code-guide-panel">
-        <div className="panel-head quiet-head">
-          <p className="section-label">Code guide</p>
-          <h3>How to read the address code</h3>
-        </div>
-        <ul className="program-list public-code-guide-list">
-          <li><span><strong>EG</strong> identifies the national addressing system for Equatorial Guinea.</span></li>
-          <li><span><strong>Province</strong> identifies the province prefix used during registration and review.</span></li>
-          <li><span><strong>N1</strong> identifies the current national address-code grammar.</span></li>
-          <li><span><strong>Location cell</strong> gives the approximate public location cell, not private identity data.</span></li>
-          <li><span><strong>Check characters</strong> help detect typing errors when a code is copied, printed, or read by phone.</span></li>
-        </ul>
-      </article>
+      <section className="service-start-workflow public-code-record-section" aria-labelledby="public-code-boundary-heading">
+        <p className="section-label">Public confirmation</p>
+        <h2 id="public-code-boundary-heading">What this page confirms</h2>
+        <p className="public-task-copy">
+          This page confirms public address-code status only. It is not proof of ownership, private title, or a property-rights certificate.
+        </p>
+      </section>
     </section>
   );
 }

@@ -2144,93 +2144,61 @@ img {
   border-top: 4px solid var(--civic-gold);
 }
 
-.public-code-status-flow {
-  display: grid;
-  grid-template-columns: minmax(0, 1.05fr) minmax(280px, 0.95fr);
-  gap: 1.25rem;
-  margin-top: 1.8rem;
-  align-items: flex-start;
+.public-code-service-page {
+  max-width: 860px !important;
 }
 
-.code-status-panel {
-  border-top: 4px solid var(--civic-blue);
+.public-code-profile-copy {
+  display: grid !important;
+  gap: var(--space-4) !important;
 }
 
-.approval-status-card h4 {
-  margin: 0.45rem 0 0;
-  color: var(--text-main);
+.public-code-profile-copy h2 {
+  margin: 0 !important;
+  color: var(--text-main) !important;
+  font-size: clamp(2.45rem, 13vw, 5.2rem) !important;
+  line-height: 0.96 !important;
+  letter-spacing: -0.055em !important;
+  overflow-wrap: anywhere !important;
 }
 
-.approval-status-card p,
-.approved-record-copy p {
-  margin: 0.4rem 0 0;
-  color: var(--text-muted);
+.public-code-status-copy {
+  color: var(--text-muted) !important;
+  font-size: clamp(1.35rem, 6vw, 2.15rem) !important;
+  line-height: 1.24 !important;
 }
 
-.public-address-profile-flow {
-  align-items: start;
+.public-code-address-line {
+  margin: 0 !important;
+  color: var(--text-main) !important;
+  font-size: clamp(1.5rem, 7vw, 2.6rem) !important;
+  font-weight: 800 !important;
+  line-height: 1.08 !important;
 }
 
-.public-profile-panel {
-  border-top: 4px solid var(--gov-blue);
+.public-code-service-actions {
+  margin-top: var(--space-4) !important;
 }
 
-.public-profile-detail-panel,
-.public-code-guide-panel {
-  border-top: 4px solid var(--gov-gold);
+.public-code-secondary-links {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 0.2rem 0.45rem !important;
 }
 
-.public-profile-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.65rem;
-  align-items: center;
-  margin-top: 1rem;
+.public-code-record-section {
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  padding: 0 !important;
 }
 
-.public-profile-record-list {
-  margin-top: 0.9rem;
+.public-code-facts-grid {
+  margin-top: var(--space-4) !important;
 }
 
-.public-profile-record-list li {
-  display: grid;
-  grid-template-columns: minmax(7.5rem, 0.34fr) minmax(0, 1fr);
-  gap: 0.75rem;
-  align-items: baseline;
-  padding-block: 0.58rem;
-}
-
-.public-profile-record-list strong {
-  color: var(--civic-navy);
-  overflow-wrap: anywhere;
-}
-
-.public-profile-secondary-links {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.2rem 0.4rem;
-}
-
-.public-profile-actions > * {
-  min-height: var(--gov-control-height);
-}
-
-.public-profile-disclaimer {
-  margin-top: 18px;
-  border-left: 4px solid var(--gov-gold);
-}
-
-.public-profile-facts {
-  margin-top: 0;
-}
-
-.public-code-guide-list strong {
-  color: var(--gov-ink-strong);
-}
-
-.calm-facts-grid div {
-  background: #fffefa;
-  border: 1px solid rgba(11, 47, 79, 0.12);
+.public-code-facts-grid div {
+  background: transparent !important;
 }
 
 @media (max-width: 920px) {
@@ -2241,8 +2209,7 @@ img {
   }
 
   .citizen-register-flow,
-  .operator-review-desk,
-  .public-code-status-flow {
+  .operator-review-desk {
     grid-template-columns: 1fr;
   }
 
@@ -8004,7 +7971,7 @@ button, input, select, textarea, a { font-family: var(--gov-font-ui) !important;
 .territory-input,.territory-textarea,input,select,textarea { min-height:35px !important; padding:7px 9px !important; border-radius:7px !important; font-size:0.84rem !important; line-height:1.2 !important; }
 textarea.territory-input,.territory-textarea { min-height:72px !important; }
 
-.section-grid,.territory-admin-grid,.verification-workspace,.field-workspace,.territory-workspace,.citizen-register-flow,.registry-simple-shell,.operator-review-shell,.operations-panel,.public-code-status-flow,.tracking-lookup-flow,.single-column-grid { gap:var(--gov-gap) !important; margin-top:10px !important; }
+.section-grid,.territory-admin-grid,.verification-workspace,.field-workspace,.territory-workspace,.citizen-register-flow,.registry-simple-shell,.operator-review-shell,.operations-panel,.tracking-lookup-flow,.single-column-grid { gap:var(--gov-gap) !important; margin-top:10px !important; }
 
 .verification-workspace { grid-template-columns:minmax(620px,1.1fr) minmax(360px,.62fr) !important; align-items:start !important; }
 .verification-queue-panel { grid-column:1 !important; grid-row:1 / span 2 !important; }
@@ -8064,7 +8031,7 @@ textarea.territory-input,.territory-textarea { min-height:72px !important; }
   .chrome-shell { grid-template-columns:1fr !important; gap:8px !important; }
   .grouped-top-nav { grid-template-columns:repeat(2,minmax(0,1fr)) !important; }
   .nav-group-links { grid-template-columns:1fr !important; }
-  .verification-workspace,.field-workspace,.territory-workspace,.territory-admin-grid,.section-grid,.citizen-register-flow,.public-code-status-flow,.registry-simple-shell,.operations-panel,.operator-review-shell { grid-template-columns:1fr !important; }
+  .verification-workspace,.field-workspace,.territory-workspace,.territory-admin-grid,.section-grid,.citizen-register-flow,.registry-simple-shell,.operations-panel,.operator-review-shell { grid-template-columns:1fr !important; }
   .verification-queue-panel,.verification-trust-panel,.field-assignments-panel,.field-location-checks-panel,.field-intake-panel,.live-intake-panel,.territory-command-panel,.territory-hierarchy-panel,.territory-detail-panel,.territory-list-panel,.location-hero-panel,.map-confirm-panel,.location-form-panel,.address-preview-panel { grid-column:1 !important; grid-row:auto !important; }
   .field-command-deck,.territory-hierarchy-grid,.territory-list { grid-template-columns:1fr !important; }
   .territory-list,.review-list,.field-task-list,.live-intake-list { max-height:560px !important; overflow-y:auto !important; }
@@ -8792,7 +8759,6 @@ textarea.territory-input,.territory-textarea { min-height:72px !important; }
   .territory-workspace,
   .registry-simple-shell,
   .operations-panel,
-  .public-code-status-flow,
   .tracking-lookup-flow,
   .single-column-grid {
     max-width: 100vw !important;
