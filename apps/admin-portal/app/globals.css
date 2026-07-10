@@ -14761,3 +14761,107 @@ html body .guided-workflow-strip.guided-workflow-strip .step-chip {
     grid-template-columns: 1fr !important;
   }
 }
+
+/* Permanent desktop workbench contract: operation-heavy admin pages must not inherit cramped 3-column card grids. */
+.desktop-workbench-grid,
+.publication-operations-grid {
+  grid-template-columns: 1fr !important;
+  gap: 18px !important;
+}
+
+.desktop-workbench-grid > .public-task-panel,
+.publication-operations-grid > .public-task-panel {
+  grid-column: 1 / -1 !important;
+  width: 100% !important;
+  border-radius: 0 !important;
+}
+
+.publication-operations-grid .publication-release-head {
+  grid-template-columns: minmax(0, 0.9fr) minmax(520px, 1.1fr) !important;
+  align-items: start !important;
+}
+
+.publication-summary-list {
+  display: grid !important;
+  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border-block: 1px solid var(--registry-line, rgba(13, 47, 79, 0.18)) !important;
+}
+
+.publication-summary-list div {
+  display: grid !important;
+  gap: 0.2rem !important;
+  padding: 0.72rem 0.9rem !important;
+  border-inline-start: 1px solid var(--registry-line-soft, rgba(13, 47, 79, 0.1)) !important;
+  background: transparent !important;
+}
+
+.publication-summary-list div:first-child {
+  border-inline-start: 0 !important;
+}
+
+.publication-summary-list dt,
+.publication-summary-list dd {
+  margin: 0 !important;
+}
+
+.publication-summary-list dt {
+  color: var(--registry-muted, #5f6873) !important;
+  font-size: 0.72rem !important;
+  font-weight: 820 !important;
+  letter-spacing: 0.09em !important;
+  line-height: 1.2 !important;
+  text-transform: uppercase !important;
+}
+
+.publication-summary-list dd {
+  color: var(--registry-ink, #14202b) !important;
+  font-size: 1.08rem !important;
+  font-weight: 820 !important;
+  line-height: 1.2 !important;
+}
+
+.publication-operations-grid .panel-head,
+.publication-operations-grid .review-glance-head {
+  max-width: none !important;
+}
+
+.publication-operations-grid .territory-form {
+  max-width: 880px !important;
+}
+
+.publication-operations-grid .review-list,
+.publication-operations-grid .selection-list,
+.publication-operations-grid .mini-list {
+  max-width: none !important;
+}
+
+@media (max-width: 900px) {
+  .publication-operations-grid .publication-release-head {
+    grid-template-columns: 1fr !important;
+  }
+
+  .publication-summary-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+
+  .publication-summary-list div:nth-child(odd) {
+    border-inline-start: 0 !important;
+  }
+}
+
+@media (max-width: 560px) {
+  .publication-summary-list {
+    grid-template-columns: 1fr !important;
+  }
+
+  .publication-summary-list div {
+    border-inline-start: 0 !important;
+    border-block-start: 1px solid var(--registry-line-soft, rgba(13, 47, 79, 0.1)) !important;
+  }
+
+  .publication-summary-list div:first-child {
+    border-block-start: 0 !important;
+  }
+}

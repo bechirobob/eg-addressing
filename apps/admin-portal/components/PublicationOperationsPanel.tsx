@@ -386,19 +386,19 @@ export function PublicationOperationsPanel({
   }
 
   return (
-    <section className="section-grid territory-admin-grid">
+    <section className="section-grid territory-admin-grid desktop-workbench-grid publication-operations-grid">
       <article className="public-task-panel review-glance-panel publication-glance-panel">
-        <div className="review-glance-head">
+        <div className="review-glance-head publication-release-head">
           <div>
             <p className="section-label">Release desk</p>
             <h3>Prepare official outputs after approval</h3>
           </div>
-          <div className="operator-summary-row review-glance-chips" aria-label="Release desk summary">
-            <span className="status-chip">Intake jobs: {publicationSummary.intakeJobs}</span>
-            <span className="status-chip warn">Packs: {publicationSummary.packs}</span>
-            <span className="status-chip">Eligible addresses: {publicationSummary.eligibleAddresses}</span>
-            <span className="status-chip ok">Published packs: {publicationSummary.publishedPacks}</span>
-          </div>
+          <dl className="publication-summary-list" aria-label="Release desk summary">
+            <div><dt>Intake jobs</dt><dd>{publicationSummary.intakeJobs}</dd></div>
+            <div><dt>Packs</dt><dd>{publicationSummary.packs}</dd></div>
+            <div><dt>Eligible addresses</dt><dd>{publicationSummary.eligibleAddresses}</dd></div>
+            <div><dt>Published packs</dt><dd>{publicationSummary.publishedPacks}</dd></div>
+          </dl>
         </div>
         {sessionStatus === 'loading' ? <p className="panel-state">Checking access before loading protected publication tools…</p> : null}
         {notice ? <p className="form-notice success">{notice}</p> : null}
