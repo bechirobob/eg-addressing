@@ -14954,3 +14954,38 @@ html body .guided-workflow-strip.guided-workflow-strip .step-chip {
     grid-column: 1 / -1 !important;
   }
 }
+
+/* Public code mobile correction pass: reduce dead masthead handoff space. */
+@media (max-width: 640px) {
+  html body main.page-shell.page-shell-code .official-lockup {
+    gap: 5px !important;
+    margin-bottom: 20px !important;
+  }
+
+  html body main.page-shell.page-shell-code .masthead-reference .crest-frame {
+    width: 36px !important;
+  }
+
+  html body main.page-shell.page-shell-code .masthead-reference .kicker {
+    font-size: 0.68rem !important;
+    letter-spacing: 0.14em !important;
+  }
+
+  html body main.page-shell.page-shell-code .masthead-reference {
+    margin-bottom: 8px !important;
+    padding-bottom: 10px !important;
+  }
+
+  html body main.page-shell.page-shell-code .masthead-reference .masthead-subtitle {
+    margin-top: 10px !important;
+    line-height: 1.42 !important;
+  }
+
+  html body main.page-shell.page-shell-code .masthead-reference h1 {
+    font-size: clamp(2.18rem, 10.4vw, 2.72rem) !important;
+  }
+
+  html body main.page-shell.page-shell-code .masthead-reference .eyebrow {
+    margin-bottom: 6px !important;
+  }
+}
