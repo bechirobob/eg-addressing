@@ -2451,6 +2451,11 @@ def verify_address(query: str) -> dict[str, Any] | None:
             row = cursor.fetchone()
             if not row:
                 return None
+            verification_note = (
+                'Controlled staging reference record only. This record is retained for pilot review and is not final government publication.'
+                if row['source'] == 'staging-reference-record' or row['verification_status'] == 'controlled-staging-reference'
+                else f"Published registry record found with status {row['status']} and verification level {row['verification_status']}."
+            )
             return {
                 'query': query,
                 'match_status': 'verified',
@@ -2464,7 +2469,7 @@ def verify_address(query: str) -> dict[str, Any] | None:
                 'latitude': row['latitude'],
                 'longitude': row['longitude'],
                 'accuracy_meters': row['accuracy_meters'],
-                'verification_note': f"Published registry record found with status {row['status']} and verification level {row['verification_status']}.",
+                'verification_note': verification_note,
                 'address_id': row['id'],
             }
 

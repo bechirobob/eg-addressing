@@ -43,6 +43,7 @@ export function PublicIssuancePanel({ initialExtract, apiBaseUrl }: PublicIssuan
   const [note, setNote] = useState('');
   const [reporterName, setReporterName] = useState('');
   const [reporterContact, setReporterContact] = useState('');
+  const [privacyAcknowledged, setPrivacyAcknowledged] = useState(false);
   const [notice, setNotice] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [isLookupLoading, setIsLookupLoading] = useState(false);
@@ -78,6 +79,11 @@ export function PublicIssuancePanel({ initialExtract, apiBaseUrl }: PublicIssuan
     setIsCorrectionSubmitting(true);
     setNotice(null);
     setError(null);
+    if (!privacyAcknowledged) {
+      setError('Privacy notice acknowledgement is required before submitting a correction report.');
+      setIsCorrectionSubmitting(false);
+      return;
+    }
 
     try {
       const response = await fetch(`${browserApiBaseUrl}/api/v1/public/corrections`, {
@@ -92,6 +98,7 @@ export function PublicIssuancePanel({ initialExtract, apiBaseUrl }: PublicIssuan
           note,
           reporter_name: reporterName || null,
           reporter_contact: reporterContact || null,
+          privacy_notice_acknowledged: privacyAcknowledged,
         }),
       });
       const payload = (await response.json()) as { status?: string; detail?: string };
@@ -234,6 +241,14 @@ export function PublicIssuancePanel({ initialExtract, apiBaseUrl }: PublicIssuan
                 <input className="territory-input" value={reporterContact} onChange={(event) => setReporterContact(event.target.value)} />
               </label>
             </div>
+            <section className="privacy-notice-box" aria-labelledby="correction-privacy-notice-heading">
+              <strong id="correction-privacy-notice-heading">Privacy notice before correction report</strong>
+              <p>This correction report may store your name, contact, notes, and the public address code you reference. It is used only for authorized review and follow-up in this staging environment.</p>
+              <label className="privacy-consent-check">
+                <input type="checkbox" checked={privacyAcknowledged} onChange={(event) => setPrivacyAcknowledged(event.target.checked)} required />
+                <span>I understand this report does not create or change an official production record until reviewed by authorized operators.</span>
+              </label>
+            </section>
             <div className="territory-form-actions">
               <button className="verification-button" type="submit" disabled={isCorrectionSubmitting}>
                 {isCorrectionSubmitting ? t('submitting') : t('submitCorrectionReport')}

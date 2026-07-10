@@ -1496,6 +1496,45 @@ img {
   line-height: 1.45;
 }
 
+.privacy-notice-box {
+  display: grid;
+  gap: 8px;
+  padding: 12px 14px;
+  border: 1px solid rgba(151, 88, 18, 0.26);
+  background: #fff8e8;
+  color: #5b3a0a;
+}
+
+.privacy-notice-box strong {
+  color: #3b2506;
+  font-size: 0.78rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.privacy-notice-box p {
+  margin: 0;
+  color: #5b3a0a;
+  line-height: 1.45;
+}
+
+.privacy-consent-check {
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+  color: #37270f;
+  font-weight: 780;
+  line-height: 1.35;
+}
+
+.privacy-consent-check input {
+  margin-top: 3px;
+  inline-size: 16px;
+  block-size: 16px;
+  accent-color: var(--civic-blue);
+  flex: 0 0 auto;
+}
+
 /* Geotag review quality workflow */
 .operator-summary-row,
 .quality-chip-row,

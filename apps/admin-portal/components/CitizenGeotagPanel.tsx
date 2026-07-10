@@ -234,6 +234,7 @@ export function CitizenGeotagPanel({ apiBaseUrl, provinces, territories }: Citiz
   const [citizenName, setCitizenName] = useState('');
   const [citizenContact, setCitizenContact] = useState('');
   const [dipLast4, setDipLast4] = useState('');
+  const [privacyAcknowledged, setPrivacyAcknowledged] = useState(false);
   const [captureMethod, setCaptureMethod] = useState('manual-map-pin');
   const [preview, setPreview] = useState<Preview | null>(null);
   const [roadSuggestion, setRoadSuggestion] = useState<RoadSuggestion | null>(null);
@@ -430,6 +431,11 @@ export function CitizenGeotagPanel({ apiBaseUrl, provinces, territories }: Citiz
       setIsSubmitting(false);
       return;
     }
+    if (!privacyAcknowledged) {
+      setError(locale === 'es' ? 'Debe confirmar el aviso de privacidad antes de enviar datos personales o técnicos.' : 'You must acknowledge the privacy notice before submitting personal or technical data.');
+      setIsSubmitting(false);
+      return;
+    }
     try {
       const response = await fetch(`${browserApiBaseUrl}/api/v1/public/geotag-submissions`, {
         method: 'POST',
@@ -452,6 +458,7 @@ export function CitizenGeotagPanel({ apiBaseUrl, provinces, territories }: Citiz
           map_display_name: roadSuggestion?.display_name ?? null,
           road_suggestion_source: roadSuggestion?.source ?? null,
           road_suggestion_attribution: roadSuggestion?.source_attribution ?? null,
+          privacy_notice_acknowledged: privacyAcknowledged,
         }),
       });
       const payload = (await response.json()) as SubmissionResult | { detail?: string };
@@ -643,6 +650,15 @@ export function CitizenGeotagPanel({ apiBaseUrl, provinces, territories }: Citiz
             </div>
             <span className="field-help">{locale === 'es' ? 'Los datos técnicos apoyan la revisión. La clasificación oficial y la publicación quedan bajo control de operadores autorizados.' : 'Technical data supports review. Official classification and publication remain controlled by authorized operators.'}</span>
           </details>
+
+          <section className="privacy-notice-box" aria-labelledby="citizen-privacy-notice-heading">
+            <strong id="citizen-privacy-notice-heading">{locale === 'es' ? 'Aviso de privacidad antes de enviar' : 'Privacy notice before submission'}</strong>
+            <p>{locale === 'es' ? 'La plataforma recogerá la referencia de ubicación, datos técnicos del dispositivo y cualquier nombre, contacto o últimos 4 dígitos del D.I.P. que decida facilitar. Estos datos se usan solo para revisión autorizada, seguimiento y corrección del registro en este entorno de staging.' : 'The platform will collect the location reference, technical device evidence, and any name, contact, or D.I.P. last 4 digits you choose to provide. This data is used only for authorized review, follow-up, and registry correction in this staging environment.'}</p>
+            <label className="privacy-consent-check">
+              <input type="checkbox" checked={privacyAcknowledged} onChange={(event) => setPrivacyAcknowledged(event.target.checked)} required />
+              <span>{locale === 'es' ? 'Entiendo que este envío no crea un registro oficial de producción y que mis datos serán revisados por operadores autorizados.' : 'I understand this submission does not create an official production record and my data will be reviewed by authorized operators.'}</span>
+            </label>
+          </section>
 
           <div className="compact-form-actions">
             <button className="secondary-action" type="button" onClick={() => void handlePreview()} disabled={isPreviewing}>

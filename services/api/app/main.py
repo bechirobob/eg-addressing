@@ -217,6 +217,7 @@ class AddressCorrectionCreate(BaseModel):
     public_code: str | None = Field(default=None, min_length=8, max_length=32)
     reporter_name: str | None = Field(default=None, min_length=2, max_length=120)
     reporter_contact: str | None = Field(default=None, min_length=3, max_length=120)
+    privacy_notice_acknowledged: bool = False
 
 
 class CorrectionReviewActionRequest(BaseModel):
@@ -254,6 +255,7 @@ class CitizenGeotagCreate(BaseModel):
     map_display_name: str | None = Field(default=None, min_length=2, max_length=500)
     road_suggestion_source: str | None = Field(default=None, min_length=3, max_length=80)
     road_suggestion_attribution: str | None = Field(default=None, min_length=3, max_length=180)
+    privacy_notice_acknowledged: bool = False
 
 
 class GeotagReviewActionRequest(BaseModel):
@@ -1595,14 +1597,15 @@ def rework_submission_endpoint(submission_id: str, payload: ReviewActionRequest,
 
 def _build_public_extract(result: dict[str, Any]) -> dict[str, Any]:
     public_code = result.get('public_code') or result.get('address_id')
+    is_staging_reference = result.get('source') == 'staging-reference-record' or result.get('verification_status') == 'controlled-staging-reference'
     return {
         **result,
-        'document_title': 'Official Address Registry Extract',
+        'document_title': 'Staging Address Registry Extract' if is_staging_reference else 'Official Address Registry Extract',
         'document_reference': f"EXTRACT-{public_code}",
         'record_locator': public_code,
         'issued_for': result.get('address_label'),
-        'issuing_authority': 'Republic of Equatorial Guinea · National Digital Addressing Platform',
-        'extract_status': 'ready' if result.get('match_status') == 'verified' else 'not-available',
+        'issuing_authority': 'Controlled staging environment · Not an official production record' if is_staging_reference else 'Republic of Equatorial Guinea · National Digital Addressing Platform',
+        'extract_status': 'staging-reference' if is_staging_reference else ('ready' if result.get('match_status') == 'verified' else 'not-available'),
     }
 
 
@@ -1669,6 +1672,8 @@ def public_address_code_record(code: str, request: Request) -> dict[str, Any]:
 @app.post('/api/v1/public/corrections', status_code=status.HTTP_201_CREATED)
 def create_public_correction(payload: AddressCorrectionCreate, request: Request) -> dict[str, Any]:
     _check_public_rate_limit(request, 'public-corrections')
+    if not payload.privacy_notice_acknowledged:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail='privacy notice acknowledgement required')
     try:
         return create_address_correction(payload.model_dump(), actor=None)
     except AddressNotFoundError as exc:
@@ -1693,6 +1698,8 @@ def public_road_suggestion(payload: RoadSuggestionRequest, request: Request) -> 
 @app.post('/api/v1/public/geotag-submissions', status_code=status.HTTP_201_CREATED)
 def create_public_geotag_submission(payload: CitizenGeotagCreate, request: Request) -> dict[str, Any]:
     _check_public_rate_limit(request, 'public-geotag-submissions')
+    if not payload.privacy_notice_acknowledged:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail='privacy notice acknowledgement required')
     try:
         created = create_citizen_geotag_submission(payload.model_dump(), actor=None)
         enriched = _enrich_geotag_submissions([created])[0]

@@ -486,6 +486,7 @@ def test_public_correction_create_returns_created_record(monkeypatch) -> None:
         'note': 'marker is on the wrong side of the property',
         'reporter_name': 'Citizen One',
         'reporter_contact': '+240****0000',
+        'privacy_notice_acknowledged': True,
     }
     monkeypatch.setattr(
         main,
@@ -500,6 +501,17 @@ def test_public_correction_create_returns_created_record(monkeypatch) -> None:
     assert response.status_code == 201
     assert response.json()['status'] == 'submitted'
     assert response.json()['public_code'] == 'EG-LI-BATA-123ABC'
+
+
+def test_public_correction_requires_privacy_acknowledgement() -> None:
+    response = client.post('/api/v1/public/corrections', json={
+        'query': 'EG-LI-BATA-123ABC',
+        'public_code': 'EG-LI-BATA-123ABC',
+        'correction_type': 'location-fix',
+        'reason': 'pin-drift',
+    })
+    assert response.status_code == 400
+    assert response.json()['detail'] == 'privacy notice acknowledgement required'
 
 
 def test_public_verification_rate_limit_returns_429(monkeypatch) -> None:
@@ -777,12 +789,26 @@ def test_public_geotag_submission_creates_citizen_record(monkeypatch) -> None:
         'longitude': 9.77,
         'accuracy_meters': 18,
         'capture_method': 'browser-gps',
+        'privacy_notice_acknowledged': True,
     }
     monkeypatch.setattr(main, 'create_citizen_geotag_submission', lambda body, actor=None: {'id': 'citizen-geotag-1', 'status': 'submitted', **body, 'grid_code': 'EG-LI-GABCD1234', 'duplicate_hints': []})
     response = client.post('/api/v1/public/geotag-submissions', json=payload)
     assert response.status_code == 201
     assert response.json()['grid_code'] == 'EG-LI-GABCD1234'
     assert response.json()['status'] == 'submitted'
+
+
+def test_public_geotag_submission_requires_privacy_acknowledgement() -> None:
+    response = client.post('/api/v1/public/geotag-submissions', json={
+        'territory_id': 'territory-bata-urban-core',
+        'address_label': 'House near civic cluster',
+        'landmark': 'Blue gate near pharmacy',
+        'latitude': 1.865,
+        'longitude': 9.77,
+        'capture_method': 'browser-gps',
+    })
+    assert response.status_code == 400
+    assert response.json()['detail'] == 'privacy notice acknowledgement required'
 
 
 def test_geotag_submissions_require_operator(monkeypatch) -> None:
@@ -860,6 +886,7 @@ def test_geotag_submission_server_recomputes_national_code(monkeypatch) -> None:
         'accuracy_meters': 18,
         'capture_method': 'browser-gps',
         'grid_code': 'EG-LI-N1-0000000000-00',
+        'privacy_notice_acknowledged': True,
     }
     expected = generate_national_address_code(payload['latitude'], payload['longitude'], 'LI')
     monkeypatch.setattr(main, 'create_citizen_geotag_submission', lambda body, actor=None: {'id': 'citizen-geotag-2', 'status': 'submitted', **body, 'grid_code': expected, 'address_code': {'code': expected, 'is_valid': True}, 'duplicate_hints': []})
@@ -957,6 +984,7 @@ def test_public_geotag_submission_accepts_dip_last4_only(monkeypatch) -> None:
         'latitude': 3.7523,
         'longitude': 8.7741,
         'capture_method': 'manual-map-pin',
+        'privacy_notice_acknowledged': True,
     })
     assert response.status_code == 201
     assert captured['dip_last4'] == '1234'
@@ -973,6 +1001,7 @@ def test_public_geotag_submission_rejects_invalid_dip_last4() -> None:
         'latitude': 3.7523,
         'longitude': 8.7741,
         'capture_method': 'manual-map-pin',
+        'privacy_notice_acknowledged': True,
     })
     assert response.status_code == 422
 
@@ -1063,6 +1092,7 @@ def test_public_geotag_submission_stores_road_suggestion_for_review(monkeypatch)
         'map_display_name': 'Ela Nguema, Malabo, Bioko Norte, Equatorial Guinea',
         'road_suggestion_source': 'openstreetmap-nominatim',
         'road_suggestion_attribution': '© OpenStreetMap contributors',
+        'privacy_notice_acknowledged': True,
     })
     assert response.status_code == 201
     assert captured['suggested_road_name'] == 'Carretera del Aeropuerto'
@@ -1122,6 +1152,7 @@ def test_public_geotag_submission_reports_auto_assigned_routing_area(monkeypatch
         'capture_method': 'manual-map-pin',
         'suggested_local_area': 'Ela Nguema',
         'road_suggestion_source': 'openstreetmap-nominatim',
+        'privacy_notice_acknowledged': True,
     })
     assert response.status_code == 201
     payload = response.json()
@@ -1413,6 +1444,7 @@ def test_public_geotag_submission_uses_selected_province_without_territory(monke
         'longitude': 8.7741,
         'accuracy_meters': 14,
         'capture_method': 'manual-map-pin',
+        'privacy_notice_acknowledged': True,
     })
     assert response.status_code == 201
     payload = response.json()
