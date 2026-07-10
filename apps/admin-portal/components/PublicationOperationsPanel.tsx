@@ -93,6 +93,8 @@ export function PublicationOperationsPanel({
   const [packAudience, setPackAudience] = useState('Pilot review / programme steering');
   const [simulationSubmissionId, setSimulationSubmissionId] = useState('');
   const [simulationNote, setSimulationNote] = useState('Simulation only for ministry workflow demonstration.');
+  const [publishSubmissionId, setPublishSubmissionId] = useState('');
+  const [publishNote, setPublishNote] = useState('Institutional release approval confirmed for public publication.');
   const [publicationSimulation, setPublicationSimulation] = useState<PublicationSimulation | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -283,6 +285,40 @@ export function PublicationOperationsPanel({
     }
   }
 
+  async function publishRegistryReadyCase(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    if (!token || !canPublish) {
+      setError('Admin required before publishing a registry-ready case file.');
+      return;
+    }
+    const submissionId = publishSubmissionId.trim();
+    if (!submissionId) {
+      setError('Enter a registry-ready geotag submission ID before publishing.');
+      return;
+    }
+    setIsSubmitting(true);
+    setNotice(null);
+    setError(null);
+    try {
+      const response = await fetch(`${browserApiBaseUrl}/api/v1/geotag-submissions/${encodeURIComponent(publishSubmissionId)}/publish`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', ...authorizationHeader(token) },
+        body: JSON.stringify({ reviewer_note: publishNote }),
+      });
+      const payload = (await response.json()) as { grid_code?: string; publication?: { certificate_status?: string }; detail?: string };
+      if (!response.ok) {
+        setError(payload.detail ?? 'Unable to publish registry-ready case file.');
+        return;
+      }
+      setNotice(`Published registry-ready case file: ${payload.grid_code ?? submissionId}`);
+      await reloadAll(token);
+    } catch {
+      setError('Unable to publish registry-ready case file.');
+    } finally {
+      setIsSubmitting(false);
+    }
+  }
+
   async function createPack(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (!token || !canWrite) {
@@ -405,6 +441,31 @@ export function PublicationOperationsPanel({
             </div>
           </div>
         ) : null}
+      </article>
+
+      <article className="public-task-panel civic-panel-green">
+        <div className="panel-head">
+          <p className="section-label">Controlled publication</p>
+          <h3>Publish registry-ready case file</h3>
+        </div>
+        <p className="institutional-note">
+          Admin-only release action. Use this only after institutional approval; it unlocks public profile proof, certificate generation, and signage export for the selected registry-ready case file.
+        </p>
+        <form className="territory-form" onSubmit={publishRegistryReadyCase}>
+          <label className="territory-field territory-field-wide">
+            <span className="territory-label">Registry-ready geotag submission ID</span>
+            <input className="territory-input" value={publishSubmissionId} onChange={(event) => setPublishSubmissionId(event.target.value)} placeholder="citizen-geotag-…" />
+          </label>
+          <label className="territory-field territory-field-wide">
+            <span className="territory-label">Publication approval note</span>
+            <textarea className="territory-input territory-textarea" value={publishNote} onChange={(event) => setPublishNote(event.target.value)} rows={3} />
+          </label>
+          <div className="territory-form-actions">
+            <button className="verification-button" type="submit" disabled={!canPublish || isSubmitting}>
+              {!canPublish ? 'Admin required' : isSubmitting ? 'Working…' : 'Publish registry-ready case file'}
+            </button>
+          </div>
+        </form>
       </article>
 
       <article className="public-task-panel civic-panel-blue">

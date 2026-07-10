@@ -2350,3 +2350,53 @@ def test_production_readiness_reports_strict_phase3_auth_ready(monkeypatch) -> N
 
     assert body['checks']['secure_cookie_sessions']['status'] == 'ready'
     assert body['checks']['default_demo_passwords_disabled']['status'] == 'ready'
+
+
+def test_publish_geotag_submission_requires_admin(monkeypatch) -> None:
+    monkeypatch.setattr(main, 'resolve_user_from_token', lambda token: EDITOR)
+    response = client.post('/api/v1/geotag-submissions/geo-ready/publish', json={'reviewer_note': 'Approved by institutional release authority.'}, headers=auth_header())
+    assert response.status_code == 403
+
+
+def test_admin_can_publish_registry_ready_geotag_and_gets_public_record(monkeypatch) -> None:
+    monkeypatch.setattr(main, 'resolve_user_from_token', lambda token: ADMIN)
+    captured = {}
+
+    def fake_publish(submission_id, reviewer_note, actor=None):
+        captured.update({'submission_id': submission_id, 'reviewer_note': reviewer_note, 'actor': actor})
+        return {
+            'id': submission_id,
+            'status': 'published',
+            'signage_batch': 'publication-batch-20260710',
+            'grid_code': 'EG-BN-N1-PUB000001-AA',
+            'address_record': {
+                'address_code': 'EG-BN-N1-PUB000001-AA',
+                'status': 'published',
+                'publication_state': 'published',
+            },
+            'publication': {
+                'public_release': 'published',
+                'signage_export_status': 'ready-for-export',
+                'certificate_status': 'ready',
+            },
+        }
+
+    monkeypatch.setattr(main, 'publish_geotag_submission', fake_publish)
+    response = client.post('/api/v1/geotag-submissions/geo-ready/publish', json={'reviewer_note': 'Approved by institutional release authority.'}, headers=auth_header())
+
+    assert response.status_code == 200
+    body = response.json()
+    assert captured['submission_id'] == 'geo-ready'
+    assert captured['actor']['role'] == 'admin'
+    assert body['status'] == 'published'
+    assert body['address_record']['publication_state'] == 'published'
+    assert body['publication']['certificate_status'] == 'ready'
+
+
+def test_publication_ui_has_admin_publish_action_separate_from_simulation() -> None:
+    source = Path('/home/ubuntu/projects/eg-addressing/apps/admin-portal/components/PublicationOperationsPanel.tsx').read_text()
+
+    assert '/api/v1/geotag-submissions/${encodeURIComponent(publishSubmissionId)}/publish' in source
+    assert 'Publish registry-ready case file' in source
+    assert 'Admin required' in source
+    assert 'simulation only' in source.lower()

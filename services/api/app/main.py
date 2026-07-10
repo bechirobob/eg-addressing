@@ -98,6 +98,7 @@ from app.db import (
     list_import_jobs,
     list_provinces as list_provinces_db,
     list_publication_packs,
+    publish_geotag_submission,
     publish_publication_pack,
     build_geotag_certificate,
     geotag_duplicate_summary,
@@ -1861,6 +1862,17 @@ def simulate_geotag_publication(submission_id: str, payload: GeotagReviewActionR
     try:
         return simulate_geotag_publication_path(submission_id, payload.reviewer_note, actor=user)
     except (SubmissionNotFoundError, InvalidSubmissionActionError) as exc:
+        code = status.HTTP_404_NOT_FOUND if isinstance(exc, SubmissionNotFoundError) else status.HTTP_400_BAD_REQUEST
+        raise HTTPException(status_code=code, detail=str(exc)) from exc
+
+
+@app.post('/api/v1/geotag-submissions/{submission_id}/publish')
+def publish_geotag_case_file(submission_id: str, payload: GeotagReviewActionRequest, authorization: str | None = Header(default=None)) -> dict[str, Any]:
+    user = _current_user(authorization)
+    _require_role(user, 'admin')
+    try:
+        return _strip_identity_fields(publish_geotag_submission(submission_id, payload.reviewer_note, actor=user))
+    except (SubmissionNotFoundError, InvalidSubmissionActionError, UnknownTerritoryError) as exc:
         code = status.HTTP_404_NOT_FOUND if isinstance(exc, SubmissionNotFoundError) else status.HTTP_400_BAD_REQUEST
         raise HTTPException(status_code=code, detail=str(exc)) from exc
 

@@ -3060,6 +3060,62 @@ def simulate_geotag_publication_path(submission_id: str, reviewer_note: str, act
     }
 
 
+def publish_geotag_submission(submission_id: str, reviewer_note: str, actor: dict[str, str] | None = None) -> dict[str, Any]:
+    items = [item for item in list_citizen_geotag_submissions() if item['id'] == submission_id]
+    if not items:
+        raise SubmissionNotFoundError('citizen geotag submission not found')
+    current = items[0]
+    if current.get('status') not in {'registry-ready', 'published'}:
+        raise InvalidSubmissionActionError('publication requires a registry-ready case file')
+
+    published = update_citizen_geotag_status(submission_id, 'published', reviewer_note, actor=actor)
+    address_record = upsert_address_record_from_geotag(published, actor=actor)
+
+    with db_connection() as connection:
+        with connection.cursor() as cursor:
+            _log_action(
+                cursor,
+                actor=actor,
+                action='publication-approved',
+                entity_type='citizen_geotag_submission',
+                entity_id=submission_id,
+                details={
+                    'reviewer_note': reviewer_note,
+                    'address_code': published.get('grid_code'),
+                    'signage_batch': published.get('signage_batch'),
+                    'address_record_id': address_record.get('id'),
+                },
+            )
+            cursor.execute(
+                '''
+                INSERT INTO address_record_events (
+                    id, address_record_id, event_type, actor_id, actor_username, actor_role, details
+                ) VALUES (%s, %s, 'publication-approved', %s, %s, %s, %s::jsonb)
+                ''',
+                (
+                    f"address-record-event-{secrets.token_hex(8)}",
+                    address_record['id'],
+                    actor.get('id') if actor else None,
+                    actor.get('username') if actor else None,
+                    actor.get('role') if actor else None,
+                    json.dumps({'reviewer_note': reviewer_note, 'source_submission_id': submission_id}),
+                ),
+            )
+        connection.commit()
+
+    return {
+        **published,
+        'address_record': address_record,
+        'publication': {
+            'public_release': 'published',
+            'signage_export_status': 'ready-for-export',
+            'certificate_status': 'ready',
+            'proof_status': 'public-proof-ready',
+            'operator_note': 'Published after explicit institutional release approval.',
+        },
+    }
+
+
 def geotag_duplicate_summary() -> dict[str, Any]:
     groups: dict[str, list[dict[str, Any]]] = {}
     for item in list_citizen_geotag_submissions():
