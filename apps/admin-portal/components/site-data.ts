@@ -81,7 +81,7 @@ export const navItems: NavItem[] = [
   {
     href: '/records',
     label: 'Case files',
-    visibleTo: [],
+    visibleTo: ['viewer', 'editor', 'admin'],
     priorityFor: ['viewer', 'editor', 'admin'],
     group: 'staff',
   },
