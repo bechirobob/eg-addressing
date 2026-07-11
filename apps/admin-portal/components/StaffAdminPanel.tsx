@@ -177,11 +177,14 @@ export function StaffAdminPanel({ apiBaseUrl }: { apiBaseUrl: string }) {
         <p className="institutional-note">
           This area is restricted to administrators. Editors, viewers, and agency reviewers can use their staff areas, but they cannot load or operate this account-management surface.
         </p>
-        <ul className="staff-admin-principles" aria-label="Staff account safeguards">
-          <li>Password rotation revokes active sessions.</li>
-          <li>Disabling an account revokes active sessions.</li>
-          <li>Current-admin and last-admin lockout protections remain enforced by the server.</li>
-        </ul>
+        <details className="staff-admin-disclosure">
+          <summary>Account safeguards</summary>
+          <ul className="staff-admin-principles" aria-label="Staff account safeguards">
+            <li>Password rotation revokes active sessions.</li>
+            <li>Disabling an account revokes active sessions.</li>
+            <li>Current-admin and last-admin lockout protections remain enforced by the server.</li>
+          </ul>
+        </details>
       </article>
 
       <article className="public-task-panel staff-admin-create-panel">
@@ -189,29 +192,32 @@ export function StaffAdminPanel({ apiBaseUrl }: { apiBaseUrl: string }) {
           <p className="section-label">Create account</p>
           <h3>Add authorized staff</h3>
         </div>
-        <form className="territory-form staff-admin-create-form" onSubmit={handleCreate}>
-          <label className="territory-field" htmlFor="staff-new-username">
-            <span className="territory-label">Username</span>
-            <input id="staff-new-username" className="territory-input" value={newAccount.username} autoComplete="username" autoCapitalize="none" autoCorrect="off" spellCheck={false} onChange={(event) => setNewAccount((value) => ({ ...value, username: event.target.value }))} required />
-          </label>
-          <label className="territory-field" htmlFor="staff-new-name">
-            <span className="territory-label">Full name</span>
-            <input id="staff-new-name" className="territory-input" value={newAccount.full_name} autoComplete="name" onChange={(event) => setNewAccount((value) => ({ ...value, full_name: event.target.value }))} required />
-          </label>
-          <label className="territory-field" htmlFor="staff-new-role">
-            <span className="territory-label">Role</span>
-            <select id="staff-new-role" className="territory-input" value={newAccount.role} onChange={(event) => setNewAccount((value) => ({ ...value, role: event.target.value as StaffRole }))}>
-              {staffRoles.map((role) => <option key={role.value} value={role.value}>{role.label}</option>)}
-            </select>
-          </label>
-          <label className="territory-field" htmlFor="staff-new-password">
-            <span className="territory-label">Temporary password</span>
-            <input id="staff-new-password" className="territory-input" type="password" value={newAccount.password} autoComplete="new-password" onChange={(event) => setNewAccount((value) => ({ ...value, password: event.target.value }))} required minLength={8} />
-          </label>
-          <div className="territory-form-actions">
-            <button className="verification-button" type="submit" disabled={isMutating}>Create staff account</button>
-          </div>
-        </form>
+        <details className="staff-admin-disclosure staff-admin-create-disclosure">
+          <summary>Open creation form</summary>
+          <form className="territory-form staff-admin-create-form" onSubmit={handleCreate}>
+            <label className="territory-field" htmlFor="staff-new-username">
+              <span className="territory-label">Username</span>
+              <input id="staff-new-username" className="territory-input" value={newAccount.username} autoComplete="username" autoCapitalize="none" autoCorrect="off" spellCheck={false} onChange={(event) => setNewAccount((value) => ({ ...value, username: event.target.value }))} required />
+            </label>
+            <label className="territory-field" htmlFor="staff-new-name">
+              <span className="territory-label">Full name</span>
+              <input id="staff-new-name" className="territory-input" value={newAccount.full_name} autoComplete="name" onChange={(event) => setNewAccount((value) => ({ ...value, full_name: event.target.value }))} required />
+            </label>
+            <label className="territory-field" htmlFor="staff-new-role">
+              <span className="territory-label">Role</span>
+              <select id="staff-new-role" className="territory-input" value={newAccount.role} onChange={(event) => setNewAccount((value) => ({ ...value, role: event.target.value as StaffRole }))}>
+                {staffRoles.map((role) => <option key={role.value} value={role.value}>{role.label}</option>)}
+              </select>
+            </label>
+            <label className="territory-field" htmlFor="staff-new-password">
+              <span className="territory-label">Temporary password</span>
+              <input id="staff-new-password" className="territory-input" type="password" value={newAccount.password} autoComplete="new-password" onChange={(event) => setNewAccount((value) => ({ ...value, password: event.target.value }))} required minLength={8} />
+            </label>
+            <div className="territory-form-actions">
+              <button className="verification-button" type="submit" disabled={isMutating}>Create staff account</button>
+            </div>
+          </form>
+        </details>
       </article>
 
       <article className="public-task-panel staff-admin-list-panel">
@@ -247,7 +253,7 @@ export function StaffAdminPanel({ apiBaseUrl }: { apiBaseUrl: string }) {
                 const unsafeAdminAction = isCurrentAdmin || isLastActiveAdmin;
                 return (
                   <tr key={user.id}>
-                    <td>
+                    <td data-label="Account">
                       <strong>{user.username}</strong>
                       <label className="staff-admin-inline-field" htmlFor={`staff-name-${user.id}`}>
                         <span>Full name</span>
@@ -255,7 +261,7 @@ export function StaffAdminPanel({ apiBaseUrl }: { apiBaseUrl: string }) {
                       </label>
                       <small>Created {formatDate(user.created_at)}</small>
                     </td>
-                    <td>
+                    <td data-label="Role">
                       <label className="staff-admin-inline-field" htmlFor={`staff-role-${user.id}`}>
                         <span>Role</span>
                         <select id={`staff-role-${user.id}`} className="territory-input" value={edit.role} disabled={isCurrentAdmin} onChange={(event) => setRowEdits((value) => ({ ...value, [user.id]: { ...edit, role: event.target.value as StaffRole } }))}>
@@ -264,26 +270,29 @@ export function StaffAdminPanel({ apiBaseUrl }: { apiBaseUrl: string }) {
                       </label>
                       <small>{roleLabel(user.role)}</small>
                     </td>
-                    <td>
+                    <td data-label="Status">
                       <span className={`staff-admin-status ${user.is_active ? 'active' : 'disabled'}`}>{user.is_active ? 'Active' : 'Disabled'}</span>
                       {isCurrentAdmin ? <small>Current admin</small> : null}
                       {isLastActiveAdmin ? <small>Last active admin</small> : null}
                     </td>
-                    <td>
+                    <td data-label="Sessions">
                       <strong>{user.active_sessions}</strong>
                       <span>active</span>
                     </td>
-                    <td>
-                      <label className="staff-admin-inline-field" htmlFor={`staff-password-${user.id}`}>
-                        <span>New password</span>
-                        <input id={`staff-password-${user.id}`} className="territory-input" type="password" value={edit.password} autoComplete="new-password" placeholder="Leave blank to keep current" onChange={(event) => setRowEdits((value) => ({ ...value, [user.id]: { ...edit, password: event.target.value } }))} />
-                      </label>
-                      <div className="staff-admin-actions">
-                        <button className="secondary-button" type="button" onClick={() => void handleSave(user)} disabled={isMutating}>Save changes</button>
-                        <button className="secondary-button" type="button" onClick={() => void handleRevoke(user)} disabled={isMutating || unsafeAdminAction || user.active_sessions === 0} aria-describedby={unsafeAdminAction ? `staff-admin-guard-${user.id}` : undefined}>Revoke sessions</button>
-                        <button className="secondary-button danger-action" type="button" onClick={() => void handleDisable(user)} disabled={isMutating || !user.is_active || unsafeAdminAction} aria-describedby={unsafeAdminAction ? `staff-admin-guard-${user.id}` : undefined}>Disable</button>
-                      </div>
-                      {unsafeAdminAction ? <small id={`staff-admin-guard-${user.id}`}>Protected to prevent administrator lockout.</small> : null}
+                    <td data-label="Controlled actions">
+                      <details className="staff-admin-disclosure staff-admin-action-disclosure">
+                        <summary>Manage account</summary>
+                        <label className="staff-admin-inline-field" htmlFor={`staff-password-${user.id}`}>
+                          <span>New password</span>
+                          <input id={`staff-password-${user.id}`} className="territory-input" type="password" value={edit.password} autoComplete="new-password" placeholder="Leave blank to keep current" onChange={(event) => setRowEdits((value) => ({ ...value, [user.id]: { ...edit, password: event.target.value } }))} />
+                        </label>
+                        <div className="staff-admin-actions">
+                          <button className="secondary-button" type="button" onClick={() => void handleSave(user)} disabled={isMutating}>Save changes</button>
+                          <button className="secondary-button" type="button" onClick={() => void handleRevoke(user)} disabled={isMutating || unsafeAdminAction || user.active_sessions === 0} aria-describedby={unsafeAdminAction ? `staff-admin-guard-${user.id}` : undefined}>Revoke sessions</button>
+                          <button className="secondary-button danger-action" type="button" onClick={() => void handleDisable(user)} disabled={isMutating || !user.is_active || unsafeAdminAction} aria-describedby={unsafeAdminAction ? `staff-admin-guard-${user.id}` : undefined}>Disable</button>
+                        </div>
+                        {unsafeAdminAction ? <small id={`staff-admin-guard-${user.id}`}>Protected to prevent administrator lockout.</small> : null}
+                      </details>
                     </td>
                   </tr>
                 );
