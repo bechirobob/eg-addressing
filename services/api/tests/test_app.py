@@ -1681,6 +1681,13 @@ def test_postgis_phase2_migration_adds_canonical_geometry_safely() -> None:
     assert "longitude BETWEEN -180 AND 180" in sql
 
 
+def test_canonical_address_record_upsert_populates_postgis_geometry() -> None:
+    source = Path('/home/ubuntu/projects/eg-addressing/services/api/app/db.py').read_text()
+    upsert_sql = source[source.index('def upsert_address_record_from_geotag'):source.index('def search_address_records')]
+    assert 'geom' in upsert_sql
+    assert 'ST_SetSRID(ST_MakePoint(EXCLUDED.longitude, EXCLUDED.latitude), 4326)::geography' in upsert_sql
+
+
 
 def test_address_record_holds_endpoint_requires_auth_and_uses_canonical_spatial_risk(monkeypatch) -> None:
     monkeypatch.setattr(main, 'resolve_user_from_token', lambda token: VIEWER)

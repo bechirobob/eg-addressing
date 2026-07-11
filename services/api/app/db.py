@@ -3475,8 +3475,8 @@ def upsert_address_record_from_geotag(geotag: dict[str, Any], actor: dict[str, s
                 '''
                 INSERT INTO address_records (
                     id, address_code, source_submission_id, province_code, territory_id, address_label,
-                    status, publication_state, latitude, longitude, accuracy_meters, search_text, record_bundle
-                ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s::jsonb)
+                    status, publication_state, latitude, longitude, accuracy_meters, search_text, record_bundle, geom
+                ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s::jsonb, ST_SetSRID(ST_MakePoint(%s, %s), 4326)::geography)
                 ON CONFLICT (address_code) DO UPDATE SET
                     source_submission_id = EXCLUDED.source_submission_id,
                     province_code = EXCLUDED.province_code,
@@ -3489,8 +3489,11 @@ def upsert_address_record_from_geotag(geotag: dict[str, Any], actor: dict[str, s
                     accuracy_meters = EXCLUDED.accuracy_meters,
                     search_text = EXCLUDED.search_text,
                     record_bundle = EXCLUDED.record_bundle,
+                    geom = ST_SetSRID(ST_MakePoint(EXCLUDED.longitude, EXCLUDED.latitude), 4326)::geography,
                     updated_at = NOW()
-                RETURNING *
+                RETURNING id, address_code, source_submission_id, province_code, territory_id, address_label,
+                          status, publication_state, latitude, longitude, accuracy_meters, search_text,
+                          record_bundle, created_at, updated_at
                 ''',
                 (
                     record_id,
@@ -3506,6 +3509,8 @@ def upsert_address_record_from_geotag(geotag: dict[str, Any], actor: dict[str, s
                     geotag.get('accuracy_meters'),
                     search_text,
                     json.dumps(bundle),
+                    geotag.get('longitude'),
+                    geotag.get('latitude'),
                 ),
             )
             record = _address_record_row(cursor.fetchone())
