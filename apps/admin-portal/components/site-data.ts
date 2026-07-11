@@ -130,6 +130,7 @@ export const statusHighlights = [
 
 const routeRules: RouteRule[] = [
   { path: '/', allowedRoles: ['guest', 'viewer', 'editor', 'admin', 'agency_viewer'] },
+  { path: '/operations-runbook', allowedRoles: ['guest', 'viewer', 'editor', 'admin', 'agency_viewer'] },
   { path: '/login', allowedRoles: ['guest', 'viewer', 'editor', 'admin', 'agency_viewer'] },
   { path: '/reports', allowedRoles: ['viewer', 'editor', 'admin', 'agency_viewer'] },
   { path: '/issue', allowedRoles: ['guest', 'viewer', 'editor', 'admin', 'agency_viewer'] },

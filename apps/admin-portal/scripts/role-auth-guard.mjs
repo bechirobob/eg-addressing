@@ -30,6 +30,7 @@ assert(/if \(role === 'admin'\) return '\/field';/.test(siteData), 'admin defaul
 assert(/if \(role === 'editor'\) return '\/registry';/.test(siteData), 'editor default route must remain /registry');
 assert(/if \(role === 'viewer' \|\| role === 'agency_viewer'\) return '\/reports';/.test(siteData), 'viewer and agency viewer default routes must land on reports');
 assert(/return '\/';/.test(siteData), 'guest default route must return to the public service start page');
+assert(/\{ path: '\/operations-runbook', allowedRoles: \['guest', 'viewer', 'editor', 'admin', 'agency_viewer'\] \}/.test(siteData), 'operations runbook must have explicit public route ownership instead of relying on unknown-route fallback');
 assert(/const PUBLIC_PREFIXES = \['\/code\/', '\/proof\/'\];/.test(siteData), 'public dynamic code/proof routes must be explicitly whitelisted');
 assert(/const PROTECTED_PREFIXES = \['\/admin', '\/reports', '\/exports', '\/registry', '\/verify', '\/field', '\/signage', '\/records', '\/territories'\];/.test(siteData), 'staff and admin route prefixes must be deny-by-default governed');
 assert(/normalized\.startsWith\(`\$\{prefix\}\/`\)/.test(siteData), 'nested staff routes must inherit base route permissions');
