@@ -663,8 +663,8 @@ def _staff_user_public(user: dict[str, Any]) -> dict[str, Any]:
     }
 
 
-SENSITIVE_DETAIL_KEYS = {'token', 'session_token', 'auth_token', 'access_token', 'refresh_token', 'authorization', 'cookie', 'password', 'password_hash', 'csrf_token', 'secret'}
-SENSITIVE_DETAIL_PATTERN = re.compile(r'(token|password|secret|authorization|cookie|csrf)', re.IGNORECASE)
+SENSITIVE_DETAIL_KEYS = {'token', 'session_token', 'auth_token', 'access_token', 'refresh_token', 'authorization', 'cookie', 'password', 'password_hash', 'csrf_token', 'secret', 'object_key'}
+SENSITIVE_DETAIL_PATTERN = re.compile(r'(token|password|secret|authorization|cookie|csrf|object[_-]?key)', re.IGNORECASE)
 
 
 def _is_sensitive_detail_key(key: Any) -> bool:
@@ -680,8 +680,21 @@ def _sanitize_timeline_value(value: Any) -> Any:
     return value
 
 
+def _sanitize_case_file_value(value: Any) -> Any:
+    if isinstance(value, dict):
+        safe: dict[str, Any] = {}
+        for key, inner in value.items():
+            if str(key).strip().lower() == 'object_key':
+                continue
+            safe[key] = '[protected]' if _is_sensitive_detail_key(key) else _sanitize_case_file_value(inner)
+        return safe
+    if isinstance(value, list):
+        return [_sanitize_case_file_value(item) for item in value]
+    return value
+
+
 def _sanitize_case_file(case_file: dict[str, Any]) -> dict[str, Any]:
-    safe = dict(case_file)
+    safe = _sanitize_case_file_value(dict(case_file))
     safe['timeline'] = [_sanitize_timeline_value(item) for item in safe.get('timeline', [])]
     return safe
 

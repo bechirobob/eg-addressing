@@ -2659,6 +2659,52 @@ def test_evidence_file_upload_attaches_private_metadata(monkeypatch) -> None:
     assert stored['content'] == b'field evidence note'
 
 
+
+
+def test_address_record_case_file_includes_protected_field_evidence_without_object_keys(monkeypatch) -> None:
+    monkeypatch.setattr(main, 'resolve_user_from_token', lambda token: VIEWER)
+
+    def fake_case_file(address_code: str) -> dict[str, Any]:
+        return {
+            'address_code': address_code,
+            'address_label': 'Protected Evidence Road',
+            'status': 'registry-ready',
+            'latitude': 3.75,
+            'longitude': 8.77,
+            'record_bundle': {},
+            'protected_evidence': {
+                'source': 'field_submissions',
+                'field_submission_id': 'submission-evidence-1',
+                'attachments': [
+                    {
+                        'reference': 'FIELD-REF-1',
+                        'type': 'photo-reference',
+                        'files': [
+                            {
+                                'file_id': 'evidence-1',
+                                'file_name': 'frontage.txt',
+                                'content_type': 'text/plain',
+                                'size_bytes': 19,
+                                'access': 'protected',
+                                'object_key': 'field-submissions/submission-evidence-1/evidence-1/frontage.txt',
+                            }
+                        ],
+                    }
+                ],
+            },
+        }
+
+    monkeypatch.setattr(main, 'get_address_record_case_file', fake_case_file)
+    response = client.get('/api/v1/address-records/EG-BN-N1-EVID000001-AA', headers=auth_header())
+
+    assert response.status_code == 200
+    evidence = response.json()['protected_evidence']
+    assert evidence['source'] == 'field_submissions'
+    assert evidence['field_submission_id'] == 'submission-evidence-1'
+    assert evidence['attachments'][0]['files'][0]['file_id'] == 'evidence-1'
+    assert evidence['attachments'][0]['files'][0]['access'] == 'protected'
+    assert 'object_key' not in evidence['attachments'][0]['files'][0]
+
 def test_evidence_file_download_requires_auth_and_streams_private_object(monkeypatch) -> None:
     monkeypatch.setattr(main, 'resolve_user_from_token', lambda token: VIEWER)
     monkeypatch.setattr(main, 'get_field_submission_evidence_file', lambda submission_id, file_id, actor=None: {'file_id': file_id, 'file_name': 'frontage.txt', 'content_type': 'text/plain', 'object_key': 'field-submissions/submission-a/evidence-1/frontage.txt'})

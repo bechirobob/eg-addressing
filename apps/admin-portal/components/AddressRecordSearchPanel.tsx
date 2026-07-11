@@ -13,6 +13,37 @@ type TimelineEvent = {
   details?: Record<string, unknown>;
 };
 
+type ProtectedEvidenceFile = {
+  file_id: string;
+  file_name: string;
+  content_type?: string;
+  size_bytes?: number;
+  access: 'protected';
+  uploaded_by?: string;
+  uploaded_at?: string;
+  review_status?: string;
+  reviewer_note?: string;
+};
+
+type ProtectedEvidenceAttachment = {
+  type?: string;
+  reference?: string;
+  note?: string;
+  captured_by?: string;
+  captured_at?: string;
+  files?: ProtectedEvidenceFile[];
+};
+
+type ProtectedEvidenceBundle = {
+  source: string;
+  field_submission_id: string;
+  candidate_name?: string;
+  submission_type?: string;
+  review_status?: string;
+  review_state?: string;
+  attachments?: ProtectedEvidenceAttachment[];
+};
+
 type AddressRecord = {
   address_code: string;
   address_label: string;
@@ -31,6 +62,7 @@ type AddressRecord = {
     search?: { landmark?: string | null; road_name?: string | null; suggested_local_area?: string | null };
   };
   timeline?: TimelineEvent[];
+  protected_evidence?: ProtectedEvidenceBundle;
 };
 
 type SearchResponse = { items: AddressRecord[] };
@@ -118,6 +150,46 @@ export function AddressRecordSearchPanel({ apiBaseUrl }: { apiBaseUrl: string })
   const canSearch = sessionStatus === 'ready';
 
   const selectedEvidence = useMemo(() => selected?.record_bundle?.evidence, [selected]);
+  const protectedEvidenceFiles = useMemo(() => {
+    const bundle = selected?.protected_evidence;
+    if (!bundle?.attachments?.length) return [] as Array<ProtectedEvidenceFile & { attachment_reference?: string; attachment_type?: string }>;
+    return bundle.attachments.flatMap((attachment) =>
+      (attachment.files ?? []).map((file) => ({
+        ...file,
+        attachment_reference: attachment.reference,
+        attachment_type: attachment.type,
+      })),
+    );
+  }, [selected]);
+
+  async function downloadProtectedEvidenceFile(file: ProtectedEvidenceFile) {
+    const submissionId = selected?.protected_evidence?.field_submission_id;
+    if (!canSearch || !submissionId) {
+      setError('Open a protected case file before downloading evidence.');
+      return;
+    }
+    setError(null);
+    setNotice(null);
+    try {
+      const response = await fetch(`${browserApiBaseUrl}/api/v1/field/submissions/${encodeURIComponent(submissionId)}/evidence-files/${encodeURIComponent(file.file_id)}`, {
+        ...sessionRequestInit(token),
+      });
+      if (!response.ok) {
+        setError('Unable to download protected evidence file.');
+        return;
+      }
+      const blob = await response.blob();
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = file.file_name || 'protected-evidence-file';
+      link.click();
+      URL.revokeObjectURL(url);
+      setNotice(`Protected evidence downloaded: ${file.file_name}.`);
+    } catch {
+      setError('Unable to download protected evidence file.');
+    }
+  }
 
   async function loadHoldRegister() {
     if (!canSearch) {
@@ -160,7 +232,14 @@ export function AddressRecordSearchPanel({ apiBaseUrl }: { apiBaseUrl: string })
       }
       const items = (payload as SearchResponse).items;
       setRecords(items);
-      setSelected(items[0] ?? null);
+      const exactMatch = nextQuery.trim()
+        ? items.find((item) => item.address_code.toLowerCase() === nextQuery.trim().toLowerCase())
+        : null;
+      if (exactMatch) {
+        await loadCaseFile(exactMatch.address_code);
+      } else {
+        setSelected(items[0] ?? null);
+      }
       setNotice(items.length ? `${items.length} address case file${items.length === 1 ? '' : 's'} found.` : 'No address case files matched that search.');
     } catch {
       setError('Unable to reach the address record search service.');
@@ -364,6 +443,28 @@ export function AddressRecordSearchPanel({ apiBaseUrl }: { apiBaseUrl: string })
                     <p>Certificate: {selected.record_bundle?.outputs?.certificate_id || 'pending'}</p>
                     <p>Signage batch: {selected.record_bundle?.outputs?.signage_batch || 'not batched'}</p>
                   </div>
+                </div>
+                <div className="protected-evidence-ledger" aria-label="Protected field evidence files">
+                  <div className="case-timeline-head">
+                    <strong>Protected field evidence</strong>
+                    <span className="institutional-note">{selected.protected_evidence?.review_state ? `Review: ${statusLabel(selected.protected_evidence.review_state)}` : 'Private files only'}</span>
+                  </div>
+                  {protectedEvidenceFiles.length ? (
+                    <ul className="protected-evidence-list">
+                      {protectedEvidenceFiles.map((file) => (
+                        <li className="protected-evidence-row" key={file.file_id}>
+                          <span>
+                            <strong>{file.file_name}</strong>
+                            <small>{file.attachment_reference || selected.protected_evidence?.candidate_name || 'Field evidence'} · {statusLabel(file.review_status || 'pending review')}</small>
+                          </span>
+                          <span>{file.content_type || 'file'} · {file.size_bytes ? `${file.size_bytes} bytes` : 'size pending'}</span>
+                          <button className="secondary-action" type="button" onClick={() => void downloadProtectedEvidenceFile(file)}>Download</button>
+                        </li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <p className="institutional-note">No protected field evidence files are linked to this canonical case yet.</p>
+                  )}
                 </div>
                 <div className="case-timeline-ledger" aria-label="Compact official timeline">
                   <div className="case-timeline-head">

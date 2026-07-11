@@ -3595,6 +3595,29 @@ def get_address_record_case_file(address_code: str) -> dict[str, Any]:
                     if isinstance(event.get('details'), str):
                         event['details'] = json.loads(event['details'])
                     timeline.append(event)
+                cursor.execute(
+                    '''
+                    SELECT fs.id, fs.candidate_name, fs.submission_type, fs.review_status, fs.spatial_evidence
+                    FROM citizen_geotag_submissions cgs
+                    JOIN field_submissions fs ON fs.id = cgs.field_submission_id
+                    WHERE cgs.id = %s
+                    LIMIT 1
+                    ''',
+                    (exact['source_submission_id'],),
+                )
+                field_row = cursor.fetchone()
+                if field_row:
+                    spatial_evidence = _coerce_json_object(field_row.get('spatial_evidence'))
+                    attachments = spatial_evidence.get('evidence_attachments') if isinstance(spatial_evidence, dict) else []
+                    exact['protected_evidence'] = {
+                        'source': 'field_submissions',
+                        'field_submission_id': field_row['id'],
+                        'candidate_name': field_row.get('candidate_name'),
+                        'submission_type': field_row.get('submission_type'),
+                        'review_status': field_row.get('review_status'),
+                        'review_state': spatial_evidence.get('evidence_review_status') or _field_evidence_review_status(spatial_evidence),
+                        'attachments': attachments if isinstance(attachments, list) else [],
+                    }
     timeline.sort(key=lambda item: item.get('created_at') or '')
     exact['timeline'] = timeline
     return exact

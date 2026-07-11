@@ -3838,6 +3838,43 @@ select.territory-input {
   padding-top: 12px;
 }
 
+.protected-evidence-ledger {
+  border-top: 1px solid var(--ref-line);
+  margin-top: 16px;
+  padding-top: 12px;
+}
+
+.protected-evidence-list {
+  display: grid;
+  gap: 0;
+  list-style: none;
+  margin: 10px 0 0;
+  padding: 0;
+}
+
+.protected-evidence-row {
+  align-items: center;
+  border-bottom: 1px solid var(--ref-line);
+  display: grid;
+  gap: 10px;
+  grid-template-columns: minmax(0, 1.15fr) minmax(160px, 0.65fr) auto;
+  padding: 10px 0;
+}
+
+.protected-evidence-row span {
+  min-width: 0;
+}
+
+.protected-evidence-row strong,
+.protected-evidence-row small {
+  display: block;
+}
+
+.protected-evidence-row small {
+  color: var(--muted);
+  margin-top: 2px;
+}
+
 .registry-hold-workbench {
   border-block: 1px solid var(--ref-line);
   padding: 14px 0;
@@ -3979,6 +4016,11 @@ select.territory-input {
   .case-timeline-row {
     grid-template-columns: 1fr;
     gap: 4px;
+  }
+
+  .protected-evidence-row {
+    align-items: stretch;
+    grid-template-columns: 1fr;
   }
 }
 
