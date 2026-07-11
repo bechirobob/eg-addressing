@@ -37,18 +37,33 @@ type PublicCodeLookupPanelProps = {
 function statusCopy(payload: PublicCodeLookup | null) {
   if (!payload) return 'Checking address code…';
   if (!payload.is_valid) return 'This address code is not valid';
-  if (payload.publication_status === 'published') return 'Approved public address record';
-  if (payload.publication_status === 'internal_registry') return 'Official case file ready — not public yet';
-  if (payload.publication_status === 'not_public') return 'Valid code, waiting for approval';
-  return 'Valid code, no approved record yet';
+  if (payload.publication_status === 'published') return 'Published public address record';
+  if (payload.publication_status === 'internal_registry') return 'Valid internal case file — public details locked';
+  if (payload.publication_status === 'not_public') return 'Valid address code — awaiting official approval';
+  return 'Valid code — no public record yet';
+}
+
+function nextStepCopy(payload: PublicCodeLookup | null) {
+  if (!payload) return 'Please wait while the platform checks the code.';
+  if (!payload.is_valid) return 'Check the characters and try again, or report the code to the registry team.';
+  if (payload.publication_status === 'published') return 'This record can be shared, printed, and checked with the public proof page.';
+  if (payload.publication_status === 'internal_registry') return 'The registry has a protected case file. Public address details, proof, certificates, and signage stay locked until publication approval.';
+  if (payload.publication_status === 'not_public') return 'The code format is valid, but public details are not approved for release.';
+  return 'No approved public record is attached to this code yet.';
 }
 
 function approvalLabel(status: PublicCodeLookup['publication_status']) {
   if (status === 'published') return 'Published';
-  if (status === 'internal_registry') return 'Internal case file ready';
+  if (status === 'internal_registry') return 'Internal registry hold';
   if (status === 'not_public') return 'Awaiting approval';
-  if (status === 'not_found') return 'No approved record';
+  if (status === 'not_found') return 'No public record';
   return 'Invalid code';
+}
+
+function statusTone(status?: PublicCodeLookup['publication_status']) {
+  if (status === 'published') return 'ok';
+  if (status === 'invalid') return 'danger';
+  return 'warn';
 }
 
 function mapUrl(payload: PublicCodeLookup) {
@@ -135,10 +150,14 @@ export function PublicCodeLookupPanel({ apiBaseUrl, code }: PublicCodeLookupPane
         {error ? <p className="form-notice error">{error}</p> : null}
         {payload ? (
           <>
-            <p className="public-task-copy public-code-status-copy">{statusCopy(payload)}</p>
+            <div className="public-code-status-panel" aria-live="polite">
+              <span className={`status-chip ${statusTone(payload.publication_status)}`}>{approvalLabel(payload.publication_status)}</span>
+              <p className="public-task-copy public-code-status-copy">{statusCopy(payload)}</p>
+              <p className="public-task-copy public-code-next-step">{nextStepCopy(payload)}</p>
+            </div>
             {record ? <p className="public-code-address-line">{record.address_label}</p> : null}
-            {record ? <p className="public-task-copy">{record.territory_name ?? 'Area pending'} · accuracy {record.accuracy_meters ?? 'not recorded'}m · {approvalLabel(payload.publication_status)}</p> : null}
-            {!record ? <p className="public-task-copy">Full address details appear only after official approval.</p> : null}
+            {record ? <p className="public-task-copy">{record.territory_name ?? 'Area pending'} · accuracy {record.accuracy_meters ?? 'not recorded'}m</p> : null}
+            {!record ? <p className="public-task-copy">Full address details appear only after official publication approval.</p> : null}
             <div className="service-start-actions public-code-service-actions" aria-label="Public address profile actions">
               {mapsLink ? <a className="primary-action" href={mapsLink} target="_blank" rel="noreferrer">Open map</a> : null}
             </div>
@@ -159,19 +178,25 @@ export function PublicCodeLookupPanel({ apiBaseUrl, code }: PublicCodeLookupPane
       </div>
 
       <section className="service-start-workflow public-code-record-section" aria-labelledby="public-code-record-heading">
-        <p className="section-label">Public record data</p>
-        <h2 id="public-code-record-heading">Verification details</h2>
-        {payload ? (
-          <dl className="facts-grid issuance-facts-grid public-code-facts-grid">
-            <div><dt>Publication state</dt><dd>{approvalLabel(payload.publication_status)}</dd></div>
-            <div><dt>Province</dt><dd>{payload.province_code ?? 'Unknown'}</dd></div>
-            <div><dt>Address-code version</dt><dd>{payload.schema ?? 'Unknown'}</dd></div>
-            <div><dt>Location cell</dt><dd>{payload.cell_size_meters ? `${payload.cell_size_meters}m` : 'Unknown'}</dd></div>
-            <div><dt>Check characters</dt><dd>{payload.checksum ?? 'Unknown'}</dd></div>
-            <div><dt>Latitude</dt><dd>{displayCoordinate(latitude)}</dd></div>
-            <div><dt>Longitude</dt><dd>{displayCoordinate(longitude)}</dd></div>
-          </dl>
-        ) : null}
+        <details className="public-code-details-disclosure">
+          <summary>
+            <span>
+              <span className="section-label">Address code details</span>
+              <strong id="public-code-record-heading">View technical verification details</strong>
+            </span>
+          </summary>
+          {payload ? (
+            <dl className="facts-grid issuance-facts-grid public-code-facts-grid">
+              <div><dt>Approval state</dt><dd>{approvalLabel(payload.publication_status)}</dd></div>
+              <div><dt>Province</dt><dd>{payload.province_code ?? 'Unknown'}</dd></div>
+              <div><dt>Address-code version</dt><dd>{payload.schema ?? 'Unknown'}</dd></div>
+              <div><dt>Location cell</dt><dd>{payload.cell_size_meters ? `${payload.cell_size_meters}m` : 'Unknown'}</dd></div>
+              <div><dt>Check characters</dt><dd>{payload.checksum ?? 'Unknown'}</dd></div>
+              <div><dt>Latitude</dt><dd>{displayCoordinate(latitude)}</dd></div>
+              <div><dt>Longitude</dt><dd>{displayCoordinate(longitude)}</dd></div>
+            </dl>
+          ) : null}
+        </details>
       </section>
 
       <section className="service-start-workflow public-code-record-section" aria-labelledby="public-code-boundary-heading">

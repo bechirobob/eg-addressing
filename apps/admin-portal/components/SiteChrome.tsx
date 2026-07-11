@@ -20,7 +20,7 @@ function serviceMetaForTitle(title: string): ServiceMeta {
   if (normalized.includes('verification') || normalized.includes('evidence')) {
     return { key: 'verification', labelKey: 'serviceEvidenceLabel', highlightKeys: ['serviceEvidence1', 'serviceEvidence2', 'serviceEvidence3'] };
   }
-  if (normalized.includes('check address code') || normalized.includes('code status') || normalized.includes('extract')) {
+  if (normalized.includes('check address code') || normalized.includes('code status') || normalized.includes('extract') || normalized.includes('address proof')) {
     return { key: 'code', labelKey: 'serviceCodeLabel', highlightKeys: ['serviceCode1', 'serviceCode2', 'serviceCode3'] };
   }
   if (normalized.includes('territory')) {

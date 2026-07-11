@@ -2222,11 +2222,27 @@ img {
   overflow-wrap: anywhere !important;
 }
 
+.public-code-status-panel {
+  border-block: 1px solid rgba(11, 47, 79, 0.12) !important;
+  display: grid !important;
+  gap: 0.55rem !important;
+  padding-block: 0.95rem !important;
+}
+
+.public-code-status-panel .status-chip {
+  justify-self: start !important;
+}
+
 .public-code-status-copy {
-  color: var(--text-muted) !important;
+  color: var(--text-main) !important;
   font-size: 1rem !important;
-  font-weight: 650 !important;
+  font-weight: 750 !important;
   line-height: 1.45 !important;
+}
+
+.public-code-next-step {
+  color: var(--text-muted) !important;
+  margin-top: -0.2rem !important;
 }
 
 .public-code-address-line {
@@ -2252,6 +2268,42 @@ img {
   border: 0 !important;
   box-shadow: none !important;
   padding: 0 !important;
+}
+
+.public-code-details-disclosure {
+  border-block: 1px solid rgba(11, 47, 79, 0.12) !important;
+  padding-block: 0.9rem !important;
+}
+
+.public-code-details-disclosure summary {
+  align-items: center !important;
+  color: var(--text-main) !important;
+  cursor: pointer !important;
+  display: flex !important;
+  justify-content: space-between !important;
+  list-style: none !important;
+}
+
+.public-code-details-disclosure summary::-webkit-details-marker {
+  display: none !important;
+}
+
+.public-code-details-disclosure summary::after {
+  color: var(--text-muted) !important;
+  content: 'Open';
+  font-size: 0.82rem !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.08em !important;
+  text-transform: uppercase !important;
+}
+
+.public-code-details-disclosure[open] summary::after {
+  content: 'Close';
+}
+
+.public-code-details-disclosure summary strong {
+  display: block !important;
+  font-size: 1rem !important;
 }
 
 .public-code-facts-grid {
@@ -14347,6 +14399,24 @@ html body .guided-workflow-strip.guided-workflow-strip .step-chip {
 .public-proof-actions {
   border-top: 1px solid rgba(11, 47, 79, 0.1);
   padding-top: 1rem;
+}
+
+.public-proof-locked {
+  display: grid;
+  gap: 0.85rem;
+  border-block: 1px solid rgba(138, 100, 31, 0.22);
+  padding-block: 1rem;
+}
+
+.public-proof-locked h4 {
+  margin: 0;
+  color: var(--civic-navy);
+  font-size: clamp(1.1rem, 3vw, 1.35rem);
+}
+
+.public-proof-locked .institutional-note {
+  border-color: rgba(138, 100, 31, 0.18);
+  background: rgba(138, 100, 31, 0.06);
 }
 
 @media (max-width: 760px) {

@@ -37,8 +37,23 @@ function displayCoordinate(value?: number | null) {
 function proofStatus(payload: PublicCodeLookup | null) {
   if (!payload) return 'Checking public record';
   if (!payload.is_valid) return 'Invalid address code';
-  if (payload.publication_status === 'published') return 'Published public address record';
-  return 'Not published for public proof';
+  if (payload.publication_status === 'published') return 'Published public proof available';
+  if (payload.publication_status === 'internal_registry') return 'Internal registry hold — proof locked';
+  return 'Public proof not available yet';
+}
+
+function proofNextStep(payload: PublicCodeLookup | null) {
+  if (!payload) return 'Please wait while the platform checks this code.';
+  if (!payload.is_valid) return 'Check the address code characters or contact the registry team.';
+  if (payload.publication_status === 'published') return 'This proof can be printed, saved as PDF, or verified by QR code.';
+  if (payload.publication_status === 'internal_registry') return 'The protected case file exists, but public proof, certificate output, and signage release remain locked until publication approval.';
+  return 'Only published public records can generate a proof sheet or QR proof.';
+}
+
+function proofTone(payload: PublicCodeLookup | null) {
+  if (payload?.publication_status === 'published') return 'ok';
+  if (payload && !payload.is_valid) return 'danger';
+  return 'warn';
 }
 
 export function PublicProofPanel({ apiBaseUrl, code }: PublicProofPanelProps) {
@@ -100,7 +115,7 @@ export function PublicProofPanel({ apiBaseUrl, code }: PublicProofPanelProps) {
             <p className="section-label">Public address proof</p>
             <h3 id="proof-title">{code}</h3>
           </div>
-          <span className={`status-chip ${canShowProof ? 'ok' : 'warn'}`}>{proofStatus(payload)}</span>
+          <span className={`status-chip ${proofTone(payload)}`}>{proofStatus(payload)}</span>
         </div>
 
         {error ? <p className="form-notice error">{error}</p> : null}
@@ -127,7 +142,16 @@ export function PublicProofPanel({ apiBaseUrl, code }: PublicProofPanelProps) {
             </aside>
           </div>
         ) : payload ? (
-          <p className="institutional-note">This code is not currently eligible for public proof. Only published public records can generate proof pages.</p>
+          <div className="public-proof-locked" role="status">
+            <p className="section-label">Proof release control</p>
+            <h4>{proofStatus(payload)}</h4>
+            <p className="institutional-note">{proofNextStep(payload)}</p>
+            <dl className="facts-grid issuance-facts-grid calm-facts-grid public-proof-facts">
+              <div><dt>Address code</dt><dd>{code}</dd></div>
+              <div><dt>Approval state</dt><dd>{payload.publication_status === 'internal_registry' ? 'Internal registry hold' : 'Not published'}</dd></div>
+              <div><dt>Public proof</dt><dd>Locked until publication approval</dd></div>
+            </dl>
+          </div>
         ) : null}
 
         <div className="public-profile-actions public-proof-actions no-print" aria-label="Public proof actions">

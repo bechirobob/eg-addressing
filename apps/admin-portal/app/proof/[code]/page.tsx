@@ -16,11 +16,11 @@ export default async function PublicProofPage({ params }: PublicProofPageProps) 
     <SiteChrome
       apiBaseUrl={publicApiBaseUrl}
       title="Public Address Proof"
-      titleKey="issueTitle"
+      titleKey="proofTitle"
       eyebrow="Public address service"
       eyebrowKey="publicAddressService"
-      subtitle="Print or save a public-safe address-code proof with QR verification."
-      subtitleKey="codeSubtitle"
+      subtitle="Print or save public proof only after official publication approval."
+      subtitleKey="proofSubtitle"
       skipSessionLookup
     >
       <PublicProofPanel apiBaseUrl={publicApiBaseUrl} code={decodedCode} />
