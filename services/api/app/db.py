@@ -3862,6 +3862,89 @@ def signage_export(status: str = 'published') -> dict[str, Any]:
     return {'source': 'address_records', 'status': status, 'count': len(rows), 'items': rows}
 
 
+def _validate_wgs84(latitude: float, longitude: float) -> tuple[float, float]:
+    lat = float(latitude)
+    lon = float(longitude)
+    if lat < -90 or lat > 90:
+        raise InvalidSubmissionActionError('latitude outside valid WGS84 range')
+    if lon < -180 or lon > 180:
+        raise InvalidSubmissionActionError('longitude outside valid WGS84 range')
+    return lat, lon
+
+
+def refresh_address_record_geometry(address_code: str | None = None) -> int:
+    where_sql = 'WHERE latitude BETWEEN -90 AND 90 AND longitude BETWEEN -180 AND 180'
+    params: list[Any] = []
+    if address_code:
+        where_sql += ' AND address_code = %s'
+        params.append(address_code)
+    with db_connection() as connection:
+        with connection.cursor() as cursor:
+            cursor.execute(
+                f'''
+                UPDATE address_records
+                SET geom = ST_SetSRID(ST_MakePoint(longitude, latitude), 4326)::geography,
+                    updated_at = updated_at
+                {where_sql}
+                ''',
+                params,
+            )
+            updated = cursor.rowcount
+        connection.commit()
+    return int(updated or 0)
+
+
+def find_nearby_address_records(latitude: float, longitude: float, radius_meters: float = 50.0, limit: int = 10) -> dict[str, Any]:
+    lat, lon = _validate_wgs84(latitude, longitude)
+    radius = max(1.0, min(float(radius_meters), 5000.0))
+    row_limit = max(1, min(int(limit), 50))
+    with db_connection() as connection:
+        with connection.cursor() as cursor:
+            cursor.execute(
+                '''
+                SELECT address_code, address_label, status, publication_state, province_code, territory_id,
+                       latitude, longitude, accuracy_meters,
+                       ST_Distance(
+                           geom,
+                           ST_SetSRID(ST_MakePoint(%s, %s), 4326)::geography
+                       ) AS distance_meters,
+                       record_bundle, updated_at
+                FROM address_records
+                WHERE geom IS NOT NULL
+                  AND ST_DWithin(
+                      geom,
+                      ST_SetSRID(ST_MakePoint(%s, %s), 4326)::geography,
+                      %s
+                  )
+                ORDER BY distance_meters ASC, updated_at DESC
+                LIMIT %s
+                ''',
+                (lon, lat, lon, lat, radius, row_limit),
+            )
+            rows = []
+            for row in cursor.fetchall():
+                rows.append({
+                    'address_code': row['address_code'],
+                    'address_label': row['address_label'],
+                    'status': row['status'],
+                    'publication_state': row.get('publication_state'),
+                    'province_code': row.get('province_code'),
+                    'territory_id': row.get('territory_id'),
+                    'latitude': row['latitude'],
+                    'longitude': row['longitude'],
+                    'accuracy_meters': row.get('accuracy_meters'),
+                    'distance_meters': round(float(row['distance_meters']), 2),
+                    'record_bundle': row.get('record_bundle') or {},
+                    'source': 'address_records',
+                })
+    return {
+        'source': 'address_records',
+        'query': {'latitude': lat, 'longitude': lon, 'radius_meters': radius},
+        'count': len(rows),
+        'items': rows,
+    }
+
+
 def postgis_readiness() -> dict[str, Any]:
     notes: list[str] = []
     try:
@@ -3871,31 +3954,75 @@ def postgis_readiness() -> dict[str, Any]:
                 installed = cursor.fetchone()
                 cursor.execute("SELECT default_version FROM pg_available_extensions WHERE name = 'postgis'")
                 available = cursor.fetchone()
+                cursor.execute(
+                    '''
+                    SELECT data_type, udt_name
+                    FROM information_schema.columns
+                    WHERE table_name = 'address_records' AND column_name = 'geom'
+                    '''
+                )
+                geometry_column = cursor.fetchone()
+                cursor.execute(
+                    '''
+                    SELECT 1
+                    FROM pg_indexes
+                    WHERE tablename = 'address_records' AND indexname = 'idx_address_records_geom'
+                    '''
+                )
+                spatial_index = cursor.fetchone()
+                cursor.execute(
+                    '''
+                    SELECT COUNT(*) AS missing_geometry_count
+                    FROM address_records
+                    WHERE latitude BETWEEN -90 AND 90
+                      AND longitude BETWEEN -180 AND 180
+                      AND geom IS NULL
+                    '''
+                )
+                missing_geometry = cursor.fetchone()
     except Exception as exc:  # pragma: no cover - defensive operational report
         return {
             'status': 'blocked',
             'extension_installed': False,
             'extension_available': False,
+            'geometry_column_ready': False,
+            'spatial_index_ready': False,
+            'canonical_geometry_ready': False,
             'restore_safe': False,
             'migration_required': True,
             'notes': [f'Unable to inspect PostGIS readiness: {exc.__class__.__name__}'],
         }
     installed_version = installed.get('extversion') if installed else None
     available_version = available.get('default_version') if available else None
+    geometry_column_ready = bool(geometry_column)
+    spatial_index_ready = bool(spatial_index)
+    missing_count = int((missing_geometry or {}).get('missing_geometry_count') or 0) if geometry_column_ready else None
+    canonical_geometry_ready = bool(installed_version and geometry_column_ready and spatial_index_ready and (missing_count in (0, None)))
     if installed_version:
         notes.append(f'PostGIS extension installed in current database: {installed_version}.')
     elif available_version:
         notes.append(f'PostGIS extension is available but not installed: {available_version}. Run a reviewed migration before spatial columns depend on it.')
     else:
         notes.append('PostGIS extension is not available in this database environment.')
+    if geometry_column_ready and spatial_index_ready:
+        notes.append('Canonical address_records geometry column and spatial index are ready.')
+    elif installed_version:
+        notes.append('PostGIS is installed, but canonical address_records geometry migration is still required.')
+    if missing_count:
+        notes.append(f'{missing_count} canonical records with valid WGS84 coordinates still need geometry backfill.')
+    migration_required = not bool(installed_version and geometry_column_ready and spatial_index_ready)
     return {
-        'status': 'ready' if installed_version else ('available' if available_version else 'blocked'),
+        'status': 'ready' if canonical_geometry_ready else ('available' if installed_version or available_version else 'blocked'),
         'extension_installed': bool(installed_version),
         'extension_available': bool(available_version or installed_version),
         'installed_version': installed_version,
         'available_version': available_version,
-        'restore_safe': bool(installed_version),
-        'migration_required': not bool(installed_version),
+        'geometry_column_ready': geometry_column_ready,
+        'spatial_index_ready': spatial_index_ready,
+        'canonical_geometry_ready': canonical_geometry_ready,
+        'missing_geometry_count': missing_count,
+        'restore_safe': bool(installed_version and (not geometry_column_ready or spatial_index_ready)),
+        'migration_required': migration_required,
         'notes': notes,
     }
 

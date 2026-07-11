@@ -1612,6 +1612,74 @@ def test_postgis_readiness_endpoint_reports_support_without_mutation(monkeypatch
     assert body['migration_required'] is False
 
 
+
+
+def test_address_record_nearby_endpoint_requires_auth_and_uses_canonical_records(monkeypatch) -> None:
+    monkeypatch.setattr(main, 'resolve_user_from_token', lambda token: VIEWER)
+    captured = {}
+
+    def fake_nearby(latitude, longitude, radius_meters=50.0, limit=10):
+        captured.update({
+            'latitude': latitude,
+            'longitude': longitude,
+            'radius_meters': radius_meters,
+            'limit': limit,
+        })
+        return {
+            'source': 'address_records',
+            'query': {'latitude': latitude, 'longitude': longitude, 'radius_meters': radius_meters},
+            'count': 1,
+            'items': [{
+                'address_code': 'EG-BN-N1-NEAR000001-AA',
+                'address_label': 'Nearby canonical record',
+                'distance_meters': 7.4,
+                'source': 'address_records',
+            }],
+        }
+
+    monkeypatch.setattr(main, 'find_nearby_address_records', fake_nearby)
+    unauthenticated = client.get('/api/v1/address-records/nearby?latitude=3.7523&longitude=8.7741')
+    assert unauthenticated.status_code == 401
+    response = client.get('/api/v1/address-records/nearby?latitude=3.7523&longitude=8.7741&radius_meters=25&limit=5', headers=auth_header())
+    assert response.status_code == 200
+    body = response.json()
+    assert captured == {'latitude': 3.7523, 'longitude': 8.7741, 'radius_meters': 25.0, 'limit': 5}
+    assert body['source'] == 'address_records'
+    assert body['items'][0]['distance_meters'] == 7.4
+
+
+def test_postgis_readiness_reports_address_record_geometry_and_index(monkeypatch) -> None:
+    monkeypatch.setattr(main, 'resolve_user_from_token', lambda token: VIEWER)
+    monkeypatch.setattr(main, 'postgis_readiness', lambda: {
+        'status': 'ready',
+        'extension_installed': True,
+        'extension_available': True,
+        'restore_safe': True,
+        'migration_required': False,
+        'geometry_column_ready': True,
+        'spatial_index_ready': True,
+        'canonical_geometry_ready': True,
+        'notes': ['PostGIS geometry column and spatial index are ready.'],
+    })
+    response = client.get('/api/v1/operator/postgis/readiness', headers=auth_header())
+    assert response.status_code == 200
+    body = response.json()
+    assert body['geometry_column_ready'] is True
+    assert body['spatial_index_ready'] is True
+    assert body['canonical_geometry_ready'] is True
+
+
+def test_postgis_phase2_migration_adds_canonical_geometry_safely() -> None:
+    migration = Path('/home/ubuntu/projects/eg-addressing/infra/migrations/005_address_record_postgis_geometry.sql')
+    assert migration.exists()
+    sql = migration.read_text()
+    assert "address_records" in sql
+    assert "geography(Point, 4326)" in sql
+    assert "ST_SetSRID(ST_MakePoint(longitude, latitude), 4326)::geography" in sql
+    assert "CREATE INDEX IF NOT EXISTS idx_address_records_geom" in sql
+    assert "latitude BETWEEN -90 AND 90" in sql
+    assert "longitude BETWEEN -180 AND 180" in sql
+
 def test_signage_pack_returns_batch_metadata_and_csv(monkeypatch) -> None:
     monkeypatch.setattr(main, 'resolve_user_from_token', lambda token: VIEWER)
     monkeypatch.setattr(main, 'signage_export', lambda status='published': {'items': [

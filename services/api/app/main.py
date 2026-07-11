@@ -110,6 +110,7 @@ from app.db import (
     address_record_export,
     build_address_record_certificate,
     build_geotag_certificate,
+    find_nearby_address_records,
     geotag_duplicate_summary,
     pilot_readiness_summary,
     preview_citizen_geotag,
@@ -1889,6 +1890,24 @@ def address_records_export_endpoint(status_value: str = Query(default='published
     user = _current_user(authorization)
     _require_role(user, 'viewer', 'editor', 'admin')
     return address_record_export(status=status_value)
+
+
+@app.get('/api/v1/address-records/nearby')
+def address_records_nearby_endpoint(
+    latitude: float | None = Query(default=None, ge=-90, le=90),
+    longitude: float | None = Query(default=None, ge=-180, le=180),
+    radius_meters: float = Query(default=50.0, ge=1, le=5000),
+    limit: int = Query(default=10, ge=1, le=50),
+    authorization: str | None = Header(default=None),
+) -> dict[str, Any]:
+    user = _current_user(authorization)
+    _require_role(user, 'viewer', 'editor', 'admin')
+    if latitude is None or longitude is None:
+        raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail='latitude and longitude are required')
+    try:
+        return find_nearby_address_records(latitude=latitude, longitude=longitude, radius_meters=radius_meters, limit=limit)
+    except InvalidSubmissionActionError as exc:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(exc)) from exc
 
 
 @app.get('/api/v1/address-records/{address_code}')
