@@ -20,6 +20,7 @@ const siteData = await read('components/site-data.ts');
 const roleAwareChrome = await read('components/RoleAwareChrome.tsx');
 const loginPanel = await read('components/LoginPanel.tsx');
 const homePage = await read('app/page.tsx');
+const staffAdmin = await read('components/StaffAdminPanel.tsx');
 
 assert(/(^|\n)knowledge\//.test(gitignore), 'knowledge/ must stay ignored so mission logs never ride into git by accident');
 assert(/(^|\n)\.hermes\//.test(gitignore), 'local tooling state should stay ignored');
@@ -43,6 +44,8 @@ assert(/href: '\/admin\/staff',[\s\S]*visibleTo: \['admin'\][\s\S]*group: 'admin
 assert(/\(role === 'guest' \? item\.group === 'public' : item\.group !== 'public'\)/.test(roleAwareChrome), 'signed-in admins can see staff and admin navigation while guests only see public navigation');
 assert(/navAdmin/.test(roleAwareChrome) && /navStaffAccounts/.test(roleAwareChrome), 'admin navigation group and staff account link must have explicit label keys');
 assert(/StaffAdminPanel/.test(await read('app/admin/staff/page.tsx')), 'staff account panel must be route-split under /admin/staff');
+assert(/admin-readiness-summary/.test(staffAdmin) && /\/api\/v1\/pilot-readiness\/summary/.test(staffAdmin), 'admin area must expose only a tiny readiness summary from the protected readiness endpoint.');
+assert(!/System readiness dashboard|Audit dashboard|Route inventory/.test(staffAdmin), 'admin readiness must stay summary-only, not become a full dashboard.');
 assert(!/StaffAdminPanel/.test(roleAwareChrome), 'shared staff chrome must not import or load the staff account panel');
 assert(/\{ path: '\/verify', allowedRoles: \['editor', 'admin'\] \}/.test(siteData), 'verify route must stay editor\/admin only');
 assert(/\{\s*href: '\/login',[\s\S]*visibleTo: \[\]/.test(siteData), 'login must not appear in shared public navigation');

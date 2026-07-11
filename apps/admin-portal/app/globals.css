@@ -15239,6 +15239,41 @@ html body main.page-shell .staff-admin-workspace > article {
   border-color: rgba(13, 47, 79, 0.16);
 }
 
+.admin-readiness-summary {
+  align-items: center;
+  border-block: 1px solid rgba(13, 47, 79, 0.14);
+  display: grid;
+  gap: 10px;
+  grid-template-columns: repeat(3, minmax(0, 150px)) minmax(220px, 1fr);
+  margin-top: 14px;
+  padding-block: 12px;
+}
+
+.admin-readiness-summary div {
+  display: grid;
+  gap: 3px;
+}
+
+.admin-readiness-summary span {
+  color: var(--eg-ink-muted);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.admin-readiness-summary strong {
+  color: var(--eg-ink);
+  font-size: 0.96rem;
+}
+
+.admin-readiness-summary p {
+  color: var(--eg-ink-muted);
+  font-size: 0.88rem;
+  line-height: 1.45;
+  margin: 0;
+}
+
 .staff-admin-list-panel {
   width: 100%;
   min-width: 0;
@@ -15433,6 +15468,11 @@ html body main.page-shell .staff-admin-workspace > article {
   .staff-admin-list-head {
     grid-template-columns: 1fr;
     display: grid;
+  }
+
+  .admin-readiness-summary {
+    align-items: stretch;
+    grid-template-columns: 1fr;
   }
 
   .staff-admin-table-wrap {

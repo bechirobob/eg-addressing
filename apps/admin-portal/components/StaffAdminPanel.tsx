@@ -32,6 +32,22 @@ type SessionResponse = {
   detail?: string;
 };
 
+type ReadinessGate = {
+  name: string;
+  status: 'passed' | 'attention' | string;
+  evidence?: string;
+  next_step?: string;
+};
+
+type PilotReadinessSummary = {
+  readiness_status: string;
+  passed_gates: number;
+  total_gates: number;
+  gates?: ReadinessGate[];
+  totals?: Record<string, number>;
+  boundaries?: string[];
+};
+
 const staffRoles: Array<{ value: StaffRole; label: string }> = [
   { value: 'viewer', label: 'Viewer' },
   { value: 'agency_viewer', label: 'Agency reviewer' },
@@ -54,9 +70,16 @@ function formatDate(value?: string | null) {
   return parsed.toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' });
 }
 
+function readinessLabel(status: string) {
+  if (status === 'pilot-ready') return 'Pilot ready';
+  if (status === 'pilot-prep') return 'Pilot preparation';
+  return status.replace(/-/g, ' ');
+}
+
 export function StaffAdminPanel({ apiBaseUrl }: { apiBaseUrl: string }) {
   const browserApiBaseUrl = resolveBrowserApiBaseUrl(apiBaseUrl);
   const [users, setUsers] = useState<StaffUser[]>([]);
+  const [readiness, setReadiness] = useState<PilotReadinessSummary | null>(null);
   const [currentUserId, setCurrentUserId] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isMutating, setIsMutating] = useState(false);
@@ -91,12 +114,14 @@ export function StaffAdminPanel({ apiBaseUrl }: { apiBaseUrl: string }) {
     setIsLoading(true);
     setError(null);
     try {
-      const [session, staff] = await Promise.all([
+      const [session, staff, readinessSummary] = await Promise.all([
         request<SessionResponse>('/api/v1/auth/me'),
         request<StaffUsersResponse>('/api/v1/admin/users'),
+        request<PilotReadinessSummary>('/api/v1/pilot-readiness/summary'),
       ]);
       setCurrentUserId(session.user?.id ?? null);
       setUsers(staff.items ?? []);
+      setReadiness(readinessSummary);
       setRowEdits((previous) => {
         const next: Record<string, { full_name: string; role: StaffRole; password: string }> = {};
         for (const user of staff.items ?? []) {
@@ -177,6 +202,21 @@ export function StaffAdminPanel({ apiBaseUrl }: { apiBaseUrl: string }) {
         <p className="institutional-note">
           This area is restricted to administrators. Editors, viewers, and agency reviewers can use their staff areas, but they cannot load or operate this account-management surface.
         </p>
+        <div className="admin-readiness-summary" aria-label="System readiness summary">
+          <div>
+            <span>System readiness</span>
+            <strong>{readiness ? readinessLabel(readiness.readiness_status) : 'Checking'}</strong>
+          </div>
+          <div>
+            <span>Checks passed</span>
+            <strong>{readiness ? `${readiness.passed_gates}/${readiness.total_gates}` : '—'}</strong>
+          </div>
+          <div>
+            <span>Registry addresses</span>
+            <strong>{readiness?.totals?.addresses ?? 0}</strong>
+          </div>
+          <p>{readiness?.boundaries?.[0] ?? 'Summary only. Full audit remains in the automated mission report.'}</p>
+        </div>
         <details className="staff-admin-disclosure">
           <summary>Account safeguards</summary>
           <ul className="staff-admin-principles" aria-label="Staff account safeguards">
