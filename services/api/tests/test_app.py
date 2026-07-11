@@ -1549,6 +1549,69 @@ def test_address_record_case_file_history_requires_auth(monkeypatch) -> None:
     assert body['timeline'][0]['event_type'] == 'address-record-upserted'
 
 
+
+
+
+def test_canonical_address_record_certificate_requires_auth_and_published_record(monkeypatch) -> None:
+    monkeypatch.setattr(main, 'resolve_user_from_token', lambda token: VIEWER)
+    monkeypatch.setattr(main, 'build_address_record_certificate', lambda address_code: {
+        'certificate_id': f'CERT-{address_code}',
+        'address_code': address_code,
+        'address_label': 'Published Ministry Annex',
+        'status': 'published',
+        'source': 'address_records',
+        'html': '<main>Published Ministry Annex</main>',
+    })
+    unauthenticated = client.get('/api/v1/address-records/EG-BN-N1-CERT000001-AA/certificate')
+    assert unauthenticated.status_code == 401
+    response = client.get('/api/v1/address-records/EG-BN-N1-CERT000001-AA/certificate', headers=auth_header())
+    assert response.status_code == 200
+    body = response.json()
+    assert body['source'] == 'address_records'
+    assert body['certificate_id'] == 'CERT-EG-BN-N1-CERT000001-AA'
+
+
+def test_canonical_address_record_export_uses_address_records_not_geotag_submissions(monkeypatch) -> None:
+    monkeypatch.setattr(main, 'resolve_user_from_token', lambda token: VIEWER)
+    captured = {}
+
+    def fake_export(status='published'):
+        captured['status'] = status
+        return {
+            'source': 'address_records',
+            'status': status,
+            'count': 1,
+            'items': [{'address_code': 'EG-BN-N1-EXP000001-AA', 'address_label': 'Canonical export row'}],
+            'csv': 'Address code,Address label\nEG-BN-N1-EXP000001-AA,Canonical export row\n',
+        }
+
+    monkeypatch.setattr(main, 'address_record_export', fake_export)
+    response = client.get('/api/v1/address-records/export?status=published', headers=auth_header())
+    assert response.status_code == 200
+    body = response.json()
+    assert captured == {'status': 'published'}
+    assert body['source'] == 'address_records'
+    assert 'Canonical export row' in body['csv']
+
+
+def test_postgis_readiness_endpoint_reports_support_without_mutation(monkeypatch) -> None:
+    monkeypatch.setattr(main, 'resolve_user_from_token', lambda token: VIEWER)
+    monkeypatch.setattr(main, 'postgis_readiness', lambda: {
+        'status': 'ready',
+        'extension_installed': True,
+        'extension_available': True,
+        'restore_safe': True,
+        'migration_required': False,
+        'notes': ['PostGIS extension installed in current database.'],
+    })
+    response = client.get('/api/v1/operator/postgis/readiness', headers=auth_header())
+    assert response.status_code == 200
+    body = response.json()
+    assert body['status'] == 'ready'
+    assert body['restore_safe'] is True
+    assert body['migration_required'] is False
+
+
 def test_signage_pack_returns_batch_metadata_and_csv(monkeypatch) -> None:
     monkeypatch.setattr(main, 'resolve_user_from_token', lambda token: VIEWER)
     monkeypatch.setattr(main, 'signage_export', lambda status='published': {'items': [

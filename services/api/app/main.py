@@ -107,10 +107,13 @@ from app.db import (
     list_publication_packs,
     publish_geotag_submission,
     publish_publication_pack,
+    address_record_export,
+    build_address_record_certificate,
     build_geotag_certificate,
     geotag_duplicate_summary,
     pilot_readiness_summary,
     preview_citizen_geotag,
+    postgis_readiness,
     public_address_code_record_lookup,
     record_geotag_duplicate_decision,
     record_geotag_field_evidence,
@@ -1880,6 +1883,14 @@ def address_record_search(
     return {'items': search_address_records(q=q, status=status_value, province_code=province_code, limit=limit)}
 
 
+
+@app.get('/api/v1/address-records/export')
+def address_records_export_endpoint(status_value: str = Query(default='published', alias='status', max_length=40), authorization: str | None = Header(default=None)) -> dict[str, Any]:
+    user = _current_user(authorization)
+    _require_role(user, 'viewer', 'editor', 'admin')
+    return address_record_export(status=status_value)
+
+
 @app.get('/api/v1/address-records/{address_code}')
 def address_record_case_file(address_code: str, authorization: str | None = Header(default=None)) -> dict[str, Any]:
     user = _current_user(authorization)
@@ -1888,6 +1899,18 @@ def address_record_case_file(address_code: str, authorization: str | None = Head
         return _sanitize_case_file(get_address_record_case_file(address_code))
     except AddressNotFoundError as exc:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(exc)) from exc
+
+
+@app.get('/api/v1/address-records/{address_code}/certificate')
+def address_record_certificate_endpoint(address_code: str, authorization: str | None = Header(default=None)) -> dict[str, Any]:
+    user = _current_user(authorization)
+    _require_role(user, 'viewer', 'editor', 'admin')
+    try:
+        return _strip_identity_fields(build_address_record_certificate(address_code))
+    except AddressNotFoundError as exc:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(exc)) from exc
+    except InvalidSubmissionActionError as exc:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(exc)) from exc
 
 
 @app.get('/api/v1/geotag-submissions')
@@ -2261,6 +2284,14 @@ def operator_command_center(authorization: str | None = Header(default=None)) ->
         'migrations': migration_status(),
         'walkthrough': _ministry_walkthrough_steps(),
     }
+
+
+
+@app.get('/api/v1/operator/postgis/readiness')
+def operator_postgis_readiness(authorization: str | None = Header(default=None)) -> dict[str, Any]:
+    user = _current_user(authorization)
+    _require_role(user, 'viewer', 'editor', 'admin')
+    return postgis_readiness()
 
 
 @app.get('/api/v1/operator/migrations/status')

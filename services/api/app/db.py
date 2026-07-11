@@ -3649,6 +3649,96 @@ def build_geotag_certificate(submission_id: str) -> dict[str, Any]:
     }
 
 
+
+def build_address_record_certificate(address_code: str) -> dict[str, Any]:
+    record = get_address_record_case_file(address_code)
+    if record.get('status') != 'published':
+        raise InvalidSubmissionActionError('certificate requires a published canonical address record')
+    bundle = record.get('record_bundle') if isinstance(record.get('record_bundle'), dict) else {}
+    routing = bundle.get('routing') if isinstance(bundle.get('routing'), dict) else {}
+    outputs = bundle.get('outputs') if isinstance(bundle.get('outputs'), dict) else {}
+    certificate_id = outputs.get('certificate_id') or f"CERT-{record['address_code']}"
+    issued_at = datetime.now(timezone.utc).isoformat()
+    verification_url = f"/code/{record['address_code']}"
+    safe_label = html.escape(str(record.get('address_label') or 'Official address record'))
+    safe_territory = html.escape(str(routing.get('territory_name') or record.get('territory_name') or 'Official routing area pending'))
+    safe_code = html.escape(str(record['address_code']))
+    html_body = f"""<!doctype html>
+<html lang=\"en\">
+<head><meta charset=\"utf-8\"><title>{html.escape(str(certificate_id))}</title></head>
+<body>
+  <main class=\"official-certificate\">
+    <p>Republic of Equatorial Guinea</p>
+    <h1>National Digital Address Certificate</h1>
+    <p><strong>Certificate reference:</strong> {html.escape(str(certificate_id))}</p>
+    <p><strong>Address code:</strong> {safe_code}</p>
+    <p><strong>Location:</strong> {safe_label}</p>
+    <p><strong>Territory:</strong> {safe_territory}</p>
+    <p><strong>Coordinates:</strong> {record['latitude']}, {record['longitude']}</p>
+    <p><strong>Status:</strong> Published canonical registry record</p>
+    <p><strong>Verify:</strong> {html.escape(verification_url)}</p>
+  </main>
+</body>
+</html>"""
+    return {
+        'certificate_id': certificate_id,
+        'address_code': record['address_code'],
+        'address_label': record.get('address_label'),
+        'territory_name': routing.get('territory_name') or record.get('territory_name'),
+        'latitude': record['latitude'],
+        'longitude': record['longitude'],
+        'accuracy_meters': record.get('accuracy_meters'),
+        'status': record.get('status'),
+        'publication_state': record.get('publication_state'),
+        'issued_at': issued_at,
+        'qr_payload': verification_url,
+        'prepared_by': 'BeCoreOps Guinea Ecuatorial',
+        'source': 'address_records',
+        'html': html_body,
+    }
+
+
+def _csv_cell(value: Any) -> str:
+    text = '' if value is None else str(value)
+    if text.startswith(('=', '+', '-', '@', '\t', '\r')):
+        text = "'" + text
+    return '"' + text.replace('"', '""') + '"'
+
+
+def address_record_export(status: str = 'published') -> dict[str, Any]:
+    status_value = status or 'published'
+    rows = []
+    for record in search_address_records(status=status_value, limit=100):
+        bundle = record.get('record_bundle') if isinstance(record.get('record_bundle'), dict) else {}
+        routing = bundle.get('routing') if isinstance(bundle.get('routing'), dict) else {}
+        outputs = bundle.get('outputs') if isinstance(bundle.get('outputs'), dict) else {}
+        rows.append({
+            'address_code': record['address_code'],
+            'signage_text': record['address_code'],
+            'address_label': record['address_label'],
+            'territory_name': routing.get('territory_name') or record.get('territory_name'),
+            'latitude': record['latitude'],
+            'longitude': record['longitude'],
+            'accuracy_meters': record.get('accuracy_meters'),
+            'certificate_id': outputs.get('certificate_id') or (f"CERT-{record['address_code']}" if record.get('status') == 'published' else None),
+            'publication_state': record.get('publication_state'),
+            'status': record.get('status'),
+        })
+    csv_rows = [['Address code', 'Address label', 'Territory', 'Latitude', 'Longitude', 'Accuracy meters', 'Certificate', 'Publication state', 'Status']]
+    csv_rows.extend([
+        [row.get('address_code'), row.get('address_label'), row.get('territory_name'), row.get('latitude'), row.get('longitude'), row.get('accuracy_meters'), row.get('certificate_id'), row.get('publication_state'), row.get('status')]
+        for row in rows
+    ])
+    csv_text = '\n'.join(','.join(_csv_cell(cell) for cell in row) for row in csv_rows) + '\n'
+    return {
+        'source': 'address_records',
+        'status': status_value,
+        'count': len(rows),
+        'items': rows,
+        'csv': csv_text,
+        'operator_note': 'Official exports are generated from canonical address_records only; raw citizen/geotag submissions remain intake evidence.',
+    }
+
 def _province_code_from_public_code(code: str) -> str | None:
     parts = code.upper().strip().split('-')
     if len(parts) >= 2 and parts[0] == 'EG' and re.fullmatch(r'[A-Z]{2}', parts[1]):
@@ -3753,21 +3843,61 @@ def public_address_code_record_lookup(code: str) -> dict[str, Any]:
 
 
 def signage_export(status: str = 'published') -> dict[str, Any]:
+    export = address_record_export(status=status)
     rows = []
-    for item in list_citizen_geotag_submissions(status=status):
+    for item in export['items']:
         rows.append({
-            'grid_code': item['grid_code'],
-            'address_code': item.get('address_code'),
-            'signage_text': item['grid_code'],
+            'grid_code': item['address_code'],
+            'address_code': item['address_code'],
+            'signage_text': item['signage_text'],
             'address_label': item['address_label'],
             'territory_name': item['territory_name'],
             'latitude': item['latitude'],
             'longitude': item['longitude'],
             'accuracy_meters': item['accuracy_meters'],
-            'batch': item['signage_batch'],
+            'batch': item.get('certificate_id'),
             'status': item['status'],
+            'source': 'address_records',
         })
-    return {'status': status, 'count': len(rows), 'items': rows}
+    return {'source': 'address_records', 'status': status, 'count': len(rows), 'items': rows}
+
+
+def postgis_readiness() -> dict[str, Any]:
+    notes: list[str] = []
+    try:
+        with db_connection() as connection:
+            with connection.cursor() as cursor:
+                cursor.execute("SELECT extversion FROM pg_extension WHERE extname = 'postgis'")
+                installed = cursor.fetchone()
+                cursor.execute("SELECT default_version FROM pg_available_extensions WHERE name = 'postgis'")
+                available = cursor.fetchone()
+    except Exception as exc:  # pragma: no cover - defensive operational report
+        return {
+            'status': 'blocked',
+            'extension_installed': False,
+            'extension_available': False,
+            'restore_safe': False,
+            'migration_required': True,
+            'notes': [f'Unable to inspect PostGIS readiness: {exc.__class__.__name__}'],
+        }
+    installed_version = installed.get('extversion') if installed else None
+    available_version = available.get('default_version') if available else None
+    if installed_version:
+        notes.append(f'PostGIS extension installed in current database: {installed_version}.')
+    elif available_version:
+        notes.append(f'PostGIS extension is available but not installed: {available_version}. Run a reviewed migration before spatial columns depend on it.')
+    else:
+        notes.append('PostGIS extension is not available in this database environment.')
+    return {
+        'status': 'ready' if installed_version else ('available' if available_version else 'blocked'),
+        'extension_installed': bool(installed_version),
+        'extension_available': bool(available_version or installed_version),
+        'installed_version': installed_version,
+        'available_version': available_version,
+        'restore_safe': bool(installed_version),
+        'migration_required': not bool(installed_version),
+        'notes': notes,
+    }
 
 
 def list_import_jobs() -> list[dict[str, Any]]:

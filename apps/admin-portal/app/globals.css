@@ -3832,6 +3832,70 @@ select.territory-input {
   line-height: 1.5;
 }
 
+.case-timeline-ledger {
+  border-top: 1px solid var(--ref-line);
+  margin-top: 16px;
+  padding-top: 12px;
+}
+
+.case-timeline-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.case-timeline-head strong {
+  color: var(--ref-navy);
+  font-size: 0.98rem;
+}
+
+.case-timeline-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0;
+  border-top: 1px solid var(--ref-line);
+}
+
+.case-timeline-row {
+  display: grid;
+  grid-template-columns: minmax(140px, 0.8fr) minmax(180px, 1.35fr) minmax(140px, 0.85fr);
+  gap: 12px;
+  align-items: start;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--ref-line);
+}
+
+.case-timeline-stage {
+  color: var(--ref-navy);
+  font-weight: 750;
+}
+
+.case-timeline-evidence {
+  color: #415267;
+  overflow-wrap: anywhere;
+}
+
+.case-timeline-meta {
+  color: #708092;
+  font-size: 0.9rem;
+}
+
+@media (max-width: 759px) {
+  .case-timeline-head {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .case-timeline-row {
+    grid-template-columns: 1fr;
+    gap: 4px;
+  }
+}
+
 .preview-submit-actions .primary-action {
   width: 100%;
 }
