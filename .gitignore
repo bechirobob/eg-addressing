@@ -25,6 +25,7 @@ build/
 coverage/
 artifacts/generated/
 artifacts/operator-digests/
+artifacts/audits/
 artifacts/qa/
 artifacts/reference-pdfs/
 artifacts/containment-backups/
