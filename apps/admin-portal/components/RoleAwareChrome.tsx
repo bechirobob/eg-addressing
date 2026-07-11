@@ -39,6 +39,7 @@ function navLabelKey(href: string) {
     '/field': 'navFieldWork',
     '/registry': 'navAddressRegistry',
     '/reports': 'navReports',
+    '/admin/staff': 'navStaffAccounts',
   };
   return labels[href];
 }
@@ -47,11 +48,12 @@ function navGroupKey(group: keyof typeof navGroupLabels) {
   const labels: Record<keyof typeof navGroupLabels, Parameters<ReturnType<typeof useTranslation>['t']>[0]> = {
     public: 'navPublic',
     staff: 'navStaff',
+    admin: 'navAdmin',
   };
   return labels[group];
 }
 
-const STAFF_SESSION_ROUTES = new Set(['/field', '/registry', '/signage', '/reports', '/exports', '/territories', '/verify', '/records']);
+const STAFF_SESSION_ROUTES = new Set(['/field', '/registry', '/signage', '/reports', '/exports', '/territories', '/verify', '/records', '/admin/staff']);
 
 export function RoleAwareChrome({ apiBaseUrl, children, skipSessionLookup = false }: RoleAwareChromeProps) {
   const { t } = useTranslation();
@@ -71,7 +73,7 @@ export function RoleAwareChrome({ apiBaseUrl, children, skipSessionLookup = fals
   const accessAllowed = effectiveSessionStatus === 'loading' ? true : isRouteAccessible(currentRoute, role);
 
   const visibleItems = useMemo(
-    () => navItems.filter((item) => item.visibleTo.includes(role) && (role === 'guest' ? item.group === 'public' : item.group === 'staff')),
+    () => navItems.filter((item) => item.visibleTo.includes(role) && (role === 'guest' ? item.group === 'public' : item.group !== 'public')),
     [role],
   );
 

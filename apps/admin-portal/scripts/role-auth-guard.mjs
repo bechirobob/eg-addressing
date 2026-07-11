@@ -30,13 +30,20 @@ assert(/if \(role === 'editor'\) return '\/registry';/.test(siteData), 'editor d
 assert(/if \(role === 'viewer' \|\| role === 'agency_viewer'\) return '\/reports';/.test(siteData), 'viewer and agency viewer default routes must land on reports');
 assert(/return '\/';/.test(siteData), 'guest default route must return to the public service start page');
 assert(/const PUBLIC_PREFIXES = \['\/code\/', '\/proof\/'\];/.test(siteData), 'public dynamic code/proof routes must be explicitly whitelisted');
-assert(/const PROTECTED_PREFIXES = \['\/reports', '\/exports', '\/registry', '\/verify', '\/field', '\/signage', '\/records', '\/territories'\];/.test(siteData), 'staff route prefixes must be deny-by-default governed');
+assert(/const PROTECTED_PREFIXES = \['\/admin', '\/reports', '\/exports', '\/registry', '\/verify', '\/field', '\/signage', '\/records', '\/territories'\];/.test(siteData), 'staff and admin route prefixes must be deny-by-default governed');
 assert(/normalized\.startsWith\(`\$\{prefix\}\/`\)/.test(siteData), 'nested staff routes must inherit base route permissions');
 assert(/return Boolean\(baseRule\?\.allowedRoles\.includes\(role\)\);/.test(siteData), 'unknown nested staff routes must not default open');
 assert(/routeNeedsResolvedSession\(pathname: string\)/.test(siteData) && /return Boolean\(baseRule && !baseRule\.allowedRoles\.includes\('guest'\)\);/.test(siteData), 'nested staff routes must wait for session resolution');
 
 assert(/\{ path: '\/reports', allowedRoles: \['viewer', 'editor', 'admin', 'agency_viewer'\] \}/.test(siteData), 'reports route must allow read-only agency reviewers');
 assert(/\{ path: '\/exports', allowedRoles: \['admin'\] \}/.test(siteData), 'exports route must stay admin-only');
+assert(/\{ path: '\/admin', allowedRoles: \['admin'\] \}/.test(siteData), 'admin route prefix must stay admin-only');
+assert(/\{ path: '\/admin\/staff', allowedRoles: \['admin'\] \}/.test(siteData), 'staff account UI must stay under an admin-only route');
+assert(/href: '\/admin\/staff',[\s\S]*visibleTo: \['admin'\][\s\S]*group: 'admin'/.test(siteData), 'staff account navigation must only be visible inside the admin group for admin users');
+assert(/\(role === 'guest' \? item\.group === 'public' : item\.group !== 'public'\)/.test(roleAwareChrome), 'signed-in admins can see staff and admin navigation while guests only see public navigation');
+assert(/navAdmin/.test(roleAwareChrome) && /navStaffAccounts/.test(roleAwareChrome), 'admin navigation group and staff account link must have explicit label keys');
+assert(/StaffAdminPanel/.test(await read('app/admin/staff/page.tsx')), 'staff account panel must be route-split under /admin/staff');
+assert(!/StaffAdminPanel/.test(roleAwareChrome), 'shared staff chrome must not import or load the staff account panel');
 assert(/\{ path: '\/verify', allowedRoles: \['editor', 'admin'\] \}/.test(siteData), 'verify route must stay editor\/admin only');
 assert(/\{\s*href: '\/login',[\s\S]*visibleTo: \[\]/.test(siteData), 'login must not appear in shared public navigation');
 assert(/className="service-start-staff"/.test(homePage) && /href="\/login"/.test(homePage), 'the only public sign-in affordance must be the homepage Staff services block');

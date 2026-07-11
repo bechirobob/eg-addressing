@@ -1,6 +1,6 @@
 export type OperatorRole = 'guest' | 'viewer' | 'editor' | 'admin' | 'agency_viewer';
 
-export type NavGroup = 'public' | 'staff';
+export type NavGroup = 'public' | 'staff' | 'admin';
 
 type NavItem = {
   href: string;
@@ -18,6 +18,7 @@ type RouteRule = {
 export const navGroupLabels: Record<NavGroup, string> = {
   public: 'Public',
   staff: 'Staff services',
+  admin: 'Admin area',
 };
 
 export const navItems: NavItem[] = [
@@ -105,6 +106,13 @@ export const navItems: NavItem[] = [
     priorityFor: ['admin'],
     group: 'staff',
   },
+  {
+    href: '/admin/staff',
+    label: 'Staff accounts',
+    visibleTo: ['admin'],
+    priorityFor: ['admin'],
+    group: 'admin',
+  },
 ];
 
 export const statusHighlights = [
@@ -126,11 +134,13 @@ const routeRules: RouteRule[] = [
   { path: '/records', allowedRoles: ['viewer', 'editor', 'admin'] },
   { path: '/territories', allowedRoles: ['editor', 'admin'] },
   { path: '/exports', allowedRoles: ['admin'] },
+  { path: '/admin', allowedRoles: ['admin'] },
+  { path: '/admin/staff', allowedRoles: ['admin'] },
   { path: '/signage', allowedRoles: ['editor', 'admin'] },
 ];
 
 const PUBLIC_PREFIXES = ['/code/', '/proof/'];
-const PROTECTED_PREFIXES = ['/reports', '/exports', '/registry', '/verify', '/field', '/signage', '/records', '/territories'];
+const PROTECTED_PREFIXES = ['/admin', '/reports', '/exports', '/registry', '/verify', '/field', '/signage', '/records', '/territories'];
 
 function normalizePathname(pathname: string): string {
   const [withoutQuery] = pathname.split(/[?#]/, 1);

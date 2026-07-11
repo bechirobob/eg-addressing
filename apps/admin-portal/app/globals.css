@@ -15003,3 +15003,148 @@ html body main.page-shell .runbook-contact-chain.runbook-contact-chain li {
   grid-template-columns: 34px minmax(0, 1fr) !important;
   width: 100% !important;
 }
+
+/* Admin-only staff account workspace: compact operations table, no dashboard theatrics. */
+.staff-admin-workspace {
+  gap: 18px;
+}
+
+.staff-admin-intro,
+.staff-admin-create-panel,
+.staff-admin-list-panel {
+  border-color: rgba(13, 47, 79, 0.16);
+}
+
+.staff-admin-principles {
+  display: grid;
+  gap: 6px;
+  margin: 14px 0 0;
+  padding-left: 18px;
+  color: var(--eg-ink-muted);
+  font-size: 0.92rem;
+}
+
+.staff-admin-create-form {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  align-items: end;
+}
+
+.staff-admin-create-form .territory-form-actions {
+  align-self: end;
+}
+
+.staff-admin-list-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.staff-admin-table-wrap {
+  overflow-x: auto;
+  border: 1px solid rgba(13, 47, 79, 0.12);
+  background: #fff;
+}
+
+.staff-admin-table {
+  width: 100%;
+  min-width: 980px;
+  border-collapse: collapse;
+  font-size: 0.92rem;
+}
+
+.staff-admin-table caption {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.staff-admin-table th,
+.staff-admin-table td {
+  padding: 14px;
+  vertical-align: top;
+  text-align: left;
+  border-bottom: 1px solid rgba(13, 47, 79, 0.1);
+}
+
+.staff-admin-table th {
+  color: var(--eg-ink-muted);
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  background: rgba(13, 47, 79, 0.035);
+}
+
+.staff-admin-table td > strong,
+.staff-admin-table td > span,
+.staff-admin-table td > small {
+  display: block;
+}
+
+.staff-admin-table small {
+  margin-top: 6px;
+  color: var(--eg-ink-muted);
+  font-size: 0.78rem;
+}
+
+.staff-admin-inline-field {
+  display: grid;
+  gap: 5px;
+  margin-top: 8px;
+}
+
+.staff-admin-inline-field span {
+  color: var(--eg-ink-muted);
+  font-size: 0.74rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.staff-admin-status {
+  display: inline-flex;
+  width: fit-content;
+  padding: 4px 8px;
+  border: 1px solid rgba(13, 47, 79, 0.16);
+  color: var(--eg-ink);
+  font-weight: 800;
+}
+
+.staff-admin-status.active {
+  border-color: rgba(45, 107, 63, 0.32);
+  color: var(--eg-green);
+}
+
+.staff-admin-status.disabled {
+  border-color: rgba(178, 58, 50, 0.3);
+  color: var(--eg-red);
+}
+
+.staff-admin-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.danger-action:not(:disabled) {
+  border-color: rgba(178, 58, 50, 0.38);
+  color: var(--eg-red);
+}
+
+@media (max-width: 960px) {
+  .staff-admin-create-form {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .staff-admin-create-form,
+  .staff-admin-list-head {
+    grid-template-columns: 1fr;
+    display: grid;
+  }
+}
