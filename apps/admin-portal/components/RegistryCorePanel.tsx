@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { FormEvent, useEffect, useMemo, useState } from 'react';
 
 import { authorizationHeader, resolveBrowserApiBaseUrl, useStoredSession } from './sessionClient';
@@ -312,6 +313,10 @@ export function RegistryCorePanel({
               <small>{lane.scent}</small>
             </button>
           ))}
+        </div>
+        <div className="registry-secondary-action" aria-label="Protected case-file review">
+          <span>Case-file review sits behind the address registry for viewer, editor, and admin staff.</span>
+          <Link href="/records">Open case files</Link>
         </div>
         <div className="registry-job-tabs" role="tablist" aria-label="Registry sections">
           <button className={activeTab === 'addresses' ? 'active' : ''} type="button" onClick={() => setActiveTab('addresses')}>Addresses</button>

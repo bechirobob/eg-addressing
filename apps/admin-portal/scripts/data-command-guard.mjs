@@ -15,6 +15,8 @@ const css = await readFile(path.join(portalRoot, 'app/globals.css'), 'utf8');
 
 assert(registry.includes('Search, update, and manage official address records.'), 'Registry must be search-first and explain its purpose.');
 assert(registry.includes('Addresses') && registry.includes('Roads') && registry.includes('Buildings'), 'Registry must expose address, road, and building sections.');
+assert(registry.includes('registry-secondary-action') && registry.includes('Open case files') && registry.includes('href="/records"'), 'Case files must live as a secondary Address Registry action, not as a global nav item.');
+assert(css.includes('.registry-secondary-action'), 'Registry secondary case-file action must have restrained row styling.');
 assert(reporting.includes('Reports are read-only'), 'Reports must be read-only.');
 assert(reporting.includes('Province') && reporting.includes('Date from') && reporting.includes('Status'), 'Reports must provide filter controls.');
 assert(reporting.includes('Export report'), 'Reports must provide export report action.');

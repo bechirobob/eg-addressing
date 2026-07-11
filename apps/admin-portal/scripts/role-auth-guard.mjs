@@ -63,6 +63,8 @@ assert(/auth_mode\?: string/.test(loginPanel), 'login payload typing must includ
 assert(/sessionRequestInit/.test(roleAwareChrome), 'logout must use sessionRequestInit so cookie-only sessions can revoke server-side');
 assert(!/if \(storedToken\) \{[\s\S]*auth\/logout[\s\S]*\}/.test(roleAwareChrome), 'logout must not skip server revoke when localStorage token is absent');
 
+assert(!/\/records': 'navCaseFiles'/.test(roleAwareChrome), 'Case files must not be added back to crowded global staff navigation.');
+assert(!/\{ href: '\/records', label: 'Case Files'/.test(roleAwareChrome), 'Case files must not be added back to mobile bottom navigation. Keep it inside Address registry.');
 assert(/role: 'viewer' \| 'editor' \| 'admin' \| 'agency_viewer';/.test(await read('components/demoAuth.ts')), 'session user typing must include agency_viewer');
 
 console.log('role-auth-guard passed');
