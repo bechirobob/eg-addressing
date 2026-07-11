@@ -15546,3 +15546,71 @@ html body main.page-shell .staff-admin-workspace > article {
     width: 100%;
   }
 }
+
+/* Streamlined primary-route density: reports and citizen geotag stay summary-first. */
+html body main.page-shell .reports-detail-disclosure {
+  border-color: rgba(13, 47, 79, 0.16);
+  box-shadow: none;
+}
+
+html body main.page-shell .reports-detail-disclosure > summary,
+html body main.page-shell .map-fallback-disclosure > summary {
+  align-items: baseline;
+  cursor: pointer;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+  justify-content: space-between;
+  list-style-position: inside;
+}
+
+html body main.page-shell .reports-detail-disclosure > summary span,
+html body main.page-shell .map-fallback-disclosure > summary span {
+  color: var(--eg-ink, #12324a);
+  font-weight: 850;
+}
+
+html body main.page-shell .reports-detail-disclosure > summary small,
+html body main.page-shell .map-fallback-disclosure > summary small {
+  color: var(--eg-ink-muted, #52616f);
+  font-size: 0.86rem;
+  font-weight: 600;
+}
+
+html body main.page-shell .reports-detail-grid {
+  border-top: 1px solid rgba(13, 47, 79, 0.12);
+  display: grid;
+  gap: 14px;
+  margin-top: 14px;
+  padding-top: 14px;
+}
+
+html body main.page-shell .reports-detail-disclosure:not([open]) .reports-detail-grid {
+  display: none !important;
+}
+
+html body main.page-shell .reports-detail-grid > article {
+  border-block: 1px solid rgba(13, 47, 79, 0.12);
+  padding-block: 12px;
+}
+
+html body main.page-shell .compact-map-confirm-panel {
+  grid-row: auto;
+  padding: 0;
+}
+
+html body main.page-shell .compact-map-confirm-panel .map-fallback-disclosure {
+  border: 1px solid rgba(13, 47, 79, 0.14);
+  margin: 0;
+}
+
+html body main.page-shell .compact-map-confirm-panel .geotag-map {
+  grid-column: auto;
+  grid-row: auto;
+  margin-top: 12px;
+  min-height: 340px;
+}
+
+html body main.page-shell .citizen-register-flow .address-preview-panel {
+  grid-column: 1 / -1;
+}

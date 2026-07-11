@@ -520,13 +520,15 @@ export function CitizenGeotagPanel({ apiBaseUrl, provinces, territories }: Citiz
         {error ? <p className="form-notice error">{error}</p> : null}
       </article>
 
-      <article className="map-confirm-panel">
-        <div className="panel-head quiet-head">
-          <p className="section-label">{t('step2')}</p>
-          <h3>{t('confirmPin')}</h3>
-        </div>
-        <div className="geotag-map" ref={mapContainerRef} aria-label="Interactive map for location registration" />
-        <p className="institutional-note">{t('pinCopy')}</p>
+      <article className="map-confirm-panel compact-map-confirm-panel">
+        <details className="quiet-disclosure map-fallback-disclosure" onToggle={(event) => { if (event.currentTarget.open) window.setTimeout(() => mapRef.current?.invalidateSize(), 80); }}>
+          <summary>
+            <span>{t('confirmPin')}</span>
+            <small>{locale === 'es' ? 'Abra solo si necesita mover el marcador manualmente' : 'Open only if you need to move the pin manually'}</small>
+          </summary>
+          <div className="geotag-map" ref={mapContainerRef} aria-label="Interactive map for location registration" />
+          <p className="institutional-note">{t('pinCopy')}</p>
+        </details>
       </article>
 
       <article className="public-task-panel location-form-panel compact-location-form-panel">
@@ -671,7 +673,8 @@ export function CitizenGeotagPanel({ apiBaseUrl, provinces, territories }: Citiz
         </form>
       </article>
 
-      <article className="public-task-panel address-preview-panel">
+      {(preview || roadSuggestion || result) ? (
+        <article className="public-task-panel address-preview-panel">
         <div className="panel-head">
           <p className="section-label">{t('step4')}</p>
           <h3>{t('addressCodePreview')}</h3>
@@ -745,7 +748,8 @@ export function CitizenGeotagPanel({ apiBaseUrl, provinces, territories }: Citiz
           </div>
         ) : null}
         <p className="submission-security-note">{locale === 'es' ? 'Todos los envíos se protegen y son revisados por operadores autorizados.' : 'All submissions are protected and reviewed by authorized operators.'}</p>
-      </article>
+        </article>
+      ) : null}
     </section>
   );
 }

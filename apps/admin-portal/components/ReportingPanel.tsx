@@ -331,39 +331,49 @@ export function ReportingPanel({ summary: initialSummary, readinessSummary, apiB
         </div>
       </article>
 
-      <article className="public-task-panel reports-section-panel">
-        <div className="panel-head"><p className="section-label">Workload</p><h3>Review queue</h3></div>
-        <div className="table-wrap desktop-table-wrap report-table-wrap"><table className="data-table desktop-data-table"><caption>Review queue</caption><thead><tr><th scope="col">Status</th><th scope="col">Count</th></tr></thead><tbody>{reviewRows.map((row) => <tr key={row.label}><td>{row.label}</td><td>{row.count}</td></tr>)}</tbody></table></div>
-        <ul className="report-row-list mobile-card-list">{reviewRows.map((row) => <li key={row.label}><span>{row.label}</span><strong>{row.count}</strong></li>)}</ul>
+      <article className="public-task-panel reports-section-panel reports-readiness-panel">
+        <div className="panel-head">
+          <p className="section-label">Publication readiness</p>
+          <h3>{readiness ? readinessStatusLabel(readiness.readiness_status) : 'Readiness unavailable'}</h3>
+        </div>
+        {readiness ? (
+          <p className="institutional-note">{readiness.passed_gates}/{readiness.total_gates} checks passed. Publication and signage remain controlled until approval.</p>
+        ) : null}
       </article>
 
-      <article className="public-task-panel reports-section-panel">
-        <div className="panel-head"><p className="section-label">Field activity</p><h3>Submitted locations</h3></div>
-        <div className="table-wrap desktop-table-wrap report-table-wrap"><table className="data-table desktop-data-table"><caption>Field activity</caption><thead><tr><th scope="col">Status</th><th scope="col">Count</th></tr></thead><tbody>{fieldRows.length ? fieldRows.map((row) => <tr key={row.label}><td>{row.label}</td><td>{row.count}</td></tr>) : <tr><td>No field activity in this report scope</td><td>0</td></tr>}</tbody></table></div>
-        <ul className="report-row-list mobile-card-list">{fieldRows.length ? fieldRows.map((row) => <li key={row.label}><span>{row.label}</span><strong>{row.count}</strong></li>) : <li><span>No field activity in this report scope</span><strong>0</strong></li>}</ul>
-      </article>
+      <details className="public-task-panel reports-detail-disclosure">
+        <summary>
+          <span>Review detailed evidence</span>
+          <small>Workload tables, readiness gates, audit events, and governance boundaries</small>
+        </summary>
+        <div className="reports-detail-grid">
+          <article className="reports-section-panel">
+            <div className="panel-head"><p className="section-label">Workload</p><h3>Review queue</h3></div>
+            <div className="table-wrap desktop-table-wrap report-table-wrap"><table className="data-table desktop-data-table"><caption>Review queue</caption><thead><tr><th scope="col">Status</th><th scope="col">Count</th></tr></thead><tbody>{reviewRows.map((row) => <tr key={row.label}><td>{row.label}</td><td>{row.count}</td></tr>)}</tbody></table></div>
+            <ul className="report-row-list mobile-card-list">{reviewRows.map((row) => <li key={row.label}><span>{row.label}</span><strong>{row.count}</strong></li>)}</ul>
+          </article>
 
-      <article className="public-task-panel reports-section-panel">
-        <div className="panel-head"><p className="section-label">Publication status</p><h3>Release progress</h3></div>
-        <div className="table-wrap desktop-table-wrap report-table-wrap"><table className="data-table desktop-data-table"><caption>Publication status</caption><thead><tr><th scope="col">Status</th><th scope="col">Count</th></tr></thead><tbody>{publicationRows.map((row) => <tr key={row.label}><td>{row.label}</td><td>{row.count}</td></tr>)}</tbody></table></div>
-        <ul className="report-row-list mobile-card-list">{publicationRows.map((row) => <li key={row.label}><span>{row.label}</span><strong>{row.count}</strong></li>)}</ul>
-      </article>
+          <article className="reports-section-panel">
+            <div className="panel-head"><p className="section-label">Field activity</p><h3>Submitted locations</h3></div>
+            <div className="table-wrap desktop-table-wrap report-table-wrap"><table className="data-table desktop-data-table"><caption>Field activity</caption><thead><tr><th scope="col">Status</th><th scope="col">Count</th></tr></thead><tbody>{fieldRows.length ? fieldRows.map((row) => <tr key={row.label}><td>{row.label}</td><td>{row.count}</td></tr>) : <tr><td>No field activity in this report scope</td><td>0</td></tr>}</tbody></table></div>
+            <ul className="report-row-list mobile-card-list">{fieldRows.length ? fieldRows.map((row) => <li key={row.label}><span>{row.label}</span><strong>{row.count}</strong></li>) : <li><span>No field activity in this report scope</span><strong>0</strong></li>}</ul>
+          </article>
 
-      <article className="public-task-panel reports-section-panel">
-        <div className="panel-head"><p className="section-label">Correction reports</p><h3>Public reports</h3></div>
-        <div className="table-wrap desktop-table-wrap report-table-wrap"><table className="data-table desktop-data-table"><caption>Correction reports</caption><thead><tr><th scope="col">Status</th><th scope="col">Count</th></tr></thead><tbody>{correctionRows.map((row) => <tr key={row.label}><td>{row.label}</td><td>{row.count}</td></tr>)}</tbody></table></div>
-        <ul className="report-row-list mobile-card-list">{correctionRows.map((row) => <li key={row.label}><span>{row.label}</span><strong>{row.count}</strong></li>)}</ul>
-      </article>
+          <article className="reports-section-panel">
+            <div className="panel-head"><p className="section-label">Publication status</p><h3>Release progress</h3></div>
+            <div className="table-wrap desktop-table-wrap report-table-wrap"><table className="data-table desktop-data-table"><caption>Publication status</caption><thead><tr><th scope="col">Status</th><th scope="col">Count</th></tr></thead><tbody>{publicationRows.map((row) => <tr key={row.label}><td>{row.label}</td><td>{row.count}</td></tr>)}</tbody></table></div>
+            <ul className="report-row-list mobile-card-list">{publicationRows.map((row) => <li key={row.label}><span>{row.label}</span><strong>{row.count}</strong></li>)}</ul>
+          </article>
 
-      {readiness || readiness === null ? (
-        <article className="public-task-panel reports-section-panel reports-readiness-panel">
-          <div className="panel-head">
-            <p className="section-label">Publication readiness</p>
-            <h3>{readiness ? readinessStatusLabel(readiness.readiness_status) : 'Readiness unavailable'}</h3>
-          </div>
+          <article className="reports-section-panel">
+            <div className="panel-head"><p className="section-label">Correction reports</p><h3>Public reports</h3></div>
+            <div className="table-wrap desktop-table-wrap report-table-wrap"><table className="data-table desktop-data-table"><caption>Correction reports</caption><thead><tr><th scope="col">Status</th><th scope="col">Count</th></tr></thead><tbody>{correctionRows.map((row) => <tr key={row.label}><td>{row.label}</td><td>{row.count}</td></tr>)}</tbody></table></div>
+            <ul className="report-row-list mobile-card-list">{correctionRows.map((row) => <li key={row.label}><span>{row.label}</span><strong>{row.count}</strong></li>)}</ul>
+          </article>
+
           {readiness ? (
-            <>
-              <p className="institutional-note">{readiness.passed_gates}/{readiness.total_gates} checks passed. Publication and signage remain controlled until approval.</p>
+            <article className="reports-section-panel reports-gates-panel">
+              <div className="panel-head"><p className="section-label">Readiness gates</p><h3>Decision evidence</h3></div>
               <div className="table-wrap desktop-table-wrap report-table-wrap">
                 <table className="data-table desktop-data-table">
                   <caption>Readiness gates</caption>
@@ -383,44 +393,44 @@ export function ReportingPanel({ summary: initialSummary, readinessSummary, apiB
               <ul className="report-row-list mobile-card-list">
                 {readiness.gates.map((gate) => <li key={gate.name}><span>{gate.name} · {formatEvidence(gate.evidence)}</span><strong>{statusText(gate.status)}</strong></li>)}
               </ul>
-            </>
+            </article>
           ) : null}
-        </article>
-      ) : null}
 
-      {readiness?.recent_audit_events?.length ? (
-        <article className="public-task-panel reports-section-panel reports-audit-panel">
-          <div className="panel-head"><p className="section-label">Audit trail</p><h3>Recent accountability events</h3></div>
-          <div className="table-wrap desktop-table-wrap report-table-wrap">
-            <table className="data-table desktop-data-table">
-              <caption>Recent audit events</caption>
-              <thead><tr><th scope="col">Action</th><th scope="col">Entity</th><th scope="col">Actor</th><th scope="col">Time</th></tr></thead>
-              <tbody>
-                {readiness.recent_audit_events.map((event, index) => (
-                  <tr key={`${event.action}-${event.entity_id}-${index}`}>
-                    <td>{statusText(event.action)}</td>
-                    <td>{auditEntityLabel(event)}</td>
-                    <td>{event.actor_username ?? 'system'}</td>
-                    <td>{event.created_at ? new Date(event.created_at).toLocaleString() : 'not recorded'}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-          <ul className="report-row-list mobile-card-list">
-            {readiness.recent_audit_events.map((event, index) => <li key={`${event.action}-${event.entity_id}-mobile-${index}`}><span>{statusText(event.action)} · {event.entity_type}</span><strong>{event.actor_username ?? 'system'}</strong></li>)}
-          </ul>
-        </article>
-      ) : null}
+          {readiness?.recent_audit_events?.length ? (
+            <article className="reports-section-panel reports-audit-panel">
+              <div className="panel-head"><p className="section-label">Audit trail</p><h3>Recent accountability events</h3></div>
+              <div className="table-wrap desktop-table-wrap report-table-wrap">
+                <table className="data-table desktop-data-table">
+                  <caption>Recent audit events</caption>
+                  <thead><tr><th scope="col">Action</th><th scope="col">Entity</th><th scope="col">Actor</th><th scope="col">Time</th></tr></thead>
+                  <tbody>
+                    {readiness.recent_audit_events.map((event, index) => (
+                      <tr key={`${event.action}-${event.entity_id}-${index}`}>
+                        <td>{statusText(event.action)}</td>
+                        <td>{auditEntityLabel(event)}</td>
+                        <td>{event.actor_username ?? 'system'}</td>
+                        <td>{event.created_at ? new Date(event.created_at).toLocaleString() : 'not recorded'}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+              <ul className="report-row-list mobile-card-list">
+                {readiness.recent_audit_events.map((event, index) => <li key={`${event.action}-${event.entity_id}-mobile-${index}`}><span>{statusText(event.action)} · {event.entity_type}</span><strong>{event.actor_username ?? 'system'}</strong></li>)}
+              </ul>
+            </article>
+          ) : null}
 
-      {readiness?.boundaries?.length ? (
-        <article className="public-task-panel reports-section-panel reports-boundary-panel">
-          <div className="panel-head"><p className="section-label">Governance boundary</p><h3>What this report does not approve</h3></div>
-          <ul className="mini-list">
-            {readiness.boundaries.map((boundary) => <li key={boundary}><strong>Boundary</strong><span>{boundary}</span></li>)}
-          </ul>
-        </article>
-      ) : null}
+          {readiness?.boundaries?.length ? (
+            <article className="reports-section-panel reports-boundary-panel">
+              <div className="panel-head"><p className="section-label">Governance boundary</p><h3>What this report does not approve</h3></div>
+              <ul className="mini-list">
+                {readiness.boundaries.map((boundary) => <li key={boundary}><strong>Boundary</strong><span>{boundary}</span></li>)}
+              </ul>
+            </article>
+          ) : null}
+        </div>
+      </details>
     </section>
   );
 }
