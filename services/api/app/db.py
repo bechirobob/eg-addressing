@@ -506,6 +506,7 @@ def _ensure_schema(cursor: psycopg.Cursor) -> None:
             accuracy_meters DOUBLE PRECISION,
             search_text TEXT NOT NULL DEFAULT '',
             record_bundle JSONB NOT NULL DEFAULT '{}'::jsonb,
+            is_archived BOOLEAN NOT NULL DEFAULT FALSE,
             created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
             updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
         )
@@ -518,9 +519,12 @@ def _ensure_schema(cursor: psycopg.Cursor) -> None:
     cursor.execute("ALTER TABLE address_records ADD COLUMN IF NOT EXISTS accuracy_meters DOUBLE PRECISION")
     cursor.execute("ALTER TABLE address_records ADD COLUMN IF NOT EXISTS search_text TEXT NOT NULL DEFAULT ''")
     cursor.execute("ALTER TABLE address_records ADD COLUMN IF NOT EXISTS record_bundle JSONB NOT NULL DEFAULT '{}'::jsonb")
+    cursor.execute("ALTER TABLE address_records ADD COLUMN IF NOT EXISTS is_archived BOOLEAN NOT NULL DEFAULT FALSE")
     cursor.execute("ALTER TABLE address_records ADD COLUMN IF NOT EXISTS updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()")
     cursor.execute("CREATE INDEX IF NOT EXISTS idx_address_records_code ON address_records (address_code)")
     cursor.execute("CREATE INDEX IF NOT EXISTS idx_address_records_status_updated ON address_records (status, updated_at DESC)")
+    cursor.execute("CREATE INDEX IF NOT EXISTS idx_address_records_active_status_updated ON address_records (status, updated_at DESC) WHERE is_archived = FALSE")
+    cursor.execute("CREATE INDEX IF NOT EXISTS idx_address_records_active_code ON address_records (address_code) WHERE is_archived = FALSE")
     cursor.execute("CREATE INDEX IF NOT EXISTS idx_address_records_province_status ON address_records (province_code, status)")
     cursor.execute("CREATE INDEX IF NOT EXISTS idx_address_records_territory_status ON address_records (territory_id, status)")
 
@@ -2841,7 +2845,7 @@ def find_geotag_duplicate_hints(latitude: float, longitude: float, max_distance_
                 '''
                 SELECT id, address_label AS label, grid_code AS code, latitude, longitude, 'citizen-submission' AS source
                 FROM citizen_geotag_submissions
-                WHERE status NOT IN ('rejected')
+                WHERE status NOT IN ('rejected', 'retired-fixture')
                 ORDER BY created_at DESC
                 LIMIT 500
                 '''
@@ -2997,7 +3001,7 @@ def create_citizen_geotag_submission(payload: dict[str, Any], actor: dict[str, s
 
 
 def list_citizen_geotag_submissions(status: str | None = None, territory_id: str | None = None) -> list[dict[str, Any]]:
-    where_clauses: list[str] = []
+    where_clauses: list[str] = [] if status else ["g.status <> 'retired-fixture'"]
     params: list[Any] = []
     if status:
         where_clauses.append('g.status = %s')
@@ -3475,8 +3479,8 @@ def upsert_address_record_from_geotag(geotag: dict[str, Any], actor: dict[str, s
                 '''
                 INSERT INTO address_records (
                     id, address_code, source_submission_id, province_code, territory_id, address_label,
-                    status, publication_state, latitude, longitude, accuracy_meters, search_text, record_bundle, geom
-                ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s::jsonb, ST_SetSRID(ST_MakePoint(%s, %s), 4326)::geography)
+                    status, publication_state, latitude, longitude, accuracy_meters, search_text, record_bundle, geom, is_archived
+                ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s::jsonb, ST_SetSRID(ST_MakePoint(%s, %s), 4326)::geography, FALSE)
                 ON CONFLICT (address_code) DO UPDATE SET
                     source_submission_id = EXCLUDED.source_submission_id,
                     province_code = EXCLUDED.province_code,
@@ -3489,11 +3493,12 @@ def upsert_address_record_from_geotag(geotag: dict[str, Any], actor: dict[str, s
                     accuracy_meters = EXCLUDED.accuracy_meters,
                     search_text = EXCLUDED.search_text,
                     record_bundle = EXCLUDED.record_bundle,
+                    is_archived = FALSE,
                     geom = ST_SetSRID(ST_MakePoint(EXCLUDED.longitude, EXCLUDED.latitude), 4326)::geography,
                     updated_at = NOW()
                 RETURNING id, address_code, source_submission_id, province_code, territory_id, address_label,
                           status, publication_state, latitude, longitude, accuracy_meters, search_text,
-                          record_bundle, created_at, updated_at
+                          record_bundle, is_archived, created_at, updated_at
                 ''',
                 (
                     record_id,
@@ -3534,8 +3539,8 @@ def upsert_address_record_from_geotag(geotag: dict[str, Any], actor: dict[str, s
     return record
 
 
-def search_address_records(q: str | None = None, status: str | None = None, province_code: str | None = None, limit: int = 25) -> list[dict[str, Any]]:
-    where_clauses: list[str] = []
+def search_address_records(q: str | None = None, status: str | None = None, province_code: str | None = None, limit: int = 25, include_archived: bool = False) -> list[dict[str, Any]]:
+    where_clauses: list[str] = [] if include_archived else ['is_archived = FALSE']
     params: list[Any] = []
     if q:
         where_clauses.append('(address_code ILIKE %s OR search_text ILIKE %s)')
@@ -3555,7 +3560,7 @@ def search_address_records(q: str | None = None, status: str | None = None, prov
                 '''
                 SELECT id, address_code, source_submission_id, province_code, territory_id, address_label,
                        status, publication_state, latitude, longitude, accuracy_meters, search_text,
-                       record_bundle, created_at, updated_at
+                       record_bundle, is_archived, created_at, updated_at
                 FROM address_records
                 ''' + where_sql + ' ORDER BY updated_at DESC LIMIT %s',
                 params,
@@ -3818,7 +3823,7 @@ def public_address_code_record_lookup(code: str) -> dict[str, Any]:
                        g.longitude, g.accuracy_meters, g.grid_code, g.status, g.signage_batch, g.updated_at
                 FROM citizen_geotag_submissions g
                 LEFT JOIN territories t ON t.id = g.territory_id
-                WHERE g.grid_code = %s
+                WHERE g.grid_code = %s AND g.status <> 'retired-fixture'
                 ORDER BY CASE WHEN g.status = 'published' THEN 0 WHEN g.status = 'registry-ready' THEN 1 ELSE 2 END, g.updated_at DESC
                 LIMIT 1
                 ''',
@@ -3939,6 +3944,7 @@ def find_nearby_address_records(latitude: float, longitude: float, radius_meters
                        record_bundle, updated_at
                 FROM address_records
                 WHERE geom IS NOT NULL
+                  AND is_archived = FALSE
                   AND ST_DWithin(
                       geom,
                       ST_SetSRID(ST_MakePoint(%s, %s), 4326)::geography,
@@ -3992,6 +3998,7 @@ def _hold_spatial_risk(cursor: psycopg.Cursor, record: dict[str, Any], radius_me
                ) AS distance_meters
         FROM address_records
         WHERE geom IS NOT NULL
+          AND is_archived = FALSE
           AND address_code <> %s
           AND ST_DWithin(
               geom,

@@ -1686,6 +1686,24 @@ def test_canonical_address_record_upsert_populates_postgis_geometry() -> None:
     upsert_sql = source[source.index('def upsert_address_record_from_geotag'):source.index('def search_address_records')]
     assert 'geom' in upsert_sql
     assert 'ST_SetSRID(ST_MakePoint(EXCLUDED.longitude, EXCLUDED.latitude), 4326)::geography' in upsert_sql
+    assert 'is_archived = FALSE' in upsert_sql
+
+
+def test_address_record_retirement_migration_and_queries_exclude_archived_records() -> None:
+    migration = Path('/home/ubuntu/projects/eg-addressing/infra/migrations/006_address_record_retirement_policy.sql')
+    assert migration.exists()
+    migration_sql = migration.read_text()
+    assert 'ADD COLUMN IF NOT EXISTS is_archived BOOLEAN NOT NULL DEFAULT FALSE' in migration_sql
+    assert 'idx_address_records_active_status_updated' in migration_sql
+    source = Path('/home/ubuntu/projects/eg-addressing/services/api/app/db.py').read_text()
+    search_sql = source[source.index('def search_address_records'):source.index('def get_address_record_case_file')]
+    nearby_sql = source[source.index('def find_nearby_address_records'):source.index('def _hold_field_status')]
+    geotag_list_sql = source[source.index('def list_citizen_geotag_submissions'):source.index('def update_citizen_geotag_status')]
+    public_lookup_sql = source[source.index('def public_address_code_record_lookup'):source.index('def signage_export')]
+    assert "where_clauses: list[str] = [] if include_archived else ['is_archived = FALSE']" in search_sql
+    assert 'AND is_archived = FALSE' in nearby_sql
+    assert "g.status <> 'retired-fixture'" in geotag_list_sql
+    assert "g.grid_code = %s AND g.status <> 'retired-fixture'" in public_lookup_sql
 
 
 
