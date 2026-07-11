@@ -2,7 +2,7 @@
 
 import { FormEvent, useEffect, useMemo, useState } from 'react';
 
-import { authorizationHeader, resolveBrowserApiBaseUrl, useStoredSession } from './sessionClient';
+import { resolveBrowserApiBaseUrl, sessionRequestInit, useStoredSession } from './sessionClient';
 
 type TimelineEvent = {
   event_type: string;
@@ -36,6 +36,27 @@ type AddressRecord = {
 type SearchResponse = { items: AddressRecord[] };
 type AddressRecordExportResponse = { source: string; status: string; count: number; csv: string; operator_note?: string };
 type AddressRecordCertificateResponse = { certificate_id: string; address_code: string; source: string; html: string };
+
+type AddressRecordHold = {
+  address_code: string;
+  address_label: string;
+  status: string;
+  publication_state?: string | null;
+  territory_name?: string | null;
+  hold_reason: string;
+  spatial_risk: {
+    level: string;
+    nearby_count: number;
+    closest_distance_meters?: number | null;
+    source: string;
+  };
+  evidence_status: string;
+  certificate_readiness: string;
+  signage_readiness: string;
+  next_action: string;
+};
+
+type AddressRecordHoldsResponse = { source: string; status: string; count: number; items: AddressRecordHold[]; operator_note?: string };
 
 function statusLabel(value?: string | null): string {
   return (value || 'unknown').replaceAll('-', ' ');
@@ -88,17 +109,35 @@ export function AddressRecordSearchPanel({ apiBaseUrl }: { apiBaseUrl: string })
   const { token, sessionStatus } = useStoredSession(browserApiBaseUrl);
   const [query, setQuery] = useState('');
   const [records, setRecords] = useState<AddressRecord[]>([]);
+  const [holds, setHolds] = useState<AddressRecordHold[]>([]);
   const [selected, setSelected] = useState<AddressRecord | null>(null);
   const [notice, setNotice] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  const canSearch = sessionStatus === 'ready' && Boolean(token);
+  const canSearch = sessionStatus === 'ready';
 
   const selectedEvidence = useMemo(() => selected?.record_bundle?.evidence, [selected]);
 
+  async function loadHoldRegister() {
+    if (!canSearch) {
+      return;
+    }
+    try {
+      const response = await fetch(`${browserApiBaseUrl}/api/v1/address-records/holds?status=registry-ready&limit=8`, {
+        ...sessionRequestInit(token),
+      });
+      const payload = (await response.json()) as AddressRecordHoldsResponse | { detail?: string };
+      if (response.ok) {
+        setHolds((payload as AddressRecordHoldsResponse).items);
+      }
+    } catch {
+      setHolds([]);
+    }
+  }
+
   async function searchRecords(nextQuery = query) {
-    if (!token) {
+    if (!canSearch) {
       setError('Sign in to search official address case files.');
       return;
     }
@@ -112,7 +151,7 @@ export function AddressRecordSearchPanel({ apiBaseUrl }: { apiBaseUrl: string })
       }
       params.set('limit', '25');
       const response = await fetch(`${browserApiBaseUrl}/api/v1/address-records/search?${params.toString()}`, {
-        headers: authorizationHeader(token),
+        ...sessionRequestInit(token),
       });
       const payload = (await response.json()) as SearchResponse | { detail?: string };
       if (!response.ok) {
@@ -131,14 +170,14 @@ export function AddressRecordSearchPanel({ apiBaseUrl }: { apiBaseUrl: string })
   }
 
   async function loadCaseFile(addressCode: string) {
-    if (!token) {
+    if (!canSearch) {
       return;
     }
     setIsLoading(true);
     setError(null);
     try {
       const response = await fetch(`${browserApiBaseUrl}/api/v1/address-records/${encodeURIComponent(addressCode)}`, {
-        headers: authorizationHeader(token),
+        ...sessionRequestInit(token),
       });
       const payload = (await response.json()) as AddressRecord | { detail?: string };
       if (!response.ok) {
@@ -154,7 +193,7 @@ export function AddressRecordSearchPanel({ apiBaseUrl }: { apiBaseUrl: string })
   }
 
   async function downloadCanonicalExport() {
-    if (!token) {
+    if (!canSearch) {
       setError('Sign in before exporting canonical address records.');
       return;
     }
@@ -162,7 +201,7 @@ export function AddressRecordSearchPanel({ apiBaseUrl }: { apiBaseUrl: string })
     setNotice(null);
     try {
       const response = await fetch(`${browserApiBaseUrl}/api/v1/address-records/export?status=published`, {
-        headers: authorizationHeader(token),
+        ...sessionRequestInit(token),
       });
       const payload = (await response.json()) as AddressRecordExportResponse | { detail?: string };
       if (!response.ok) {
@@ -178,14 +217,14 @@ export function AddressRecordSearchPanel({ apiBaseUrl }: { apiBaseUrl: string })
   }
 
   async function downloadSelectedCertificate() {
-    if (!token || !selected) {
+    if (!canSearch || !selected) {
       return;
     }
     setError(null);
     setNotice(null);
     try {
       const response = await fetch(`${browserApiBaseUrl}/api/v1/address-records/${encodeURIComponent(selected.address_code)}/certificate`, {
-        headers: authorizationHeader(token),
+        ...sessionRequestInit(token),
       });
       const payload = (await response.json()) as AddressRecordCertificateResponse | { detail?: string };
       if (!response.ok) {
@@ -202,6 +241,7 @@ export function AddressRecordSearchPanel({ apiBaseUrl }: { apiBaseUrl: string })
 
   useEffect(() => {
     if (canSearch) {
+      void loadHoldRegister();
       void searchRecords('');
     }
   }, [canSearch]);
@@ -228,6 +268,36 @@ export function AddressRecordSearchPanel({ apiBaseUrl }: { apiBaseUrl: string })
           <p>Search canonical records by address code, routing area, landmark, road, or local area. Evidence is grouped as a compact case file, not shown as raw rows.</p>
         </div>
         <button className="secondary-action" type="button" onClick={() => void downloadCanonicalExport()}>Export canonical records</button>
+      </div>
+
+      <div className="registry-hold-workbench" aria-label="Hold register">
+        <div className="registry-hold-head">
+          <div>
+            <p className="section-label">Hold register</p>
+            <h3>Registry-ready records held from publication</h3>
+          </div>
+          <span className="institutional-note">Canonical source: address_records</span>
+        </div>
+        {holds.length ? (
+          <div className="hold-risk-ledger" role="table" aria-label="Compact hold and spatial risk ledger">
+            <div className="hold-risk-row hold-risk-row-head" role="row">
+              <span>Record</span>
+              <span>Spatial risk</span>
+              <span>Evidence</span>
+              <span>Readiness</span>
+              <span>Next action</span>
+            </div>
+            {holds.map((hold) => (
+              <button className="hold-risk-row" role="row" type="button" key={hold.address_code} onClick={() => void loadCaseFile(hold.address_code)}>
+                <span><strong>{hold.address_label}</strong><small>{hold.address_code}</small></span>
+                <span><strong>{statusLabel(hold.spatial_risk.level)}</strong><small>{hold.spatial_risk.nearby_count} nearby · {hold.spatial_risk.closest_distance_meters ?? 'no'}m closest</small></span>
+                <span><strong>{hold.evidence_status}</strong><small>{hold.hold_reason}</small></span>
+                <span><strong>Certificate: {hold.certificate_readiness}</strong><small>Signage: {hold.signage_readiness}</small></span>
+                <span>{hold.next_action}</span>
+              </button>
+            ))}
+          </div>
+        ) : <p className="panel-state">No registry-ready holds found. Publication remains locked until an authorized release exists.</p>}
       </div>
 
       <form className="territory-form" onSubmit={submitSearch}>

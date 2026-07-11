@@ -111,6 +111,7 @@ from app.db import (
     build_address_record_certificate,
     build_geotag_certificate,
     find_nearby_address_records,
+    address_record_holds,
     geotag_duplicate_summary,
     pilot_readiness_summary,
     preview_citizen_geotag,
@@ -1908,6 +1909,19 @@ def address_records_nearby_endpoint(
         return find_nearby_address_records(latitude=latitude, longitude=longitude, radius_meters=radius_meters, limit=limit)
     except InvalidSubmissionActionError as exc:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(exc)) from exc
+
+
+@app.get('/api/v1/address-records/holds')
+def address_record_holds_endpoint(
+    status_value: str | None = Query(default='registry-ready', alias='status', max_length=40),
+    limit: int | None = Query(default=25),
+    authorization: str | None = Header(default=None),
+) -> dict[str, Any]:
+    user = _current_user(authorization)
+    _require_role(user, 'viewer', 'editor', 'admin')
+    if limit is None or limit < 1 or limit > 50:
+        raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail='limit must be between 1 and 50')
+    return address_record_holds(status=status_value or 'registry-ready', limit=limit)
 
 
 @app.get('/api/v1/address-records/{address_code}')

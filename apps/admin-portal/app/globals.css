@@ -3838,6 +3838,82 @@ select.territory-input {
   padding-top: 12px;
 }
 
+.registry-hold-workbench {
+  border-block: 1px solid var(--ref-line);
+  padding: 14px 0;
+  margin: 6px 0 18px;
+}
+
+.registry-hold-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 10px;
+}
+
+.registry-hold-head h3 {
+  color: var(--ref-navy);
+  font-size: clamp(1rem, 2vw, 1.18rem);
+  line-height: 1.2;
+  margin: 2px 0 0;
+}
+
+.hold-risk-ledger {
+  border-top: 1px solid var(--ref-line);
+  display: grid;
+}
+
+.hold-risk-row {
+  appearance: none;
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid var(--ref-line);
+  color: #35475c;
+  cursor: pointer;
+  display: grid;
+  font: inherit;
+  gap: 12px;
+  grid-template-columns: minmax(190px, 1.1fr) minmax(130px, .72fr) minmax(170px, .9fr) minmax(170px, .92fr) minmax(190px, 1fr);
+  padding: 10px 0;
+  text-align: left;
+  width: 100%;
+}
+
+.hold-risk-row:hover,
+.hold-risk-row:focus-visible {
+  background: #f7fafb;
+  outline: none;
+}
+
+.hold-risk-row-head {
+  color: #6d7c8e;
+  cursor: default;
+  font-size: .78rem;
+  font-weight: 800;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.hold-risk-row span {
+  display: grid;
+  gap: 3px;
+  min-width: 0;
+}
+
+.hold-risk-row strong {
+  color: var(--ref-navy);
+  font-size: .92rem;
+  line-height: 1.28;
+}
+
+.hold-risk-row small {
+  color: #6d7c8e;
+  font-size: .82rem;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+}
+
 .case-timeline-head {
   display: flex;
   align-items: center;
@@ -3885,9 +3961,19 @@ select.territory-input {
 }
 
 @media (max-width: 759px) {
+  .registry-hold-head,
   .case-timeline-head {
     align-items: stretch;
     flex-direction: column;
+  }
+
+  .hold-risk-row {
+    grid-template-columns: 1fr;
+    gap: 7px;
+  }
+
+  .hold-risk-row-head {
+    display: none;
   }
 
   .case-timeline-row {
@@ -15125,7 +15211,7 @@ html body main.page-shell .staff-admin-workspace > article {
 
 .staff-admin-create-form {
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  align-items: end;
+  align-items: flex-end;
   margin: 14px;
 }
 

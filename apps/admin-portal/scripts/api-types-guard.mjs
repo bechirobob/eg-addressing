@@ -18,6 +18,7 @@ assert(apiTypes.includes('export type ApiOperation'), 'apiTypes.ts must export A
 assert(apiTypes.includes('/api/v1/address-records/search'), 'address record search endpoint must be represented in generated API paths.');
 assert(apiTypes.includes('/api/v1/address-records/export'), 'canonical address record export endpoint must be represented in generated API paths.');
 assert(apiTypes.includes('/api/v1/address-records/nearby'), 'canonical address record proximity endpoint must be represented in generated API paths.');
+assert(apiTypes.includes('/api/v1/address-records/holds'), 'registry-ready hold endpoint must be represented in generated API paths.');
 assert(apiTypes.includes('/api/v1/address-records/{address_code}/certificate'), 'canonical address record certificate endpoint must be represented in generated API paths.');
 assert(apiTypes.includes('/api/v1/operator/migrations/status'), 'migration status endpoint must be represented in generated API paths.');
 assert(apiTypes.includes('/api/v1/operator/postgis/readiness'), 'PostGIS readiness endpoint must be represented in generated API paths.');

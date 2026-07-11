@@ -3945,6 +3945,103 @@ def find_nearby_address_records(latitude: float, longitude: float, radius_meters
     }
 
 
+def _hold_field_status(record: dict[str, Any]) -> str:
+    bundle = record.get('record_bundle') if isinstance(record.get('record_bundle'), dict) else {}
+    evidence = bundle.get('evidence') if isinstance(bundle.get('evidence'), dict) else {}
+    field_verification = evidence.get('field_verification') if isinstance(evidence.get('field_verification'), dict) else {}
+    gps_capture = evidence.get('gps_capture') if isinstance(evidence.get('gps_capture'), dict) else {}
+    status = field_verification.get('status') or ('gps evidence recorded' if gps_capture else None)
+    return str(status or 'field evidence pending')
+
+
+def _hold_spatial_risk(cursor: psycopg.Cursor, record: dict[str, Any], radius_meters: float = 25.0) -> dict[str, Any]:
+    cursor.execute(
+        '''
+        SELECT address_code, address_label,
+               ST_Distance(
+                   geom,
+                   ST_SetSRID(ST_MakePoint(%s, %s), 4326)::geography
+               ) AS distance_meters
+        FROM address_records
+        WHERE geom IS NOT NULL
+          AND address_code <> %s
+          AND ST_DWithin(
+              geom,
+              ST_SetSRID(ST_MakePoint(%s, %s), 4326)::geography,
+              %s
+          )
+        ORDER BY distance_meters ASC
+        LIMIT 5
+        ''',
+        (record['longitude'], record['latitude'], record['address_code'], record['longitude'], record['latitude'], radius_meters),
+    )
+    nearby = [
+        {
+            'address_code': row['address_code'],
+            'address_label': row['address_label'],
+            'distance_meters': round(float(row['distance_meters']), 2),
+            'source': 'address_records',
+        }
+        for row in cursor.fetchall()
+    ]
+    closest = nearby[0]['distance_meters'] if nearby else None
+    if closest is not None and closest <= 10:
+        level = 'high'
+    elif closest is not None and closest <= 25:
+        level = 'medium'
+    else:
+        level = 'low'
+    return {
+        'source': 'address_records',
+        'level': level,
+        'nearby_count': len(nearby),
+        'closest_distance_meters': closest,
+        'nearby_records': nearby,
+    }
+
+
+def address_record_holds(status: str = 'registry-ready', limit: int = 25) -> dict[str, Any]:
+    status_value = status or 'registry-ready'
+    row_limit = max(1, min(int(limit), 50))
+    records = search_address_records(status=status_value, limit=row_limit)
+    items: list[dict[str, Any]] = []
+    with db_connection() as connection:
+        with connection.cursor() as cursor:
+            for record in records:
+                bundle = record.get('record_bundle') if isinstance(record.get('record_bundle'), dict) else {}
+                outputs = bundle.get('outputs') if isinstance(bundle.get('outputs'), dict) else {}
+                routing = bundle.get('routing') if isinstance(bundle.get('routing'), dict) else {}
+                spatial_risk = _hold_spatial_risk(cursor, record)
+                is_published = record.get('status') == 'published'
+                hold_reason = 'Publication approval required before public release.'
+                if spatial_risk['level'] in {'high', 'medium'}:
+                    hold_reason = 'Spatial duplicate-risk review required before publication.'
+                items.append({
+                    'address_code': record['address_code'],
+                    'address_label': record['address_label'],
+                    'status': record['status'],
+                    'publication_state': record.get('publication_state'),
+                    'province_code': record.get('province_code'),
+                    'territory_name': routing.get('territory_name') or record.get('territory_name'),
+                    'latitude': record['latitude'],
+                    'longitude': record['longitude'],
+                    'accuracy_meters': record.get('accuracy_meters'),
+                    'hold_reason': hold_reason,
+                    'spatial_risk': spatial_risk,
+                    'evidence_status': _hold_field_status(record),
+                    'certificate_readiness': 'ready' if is_published else 'blocked until published',
+                    'signage_readiness': 'ready' if is_published and outputs.get('signage_batch') else 'blocked until published',
+                    'next_action': 'Review spatial risk and publication evidence before release.',
+                })
+    return {
+        'source': 'address_records',
+        'status': status_value,
+        'count': len(items),
+        'items': items,
+        'operator_note': 'Hold register is generated from canonical address_records only; raw citizen/geotag submissions remain intake evidence.',
+    }
+
+
 def postgis_readiness() -> dict[str, Any]:
     notes: list[str] = []
     try:

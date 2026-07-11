@@ -1680,6 +1680,52 @@ def test_postgis_phase2_migration_adds_canonical_geometry_safely() -> None:
     assert "latitude BETWEEN -90 AND 90" in sql
     assert "longitude BETWEEN -180 AND 180" in sql
 
+
+
+def test_address_record_holds_endpoint_requires_auth_and_uses_canonical_spatial_risk(monkeypatch) -> None:
+    monkeypatch.setattr(main, 'resolve_user_from_token', lambda token: VIEWER)
+    captured = {}
+
+    def fake_holds(status='registry-ready', limit=25):
+        captured.update({'status': status, 'limit': limit})
+        return {
+            'source': 'address_records',
+            'status': status,
+            'count': 1,
+            'items': [{
+                'address_code': 'EG-BN-N1-HOLD000001-AA',
+                'address_label': 'Held canonical record',
+                'status': 'registry-ready',
+                'publication_state': 'not-public',
+                'hold_reason': 'Publication approval required before public release.',
+                'spatial_risk': {'level': 'medium', 'nearby_count': 1, 'closest_distance_meters': 8.6, 'source': 'address_records'},
+                'evidence_status': 'field evidence recorded',
+                'certificate_readiness': 'blocked until published',
+                'signage_readiness': 'blocked until published',
+                'next_action': 'Review spatial risk and publication evidence before release.',
+            }],
+        }
+
+    monkeypatch.setattr(main, 'address_record_holds', fake_holds)
+    unauthenticated = client.get('/api/v1/address-records/holds')
+    assert unauthenticated.status_code == 401
+    response = client.get('/api/v1/address-records/holds?status=registry-ready&limit=10', headers=auth_header())
+    assert response.status_code == 200
+    body = response.json()
+    assert captured == {'status': 'registry-ready', 'limit': 10}
+    assert body['source'] == 'address_records'
+    assert body['items'][0]['spatial_risk']['source'] == 'address_records'
+    assert 'citizen_name' not in body['items'][0]
+    assert 'citizen_contact' not in body['items'][0]
+
+
+def test_address_record_holds_endpoint_authenticates_before_query_validation(monkeypatch) -> None:
+    monkeypatch.setattr(main, 'resolve_user_from_token', lambda token: VIEWER)
+    unauthenticated = client.get('/api/v1/address-records/holds?limit=0')
+    assert unauthenticated.status_code == 401
+    authenticated = client.get('/api/v1/address-records/holds?limit=0', headers=auth_header())
+    assert authenticated.status_code == 422
+
 def test_signage_pack_returns_batch_metadata_and_csv(monkeypatch) -> None:
     monkeypatch.setattr(main, 'resolve_user_from_token', lambda token: VIEWER)
     monkeypatch.setattr(main, 'signage_export', lambda status='published': {'items': [

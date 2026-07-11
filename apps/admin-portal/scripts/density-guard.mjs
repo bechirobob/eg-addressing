@@ -18,6 +18,10 @@ const checks = [
     file: 'components/TerritoryAdminPanel.tsx',
     markers: ['Create new territory', 'Edit selected territory details', 'territory-command-panel'],
   },
+  {
+    file: 'components/AddressRecordSearchPanel.tsx',
+    markers: ['registry-hold-workbench', 'hold-risk-ledger', 'Hold register', 'const canSearch = sessionStatus === \'ready\';', 'sessionRequestInit(token)'],
+  },
 ];
 
 for (const check of checks) {
