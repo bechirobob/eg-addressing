@@ -15005,8 +15005,17 @@ html body main.page-shell .runbook-contact-chain.runbook-contact-chain li {
 }
 
 /* Admin-only staff account workspace: compact operations table, no dashboard theatrics. */
-.staff-admin-workspace {
+html body main.page-shell .staff-admin-workspace.staff-admin-workspace {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) !important;
   gap: 18px;
+  width: min(1180px, calc(100vw - 48px));
+  margin-inline: auto;
+}
+
+html body main.page-shell .staff-admin-workspace > article {
+  width: 100%;
+  min-width: 0;
 }
 
 .staff-admin-intro,
