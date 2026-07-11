@@ -63,10 +63,6 @@ assert(/auth_mode\?: string/.test(loginPanel), 'login payload typing must includ
 assert(/sessionRequestInit/.test(roleAwareChrome), 'logout must use sessionRequestInit so cookie-only sessions can revoke server-side');
 assert(!/if \(storedToken\) \{[\s\S]*auth\/logout[\s\S]*\}/.test(roleAwareChrome), 'logout must not skip server revoke when localStorage token is absent');
 
-assert(/href: '\/records',[\s\S]*visibleTo: \['viewer', 'editor', 'admin'\][\s\S]*group: 'staff'/.test(siteData), 'case files navigation must be visible to signed-in viewer/editor/admin staff users');
-assert(/\{ href: '\/records', label: 'Case Files', iconClass: 'case-files' \}/.test(roleAwareChrome), 'mobile operator control navigation must include Case Files');
-assert(/\['\/field', '\/registry', '\/records', '\/signage'/.test(roleAwareChrome), 'mobile control navigation must render on the /records route');
-
 assert(/role: 'viewer' \| 'editor' \| 'admin' \| 'agency_viewer';/.test(await read('components/demoAuth.ts')), 'session user typing must include agency_viewer');
 
 console.log('role-auth-guard passed');

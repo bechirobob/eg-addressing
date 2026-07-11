@@ -38,7 +38,6 @@ function navLabelKey(href: string) {
     '/signage': 'navLocationReview',
     '/field': 'navFieldWork',
     '/registry': 'navAddressRegistry',
-    '/records': 'navCaseFiles',
     '/reports': 'navReports',
     '/admin/staff': 'navStaffAccounts',
   };
@@ -117,7 +116,6 @@ export function RoleAwareChrome({ apiBaseUrl, children, skipSessionLookup = fals
   const controlNavItems = [
     { href: '/field', label: 'Field', iconClass: 'queue' },
     { href: '/registry', label: 'Registry', iconClass: 'case-files' },
-    { href: '/records', label: 'Case Files', iconClass: 'case-files' },
     { href: '/signage', label: 'Signage', iconClass: 'signage' },
     { href: '/reports', label: 'Reports', iconClass: 'reports' },
     ...(role === 'admin' ? [{ href: '/admin/staff?from=mobile-staff-services', label: 'Admin', iconClass: 'dashboard' }] : []),
@@ -178,7 +176,7 @@ export function RoleAwareChrome({ apiBaseUrl, children, skipSessionLookup = fals
         ) : null}
       </div>
 
-      {role !== 'guest' && ['/field', '/registry', '/records', '/signage', '/reports', '/exports', '/territories', '/verify'].includes(currentRoute) && controlNavItems.length ? (
+      {role !== 'guest' && ['/field', '/registry', '/signage', '/reports', '/exports', '/territories', '/verify'].includes(currentRoute) && controlNavItems.length ? (
         <nav className="mobile-control-nav" aria-label="Operator control navigation">
           {controlNavItems.map((item) => {
             const isActive = currentRoute === item.href.split('?')[0];
