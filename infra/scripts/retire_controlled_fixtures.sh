@@ -42,14 +42,19 @@ WITH controlled_records AS (
   FROM address_records
   WHERE address_label ILIKE 'Controlled canonical proof fixture%'
      OR address_label ILIKE 'Controlled canonical pilot address%'
+     OR address_label ILIKE 'Controlled published simulation fixture%'
      OR record_bundle::text ILIKE '%controlled-fixture%'
+     OR record_bundle::text ILIKE '%controlled-published-simulation%'
 ), controlled_submissions AS (
   SELECT id, grid_code, status
   FROM citizen_geotag_submissions
   WHERE address_label ILIKE 'Controlled canonical proof fixture%'
      OR address_label ILIKE 'Controlled canonical pilot address%'
+     OR address_label ILIKE 'Controlled published simulation fixture%'
      OR landmark ILIKE '%Controlled proof fixture%'
+     OR landmark ILIKE '%Controlled published simulation%'
      OR reviewer_note ILIKE '%Controlled canonical proof%'
+     OR reviewer_note ILIKE '%controlled published simulation%'
      OR id IN (SELECT source_submission_id FROM controlled_records)
 ), smoke_noise AS (
   SELECT 'field_submission' AS type, id FROM field_submissions WHERE submitted_by IN ('Smoke automation', 'Browser smoke') OR candidate_name ILIKE 'Smoke Flow Road%' OR candidate_name ILIKE 'Smoke Map Grid Road%' OR candidate_name ILIKE 'Smoke Browser Map Grid%'
@@ -79,14 +84,19 @@ WITH controlled_records AS (
   FROM address_records
   WHERE address_label ILIKE 'Controlled canonical proof fixture%'
      OR address_label ILIKE 'Controlled canonical pilot address%'
+     OR address_label ILIKE 'Controlled published simulation fixture%'
      OR record_bundle::text ILIKE '%controlled-fixture%'
+     OR record_bundle::text ILIKE '%controlled-published-simulation%'
 ), controlled_submissions AS (
   SELECT id
   FROM citizen_geotag_submissions
   WHERE address_label ILIKE 'Controlled canonical proof fixture%'
      OR address_label ILIKE 'Controlled canonical pilot address%'
+     OR address_label ILIKE 'Controlled published simulation fixture%'
      OR landmark ILIKE '%Controlled proof fixture%'
+     OR landmark ILIKE '%Controlled published simulation%'
      OR reviewer_note ILIKE '%Controlled canonical proof%'
+     OR reviewer_note ILIKE '%controlled published simulation%'
      OR id IN (SELECT source_submission_id FROM controlled_records)
 )
 UPDATE address_records
@@ -104,15 +114,20 @@ WITH controlled_records AS (
   FROM address_records
   WHERE address_label ILIKE 'Controlled canonical proof fixture%'
      OR address_label ILIKE 'Controlled canonical pilot address%'
+     OR address_label ILIKE 'Controlled published simulation fixture%'
      OR record_bundle::text ILIKE '%controlled-fixture%'
+     OR record_bundle::text ILIKE '%controlled-published-simulation%'
      OR record_bundle #>> '{retirement,reason}' = 'controlled-proof-fixture'
 ), controlled_submissions AS (
   SELECT id
   FROM citizen_geotag_submissions
   WHERE address_label ILIKE 'Controlled canonical proof fixture%'
      OR address_label ILIKE 'Controlled canonical pilot address%'
+     OR address_label ILIKE 'Controlled published simulation fixture%'
      OR landmark ILIKE '%Controlled proof fixture%'
+     OR landmark ILIKE '%Controlled published simulation%'
      OR reviewer_note ILIKE '%Controlled canonical proof%'
+     OR reviewer_note ILIKE '%controlled published simulation%'
      OR id IN (SELECT source_submission_id FROM controlled_records)
 )
 UPDATE citizen_geotag_submissions
