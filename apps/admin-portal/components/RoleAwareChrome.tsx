@@ -118,6 +118,7 @@ export function RoleAwareChrome({ apiBaseUrl, children, skipSessionLookup = fals
     { href: '/registry', label: 'Registry', iconClass: 'case-files' },
     { href: '/signage', label: 'Signage', iconClass: 'signage' },
     { href: '/reports', label: 'Reports', iconClass: 'reports' },
+    ...(role === 'admin' ? [{ href: '/admin/staff?from=mobile-staff-services', label: 'Admin', iconClass: 'dashboard' }] : []),
   ].filter((item) => isRouteAccessible(item.href, role));
 
   return (
@@ -178,7 +179,7 @@ export function RoleAwareChrome({ apiBaseUrl, children, skipSessionLookup = fals
       {role !== 'guest' && ['/field', '/registry', '/signage', '/reports', '/exports', '/territories', '/verify'].includes(currentRoute) && controlNavItems.length ? (
         <nav className="mobile-control-nav" aria-label="Operator control navigation">
           {controlNavItems.map((item) => {
-            const isActive = currentRoute === item.href;
+            const isActive = currentRoute === item.href.split('?')[0];
             return (
               <Link key={item.href} href={item.href} className={`mobile-control-nav-link mobile-control-nav-${item.iconClass} ${isActive ? 'active' : ''}`} aria-current={isActive ? 'page' : undefined}>
                 <span aria-hidden="true" />

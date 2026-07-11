@@ -12059,7 +12059,7 @@ html body .mobile-control-nav.mobile-control-nav {
 
 @media (max-width: 760px) {
   html body .mobile-control-nav.mobile-control-nav {
-    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+    grid-template-columns: repeat(auto-fit, minmax(58px, 1fr)) !important;
     gap: 8px !important;
   }
 
