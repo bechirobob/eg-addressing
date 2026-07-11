@@ -53,6 +53,9 @@ const ownership = {
 };
 
 const siteData = await read('components/site-data.ts');
+const registryCorePanel = await read('components/RegistryCorePanel.tsx');
+const fieldWorkflowPanel = await read('components/FieldWorkflowPanel.tsx');
+const signageOperationsPanel = await read('components/SignageOperationsPanel.tsx');
 const packageJson = JSON.parse(await read('package.json'));
 const discoveredRoutes = await discoverPageRoutes();
 const ownershipRoutes = Object.keys(ownership).sort();
@@ -83,6 +86,11 @@ for (const route of ['/geotag', '/issue', '/track', '/field', '/registry', '/rep
 
 assert(/href: '\/login',[\s\S]*visibleTo: \[\]/.test(siteData), 'login must remain hidden from shared nav');
 assert(!siteData.includes("href: '/operations-runbook'"), 'operations runbook must stay hidden from nav');
+assert(/<Link href="\/records">Open case files<\/Link>/.test(registryCorePanel), 'registry must keep an in-layer Case Files handoff');
+assert(/<Link href="\/verify">Review evidence queue<\/Link>/.test(registryCorePanel), 'registry must keep an in-layer review queue handoff');
+assert(/<Link href="\/territories">Maintain territories<\/Link>/.test(registryCorePanel), 'registry must keep an in-layer territories maintenance handoff');
+assert(/<Link href="\/verify">Review submitted evidence<\/Link>/.test(fieldWorkflowPanel), 'field workflow must keep an in-layer review queue handoff');
+assert(/sessionUser\?\.role === 'admin'[\s\S]*<Link href="\/exports">Open publication operations<\/Link>/.test(signageOperationsPanel), 'signage must keep an admin-only publication operations handoff');
 assert(packageJson.scripts['test:route-ownership'] === 'node scripts/route-ownership-guard.mjs', 'package script test:route-ownership must run this guard');
 
 console.log(`route-ownership-guard passed (${discoveredRoutes.length} routes declared)`);

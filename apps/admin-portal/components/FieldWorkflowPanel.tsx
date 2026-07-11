@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { FormEvent, useEffect, useState } from 'react';
 
 import { useTranslation, translateUiText } from './i18n';
@@ -648,6 +649,10 @@ export function FieldWorkflowPanel({ assignments, submissions: initialSubmission
             <span className="field-help">Records an auditable field evidence reference. Do not paste passwords, D.I.P. scans, or private identity files here.</span>
           </label>
         </details>
+        <div className="registry-secondary-action field-secondary-action" aria-label="Field review handoff">
+          <span>Submitted field evidence is reviewed in the protected queue before registry approval.</span>
+          <Link href="/verify">Review submitted evidence</Link>
+        </div>
         {geotagTasks.length ? (
           <ul className="mini-list field-task-list">
             {geotagTasks.map((task) => {

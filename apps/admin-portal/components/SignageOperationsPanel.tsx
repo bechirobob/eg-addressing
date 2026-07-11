@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { useEffect, useMemo, useState } from 'react';
 
 import { useTranslation, translateUiText } from './i18n';
@@ -549,6 +550,12 @@ export function SignageOperationsPanel({ apiBaseUrl }: SignageOperationsPanelPro
           <span className="status-chip warn">{t('activeReview')}: {activeReviewCount}</span>
           <span className="status-chip">{t('historyClosed')}: {terminalReviewCount}</span>
         </div>
+        {sessionUser?.role === 'admin' ? (
+          <div className="registry-secondary-action signage-secondary-action" aria-label="Publication operations handoff">
+            <span>Admin-only intake and publication packs stay under publication operations, not staff navigation.</span>
+            <Link href="/exports">Open publication operations</Link>
+          </div>
+        ) : null}
       </article>
 
       <article className="public-task-panel review-glance-panel">

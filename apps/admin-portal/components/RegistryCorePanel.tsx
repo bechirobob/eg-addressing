@@ -314,9 +314,11 @@ export function RegistryCorePanel({
             </button>
           ))}
         </div>
-        <div className="registry-secondary-action" aria-label="Protected case-file review">
-          <span>Case-file review sits behind the address registry for viewer, editor, and admin staff.</span>
+        <div className="registry-secondary-action" aria-label="Protected registry support routes">
+          <span>Specialist tools stay behind the registry instead of crowding global navigation.</span>
           <Link href="/records">Open case files</Link>
+          {canWrite ? <Link href="/verify">Review evidence queue</Link> : null}
+          {canWrite ? <Link href="/territories">Maintain territories</Link> : null}
         </div>
         <div className="registry-job-tabs" role="tablist" aria-label="Registry sections">
           <button className={activeTab === 'addresses' ? 'active' : ''} type="button" onClick={() => setActiveTab('addresses')}>Addresses</button>
