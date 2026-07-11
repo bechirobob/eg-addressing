@@ -108,7 +108,7 @@ export const navItems: NavItem[] = [
   },
   {
     href: '/admin/staff',
-    label: 'Staff accounts',
+    label: 'Staff account control',
     visibleTo: ['admin'],
     priorityFor: ['admin'],
     group: 'admin',
