@@ -15019,9 +15019,17 @@ html body main.page-shell .staff-admin-workspace > article {
 }
 
 .staff-admin-intro,
-.staff-admin-create-panel,
-.staff-admin-list-panel {
+.staff-admin-create-panel {
   border-color: rgba(13, 47, 79, 0.16);
+}
+
+.staff-admin-list-panel {
+  width: 100%;
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
 }
 
 .staff-admin-disclosure {
@@ -15063,22 +15071,33 @@ html body main.page-shell .staff-admin-workspace > article {
 
 .staff-admin-list-head {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: space-between;
-  gap: 16px;
+  gap: 12px;
+  margin-bottom: 8px;
+  padding: 0 2px;
+}
+
+.staff-admin-list-head .section-label {
+  margin-bottom: 2px;
+}
+
+.staff-admin-list-head h3 {
+  margin: 0;
+  font-size: clamp(1rem, 1.3vw, 1.18rem);
 }
 
 .staff-admin-table-wrap {
   overflow-x: auto;
-  border: 1px solid rgba(13, 47, 79, 0.12);
-  background: #fff;
+  border-block: 1px solid rgba(13, 47, 79, 0.16);
+  background: transparent;
 }
 
 .staff-admin-table {
   width: 100%;
-  min-width: 980px;
+  min-width: 900px;
   border-collapse: collapse;
-  font-size: 0.92rem;
+  font-size: 0.86rem;
 }
 
 .staff-admin-table caption {
@@ -15092,18 +15111,22 @@ html body main.page-shell .staff-admin-workspace > article {
 
 .staff-admin-table th,
 .staff-admin-table td {
-  padding: 14px;
+  padding: 9px 10px;
   vertical-align: top;
   text-align: left;
-  border-bottom: 1px solid rgba(13, 47, 79, 0.1);
+  border-bottom: 1px solid rgba(13, 47, 79, 0.09);
 }
 
 .staff-admin-table th {
   color: var(--eg-ink-muted);
-  font-size: 0.78rem;
+  font-size: 0.7rem;
   text-transform: uppercase;
   letter-spacing: 0.06em;
-  background: rgba(13, 47, 79, 0.035);
+  background: transparent;
+}
+
+.staff-admin-table tbody tr:last-child td {
+  border-bottom: 0;
 }
 
 .staff-admin-table td > strong,
@@ -15113,31 +15136,38 @@ html body main.page-shell .staff-admin-workspace > article {
 }
 
 .staff-admin-table small {
-  margin-top: 6px;
+  margin-top: 4px;
   color: var(--eg-ink-muted);
-  font-size: 0.78rem;
+  font-size: 0.72rem;
 }
 
 .staff-admin-inline-field {
   display: grid;
-  gap: 5px;
-  margin-top: 8px;
+  gap: 3px;
+  margin-top: 5px;
 }
 
 .staff-admin-inline-field span {
   color: var(--eg-ink-muted);
-  font-size: 0.74rem;
+  font-size: 0.68rem;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
 
+.staff-admin-inline-field .territory-input {
+  min-height: 34px;
+  padding: 7px 9px;
+  font-size: 0.86rem;
+}
+
 .staff-admin-status {
   display: inline-flex;
   width: fit-content;
-  padding: 4px 8px;
+  padding: 2px 6px;
   border: 1px solid rgba(13, 47, 79, 0.16);
   color: var(--eg-ink);
+  font-size: 0.74rem;
   font-weight: 800;
 }
 
@@ -15154,8 +15184,16 @@ html body main.page-shell .staff-admin-workspace > article {
 .staff-admin-actions {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
-  margin-top: 10px;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.staff-admin-actions .secondary-button,
+.staff-admin-list-head .secondary-button,
+.staff-admin-action-disclosure summary {
+  min-height: 34px;
+  padding: 7px 10px;
+  font-size: 0.78rem;
 }
 
 .danger-action:not(:disabled) {
@@ -15190,8 +15228,8 @@ html body main.page-shell .staff-admin-workspace > article {
   .staff-admin-table {
     min-width: 0;
     border-collapse: separate;
-    border-spacing: 0 12px;
-    font-size: 0.9rem;
+    border-spacing: 0 8px;
+    font-size: 0.84rem;
   }
 
   .staff-admin-table thead {
@@ -15212,21 +15250,21 @@ html body main.page-shell .staff-admin-workspace > article {
   }
 
   .staff-admin-table tr {
-    border: 1px solid rgba(13, 47, 79, 0.14);
-    background: #fff;
+    border-block: 1px solid rgba(13, 47, 79, 0.13);
+    background: transparent;
   }
 
   .staff-admin-table td {
-    padding: 12px 14px;
+    padding: 8px 2px;
     border-bottom: 1px solid rgba(13, 47, 79, 0.08);
   }
 
   .staff-admin-table td::before {
     content: attr(data-label);
     display: block;
-    margin-bottom: 7px;
+    margin-bottom: 4px;
     color: var(--eg-ink-muted);
-    font-size: 0.72rem;
+    font-size: 0.66rem;
     font-weight: 800;
     letter-spacing: 0.06em;
     text-transform: uppercase;

@@ -220,7 +220,7 @@ export function StaffAdminPanel({ apiBaseUrl }: { apiBaseUrl: string }) {
         </details>
       </article>
 
-      <article className="public-task-panel staff-admin-list-panel">
+      <article className="staff-admin-list-panel">
         <div className="panel-head staff-admin-list-head">
           <div>
             <p className="section-label">Account register</p>
