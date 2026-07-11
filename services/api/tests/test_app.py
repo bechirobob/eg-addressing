@@ -2208,6 +2208,8 @@ def test_public_tracking_lookup_accepts_address_code_without_leaking_operator_da
     assert body['lookup_type'] == 'address-code'
     assert body['grid_code'] == 'EG-BN-N1-TRACK001-AA'
     assert body['publication_state'] == 'internal-registry'
+    assert body['address_label'] is None
+    assert 'Tracked by address code' not in response.text
     assert 'citizen_contact' not in response.text
     assert 'dip_last4' not in response.text
     assert 'operator-only note' not in response.text

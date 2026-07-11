@@ -1016,19 +1016,21 @@ def _sla_drilldown(enriched_items: list[dict[str, Any]], corrections: list[dict[
 def _public_tracking_payload(item: dict[str, Any], *, lookup_type: str) -> dict[str, Any]:
     enriched = _enrich_geotag_submissions([item])[0]
     automation = enriched.get('automation', {})
+    publication_state = automation.get('integration', {}).get('api_record_state')
+    public_address_label = enriched['address_label'] if enriched['status'] == 'published' or lookup_type == 'submission-id' else None
     return _strip_identity_fields({
         'lookup_type': lookup_type,
         'id': enriched['id'],
         'grid_code': enriched['grid_code'],
         'status': enriched['status'],
-        'address_label': enriched['address_label'],
+        'address_label': public_address_label,
         'created_at': enriched.get('created_at'),
         'updated_at': enriched.get('updated_at'),
         'tracking': automation.get('citizen_tracking'),
         'process_stage': automation.get('process_stage'),
         'next_step': automation.get('next_best_action_label'),
         'public_lookup_url': enriched.get('public_lookup_url'),
-        'publication_state': automation.get('integration', {}).get('api_record_state'),
+        'publication_state': publication_state,
     })
 
 
