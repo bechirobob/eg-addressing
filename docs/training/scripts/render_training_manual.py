@@ -234,11 +234,19 @@ ul > li::marker { color: var(--eg-green); }
 strong { color: var(--eg-blue-deep); }
 .section-break { page-break-after: always; }
 .document-control p {
+  display: grid;
+  grid-template-columns: 42mm minmax(0, 1fr);
+  column-gap: 5mm;
+  align-items: start;
   margin-bottom: 2.5mm;
 }
 .document-control p strong {
-  display: inline-block;
-  min-width: 42mm;
+  display: block;
+  min-width: 0;
+}
+.document-control p span {
+  display: block;
+  min-width: 0;
 }
 footer.print-note {
   margin-top: 9mm;
@@ -277,7 +285,7 @@ def paragraph_with_labels(text: str) -> str:
     escaped = inline(text)
     if ":" in text and len(text.split(":", 1)[0]) < 42:
         left, right = text.split(":", 1)
-        return f"<p><strong>{inline(left)}:</strong>{inline(right)}</p>"
+        return f"<p><strong>{inline(left)}:</strong><span>{inline(right.strip())}</span></p>"
     return f"<p>{escaped}</p>"
 
 
