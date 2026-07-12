@@ -105,8 +105,8 @@ body {
 .cover-eyebrow {
   display: inline-block;
   margin: 0 0 9mm;
-  padding-left: 3.5mm;
-  border-left: 4px solid var(--eg-gold);
+  padding: 0;
+  border: 0;
   text-transform: uppercase;
   letter-spacing: 0.12em;
   font-size: 8.5pt;
@@ -116,12 +116,12 @@ body {
 .cover h1 {
   max-width: 150mm;
   margin: 0;
-  color: var(--eg-ink);
+  color: var(--eg-blue-deep);
   font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   font-size: 31pt;
-  font-weight: 800;
-  line-height: 1.05;
-  letter-spacing: -0.03em;
+  font-weight: 850;
+  line-height: 1.02;
+  letter-spacing: -0.035em;
 }
 .cover-subtitle {
   max-width: 135mm;
@@ -151,7 +151,7 @@ body {
   page-break-before: auto;
 }
 h1, h2, h3, h4 {
-  color: var(--eg-ink);
+  color: var(--eg-blue-deep);
   font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   letter-spacing: -0.015em;
   line-height: 1.2;
