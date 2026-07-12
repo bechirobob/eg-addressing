@@ -112,7 +112,7 @@ Mirror the frozen addressing system document/page style:
 - wide margins;
 - restrained navy/green/gold/red/ivory palette;
 - ivory or white background;
-- clean page breaks for every major section.
+- clean pagination that allows short related sections to share a page when they fit, while preventing stranded headings at page foot.
 
 Avoid:
 

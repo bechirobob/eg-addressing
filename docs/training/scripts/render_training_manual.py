@@ -202,12 +202,12 @@ body {
   padding: 0 1mm 4mm;
 }
 .content section {
-  break-before: page;
-  page-break-before: always;
+  break-inside: avoid-page;
+  page-break-inside: avoid;
+  margin-bottom: 8mm;
 }
-.content section:first-child {
-  break-before: auto;
-  page-break-before: auto;
+.content section + section {
+  margin-top: 6mm;
 }
 h1, h2, h3, h4 {
   color: var(--eg-blue-deep);
