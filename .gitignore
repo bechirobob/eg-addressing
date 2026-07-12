@@ -31,6 +31,7 @@ artifacts/reference-pdfs/
 artifacts/containment-backups/
 artifacts/restore-drills/
 artifacts/manuals/
+artifacts/training-pdfs/
 artifacts/*.html
 artifacts/*.pdf
 artifacts/*audit*.md

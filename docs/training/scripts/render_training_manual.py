@@ -13,6 +13,65 @@ ROOT = Path(__file__).resolve().parents[3]
 CHROME = "/usr/bin/google-chrome"
 COAT_OF_ARMS = ROOT / "apps/admin-portal/public/eg-coat-of-arms.svg"
 
+MANUAL_META = {
+    "public-user-guide": {
+        "file": "Public-User-Guide",
+        "es_subtitle": "Guía de uso para el piloto controlado: registrar una ubicación, comprobar un código de dirección y hacer seguimiento de una solicitud.",
+        "en_subtitle": "User guide for the controlled pilot: submit a location, check an address code, and track a request.",
+        "es_eyebrow": "Capacitación pública",
+        "en_eyebrow": "Public training",
+    },
+    "field-officer-manual": {
+        "file": "Field-Officer-Manual",
+        "es_subtitle": "Manual operativo para capturar evidencia de ubicación, notas de campo y comprobaciones seguras durante el piloto controlado.",
+        "en_subtitle": "Operational manual for capturing location evidence, field notes, and safe checks during the controlled pilot.",
+        "es_eyebrow": "Capacitación de campo",
+        "en_eyebrow": "Field training",
+    },
+    "registry-officer-manual": {
+        "file": "Registry-Officer-Manual",
+        "es_subtitle": "Manual para revisar solicitudes, preparar registros oficiales y mantener la calidad del flujo de registro.",
+        "en_subtitle": "Manual for reviewing requests, preparing official records, and maintaining registry workflow quality.",
+        "es_eyebrow": "Capacitación de registro",
+        "en_eyebrow": "Registry training",
+    },
+    "institutional-reviewer-manual": {
+        "file": "Institutional-Reviewer-Manual",
+        "es_subtitle": "Manual para revisar evidencia, estado de preparación, riesgos y decisiones institucionales del piloto.",
+        "en_subtitle": "Manual for reviewing evidence, readiness status, risks, and institutional decisions in the pilot.",
+        "es_eyebrow": "Revisión institucional",
+        "en_eyebrow": "Institutional review",
+    },
+    "system-administrator-manual": {
+        "file": "System-Administrator-Manual",
+        "es_subtitle": "Manual para administrar usuarios, sesiones de inicio de sesión, accesos y controles seguros del sistema.",
+        "en_subtitle": "Manual for administering users, login sessions, access, and safe system controls.",
+        "es_eyebrow": "Administración del sistema",
+        "en_eyebrow": "System administration",
+    },
+    "publication-official-issuance-guide": {
+        "file": "Publication-Official-Issuance-Guide",
+        "es_subtitle": "Guía para entender bloqueos de publicación, emisión oficial, certificados, señalización y exportaciones.",
+        "en_subtitle": "Guide for understanding publication locks, official issuance, certificates, signage, and exports.",
+        "es_eyebrow": "Publicación oficial",
+        "en_eyebrow": "Official issuance",
+    },
+    "reports-activity-audit-guide": {
+        "file": "Reports-Activity-Audit-Guide",
+        "es_subtitle": "Guía para leer informes, actividad, controles de preparación y evidencia de auditoría del piloto.",
+        "en_subtitle": "Guide for reading reports, activity, readiness checks, and pilot audit evidence.",
+        "es_eyebrow": "Informes y auditoría",
+        "en_eyebrow": "Reports and audit",
+    },
+    "pilot-training-manual": {
+        "file": "Pilot-Training-Manual",
+        "es_subtitle": "Manual para organizar sesiones de capacitación, ejercicios, evaluación y seguimiento del piloto.",
+        "en_subtitle": "Manual for organizing pilot training sessions, exercises, assessment, and follow-up.",
+        "es_eyebrow": "Capacitación del piloto",
+        "en_eyebrow": "Pilot training",
+    },
+}
+
 CSS = """
 @page {
   size: A4;
@@ -298,14 +357,15 @@ def render_markdown(md: str) -> str:
 
 def language_meta(source: Path) -> dict[str, str]:
     is_es = source.name.upper().startswith("ES")
+    manual = MANUAL_META.get(source.parent.name, MANUAL_META["public-user-guide"])
     if is_es:
         return {
             "lang": "es",
             "version": "Versión española",
             "republic": "República de Guinea Ecuatorial",
             "platform": "Plataforma Nacional de Direccionamiento Digital",
-            "eyebrow": "Capacitación pública",
-            "subtitle": "Guía de uso para el piloto controlado: registrar una ubicación, comprobar un código de dirección y hacer seguimiento de una solicitud.",
+            "eyebrow": manual["es_eyebrow"],
+            "subtitle": manual["es_subtitle"],
             "status_left": "Material de capacitación para piloto controlado",
             "status_right": "Soporte operativo: BeCore",
         }
@@ -314,11 +374,17 @@ def language_meta(source: Path) -> dict[str, str]:
         "version": "English version",
         "republic": "Republic of Equatorial Guinea",
         "platform": "National Digital Addressing Platform",
-        "eyebrow": "Public training",
-        "subtitle": "User guide for the controlled pilot: submit a location, check an address code, and track a request.",
+        "eyebrow": manual["en_eyebrow"],
+        "subtitle": manual["en_subtitle"],
         "status_left": "Controlled pilot training material",
         "status_right": "Operational support: BeCore",
     }
+
+
+def output_stem(source: Path) -> str:
+    manual = MANUAL_META.get(source.parent.name, MANUAL_META["public-user-guide"])
+    suffix = "ES" if source.name.upper().startswith("ES") else "EN"
+    return f"EG-Addressing-{manual['file']}-{suffix}"
 
 
 def build_html(source: Path, output: Path) -> None:
@@ -389,9 +455,9 @@ def main(argv: list[str]) -> int:
             raise SystemExit(f"missing source: {source}")
         output_dir = source.parent / "output"
         output_dir.mkdir(parents=True, exist_ok=True)
-        suffix = "ES" if source.name.upper().startswith("ES") else "EN"
-        html_path = output_dir / f"EG-Addressing-Public-User-Guide-{suffix}.html"
-        pdf_path = output_dir / f"EG-Addressing-Public-User-Guide-{suffix}.pdf"
+        stem = output_stem(source)
+        html_path = output_dir / f"{stem}.html"
+        pdf_path = output_dir / f"{stem}.pdf"
         build_html(source, html_path)
         chrome_pdf(html_path, pdf_path)
         print(f"rendered {pdf_path}")

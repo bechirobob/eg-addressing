@@ -141,12 +141,10 @@ Procedimiento:
 Ejemplo de capacitación: una persona desea registrar la entrada principal de una pequeña tienda. El usuario coloca el punto en la entrada, escribe el nombre del negocio, añade una referencia cercana y envía la solicitud. El sistema guarda la ubicación como ubicación enviada para revisión.
 
 Errores que se deben evitar:
-
-1. Colocar el punto sobre una calle diferente.
-2. Escribir una descripción demasiado corta, como solo “mi casa”.
-3. Enviar una ubicación sin revisar el mapa.
-4. Poner datos sensibles completos en notas públicas.
-5. Asumir que el envío ya completó todo el proceso.
+1. Saltar el límite del rol porque el caso parece simple.
+2. Dejar la siguiente acción poco clara.
+3. Añadir datos privados que el siguiente rol no necesita.
+4. Prometer un resultado que pertenece a otro flujo.
 
 ## 8. Módulo 3: comprobar un código de dirección
 

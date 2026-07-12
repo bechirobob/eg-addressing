@@ -141,12 +141,10 @@ Procedure:
 Training example: a person wants to register the main entrance of a small shop. The user places the point on the entrance, writes the business name, adds a nearby reference, and submits the request. The system stores the information as a submitted location for review.
 
 Mistakes to avoid:
-
-1. Placing the point on a different road.
-2. Writing a description that is too short, such as only “my house”.
-3. Submitting a location without checking the map.
-4. Putting full sensitive data in public notes.
-5. Assuming submission already completed the whole process.
+1. Skipping the role boundary because the case looks simple.
+2. Leaving the next action unclear.
+3. Adding private details that the next role does not need.
+4. Promising an outcome that belongs to another workflow.
 
 ## 8. Module 3: check an address code
 

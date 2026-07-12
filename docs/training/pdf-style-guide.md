@@ -58,16 +58,16 @@ Avoid:
 
 ## Document control page
 
-Include a simple document control table:
+Use plain labelled lines, not a table or card layout:
 
-| Field | Value |
-|---|---|
-| Document title | Manual title |
-| Language | Spanish or English |
-| Audience | Target audience |
-| Status | Controlled pilot training material |
-| Prepared for | Equatorial Guinea National Digital Addressing pilot |
-| Operational support | BeCore |
+```text
+Document title: Manual title.
+Language: Spanish or English.
+Audience: Target audience.
+Status: Controlled pilot training material.
+Prepared for: Equatorial Guinea National Digital Addressing pilot.
+Operational support: BeCore.
+```
 
 Do not include automatic generated timestamps or internal file locations.
 
@@ -103,15 +103,16 @@ If exact page-number indexing is not available at draft stage, use section-numbe
 
 ## Typography and layout
 
-Use a calm official layout:
+Mirror the frozen addressing system document/page style:
 
-- strong title hierarchy;
+- system UI sans-serif typography for labels, headings, and body text;
+- heavy deep-navy headings;
+- uppercase letter-spaced section labels;
 - readable body text;
 - wide margins;
-- restrained navy/green/gold palette;
+- restrained navy/green/gold/red/ivory palette;
 - ivory or white background;
-- clear section dividers;
-- line pictograms only where they improve understanding.
+- clean page breaks for every major section.
 
 Avoid:
 
@@ -120,6 +121,10 @@ Avoid:
 - emoji;
 - decorative glass/blur effects;
 - cramped tables;
+- tables in manual body content unless explicitly approved for a specific manual;
+- colored callout containers;
+- brown/gold side ticks beside cover labels;
+- shadows under the coat of arms or other page elements;
 - dense paragraphs without steps or examples.
 
 ## Training module pattern
@@ -181,19 +186,17 @@ Rules:
 
 Use the simplified operator terms:
 
-| Use | Avoid in manuals |
-|---|---|
-| official record | canonical record |
-| ready for approval | registry-ready |
-| public status | publication state |
-| approval lock / public release lock | release gate |
-| submitted location / location request | geotag submission |
-| location evidence | spatial evidence |
-| map evidence | geometry evidence |
-| activity log | audit log, unless explained as a formal audit term |
-| login session | auth token / session token |
-| sign user out everywhere | revoke sessions |
-| test record / training example | smoke fixture / pilot fixture |
+1. Use “official record”; avoid “canonical record”.
+2. Use “ready for approval”; avoid “registry-ready”.
+3. Use “public status”; avoid “publication state”.
+4. Use “approval lock” or “public release lock”; avoid “release gate”.
+5. Use “submitted location” or “location request”; avoid “geotag submission”.
+6. Use “location evidence”; avoid “spatial evidence”.
+7. Use “map evidence”; avoid “geometry evidence”.
+8. Use “activity log”; avoid “audit log” unless explaining a formal audit term.
+9. Use “login session”; avoid “auth token” or “session token”.
+10. Use “sign user out everywhere”; avoid “revoke sessions”.
+11. Use “test record” or “training example”; avoid “smoke fixture” or “pilot fixture”.
 
 ## Language quality
 
