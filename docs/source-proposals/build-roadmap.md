@@ -16,8 +16,8 @@ Deliver a pilot-ready national digital addressing platform that can support real
 ### Deliverables
 - approved architecture blueprint
 - schema.sql baseline
-- OpenAPI MVP baseline
-- repo scaffold
+- OpenAPI contract baseline
+- repository structure baseline
 - design decisions register
 
 ### Risks

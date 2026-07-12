@@ -3,7 +3,7 @@ info:
   title: National Digital Addressing Platform API
   version: 0.1.0
   description: |
-    Pilot MVP API for the Equatorial Guinea national digital addressing platform.
+    Controlled implementation API for the Equatorial Guinea national digital addressing platform.
     Covers auth, territory, registry, field capture, workflow, reporting, and scoped integrations.
 servers:
   - url: https://api.addressing.gov.gq/api/v1

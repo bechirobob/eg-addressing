@@ -1,6 +1,6 @@
-# Repository Scaffold Overview
+# Repository Architecture Overview
 
-This starter repository has been created as a planning scaffold for the national digital addressing platform.
+This repository structure defines the planned domain boundaries for the national digital addressing platform.
 
 ## Included directories
 
@@ -39,11 +39,11 @@ docs/
 ## Immediate next coding moves
 
 1. add DB migration tooling
-2. scaffold FastAPI service structure
-3. scaffold Next.js admin portal shell
+2. establish FastAPI service structure
+3. establish Next.js admin portal shell
 4. define shared environment variables
 5. connect auth + role model
 
-## Why this scaffold matters
+## Why this structure matters
 
 It gives the project clean domain separation before implementation starts, so the build does not collapse into one giant cursed folder.
