@@ -34,7 +34,7 @@ function plainStatus(value?: string | null) {
 function publicationLabel(address: Address) {
   if (address.is_archived) return 'Archived';
   if (address.publication_state === 'published') return 'Published';
-  if (address.publication_state === 'internal-registry' || address.status === 'registry-ready') return 'Internal hold';
+  if (address.publication_state === 'internal-registry' || address.status === 'registry-ready') return 'Needs review';
   return 'Draft';
 }
 
@@ -133,7 +133,7 @@ export function RegistryCorePanel({
     () => [
       {
         key: 'internal-hold',
-        label: 'Internal holds',
+        label: 'Needs reviews',
         count: registryCounts.internalHold,
         tone: 'warn',
         scent: 'Records ready for protected review but not public release.',
@@ -293,7 +293,7 @@ export function RegistryCorePanel({
         </label>
         <div className="operator-summary-row registry-count-line" aria-label="Registry overview">
           <span>Active addresses: <strong>{registryCounts.activeAddresses}</strong></span>
-          <span>Internal hold: <strong>{registryCounts.internalHold}</strong></span>
+          <span>Needs review: <strong>{registryCounts.internalHold}</strong></span>
           <span>Published: <strong>{registryCounts.published}</strong></span>
           <span>Archived hidden: <strong>{registryCounts.archived}</strong></span>
         </div>
@@ -484,7 +484,7 @@ export function RegistryCorePanel({
                         <div><dt>Province</dt><dd>{selectedAddress.province_code || 'Not set'}</dd></div>
                         <div><dt>Road</dt><dd>{selectedAddress.road_name || 'Not set'}</dd></div>
                         <div><dt>Building</dt><dd>{selectedAddress.building_label || 'Not set'}</dd></div>
-                        <div><dt>Publication state</dt><dd>{plainStatus(selectedAddress.publication_state)}</dd></div>
+                        <div><dt>Public status</dt><dd>{plainStatus(selectedAddress.publication_state)}</dd></div>
                       </dl>
                     </details>
                     <details className="quiet-disclosure">

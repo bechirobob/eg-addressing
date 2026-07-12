@@ -253,7 +253,7 @@ export function FieldWorkflowPanel({ assignments, submissions: initialSubmission
     }
     const evidence = buildSpatialEvidence();
     if (!evidence || form.submission_type === 'address') {
-      setError('Capture road/building spatial evidence before analysis.');
+      setError('Capture road/building location evidence before analysis.');
       return;
     }
     setIsAnalyzingSpatialEvidence(true);
@@ -680,7 +680,7 @@ export function FieldWorkflowPanel({ assignments, submissions: initialSubmission
             })}
           </ul>
         ) : (
-          <p className="panel-state">No citizen geotag field checks are currently assigned.</p>
+          <p className="panel-state">No submitted-location field checks are currently assigned.</p>
         )}
       </article>
 

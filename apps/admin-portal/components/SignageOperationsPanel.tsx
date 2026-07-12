@@ -239,10 +239,10 @@ export function SignageOperationsPanel({ apiBaseUrl }: SignageOperationsPanelPro
   const terminalReviewCount = useMemo(() => submissions.length - activeReviewCount, [activeReviewCount, submissions]);
   const queueLanes = useMemo(() => {
     const laneLabels: Record<string, string> = {
-      'field-verification': 'Field verification',
+      'field-verification': 'Field check',
       'operator-road-review': 'Road/local-area review',
       'ready-for-operator': 'Operator decision',
-      'registry-ready': 'Registry-ready hold',
+      'registry-ready': 'Ready-for-approval hold',
       'closed-rejected': 'Closed/rejected',
     };
     const laneOrder = ['field-verification', 'operator-road-review', 'ready-for-operator', 'registry-ready', 'closed-rejected'];
@@ -622,10 +622,10 @@ export function SignageOperationsPanel({ apiBaseUrl }: SignageOperationsPanelPro
               ) : <p className="panel-state">No active SLA items are waiting.</p>}
             </section>
             <section>
-              <strong>Publication hold</strong>
-              <p className="institutional-note">Registry-ready records stay internal. Public release, certificates, partner API readiness, and physical signage remain locked until full approval.</p>
-              <div className="operator-summary-row" aria-label="Publication hold summary">
-                <span className="status-chip warn">Registry-ready hold: {automationSummary?.publication_hold?.registry_ready ?? 0}</span>
+              <strong>Public release pending</strong>
+              <p className="institutional-note">Ready-for-approval records stay internal. Public release, certificates, partner API readiness, and physical signage remain locked until full approval.</p>
+              <div className="operator-summary-row" aria-label="Public release pending summary">
+                <span className="status-chip warn">Ready-for-approval hold: {automationSummary?.publication_hold?.registry_ready ?? 0}</span>
                 <span className="status-chip">Oldest hold: {automationSummary?.publication_hold?.oldest_days ?? 0}d</span>
               </div>
             </section>
@@ -848,7 +848,7 @@ export function SignageOperationsPanel({ apiBaseUrl }: SignageOperationsPanelPro
           <p className="section-label">Physical rollout lock</p>
           <h3>Published records only after full project approval</h3>
         </div>
-        <p className="public-task-copy">Physical signage outputs are locked until full project approval. Registry-ready case files stay searchable internally without implying fabrication or publication.</p>
+        <p className="public-task-copy">Physical signage outputs are locked until full project approval. Ready-for-approval case files stay searchable internally without implying fabrication or publication.</p>
         <details className="quiet-disclosure compact-review-disclosure signage-rollout-disclosure">
           <summary>Open physical rollout outputs</summary>
           <div className="territory-form-actions">

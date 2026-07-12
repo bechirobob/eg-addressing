@@ -1125,7 +1125,7 @@ FIELD_ASSIGNMENTS = [
         'assignment_id': 'field-malabo-001',
         'territory_id': 'territory-malabo-urban-core',
         'territory': 'Malabo Urban Core',
-        'task': 'Capital citizen geotag verification',
+        'task': 'Capital submitted-location check',
         'team': 'Bioko Norte Verification Cell',
         'priority': 'critical',
     },

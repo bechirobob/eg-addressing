@@ -189,7 +189,7 @@ export function VerificationWorkflowPanel({ submissions: initialSubmissions, sam
     if (!canReview) return 'Editor or admin required';
     if (busySubmissionId === submission.id) return 'Working…';
     if (action === 'under-review' && submission.review_status === 'under-review') return 'Already under review';
-    if (action === 'approve' && !hasRequiredSpatialEvidence(submission)) return 'Spatial evidence required';
+    if (action === 'approve' && !hasRequiredSpatialEvidence(submission)) return 'Location evidence required';
     if (action === 'approve' && evidenceReviewStatus(submission) !== 'accepted' && evidenceReviewStatus(submission) !== 'not-required') return 'Accept evidence first';
     return null;
   }
@@ -385,8 +385,8 @@ export function VerificationWorkflowPanel({ submissions: initialSubmissions, sam
 
         <details className="inline-disclosure compact-review-disclosure" open={slaItems.length > 0}>
           <summary>
-            <strong>SLA drill-down</strong>
-            <span>{slaItems.length} overdue citizen geotag item{slaItems.length === 1 ? '' : 's'}</span>
+            <strong>Overdue item drill-down</strong>
+            <span>{slaItems.length} overdue submitted-location item{slaItems.length === 1 ? '' : 's'}</span>
           </summary>
           {slaItems.length ? (
             <ul className="mini-list">

@@ -24,7 +24,7 @@ const budgets = [
   {
     file: 'services/api/tests/test_app.py',
     maxLines: 3100,
-    note: 'Tests should be split by auth, public workflow, canonical record, and admin domains.',
+    note: 'Tests should be split by auth, public workflow, official record, and admin domains.',
   },
   {
     file: 'apps/admin-portal/components/FieldWorkflowPanel.tsx',

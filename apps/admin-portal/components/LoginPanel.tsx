@@ -45,7 +45,7 @@ export function LoginPanel({ apiBaseUrl }: LoginPanelProps) {
       } else if (payload.token) {
         setStoredToken(payload.token);
       } else {
-        setError('Login failed: session token was not returned.');
+        setError('Login failed: login session was not returned.');
         return;
       }
       const nextRoute = defaultRouteForRole((payload.user?.role as OperatorRole | undefined) ?? 'viewer');

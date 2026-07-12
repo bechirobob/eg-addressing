@@ -104,9 +104,9 @@ function formatDate(value?: string | null): string {
 function eventStage(event: TimelineEvent): string {
   const key = event.event_type || event.action || 'case event';
   const labels: Record<string, string> = {
-    'address-record-upserted': 'Canonical record updated',
-    'registry-ready': 'Registry ready',
-    'publication-approved': 'Publication approved',
+    'address-record-upserted': 'Official record updated',
+    'registry-ready': 'Ready for approval',
+    'publication-approved': 'Public release approved',
     'publish': 'Published',
     'field-check': 'Field check requested',
     'under-review': 'Review opened',
@@ -273,7 +273,7 @@ export function AddressRecordSearchPanel({ apiBaseUrl }: { apiBaseUrl: string })
 
   async function downloadCanonicalExport() {
     if (!canSearch) {
-      setError('Sign in before exporting canonical address records.');
+      setError('Sign in before exporting official address records.');
       return;
     }
     setError(null);
@@ -284,14 +284,14 @@ export function AddressRecordSearchPanel({ apiBaseUrl }: { apiBaseUrl: string })
       });
       const payload = (await response.json()) as AddressRecordExportResponse | { detail?: string };
       if (!response.ok) {
-        setError('detail' in payload && payload.detail ? payload.detail : 'Unable to export canonical address records.');
+        setError('detail' in payload && payload.detail ? payload.detail : 'Unable to export official address records.');
         return;
       }
       const exportPayload = payload as AddressRecordExportResponse;
-      downloadTextFile('canonical-address-records-published.csv', exportPayload.csv, 'text/csv;charset=utf-8');
-      setNotice(`Canonical address record export prepared from ${exportPayload.source}: ${exportPayload.count} row${exportPayload.count === 1 ? '' : 's'}.`);
+      downloadTextFile('official-address-records-published.csv', exportPayload.csv, 'text/csv;charset=utf-8');
+      setNotice(`Official address record export prepared from ${exportPayload.source}: ${exportPayload.count} row${exportPayload.count === 1 ? '' : 's'}.`);
     } catch {
-      setError('Unable to export canonical address records.');
+      setError('Unable to export official address records.');
     }
   }
 
@@ -307,7 +307,7 @@ export function AddressRecordSearchPanel({ apiBaseUrl }: { apiBaseUrl: string })
       });
       const payload = (await response.json()) as AddressRecordCertificateResponse | { detail?: string };
       if (!response.ok) {
-        setError('detail' in payload && payload.detail ? payload.detail : 'Certificate is available only for published canonical records.');
+        setError('detail' in payload && payload.detail ? payload.detail : 'Certificate is available only for published official records.');
         return;
       }
       const certificate = payload as AddressRecordCertificateResponse;
@@ -344,21 +344,21 @@ export function AddressRecordSearchPanel({ apiBaseUrl }: { apiBaseUrl: string })
         <div>
           <p className="section-label">Official registry layer</p>
           <h2>Address Case Files</h2>
-          <p>Search canonical records by address code, routing area, landmark, road, or local area. Evidence is grouped as a compact case file, not shown as raw rows.</p>
+          <p>Search official records by address code, routing area, landmark, road, or local area. Evidence is grouped as a compact case file, not shown as raw rows.</p>
         </div>
-        <button className="secondary-action" type="button" onClick={() => void downloadCanonicalExport()}>Export canonical records</button>
+        <button className="secondary-action" type="button" onClick={() => void downloadCanonicalExport()}>Export official records</button>
       </div>
 
       <div className="registry-hold-workbench" aria-label="Hold register">
         <div className="registry-hold-head">
           <div>
             <p className="section-label">Hold register</p>
-            <h3>Registry-ready records held from publication</h3>
+            <h3>Ready-for-approval records held from public release</h3>
           </div>
-          <span className="institutional-note">Canonical source: address_records</span>
+          <span className="institutional-note">Official source: address_records</span>
         </div>
         {holds.length ? (
-          <div className="hold-risk-ledger" role="table" aria-label="Compact hold and spatial risk ledger">
+          <div className="hold-risk-ledger" role="table" aria-label="Compact hold and nearby address risk ledger">
             <div className="hold-risk-row hold-risk-row-head" role="row">
               <span>Record</span>
               <span>Spatial risk</span>
@@ -376,7 +376,7 @@ export function AddressRecordSearchPanel({ apiBaseUrl }: { apiBaseUrl: string })
               </button>
             ))}
           </div>
-        ) : <p className="panel-state">No registry-ready holds found. Publication remains locked until an authorized release exists.</p>}
+        ) : <p className="panel-state">No ready-for-approval holds found. Public release remains locked until an authorized release exists.</p>}
       </div>
 
       <form className="territory-form" onSubmit={submitSearch}>
@@ -401,7 +401,7 @@ export function AddressRecordSearchPanel({ apiBaseUrl }: { apiBaseUrl: string })
               <span>{record.address_code}</span>
               <small>{statusLabel(record.status)} · {record.record_bundle?.routing?.territory_name || record.territory_name || 'routing pending'}</small>
             </button>
-          )) : <p className="panel-state">No canonical address records yet.</p>}
+          )) : <p className="panel-state">No official address records yet.</p>}
         </aside>
 
         <article className="request-detail-panel">
@@ -463,12 +463,12 @@ export function AddressRecordSearchPanel({ apiBaseUrl }: { apiBaseUrl: string })
                       ))}
                     </ul>
                   ) : (
-                    <p className="institutional-note">No protected field evidence files are linked to this canonical case yet.</p>
+                    <p className="institutional-note">No protected field evidence files are linked to this official case yet.</p>
                   )}
                 </div>
-                <div className="case-timeline-ledger" aria-label="Compact official timeline">
+                <div className="case-timeline-ledger" aria-label="Compact official record history">
                   <div className="case-timeline-head">
-                    <strong>Compact official timeline</strong>
+                    <strong>Official record history</strong>
                     <button className="secondary-action" type="button" onClick={() => void downloadSelectedCertificate()} disabled={selected.status !== 'published'}>Download certificate</button>
                   </div>
                   {(selected.timeline ?? []).length ? (

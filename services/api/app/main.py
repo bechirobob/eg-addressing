@@ -536,7 +536,7 @@ def suggest_nearest_road_name(latitude: float, longitude: float) -> dict[str, An
 
 def _midpoint(points: list[dict[str, Any]]) -> dict[str, float]:
     if not points:
-        raise InvalidSubmissionActionError('spatial evidence has no coordinate points')
+        raise InvalidSubmissionActionError('location evidence has no coordinate points')
     return {
         'latitude': round(sum(float(point['latitude']) for point in points) / len(points), 7),
         'longitude': round(sum(float(point['longitude']) for point in points) / len(points), 7),
@@ -777,7 +777,7 @@ def _geotag_sla(item: dict[str, Any], automation: dict[str, Any], now: datetime)
         label = 'Supervisor duplicate decision'
         due_hours = 120
     else:
-        label = 'Review new citizen geotag'
+        label = 'Review new submitted location'
         due_hours = 48
     if item.get('duplicate_hint') == 'possible-duplicate':
         label = 'Supervisor duplicate decision'
@@ -819,7 +819,7 @@ def _publication_hold_summary(enriched_items: list[dict[str, Any]], now: datetim
         'public_release_locked': True,
         'oldest_days': round(max(known_ages) / 24) if known_ages else 0,
         'oldest_hours': round(max(known_ages), 1) if known_ages else 0,
-        'note': 'Registry-ready records remain internal until full project/institutional approval publishes them.',
+        'note': 'Ready-for-approval records remain internal until full project/institutional approval publishes them.',
     }
 
 
@@ -881,7 +881,7 @@ def _geotag_automation(item: dict[str, Any], quality_flags: dict[str, Any], dupl
         next_action_label = 'No action unless reopened by an authorized reviewer.'
     elif status_value == 'registry-ready':
         triage_bucket = 'registry-ready'
-        process_stage = 'Approved for official case-file registry'
+        process_stage = 'Ready for official approval'
         next_action = 'await-project-publication-approval'
         next_action_label = 'Hold for full project/institutional approval before certificate, physical signage, or public publication.'
     elif status_value == 'needs-field-check' or field_status in {'visited', 'needs-recapture', 'blocked'} or quality_flags['requires_field_check'] or quality_flags['possible_duplicate']:
@@ -1058,7 +1058,7 @@ def _signage_pack(status_value: str = 'published') -> dict[str, Any]:
             f"{row.get('grid_code')} — {row.get('signage_text') or row.get('address_label')}"
             for row in rows
         ],
-        'operator_note': 'Physical signage packs include published records only. Registry-ready case files stay locked until full project/institutional approval.',
+        'operator_note': 'Physical signage packs include published records only. Ready-for-approval case files stay locked until full project/institutional approval.',
     }
 
 
@@ -1856,7 +1856,7 @@ def public_geotag_submission_tracking(submission_id: str, request: Request) -> d
     _check_public_rate_limit(request, 'public-geotag-tracking')
     items = [item for item in list_citizen_geotag_submissions() if item['id'] == submission_id]
     if not items:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail='citizen geotag submission not found')
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail='submitted location not found')
     return _public_tracking_payload(items[0], lookup_type='submission-id')
 
 
@@ -2072,7 +2072,7 @@ def publish_geotag_case_file(submission_id: str, payload: GeotagReviewActionRequ
     user = _current_user(authorization)
     _require_role(user, 'admin')
     if not PUBLICATION_RELEASE_ENABLED:
-        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail='publication release gate is disabled')
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail='public release lock is active')
     try:
         return _strip_identity_fields(publish_geotag_submission(submission_id, payload.reviewer_note, actor=user))
     except (SubmissionNotFoundError, InvalidSubmissionActionError, UnknownTerritoryError) as exc:
@@ -2234,7 +2234,7 @@ def publish_publication_pack_endpoint(pack_id: str, authorization: str | None = 
     user = _current_user(authorization)
     _require_role(user, 'admin')
     if not PUBLICATION_RELEASE_ENABLED:
-        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail='publication release gate is disabled')
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail='public release lock is active')
     try:
         return publish_publication_pack(pack_id, actor=user)
     except PublicationPackNotFoundError as exc:
@@ -2259,13 +2259,13 @@ def _ministry_walkthrough_steps() -> list[dict[str, str]]:
             'step': '3',
             'title': 'Location review and field routing',
             'route': '/signage',
-            'operator_message': 'Review duplicate risk, routing assignment, field-check needs, and registry-ready hold state.',
+            'operator_message': 'Review duplicate risk, routing assignment, field-check needs, and ready-for-approval hold state.',
         },
         {
             'step': '4',
             'title': 'Evidence and SLA command desk',
             'route': '/verify',
-            'operator_message': 'Show evidence review, field submissions, and overdue SLA drill-down.',
+            'operator_message': 'Show evidence review, field submissions, and overdue item drill-down.',
         },
         {
             'step': '5',

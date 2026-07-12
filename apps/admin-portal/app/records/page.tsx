@@ -9,7 +9,7 @@ export default function RecordsPage() {
     <SiteChrome
       title="Address Case Files"
       titleKey="recordsTitle"
-      subtitle="Search canonical government address records as structured case files with evidence, routing, and timeline context. Evidence is grouped as a case file, not shown as raw rows."
+      subtitle="Search official government address records as structured case files with evidence, routing, and record history context. Evidence is grouped as a case file, not shown as raw rows."
       subtitleKey="recordsSubtitle"
       eyebrow="Official registry layer"
       eyebrowKey="recordsEyebrow"

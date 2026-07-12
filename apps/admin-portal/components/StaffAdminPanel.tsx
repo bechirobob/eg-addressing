@@ -177,7 +177,7 @@ export function StaffAdminPanel({ apiBaseUrl }: { apiBaseUrl: string }) {
         method: 'PATCH',
         body: JSON.stringify(payload),
       });
-    }, 'Staff account updated. Password rotations revoke active sessions automatically.');
+    }, 'Staff account updated. Password rotations sign the user out everywhere automatically.');
   }
 
   async function handleDisable(user: StaffUser) {
@@ -189,7 +189,7 @@ export function StaffAdminPanel({ apiBaseUrl }: { apiBaseUrl: string }) {
   async function handleRevoke(user: StaffUser) {
     await mutate(async () => {
       await request<{ revoked_sessions: number }>(`/api/v1/admin/users/${user.id}/revoke-sessions`, { method: 'POST' });
-    }, 'Active sessions revoked.');
+    }, 'User signed out everywhere.');
   }
 
   return (
@@ -220,8 +220,8 @@ export function StaffAdminPanel({ apiBaseUrl }: { apiBaseUrl: string }) {
         <details className="staff-admin-disclosure">
           <summary>Account safeguards</summary>
           <ul className="staff-admin-principles" aria-label="Staff account safeguards">
-            <li>Password rotation revokes active sessions.</li>
-            <li>Disabling an account revokes active sessions.</li>
+            <li>Password rotation signs the user out everywhere.</li>
+            <li>Deactivating an account signs the user out everywhere.</li>
             <li>Current-admin and last-admin lockout protections remain enforced by the server.</li>
           </ul>
         </details>

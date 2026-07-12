@@ -129,7 +129,7 @@ export function TrackingLookupPanel({ apiBaseUrl }: TrackingLookupPanelProps) {
             <h3>{result.process_stage || result.tracking?.public_status_label || 'Status available'}</h3>
           </div>
           <div className="summary-grid">
-            <div className="summary-card"><strong>{publicationLabel(result.publication_state)}</strong><span>Publication state</span></div>
+            <div className="summary-card"><strong>{publicationLabel(result.publication_state)}</strong><span>Public status</span></div>
             <div className="summary-card"><strong>{result.grid_code}</strong><span>Address code</span></div>
             <div className="summary-card"><strong>{result.status.replaceAll('-', ' ')}</strong><span>Operator workflow state</span></div>
           </div>

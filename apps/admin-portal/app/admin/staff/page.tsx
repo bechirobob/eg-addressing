@@ -11,7 +11,7 @@ export default function AdminStaffPage() {
       apiBaseUrl={publicApiBaseUrl}
       eyebrow="Admin area"
       title="Staff account control"
-      subtitle="Create staff accounts, rotate credentials, revoke sessions, and disable access from the protected administration area."
+      subtitle="Create staff accounts, rotate credentials, sign users out everywhere, and deactivate access from the protected administration area."
     >
       <StaffAdminPanel apiBaseUrl={publicApiBaseUrl} />
     </SiteChrome>

@@ -22,8 +22,8 @@ const route = readFileSync(files.route, 'utf8');
 const profile = readFileSync(files.profile, 'utf8');
 
 assert(/function reedSolomonRemainder/.test(qr), 'QR generator must include local Reed-Solomon error correction, not a decorative SVG placeholder.');
-assert(/createQrSvg\(profileUrl/.test(proof), 'Public proof page must generate QR from the canonical public profile URL.');
-assert(/\/code\/\$\{encodeURIComponent\(code\)\}/.test(proof), 'QR proof must point to canonical /code/[code] public profile, not a private/admin URL.');
+assert(/createQrSvg\(profileUrl/.test(proof), 'Public proof page must generate QR from the official public profile URL.');
+assert(/\/code\/\$\{encodeURIComponent\(code\)\}/.test(proof), 'QR proof must point to the official /code/[code] public profile, not a private/admin URL.');
 assert(/Print \/ save PDF/.test(proof), 'Proof route must expose browser-native print/save-PDF action.');
 assert(/not proof of ownership, private title, property rights/.test(proof), 'Proof route must include public-safe ownership/title disclaimer.');
 assert(!/proof of ownership[^,]/i.test(proof.replace(/not proof of ownership/g, '')), 'Proof route must not imply ownership proof.');

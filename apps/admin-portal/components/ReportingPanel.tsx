@@ -224,14 +224,14 @@ export function ReportingPanel({ summary: initialSummary, readinessSummary, apiB
         ['Status', readinessStatusLabel(readiness.readiness_status)],
         ['Checks passed', `${readiness.passed_gates}/${readiness.total_gates}`],
         [],
-        ['Readiness gates'],
-        ['Gate', 'Status', 'Evidence', 'Next step'],
+        ['Readiness checks'],
+        ['Check', 'Status', 'Evidence', 'Next step'],
         ...readiness.gates.map((gate) => [gate.name, statusText(gate.status), formatEvidence(gate.evidence), gate.next_step]),
       );
       if (readiness.recent_audit_events?.length) {
         rows.push(
           [],
-          ['Recent audit events'],
+          ['Recent activity events'],
           ['Action', 'Entity', 'Actor', 'Time'],
           ...readiness.recent_audit_events.map((event) => [
             statusText(event.action),
@@ -344,7 +344,7 @@ export function ReportingPanel({ summary: initialSummary, readinessSummary, apiB
       <details className="public-task-panel reports-detail-disclosure">
         <summary>
           <span>Review detailed evidence</span>
-          <small>Workload tables, readiness gates, audit events, and governance boundaries</small>
+          <small>Workload tables, readiness checks, activity events, and governance boundaries</small>
         </summary>
         <div className="reports-detail-grid">
           <article className="reports-section-panel">
@@ -373,11 +373,11 @@ export function ReportingPanel({ summary: initialSummary, readinessSummary, apiB
 
           {readiness ? (
             <article className="reports-section-panel reports-gates-panel">
-              <div className="panel-head"><p className="section-label">Readiness gates</p><h3>Decision evidence</h3></div>
+              <div className="panel-head"><p className="section-label">Readiness checks</p><h3>Decision evidence</h3></div>
               <div className="table-wrap desktop-table-wrap report-table-wrap">
                 <table className="data-table desktop-data-table">
-                  <caption>Readiness gates</caption>
-                  <thead><tr><th scope="col">Gate</th><th scope="col">Status</th><th scope="col">Evidence</th><th scope="col">Next step</th></tr></thead>
+                  <caption>Readiness checks</caption>
+                  <thead><tr><th scope="col">Check</th><th scope="col">Status</th><th scope="col">Evidence</th><th scope="col">Next step</th></tr></thead>
                   <tbody>
                     {readiness.gates.map((gate) => (
                       <tr key={gate.name}>
@@ -401,7 +401,7 @@ export function ReportingPanel({ summary: initialSummary, readinessSummary, apiB
               <div className="panel-head"><p className="section-label">Audit trail</p><h3>Recent accountability events</h3></div>
               <div className="table-wrap desktop-table-wrap report-table-wrap">
                 <table className="data-table desktop-data-table">
-                  <caption>Recent audit events</caption>
+                  <caption>Recent activity events</caption>
                   <thead><tr><th scope="col">Action</th><th scope="col">Entity</th><th scope="col">Actor</th><th scope="col">Time</th></tr></thead>
                   <tbody>
                     {readiness.recent_audit_events.map((event, index) => (

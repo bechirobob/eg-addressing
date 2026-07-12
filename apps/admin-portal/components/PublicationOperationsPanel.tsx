@@ -214,7 +214,7 @@ export function PublicationOperationsPanel({
   }
 
   function publishDisabledReason(pack: PublicationPack) {
-    if (!publicationReleaseEnabled) return 'Institutional release gate locked';
+    if (!publicationReleaseEnabled) return 'Institutional approval lock active';
     if (!canPublish) return 'Admin required';
     if (isSubmitting) return 'Working…';
     if (pack.status === 'published') return 'Already published';
@@ -223,7 +223,7 @@ export function PublicationOperationsPanel({
   }
 
   function publishCaseDisabledReason() {
-    if (!publicationReleaseEnabled) return 'Institutional release gate locked';
+    if (!publicationReleaseEnabled) return 'Institutional approval lock active';
     if (!canPublish) return 'Admin required';
     if (isSubmitting) return 'Working…';
     return null;
@@ -267,7 +267,7 @@ export function PublicationOperationsPanel({
     }
     const submissionId = simulationSubmissionId.trim();
     if (!submissionId) {
-      setError('Enter a registry-ready geotag submission ID before running the simulation.');
+      setError('Enter a ready-for-approval location request ID before running the test simulation.');
       return;
     }
     setIsSubmitting(true);
@@ -297,12 +297,12 @@ export function PublicationOperationsPanel({
   async function publishRegistryReadyCase(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (!token || !canPublish) {
-      setError(publicationReleaseEnabled ? 'Admin required before publishing a registry-ready case file.' : 'Institutional release gate is locked. Keep records registry-ready until formal approval.');
+      setError(publicationReleaseEnabled ? 'Admin required before publishing a ready-for-approval case file.' : 'Institutional approval lock is active. Keep records ready for approval until formal approval.');
       return;
     }
     const submissionId = publishSubmissionId.trim();
     if (!submissionId) {
-      setError('Enter a registry-ready geotag submission ID before publishing.');
+      setError('Enter a ready-for-approval location request ID before publishing.');
       return;
     }
     setIsSubmitting(true);
@@ -316,13 +316,13 @@ export function PublicationOperationsPanel({
       });
       const payload = (await response.json()) as { grid_code?: string; publication?: { certificate_status?: string }; detail?: string };
       if (!response.ok) {
-        setError(payload.detail ?? 'Unable to publish registry-ready case file.');
+        setError(payload.detail ?? 'Unable to publish ready-for-approval case file.');
         return;
       }
-      setNotice(`Published registry-ready case file: ${payload.grid_code ?? submissionId}`);
+      setNotice(`Published ready-for-approval case file: ${payload.grid_code ?? submissionId}`);
       await reloadAll(token);
     } catch {
-      setError('Unable to publish registry-ready case file.');
+      setError('Unable to publish ready-for-approval case file.');
     } finally {
       setIsSubmitting(false);
     }
@@ -420,13 +420,13 @@ export function PublicationOperationsPanel({
           <h3>Check public release without publishing</h3>
         </div>
         <p className="institutional-note">
-          Simulation is locked: it does not create public records, certificates, or physical signage. Use it to demonstrate the approval path for a registry-ready geotag case.
+          Test simulation is locked: it does not create public records, certificates, or physical signage. Use it to demonstrate the approval path for a ready-for-approval location request.
         </p>
         <details className="quiet-disclosure compact-review-disclosure">
           <summary>Open simulation form</summary>
           <form className="territory-form" onSubmit={simulatePublication}>
           <label className="territory-field territory-field-wide">
-            <span className="territory-label">Registry-ready geotag submission ID</span>
+            <span className="territory-label">Ready-for-approval location request ID</span>
             <input className="territory-input" value={simulationSubmissionId} onChange={(event) => setSimulationSubmissionId(event.target.value)} placeholder="citizen-geotag-…" />
           </label>
           <label className="territory-field territory-field-wide">
@@ -454,17 +454,17 @@ export function PublicationOperationsPanel({
 
       <article className="public-task-panel civic-panel-green controlled-publication-panel">
         <div className="panel-head">
-          <p className="section-label">Controlled publication</p>
-          <h3>Publish registry-ready case file</h3>
+          <p className="section-label">Public release control</p>
+          <h3>Publish ready-for-approval case file</h3>
         </div>
         <p className="institutional-note">
-          Admin-only release action. Use this only after institutional approval; it unlocks public profile proof, certificate generation, and signage export for the selected registry-ready case file.
+          Admin-only public release action. Use this only after institutional approval; it unlocks public profile proof, certificate generation, and signage export for the selected ready-for-approval case file.
         </p>
         <details className="quiet-disclosure compact-review-disclosure publication-release-disclosure">
           <summary>Open locked publication action</summary>
           <form className="territory-form" onSubmit={publishRegistryReadyCase}>
             <label className="territory-field territory-field-wide">
-              <span className="territory-label">Registry-ready geotag submission ID</span>
+              <span className="territory-label">Ready-for-approval location request ID</span>
               <input className="territory-input" value={publishSubmissionId} onChange={(event) => setPublishSubmissionId(event.target.value)} placeholder="citizen-geotag-…" />
             </label>
             <label className="territory-field territory-field-wide">
@@ -473,7 +473,7 @@ export function PublicationOperationsPanel({
             </label>
             <div className="territory-form-actions">
               <button className="verification-button" type="submit" disabled={Boolean(publishCaseDisabledReason())}>
-                {publishCaseDisabledReason() ?? 'Publish registry-ready case file'}
+                {publishCaseDisabledReason() ?? 'Publish ready-for-approval case file'}
               </button>
             </div>
           </form>
@@ -642,12 +642,12 @@ export function PublicationOperationsPanel({
 
       <article className="public-task-panel civic-panel-green territory-list-panel">
         <div className="panel-head">
-          <p className="section-label">Publication-ready records</p>
-          <h3>Current address publication state</h3>
+          <p className="section-label">Public-ready records</p>
+          <h3>Current address public status</h3>
         </div>
         {addresses.length > 0 ? (
           <details className="quiet-disclosure compact-review-disclosure">
-            <summary>{addresses.length} address publication states</summary>
+            <summary>{addresses.length} address public statuses</summary>
             <ul className="mini-list">
               {addresses.map((address) => (
                 <li key={address.id}>

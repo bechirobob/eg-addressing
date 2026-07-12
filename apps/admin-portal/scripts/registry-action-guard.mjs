@@ -19,8 +19,8 @@ assert(registry.includes('Editor or admin access required'), 'Registry should ex
 assert(registry.includes('Admin access required to archive'), 'Registry should explain archive gating');
 assert(publication.includes('commitDisabledReason'), 'Publication commit actions should show disabled reasons');
 assert(publication.includes('publishDisabledReason'), 'Publication publish actions should show disabled reasons');
-assert(publication.includes('publicationReleaseEnabled'), 'Publication release controls must be guarded by an explicit release gate flag');
-assert(publication.includes('Institutional release gate locked'), 'Publication UI must tell operators when the release gate is locked');
+assert(publication.includes('publicationReleaseEnabled'), 'Publication release controls must be guarded by an explicit approval-lock flag');
+assert(publication.includes('Institutional approval lock active'), 'Publication UI must tell operators when the approval lock is active');
 assert(publication.includes('disabled={Boolean(commitDisabledReason(job))}'), 'Commit buttons must be disabled when not actionable');
 assert(publication.includes('disabled={Boolean(publishDisabledReason(pack))}'), 'Publish buttons must be disabled when not actionable');
 

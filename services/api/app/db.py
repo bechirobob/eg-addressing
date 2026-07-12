@@ -1234,7 +1234,7 @@ def revoke_staff_user_sessions(user_id: str, actor: dict[str, str] | None = None
             if not user:
                 raise UserNotFoundError('staff user not found')
             if user['role'] == 'admin' and user['is_active'] and _active_admin_count(cursor, exclude_user_id=user_id) == 0:
-                raise InvalidUserRoleError('cannot revoke sessions for the last active admin')
+                raise InvalidUserRoleError('cannot sign out the last active admin everywhere')
             cursor.execute('UPDATE auth_tokens SET revoked_at = NOW() WHERE user_id = %s AND revoked_at IS NULL AND expires_at > NOW()', (user_id,))
             revoked = cursor.rowcount
             _log_action(cursor, actor=actor, action='revoke-staff-sessions', entity_type='user', entity_id=user_id, details={'revoked_sessions': revoked})
@@ -3045,7 +3045,7 @@ def update_citizen_geotag_status(submission_id: str, next_status: str, reviewer_
             cursor.execute('SELECT * FROM citizen_geotag_submissions WHERE id = %s', (submission_id,))
             existing = cursor.fetchone()
             if not existing:
-                raise SubmissionNotFoundError('citizen geotag submission not found')
+                raise SubmissionNotFoundError('submitted location not found')
             if next_status in {'needs-field-check', 'registry-ready'} and not existing['field_submission_id'] and existing['territory_id']:
                 field_payload = {
                     'assignment_id': None,
@@ -3053,7 +3053,7 @@ def update_citizen_geotag_status(submission_id: str, next_status: str, reviewer_
                     'submission_type': 'address',
                     'candidate_name': existing['address_label'],
                     'candidate_status': 'submitted' if next_status == 'needs-field-check' else 'registry-ready',
-                    'notes': f"Citizen geotag {existing['grid_code']} at {existing['latitude']}, {existing['longitude']}. Landmark: {existing['landmark']}. Accuracy: {existing['accuracy_meters'] or 'not recorded'} m.",
+                    'notes': f"Submitted location {existing['grid_code']} at {existing['latitude']}, {existing['longitude']}. Landmark: {existing['landmark']}. GPS accuracy: {existing['accuracy_meters'] or 'not recorded'} m.",
                     'submitted_by': 'citizen-geotag-intake',
                 }
                 field_submission = create_field_submission(field_payload, actor=actor)
@@ -3112,7 +3112,7 @@ def verify_geotag_identity(submission_id: str, dip_full: str, identity_document_
                 (dip_last4, status_value, identity_document_verified, reviewer_note, submission_id),
             )
             if not cursor.fetchone():
-                raise SubmissionNotFoundError('citizen geotag submission not found')
+                raise SubmissionNotFoundError('submitted location not found')
             _log_action(
                 cursor,
                 actor=actor,
@@ -3145,7 +3145,7 @@ def review_geotag_road_suggestion(submission_id: str, action: str, reviewed_road
                 (action, reviewed_road_name if action != 'rejected' else None, reviewer_note, submission_id),
             )
             if not cursor.fetchone():
-                raise SubmissionNotFoundError('citizen geotag submission not found')
+                raise SubmissionNotFoundError('submitted location not found')
             _log_action(
                 cursor,
                 actor=actor,
@@ -3187,7 +3187,7 @@ def update_geotag_field_status(submission_id: str, field_status: str, field_note
                 (field_status, field_note, field_status, next_status, field_note, submission_id),
             )
             if not cursor.fetchone():
-                raise SubmissionNotFoundError('citizen geotag submission not found')
+                raise SubmissionNotFoundError('submitted location not found')
             _log_action(
                 cursor,
                 actor=actor,
@@ -3214,7 +3214,7 @@ def record_geotag_field_evidence(
             cursor.execute('SELECT id, field_status FROM citizen_geotag_submissions WHERE id = %s', (submission_id,))
             existing = cursor.fetchone()
             if not existing:
-                raise SubmissionNotFoundError('citizen geotag submission not found')
+                raise SubmissionNotFoundError('submitted location not found')
             next_field_status = existing.get('field_status') or 'visited'
             if next_field_status == 'assigned':
                 next_field_status = 'visited'
@@ -3255,10 +3255,10 @@ def record_geotag_field_evidence(
 def simulate_geotag_publication_path(submission_id: str, reviewer_note: str, actor: dict[str, str] | None = None) -> dict[str, Any]:
     items = [item for item in list_citizen_geotag_submissions() if item['id'] == submission_id]
     if not items:
-        raise SubmissionNotFoundError('citizen geotag submission not found')
+        raise SubmissionNotFoundError('submitted location not found')
     item = items[0]
     if item.get('status') not in {'registry-ready', 'published'}:
-        raise InvalidSubmissionActionError('publication simulation requires a registry-ready case file')
+        raise InvalidSubmissionActionError('test simulation requires a ready-for-approval case file')
     with db_connection() as connection:
         with connection.cursor() as cursor:
             _log_action(
@@ -3287,10 +3287,10 @@ def simulate_geotag_publication_path(submission_id: str, reviewer_note: str, act
 def publish_geotag_submission(submission_id: str, reviewer_note: str, actor: dict[str, str] | None = None) -> dict[str, Any]:
     items = [item for item in list_citizen_geotag_submissions() if item['id'] == submission_id]
     if not items:
-        raise SubmissionNotFoundError('citizen geotag submission not found')
+        raise SubmissionNotFoundError('submitted location not found')
     current = items[0]
     if current.get('status') not in {'registry-ready', 'published'}:
-        raise InvalidSubmissionActionError('publication requires a registry-ready case file')
+        raise InvalidSubmissionActionError('public release requires a ready-for-approval case file')
 
     published = update_citizen_geotag_status(submission_id, 'published', reviewer_note, actor=actor)
     address_record = upsert_address_record_from_geotag(published, actor=actor)
@@ -3466,7 +3466,7 @@ def _address_record_row(row: dict[str, Any]) -> dict[str, Any]:
 
 def upsert_address_record_from_geotag(geotag: dict[str, Any], actor: dict[str, str] | None = None) -> dict[str, Any]:
     if geotag.get('status') not in {'registry-ready', 'published'}:
-        raise InvalidSubmissionActionError('canonical address record requires registry-ready geotag')
+        raise InvalidSubmissionActionError('official address record requires a ready-for-approval submitted location')
     bundle = build_address_record_bundle(geotag)
     address_code = geotag['grid_code']
     record_id = f"address-record-{_slugify(address_code)}"
@@ -3636,7 +3636,7 @@ def get_address_record_case_file(address_code: str) -> dict[str, Any]:
 def build_geotag_certificate(submission_id: str) -> dict[str, Any]:
     items = [item for item in list_citizen_geotag_submissions() if item['id'] == submission_id]
     if not items:
-        raise SubmissionNotFoundError('citizen geotag submission not found')
+        raise SubmissionNotFoundError('submitted location not found')
     item = items[0]
     if item['status'] != 'published':
         raise InvalidSubmissionActionError('certificate requires published status after full project approval')
@@ -3686,7 +3686,7 @@ def build_geotag_certificate(submission_id: str) -> dict[str, Any]:
 def build_address_record_certificate(address_code: str) -> dict[str, Any]:
     record = get_address_record_case_file(address_code)
     if record.get('status') != 'published':
-        raise InvalidSubmissionActionError('certificate requires a published canonical address record')
+        raise InvalidSubmissionActionError('certificate requires a published official address record')
     bundle = record.get('record_bundle') if isinstance(record.get('record_bundle'), dict) else {}
     routing = bundle.get('routing') if isinstance(bundle.get('routing'), dict) else {}
     outputs = bundle.get('outputs') if isinstance(bundle.get('outputs'), dict) else {}
@@ -3708,7 +3708,7 @@ def build_address_record_certificate(address_code: str) -> dict[str, Any]:
     <p><strong>Location:</strong> {safe_label}</p>
     <p><strong>Territory:</strong> {safe_territory}</p>
     <p><strong>Coordinates:</strong> {record['latitude']}, {record['longitude']}</p>
-    <p><strong>Status:</strong> Published canonical registry record</p>
+    <p><strong>Status:</strong> Published official registry record</p>
     <p><strong>Verify:</strong> {html.escape(verification_url)}</p>
   </main>
 </body>
@@ -3757,7 +3757,7 @@ def address_record_export(status: str = 'published') -> dict[str, Any]:
             'publication_state': record.get('publication_state'),
             'status': record.get('status'),
         })
-    csv_rows = [['Address code', 'Address label', 'Territory', 'Latitude', 'Longitude', 'Accuracy meters', 'Certificate', 'Publication state', 'Status']]
+    csv_rows = [['Address code', 'Address label', 'Territory', 'Latitude', 'Longitude', 'GPS accuracy', 'Certificate', 'Public status', 'Status']]
     csv_rows.extend([
         [row.get('address_code'), row.get('address_label'), row.get('territory_name'), row.get('latitude'), row.get('longitude'), row.get('accuracy_meters'), row.get('certificate_id'), row.get('publication_state'), row.get('status')]
         for row in rows
@@ -3769,7 +3769,7 @@ def address_record_export(status: str = 'published') -> dict[str, Any]:
         'count': len(rows),
         'items': rows,
         'csv': csv_text,
-        'operator_note': 'Official exports are generated from canonical address_records only; raw citizen/geotag submissions remain intake evidence.',
+        'operator_note': 'Official exports are generated from official address_records only; raw submitted locations remain intake evidence.',
     }
 
 def _province_code_from_public_code(code: str) -> str | None:
@@ -4073,7 +4073,7 @@ def address_record_holds(status: str = 'registry-ready', limit: int = 25) -> dic
         'status': status_value,
         'count': len(items),
         'items': items,
-        'operator_note': 'Hold register is generated from canonical address_records only; raw citizen/geotag submissions remain intake evidence.',
+        'operator_note': 'Hold register is generated from official address_records only; raw submitted locations remain intake evidence.',
     }
 
 
@@ -4137,11 +4137,11 @@ def postgis_readiness() -> dict[str, Any]:
     else:
         notes.append('PostGIS extension is not available in this database environment.')
     if geometry_column_ready and spatial_index_ready:
-        notes.append('Canonical address_records geometry column and spatial index are ready.')
+        notes.append('Official address_records geometry column and spatial index are ready.')
     elif installed_version:
-        notes.append('PostGIS is installed, but canonical address_records geometry migration is still required.')
+        notes.append('PostGIS is installed, but official address_records geometry migration is still required.')
     if missing_count:
-        notes.append(f'{missing_count} canonical records with valid WGS84 coordinates still need geometry backfill.')
+        notes.append(f'{missing_count} official records with valid WGS84 coordinates still need geometry backfill.')
     migration_required = not bool(installed_version and geometry_column_ready and spatial_index_ready)
     return {
         'status': 'ready' if canonical_geometry_ready else ('available' if installed_version or available_version else 'blocked'),
@@ -4402,10 +4402,10 @@ def pilot_readiness_summary() -> dict[str, Any]:
 
     gates = [
         _readiness_gate(
-            'Citizen capture intake',
+            'Location request intake',
             totals.get('citizen_geotags', 0) > 0,
-            f"{totals.get('citizen_geotags', 0)} citizen geotag submissions recorded.",
-            'Run at least one clean pilot fixture through geotag capture if this is zero.',
+            f"{totals.get('citizen_geotags', 0)} submitted locations recorded.",
+            'Run at least one clean test record through location capture if this is zero.',
         ),
         _readiness_gate(
             'Administrative review queue',
@@ -4414,10 +4414,10 @@ def pilot_readiness_summary() -> dict[str, Any]:
             'Keep submitted/under-review/field-check statuses visible to reviewers.',
         ),
         _readiness_gate(
-            'Field verification workflow',
+            'Field check workflow',
             totals.get('submissions', 0) > 0,
             f"{totals.get('submissions', 0)} field submissions recorded; statuses: {review_breakdown or 'none recorded'}.",
-            'Route at least one uncertain geotag to field verification during pilot rehearsal.',
+            'Next: Route at least one uncertain submitted location to field check during pilot rehearsal.',
         ),
         _readiness_gate(
             'Public correction queue',
@@ -4428,7 +4428,7 @@ def pilot_readiness_summary() -> dict[str, Any]:
         _readiness_gate(
             'Published output after full approval',
             totals.get('published_addresses', 0) > 0,
-            f"{totals.get('published_addresses', 0)} published registry addresses; {geotag_breakdown.get('registry-ready', 0)} internal registry-ready case files.",
+            f"{totals.get('published_addresses', 0)} published registry addresses; {geotag_breakdown.get('registry-ready', 0)} internal ready-for-approval case files.",
             'After full project approval, publish at least one clean record before public lookup/signage demo.',
         ),
         _readiness_gate(
@@ -4457,7 +4457,7 @@ def pilot_readiness_summary() -> dict[str, Any]:
         'boundaries': [
             'Pilot-ready status does not make address codes legally official without Government adoption.',
             'Government ownership, data-sharing policy, and final national code standard remain institutional decisions.',
-            'Public lookup must continue exposing only published records; registry-ready case files remain protected/internal until project approval.',
+            'Public lookup must continue exposing only published records; ready-for-approval case files remain protected/internal until project approval.',
         ],
     }
 

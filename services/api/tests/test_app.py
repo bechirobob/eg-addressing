@@ -160,7 +160,7 @@ def test_admin_user_routes_return_clear_last_admin_errors(monkeypatch) -> None:
     monkeypatch.setattr(main, 'resolve_user_from_token', lambda token: ADMIN)
     monkeypatch.setattr(main, 'update_staff_user', lambda *args, **kwargs: (_ for _ in ()).throw(main.InvalidUserRoleError('cannot remove the last active admin')))
     monkeypatch.setattr(main, 'disable_staff_user', lambda *args, **kwargs: (_ for _ in ()).throw(main.InvalidUserRoleError('cannot remove the last active admin')))
-    monkeypatch.setattr(main, 'revoke_staff_user_sessions', lambda *args, **kwargs: (_ for _ in ()).throw(main.InvalidUserRoleError('cannot revoke sessions for the last active admin')))
+    monkeypatch.setattr(main, 'revoke_staff_user_sessions', lambda *args, **kwargs: (_ for _ in ()).throw(main.InvalidUserRoleError('cannot sign out the last active admin everywhere')))
 
     demote = client.patch('/api/v1/admin/users/user-other-admin', json={'role': 'viewer'}, headers=auth_header())
     disable = client.post('/api/v1/admin/users/user-other-admin/disable', headers=auth_header())
@@ -750,7 +750,7 @@ def test_publish_publication_pack_requires_release_gate(monkeypatch) -> None:
     monkeypatch.setattr(main, 'PUBLICATION_RELEASE_ENABLED', False)
     response = client.post('/api/v1/publication/packs/pack-1/publish', headers=auth_header())
     assert response.status_code == 403
-    assert response.json()['detail'] == 'publication release gate is disabled'
+    assert response.json()['detail'] == 'public release lock is active'
 
 
 def test_audit_logs_endpoint_returns_pagination_metadata(monkeypatch) -> None:
@@ -2906,7 +2906,7 @@ def test_publish_geotag_submission_requires_release_gate(monkeypatch) -> None:
     response = client.post('/api/v1/geotag-submissions/geo-ready/publish', json={'reviewer_note': 'Approved by institutional release authority.'}, headers=auth_header())
 
     assert response.status_code == 403
-    assert response.json()['detail'] == 'publication release gate is disabled'
+    assert response.json()['detail'] == 'public release lock is active'
 
 
 def test_admin_can_publish_registry_ready_geotag_and_gets_public_record(monkeypatch) -> None:
@@ -2949,6 +2949,6 @@ def test_publication_ui_has_admin_publish_action_separate_from_simulation() -> N
     source = Path('/home/ubuntu/projects/eg-addressing/apps/admin-portal/components/PublicationOperationsPanel.tsx').read_text()
 
     assert '/api/v1/geotag-submissions/${encodeURIComponent(publishSubmissionId)}/publish' in source
-    assert 'Publish registry-ready case file' in source
+    assert 'Publish ready-for-approval case file' in source
     assert 'Admin required' in source
     assert 'simulation only' in source.lower()

@@ -31,7 +31,7 @@ const incidentSteps = [
   'Pause publication, export, signage, or certificate actions until the issue is understood.',
   'Notify BeCore first, then technical escalation if the issue affects access, privacy, evidence, or uptime.',
   'Preserve logs, request references, screenshots, and incident notes before making destructive changes.',
-  'Rotate credentials and revoke sessions if account exposure is suspected.',
+  'Rotate credentials and sign users out everywhere if account exposure is suspected.',
   'Record the resolution and verification evidence before reopening the pilot workflow.',
 ] as const;
 

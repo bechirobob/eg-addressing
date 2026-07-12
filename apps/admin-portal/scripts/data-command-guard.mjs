@@ -26,13 +26,13 @@ assert(reporting.includes('Province') && reporting.includes('Date from') && repo
 assert(reporting.includes('Export report'), 'Reports must provide export report action.');
 assert(reporting.includes("sessionStatus !== 'ready'"), 'Reports must refresh protected data after cookie-session auth resolves, not only when a bearer token exists.');
 assert(reporting.includes('loadReadiness(token)'), 'Reports must refresh readiness evidence after session resolution.');
-assert(reporting.includes('Readiness gates') && reporting.includes('Recent audit events') && reporting.includes('Governance boundary'), 'Reports must expose readiness gates, recent audit events, and governance boundaries.');
+assert(reporting.includes('Readiness checks') && reporting.includes('Recent activity events') && reporting.includes('Governance boundary'), 'Reports must expose readiness checks, recent activity events, and governance boundaries.');
 assert(reporting.includes('auditEntityLabel') && reporting.includes('session: [protected]') && reporting.includes('[protected-id]'), 'Reports must mask protected audit entity identifiers and long stable IDs.');
 assert(reporting.includes('formatEvidence'), 'Reports must format readiness evidence instead of rendering raw backend dictionaries.');
 assert(reporting.includes('safeIsoDate'), 'Report export must safely format audit timestamps without throwing on malformed values.');
 assert(reporting.includes('summary.filters ?? {}') && reporting.includes('filterDisplayValue'), 'Report export must describe the applied report filters, not stale edited input fields.');
 assert(reporting.includes('Promise.all([loadSummary(token ?? null), loadReadiness(token ?? null)]'), 'Applying report filters must refresh summary and readiness/audit evidence together.');
-assert(reporting.includes('national-addressing-report-audit.csv') && reporting.includes('Governance boundaries') && reporting.includes('Recent audit events'), 'Report export must include audit/readiness/governance evidence, not only top-line metrics.');
+assert(reporting.includes('national-addressing-report-audit.csv') && reporting.includes('Governance boundaries') && reporting.includes('Recent activity events'), 'Report export must include activity/readiness/governance evidence, not only top-line metrics.');
 assert(reporting.includes('/^[=+\\-@\\t\\r]/'), 'Report export must neutralize spreadsheet formula injection prefixes in CSV cells.');
 assert(css.includes('.metric-row-list') && css.includes('.report-row-list'), 'Reports must use row-based metric styling.');
 assert(css.includes('html body main.page-shell .reports-readiness-panel') && css.includes('html body main.page-shell .reports-audit-panel') && css.includes('html body main.page-shell .reports-boundary-panel'), 'Reports readiness, audit, and governance evidence must stay full-width on desktop.');

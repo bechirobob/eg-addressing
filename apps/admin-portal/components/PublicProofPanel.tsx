@@ -137,7 +137,7 @@ export function PublicProofPanel({ apiBaseUrl, code }: PublicProofPanelProps) {
             </div>
             <aside className="public-proof-qr" aria-label="QR verification link">
               {qrSvg ? <div className="qr-code-frame" dangerouslySetInnerHTML={{ __html: qrSvg }} /> : null}
-              <p>Scan to open the canonical public address profile.</p>
+              <p>Scan to open the official public address profile.</p>
               <a href={profileUrl}>{profileUrl}</a>
             </aside>
           </div>
