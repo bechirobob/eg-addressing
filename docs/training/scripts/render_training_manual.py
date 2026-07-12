@@ -36,23 +36,23 @@ CSS = """
 * { box-sizing: border-box; }
 html, body { margin: 0; padding: 0; }
 body {
-  background: var(--eg-ivory);
+  background: var(--eg-paper);
   color: var(--eg-ink);
   font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   font-size: 10.7pt;
   line-height: 1.58;
 }
 .manual {
-  max-width: 176mm;
+  width: 100%;
+  max-width: none;
   margin: 0 auto;
-  background: var(--eg-paper);
+  background: transparent;
 }
 .flag-ribbon {
   width: 100%;
   height: 14px;
   margin-bottom: 22px;
   background: linear-gradient(90deg, var(--eg-blue) 0 20%, var(--eg-green) 20% 47%, #ffffff 47% 72%, var(--eg-red) 72% 100%);
-  box-shadow: 0 1px 0 rgba(13, 47, 79, 0.16);
 }
 .cover {
   min-height: 246mm;
@@ -78,12 +78,10 @@ body {
   margin-bottom: 24mm;
 }
 .crest-frame {
-  width: 36mm;
-  padding: 3.5mm;
-  border: 1px solid rgba(13, 47, 79, 0.24);
-  border-bottom: 4px solid var(--eg-gold);
-  background: var(--eg-paper);
-  box-shadow: 6px 6px 0 rgba(13, 47, 79, 0.06);
+  width: 34mm;
+  padding: 0;
+  border: 0;
+  background: transparent;
 }
 .crest-frame img {
   width: 100%;
@@ -118,11 +116,12 @@ body {
 .cover h1 {
   max-width: 150mm;
   margin: 0;
-  color: var(--eg-blue-deep);
-  font-family: Georgia, "Times New Roman", serif;
+  color: var(--eg-ink);
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   font-size: 31pt;
-  line-height: 0.98;
-  letter-spacing: -0.025em;
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: -0.03em;
 }
 .cover-subtitle {
   max-width: 135mm;
@@ -143,18 +142,28 @@ body {
 .content {
   padding: 0 1mm 4mm;
 }
+.content section {
+  break-before: page;
+  page-break-before: always;
+}
+.content section:first-child {
+  break-before: auto;
+  page-break-before: auto;
+}
 h1, h2, h3, h4 {
-  color: var(--eg-blue-deep);
-  font-family: Georgia, "Times New Roman", serif;
+  color: var(--eg-ink);
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   letter-spacing: -0.015em;
   line-height: 1.2;
+  break-after: avoid;
+  page-break-after: avoid;
 }
 h1 { font-size: 22pt; margin: 0 0 7mm; }
 h2 {
   font-size: 15.5pt;
-  margin: 9mm 0 3.4mm;
-  padding-top: 5mm;
-  border-top: 1px solid rgba(13, 47, 79, 0.14);
+  margin: 0 0 5mm;
+  padding-bottom: 3mm;
+  border-bottom: 1px solid rgba(13, 47, 79, 0.14);
 }
 h3 { font-size: 12.5pt; margin: 5mm 0 2mm; color: var(--eg-blue); }
 h4 { font-size: 11pt; margin: 4mm 0 1.5mm; color: var(--eg-ink); }
@@ -219,7 +228,7 @@ def render_markdown(md: str) -> str:
     in_ul = False
     in_ol = False
     para: list[str] = []
-    document_control = False
+    section_open = False
 
     def flush_para() -> None:
         nonlocal para
@@ -243,19 +252,25 @@ def render_markdown(md: str) -> str:
             close_lists()
             continue
         if line == "[PAGEBREAK]":
-            flush_para(); close_lists(); out.append('<div class="section-break"></div>'); continue
+            flush_para()
+            close_lists()
+            if section_open:
+                out.append("</section>")
+                section_open = False
+            out.append('<div class="section-break"></div>')
+            continue
         if line.startswith("# "):
             # Cover title already renders separately.
             continue
         if line.startswith("## "):
             flush_para(); close_lists()
             text = line[3:].strip()
-            if document_control:
+            if section_open:
                 out.append("</section>")
-                document_control = False
+                section_open = False
             cls = ' class="document-control"' if "control" in text.lower() or "control del documento" in text.lower() else ""
             out.append(f"<section{cls}>")
-            document_control = bool(cls)
+            section_open = True
             anchor = re.sub(r"[^a-z0-9]+", "-", text.lower()).strip("-")
             out.append(f'<h2 id="{anchor}">{inline(text)}</h2>')
             continue
@@ -276,7 +291,7 @@ def render_markdown(md: str) -> str:
             continue
         para.append(line)
     flush_para(); close_lists()
-    if document_control:
+    if section_open:
         out.append("</section>")
     return "\n".join(out)
 

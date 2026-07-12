@@ -14,8 +14,6 @@ Preparado para: Piloto de Direccionamiento Digital Nacional de Guinea Ecuatorial
 
 Soporte operativo: BeCore.
 
-[PAGEBREAK]
-
 ## Lista de contenidos
 
 1. Cómo usar este manual

@@ -14,8 +14,6 @@ Prepared for: Equatorial Guinea National Digital Addressing pilot.
 
 Operational support: BeCore.
 
-[PAGEBREAK]
-
 ## Table of contents
 
 1. How to use this manual
