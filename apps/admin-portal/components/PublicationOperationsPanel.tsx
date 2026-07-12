@@ -452,7 +452,7 @@ export function PublicationOperationsPanel({
         ) : null}
       </article>
 
-      <article className="public-task-panel civic-panel-green">
+      <article className="public-task-panel civic-panel-green controlled-publication-panel">
         <div className="panel-head">
           <p className="section-label">Controlled publication</p>
           <h3>Publish registry-ready case file</h3>
@@ -460,21 +460,24 @@ export function PublicationOperationsPanel({
         <p className="institutional-note">
           Admin-only release action. Use this only after institutional approval; it unlocks public profile proof, certificate generation, and signage export for the selected registry-ready case file.
         </p>
-        <form className="territory-form" onSubmit={publishRegistryReadyCase}>
-          <label className="territory-field territory-field-wide">
-            <span className="territory-label">Registry-ready geotag submission ID</span>
-            <input className="territory-input" value={publishSubmissionId} onChange={(event) => setPublishSubmissionId(event.target.value)} placeholder="citizen-geotag-…" />
-          </label>
-          <label className="territory-field territory-field-wide">
-            <span className="territory-label">Publication approval note</span>
-            <textarea className="territory-input territory-textarea" value={publishNote} onChange={(event) => setPublishNote(event.target.value)} rows={3} />
-          </label>
-          <div className="territory-form-actions">
-            <button className="verification-button" type="submit" disabled={Boolean(publishCaseDisabledReason())}>
-              {publishCaseDisabledReason() ?? 'Publish registry-ready case file'}
-            </button>
-          </div>
-        </form>
+        <details className="quiet-disclosure compact-review-disclosure publication-release-disclosure">
+          <summary>Open locked publication action</summary>
+          <form className="territory-form" onSubmit={publishRegistryReadyCase}>
+            <label className="territory-field territory-field-wide">
+              <span className="territory-label">Registry-ready geotag submission ID</span>
+              <input className="territory-input" value={publishSubmissionId} onChange={(event) => setPublishSubmissionId(event.target.value)} placeholder="citizen-geotag-…" />
+            </label>
+            <label className="territory-field territory-field-wide">
+              <span className="territory-label">Publication approval note</span>
+              <textarea className="territory-input territory-textarea" value={publishNote} onChange={(event) => setPublishNote(event.target.value)} rows={3} />
+            </label>
+            <div className="territory-form-actions">
+              <button className="verification-button" type="submit" disabled={Boolean(publishCaseDisabledReason())}>
+                {publishCaseDisabledReason() ?? 'Publish registry-ready case file'}
+              </button>
+            </div>
+          </form>
+        </details>
       </article>
 
       <article className="public-task-panel civic-panel-blue">

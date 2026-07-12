@@ -8,11 +8,12 @@ const portalRoot = path.resolve(__dirname, '..');
 const checks = [
   {
     file: 'components/FieldWorkflowPanel.tsx',
-    markers: ['field-summary-ledger', 'Shared field evidence settings', 'workbench-panel-disclosure', 'live-intake-panel'],
+    markers: ['field-summary-ledger', 'Shared field evidence settings', 'workbench-panel-disclosure', 'controlled-sample-disclosure', 'Load controlled sample', 'live-intake-disclosure'],
+    forbidden: ['Load pilot sample'],
   },
   {
     file: 'components/PublicationOperationsPanel.tsx',
-    markers: ['Open simulation form', 'Create publication pack', 'Create migration or intake job manually'],
+    markers: ['Open simulation form', 'Create publication pack', 'Create migration or intake job manually', 'publication-release-disclosure', 'Open locked publication action'],
   },
   {
     file: 'components/TerritoryAdminPanel.tsx',
@@ -29,6 +30,11 @@ for (const check of checks) {
   for (const marker of check.markers) {
     if (!source.includes(marker)) {
       throw new Error(`${check.file} missing density guard marker: ${marker}`);
+    }
+  }
+  for (const forbidden of check.forbidden ?? []) {
+    if (source.includes(forbidden)) {
+      throw new Error(`${check.file} contains forbidden clutter marker: ${forbidden}`);
     }
   }
 }

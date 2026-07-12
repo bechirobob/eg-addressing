@@ -849,38 +849,41 @@ export function SignageOperationsPanel({ apiBaseUrl }: SignageOperationsPanelPro
           <h3>Published records only after full project approval</h3>
         </div>
         <p className="public-task-copy">Physical signage outputs are locked until full project approval. Registry-ready case files stay searchable internally without implying fabrication or publication.</p>
-        <div className="territory-form-actions">
-          <button className="primary-action" type="button" onClick={downloadCsv} disabled={!exportRows.length}>Download CSV</button>
-          <button className="secondary-action" type="button" onClick={() => void downloadSignagePack()} disabled={!exportRows.length}>Generate signage pack JSON</button>
-          <button className="secondary-action" type="button" onClick={() => window.print()} disabled={!exportRows.length}>Print list</button>
-        </div>
-        {exportRows.length ? (
-          <>
-            <div className="table-wrap desktop-table-wrap signage-batch-table-wrap" aria-label="Signage batches table">
-              <table className="data-table desktop-data-table">
-                <caption>Signage batches</caption>
-                <thead><tr><th scope="col">Batch ID</th><th scope="col">Territory</th><th scope="col">Records</th><th scope="col">Status</th><th scope="col">Approver</th><th scope="col">Date</th></tr></thead>
-                <tbody>
-                  {exportRows.map((row) => (
-                    <tr key={`${row.grid_code}-${row.batch ?? 'batch-table'}`}>
-                      <td>{row.batch ?? 'Pending batch'}</td><td>{row.territory_name ?? 'Area pending'}</td><td>{row.address_label}</td><td>{statusLabel(row.status)}</td><td>Project approval required</td><td>Not released</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-            <ul className="mini-list signage-export-list mobile-card-list">
-              {exportRows.map((row) => (
-                <li key={`${row.grid_code}-${row.batch ?? 'batch'}`}>
-                  <strong>{row.signage_text}</strong>
-                  <span>{row.address_label} · {row.territory_name ?? 'Area pending'} · {row.latitude}, {row.longitude}</span>
-                </li>
-              ))}
-            </ul>
-          </>
-        ) : (
-          <p className="panel-state">No records are published for physical signage yet.</p>
-        )}
+        <details className="quiet-disclosure compact-review-disclosure signage-rollout-disclosure">
+          <summary>Open physical rollout outputs</summary>
+          <div className="territory-form-actions">
+            <button className="primary-action" type="button" onClick={downloadCsv} disabled={!exportRows.length}>Download CSV</button>
+            <button className="secondary-action" type="button" onClick={() => void downloadSignagePack()} disabled={!exportRows.length}>Generate signage pack JSON</button>
+            <button className="secondary-action" type="button" onClick={() => window.print()} disabled={!exportRows.length}>Print list</button>
+          </div>
+          {exportRows.length ? (
+            <>
+              <div className="table-wrap desktop-table-wrap signage-batch-table-wrap" aria-label="Signage batches table">
+                <table className="data-table desktop-data-table">
+                  <caption>Signage batches</caption>
+                  <thead><tr><th scope="col">Batch ID</th><th scope="col">Territory</th><th scope="col">Records</th><th scope="col">Status</th><th scope="col">Approver</th><th scope="col">Date</th></tr></thead>
+                  <tbody>
+                    {exportRows.map((row) => (
+                      <tr key={`${row.grid_code}-${row.batch ?? 'batch-table'}`}>
+                        <td>{row.batch ?? 'Pending batch'}</td><td>{row.territory_name ?? 'Area pending'}</td><td>{row.address_label}</td><td>{statusLabel(row.status)}</td><td>Project approval required</td><td>Not released</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+              <ul className="mini-list signage-export-list mobile-card-list">
+                {exportRows.map((row) => (
+                  <li key={`${row.grid_code}-${row.batch ?? 'batch'}`}>
+                    <strong>{row.signage_text}</strong>
+                    <span>{row.address_label} · {row.territory_name ?? 'Area pending'} · {row.latitude}, {row.longitude}</span>
+                  </li>
+                ))}
+              </ul>
+            </>
+          ) : (
+            <p className="panel-state">No records are published for physical signage yet.</p>
+          )}
+        </details>
       </article>
       {notice ? <p className="form-notice success">{notice}</p> : null}
       {error ? <p className="form-notice error">{error}</p> : null}

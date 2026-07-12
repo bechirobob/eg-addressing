@@ -813,11 +813,11 @@ export function FieldWorkflowPanel({ assignments, submissions: initialSubmission
                   <span>{spatialAnalysis?.map_suggestion?.suggested_road_name ? `Suggested road: ${spatialAnalysis.map_suggestion.suggested_road_name}` : roadPoints.length >= 2 ? 'System check running or ready to run.' : 'No technical input needed from the worker.'}</span>
                   {spatialAnalysis?.calculated_length_km ? <span>Distance: {spatialAnalysis.calculated_length_km} km · Grid coverage saved for reviewer</span> : null}
                 </div>
-                <details className="quiet-disclosure technical-evidence-disclosure">
-                  <summary>Technical evidence</summary>
+                <details className="quiet-disclosure technical-evidence-disclosure controlled-sample-disclosure">
+                  <summary>Technical evidence and controlled sample</summary>
                   <div className="calm-action-row">
                     <button className="secondary-action" type="button" disabled={isCapturingGeometry} onClick={() => void captureCurrentPosition('road-midpoint')}>Add midpoint if road bends</button>
-                    <button className="secondary-action" type="button" onClick={loadPilotSampleStretch}>Load pilot sample</button>
+                    <button className="secondary-action" type="button" onClick={loadPilotSampleStretch}>Load controlled sample</button>
                     <button className="secondary-action" type="button" disabled={isAnalyzingSpatialEvidence || !buildSpatialEvidence()} onClick={() => void analyzeSpatialEvidence()}>{isAnalyzingSpatialEvidence ? 'Checking…' : 'Recheck system analysis'}</button>
                   </div>
                   {roadPoints.length > 0 ? <p>{roadPoints.map((point) => `${point.role}: ${point.latitude}, ${point.longitude} ±${Math.round(point.accuracy_meters ?? 0)}m`).join(' · ')}</p> : null}
@@ -866,7 +866,7 @@ export function FieldWorkflowPanel({ assignments, submissions: initialSubmission
       </article>
 
       <article className="public-task-panel civic-panel-gold live-intake-panel">
-        <details className="workbench-panel-disclosure" open>
+        <details className="workbench-panel-disclosure live-intake-disclosure">
           <summary>
             <span>
               <small className="section-label">Live intake</small>
