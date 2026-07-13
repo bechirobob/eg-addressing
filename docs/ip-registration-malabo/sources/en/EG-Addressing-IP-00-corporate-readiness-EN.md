@@ -5,7 +5,7 @@
 Title: Corporate Readiness and Attachment Pack
 Product: National Digital Addressing System
 Responsible founder: Benjamin Bob Bechiro
-Company: BeCorps
+Company: BeCoreOps
 Document type: Readiness checklist
 Status: Supporting document for intellectual-property registration preparation in Malabo.
 
@@ -16,7 +16,7 @@ This document organizes the corporate attachments that should accompany the inte
 ## Presentation identity
 
 - Responsible founder: Benjamin Bob Bechiro.
-- Presented company: BeCorps.
+- Presented company: BeCoreOps.
 - Technology product: National Digital Addressing System.
 - Filing packet location: Malabo, Republic of Equatorial Guinea.
 

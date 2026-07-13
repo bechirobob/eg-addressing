@@ -5,7 +5,7 @@
 Title: Master Intellectual Property Asset Register
 Product: National Digital Addressing System
 Responsible founder: Benjamin Bob Bechiro
-Company: BeCorps
+Company: BeCoreOps
 Document type: Master register
 Status: Supporting document for intellectual-property registration preparation in Malabo.
 
@@ -39,4 +39,4 @@ This register consolidates principal assets, type, responsible person, status, a
 ## Responsibility
 
 - Design, implementation, and technical direction: Benjamin Bob Bechiro.
-- Business vehicle: BeCorps.
+- Business vehicle: BeCoreOps.

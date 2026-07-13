@@ -20,7 +20,7 @@ COAT = ROOT / "apps/admin-portal/public/eg-coat-of-arms.svg"
 
 FOUNDER_EN = "Benjamin Bob Bechiro"
 FOUNDER_ES = "Benjamin Bob Bechiro"
-COMPANY = "BeCorps"
+COMPANY = "BeCoreOps"
 PRODUCT_EN = "National Digital Addressing System"
 PRODUCT_ES = "Sistema Nacional de Direccionamiento Digital"
 

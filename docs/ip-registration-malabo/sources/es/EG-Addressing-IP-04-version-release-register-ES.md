@@ -5,7 +5,7 @@
 Título: Registro de versiones y entregas
 Producto: Sistema Nacional de Direccionamiento Digital
 Fundador responsable: Benjamin Bob Bechiro
-Empresa: BeCorps
+Empresa: BeCoreOps
 Tipo de documento: Registro
 Estado: Documento de soporte para preparación de registro de propiedad intelectual en Malabo.
 

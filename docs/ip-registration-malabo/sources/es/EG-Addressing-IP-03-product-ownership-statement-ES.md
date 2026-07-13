@@ -5,7 +5,7 @@
 Título: Declaración de propiedad del producto
 Producto: Sistema Nacional de Direccionamiento Digital
 Fundador responsable: Benjamin Bob Bechiro
-Empresa: BeCorps
+Empresa: BeCoreOps
 Tipo de documento: Declaración de producto
 Estado: Documento de soporte para preparación de registro de propiedad intelectual en Malabo.
 
@@ -20,7 +20,7 @@ Este documento resume el producto como obra tecnológica integral, su finalidad 
 
 ## Responsable
 
-- Benjamin Bob Bechiro, fundador de BeCorps, asume responsabilidad sobre diseño, implementación, arquitectura, evolución funcional y coordinación documental.
+- Benjamin Bob Bechiro, fundador de BeCoreOps, asume responsabilidad sobre diseño, implementación, arquitectura, evolución funcional y coordinación documental.
 
 ## Valor público
 

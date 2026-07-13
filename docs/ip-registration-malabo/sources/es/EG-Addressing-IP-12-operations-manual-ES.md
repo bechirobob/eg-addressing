@@ -5,7 +5,7 @@
 Título: Manual de operaciones
 Producto: Sistema Nacional de Direccionamiento Digital
 Fundador responsable: Benjamin Bob Bechiro
-Empresa: BeCorps
+Empresa: BeCoreOps
 Tipo de documento: Manual operativo
 Estado: Documento de soporte para preparación de registro de propiedad intelectual en Malabo.
 

@@ -5,7 +5,7 @@
 Título: Certificado interno de titularidad del software
 Producto: Sistema Nacional de Direccionamiento Digital
 Fundador responsable: Benjamin Bob Bechiro
-Empresa: BeCorps
+Empresa: BeCoreOps
 Tipo de documento: Certificado interno
 Estado: Documento de soporte para preparación de registro de propiedad intelectual en Malabo.
 
@@ -15,7 +15,7 @@ Este certificado interno identifica los componentes del software y la persona re
 
 ## Certificación
 
-- Se certifica internamente que el Sistema Nacional de Direccionamiento Digital ha sido diseñado e implementado bajo responsabilidad de Benjamin Bob Bechiro, fundador de BeCorps.
+- Se certifica internamente que el Sistema Nacional de Direccionamiento Digital ha sido diseñado e implementado bajo responsabilidad de Benjamin Bob Bechiro, fundador de BeCoreOps.
 - El sistema está compuesto por una aplicación web de administración, una API de servicios, base de datos relacional, almacenamiento de evidencias, automatización operativa y documentación técnica asociada.
 
 ## Componentes de software

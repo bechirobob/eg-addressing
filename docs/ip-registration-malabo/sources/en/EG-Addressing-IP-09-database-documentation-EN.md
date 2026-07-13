@@ -5,7 +5,7 @@
 Title: Database Documentation
 Product: National Digital Addressing System
 Responsible founder: Benjamin Bob Bechiro
-Company: BeCorps
+Company: BeCoreOps
 Document type: Technical manual
 Status: Supporting document for intellectual-property registration preparation in Malabo.
 

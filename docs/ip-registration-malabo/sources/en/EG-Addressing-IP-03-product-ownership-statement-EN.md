@@ -5,7 +5,7 @@
 Title: Product Ownership Statement
 Product: National Digital Addressing System
 Responsible founder: Benjamin Bob Bechiro
-Company: BeCorps
+Company: BeCoreOps
 Document type: Product statement
 Status: Supporting document for intellectual-property registration preparation in Malabo.
 
@@ -20,7 +20,7 @@ This document summarizes the product as an integrated technology work, its publi
 
 ## Responsible person
 
-- Benjamin Bob Bechiro, founder of BeCorps, assumes responsibility for design, implementation, architecture, functional evolution, and documentation coordination.
+- Benjamin Bob Bechiro, founder of BeCoreOps, assumes responsibility for design, implementation, architecture, functional evolution, and documentation coordination.
 
 ## Public value
 

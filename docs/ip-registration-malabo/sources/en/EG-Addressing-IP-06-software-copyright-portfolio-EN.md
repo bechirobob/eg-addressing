@@ -5,7 +5,7 @@
 Title: Software Copyright Portfolio
 Product: National Digital Addressing System
 Responsible founder: Benjamin Bob Bechiro
-Company: BeCorps
+Company: BeCoreOps
 Document type: Portfolio
 Status: Supporting document for intellectual-property registration preparation in Malabo.
 
@@ -39,4 +39,4 @@ This portfolio identifies software modules protectable as technical expression o
 ## Presented ownership
 
 - Responsible for design and implementation: Benjamin Bob Bechiro.
-- Presentation and operation company: BeCorps.
+- Presentation and operation company: BeCoreOps.

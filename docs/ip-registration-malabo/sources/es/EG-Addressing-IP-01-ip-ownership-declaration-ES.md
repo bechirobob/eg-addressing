@@ -5,7 +5,7 @@
 Título: Declaración de titularidad de propiedad intelectual
 Producto: Sistema Nacional de Direccionamiento Digital
 Fundador responsable: Benjamin Bob Bechiro
-Empresa: BeCorps
+Empresa: BeCoreOps
 Tipo de documento: Declaración
 Estado: Documento de soporte para preparación de registro de propiedad intelectual en Malabo.
 
@@ -15,8 +15,8 @@ Esta declaración establece la autoría responsable y la titularidad presentada 
 
 ## Declaración principal
 
-- Benjamin Bob Bechiro, fundador de BeCorps, declara que es responsable de la concepción, diseño, implementación y dirección técnica del Sistema Nacional de Direccionamiento Digital.
-- BeCorps se presenta como vehículo empresarial responsable de la explotación, mantenimiento, soporte y presentación administrativa del sistema.
+- Benjamin Bob Bechiro, fundador de BeCoreOps, declara que es responsable de la concepción, diseño, implementación y dirección técnica del Sistema Nacional de Direccionamiento Digital.
+- BeCoreOps se presenta como vehículo empresarial responsable de la explotación, mantenimiento, soporte y presentación administrativa del sistema.
 - La titularidad presentada comprende software, interfaces, lógica funcional, documentación técnica, arquitectura, procesos operativos, estándares de datos y materiales de capacitación asociados.
 
 ## Alcance protegido

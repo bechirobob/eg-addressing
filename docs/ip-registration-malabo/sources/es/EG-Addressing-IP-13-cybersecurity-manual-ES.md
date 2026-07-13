@@ -5,7 +5,7 @@
 Título: Manual de ciberseguridad
 Producto: Sistema Nacional de Direccionamiento Digital
 Fundador responsable: Benjamin Bob Bechiro
-Empresa: BeCorps
+Empresa: BeCoreOps
 Tipo de documento: Manual de seguridad
 Estado: Documento de soporte para preparación de registro de propiedad intelectual en Malabo.
 

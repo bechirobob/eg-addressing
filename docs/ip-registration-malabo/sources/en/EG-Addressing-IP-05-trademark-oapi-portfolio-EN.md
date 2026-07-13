@@ -5,7 +5,7 @@
 Title: Trademark and Distinctive Signs Portfolio for OAPI
 Product: National Digital Addressing System
 Responsible founder: Benjamin Bob Bechiro
-Company: BeCorps
+Company: BeCoreOps
 Document type: Portfolio
 Status: Supporting document for intellectual-property registration preparation in Malabo.
 
@@ -15,7 +15,7 @@ This portfolio organizes names and signs that may be prepared for search, reserv
 
 ## Signs to review
 
-- BeCorps
+- BeCoreOps
 - Sistema Nacional de Direccionamiento Digital
 - National Digital Addressing System
 - Company logo once approved.

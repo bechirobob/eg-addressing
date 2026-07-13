@@ -5,7 +5,7 @@
 Title: Internal Software Ownership Certificate
 Product: National Digital Addressing System
 Responsible founder: Benjamin Bob Bechiro
-Company: BeCorps
+Company: BeCoreOps
 Document type: Internal certificate
 Status: Supporting document for intellectual-property registration preparation in Malabo.
 
@@ -15,7 +15,7 @@ This internal certificate identifies the software components and the person resp
 
 ## Certification
 
-- It is internally certified that the National Digital Addressing System has been designed and implemented under the responsibility of Benjamin Bob Bechiro, founder of BeCorps.
+- It is internally certified that the National Digital Addressing System has been designed and implemented under the responsibility of Benjamin Bob Bechiro, founder of BeCoreOps.
 - The system consists of an administration web application, service API, relational database, evidence storage, operational automation, and associated technical documentation.
 
 ## Software components

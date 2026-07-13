@@ -5,7 +5,7 @@
 Título: Registro maestro de activos de propiedad intelectual
 Producto: Sistema Nacional de Direccionamiento Digital
 Fundador responsable: Benjamin Bob Bechiro
-Empresa: BeCorps
+Empresa: BeCoreOps
 Tipo de documento: Registro maestro
 Estado: Documento de soporte para preparación de registro de propiedad intelectual en Malabo.
 
@@ -39,4 +39,4 @@ Este registro concentra los activos principales, su tipo, responsable, estado y 
 ## Responsabilidad
 
 - Diseño, implementación y dirección técnica: Benjamin Bob Bechiro.
-- Vehículo empresarial: BeCorps.
+- Vehículo empresarial: BeCoreOps.

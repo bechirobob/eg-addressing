@@ -5,7 +5,7 @@
 Título: Paquete de preparación corporativa y anexos
 Producto: Sistema Nacional de Direccionamiento Digital
 Fundador responsable: Benjamin Bob Bechiro
-Empresa: BeCorps
+Empresa: BeCoreOps
 Tipo de documento: Lista de preparación
 Estado: Documento de soporte para preparación de registro de propiedad intelectual en Malabo.
 
@@ -16,7 +16,7 @@ Este documento organiza los anexos corporativos que deben acompañar el expedien
 ## Identidad de presentación
 
 - Fundador responsable: Benjamin Bob Bechiro.
-- Empresa presentada: BeCorps.
+- Empresa presentada: BeCoreOps.
 - Producto tecnológico: Sistema Nacional de Direccionamiento Digital.
 - Lugar de preparación del expediente: Malabo, República de Guinea Ecuatorial.
 

@@ -5,7 +5,7 @@
 Título: Especificación del Sistema Nacional de Direccionamiento Digital
 Producto: Sistema Nacional de Direccionamiento Digital
 Fundador responsable: Benjamin Bob Bechiro
-Empresa: BeCorps
+Empresa: BeCoreOps
 Tipo de documento: Especificación
 Estado: Documento de soporte para preparación de registro de propiedad intelectual en Malabo.
 

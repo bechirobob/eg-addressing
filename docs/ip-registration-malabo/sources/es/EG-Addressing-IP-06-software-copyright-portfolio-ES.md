@@ -5,7 +5,7 @@
 Título: Portafolio de derechos de autor del software
 Producto: Sistema Nacional de Direccionamiento Digital
 Fundador responsable: Benjamin Bob Bechiro
-Empresa: BeCorps
+Empresa: BeCoreOps
 Tipo de documento: Portafolio
 Estado: Documento de soporte para preparación de registro de propiedad intelectual en Malabo.
 
@@ -39,4 +39,4 @@ Este portafolio identifica los módulos de software protegibles como expresión 
 ## Titularidad presentada
 
 - Responsable de diseño e implementación: Benjamin Bob Bechiro.
-- Empresa de presentación y explotación: BeCorps.
+- Empresa de presentación y explotación: BeCoreOps.

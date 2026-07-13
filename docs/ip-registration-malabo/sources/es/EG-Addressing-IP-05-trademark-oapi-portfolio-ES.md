@@ -5,7 +5,7 @@
 Título: Portafolio de marcas y signos distintivos para OAPI
 Producto: Sistema Nacional de Direccionamiento Digital
 Fundador responsable: Benjamin Bob Bechiro
-Empresa: BeCorps
+Empresa: BeCoreOps
 Tipo de documento: Portafolio
 Estado: Documento de soporte para preparación de registro de propiedad intelectual en Malabo.
 
@@ -15,7 +15,7 @@ Este portafolio organiza los nombres y signos que pueden prepararse para búsque
 
 ## Signos a revisar
 
-- BeCorps
+- BeCoreOps
 - Sistema Nacional de Direccionamiento Digital
 - National Digital Addressing System
 - Logotipo empresarial cuando esté aprobado.
