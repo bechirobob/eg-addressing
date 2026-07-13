@@ -91,7 +91,6 @@ from app.db import (
     get_road,
     get_submission,
     get_territory,
-    init_db,
     list_address_corrections,
     list_citizen_geotag_submissions,
     list_admin_units as list_admin_units_db,
@@ -342,7 +341,9 @@ class PublicationPackCreate(BaseModel):
 
 @asynccontextmanager
 async def lifespan(_: FastAPI):
-    init_db()
+    # NLI-WO-001: ordinary API startup must not create/alter schema, load
+    # reference data, or seed development fixtures. Operators use the explicit
+    # migration/reference/fixture lifecycle commands before application start.
     yield
 
 

@@ -12,6 +12,8 @@ coverage
 **/coverage
 artifacts
 backups
+data
+**/data
 knowledge
 *.pyc
 *.tsbuildinfo

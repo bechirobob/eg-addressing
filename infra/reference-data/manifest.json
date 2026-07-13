@@ -1,0 +1,11 @@
+{
+  "current_package": "eg-admin-units-v1.json",
+  "packages": [
+    {
+      "package_id": "eg-admin-units-v1",
+      "package_version": "2026-07-13",
+      "source": "INEGE-referenced administrative division table and current controlled pilot province baseline",
+      "authority_status": "provisional-government-reference"
+    }
+  ]
+}

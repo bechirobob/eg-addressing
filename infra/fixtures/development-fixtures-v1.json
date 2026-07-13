@@ -1,0 +1,28 @@
+{
+  "fixture_id": "development-users-v1",
+  "fixture_version": "2026-07-13.3",
+  "description": "Non-production staff and minimal operational smoke records for controlled local and CI smoke testing only.",
+  "records": {
+    "users": [
+      {"id": "user-admin", "username": "admin", "full_name": "National Platform Administrator", "role": "admin"},
+      {"id": "user-editor", "username": "editor", "full_name": "Registry Editor", "role": "editor"},
+      {"id": "user-viewer", "username": "viewer", "full_name": "Program Viewer", "role": "viewer"},
+      {"id": "user-agency-viewer", "username": "agency_viewer", "full_name": "Agency Review Viewer", "role": "agency_viewer"}
+    ],
+    "territories": [
+      {"id": "territory-malabo-urban-core", "name": "Malabo Urban Core", "province_code": "BN", "admin_unit_id": "admin-unit-bioko-norte", "type": "capital-urban-core", "readiness": "active-mapping"}
+    ],
+    "roads": [
+      {"id": "road-malabo-reference", "name": "Malabo Reference Road", "territory_id": "territory-malabo-urban-core", "status": "validated", "length_km": "0.8"}
+    ],
+    "buildings": [
+      {"id": "building-malabo-reference", "label": "Malabo Reference Building", "territory_id": "territory-malabo-urban-core", "road_id": "road-malabo-reference", "status": "validated", "usage": "civic"}
+    ],
+    "addresses": [
+      {"id": "address-malabo-reference", "formatted": "EG-BN-MALABO-001A", "territory_id": "territory-malabo-urban-core", "road_id": "road-malabo-reference", "building_id": "building-malabo-reference", "province_code": "BN", "public_code": "EG-BN-MALABO-001A", "issuance_method": "controlled-smoke-fixture", "source": "staging-reference-record", "verification_status": "controlled-staging-reference", "status": "registry-ready", "publication_state": "published"}
+    ],
+    "field_assignments": [
+      {"assignment_id": "field-malabo-001", "territory_id": "territory-malabo-urban-core", "territory": "Malabo Urban Core", "task": "Controlled smoke verification", "team": "Smoke Team", "priority": "high"}
+    ]
+  }
+}
