@@ -1,56 +1,80 @@
-# Work-order implementation
+# Work-order implementation — Review 01 remediation
 
 **Work order:** `docs/sda/work-orders/NLI-WO-001-controlled-database-lifecycle.md`  
 **Implementation plan:** `docs/sda/implementation-plans/NLI-WO-001-controlled-database-lifecycle.md`  
-**Head commit reviewed for this evidence:** `edd2ce4`
+**Review addressed:** `docs/sda/reviews/NLI-WO-001-review-01.md`  
+**Remediation code commit:** `c2322a0`  
+**Final PR head:** `UPDATED_AFTER_PUSH`  
 
-> For SDA-governed work, the complete evidence structure from `docs/sda/templates/pull-request-evidence.md` is included in `docs/sda/evidence/NLI-WO-001-pull-request-evidence.md`. This PR does not claim SDA acceptance or national production approval.
+> PR #4 remains draft. This does not claim SDA acceptance, official publication authority, or national-production approval.
 
 ## Outcome
 
-Implements controlled database/reference-data lifecycle for NLI-WO-001:
+Resolved Review 01 findings F01–F09 for controlled database lifecycle:
 
-- API startup no longer creates/changes schema or seeds data.
-- Ordered migrations now create an empty PostGIS database through a checksum ledger.
-- Existing migrations `001–006` remain byte-for-byte checksum-preserved.
-- Existing pilot DB transition is explicit and data-preserving.
-- Governed reference data and non-production fixtures are loaded by separate commands.
-- API CI now runs a real PostGIS lifecycle rehearsal.
-- Restore drill validates migration ledger and PostGIS after restore.
+- Removed executable runtime schema creation/seed path.
+- Added real PostgreSQL/PostGIS integration tests for checksum/filename drift, failed migrations, concurrent execution, startup invariance, pending migration readiness, credential/session preservation, existing-pilot transition, reference-data drift, and fixture ownership/cleanup.
+- Reference-data and fixture commands now fail clearly when migrations are missing and do not create tables.
+- Fixture cleanup is ownership-safe and collision-safe.
+- Existing-pilot transition validates structure and holds one advisory lock through validation/application.
+- `000` is schema-only; auth-token backfill is isolated in `007_lifecycle_metadata_hardening.sql`.
+- Local bootstrap was fixed and proven from an isolated clean Compose project through API health.
+- API CI is split into API tests plus dedicated migration lifecycle/dump-restore proof.
 
 ## Acceptance criteria
 
-| Criterion | Status | Implementation | Evidence/test | Residual condition |
-|---|---|---|---|---|
-| AC-01 | PASS | Empty DB creation via `000` + ordered runner | Empty PostGIS proof: ledger `7`, PostGIS `1` | SDA review of generated schema bridge |
-| AC-02 | PASS | Ledger includes version/filename/checksum/context | `migrate.py apply/status` | None known |
-| AC-03 | PASS | Checksum mismatch fails closed | Source/status controls | Add deeper negative DB test if requested |
-| AC-04 | PASS | Transactions + advisory lock | Source and empty DB proof | Optional future concurrency stress |
-| AC-05 | PASS | `transition-pilot` for existing DB | Before/after counts identical; live pilot transitioned | Drift outside checked tables fails closed |
-| AC-06 | PASS | API lifespan no longer calls `init_db()` | Startup invariance test | None |
-| AC-07 | PASS | Startup does not auto-apply pending migrations | Read-only status path | Expand pending DB integration if requested |
-| AC-08 | PASS | Explicit idempotent reference loader | First load `74`, second `0` | Source authority signoff still institutional |
-| AC-09 | PASS | Fixtures explicit and production-refusing | Prod refusal + allowed load/cleanup | Fixture package can expand later |
-| AC-10 | PASS | Credential preservation/default protection | Backend tests + loader SQL | None known |
-| AC-11 | PASS | Local bootstrap script added | Shell syntax + lifecycle proof | Depends on private env values |
-| AC-12 | PASS | CI PostGIS service and rehearsal | Workflow YAML ok; local equivalent passed | Remote CI awaits PR run |
-| AC-13 | PASS | Restore drill validates ledger/PostGIS | Restore drill passed | Backup artifact local/ignored |
-| AC-14 | PASS | README/env/plan/evidence updated | Docs included | Runbook polish after SDA review |
-| AC-15 | PASS | Existing gates preserved | Backend `175 passed`; frontend `test:ci` passed | Existing httpx warnings remain |
+Criteria are marked `READY FOR SDA REVIEW`, not SDA-accepted `PASS`.
+
+| Criterion | Status | Evidence |
+|---|---|---|
+| AC-01 | READY FOR SDA REVIEW | Empty PostGIS DB integration test; ledger `000–007`; PostGIS asserted. |
+| AC-02 | READY FOR SDA REVIEW | Ledger field assertions and filename drift detection. |
+| AC-03 | READY FOR SDA REVIEW | DB-backed checksum drift test. |
+| AC-04 | READY FOR SDA REVIEW | Failed migration rollback test; concurrent runner test; transition lock fix. |
+| AC-05 | READY FOR SDA REVIEW | Existing-pilot transition before/after invariant and drift rejection test. |
+| AC-06 | READY FOR SDA REVIEW | Real API startup schema/row fingerprint invariance test. |
+| AC-07 | READY FOR SDA REVIEW | Pending migration readiness/no-auto-apply test. |
+| AC-08 | READY FOR SDA REVIEW | Missing-migration, idempotency, status, history, and drift tests. |
+| AC-09 | READY FOR SDA REVIEW | Fixture collision/ownership/cleanup tests. |
+| AC-10 | READY FOR SDA REVIEW | Credential/session preservation test. |
+| AC-11 | READY FOR SDA REVIEW | Isolated clean bootstrap proof and API health check. |
+| AC-12 | READY FOR SDA REVIEW | API CI PostGIS env + dedicated lifecycle job; final remote result pending below. |
+| AC-13 | READY FOR SDA REVIEW | Lifecycle CI includes dump/restore ledger/PostGIS proof; final remote result pending below. |
+| AC-14 | READY FOR SDA REVIEW | Bootstrap/docs/evidence updated. |
+| AC-15 | READY FOR SDA REVIEW | Local backend/frontend gates green; final remote result pending below. |
+
+## Local verification
+
+| Check | Result |
+|---|---|
+| Backend full suite with PostGIS env | `187 passed, 5 warnings` |
+| Lifecycle integration suite | `11 passed` |
+| Frontend API type generation | 105 operations; no diff |
+| Frontend `test:ci` | passed |
+| YAML / Python / shell syntax | passed |
+| Isolated clean bootstrap | `bootstrap_local: ok`; `/api/v1/health` returned `status: ok` |
+
+## Remote verification
+
+Updated after push:
+
+| Workflow/check | Final result | URL |
+|---|---|---|
+| API CI | `PENDING` | `UPDATED_AFTER_PUSH` |
+| Frontend CI | `PENDING` | `UPDATED_AFTER_PUSH` |
+
+## Review resolution log
+
+See `docs/sda/reviews/NLI-WO-001-review-01.md` section 9 and full evidence at:
+
+`docs/sda/evidence/NLI-WO-001-pull-request-evidence.md`
 
 ## Required declarations
 
-- [x] I read the repository `AGENTS.md`, active work order, referenced ADRs, and standards.
-- [x] Every acceptance criterion is represented truthfully.
-- [x] Database, API, identity/security, GIS, audit/evidence, workflow, operations, and documentation effects are covered or marked not applicable with a reason.
-- [x] Required tests and generated contracts are current.
+- [x] I read the repository `AGENTS.md`, active work order, referenced ADRs, standards, and Review 01.
+- [x] Every Review 01 finding F01–F09 has a response and evidence.
+- [x] Database, API, identity/security, GIS, audit/evidence, workflow, operations, and documentation effects are covered or marked with a remaining condition.
+- [x] Required local tests and generated contracts are current.
 - [x] No control was disabled merely to pass CI.
 - [x] No secrets or production personal/evidence data were committed.
-- [x] RFIs, deviations, limitations, and residual risks are linked.
-- [x] This pull request does not claim SDA acceptance, official publication authority, or national-production approval.
-
-## Evidence
-
-See full evidence file:
-
-`docs/sda/evidence/NLI-WO-001-pull-request-evidence.md`
+- [x] This pull request remains draft and does not claim SDA acceptance, official publication authority, or national-production approval.
