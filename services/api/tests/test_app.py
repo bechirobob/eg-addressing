@@ -10,6 +10,7 @@ import app.main as main
 from app.security_posture import production_readiness_status
 from app.main import app
 
+REPO_ROOT = Path(__file__).resolve().parents[3]
 client = TestClient(app)
 
 ADMIN = {'id': 'user-admin', 'username': 'admin', 'full_name': 'National Platform Administrator', 'role': 'admin'}
@@ -1669,7 +1670,7 @@ def test_postgis_readiness_reports_address_record_geometry_and_index(monkeypatch
 
 
 def test_postgis_phase2_migration_adds_canonical_geometry_safely() -> None:
-    migration = Path('/home/ubuntu/projects/eg-addressing/infra/migrations/005_address_record_postgis_geometry.sql')
+    migration = REPO_ROOT / 'infra/migrations/005_address_record_postgis_geometry.sql'
     assert migration.exists()
     sql = migration.read_text()
     assert "address_records" in sql
@@ -1681,7 +1682,7 @@ def test_postgis_phase2_migration_adds_canonical_geometry_safely() -> None:
 
 
 def test_canonical_address_record_upsert_populates_postgis_geometry() -> None:
-    source = Path('/home/ubuntu/projects/eg-addressing/services/api/app/db.py').read_text()
+    source = (REPO_ROOT / 'services/api/app/db.py').read_text()
     upsert_sql = source[source.index('def upsert_address_record_from_geotag'):source.index('def search_address_records')]
     assert 'geom' in upsert_sql
     assert 'ST_SetSRID(ST_MakePoint(EXCLUDED.longitude, EXCLUDED.latitude), 4326)::geography' in upsert_sql
@@ -1689,12 +1690,12 @@ def test_canonical_address_record_upsert_populates_postgis_geometry() -> None:
 
 
 def test_address_record_retirement_migration_and_queries_exclude_archived_records() -> None:
-    migration = Path('/home/ubuntu/projects/eg-addressing/infra/migrations/006_address_record_retirement_policy.sql')
+    migration = REPO_ROOT / 'infra/migrations/006_address_record_retirement_policy.sql'
     assert migration.exists()
     migration_sql = migration.read_text()
     assert 'ADD COLUMN IF NOT EXISTS is_archived BOOLEAN NOT NULL DEFAULT FALSE' in migration_sql
     assert 'idx_address_records_active_status_updated' in migration_sql
-    source = Path('/home/ubuntu/projects/eg-addressing/services/api/app/db.py').read_text()
+    source = (REPO_ROOT / 'services/api/app/db.py').read_text()
     search_sql = source[source.index('def search_address_records'):source.index('def get_address_record_case_file')]
     nearby_sql = source[source.index('def find_nearby_address_records'):source.index('def _hold_field_status')]
     geotag_list_sql = source[source.index('def list_citizen_geotag_submissions'):source.index('def update_citizen_geotag_status')]
@@ -2863,7 +2864,7 @@ def test_runtime_db_module_has_no_executable_schema_bootstrap() -> None:
 
 
 def test_admin_smoke_uses_environment_supplied_credentials() -> None:
-    source = Path('/home/ubuntu/projects/eg-addressing/apps/admin-portal/scripts/admin-flow-smoke.mjs').read_text()
+    source = (REPO_ROOT / 'apps/admin-portal/scripts/admin-flow-smoke.mjs').read_text()
 
     assert 'SMOKE_ADMIN_USERNAME' in source
     assert 'SMOKE_ADMIN_PASSWORD' in source
@@ -2944,7 +2945,7 @@ def test_admin_can_publish_registry_ready_geotag_and_gets_public_record(monkeypa
 
 
 def test_publication_ui_has_admin_publish_action_separate_from_simulation() -> None:
-    source = Path('/home/ubuntu/projects/eg-addressing/apps/admin-portal/components/PublicationOperationsPanel.tsx').read_text()
+    source = (REPO_ROOT / 'apps/admin-portal/components/PublicationOperationsPanel.tsx').read_text()
 
     assert '/api/v1/geotag-submissions/${encodeURIComponent(publishSubmissionId)}/publish' in source
     assert 'Publish ready-for-approval case file' in source
