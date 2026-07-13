@@ -91,7 +91,6 @@ from app.db import (
     get_road,
     get_submission,
     get_territory,
-    init_db,
     list_address_corrections,
     list_citizen_geotag_submissions,
     list_admin_units as list_admin_units_db,

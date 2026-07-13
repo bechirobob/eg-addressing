@@ -224,12 +224,11 @@ def test_cookie_mode_public_submission_does_not_require_csrf(monkeypatch) -> Non
 
 
 
-def test_init_db_keeps_official_municipality_routing_active() -> None:
-    source = Path('app/db.py').read_text()
-    assert "WHERE type = 'official-municipality'" in source
-    assert "AND readiness = 'official-routing'" in source
-    assert 'SET is_archived = FALSE' in source
-    assert "AND NOT (type = 'official-municipality' AND readiness = 'official-routing')" in source
+def test_migration_schema_preserves_official_municipality_routing_columns() -> None:
+    source = Path('../../infra/migrations/000_current_operational_schema.sql').read_text()
+    assert 'territories' in source
+    assert 'readiness TEXT NOT NULL' in source
+    assert 'is_archived BOOLEAN NOT NULL DEFAULT FALSE' in source
 
 def test_official_admin_routing_seed_contains_table_backed_units() -> None:
     from app.data import ADMIN_UNITS, TERRITORIES
@@ -2854,14 +2853,13 @@ def test_default_demo_password_policy_can_reject_seeded_passwords(monkeypatch) -
     assert db.default_demo_password_rejected('unknown', 'admin123') is False
 
 
-def test_user_seed_preserves_existing_password_hash_and_active_state() -> None:
+def test_runtime_db_module_has_no_executable_schema_bootstrap() -> None:
     source = Path(db.__file__).read_text()
-    seed_section = source[source.index('for user in DEMO_USERS:'):source.index('for territory in TERRITORIES:')]
 
-    assert 'password_hash = users.password_hash' in seed_section
-    assert 'is_active = users.is_active' in seed_section
-    assert 'password_hash = EXCLUDED.password_hash' not in seed_section
-    assert 'is_active = TRUE' not in seed_section
+    assert 'def _ensure_schema' not in source
+    assert 'CREATE TABLE IF NOT EXISTS' not in source
+    assert 'ALTER TABLE' not in source
+    assert 'init_db is disabled by NLI-WO-001' in source
 
 
 def test_admin_smoke_uses_environment_supplied_credentials() -> None:

@@ -31,6 +31,7 @@ def test_migration_runner_source_has_sda_controls() -> None:
     assert 'execution_context' in source
     assert 'checksum-mismatch' in source
     assert 'transition-pilot' in source
+    assert "row['filename'] != migration.filename" in source
 
 
 def test_initial_schema_migration_precedes_legacy_marker_and_preserves_existing_checksums() -> None:
@@ -49,11 +50,24 @@ def test_initial_schema_migration_precedes_legacy_marker_and_preserves_existing_
 def test_reference_and_fixture_lifecycle_files_exist_and_are_separated() -> None:
     assert Path('../../infra/reference-data/manifest.json').exists()
     assert Path('../../infra/reference-data/eg-admin-units-v1.json').exists()
+    assert Path('../../infra/fixtures/development-fixtures-v1.json').exists()
     fixture_script = Path('../../infra/scripts/load_development_fixtures.py').read_text(encoding='utf-8')
+    reference_script = Path('../../infra/scripts/load_reference_data.py').read_text(encoding='utf-8')
     assert 'APP_ENV' in fixture_script
     assert 'production' in fixture_script
     assert 'DEVELOPMENT_FIXTURE_PASSWORD' in fixture_script
     assert 'admin123' not in fixture_script
+    assert 'CREATE TABLE' not in fixture_script
+    assert 'CREATE TABLE' not in reference_script
+    assert 'missing-migrations' in fixture_script
+    assert 'missing-migrations' in reference_script
+
+
+def test_schema_bridge_is_schema_only_and_data_backfill_is_isolated() -> None:
+    bridge = Path('../../infra/migrations/000_current_operational_schema.sql').read_text(encoding='utf-8')
+    hardening = Path('../../infra/migrations/007_lifecycle_metadata_hardening.sql').read_text(encoding='utf-8')
+    assert 'UPDATE auth_tokens' not in bridge
+    assert 'UPDATE auth_tokens' in hardening
 
 
 def test_run_migrations_shell_delegates_to_controlled_runner() -> None:

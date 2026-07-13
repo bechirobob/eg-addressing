@@ -17,6 +17,7 @@ from psycopg.rows import dict_row
 
 ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_PACKAGE = ROOT / 'infra/reference-data/eg-admin-units-v1.json'
+REQUIRED_TABLES = {'schema_migrations', 'provinces', 'admin_units', 'reference_data_loads', 'reference_data_load_history'}
 
 
 def database_target() -> str | dict[str, Any]:
@@ -56,20 +57,33 @@ def read_package(path: Path) -> tuple[dict[str, Any], str]:
     return json.loads(raw.decode('utf-8')), hashlib.sha256(raw).hexdigest()
 
 
-def ensure_metadata_table(cur: Any) -> None:
-    cur.execute(
-        '''
-        CREATE TABLE IF NOT EXISTS reference_data_loads (
-            package_id TEXT PRIMARY KEY,
-            package_version TEXT NOT NULL,
-            source TEXT NOT NULL,
-            authority_status TEXT NOT NULL,
-            package_checksum TEXT NOT NULL,
-            loaded_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-            execution_context TEXT NOT NULL DEFAULT '{}'
-        )
-        '''
-    )
+def existing_tables(cur: Any) -> set[str]:
+    cur.execute("SELECT table_name FROM information_schema.tables WHERE table_schema = 'public'")
+    return {row['table_name'] for row in cur.fetchall()}
+
+
+def require_migrated_schema(cur: Any) -> None:
+    missing = sorted(REQUIRED_TABLES - existing_tables(cur))
+    if missing:
+        raise SystemExit(json.dumps({'status': 'missing-migrations', 'missing_tables': missing}, indent=2))
+
+
+def expected_state(cur: Any, package: dict[str, Any], checksum: str) -> dict[str, Any]:
+    cur.execute('SELECT package_id, package_version, package_checksum, loaded_at FROM reference_data_loads WHERE package_id = %s', (package['package_id'],))
+    loaded = cur.fetchone()
+    if not loaded:
+        state = 'not-loaded'
+    elif loaded['package_checksum'] == checksum and loaded['package_version'] == package['package_version']:
+        state = 'current'
+    else:
+        state = 'drift'
+    return {
+        'package_id': package['package_id'],
+        'expected_version': package['package_version'],
+        'expected_checksum': checksum,
+        'state': state,
+        'loaded': dict(loaded) if loaded else None,
+    }
 
 
 def load(package_path: Path) -> int:
@@ -80,7 +94,10 @@ def load(package_path: Path) -> int:
     with connect_database() as conn:
         with conn.transaction():
             with conn.cursor() as cur:
-                ensure_metadata_table(cur)
+                require_migrated_schema(cur)
+                state = expected_state(cur, package, checksum)
+                if state['state'] == 'drift':
+                    raise SystemExit(json.dumps({'status': 'package-drift', **state}, indent=2, default=str))
                 for province in records['provinces']:
                     cur.execute('SELECT name FROM provinces WHERE code = %s', (province['code'],))
                     existing = cur.fetchone()
@@ -124,23 +141,37 @@ def load(package_path: Path) -> int:
                         source = EXCLUDED.source,
                         authority_status = EXCLUDED.authority_status,
                         package_checksum = EXCLUDED.package_checksum,
-                        loaded_at = NOW(),
+                        loaded_at = CASE WHEN reference_data_loads.package_checksum = EXCLUDED.package_checksum THEN reference_data_loads.loaded_at ELSE NOW() END,
                         execution_context = EXCLUDED.execution_context
                     ''',
                     (package['package_id'], package['package_version'], package['source'], package['authority_status'], checksum, context('load-reference-data')),
+                )
+                cur.execute(
+                    '''
+                    INSERT INTO reference_data_load_history(package_id, package_version, source, authority_status, package_checksum, execution_context)
+                    SELECT %s, %s, %s, %s, %s, %s
+                    WHERE NOT EXISTS (
+                        SELECT 1 FROM reference_data_load_history WHERE package_id = %s AND package_checksum = %s
+                    )
+                    ''',
+                    (package['package_id'], package['package_version'], package['source'], package['authority_status'], checksum, context('load-reference-data'), package['package_id'], checksum),
                 )
         print(json.dumps({'status': 'loaded', 'changed_rows': changed, 'package_id': package['package_id'], 'package_version': package['package_version'], 'checksum': checksum}, indent=2))
     return 0
 
 
-def status() -> int:
+def status(package_path: Path) -> int:
+    package, checksum = read_package(package_path)
     with connect_database() as conn:
         with conn.cursor() as cur:
-            ensure_metadata_table(cur)
+            require_migrated_schema(cur)
+            state = expected_state(cur, package, checksum)
             cur.execute('SELECT package_id, package_version, source, authority_status, package_checksum, loaded_at FROM reference_data_loads ORDER BY package_id')
             rows = [dict(row) for row in cur.fetchall()]
-    print(json.dumps({'status': 'loaded' if rows else 'not-loaded', 'packages': rows}, indent=2, default=str))
-    return 0 if rows else 1
+            cur.execute('SELECT COUNT(*) AS count FROM reference_data_load_history')
+            history_count = cur.fetchone()['count']
+    print(json.dumps({'status': state['state'], 'expected': state, 'packages': rows, 'history_count': history_count}, indent=2, default=str))
+    return 0 if state['state'] == 'current' else 1
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -150,7 +181,7 @@ def main(argv: list[str] | None = None) -> int:
     args = parser.parse_args(argv)
     if args.command == 'load':
         return load(Path(args.package))
-    return status()
+    return status(Path(args.package))
 
 
 if __name__ == '__main__':

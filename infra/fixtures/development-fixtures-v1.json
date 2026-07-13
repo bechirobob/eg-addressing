@@ -1,0 +1,33 @@
+{
+  "fixture_id": "development-users-v1",
+  "fixture_version": "2026-07-13.2",
+  "description": "Non-production staff accounts for controlled local and CI smoke testing only.",
+  "records": {
+    "users": [
+      {
+        "id": "user-admin",
+        "username": "admin",
+        "full_name": "National Platform Administrator",
+        "role": "admin"
+      },
+      {
+        "id": "user-editor",
+        "username": "editor",
+        "full_name": "Registry Editor",
+        "role": "editor"
+      },
+      {
+        "id": "user-viewer",
+        "username": "viewer",
+        "full_name": "Program Viewer",
+        "role": "viewer"
+      },
+      {
+        "id": "user-agency-viewer",
+        "username": "agency_viewer",
+        "full_name": "Agency Review Viewer",
+        "role": "agency_viewer"
+      }
+    ]
+  }
+}

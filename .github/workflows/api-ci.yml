@@ -8,6 +8,7 @@ on:
       - 'infra/migrations/**'
       - 'infra/scripts/**'
       - 'infra/reference-data/**'
+      - 'infra/fixtures/**'
       - 'infra/docker/**'
       - '.github/workflows/api-ci.yml'
   pull_request:
@@ -17,12 +18,13 @@ on:
       - 'infra/migrations/**'
       - 'infra/scripts/**'
       - 'infra/reference-data/**'
+      - 'infra/fixtures/**'
       - 'infra/docker/**'
       - '.github/workflows/api-ci.yml'
 
 jobs:
-  api:
-    name: api
+  api-tests:
+    name: api-tests
     runs-on: ubuntu-latest
     services:
       postgres:
@@ -53,25 +55,71 @@ jobs:
       - name: Install dependencies
         run: python -m pip install -r requirements.txt
 
-      - name: Run API tests
+      - name: Run API and database lifecycle tests
         env:
           PYTHONPATH: .
-        run: python -m pytest -q
-
-      - name: Run controlled migration lifecycle rehearsal
-        working-directory: .
-        env:
           POSTGRES_HOST: 127.0.0.1
           POSTGRES_PORT: '5432'
           POSTGRES_DB: addressing_ci
           POSTGRES_USER: addressing
           POSTGRES_PASSWORD: ci_password
           APP_ENV: test
+        run: python -m pytest -q
+
+  migration-lifecycle:
+    name: migration-lifecycle
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgis/postgis:16-3.4
+        env:
+          POSTGRES_DB: addressing_lifecycle
+          POSTGRES_USER: addressing
+          POSTGRES_PASSWORD: ci_password
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U addressing -d addressing_lifecycle"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install API dependencies
+        working-directory: services/api
+        run: python -m pip install -r requirements.txt
+
+      - name: Run controlled migration lifecycle rehearsal
+        env:
+          POSTGRES_HOST: 127.0.0.1
+          POSTGRES_PORT: '5432'
+          POSTGRES_DB: addressing_lifecycle
+          POSTGRES_USER: addressing
+          POSTGRES_PASSWORD: ci_password
+          APP_ENV: test
+          PYTHONPATH: services/api
         run: |
           python infra/scripts/migrate.py apply
           python infra/scripts/migrate.py status
+          python infra/scripts/load_reference_data.py status || true
           python infra/scripts/load_reference_data.py load
-          python infra/scripts/load_reference_data.py load
+          python infra/scripts/load_reference_data.py status
           FIXTURE_PASSWORD="$(python -c 'import secrets; print("ci-" + secrets.token_urlsafe(18))')"
           EG_ALLOW_DEV_FIXTURES=YES DEVELOPMENT_FIXTURE_PASSWORD="$FIXTURE_PASSWORD" python infra/scripts/load_development_fixtures.py load
           EG_ALLOW_DEV_FIXTURES=YES DEVELOPMENT_FIXTURE_PASSWORD="$FIXTURE_PASSWORD" python infra/scripts/load_development_fixtures.py cleanup
+          python infra/scripts/migrate.py status
+          sudo apt-get update && sudo apt-get install -y postgresql-client
+          export PGPASSWORD="$POSTGRES_PASSWORD"
+          pg_dump -h "$POSTGRES_HOST" -p "$POSTGRES_PORT" -U "$POSTGRES_USER" -d "$POSTGRES_DB" -Fc -f /tmp/wo001-lifecycle.dump
+          dropdb -h "$POSTGRES_HOST" -p "$POSTGRES_PORT" -U "$POSTGRES_USER" --if-exists addressing_lifecycle_restore
+          createdb -h "$POSTGRES_HOST" -p "$POSTGRES_PORT" -U "$POSTGRES_USER" addressing_lifecycle_restore
+          pg_restore -h "$POSTGRES_HOST" -p "$POSTGRES_PORT" -U "$POSTGRES_USER" -d addressing_lifecycle_restore --no-owner --no-privileges /tmp/wo001-lifecycle.dump
+          psql -h "$POSTGRES_HOST" -p "$POSTGRES_PORT" -U "$POSTGRES_USER" -d addressing_lifecycle_restore -At -c "SELECT jsonb_build_object('migration_rows',(SELECT COUNT(*)::int FROM schema_migrations),'latest_version',(SELECT MAX(version) FROM schema_migrations),'checksum_rows',(SELECT COUNT(*)::int FROM schema_migrations WHERE checksum <> ''),'postgis_extensions',(SELECT COUNT(*)::int FROM pg_extension WHERE extname='postgis'))::text" | tee /tmp/wo001-restore-ledger.json
+          python -c "import json, pathlib; ledger=json.loads(pathlib.Path('/tmp/wo001-restore-ledger.json').read_text()); assert ledger['migration_rows'] == 8, ledger; assert ledger['latest_version'] == '007', ledger; assert ledger['checksum_rows'] == 8, ledger; assert ledger['postgis_extensions'] == 1, ledger"

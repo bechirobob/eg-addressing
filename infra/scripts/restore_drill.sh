@@ -92,7 +92,7 @@ SQL
 python3 - <<PY
 import json, sys
 ledger = json.loads('''$LEDGER_JSON''')
-if ledger['migration_rows'] < 7 or ledger['latest_version'] != '006' or ledger['checksum_rows'] != ledger['migration_rows'] or ledger['postgis_extensions'] != 1:
+if ledger['migration_rows'] < 8 or ledger['latest_version'] != '007' or ledger['checksum_rows'] != ledger['migration_rows'] or ledger['postgis_extensions'] != 1:
     print(json.dumps({'status': 'failed', 'reason': 'invalid migration ledger after restore', 'ledger': ledger}, indent=2), file=sys.stderr)
     raise SystemExit(1)
 PY
