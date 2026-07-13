@@ -1,0 +1,101 @@
+erDiagram
+  COUNTRY ||--o{ ADMINISTRATIVE_UNIT : contains
+  ADMINISTRATIVE_UNIT ||--o{ ADMINISTRATIVE_UNIT : parent_of
+  ADMINISTRATIVE_UNIT ||--o{ ADMINISTRATIVE_BOUNDARY_VERSION : has
+  ADMINISTRATIVE_UNIT ||--o{ ADMINISTRATIVE_UNIT_NAME : has
+  ADMINISTRATIVE_UNIT ||--o{ OPERATIONAL_AREA_COVERAGE : covered_by
+  OPERATIONAL_AREA ||--o{ OPERATIONAL_AREA_COVERAGE : covers
+
+  SOURCE_PACKAGE ||--o{ SOURCE_RECORD : contains
+  SOURCE_RECORD ||--o{ INTAKE_CASE : supports
+  INTAKE_CASE ||--o{ FIELD_OBSERVATION : has
+  FIELD_OBSERVATION ||--o{ EVIDENCE_OBJECT : has
+
+  ROAD ||--o{ ROAD_SEGMENT : consists_of
+  ROAD ||--o{ ROAD_NAME : named_by
+  ROAD_SEGMENT ||--o{ GEOMETRY_VERSION : has_geometry
+  LANDMARK ||--o{ GEOMETRY_VERSION : has_geometry
+  PARCEL_REFERENCE ||--o{ GEOMETRY_VERSION : may_have_geometry
+  BUILDING ||--o{ ENTRANCE : has
+  BUILDING ||--o{ UNIT : has
+  BUILDING ||--o{ GEOMETRY_VERSION : has_geometry
+  ENTRANCE ||--o{ GEOMETRY_VERSION : has_geometry
+  NON_BUILDING_OBJECT ||--o{ GEOMETRY_VERSION : has_geometry
+
+  LOCATION_RECORD ||--o{ LOCATION_RECORD_VERSION : has_versions
+  LOCATION_RECORD ||--o{ LOCATION_RECORD_EVENT : has_events
+  LOCATION_RECORD ||--o{ GEOMETRY_VERSION : has_location_geometry
+  LOCATION_RECORD ||--o{ LOCATION_RECORD_RELATIONSHIP : relates
+  LOCATION_RECORD ||--o{ PUBLIC_CODE_ALIAS : has_codes
+  LOCATION_RECORD ||--o{ CORRECTION_CASE : corrected_by
+  LOCATION_RECORD ||--o{ DISPUTE_CASE : disputed_by
+
+  LOCATION_RECORD_VERSION }o--o| ROAD_SEGMENT : references
+  LOCATION_RECORD_VERSION }o--o| LANDMARK : references
+  LOCATION_RECORD_VERSION }o--o| PARCEL_REFERENCE : references
+  LOCATION_RECORD_VERSION }o--o| BUILDING : references
+  LOCATION_RECORD_VERSION }o--o| ENTRANCE : references
+  LOCATION_RECORD_VERSION }o--o| UNIT : references
+  LOCATION_RECORD_VERSION }o--o| NON_BUILDING_OBJECT : references
+  LOCATION_RECORD_VERSION }o--|| ADMINISTRATIVE_UNIT : located_in
+  LOCATION_RECORD_VERSION }o--o| OPERATIONAL_AREA : routed_by
+
+  PUBLICATION_RELEASE ||--o{ PUBLICATION_RELEASE_ITEM : contains
+  PUBLICATION_RELEASE_ITEM }o--|| LOCATION_RECORD : releases
+
+  COUNTRY {
+    text country_id PK
+    text iso2_code
+    text official_name_es
+    text official_name_en
+    text status
+  }
+  ADMINISTRATIVE_UNIT {
+    text admin_unit_id PK
+    text parent_admin_unit_id FK
+    text admin_level
+    text official_code
+    text status
+    date effective_from
+    date effective_to
+  }
+  OPERATIONAL_AREA {
+    text operational_area_id PK
+    text area_type
+    text purpose
+    text status
+  }
+  LOCATION_RECORD {
+    text location_record_id PK
+    text current_version_id FK
+    text lifecycle_state
+    text publication_state
+    text classification
+    timestamptz created_at
+  }
+  LOCATION_RECORD_VERSION {
+    text location_record_version_id PK
+    text location_record_id FK
+    integer version_number
+    text label_es
+    text label_en
+    text version_reason
+    boolean is_current
+  }
+  GEOMETRY_VERSION {
+    text geometry_version_id PK
+    text subject_type
+    text subject_id
+    text geometry_role
+    text geometry_type
+    text crs
+    text quality_state
+    boolean is_current
+  }
+  PUBLIC_CODE_ALIAS {
+    text public_code_alias_id PK
+    text location_record_id FK
+    text public_code
+    text code_state
+    boolean is_current
+  }
