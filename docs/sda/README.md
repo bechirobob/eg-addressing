@@ -23,9 +23,11 @@ When these documents conflict, the precedence rules in `AGENTS.md` apply. Materi
 - SDA charter: **established**
 - Current-state baseline: **v0.1**
 - Target reference architecture: **v0.1**
-- Initial risk register: **open and controlled**
-- Active implementation work order: [`NLI-WO-001 — Controlled Database and Reference-Data Lifecycle`](work-orders/NLI-WO-001-controlled-database-lifecycle.md)
+- Risk register: **active and controlled**
+- Accepted implementation work: [`NLI-WO-001 — Controlled Database and Reference-Data Lifecycle`](work-orders/NLI-WO-001-closeout.md)
+- Active design-authority work order: [`NLI-WO-002 — Canonical National Location Data Model`](work-orders/NLI-WO-002-canonical-national-location-data-model.md)
 - National production status: **not approved**
+- Official publication authority: **not established in the executable workflow**
 
 ## Directory structure
 
@@ -38,7 +40,7 @@ docs/sda/
   risk-register.md
   standards/       Mandatory engineering rules
   adrs/            Accepted architecture decisions
-  work-orders/     Authorized implementation directives
+  work-orders/     Issued directives and immutable closeout records
   templates/       Required evidence and RFI formats
   reviews/         SDA acceptance and rework records
 ```
@@ -46,8 +48,8 @@ docs/sda/
 ## Controlled delivery cycle
 
 1. **Issue** — the SDA creates a work order with scope, constraints, acceptance criteria, and required evidence.
-2. **Plan** — the implementation agent maps its plan to every acceptance criterion before coding.
-3. **Implement** — changes are made on a dedicated branch with tests, migrations, and documentation.
+2. **Plan** — the implementation agent maps its plan to every acceptance criterion before coding or modelling.
+3. **Implement or model** — changes are made on a dedicated branch with tests, migrations, diagrams, and documentation appropriate to the work order.
 4. **Evidence** — the pull request records criterion-by-criterion proof, operational effects, and residual risk.
 5. **Review** — the SDA classifies findings as Blocker, Required, Advisory, Accepted Risk, or Architecture Decision Required.
 6. **Correct** — the implementation agent resolves each finding with a commit, test, evidence item, RFI, or risk request.
@@ -60,7 +62,7 @@ Implementation completion is not acceptance. Passing CI is required evidence, no
 
 - **Class A — National authority or trust:** identity, publication, address-code grammar, official geometry, data classification, bulk exports, destructive operations, institutional scope. Requires explicit SDA approval and enhanced evidence.
 - **Class B — Core platform:** schema, APIs, workflows, evidence handling, integrations, deployment, resilience. Requires a work order or explicit inclusion in an approved work order.
-- **Class C — Controlled maintenance:** compatible bug fixes, copy corrections, internal refactoring, and dependency maintenance without authority or data-model effects. Still requires normal review and tests.
+- **Class C — Controlled maintenance:** compatible defect fixes, copy/localization corrections, and low-risk refactoring. Requires normal tests and review. A change becomes Class A or B when its real effects cross those boundaries.
 
 Any uncertainty about class is resolved upward.
 
