@@ -342,7 +342,9 @@ class PublicationPackCreate(BaseModel):
 
 @asynccontextmanager
 async def lifespan(_: FastAPI):
-    init_db()
+    # NLI-WO-001: ordinary API startup must not create/alter schema, load
+    # reference data, or seed development fixtures. Operators use the explicit
+    # migration/reference/fixture lifecycle commands before application start.
     yield
 
 

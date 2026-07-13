@@ -33,13 +33,19 @@ from app.data import (
 
 PASSWORD_SALT = 'eg-addressing-demo-salt'
 SESSION_TTL_HOURS = max(1, int(os.getenv('SESSION_TTL_HOURS', '12')))
-ALLOW_DEFAULT_DEMO_PASSWORDS = os.getenv('ALLOW_DEFAULT_DEMO_PASSWORDS', 'true').strip().lower() not in {'0', 'false', 'no'}
+LEGACY_DEFAULT_DEMO_PASSWORDS = {
+    'admin': 'admin123',
+    'editor': 'editor123',
+    'viewer': 'viewer123',
+    'agency_viewer': 'agency123',
+}
+ALLOW_DEFAULT_DEMO_PASSWORDS = os.getenv('ALLOW_DEFAULT_DEMO_PASSWORDS', 'false').strip().lower() in {'1', 'true', 'yes'}
 
 
 def default_demo_password_rejected(username: str, password: str) -> bool:
     if ALLOW_DEFAULT_DEMO_PASSWORDS:
         return False
-    return any(user['username'] == username and user['password'] == password for user in DEMO_USERS)
+    return LEGACY_DEFAULT_DEMO_PASSWORDS.get(username) == password
 
 
 class UnknownProvinceError(ValueError):
@@ -689,7 +695,9 @@ def init_db() -> None:
                     ),
                 )
 
+            legacy_fixture_password = os.getenv('DEVELOPMENT_FIXTURE_PASSWORD')
             for user in DEMO_USERS:
+                seed_password = legacy_fixture_password or secrets.token_urlsafe(32)
                 cursor.execute(
                     '''
                     INSERT INTO users (id, username, full_name, role, password_hash, is_active)
@@ -701,7 +709,7 @@ def init_db() -> None:
                         password_hash = users.password_hash,
                         is_active = users.is_active
                     ''',
-                    (user['id'], user['username'], user['full_name'], user['role'], _hash_password(user['password'])),
+                    (user['id'], user['username'], user['full_name'], user['role'], _hash_password(seed_password)),
                 )
 
             for territory in TERRITORIES:

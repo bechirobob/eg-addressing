@@ -552,28 +552,24 @@ DEMO_USERS = [
         'username': 'admin',
         'full_name': 'National Platform Administrator',
         'role': 'admin',
-        'password': 'admin123',
     },
     {
         'id': 'user-editor',
         'username': 'editor',
         'full_name': 'Registry Editor',
         'role': 'editor',
-        'password': 'editor123',
     },
     {
         'id': 'user-viewer',
         'username': 'viewer',
         'full_name': 'Program Viewer',
         'role': 'viewer',
-        'password': 'viewer123',
     },
     {
         'id': 'user-agency-viewer',
         'username': 'agency_viewer',
         'full_name': 'Agency Review Viewer',
         'role': 'agency_viewer',
-        'password': 'agency123',
     },
 ]
 

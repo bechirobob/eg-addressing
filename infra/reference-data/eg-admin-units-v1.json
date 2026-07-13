@@ -1,0 +1,774 @@
+{
+  "package_id": "eg-admin-units-v1",
+  "package_version": "2026-07-13",
+  "source": "INEGE-referenced administrative division table and current controlled pilot province baseline",
+  "authority_status": "provisional-government-reference",
+  "records": {
+    "provinces": [
+      {
+        "id": "prov-annobon",
+        "code": "AN",
+        "name": "Annobón"
+      },
+      {
+        "id": "prov-bioko-norte",
+        "code": "BN",
+        "name": "Bioko Norte"
+      },
+      {
+        "id": "prov-bioko-sur",
+        "code": "BS",
+        "name": "Bioko Sur"
+      },
+      {
+        "id": "prov-centro-sur",
+        "code": "CS",
+        "name": "Centro Sur"
+      },
+      {
+        "id": "prov-djibloho",
+        "code": "DJ",
+        "name": "Djibloho"
+      },
+      {
+        "id": "prov-kie-ntem",
+        "code": "KN",
+        "name": "Kié-Ntem"
+      },
+      {
+        "id": "prov-litoral",
+        "code": "LI",
+        "name": "Litoral"
+      },
+      {
+        "id": "prov-wele-nzas",
+        "code": "WN",
+        "name": "Wele-Nzas"
+      }
+    ],
+    "admin_units": [
+      {
+        "id": "admin-unit-annobon",
+        "level": "province",
+        "code": "AN",
+        "parent_id": null,
+        "name_es": "Annobón",
+        "name_en": "Annobón",
+        "status": "active",
+        "sort_order": 10
+      },
+      {
+        "id": "admin-unit-bioko-norte",
+        "level": "province",
+        "code": "BN",
+        "parent_id": null,
+        "name_es": "Bioko Norte",
+        "name_en": "Bioko Norte",
+        "status": "active",
+        "sort_order": 20
+      },
+      {
+        "id": "admin-unit-bioko-sur",
+        "level": "province",
+        "code": "BS",
+        "parent_id": null,
+        "name_es": "Bioko Sur",
+        "name_en": "Bioko Sur",
+        "status": "active",
+        "sort_order": 30
+      },
+      {
+        "id": "admin-unit-centro-sur",
+        "level": "province",
+        "code": "CS",
+        "parent_id": null,
+        "name_es": "Centro Sur",
+        "name_en": "Centro Sur",
+        "status": "active",
+        "sort_order": 40
+      },
+      {
+        "id": "admin-unit-djibloho",
+        "level": "province",
+        "code": "DJ",
+        "parent_id": null,
+        "name_es": "Djibloho",
+        "name_en": "Djibloho",
+        "status": "active",
+        "sort_order": 50
+      },
+      {
+        "id": "admin-unit-kie-ntem",
+        "level": "province",
+        "code": "KN",
+        "parent_id": null,
+        "name_es": "Kié-Ntem",
+        "name_en": "Kié-Ntem",
+        "status": "active",
+        "sort_order": 60
+      },
+      {
+        "id": "admin-unit-litoral",
+        "level": "province",
+        "code": "LI",
+        "parent_id": null,
+        "name_es": "Litoral",
+        "name_en": "Litoral",
+        "status": "active",
+        "sort_order": 70
+      },
+      {
+        "id": "admin-unit-wele-nzas",
+        "level": "province",
+        "code": "WN",
+        "parent_id": null,
+        "name_es": "Wele-Nzas",
+        "name_en": "Wele-Nzas",
+        "status": "active",
+        "sort_order": 80
+      },
+      {
+        "id": "admin-unit-district-san-antonio-de-pale",
+        "level": "district",
+        "code": "AN-D-SAN-ANTONIO-DE-PALE",
+        "parent_id": "admin-unit-annobon",
+        "province_code": "AN",
+        "name_es": "San Antonio de Palé",
+        "name_en": "San Antonio de Palé",
+        "status": "active",
+        "sort_order": 1000
+      },
+      {
+        "id": "admin-unit-municipality-san-antonio-de-pale",
+        "level": "municipality",
+        "code": "AN-M-SAN-ANTONIO-DE-PALE",
+        "parent_id": "admin-unit-district-san-antonio-de-pale",
+        "province_code": "AN",
+        "name_es": "San Antonio de Palé",
+        "name_en": "San Antonio de Palé",
+        "status": "active",
+        "sort_order": 1010
+      },
+      {
+        "id": "admin-unit-district-malabo",
+        "level": "district",
+        "code": "BN-D-MALABO",
+        "parent_id": "admin-unit-bioko-norte",
+        "province_code": "BN",
+        "name_es": "Malabo",
+        "name_en": "Malabo",
+        "status": "active",
+        "sort_order": 1020
+      },
+      {
+        "id": "admin-unit-municipality-malabo",
+        "level": "municipality",
+        "code": "BN-M-MALABO",
+        "parent_id": "admin-unit-district-malabo",
+        "province_code": "BN",
+        "name_es": "Malabo",
+        "name_en": "Malabo",
+        "status": "active",
+        "sort_order": 1030
+      },
+      {
+        "id": "admin-unit-district-baney",
+        "level": "district",
+        "code": "BN-D-BANEY",
+        "parent_id": "admin-unit-bioko-norte",
+        "province_code": "BN",
+        "name_es": "Baney",
+        "name_en": "Baney",
+        "status": "active",
+        "sort_order": 1040
+      },
+      {
+        "id": "admin-unit-municipality-baney",
+        "level": "municipality",
+        "code": "BN-M-BANEY",
+        "parent_id": "admin-unit-district-baney",
+        "province_code": "BN",
+        "name_es": "Baney",
+        "name_en": "Baney",
+        "status": "active",
+        "sort_order": 1050
+      },
+      {
+        "id": "admin-unit-municipality-rebola",
+        "level": "municipality",
+        "code": "BN-M-REBOLA",
+        "parent_id": "admin-unit-district-baney",
+        "province_code": "BN",
+        "name_es": "Rebola",
+        "name_en": "Rebola",
+        "status": "active",
+        "sort_order": 1060
+      },
+      {
+        "id": "admin-unit-district-luba",
+        "level": "district",
+        "code": "BS-D-LUBA",
+        "parent_id": "admin-unit-bioko-sur",
+        "province_code": "BS",
+        "name_es": "Luba",
+        "name_en": "Luba",
+        "status": "active",
+        "sort_order": 1070
+      },
+      {
+        "id": "admin-unit-municipality-batete",
+        "level": "municipality",
+        "code": "BS-M-BATETE",
+        "parent_id": "admin-unit-district-luba",
+        "province_code": "BS",
+        "name_es": "Batete",
+        "name_en": "Batete",
+        "status": "active",
+        "sort_order": 1080
+      },
+      {
+        "id": "admin-unit-municipality-luba",
+        "level": "municipality",
+        "code": "BS-M-LUBA",
+        "parent_id": "admin-unit-district-luba",
+        "province_code": "BS",
+        "name_es": "Luba",
+        "name_en": "Luba",
+        "status": "active",
+        "sort_order": 1090
+      },
+      {
+        "id": "admin-unit-municipality-moka",
+        "level": "municipality",
+        "code": "BS-M-MOKA",
+        "parent_id": "admin-unit-district-luba",
+        "province_code": "BS",
+        "name_es": "Moka",
+        "name_en": "Moka",
+        "status": "active",
+        "sort_order": 1100
+      },
+      {
+        "id": "admin-unit-district-riaba",
+        "level": "district",
+        "code": "BS-D-RIABA",
+        "parent_id": "admin-unit-bioko-sur",
+        "province_code": "BS",
+        "name_es": "Riaba",
+        "name_en": "Riaba",
+        "status": "active",
+        "sort_order": 1110
+      },
+      {
+        "id": "admin-unit-municipality-riaba",
+        "level": "municipality",
+        "code": "BS-M-RIABA",
+        "parent_id": "admin-unit-district-riaba",
+        "province_code": "BS",
+        "name_es": "Riaba",
+        "name_en": "Riaba",
+        "status": "active",
+        "sort_order": 1120
+      },
+      {
+        "id": "admin-unit-district-akurenam",
+        "level": "district",
+        "code": "CS-D-AKURENAM",
+        "parent_id": "admin-unit-centro-sur",
+        "province_code": "CS",
+        "name_es": "Akurenam",
+        "name_en": "Akurenam",
+        "status": "active",
+        "sort_order": 1130
+      },
+      {
+        "id": "admin-unit-municipality-akurenam",
+        "level": "municipality",
+        "code": "CS-M-AKURENAM",
+        "parent_id": "admin-unit-district-akurenam",
+        "province_code": "CS",
+        "name_es": "Akurenam",
+        "name_en": "Akurenam",
+        "status": "active",
+        "sort_order": 1140
+      },
+      {
+        "id": "admin-unit-district-evinayong",
+        "level": "district",
+        "code": "CS-D-EVINAYONG",
+        "parent_id": "admin-unit-centro-sur",
+        "province_code": "CS",
+        "name_es": "Evinayong",
+        "name_en": "Evinayong",
+        "status": "active",
+        "sort_order": 1150
+      },
+      {
+        "id": "admin-unit-municipality-bicurga",
+        "level": "municipality",
+        "code": "CS-M-BICURGA",
+        "parent_id": "admin-unit-district-evinayong",
+        "province_code": "CS",
+        "name_es": "Bicurga",
+        "name_en": "Bicurga",
+        "status": "active",
+        "sort_order": 1160
+      },
+      {
+        "id": "admin-unit-municipality-evinayong",
+        "level": "municipality",
+        "code": "CS-M-EVINAYONG",
+        "parent_id": "admin-unit-district-evinayong",
+        "province_code": "CS",
+        "name_es": "Evinayong",
+        "name_en": "Evinayong",
+        "status": "active",
+        "sort_order": 1170
+      },
+      {
+        "id": "admin-unit-municipality-teguete",
+        "level": "municipality",
+        "code": "CS-M-TEGUETE",
+        "parent_id": "admin-unit-district-evinayong",
+        "province_code": "CS",
+        "name_es": "Teguete",
+        "name_en": "Teguete",
+        "status": "active",
+        "sort_order": 1180
+      },
+      {
+        "id": "admin-unit-district-niefang",
+        "level": "district",
+        "code": "CS-D-NIEFANG",
+        "parent_id": "admin-unit-centro-sur",
+        "province_code": "CS",
+        "name_es": "Niefang",
+        "name_en": "Niefang",
+        "status": "active",
+        "sort_order": 1190
+      },
+      {
+        "id": "admin-unit-municipality-niefang",
+        "level": "municipality",
+        "code": "CS-M-NIEFANG",
+        "parent_id": "admin-unit-district-niefang",
+        "province_code": "CS",
+        "name_es": "Niefang",
+        "name_en": "Niefang",
+        "status": "active",
+        "sort_order": 1200
+      },
+      {
+        "id": "admin-unit-municipality-nkimi",
+        "level": "municipality",
+        "code": "CS-M-NKIMI",
+        "parent_id": "admin-unit-district-niefang",
+        "province_code": "CS",
+        "name_es": "Nkimi",
+        "name_en": "Nkimi",
+        "status": "active",
+        "sort_order": 1210
+      },
+      {
+        "id": "admin-unit-municipality-nkumekien",
+        "level": "municipality",
+        "code": "CS-M-NKUMEKIEN",
+        "parent_id": "admin-unit-district-niefang",
+        "province_code": "CS",
+        "name_es": "Nkumekien",
+        "name_en": "Nkumekien",
+        "status": "active",
+        "sort_order": 1220
+      },
+      {
+        "id": "admin-unit-district-oyala",
+        "level": "district",
+        "code": "DJ-D-OYALA",
+        "parent_id": "admin-unit-djibloho",
+        "province_code": "DJ",
+        "name_es": "Oyala",
+        "name_en": "Oyala",
+        "status": "active",
+        "sort_order": 1230
+      },
+      {
+        "id": "admin-unit-municipality-ciudad-de-la-paz",
+        "level": "municipality",
+        "code": "DJ-M-CIUDAD-DE-LA-PAZ",
+        "parent_id": "admin-unit-district-oyala",
+        "province_code": "DJ",
+        "name_es": "Ciudad de la Paz",
+        "name_en": "Ciudad de la Paz",
+        "status": "active",
+        "sort_order": 1240
+      },
+      {
+        "id": "admin-unit-district-mebere",
+        "level": "district",
+        "code": "DJ-D-MEBERE",
+        "parent_id": "admin-unit-djibloho",
+        "province_code": "DJ",
+        "name_es": "Meberé",
+        "name_en": "Meberé",
+        "status": "active",
+        "sort_order": 1250
+      },
+      {
+        "id": "admin-unit-municipality-mebere",
+        "level": "municipality",
+        "code": "DJ-M-MEBERE",
+        "parent_id": "admin-unit-district-mebere",
+        "province_code": "DJ",
+        "name_es": "Meberé",
+        "name_en": "Meberé",
+        "status": "active",
+        "sort_order": 1260
+      },
+      {
+        "id": "admin-unit-district-ebibeyin",
+        "level": "district",
+        "code": "KN-D-EBIBEYIN",
+        "parent_id": "admin-unit-kie-ntem",
+        "province_code": "KN",
+        "name_es": "Ebibeyin",
+        "name_en": "Ebibeyin",
+        "status": "active",
+        "sort_order": 1270
+      },
+      {
+        "id": "admin-unit-municipality-bidjabidjan",
+        "level": "municipality",
+        "code": "KN-M-BIDJABIDJAN",
+        "parent_id": "admin-unit-district-ebibeyin",
+        "province_code": "KN",
+        "name_es": "Bidjabidján",
+        "name_en": "Bidjabidján",
+        "status": "active",
+        "sort_order": 1280
+      },
+      {
+        "id": "admin-unit-municipality-ebibeyin",
+        "level": "municipality",
+        "code": "KN-M-EBIBEYIN",
+        "parent_id": "admin-unit-district-ebibeyin",
+        "province_code": "KN",
+        "name_es": "Ebibeyin",
+        "name_en": "Ebibeyin",
+        "status": "active",
+        "sort_order": 1290
+      },
+      {
+        "id": "admin-unit-district-micomiseng",
+        "level": "district",
+        "code": "KN-D-MICOMISENG",
+        "parent_id": "admin-unit-kie-ntem",
+        "province_code": "KN",
+        "name_es": "Micomiseng",
+        "name_en": "Micomiseng",
+        "status": "active",
+        "sort_order": 1300
+      },
+      {
+        "id": "admin-unit-municipality-micomiseng",
+        "level": "municipality",
+        "code": "KN-M-MICOMISENG",
+        "parent_id": "admin-unit-district-micomiseng",
+        "province_code": "KN",
+        "name_es": "Micomiseng",
+        "name_en": "Micomiseng",
+        "status": "active",
+        "sort_order": 1310
+      },
+      {
+        "id": "admin-unit-municipality-ncue",
+        "level": "municipality",
+        "code": "KN-M-NCUE",
+        "parent_id": "admin-unit-district-micomiseng",
+        "province_code": "KN",
+        "name_es": "Ncue",
+        "name_en": "Ncue",
+        "status": "active",
+        "sort_order": 1320
+      },
+      {
+        "id": "admin-unit-municipality-nsang",
+        "level": "municipality",
+        "code": "KN-M-NSANG",
+        "parent_id": "admin-unit-district-micomiseng",
+        "province_code": "KN",
+        "name_es": "Nsang",
+        "name_en": "Nsang",
+        "status": "active",
+        "sort_order": 1330
+      },
+      {
+        "id": "admin-unit-district-nsok-nsomo",
+        "level": "district",
+        "code": "KN-D-NSOK-NSOMO",
+        "parent_id": "admin-unit-kie-ntem",
+        "province_code": "KN",
+        "name_es": "Nsok-Nsomo",
+        "name_en": "Nsok-Nsomo",
+        "status": "active",
+        "sort_order": 1340
+      },
+      {
+        "id": "admin-unit-municipality-nsok-nsomo",
+        "level": "municipality",
+        "code": "KN-M-NSOK-NSOMO",
+        "parent_id": "admin-unit-district-nsok-nsomo",
+        "province_code": "KN",
+        "name_es": "Nsok-Nsomo",
+        "name_en": "Nsok-Nsomo",
+        "status": "active",
+        "sort_order": 1350
+      },
+      {
+        "id": "admin-unit-district-bata",
+        "level": "district",
+        "code": "LI-D-BATA",
+        "parent_id": "admin-unit-litoral",
+        "province_code": "LI",
+        "name_es": "Bata",
+        "name_en": "Bata",
+        "status": "active",
+        "sort_order": 1360
+      },
+      {
+        "id": "admin-unit-municipality-bata",
+        "level": "municipality",
+        "code": "LI-M-BATA",
+        "parent_id": "admin-unit-district-bata",
+        "province_code": "LI",
+        "name_es": "Bata",
+        "name_en": "Bata",
+        "status": "active",
+        "sort_order": 1370
+      },
+      {
+        "id": "admin-unit-municipality-machinda",
+        "level": "municipality",
+        "code": "LI-M-MACHINDA",
+        "parent_id": "admin-unit-district-bata",
+        "province_code": "LI",
+        "name_es": "Machinda",
+        "name_en": "Machinda",
+        "status": "active",
+        "sort_order": 1380
+      },
+      {
+        "id": "admin-unit-municipality-rio-campo",
+        "level": "municipality",
+        "code": "LI-M-RIO-CAMPO",
+        "parent_id": "admin-unit-district-bata",
+        "province_code": "LI",
+        "name_es": "Río Campo",
+        "name_en": "Río Campo",
+        "status": "active",
+        "sort_order": 1390
+      },
+      {
+        "id": "admin-unit-district-mbini",
+        "level": "district",
+        "code": "LI-D-MBINI",
+        "parent_id": "admin-unit-litoral",
+        "province_code": "LI",
+        "name_es": "Mbini",
+        "name_en": "Mbini",
+        "status": "active",
+        "sort_order": 1400
+      },
+      {
+        "id": "admin-unit-municipality-bitica",
+        "level": "municipality",
+        "code": "LI-M-BITICA",
+        "parent_id": "admin-unit-district-mbini",
+        "province_code": "LI",
+        "name_es": "Bitica",
+        "name_en": "Bitica",
+        "status": "active",
+        "sort_order": 1410
+      },
+      {
+        "id": "admin-unit-municipality-mbini",
+        "level": "municipality",
+        "code": "LI-M-MBINI",
+        "parent_id": "admin-unit-district-mbini",
+        "province_code": "LI",
+        "name_es": "Mbini",
+        "name_en": "Mbini",
+        "status": "active",
+        "sort_order": 1420
+      },
+      {
+        "id": "admin-unit-district-cogo",
+        "level": "district",
+        "code": "LI-D-COGO",
+        "parent_id": "admin-unit-litoral",
+        "province_code": "LI",
+        "name_es": "Cogo",
+        "name_en": "Cogo",
+        "status": "active",
+        "sort_order": 1430
+      },
+      {
+        "id": "admin-unit-municipality-cabo-san-juan",
+        "level": "municipality",
+        "code": "LI-M-CABO-SAN-JUAN",
+        "parent_id": "admin-unit-district-cogo",
+        "province_code": "LI",
+        "name_es": "Cabo San Juan",
+        "name_en": "Cabo San Juan",
+        "status": "active",
+        "sort_order": 1440
+      },
+      {
+        "id": "admin-unit-municipality-cogo",
+        "level": "municipality",
+        "code": "LI-M-COGO",
+        "parent_id": "admin-unit-district-cogo",
+        "province_code": "LI",
+        "name_es": "Cogo",
+        "name_en": "Cogo",
+        "status": "active",
+        "sort_order": 1450
+      },
+      {
+        "id": "admin-unit-municipality-corisco",
+        "level": "municipality",
+        "code": "LI-M-CORISCO",
+        "parent_id": "admin-unit-district-cogo",
+        "province_code": "LI",
+        "name_es": "Corisco",
+        "name_en": "Corisco",
+        "status": "active",
+        "sort_order": 1460
+      },
+      {
+        "id": "admin-unit-district-aconibe",
+        "level": "district",
+        "code": "WN-D-ACONIBE",
+        "parent_id": "admin-unit-wele-nzas",
+        "province_code": "WN",
+        "name_es": "Aconibe",
+        "name_en": "Aconibe",
+        "status": "active",
+        "sort_order": 1470
+      },
+      {
+        "id": "admin-unit-municipality-aconibe",
+        "level": "municipality",
+        "code": "WN-M-ACONIBE",
+        "parent_id": "admin-unit-district-aconibe",
+        "province_code": "WN",
+        "name_es": "Aconibe",
+        "name_en": "Aconibe",
+        "status": "active",
+        "sort_order": 1480
+      },
+      {
+        "id": "admin-unit-district-anisok",
+        "level": "district",
+        "code": "WN-D-ANISOK",
+        "parent_id": "admin-unit-wele-nzas",
+        "province_code": "WN",
+        "name_es": "Añisok",
+        "name_en": "Añisok",
+        "status": "active",
+        "sort_order": 1490
+      },
+      {
+        "id": "admin-unit-municipality-anisok",
+        "level": "municipality",
+        "code": "WN-M-ANISOK",
+        "parent_id": "admin-unit-district-anisok",
+        "province_code": "WN",
+        "name_es": "Añisok",
+        "name_en": "Añisok",
+        "status": "active",
+        "sort_order": 1500
+      },
+      {
+        "id": "admin-unit-municipality-ayene",
+        "level": "municipality",
+        "code": "WN-M-AYENE",
+        "parent_id": "admin-unit-district-anisok",
+        "province_code": "WN",
+        "name_es": "Ayene",
+        "name_en": "Ayene",
+        "status": "active",
+        "sort_order": 1510
+      },
+      {
+        "id": "admin-unit-district-mongomo",
+        "level": "district",
+        "code": "WN-D-MONGOMO",
+        "parent_id": "admin-unit-wele-nzas",
+        "province_code": "WN",
+        "name_es": "Mongomo",
+        "name_en": "Mongomo",
+        "status": "active",
+        "sort_order": 1520
+      },
+      {
+        "id": "admin-unit-municipality-mengomeyen",
+        "level": "municipality",
+        "code": "WN-M-MENGOMEYEN",
+        "parent_id": "admin-unit-district-mongomo",
+        "province_code": "WN",
+        "name_es": "Mengomeyén",
+        "name_en": "Mengomeyén",
+        "status": "active",
+        "sort_order": 1530
+      },
+      {
+        "id": "admin-unit-municipality-mongomo",
+        "level": "municipality",
+        "code": "WN-M-MONGOMO",
+        "parent_id": "admin-unit-district-mongomo",
+        "province_code": "WN",
+        "name_es": "Mongomo",
+        "name_en": "Mongomo",
+        "status": "active",
+        "sort_order": 1540
+      },
+      {
+        "id": "admin-unit-municipality-nzangayong",
+        "level": "municipality",
+        "code": "WN-M-NZANGAYONG",
+        "parent_id": "admin-unit-district-mongomo",
+        "province_code": "WN",
+        "name_es": "Nzangayong",
+        "name_en": "Nzangayong",
+        "status": "active",
+        "sort_order": 1550
+      },
+      {
+        "id": "admin-unit-district-nsork",
+        "level": "district",
+        "code": "WN-D-NSORK",
+        "parent_id": "admin-unit-wele-nzas",
+        "province_code": "WN",
+        "name_es": "Nsork",
+        "name_en": "Nsork",
+        "status": "active",
+        "sort_order": 1560
+      },
+      {
+        "id": "admin-unit-municipality-nsork",
+        "level": "municipality",
+        "code": "WN-M-NSORK",
+        "parent_id": "admin-unit-district-nsork",
+        "province_code": "WN",
+        "name_es": "Nsork",
+        "name_en": "Nsork",
+        "status": "active",
+        "sort_order": 1570
+      }
+    ]
+  },
+  "notes": [
+    "This package is governed reference data, not a development fixture.",
+    "Loading is explicit and idempotent; operational edits are not silently overwritten."
+  ]
+}

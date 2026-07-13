@@ -7,6 +7,7 @@ on:
       - 'services/api/**'
       - 'infra/migrations/**'
       - 'infra/scripts/**'
+      - 'infra/reference-data/**'
       - 'infra/docker/**'
       - '.github/workflows/api-ci.yml'
   pull_request:
@@ -15,6 +16,7 @@ on:
       - 'services/api/**'
       - 'infra/migrations/**'
       - 'infra/scripts/**'
+      - 'infra/reference-data/**'
       - 'infra/docker/**'
       - '.github/workflows/api-ci.yml'
 
@@ -22,6 +24,20 @@ jobs:
   api:
     name: api
     runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgis/postgis:16-3.4
+        env:
+          POSTGRES_DB: addressing_ci
+          POSTGRES_USER: addressing
+          POSTGRES_PASSWORD: ci_password
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U addressing -d addressing_ci"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 10
     defaults:
       run:
         working-directory: services/api
@@ -41,3 +57,21 @@ jobs:
         env:
           PYTHONPATH: .
         run: python -m pytest -q
+
+      - name: Run controlled migration lifecycle rehearsal
+        working-directory: .
+        env:
+          POSTGRES_HOST: 127.0.0.1
+          POSTGRES_PORT: '5432'
+          POSTGRES_DB: addressing_ci
+          POSTGRES_USER: addressing
+          POSTGRES_PASSWORD: ci_password
+          APP_ENV: test
+        run: |
+          python infra/scripts/migrate.py apply
+          python infra/scripts/migrate.py status
+          python infra/scripts/load_reference_data.py load
+          python infra/scripts/load_reference_data.py load
+          FIXTURE_PASSWORD="$(python -c 'import secrets; print("ci-" + secrets.token_urlsafe(18))')"
+          EG_ALLOW_DEV_FIXTURES=YES DEVELOPMENT_FIXTURE_PASSWORD="$FIXTURE_PASSWORD" python infra/scripts/load_development_fixtures.py load
+          EG_ALLOW_DEV_FIXTURES=YES DEVELOPMENT_FIXTURE_PASSWORD="$FIXTURE_PASSWORD" python infra/scripts/load_development_fixtures.py cleanup

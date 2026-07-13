@@ -79,6 +79,24 @@ SELECT jsonb_object_agg(table_name, row_count)::text FROM counts;
 SQL
 )"
 
+LEDGER_JSON="$(${COMPOSE[@]} exec -T postgres psql -U "$POSTGRES_USER" -d "$RESTORE_DB" -At <<'SQL'
+SELECT jsonb_build_object(
+  'migration_rows', (SELECT COUNT(*)::int FROM schema_migrations),
+  'latest_version', (SELECT MAX(version) FROM schema_migrations),
+  'checksum_rows', (SELECT COUNT(*)::int FROM schema_migrations WHERE checksum IS NOT NULL AND checksum <> ''),
+  'postgis_extensions', (SELECT COUNT(*)::int FROM pg_extension WHERE extname = 'postgis')
+)::text;
+SQL
+)"
+
+python3 - <<PY
+import json, sys
+ledger = json.loads('''$LEDGER_JSON''')
+if ledger['migration_rows'] < 7 or ledger['latest_version'] != '006' or ledger['checksum_rows'] != ledger['migration_rows'] or ledger['postgis_extensions'] != 1:
+    print(json.dumps({'status': 'failed', 'reason': 'invalid migration ledger after restore', 'ledger': ledger}, indent=2), file=sys.stderr)
+    raise SystemExit(1)
+PY
+
 LIVE_COUNTS_JSON="$(${COMPOSE[@]} exec -T postgres psql -U "$POSTGRES_USER" -d "$POSTGRES_DB" -At -F $'\t' <<'SQL'
 WITH counts AS (
   SELECT 'users' AS table_name, COUNT(*)::int AS row_count FROM users
@@ -115,6 +133,7 @@ report = {
   'backup_bytes': int('$BACKUP_BYTES'),
   'backup_sha256': '$BACKUP_SHA256',
   'restored_counts': json.loads('''$COUNTS_JSON'''),
+  'migration_ledger': json.loads('''$LEDGER_JSON'''),
   'live_counts_at_drill': json.loads('''$LIVE_COUNTS_JSON'''),
   'restore_target_removed': True,
 }
