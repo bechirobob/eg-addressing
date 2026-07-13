@@ -110,3 +110,16 @@ The work order is close to acceptance. Resolve F08 and F10 only; preserve the al
 |---|---|---|---|---|
 | F08 | Resolved in implementation: migration-state evaluator moved into the runtime package as `app.migration_state`; API/operator code imports it directly without `infra/scripts` path injection; `infra/scripts/migration_state.py` is only a compatibility entrypoint; API CI now builds `services/api/Dockerfile`, imports `app.main` inside the image, boots the image against PostGIS, and verifies `/api/v1/health`, `/api/v1/operator/migrations/status`, and `/api/v1/operator/production-readiness`. `.dockerignore` excludes local runtime `data/` from the image build context. | Fixing commit `6207d1338f477bca361e3bb09b8744e63184d9ee`; local evidence: `python3 -m py_compile ...` passed; full API suite `200 passed`; frontend `npm --prefix apps/admin-portal run test:ci` passed; local Docker image proof built `services/api/Dockerfile`, ran `docker run --rm eg-addressing-api-review03 python -c "import app.main"`, booted image on port 8120, and returned 200 for health, migrations status (`current`), and production-readiness (`needs_work`). | READY FOR SDA REVIEW 04 | 2026-07-13 |
 | F10 | Resolved in implementation: missing, empty, invalid-name, and duplicate-version migration packages now raise explicit `MigrationPackageError` states; `migrate.py status/apply` exit non-zero before connecting/creating the ledger when the package is invalid; API operator status and production-readiness return non-current/non-ready for all four states instead of converting parse failures to an empty expected set. | Fixing commit `6207d1338f477bca361e3bb09b8744e63184d9ee`; local evidence: lifecycle integration suite `23 passed`; new parameterized tests `test_cli_fails_before_ledger_for_invalid_migration_packages` and `test_operator_and_production_readiness_fail_closed_for_invalid_migration_packages`; full API suite `200 passed`. | READY FOR SDA REVIEW 04 | 2026-07-13 |
+
+## 10. Remote verification for Review 04 request
+
+Final evidence head verified remotely: `5e2add5825b60523980b07262734d30d0e834a01`.
+
+- API CI run `29289601957`: **success** — https://github.com/bechirobob/eg-addressing/actions/runs/29289601957
+  - `migration-lifecycle`: success — https://github.com/bechirobob/eg-addressing/actions/runs/29289601957/job/86950006589
+  - `api-image-runtime`: success — https://github.com/bechirobob/eg-addressing/actions/runs/29289601957/job/86950006606
+  - `api-tests`: success — https://github.com/bechirobob/eg-addressing/actions/runs/29289601957/job/86950006672
+- Frontend CI run `29289601961`: **success** — https://github.com/bechirobob/eg-addressing/actions/runs/29289601961
+
+PR #4 remains draft, open, and unmerged. SDA Review 04 requested after this evidence was recorded.
+
