@@ -32,6 +32,8 @@ artifacts/containment-backups/
 artifacts/restore-drills/
 artifacts/manuals/
 artifacts/training-pdfs/
+artifacts/ip-registration-malabo/
+docs/ip-registration-malabo/html/
 artifacts/*.html
 artifacts/*.pdf
 artifacts/*audit*.md
