@@ -4,7 +4,7 @@
 **Implementation plan:** `docs/sda/implementation-plans/NLI-WO-001-controlled-database-lifecycle.md`  
 **Review addressed:** `docs/sda/reviews/NLI-WO-001-review-01.md`  
 **Remediation code commit:** `c2322a0`  
-**Final PR head:** `UPDATED_AFTER_PUSH`  
+**Final implementation head verified remotely:** `555514347b9a243c5a1691a9a38ac1695edd9fff`  
 
 > PR #4 remains draft. This does not claim SDA acceptance, official publication authority, or national-production approval.
 
@@ -38,10 +38,10 @@ Criteria are marked `READY FOR SDA REVIEW`, not SDA-accepted `PASS`.
 | AC-09 | READY FOR SDA REVIEW | Fixture collision/ownership/cleanup tests. |
 | AC-10 | READY FOR SDA REVIEW | Credential/session preservation test. |
 | AC-11 | READY FOR SDA REVIEW | Isolated clean bootstrap proof and API health check. |
-| AC-12 | READY FOR SDA REVIEW | API CI PostGIS env + dedicated lifecycle job; final remote result pending below. |
-| AC-13 | READY FOR SDA REVIEW | Lifecycle CI includes dump/restore ledger/PostGIS proof; final remote result pending below. |
+| AC-12 | READY FOR SDA REVIEW | API CI PostGIS env + dedicated lifecycle job; remote result linked below. |
+| AC-13 | READY FOR SDA REVIEW | Lifecycle CI includes dump/restore ledger/PostGIS proof; remote result linked below. |
 | AC-14 | READY FOR SDA REVIEW | Bootstrap/docs/evidence updated. |
-| AC-15 | READY FOR SDA REVIEW | Local backend/frontend gates green; final remote result pending below. |
+| AC-15 | READY FOR SDA REVIEW | Local backend/frontend gates green; remote result linked below. |
 
 ## Local verification
 
@@ -60,8 +60,8 @@ Updated after push:
 
 | Workflow/check | Final result | URL |
 |---|---|---|
-| API CI | `PENDING` | `UPDATED_AFTER_PUSH` |
-| Frontend CI | `PENDING` | `UPDATED_AFTER_PUSH` |
+| API CI | `success` | https://github.com/bechirobob/eg-addressing/actions/runs/29278041290 |
+| Frontend CI | `success` | https://github.com/bechirobob/eg-addressing/actions/runs/29278041293 |
 
 ## Review resolution log
 
