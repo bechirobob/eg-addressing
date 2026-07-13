@@ -154,3 +154,12 @@ This outcome does not reverse the resolved Review 01 controls; it narrows the re
 | F08 | Resolved in implementation: `bootstrap_local.sh` supports clean isolated DB bootstrap, reference/fixture load, host or compose app startup, existing admin smoke execution, and durable JSON report; API CI migration lifecycle now starts the API and runs `apps/admin-portal/scripts/admin-flow-smoke.mjs` before cleanup. | Fixing commit `17235b4ab320b550f245383333c003521c147953`; local evidence: isolated `addressing_bootstrap_wo001` run produced `/tmp/wo001-bootstrap-local-report.json` with `status=passed`, `migrations=current`, `fixtures_loaded=true`, `app_runtime=host`, `smoke_checks=passed`; frontend local `npm --prefix apps/admin-portal run test:ci` passed. | READY FOR SDA REVIEW 03 | 2026-07-13 |
 | F09 | Resolved in implementation: `db_invariants.py` captures source/restored data manifests with counts, hashes, relationships, ledger metadata, reference/fixture hashes; `restore_drill.sh` and API CI dump/restore fail unless source and restored manifests match. | Fixing commit `17235b4ab320b550f245383333c003521c147953`; local evidence: backend suite `192 passed`; workflow YAML validation passed for `.github/workflows/api-ci.yml` and `.github/workflows/frontend-ci.yml`; CI lifecycle lane updated to compare `/tmp/wo001-source-invariants.json` and `/tmp/wo001-restored-invariants.json`. | READY FOR SDA REVIEW 03 | 2026-07-13 |
 | F10 | Resolved in implementation: API and CLI share `infra/scripts/migration_state.py`; operator and production-readiness status fail closed for pending migrations, checksum mismatch, filename mismatch, unknown ledger versions, unreadable state, and missing production configuration. | Fixing commit `17235b4ab320b550f245383333c003521c147953`; local evidence: `test_operator_and_production_readiness_fail_closed_for_all_migration_drift` and `test_production_readiness_fails_closed_for_unreadable_state_and_missing_production_config`; full backend suite `192 passed`. | READY FOR SDA REVIEW 03 | 2026-07-13 |
+
+## 10. Remote verification for Review 03 request
+
+Final implementation head verified remotely: `0b41e11d1c0af846650084a030193876da0914ef`.
+
+- API CI run `29284277801`: **success** — https://github.com/bechirobob/eg-addressing/actions/runs/29284277801
+- Frontend CI run `29284277384`: **success** — https://github.com/bechirobob/eg-addressing/actions/runs/29284277384
+
+PR #4 remains draft, open, and unmerged. SDA Review 03 requested after this evidence was recorded.
