@@ -132,6 +132,7 @@ jobs:
             fi
           done
           SMOKE_API_BASE_URL=http://127.0.0.1:8100 SMOKE_ADMIN_USERNAME=admin SMOKE_ADMIN_PASSWORD="$FIXTURE_PASSWORD" node apps/admin-portal/scripts/admin-flow-smoke.mjs | tee /tmp/wo001-admin-smoke.json
+          export PGPASSWORD="$POSTGRES_PASSWORD"
           psql -h "$POSTGRES_HOST" -p "$POSTGRES_PORT" -U "$POSTGRES_USER" -d "$POSTGRES_DB" -v ON_ERROR_STOP=1 -c "DELETE FROM audit_logs WHERE entity_id IN (SELECT id FROM field_submissions WHERE submitted_by='Smoke automation' OR candidate_name ILIKE 'Smoke Flow Road%') OR entity_id IN (SELECT id FROM address_corrections WHERE reporter_contact='smoke@example.invalid' OR reason='smoke-test-review') OR entity_id IN (SELECT id FROM roads WHERE name ILIKE 'Smoke Flow Road%')"
           psql -h "$POSTGRES_HOST" -p "$POSTGRES_PORT" -U "$POSTGRES_USER" -d "$POSTGRES_DB" -v ON_ERROR_STOP=1 -c "DELETE FROM address_corrections WHERE reporter_contact='smoke@example.invalid' OR reason='smoke-test-review'"
           psql -h "$POSTGRES_HOST" -p "$POSTGRES_PORT" -U "$POSTGRES_USER" -d "$POSTGRES_DB" -v ON_ERROR_STOP=1 -c "DELETE FROM field_submissions WHERE submitted_by='Smoke automation' OR candidate_name ILIKE 'Smoke Flow Road%'"
