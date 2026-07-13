@@ -107,6 +107,15 @@ Design defines event/provenance/publication release model. Runtime audit/publica
 
 No configuration, deployment, readiness, metrics, infrastructure, backup, or DR change.
 
+## 12.1 No-runtime-change evidence
+
+- No files under `services/api/` changed.
+- No files under `infra/migrations/` changed.
+- No files under `apps/` changed.
+- No files under `infra/docker/` changed.
+- No production or pilot data files changed.
+- The changed-path proof for this PR must be `docs/sda/**` only.
+
 ## 13. Test commands and results
 
 | Command/check | Environment | Result | Evidence |
