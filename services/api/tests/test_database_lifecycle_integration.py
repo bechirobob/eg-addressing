@@ -4,8 +4,10 @@ import json
 import os
 import shutil
 import subprocess
+import sys
 import time
 from pathlib import Path
+from typing import Any
 
 import psycopg
 import pytest
@@ -15,6 +17,8 @@ from psycopg.rows import dict_row
 ROOT = Path(__file__).resolve().parents[3]
 MIGRATIONS = ROOT / 'infra/migrations'
 PYTHON = str(ROOT / 'services/api/.venv/bin/python') if (ROOT / 'services/api/.venv/bin/python').exists() else 'python3'
+sys.path.insert(0, str(ROOT / 'infra/scripts'))
+from db_invariants import full_manifest, data_manifest  # noqa: E402
 
 
 def pg_env_available() -> bool:
@@ -187,17 +191,9 @@ def test_api_startup_does_not_change_schema_or_rows(db_env, monkeypatch):
     assert fingerprint(db_env) == before
 
 
-def fingerprint(env: dict[str, str]) -> dict[str, int]:
+def fingerprint(env: dict[str, str]) -> dict[str, Any]:
     with connect_db(env) as conn:
-        with conn.cursor() as cur:
-            cur.execute("SELECT COUNT(*) AS count FROM information_schema.tables WHERE table_schema='public'")
-            tables = cur.fetchone()['count']
-            counts = {'tables': tables}
-            for table in ['users', 'auth_tokens', 'provinces', 'admin_units', 'schema_migrations']:
-                if table_exists(env, table):
-                    cur.execute(f'SELECT COUNT(*) AS count FROM {table}')
-                    counts[table] = cur.fetchone()['count']
-            return counts
+        return full_manifest(conn)
 
 
 def test_pending_migration_readiness_does_not_auto_apply(db_env, tmp_path, monkeypatch):
@@ -222,6 +218,70 @@ def test_pending_migration_readiness_does_not_auto_apply(db_env, tmp_path, monke
     assert [row['version'] for row in ledger_rows(db_env)] == before
 
 
+def configure_app_db_env(monkeypatch, env: dict[str, str], migrations_dir: Path = MIGRATIONS) -> None:
+    monkeypatch.setenv('MIGRATIONS_DIR', str(migrations_dir))
+    monkeypatch.setenv('POSTGRES_HOST', env['POSTGRES_HOST'])
+    monkeypatch.setenv('POSTGRES_PORT', env['POSTGRES_PORT'])
+    monkeypatch.setenv('POSTGRES_DB', env['POSTGRES_DB'])
+    monkeypatch.setenv('POSTGRES_USER', env['POSTGRES_USER'])
+    monkeypatch.setenv('POSTGRES_PASSWORD', env.get('POSTGRES_PASSWORD', ''))
+    monkeypatch.delenv('DATABASE_URL', raising=False)
+
+
+def test_operator_and_production_readiness_fail_closed_for_all_migration_drift(db_env, tmp_path, monkeypatch):
+    migrations = copy_migrations(tmp_path)
+    apply_migrations(db_env, migrations)
+    configure_app_db_env(monkeypatch, db_env, migrations)
+    from app.ops_status import migration_status as app_migration_status
+    from app.security_posture import production_readiness_status
+
+    assert app_migration_status()['status'] == 'current'
+
+    (migrations / '001_schema_migration_baseline.sql').write_text('-- tampered\nSELECT 1;\n')
+    checksum = app_migration_status()
+    assert checksum['status'] == 'checksum-mismatch'
+    assert production_readiness_status()['checks']['explicit_migrations']['status'] == 'needs_work'
+
+    (migrations / '001_schema_migration_baseline.sql').write_text((MIGRATIONS / '001_schema_migration_baseline.sql').read_text())
+    with connect_db(db_env) as conn:
+        conn.execute("UPDATE schema_migrations SET filename='001_wrong_name.sql' WHERE version='001'")
+        conn.commit()
+    filename = app_migration_status()
+    assert filename['status'] == 'filename-mismatch'
+    assert '001' in filename['filename_mismatch_versions']
+
+    with connect_db(db_env) as conn:
+        conn.execute("UPDATE schema_migrations SET filename='001_schema_migration_baseline.sql' WHERE version='001'")
+        conn.execute("INSERT INTO schema_migrations(version, filename, checksum) VALUES ('999','999_unknown.sql','unknown')")
+        conn.commit()
+    unknown = app_migration_status()
+    assert unknown['status'] == 'unknown-ledger-state'
+    assert '999' in unknown['unknown_versions']
+
+    with connect_db(db_env) as conn:
+        conn.execute("DELETE FROM schema_migrations WHERE version='999'")
+        conn.execute("DELETE FROM schema_migrations WHERE version='007'")
+        conn.commit()
+    pending = app_migration_status()
+    assert pending['status'] == 'pending'
+    assert '007' in pending['pending_versions']
+
+
+def test_production_readiness_fails_closed_for_unreadable_state_and_missing_production_config(monkeypatch):
+    monkeypatch.setenv('APP_ENV', 'production')
+    monkeypatch.delenv('DATABASE_URL', raising=False)
+    monkeypatch.delenv('POSTGRES_HOST', raising=False)
+    monkeypatch.setenv('SESSION_COOKIE_MODE', 'bearer-local-storage')
+    monkeypatch.setenv('ALLOW_DEFAULT_DEMO_PASSWORDS', 'true')
+    from app.security_posture import production_readiness_status
+
+    body = production_readiness_status()
+    assert body['status'] == 'needs_work'
+    assert body['checks']['explicit_migrations']['status'] == 'needs_work'
+    assert body['checks']['explicit_migrations']['migration_status']['status'] == 'not-configured'
+    assert body['checks']['production_configuration']['status'] == 'needs_work'
+
+
 def test_credentials_and_sessions_survive_migrate_and_reference_load(db_env):
     apply_migrations(db_env)
     with connect_db(db_env) as conn:
@@ -237,30 +297,75 @@ def test_credentials_and_sessions_survive_migrate_and_reference_load(db_env):
         assert cur.fetchone()['count'] == 1
 
 
-def test_existing_pilot_transition_preserves_counts_and_rejects_drift(db_env, tmp_path):
-    # Simulate a pre-WO database with current operational tables but no ledger rows.
+def insert_representative_pre_wo_fixture(env: dict[str, str]) -> None:
     schema_sql = (MIGRATIONS / '000_current_operational_schema.sql').read_text()
-    with connect_db(db_env) as conn:
+    with connect_db(env) as conn:
         conn.execute(schema_sql)
         conn.execute("INSERT INTO provinces(code, name) VALUES ('BN','Bioko Norte')")
+        conn.execute("INSERT INTO admin_units(id, level, code, parent_id, province_code, name_es, name_en) VALUES ('admin-bn','province','BN',NULL,'BN','Bioko Norte','Bioko Norte')")
         conn.execute("INSERT INTO users(id, username, full_name, role, password_hash) VALUES ('legacy-admin','legacy','Legacy Admin','admin','legacy-hash')")
+        conn.execute("INSERT INTO auth_tokens(token, user_id, expires_at, last_seen_at) VALUES ('legacy-token','legacy-admin', NOW() + INTERVAL '1 hour', NOW())")
+        conn.execute("INSERT INTO territories(id, name, province_code, admin_unit_id, type, readiness) VALUES ('territory-prewo','Pre-WO Territory','BN','admin-bn','official-municipality','official-routing')")
+        conn.execute("INSERT INTO roads(id, name, territory_id, status, length_km, spatial_evidence) VALUES ('road-prewo','Pre-WO Road','territory-prewo','validated','1.2','{}'::jsonb)")
+        conn.execute("INSERT INTO buildings(id, label, territory_id, road_id, status, usage, spatial_evidence) VALUES ('building-prewo','Pre-WO Building','territory-prewo','road-prewo','validated','civic','{}'::jsonb)")
+        conn.execute("INSERT INTO addresses(id, formatted, territory_id, road_id, building_id, province_code, public_code, status, publication_state) VALUES ('address-prewo','Pre-WO Address','territory-prewo','road-prewo','building-prewo','BN','EG-BN-PREWO-001','registry-ready','not-public')")
+        conn.execute("INSERT INTO address_points(id, address_id, latitude, longitude, source_method) VALUES ('point-prewo','address-prewo',3.75,8.78,'pilot-transition-fixture')")
+        conn.execute("INSERT INTO citizen_geotag_submissions(id, territory_id, address_label, latitude, longitude, grid_code, status, field_submission_id) VALUES ('geotag-prewo','territory-prewo','Pre-WO Geotag',3.7501,8.7801,'EG-BN-PREWO-GRID','submitted','field-submission-prewo')")
+        conn.execute("INSERT INTO address_records(id, address_code, source_submission_id, province_code, territory_id, address_label, status, latitude, longitude, record_bundle) VALUES ('record-prewo','EG-BN-N1-PREWO-01','geotag-prewo','BN','territory-prewo','Pre-WO Canonical Record','registry-ready',3.7501,8.7801, '{\"evidence_hash\":\"prewo-hash\"}'::jsonb)")
+        conn.execute("INSERT INTO address_record_events(id, address_record_id, event_type, actor_id, actor_username, actor_role, details) VALUES ('event-prewo','record-prewo','created','legacy-admin','legacy','admin','{}'::jsonb)")
+        conn.execute("INSERT INTO field_assignments(assignment_id, territory_id, territory, task, team, priority) VALUES ('assignment-prewo','territory-prewo','Pre-WO Territory','validate','Team A','high')")
+        conn.execute("INSERT INTO field_submissions(id, assignment_id, territory_id, submission_type, candidate_name, candidate_status, submitted_by, review_status, spatial_evidence) VALUES ('field-submission-prewo','assignment-prewo','territory-prewo','address','Pre-WO Field Submission','submitted','Legacy Enumerator','approved','{\"photo_sha256\":\"fixture-evidence-sha\"}'::jsonb)")
+        conn.execute("INSERT INTO import_jobs(id, name, source_name, status, imported_count) VALUES ('import-prewo','Pre-WO Import','controlled-fixture','validated',1)")
+        conn.execute("INSERT INTO import_rows(job_id, row_number, submission_type, territory_id, candidate_name, candidate_status, validation_status, validation_message, committed_submission_id) VALUES ('import-prewo',1,'address','territory-prewo','Pre-WO Import Row','submitted','valid','ok','field-submission-prewo')")
+        conn.execute("INSERT INTO publication_packs(id, name, status, audience) VALUES ('pack-prewo','Pre-WO Pack','draft','internal')")
+        conn.execute("INSERT INTO publication_pack_addresses(publication_pack_id, address_id) VALUES ('pack-prewo','address-prewo')")
+        conn.execute("INSERT INTO audit_logs(actor_user_id, actor_username, actor_role, action, entity_type, entity_id, details) VALUES ('legacy-admin','legacy','admin','pilot-transition-fixture','address_record','record-prewo','{\"hash\":\"audit-prewo\"}')")
         conn.commit()
+
+
+def test_schema_fingerprint_detects_column_index_constraint_and_extension_state(db_env):
+    apply_migrations(db_env)
     before = fingerprint(db_env)
+    assert before['schema_sha256']
+    with connect_db(db_env) as conn:
+        conn.execute('DROP INDEX idx_address_records_code')
+        conn.commit()
+    after = fingerprint(db_env)
+    assert after['schema_sha256'] != before['schema_sha256']
+
+
+def test_existing_pilot_transition_preserves_representative_counts_hashes_and_relationships(db_env):
+    insert_representative_pre_wo_fixture(db_env)
+    with connect_db(db_env) as conn:
+        before = data_manifest(conn)
+        before_record = dict(conn.execute("SELECT id, address_code, source_submission_id, province_code, territory_id, address_label, status, publication_state, latitude, longitude, record_bundle FROM address_records WHERE id='record-prewo'").fetchone())
     result = run_cmd([PYTHON, 'infra/scripts/migrate.py', 'transition-pilot'], db_env)
     assert result.returncode == 0
-    after = fingerprint(db_env)
-    assert after['users'] == before['users']
-    assert after['provinces'] == before['provinces']
+    with connect_db(db_env) as conn:
+        after = data_manifest(conn)
+    protected_tables = ['users', 'auth_tokens', 'territories', 'roads', 'buildings', 'addresses', 'address_points', 'citizen_geotag_submissions', 'address_records', 'address_record_events', 'field_assignments', 'field_submissions', 'import_jobs', 'import_rows', 'publication_packs', 'publication_pack_addresses', 'audit_logs']
+    for table in protected_tables:
+        assert after['manifest']['row_counts'][table] == before['manifest']['row_counts'][table]
+        if table != 'address_records':
+            assert after['manifest']['table_hashes'][table] == before['manifest']['table_hashes'][table], table
+    with connect_db(db_env) as conn:
+        after_record = dict(conn.execute("SELECT id, address_code, source_submission_id, province_code, territory_id, address_label, status, publication_state, latitude, longitude, record_bundle FROM address_records WHERE id='record-prewo'").fetchone())
+    assert after_record == before_record
+    required_relationships = ['territories_with_province', 'roads_with_territory', 'buildings_with_road', 'addresses_with_building', 'address_records_with_events', 'field_submissions_with_assignment', 'import_rows_with_job', 'publication_addresses_with_address', 'auth_tokens_with_user']
+    for relationship in required_relationships:
+        assert after['manifest']['relationships'][relationship] == before['manifest']['relationships'][relationship]
     assert [row['version'] for row in ledger_rows(db_env)] == ['000', '001', '002', '003', '004', '005', '006', '007']
 
-    drift_db = db_env.copy()
-    drift_db['POSTGRES_DB'] = db_env['POSTGRES_DB']
-    with connect_db(drift_db) as conn:
+
+def test_transition_rejects_structural_drift_before_ledger_bootstrap(db_env):
+    insert_representative_pre_wo_fixture(db_env)
+    with connect_db(db_env) as conn:
         conn.execute('ALTER TABLE users DROP COLUMN password_hash')
         conn.commit()
-    failed = run_cmd([PYTHON, 'infra/scripts/migrate.py', 'transition-pilot'], drift_db, check=False)
+    failed = run_cmd([PYTHON, 'infra/scripts/migrate.py', 'transition-pilot'], db_env, check=False)
     assert failed.returncode == 2
     assert 'incompatible-source-state' in failed.stdout
+    assert table_exists(db_env, 'schema_migrations') is False
 
 
 def test_reference_data_missing_migrations_status_and_drift(db_env, tmp_path):
@@ -305,16 +410,21 @@ def test_fixture_missing_migrations_collision_ownership_and_cleanup(db_env):
         assert dict(cur.fetchone()) == {'username': 'real-admin', 'password_hash': 'real-hash'}
 
 
-def test_fixture_owned_records_cleanup(db_env):
+def test_fixture_owned_records_reload_and_cleanup_are_deterministic(db_env):
     apply_migrations(db_env)
+    run_cmd([PYTHON, 'infra/scripts/load_reference_data.py', 'load'], db_env)
     env = db_env | {'APP_ENV': 'test', 'EG_ALLOW_DEV_FIXTURES': 'YES', 'DEVELOPMENT_FIXTURE_PASSWORD': 'controlled-fixture-password'}
     loaded = run_cmd([PYTHON, 'infra/scripts/load_development_fixtures.py', 'load'], env)
-    assert json.loads(loaded.stdout)['created_records'] == 4
+    assert json.loads(loaded.stdout)['created_records'] == 9
+    reloaded = run_cmd([PYTHON, 'infra/scripts/load_development_fixtures.py', 'load'], env)
+    assert json.loads(reloaded.stdout)['created_records'] == 0
     with connect_db(db_env) as conn:
         cur = conn.execute("SELECT COUNT(*) AS count FROM development_fixture_records WHERE batch_id='development-users-v1'")
+        assert cur.fetchone()['count'] == 9
+        cur = conn.execute("SELECT COUNT(*) AS count FROM users WHERE id LIKE 'user-%'")
         assert cur.fetchone()['count'] == 4
     cleaned = run_cmd([PYTHON, 'infra/scripts/load_development_fixtures.py', 'cleanup'], env)
-    assert json.loads(cleaned.stdout)['deleted_records'] == 4
+    assert json.loads(cleaned.stdout)['deleted_records'] == 9
     with connect_db(db_env) as conn:
         cur = conn.execute("SELECT COUNT(*) AS count FROM users WHERE id LIKE 'user-%'")
         assert cur.fetchone()['count'] == 0

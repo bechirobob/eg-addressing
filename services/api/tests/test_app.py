@@ -231,18 +231,23 @@ def test_migration_schema_preserves_official_municipality_routing_columns() -> N
     assert 'readiness TEXT NOT NULL' in source
     assert 'is_archived BOOLEAN NOT NULL DEFAULT FALSE' in source
 
-def test_official_admin_routing_seed_contains_table_backed_units() -> None:
-    from app.data import ADMIN_UNITS, TERRITORIES
+def test_official_admin_routing_reference_package_contains_table_backed_units() -> None:
+    package = json.loads((REPO_ROOT / 'infra/reference-data/eg-admin-units-v1.json').read_text())
+    admin_units = package['records']['admin_units']
 
-    districts = [unit for unit in ADMIN_UNITS if unit['level'] == 'district']
-    municipalities = [unit for unit in ADMIN_UNITS if unit['level'] == 'municipality']
-    official_territories = [territory for territory in TERRITORIES if territory['type'] == 'official-municipality']
+    districts = [unit for unit in admin_units if unit['level'] == 'district']
+    municipalities = [unit for unit in admin_units if unit['level'] == 'municipality']
 
     assert len(districts) == 20
     assert len(municipalities) == 38
-    assert len(official_territories) == 38
-    assert {unit['name_es'] for unit in municipalities} >= {'Malabo', 'Bata', 'Mongomo', 'Ciudad de la Paz', 'San Antonio de Palé'}
-    assert next(territory for territory in TERRITORIES if territory['name'] == 'Rebola' and territory['province_code'] == 'BN')['readiness'] == 'official-routing'
+    assert {unit['name_es'] for unit in municipalities} >= {'Malabo', 'Bata', 'Mongomo', 'Ciudad de la Paz', 'San Antonio de Palé', 'Rebola'}
+
+
+def test_runtime_data_module_contains_no_seed_or_fixture_authority() -> None:
+    source = (REPO_ROOT / 'services/api/app/data.py').read_text()
+    forbidden = ['DEMO_USERS', 'PROVINCES', 'ADMIN_UNITS', 'TERRITORIES', 'ROADS', 'BUILDINGS', 'ADDRESSES', 'FIELD_SUBMISSIONS']
+    for name in forbidden:
+        assert f'{name} =' not in source
 
 def test_provinces_endpoint_returns_database_rows(monkeypatch) -> None:
     expected = [

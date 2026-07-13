@@ -1,7 +1,7 @@
 from __future__ import annotations
 
-import hashlib
 import os
+import sys
 from pathlib import Path
 from typing import Any
 
@@ -17,29 +17,25 @@ def _repo_root() -> Path:
             return parent
     return Path('/app')
 
+ROOT = _repo_root()
+SCRIPTS_DIR = ROOT / 'infra' / 'scripts'
+if str(SCRIPTS_DIR) not in sys.path:
+    sys.path.insert(0, str(SCRIPTS_DIR))
 
-def _migration_files() -> list[Path]:
-    migrations_dir = Path(os.getenv('MIGRATIONS_DIR', _repo_root() / 'infra' / 'migrations'))
-    if not migrations_dir.exists():
+from migration_state import evaluate_migration_state, migration_files, safe_public_status  # noqa: E402
+
+
+def _migration_files() -> list[dict[str, str]]:
+    migrations_dir = Path(os.getenv('MIGRATIONS_DIR', ROOT / 'infra' / 'migrations'))
+    try:
+        return migration_files(migrations_dir)
+    except Exception:
         return []
-    return sorted(migrations_dir.glob('*.sql'))
-
-
-def _checksum(path: Path) -> str:
-    return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
 def migration_status() -> dict[str, Any]:
     """Return a public-safe migration summary for the operator command center."""
-    files = _migration_files()
-    expected = [
-        {
-            'version': path.name.split('_', 1)[0],
-            'filename': path.name,
-            'checksum': _checksum(path),
-        }
-        for path in files
-    ]
+    expected = _migration_files()
     latest = expected[-1] if expected else None
     database_url = get_database_url()
     if not database_url:
@@ -48,8 +44,14 @@ def migration_status() -> dict[str, Any]:
             'applied_count': 0,
             'expected_count': len(expected),
             'pending_count': len(expected),
+            'pending_versions': [row['version'] for row in expected],
+            'mismatch_versions': [],
+            'checksum_mismatch_versions': [],
+            'filename_mismatch_versions': [],
+            'unknown_versions': [],
             'latest_version': latest['version'] if latest else None,
             'latest_filename': latest['filename'] if latest else None,
+            'current': False,
             'operator_note': 'Database URL is not configured; migration state cannot be checked.',
         }
 
@@ -57,53 +59,20 @@ def migration_status() -> dict[str, Any]:
         import psycopg
 
         with psycopg.connect(database_url, row_factory=dict_row) as connection:
-            with connection.cursor() as cursor:
-                cursor.execute(
-                    """
-                    SELECT EXISTS (
-                        SELECT 1 FROM information_schema.tables
-                        WHERE table_schema = 'public' AND table_name = 'schema_migrations'
-                    ) AS exists
-                    """
-                )
-                if not cursor.fetchone()['exists']:
-                    applied: list[dict[str, Any]] = []
-                else:
-                    cursor.execute('SELECT version, filename, checksum, applied_at FROM schema_migrations ORDER BY version ASC')
-                    applied = list(cursor.fetchall())
+            return safe_public_status(evaluate_migration_state(connection, expected))
     except Exception:
         return {
             'status': 'unreadable',
             'applied_count': 0,
             'expected_count': len(expected),
             'pending_count': len(expected),
+            'pending_versions': [row['version'] for row in expected],
+            'mismatch_versions': [],
+            'checksum_mismatch_versions': [],
+            'filename_mismatch_versions': [],
+            'unknown_versions': [],
             'latest_version': latest['version'] if latest else None,
             'latest_filename': latest['filename'] if latest else None,
+            'current': False,
             'operator_note': 'Migration table could not be read from the configured database.',
         }
-
-    applied_by_version = {row['version']: row for row in applied}
-    pending = [item for item in expected if item['version'] not in applied_by_version]
-    mismatched = [
-        item
-        for item in expected
-        if item['version'] in applied_by_version and applied_by_version[item['version']].get('checksum') != item['checksum']
-    ]
-    status = 'current'
-    if mismatched:
-        status = 'checksum-mismatch'
-    elif pending:
-        status = 'pending'
-
-    latest_applied = applied[-1] if applied else None
-    return {
-        'status': status,
-        'applied_count': len(applied),
-        'expected_count': len(expected),
-        'pending_count': len(pending),
-        'latest_version': latest_applied['version'] if latest_applied else None,
-        'latest_filename': latest_applied['filename'] if latest_applied else None,
-        'pending_versions': [item['version'] for item in pending[:10]],
-        'mismatch_versions': [item['version'] for item in mismatched[:10]],
-        'operator_note': 'Migration state is current.' if status == 'current' else 'Review migration status before production claims.',
-    }

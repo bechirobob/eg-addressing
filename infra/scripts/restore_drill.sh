@@ -54,6 +54,19 @@ fi
 BACKUP_FILE="$(basename "$BACKUP_PATH")"
 BACKUP_BYTES="$(stat -c '%s' "$BACKUP_PATH")"
 BACKUP_SHA256="$(sha256sum "$BACKUP_PATH" | awk '{print $1}')"
+PYTHON_BIN="${PYTHON_BIN:-$ROOT_DIR/services/api/.venv/bin/python}"
+if [[ ! -x "$PYTHON_BIN" ]]; then
+  PYTHON_BIN="${PYTHON_BIN_FALLBACK:-python3}"
+fi
+if [[ "${DATABASE_URL:-}" == *"@postgres:"* ]]; then
+  unset DATABASE_URL
+fi
+export POSTGRES_HOST="${POSTGRES_HOST:-127.0.0.1}"
+export POSTGRES_PORT="${POSTGRES_PORT:-5434}"
+export POSTGRES_USER POSTGRES_PASSWORD
+SOURCE_MANIFEST_FILE="$(mktemp)"
+RESTORED_MANIFEST_FILE="$(mktemp)"
+POSTGRES_DB="$POSTGRES_DB" "$PYTHON_BIN" "$ROOT_DIR/infra/scripts/db_invariants.py" data --output "$SOURCE_MANIFEST_FILE" >/dev/null
 
 # Refuse unsafe target names and live DB names.
 if [[ "$RESTORE_DB" == "$POSTGRES_DB" || ! "$RESTORE_DB" =~ ^[a-zA-Z0-9_]+$ ]]; then
@@ -64,6 +77,7 @@ fi
 "${COMPOSE[@]}" exec -T postgres dropdb -U "$POSTGRES_USER" --if-exists "$RESTORE_DB" >/dev/null
 "${COMPOSE[@]}" exec -T postgres createdb -U "$POSTGRES_USER" "$RESTORE_DB"
 "${COMPOSE[@]}" exec -T postgres pg_restore -U "$POSTGRES_USER" -d "$RESTORE_DB" --no-owner --no-privileges < "$BACKUP_PATH"
+POSTGRES_DB="$RESTORE_DB" "$PYTHON_BIN" "$ROOT_DIR/infra/scripts/db_invariants.py" data --output "$RESTORED_MANIFEST_FILE" >/dev/null
 
 COUNTS_JSON="$(${COMPOSE[@]} exec -T postgres psql -U "$POSTGRES_USER" -d "$RESTORE_DB" -At -F $'\t' <<'SQL'
 WITH counts AS (
@@ -94,6 +108,11 @@ import json, sys
 ledger = json.loads('''$LEDGER_JSON''')
 if ledger['migration_rows'] < 8 or ledger['latest_version'] != '007' or ledger['checksum_rows'] != ledger['migration_rows'] or ledger['postgis_extensions'] != 1:
     print(json.dumps({'status': 'failed', 'reason': 'invalid migration ledger after restore', 'ledger': ledger}, indent=2), file=sys.stderr)
+    raise SystemExit(1)
+source = json.loads(open('$SOURCE_MANIFEST_FILE').read())
+restored = json.loads(open('$RESTORED_MANIFEST_FILE').read())
+if source != restored:
+    print(json.dumps({'status': 'failed', 'reason': 'source/restored invariant mismatch', 'source_sha256': source.get('sha256'), 'restored_sha256': restored.get('sha256')}, indent=2), file=sys.stderr)
     raise SystemExit(1)
 PY
 
@@ -133,6 +152,9 @@ report = {
   'backup_bytes': int('$BACKUP_BYTES'),
   'backup_sha256': '$BACKUP_SHA256',
   'restored_counts': json.loads('''$COUNTS_JSON'''),
+  'source_invariant_sha256': json.loads(Path('$SOURCE_MANIFEST_FILE').read_text())['sha256'],
+  'restored_invariant_sha256': json.loads(Path('$RESTORED_MANIFEST_FILE').read_text())['sha256'],
+  'source_restored_invariants_match': True,
   'migration_ledger': json.loads('''$LEDGER_JSON'''),
   'live_counts_at_drill': json.loads('''$LIVE_COUNTS_JSON'''),
   'restore_target_removed': True,

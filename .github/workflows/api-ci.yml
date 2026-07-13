@@ -94,6 +94,11 @@ jobs:
         with:
           python-version: '3.11'
 
+      - name: Setup Node.js for smoke checks
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
       - name: Install API dependencies
         working-directory: services/api
         run: python -m pip install -r requirements.txt
@@ -115,13 +120,31 @@ jobs:
           python infra/scripts/load_reference_data.py status
           FIXTURE_PASSWORD="$(python -c 'import secrets; print("ci-" + secrets.token_urlsafe(18))')"
           EG_ALLOW_DEV_FIXTURES=YES DEVELOPMENT_FIXTURE_PASSWORD="$FIXTURE_PASSWORD" python infra/scripts/load_development_fixtures.py load
+          uvicorn app.main:app --app-dir services/api --host 127.0.0.1 --port 8100 >/tmp/wo001-api-smoke.log 2>&1 &
+          API_PID=$!
+          trap 'kill $API_PID 2>/dev/null || true' EXIT
+          for attempt in {1..30}; do
+            curl -fsS http://127.0.0.1:8100/api/v1/health >/dev/null && break
+            sleep 1
+            if [[ "$attempt" == "30" ]]; then
+              cat /tmp/wo001-api-smoke.log
+              exit 1
+            fi
+          done
+          SMOKE_API_BASE_URL=http://127.0.0.1:8100 SMOKE_ADMIN_USERNAME=admin SMOKE_ADMIN_PASSWORD="$FIXTURE_PASSWORD" node apps/admin-portal/scripts/admin-flow-smoke.mjs | tee /tmp/wo001-admin-smoke.json
+          psql -h "$POSTGRES_HOST" -p "$POSTGRES_PORT" -U "$POSTGRES_USER" -d "$POSTGRES_DB" -v ON_ERROR_STOP=1 -c "DELETE FROM audit_logs WHERE entity_id IN (SELECT id FROM field_submissions WHERE submitted_by='Smoke automation' OR candidate_name ILIKE 'Smoke Flow Road%') OR entity_id IN (SELECT id FROM address_corrections WHERE reporter_contact='smoke@example.invalid' OR reason='smoke-test-review') OR entity_id IN (SELECT id FROM roads WHERE name ILIKE 'Smoke Flow Road%')"
+          psql -h "$POSTGRES_HOST" -p "$POSTGRES_PORT" -U "$POSTGRES_USER" -d "$POSTGRES_DB" -v ON_ERROR_STOP=1 -c "DELETE FROM address_corrections WHERE reporter_contact='smoke@example.invalid' OR reason='smoke-test-review'"
+          psql -h "$POSTGRES_HOST" -p "$POSTGRES_PORT" -U "$POSTGRES_USER" -d "$POSTGRES_DB" -v ON_ERROR_STOP=1 -c "DELETE FROM field_submissions WHERE submitted_by='Smoke automation' OR candidate_name ILIKE 'Smoke Flow Road%'"
+          psql -h "$POSTGRES_HOST" -p "$POSTGRES_PORT" -U "$POSTGRES_USER" -d "$POSTGRES_DB" -v ON_ERROR_STOP=1 -c "DELETE FROM roads WHERE name ILIKE 'Smoke Flow Road%'"
           EG_ALLOW_DEV_FIXTURES=YES DEVELOPMENT_FIXTURE_PASSWORD="$FIXTURE_PASSWORD" python infra/scripts/load_development_fixtures.py cleanup
           python infra/scripts/migrate.py status
+          python infra/scripts/db_invariants.py data --output /tmp/wo001-source-invariants.json >/dev/null
           sudo apt-get update && sudo apt-get install -y postgresql-client
           export PGPASSWORD="$POSTGRES_PASSWORD"
           pg_dump -h "$POSTGRES_HOST" -p "$POSTGRES_PORT" -U "$POSTGRES_USER" -d "$POSTGRES_DB" -Fc -f /tmp/wo001-lifecycle.dump
           dropdb -h "$POSTGRES_HOST" -p "$POSTGRES_PORT" -U "$POSTGRES_USER" --if-exists addressing_lifecycle_restore
           createdb -h "$POSTGRES_HOST" -p "$POSTGRES_PORT" -U "$POSTGRES_USER" addressing_lifecycle_restore
           pg_restore -h "$POSTGRES_HOST" -p "$POSTGRES_PORT" -U "$POSTGRES_USER" -d addressing_lifecycle_restore --no-owner --no-privileges /tmp/wo001-lifecycle.dump
+          POSTGRES_DB=addressing_lifecycle_restore python infra/scripts/db_invariants.py data --output /tmp/wo001-restored-invariants.json >/dev/null
           psql -h "$POSTGRES_HOST" -p "$POSTGRES_PORT" -U "$POSTGRES_USER" -d addressing_lifecycle_restore -At -c "SELECT jsonb_build_object('migration_rows',(SELECT COUNT(*)::int FROM schema_migrations),'latest_version',(SELECT MAX(version) FROM schema_migrations),'checksum_rows',(SELECT COUNT(*)::int FROM schema_migrations WHERE checksum <> ''),'postgis_extensions',(SELECT COUNT(*)::int FROM pg_extension WHERE extname='postgis'))::text" | tee /tmp/wo001-restore-ledger.json
-          python -c "import json, pathlib; ledger=json.loads(pathlib.Path('/tmp/wo001-restore-ledger.json').read_text()); assert ledger['migration_rows'] == 8, ledger; assert ledger['latest_version'] == '007', ledger; assert ledger['checksum_rows'] == 8, ledger; assert ledger['postgis_extensions'] == 1, ledger"
+          python -c "import json, pathlib; ledger=json.loads(pathlib.Path('/tmp/wo001-restore-ledger.json').read_text()); source=json.loads(pathlib.Path('/tmp/wo001-source-invariants.json').read_text()); restored=json.loads(pathlib.Path('/tmp/wo001-restored-invariants.json').read_text()); assert ledger['migration_rows'] == 8, ledger; assert ledger['latest_version'] == '007', ledger; assert ledger['checksum_rows'] == 8, ledger; assert ledger['postgis_extensions'] == 1, ledger; assert source == restored, {'source': source.get('sha256'), 'restored': restored.get('sha256')}"

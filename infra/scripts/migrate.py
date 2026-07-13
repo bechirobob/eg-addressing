@@ -17,6 +17,8 @@ from typing import Any
 import psycopg
 from psycopg.rows import dict_row
 
+from migration_state import evaluate_migration_state
+
 ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_MIGRATIONS_DIR = ROOT / 'infra' / 'migrations'
 LOCK_KEY = 2026071301
@@ -46,6 +48,44 @@ REQUIRED_TRANSITION_COLUMNS = {
     'import_rows': {'job_id', 'row_number', 'territory_id', 'validation_status'},
     'publication_packs': {'id', 'name', 'status', 'audience'},
     'publication_pack_addresses': {'publication_pack_id', 'address_id'},
+}
+
+REQUIRED_TRANSITION_COLUMN_SPECS = {
+    ('users', 'id'): {'udt_name': 'text', 'is_nullable': 'NO'},
+    ('users', 'password_hash'): {'udt_name': 'text', 'is_nullable': 'NO'},
+    ('auth_tokens', 'user_id'): {'udt_name': 'text', 'is_nullable': 'NO'},
+    ('territories', 'province_code'): {'udt_name': 'text', 'is_nullable': 'NO'},
+    ('roads', 'territory_id'): {'udt_name': 'text', 'is_nullable': 'NO'},
+    ('buildings', 'road_id'): {'udt_name': 'text', 'is_nullable': 'NO'},
+    ('addresses', 'building_id'): {'udt_name': 'text', 'is_nullable': 'NO'},
+    ('address_records', 'latitude'): {'udt_name': 'float8', 'is_nullable': 'NO'},
+    ('address_records', 'longitude'): {'udt_name': 'float8', 'is_nullable': 'NO'},
+    ('address_record_events', 'address_record_id'): {'udt_name': 'text', 'is_nullable': 'NO'},
+    ('field_assignments', 'territory_id'): {'udt_name': 'text', 'is_nullable': 'NO'},
+    ('field_submissions', 'territory_id'): {'udt_name': 'text', 'is_nullable': 'NO'},
+    ('import_rows', 'job_id'): {'udt_name': 'text', 'is_nullable': 'NO'},
+    ('publication_pack_addresses', 'publication_pack_id'): {'udt_name': 'text', 'is_nullable': 'NO'},
+}
+
+REQUIRED_TRANSITION_INDEXES = {
+    'idx_addresses_public_code_unique',
+    'idx_address_records_code',
+    'idx_address_records_active_status_updated',
+    'idx_address_record_events_record_created',
+    'idx_citizen_geotag_status_created_at',
+}
+
+REQUIRED_TRANSITION_CONSTRAINTS = {
+    'users_pkey',
+    'users_username_key',
+    'auth_tokens_user_id_fkey',
+    'roads_territory_id_fkey',
+    'buildings_road_id_fkey',
+    'addresses_building_id_fkey',
+    'address_records_source_submission_id_fkey',
+    'address_record_events_address_record_id_fkey',
+    'field_submissions_assignment_id_fkey',
+    'publication_pack_addresses_publication_pack_id_fkey',
 }
 
 
@@ -145,34 +185,8 @@ def applied_rows(conn: psycopg.Connection) -> dict[str, dict[str, Any]]:
 
 
 def compute_status(conn: psycopg.Connection, migrations: list[Migration]) -> dict[str, Any]:
-    applied = applied_rows(conn)
-    expected = {m.version: m for m in migrations}
-    pending = [m for m in migrations if m.version not in applied]
-    mismatched = [
-        m for m in migrations
-        if m.version in applied
-        and (applied[m.version]['checksum'] != m.checksum or applied[m.version]['filename'] != m.filename)
-    ]
-    unknown = [version for version in applied if version not in expected]
-    if mismatched:
-        state = 'checksum-mismatch'
-    elif unknown:
-        state = 'unknown-ledger-state'
-    elif pending:
-        state = 'pending'
-    else:
-        state = 'current'
-    return {
-        'status': state,
-        'applied_count': len(applied),
-        'expected_count': len(migrations),
-        'pending_count': len(pending),
-        'pending_versions': [m.version for m in pending],
-        'mismatch_versions': [m.version for m in mismatched],
-        'filename_mismatch_versions': [m.version for m in mismatched if m.version in applied and applied[m.version]['filename'] != m.filename],
-        'unknown_versions': unknown,
-        'latest_version': max(applied) if applied else None,
-    }
+    expected = [{'version': m.version, 'filename': m.filename, 'checksum': m.checksum} for m in migrations]
+    return evaluate_migration_state(conn, expected)
 
 
 def print_status(status: dict[str, Any]) -> None:
@@ -236,13 +250,40 @@ def table_names(conn: psycopg.Connection) -> set[str]:
         return {row['table_name'] for row in cur.fetchall()}
 
 
-def table_columns(conn: psycopg.Connection) -> dict[str, set[str]]:
+def table_columns(conn: psycopg.Connection) -> dict[str, dict[str, dict[str, Any]]]:
     with conn.cursor() as cur:
-        cur.execute("SELECT table_name, column_name FROM information_schema.columns WHERE table_schema = 'public'")
-        result: dict[str, set[str]] = {}
+        cur.execute(
+            """
+            SELECT table_name, column_name, udt_name, data_type, is_nullable, column_default
+            FROM information_schema.columns
+            WHERE table_schema = 'public'
+            ORDER BY table_name, ordinal_position
+            """
+        )
+        result: dict[str, dict[str, dict[str, Any]]] = {}
         for row in cur.fetchall():
-            result.setdefault(row['table_name'], set()).add(row['column_name'])
+            result.setdefault(row['table_name'], {})[row['column_name']] = dict(row)
         return result
+
+
+def index_names(conn: psycopg.Connection) -> set[str]:
+    with conn.cursor() as cur:
+        cur.execute("SELECT indexname FROM pg_indexes WHERE schemaname = 'public'")
+        return {row['indexname'] for row in cur.fetchall()}
+
+
+def constraint_names(conn: psycopg.Connection) -> set[str]:
+    with conn.cursor() as cur:
+        cur.execute(
+            """
+            SELECT con.conname AS constraint_name
+            FROM pg_constraint con
+            JOIN pg_class c ON c.oid = con.conrelid
+            JOIN pg_namespace n ON n.oid = c.relnamespace
+            WHERE n.nspname = 'public'
+            """
+        )
+        return {row['constraint_name'] for row in cur.fetchall()}
 
 
 def transition_compatibility_errors(conn: psycopg.Connection) -> dict[str, Any]:
@@ -250,29 +291,46 @@ def transition_compatibility_errors(conn: psycopg.Connection) -> dict[str, Any]:
     missing_tables = sorted(REQUIRED_TRANSITION_TABLES - present)
     columns = table_columns(conn)
     missing_columns = {
-        table: sorted(required - columns.get(table, set()))
+        table: sorted(required - set(columns.get(table, {}).keys()))
         for table, required in REQUIRED_TRANSITION_COLUMNS.items()
-        if required - columns.get(table, set())
+        if required - set(columns.get(table, {}).keys())
     }
+    type_mismatches: dict[str, dict[str, Any]] = {}
+    for (table, column), expected in REQUIRED_TRANSITION_COLUMN_SPECS.items():
+        actual = columns.get(table, {}).get(column)
+        if not actual:
+            continue
+        problems = {key: {'expected': value, 'actual': actual.get(key)} for key, value in expected.items() if actual.get(key) != value}
+        if problems:
+            type_mismatches[f'{table}.{column}'] = problems
+    missing_indexes = sorted(REQUIRED_TRANSITION_INDEXES - index_names(conn))
+    missing_constraints = sorted(REQUIRED_TRANSITION_CONSTRAINTS - constraint_names(conn))
     with conn.cursor() as cur:
         cur.execute("SELECT COUNT(*) AS count FROM pg_extension WHERE extname = 'postgis'")
         postgis_extensions = cur.fetchone()['count']
         invalid_users = 0
-        if not (REQUIRED_TRANSITION_COLUMNS['users'] - columns.get('users', set())):
+        if not (REQUIRED_TRANSITION_COLUMNS['users'] - set(columns.get('users', {}).keys())):
             cur.execute("SELECT COUNT(*) AS count FROM users WHERE id IS NULL OR username IS NULL OR password_hash IS NULL")
             invalid_users = cur.fetchone()['count']
     errors: dict[str, Any] = {'postgis_extensions_before_transition': postgis_extensions}
+    if postgis_extensions != 1:
+        errors['postgis_extension_required'] = True
     if missing_tables:
         errors['missing_tables'] = missing_tables
     if missing_columns:
         errors['missing_columns'] = missing_columns
+    if type_mismatches:
+        errors['type_mismatches'] = type_mismatches
+    if missing_indexes:
+        errors['missing_indexes'] = missing_indexes
+    if missing_constraints:
+        errors['missing_constraints'] = missing_constraints
     if invalid_users:
         errors['invalid_users'] = invalid_users
     return errors
 
 
 def transition_pilot(conn: psycopg.Connection, migrations: list[Migration], command: str) -> int:
-    ensure_ledger(conn)
     with conn.cursor() as cur:
         cur.execute('SELECT pg_advisory_lock(%s)', (LOCK_KEY,))
     try:
@@ -281,6 +339,7 @@ def transition_pilot(conn: psycopg.Connection, migrations: list[Migration], comm
         if blocking:
             print_status({'status': 'incompatible-source-state', **compatibility})
             return 2
+        ensure_ledger(conn)
         status = compute_status(conn, migrations)
         if status['mismatch_versions'] or status['unknown_versions']:
             print_status(status)
