@@ -78,3 +78,32 @@ See `docs/sda/reviews/NLI-WO-001-review-01.md` section 9 and full evidence at:
 - [x] No control was disabled merely to pass CI.
 - [x] No secrets or production personal/evidence data were committed.
 - [x] This pull request remains draft and does not claim SDA acceptance, official publication authority, or national-production approval.
+
+## Review 03 remediation addendum — F08/F10
+
+**Review addressed:** `docs/sda/reviews/NLI-WO-001-review-03.md`  
+**Fixing implementation commit:** `6207d1338f477bca361e3bb09b8744e63184d9ee`  
+**Scope:** F08 and F10 only; accepted Review 03 behavior preserved.
+
+### Outcome
+
+- F08: packaged migration-state evaluator as runtime module `app.migration_state`; removed API dependence on `infra/scripts` path injection; kept `infra/scripts/migration_state.py` as a compatibility entrypoint.
+- F08: added `api-image-runtime` CI job that builds `services/api/Dockerfile`, imports `app.main` inside the built image, boots the image against PostGIS, and verifies health plus operator migration/production-readiness endpoints.
+- F08: added `.dockerignore` exclusions for local runtime `data/` so actual image builds do not fail on local Postgres volume files.
+- F10: missing, empty, invalid-name, and duplicate-version migration packages now produce explicit fail-closed states and non-zero CLI status/apply before ledger creation.
+- F10: operator migration status and production-readiness remain non-ready for those package error states.
+
+### Local evidence at fixing commit
+
+| Check | Result |
+|---|---|
+| Lifecycle integration suite | `23 passed` |
+| Full API suite | `200 passed, 5 warnings` |
+| Frontend `npm --prefix apps/admin-portal run test:ci` | passed |
+| Workflow YAML parse | passed |
+| Actual API Dockerfile build/import/boot | passed — built image, `import app.main` inside image, booted image, `/api/v1/health` 200, `/api/v1/operator/migrations/status` 200 `current`, `/api/v1/operator/production-readiness` 200 `needs_work` |
+
+### Remote evidence
+
+Remote API/frontend workflow URLs are recorded in the PR body and Review 04 request comment after the final pushed head is green. This file does not claim SDA acceptance.
+
