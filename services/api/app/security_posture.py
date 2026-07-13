@@ -55,7 +55,7 @@ def production_readiness_status() -> dict[str, Any]:
         ),
         'explicit_migrations': {
             'status': 'ready' if migration_ready else 'needs_work',
-            'detail': f"Migration state is {migration.get('status', 'unreadable')}; readiness fails closed for pending, checksum mismatch, filename mismatch, unknown ledger state, unreadable state, and missing DB configuration.",
+            'detail': f"Migration state is {migration.get('status', 'unreadable')}; readiness fails closed for pending, checksum mismatch, filename mismatch, unknown ledger state, unreadable state, missing DB configuration, and missing/empty/invalid/duplicate migration packages.",
             'migration_status': migration,
         },
         'repeatable_audit_harness': {

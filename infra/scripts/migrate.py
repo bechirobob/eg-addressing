@@ -3,10 +3,8 @@
 from __future__ import annotations
 
 import argparse
-import hashlib
 import json
 import os
-import re
 import socket
 import sys
 from dataclasses import dataclass
@@ -14,15 +12,18 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
+ROOT = Path(__file__).resolve().parents[2]
+API_ROOT = ROOT / 'services' / 'api'
+if str(API_ROOT) not in sys.path:
+    sys.path.insert(0, str(API_ROOT))
+
 import psycopg
 from psycopg.rows import dict_row
 
-from migration_state import evaluate_migration_state
+from app.migration_state import MigrationPackageError, evaluate_migration_state, migration_files, safe_public_status
 
-ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_MIGRATIONS_DIR = ROOT / 'infra' / 'migrations'
 LOCK_KEY = 2026071301
-VALID_NAME = re.compile(r'^(?P<version>[0-9]{3})_[A-Za-z0-9_]+\.sql$')
 REQUIRED_TRANSITION_TABLES = {
     'provinces', 'admin_units', 'users', 'auth_tokens', 'audit_logs', 'territories',
     'roads', 'buildings', 'addresses', 'address_points', 'address_corrections',
@@ -132,20 +133,15 @@ def execution_context(command: str) -> str:
 
 
 def load_migrations(migrations_dir: Path) -> list[Migration]:
-    if not migrations_dir.exists():
-        raise SystemExit(f'Missing migrations dir: {migrations_dir}')
-    migrations: list[Migration] = []
-    seen: set[str] = set()
-    for path in sorted(migrations_dir.glob('*.sql')):
-        match = VALID_NAME.match(path.name)
-        if not match:
-            raise SystemExit(f'Invalid migration filename: {path.name}')
-        version = match.group('version')
-        if version in seen:
-            raise SystemExit(f'Duplicate migration version: {version}')
-        seen.add(version)
-        migrations.append(Migration(version, path.name, path, hashlib.sha256(path.read_bytes()).hexdigest()))
-    return migrations
+    try:
+        rows = migration_files(migrations_dir)
+    except MigrationPackageError as exc:
+        print_status(safe_public_status(exc.to_status()))
+        raise SystemExit(2) from exc
+    return [
+        Migration(row['version'], row['filename'], Path(migrations_dir) / row['filename'], row['checksum'])
+        for row in rows
+    ]
 
 
 def ensure_ledger(conn: psycopg.Connection) -> None:

@@ -1,13 +1,13 @@
 from __future__ import annotations
 
 import os
-import sys
 from pathlib import Path
 from typing import Any
 
 from psycopg.rows import dict_row
 
 from app.db import get_database_url
+from app.migration_state import MigrationPackageError, evaluate_migration_state, migration_files, safe_public_status
 
 
 def _repo_root() -> Path:
@@ -17,25 +17,23 @@ def _repo_root() -> Path:
             return parent
     return Path('/app')
 
+
 ROOT = _repo_root()
-SCRIPTS_DIR = ROOT / 'infra' / 'scripts'
-if str(SCRIPTS_DIR) not in sys.path:
-    sys.path.insert(0, str(SCRIPTS_DIR))
-
-from migration_state import evaluate_migration_state, migration_files, safe_public_status  # noqa: E402
 
 
-def _migration_files() -> list[dict[str, str]]:
+def _migration_files_status() -> tuple[list[dict[str, str]], dict[str, Any] | None]:
     migrations_dir = Path(os.getenv('MIGRATIONS_DIR', ROOT / 'infra' / 'migrations'))
     try:
-        return migration_files(migrations_dir)
-    except Exception:
-        return []
+        return migration_files(migrations_dir), None
+    except MigrationPackageError as exc:
+        return [], safe_public_status(exc.to_status())
 
 
 def migration_status() -> dict[str, Any]:
     """Return a public-safe migration summary for the operator command center."""
-    expected = _migration_files()
+    expected, package_error = _migration_files_status()
+    if package_error is not None:
+        return package_error
     latest = expected[-1] if expected else None
     database_url = get_database_url()
     if not database_url:

@@ -149,3 +149,90 @@ jobs:
           POSTGRES_DB=addressing_lifecycle_restore python infra/scripts/db_invariants.py data --output /tmp/wo001-restored-invariants.json >/dev/null
           psql -h "$POSTGRES_HOST" -p "$POSTGRES_PORT" -U "$POSTGRES_USER" -d addressing_lifecycle_restore -At -c "SELECT jsonb_build_object('migration_rows',(SELECT COUNT(*)::int FROM schema_migrations),'latest_version',(SELECT MAX(version) FROM schema_migrations),'checksum_rows',(SELECT COUNT(*)::int FROM schema_migrations WHERE checksum <> ''),'postgis_extensions',(SELECT COUNT(*)::int FROM pg_extension WHERE extname='postgis'))::text" | tee /tmp/wo001-restore-ledger.json
           python -c "import json, pathlib; ledger=json.loads(pathlib.Path('/tmp/wo001-restore-ledger.json').read_text()); source=json.loads(pathlib.Path('/tmp/wo001-source-invariants.json').read_text()); restored=json.loads(pathlib.Path('/tmp/wo001-restored-invariants.json').read_text()); assert ledger['migration_rows'] == 8, ledger; assert ledger['latest_version'] == '007', ledger; assert ledger['checksum_rows'] == 8, ledger; assert ledger['postgis_extensions'] == 1, ledger; assert source == restored, {'source': source.get('sha256'), 'restored': restored.get('sha256')}"
+
+  api-image-runtime:
+    name: api-image-runtime
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgis/postgis:16-3.4
+        env:
+          POSTGRES_DB: addressing_image
+          POSTGRES_USER: addressing
+          POSTGRES_PASSWORD: ci_password
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U addressing -d addressing_image"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install API dependencies for migration release action
+        working-directory: services/api
+        run: python -m pip install -r requirements.txt
+
+      - name: Build API image and verify container runtime
+        env:
+          POSTGRES_HOST: 127.0.0.1
+          POSTGRES_PORT: '5432'
+          POSTGRES_DB: addressing_image
+          POSTGRES_USER: addressing
+          POSTGRES_PASSWORD: ci_password
+          APP_ENV: test
+          PYTHONPATH: services/api
+        run: |
+          python infra/scripts/migrate.py apply
+          python infra/scripts/load_reference_data.py load
+          FIXTURE_PASSWORD="$(python -c 'import secrets; print("ci-" + secrets.token_urlsafe(18))')"
+          EG_ALLOW_DEV_FIXTURES=YES DEVELOPMENT_FIXTURE_PASSWORD="$FIXTURE_PASSWORD" python infra/scripts/load_development_fixtures.py load
+          docker build -f services/api/Dockerfile -t eg-addressing-api-ci .
+          docker run --rm eg-addressing-api-ci python -c "import app.main; print('app.main import ok')"
+          API_CONTAINER="eg-addressing-api-ci-${GITHUB_RUN_ID}"
+          docker run -d --rm --name "$API_CONTAINER" --network host \
+            -e POSTGRES_HOST="$POSTGRES_HOST" \
+            -e POSTGRES_PORT="$POSTGRES_PORT" \
+            -e POSTGRES_DB="$POSTGRES_DB" \
+            -e POSTGRES_USER="$POSTGRES_USER" \
+            -e POSTGRES_PASSWORD="${POSTGRES_PASSWORD}" \
+            -e APP_ENV="$APP_ENV" \
+            eg-addressing-api-ci
+          trap 'docker rm -f "$API_CONTAINER" >/dev/null 2>&1 || true' EXIT
+          for attempt in {1..30}; do
+            python - <<'PY' && break
+          import urllib.request
+          urllib.request.urlopen('http://127.0.0.1:8100/api/v1/health', timeout=2).read()
+          PY
+            sleep 1
+            if [[ "$attempt" == "30" ]]; then
+              docker logs "$API_CONTAINER"
+              exit 1
+            fi
+          done
+          TOKEN=$(SMOKE_ADMIN_PASSWORD="$FIXTURE_PASSWORD" python - <<'PY'
+          import json, os, urllib.request
+          payload=json.dumps({'username':'admin','password':os.environ['SMOKE_ADMIN_PASSWORD']}).encode()
+          req=urllib.request.Request('http://127.0.0.1:8100/api/v1/auth/login', data=payload, headers={'Content-Type':'application/json'}, method='POST')
+          with urllib.request.urlopen(req, timeout=5) as response:
+              print(json.load(response)['token'])
+          PY
+          )
+          TOKEN="$TOKEN" python - <<'PY'
+          import json, os, urllib.request
+          for path in ['/api/v1/health', '/api/v1/operator/migrations/status', '/api/v1/operator/production-readiness']:
+              headers={'Authorization': f"Bearer {os.environ['TOKEN']}"} if path.startswith('/api/v1/operator/') else {}
+              req=urllib.request.Request(f'http://127.0.0.1:8100{path}', headers=headers)
+              with urllib.request.urlopen(req, timeout=5) as response:
+                  body=json.loads(response.read() or b'{}')
+                  assert response.status == 200, (path, response.status, body)
+                  print(path, body.get('status', 'ok'))
+          PY
+

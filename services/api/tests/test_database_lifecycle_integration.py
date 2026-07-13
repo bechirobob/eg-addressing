@@ -94,6 +94,27 @@ def migration_status(env: dict[str, str], migrations_dir: Path = MIGRATIONS, *, 
     return run_cmd([PYTHON, 'infra/scripts/migrate.py', 'status', '--migrations-dir', str(migrations_dir)], env, check=check)
 
 
+def migration_apply(env: dict[str, str], migrations_dir: Path, *, check: bool = True) -> subprocess.CompletedProcess[str]:
+    return run_cmd([PYTHON, 'infra/scripts/migrate.py', 'apply', '--migrations-dir', str(migrations_dir)], env, check=check)
+
+
+def malformed_migration_package(tmp_path: Path, kind: str) -> Path:
+    if kind == 'missing':
+        return tmp_path / 'missing-migrations'
+    migrations = tmp_path / kind
+    migrations.mkdir()
+    if kind == 'empty':
+        return migrations
+    if kind == 'invalid-name':
+        (migrations / 'not_a_valid_migration.sql').write_text('SELECT 1;')
+        return migrations
+    if kind == 'duplicate-version':
+        (migrations / '000_first.sql').write_text('SELECT 1;')
+        (migrations / '000_second.sql').write_text('SELECT 2;')
+        return migrations
+    raise AssertionError(f'unknown malformed package kind: {kind}')
+
+
 def copy_migrations(tmp_path: Path) -> Path:
     dest = tmp_path / 'migrations'
     dest.mkdir()
@@ -143,6 +164,57 @@ def test_checksum_and_filename_drift_make_status_non_current(db_env, tmp_path):
     filename_drift = migration_status(db_env, MIGRATIONS, check=False)
     assert filename_drift.returncode == 1
     assert 'filename_mismatch_versions' in filename_drift.stdout
+
+
+@pytest.mark.parametrize(
+    ('kind', 'expected_status'),
+    [
+        ('missing', 'missing-migration-package'),
+        ('empty', 'empty-migration-package'),
+        ('invalid-name', 'invalid-migration-filename'),
+        ('duplicate-version', 'duplicate-migration-version'),
+    ],
+)
+def test_cli_fails_before_ledger_for_invalid_migration_packages(db_env, tmp_path, kind, expected_status):
+    migrations = malformed_migration_package(tmp_path, kind)
+    status = migration_status(db_env, migrations, check=False)
+    assert status.returncode == 2
+    assert expected_status in status.stdout
+    assert table_exists(db_env, 'schema_migrations') is False
+
+    apply = migration_apply(db_env, migrations, check=False)
+    assert apply.returncode == 2
+    assert expected_status in apply.stdout
+    assert table_exists(db_env, 'schema_migrations') is False
+
+
+@pytest.mark.parametrize(
+    ('kind', 'expected_status'),
+    [
+        ('missing', 'missing-migration-package'),
+        ('empty', 'empty-migration-package'),
+        ('invalid-name', 'invalid-migration-filename'),
+        ('duplicate-version', 'duplicate-migration-version'),
+    ],
+)
+def test_operator_and_production_readiness_fail_closed_for_invalid_migration_packages(db_env, tmp_path, monkeypatch, kind, expected_status):
+    migrations = malformed_migration_package(tmp_path, kind)
+    configure_app_db_env(monkeypatch, db_env, migrations)
+    monkeypatch.setenv('APP_ENV', 'production')
+    monkeypatch.setenv('SESSION_COOKIE_MODE', 'secure-http-only-cookie')
+    monkeypatch.setenv('ALLOW_DEFAULT_DEMO_PASSWORDS', 'false')
+    monkeypatch.setenv('DEPLOYMENT_LABEL', 'production')
+    from app.ops_status import migration_status as app_migration_status
+    from app.security_posture import production_readiness_status
+
+    status = app_migration_status()
+    assert status['status'] == expected_status
+    assert status['current'] is False
+    assert status['package_error']
+    readiness = production_readiness_status()
+    assert readiness['status'] == 'needs_work'
+    assert readiness['checks']['explicit_migrations']['status'] == 'needs_work'
+    assert readiness['checks']['explicit_migrations']['migration_status']['status'] == expected_status
 
 
 def test_failed_migration_rolls_back_and_does_not_continue(db_env, tmp_path):
