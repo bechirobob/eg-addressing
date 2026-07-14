@@ -1,89 +1,86 @@
-# Controlled Vocabularies
+# Controlled Vocabulary Registry
 
-**Status:** Draft for SDA review
+Authoritative values. Every dictionary/state/API/schema reference must use these exact keys.
 
-## 1. Vocabulary rules
+| Vocabulary | Value | Owner | Terminal? | Classification | Current mappings |
+|---|---|---|---|---|---|
+| `lifecycle_state` | `draft-candidate` | SDA/registry authority | no | government-internal | see field map/current-state inventory |
+| `lifecycle_state` | `registry-review` | SDA/registry authority | no | government-internal | see field map/current-state inventory |
+| `lifecycle_state` | `registry-ready` | SDA/registry authority | no | government-internal | see field map/current-state inventory |
+| `lifecycle_state` | `active` | SDA/registry authority | no | government-internal | see field map/current-state inventory |
+| `lifecycle_state` | `corrected` | SDA/registry authority | no | government-internal | see field map/current-state inventory |
+| `lifecycle_state` | `superseded` | SDA/registry authority | no | government-internal | see field map/current-state inventory |
+| `lifecycle_state` | `retired` | SDA/registry authority | yes | government-internal | see field map/current-state inventory |
+| `lifecycle_state` | `disputed` | SDA/registry authority | no | government-internal | see field map/current-state inventory |
+| `lifecycle_state` | `revoked` | SDA/registry authority | yes | government-internal | see field map/current-state inventory |
+| `publication_state` | `not-public` | SDA/registry authority | no | government-internal | see field map/current-state inventory |
+| `publication_state` | `internal-registry` | SDA/registry authority | no | government-internal | see field map/current-state inventory |
+| `publication_state` | `release-requested` | SDA/registry authority | no | government-internal | see field map/current-state inventory |
+| `publication_state` | `release-approved` | SDA/registry authority | no | government-internal | see field map/current-state inventory |
+| `publication_state` | `publicly-released` | SDA/registry authority | no | government-internal | see field map/current-state inventory |
+| `publication_state` | `partner-released` | SDA/registry authority | no | government-internal | see field map/current-state inventory |
+| `publication_state` | `suspended` | SDA/registry authority | no | government-internal | see field map/current-state inventory |
+| `publication_state` | `withdrawn` | SDA/registry authority | yes | government-internal | see field map/current-state inventory |
+| `intake_state` | `submitted` | SDA/registry authority | no | government-internal | see field map/current-state inventory |
+| `intake_state` | `under-review` | SDA/registry authority | no | government-internal | see field map/current-state inventory |
+| `intake_state` | `needs-field-check` | SDA/registry authority | no | government-internal | see field map/current-state inventory |
+| `intake_state` | `duplicate-review` | SDA/registry authority | no | government-internal | see field map/current-state inventory |
+| `intake_state` | `rejected` | SDA/registry authority | yes | government-internal | see field map/current-state inventory |
+| `intake_state` | `promoted-to-canonical` | SDA/registry authority | no | government-internal | see field map/current-state inventory |
+| `intake_state` | `closed` | SDA/registry authority | yes | government-internal | see field map/current-state inventory |
+| `field_verification_state` | `assigned` | SDA/registry authority | no | government-internal | see field map/current-state inventory |
+| `field_verification_state` | `in-progress` | SDA/registry authority | no | government-internal | see field map/current-state inventory |
+| `field_verification_state` | `field-captured` | SDA/registry authority | no | government-internal | see field map/current-state inventory |
+| `field_verification_state` | `evidence-under-review` | SDA/registry authority | no | government-internal | see field map/current-state inventory |
+| `field_verification_state` | `evidence-approved` | SDA/registry authority | no | government-internal | see field map/current-state inventory |
+| `field_verification_state` | `evidence-rejected` | SDA/registry authority | no | government-internal | see field map/current-state inventory |
+| `field_verification_state` | `needs-recapture` | SDA/registry authority | no | government-internal | see field map/current-state inventory |
+| `field_verification_state` | `linked-to-canonical` | SDA/registry authority | no | government-internal | see field map/current-state inventory |
+| `field_verification_state` | `cancelled` | SDA/registry authority | yes | government-internal | see field map/current-state inventory |
+| `geometry_quality_state` | `unvalidated` | SDA/registry authority | no | government-internal | see field map/current-state inventory |
+| `geometry_quality_state` | `valid` | SDA/registry authority | no | government-internal | see field map/current-state inventory |
+| `geometry_quality_state` | `valid-with-warning` | SDA/registry authority | no | government-internal | see field map/current-state inventory |
+| `geometry_quality_state` | `needs-review` | SDA/registry authority | no | government-internal | see field map/current-state inventory |
+| `geometry_quality_state` | `rejected` | SDA/registry authority | yes | government-internal | see field map/current-state inventory |
+| `geometry_quality_state` | `superseded` | SDA/registry authority | no | government-internal | see field map/current-state inventory |
+| `geometry_quality_state` | `disputed` | SDA/registry authority | no | government-internal | see field map/current-state inventory |
+| `name_status` | `candidate` | SDA/registry authority | no | government-internal | see field map/current-state inventory |
+| `name_status` | `under-review` | SDA/registry authority | no | government-internal | see field map/current-state inventory |
+| `name_status` | `official-current` | SDA/registry authority | no | government-internal | see field map/current-state inventory |
+| `name_status` | `official-historical` | SDA/registry authority | no | government-internal | see field map/current-state inventory |
+| `name_status` | `alternate` | SDA/registry authority | no | government-internal | see field map/current-state inventory |
+| `name_status` | `retired` | SDA/registry authority | yes | government-internal | see field map/current-state inventory |
+| `name_status` | `rejected` | SDA/registry authority | yes | government-internal | see field map/current-state inventory |
+| `name_status` | `disputed` | SDA/registry authority | no | government-internal | see field map/current-state inventory |
+| `public_code_state` | `reserved-internal` | SDA/registry authority | no | government-internal | see field map/current-state inventory |
+| `public_code_state` | `active-public` | SDA/registry authority | no | government-internal | see field map/current-state inventory |
+| `public_code_state` | `superseded` | SDA/registry authority | no | government-internal | see field map/current-state inventory |
+| `public_code_state` | `retired` | SDA/registry authority | yes | government-internal | see field map/current-state inventory |
+| `public_code_state` | `revoked` | SDA/registry authority | yes | government-internal | see field map/current-state inventory |
+| `public_code_state` | `blocked` | SDA/registry authority | yes | government-internal | see field map/current-state inventory |
+| `source_authority_class` | `official-government` | SDA/registry authority | no | government-internal | see field map/current-state inventory |
+| `source_authority_class` | `registry-authority` | SDA/registry authority | no | government-internal | see field map/current-state inventory |
+| `source_authority_class` | `gis-data-authority` | SDA/registry authority | no | government-internal | see field map/current-state inventory |
+| `source_authority_class` | `operator-confirmed` | SDA/registry authority | no | government-internal | see field map/current-state inventory |
+| `source_authority_class` | `field-verified` | SDA/registry authority | no | government-internal | see field map/current-state inventory |
+| `source_authority_class` | `citizen-submitted` | SDA/registry authority | no | government-internal | see field map/current-state inventory |
+| `source_authority_class` | `imported-reference` | SDA/registry authority | no | government-internal | see field map/current-state inventory |
+| `source_authority_class` | `external-map-suggestion` | SDA/registry authority | no | government-internal | see field map/current-state inventory |
+| `source_authority_class` | `derived` | SDA/registry authority | no | government-internal | see field map/current-state inventory |
+| `source_authority_class` | `test-fixture` | SDA/registry authority | no | government-internal | see field map/current-state inventory |
+| `classification` | `public` | SDA/registry authority | no | government-internal | see field map/current-state inventory |
+| `classification` | `public-after-release` | SDA/registry authority | no | government-internal | see field map/current-state inventory |
+| `classification` | `government-internal` | SDA/registry authority | no | government-internal | see field map/current-state inventory |
+| `classification` | `restricted` | SDA/registry authority | no | government-internal | see field map/current-state inventory |
+| `classification` | `highly-restricted` | SDA/registry authority | no | government-internal | see field map/current-state inventory |
+| `classification` | `security-internal` | SDA/registry authority | no | government-internal | see field map/current-state inventory |
+| `object_role` | `primary-subject` | SDA/registry authority | no | government-internal | see field map/current-state inventory |
+| `object_role` | `context` | SDA/registry authority | no | government-internal | see field map/current-state inventory |
+| `object_role` | `access` | SDA/registry authority | no | government-internal | see field map/current-state inventory |
+| `object_role` | `contains` | SDA/registry authority | no | government-internal | see field map/current-state inventory |
+| `object_role` | `nearby-landmark` | SDA/registry authority | no | government-internal | see field map/current-state inventory |
+| `object_role` | `legacy-source` | SDA/registry authority | no | government-internal | see field map/current-state inventory |
 
-- Controlled values use lowercase kebab-case.
-- A value belongs to exactly one vocabulary.
-- Runtime code must not create status strings ad hoc in future implementation work.
-- Legacy values remain mapped during transition but are not automatically canonical.
+## Invalid-transition rule
 
-## 2. Administrative unit status
-
-| Value | Meaning |
-|---|---|
-| `proposed` | Not yet approved as reference geography. |
-| `active` | Current approved unit. |
-| `superseded` | Replaced by later unit/version. |
-| `retired` | No longer current but preserved historically. |
-| `disputed` | Under authority review. |
-
-## 3. Operational area status
-
-`draft`, `active`, `paused`, `completed`, `retired`.
-
-## 4. Candidate/intake status
-
-`submitted`, `under-review`, `needs-field-check`, `duplicate-review`, `rejected`, `promoted-to-canonical`, `closed`.
-
-Current mappings:
-
-| Current value | Target vocabulary/value |
-|---|---|
-| `submitted` | candidate/intake `submitted` |
-| `under-review` | candidate/intake `under-review` |
-| `needs-field-check` | candidate/intake `needs-field-check` |
-| `retired-fixture` | fixture/testing state, not production vocabulary |
-
-## 5. Field verification status
-
-`assigned`, `in-progress`, `field-captured`, `evidence-under-review`, `evidence-approved`, `evidence-rejected`, `cancelled`.
-
-## 6. Canonical lifecycle state
-
-`draft-candidate`, `registry-review`, `registry-ready`, `active`, `corrected`, `superseded`, `retired`, `disputed`, `revoked`.
-
-Current mappings:
-
-| Current value | Target value | Note |
-|---|---|---|
-| `registry-ready` | `registry-ready` | Internal registry approval only. |
-| `published` | publication state `publicly-released`, not canonical lifecycle. |
-| `official` | verification/authority flag, not lifecycle. |
-| `provisional` | evidence confidence/verification, not lifecycle. |
-
-## 7. Publication state
-
-`not-public`, `internal-registry`, `release-requested`, `release-approved`, `publicly-released`, `partner-released`, `suspended`, `withdrawn`.
-
-Current mappings:
-
-| Current value | Target value |
-|---|---|
-| `not-public` | `not-public` |
-| `internal-registry` | `internal-registry` |
-| `published` | `publicly-released` |
-| `publication-approved` | event type producing `release-approved` |
-| `publication-simulation` | simulation event only; no state change. |
-| `ready-for-export` | projection/export readiness, not record state. |
-
-## 8. Geometry quality state
-
-`unvalidated`, `valid`, `valid-with-warning`, `needs-review`, `rejected`, `superseded`, `disputed`.
-
-## 9. Name status
-
-`candidate`, `under-review`, `official-current`, `official-historical`, `alternate`, `retired`, `rejected`, `disputed`.
-
-## 10. Public code state
-
-`reserved-internal`, `active-public`, `superseded`, `retired`, `revoked`, `blocked`.
-
-## 11. Source authority class
-
-`official-government`, `operator-confirmed`, `field-verified`, `citizen-submitted`, `imported-reference`, `external-map-suggestion`, `derived`, `test-fixture`.
-
-## 12. Data classification
-
-Use the platform security standard: `public`, `government-internal`, `restricted`, `highly-restricted`.
+Any value not listed above is invalid for new canonical target data. Legacy values must map through `current-to-target-mapping.md` and be rejected, remapped, or placed in an exception queue during WO-002B.

@@ -1,29 +1,25 @@
-# Geometry evidence and provenance model
+# Geometry observation, approval, and subject integrity
 
 **Status:** Proposed  
 **Date:** 2026-07-13  
 **Related work order:** `NLI-WO-002`  
 
-## Context
+## Context and drivers
 
-Coordinates can come from citizens, field teams, imports, maps, and derived sources.
+Review 01 requires the design pack to decide real architecture questions before executable WO-002B work. Drivers: single canonical authority, no silent data loss, reconstructable time/publication state, PostGIS integrity, and compatibility with current pilot data.
 
 ## Decision
 
-Separate geometry observations from approved geometry versions with CRS, quality, method, authority, and classification.
+Separate `geometry_observation` from approved `geometry_version`; use PostGIS Geometry(Geometry,4326); constrain subject_table values and add WO-002B triggers for subject integrity; enforce one-current per subject/role.
 
 ## Alternatives considered
 
-1. Keep current tables and status fields unchanged. Rejected because NLI-WO-002 requires canonical authority clarity.
-2. Copy the proposal schema wholesale. Rejected because it conflicts with current migrations and could create a second canonical authority.
-3. Use the proposed model in this ADR and defer executable implementation to NLI-WO-002B.
+Alternatives: one polymorphic geometry row; raw citizen GPS as approved geometry; one geometry column per entity. Rejected due to provenance/integrity gaps.
 
-## Consequences
+## Consequences and implementation constraints
 
-Prevents map/citizen observations becoming official geometry without validation.
+Migration: backfill observations from geotags/field/legacy points and approved versions from address_records.geom where valid. No runtime behavior or executable migration is authorized by this ADR.
 
-No executable migration, API contract, runtime code, infrastructure, or production data change is authorized by this proposed ADR.
+## Validation
 
-## Follow-up
-
-Requires SDA review and later implementation work order before runtime adoption.
+The decision is reflected in `target-model.json`, ERD, data dictionary, draft SQL, current-to-target mapping, representative records, and consistency checker.

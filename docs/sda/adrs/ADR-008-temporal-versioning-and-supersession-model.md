@@ -1,29 +1,25 @@
-# Temporal versioning and supersession model
+# Temporal mechanics, correction, supersession, and immutable publication
 
 **Status:** Proposed  
 **Date:** 2026-07-13  
 **Related work order:** `NLI-WO-002`  
 
-## Context
+## Context and drivers
 
-Corrections, boundary changes, and public code history require reconstructable past state.
+Review 01 requires the design pack to decide real architecture questions before executable WO-002B work. Drivers: single canonical authority, no silent data loss, reconstructable time/publication state, PostGIS integrity, and compatibility with current pilot data.
 
 ## Decision
 
-Use immutable versions/events with current pointers, effective dates, recorded dates, and explicit supersession relationships.
+Use bitemporal effective/recorded intervals, immutable versions, explicit predecessor/successor/correction links, one-current enforcement, backdated decision rules, dispute states, and publication snapshots targeting exact version+alias.
 
 ## Alternatives considered
 
-1. Keep current tables and status fields unchanged. Rejected because NLI-WO-002 requires canonical authority clarity.
-2. Copy the proposal schema wholesale. Rejected because it conflicts with current migrations and could create a second canonical authority.
-3. Use the proposed model in this ADR and defer executable implementation to NLI-WO-002B.
+Alternatives: mutable current row only; release item points to current record; overwrite corrections. Rejected because reconstruction fails.
 
-## Consequences
+## Consequences and implementation constraints
 
-Future migrations must backfill versions and validate one-current-version invariants.
+Migration: create versions/events, snapshot current state, future corrections create new versions and releases. No runtime behavior or executable migration is authorized by this ADR.
 
-No executable migration, API contract, runtime code, infrastructure, or production data change is authorized by this proposed ADR.
+## Validation
 
-## Follow-up
-
-Requires SDA review and later implementation work order before runtime adoption.
+The decision is reflected in `target-model.json`, ERD, data dictionary, draft SQL, current-to-target mapping, representative records, and consistency checker.

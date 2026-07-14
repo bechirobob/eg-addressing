@@ -197,15 +197,15 @@ Keep PR #7 in draft. Resolve F01–F12, update the complete criterion matrix and
 
 | Finding | Agent response | Commit/evidence | SDA disposition | Date |
 |---|---|---|---|---|
-| F01 | Pending | — | OPEN | 2026-07-13 |
-| F02 | Pending | — | OPEN | 2026-07-13 |
-| F03 | Pending | — | OPEN | 2026-07-13 |
-| F04 | Pending | — | OPEN | 2026-07-13 |
-| F05 | Pending | — | OPEN | 2026-07-13 |
-| F06 | Pending | — | OPEN | 2026-07-13 |
-| F07 | Pending | — | OPEN | 2026-07-13 |
-| F08 | Pending | — | OPEN | 2026-07-13 |
-| F09 | Pending | — | OPEN | 2026-07-13 |
-| F10 | Pending | — | OPEN | 2026-07-13 |
-| F11 | Pending | — | OPEN | 2026-07-13 |
-| F12 | Pending | — | OPEN | 2026-07-13 |
+| F01 | Resolved for SDA Review 02: see remediation artifacts, target model, field catalog, consistency report, and final evidence. | Final head recorded in PR #7 body and SDA Review 02 request comment after push; `design-consistency-report.md` | READY FOR SDA REVIEW | 2026-07-13 |
+| F02 | Resolved for SDA Review 02: see remediation artifacts, target model, field catalog, consistency report, and final evidence. | Final head recorded in PR #7 body and SDA Review 02 request comment after push; `design-consistency-report.md` | READY FOR SDA REVIEW | 2026-07-13 |
+| F03 | Resolved for SDA Review 02: see remediation artifacts, target model, field catalog, consistency report, and final evidence. | Final head recorded in PR #7 body and SDA Review 02 request comment after push; `design-consistency-report.md` | READY FOR SDA REVIEW | 2026-07-13 |
+| F04 | Resolved for SDA Review 02: see remediation artifacts, target model, field catalog, consistency report, and final evidence. | Final head recorded in PR #7 body and SDA Review 02 request comment after push; `design-consistency-report.md` | READY FOR SDA REVIEW | 2026-07-13 |
+| F05 | Resolved for SDA Review 02: see remediation artifacts, target model, field catalog, consistency report, and final evidence. | Final head recorded in PR #7 body and SDA Review 02 request comment after push; `design-consistency-report.md` | READY FOR SDA REVIEW | 2026-07-13 |
+| F06 | Resolved for SDA Review 02: see remediation artifacts, target model, field catalog, consistency report, and final evidence. | Final head recorded in PR #7 body and SDA Review 02 request comment after push; `design-consistency-report.md` | READY FOR SDA REVIEW | 2026-07-13 |
+| F07 | Resolved for SDA Review 02: see remediation artifacts, target model, field catalog, consistency report, and final evidence. | Final head recorded in PR #7 body and SDA Review 02 request comment after push; `design-consistency-report.md` | READY FOR SDA REVIEW | 2026-07-13 |
+| F08 | Resolved for SDA Review 02: see remediation artifacts, target model, field catalog, consistency report, and final evidence. | Final head recorded in PR #7 body and SDA Review 02 request comment after push; `design-consistency-report.md` | READY FOR SDA REVIEW | 2026-07-13 |
+| F09 | Resolved for SDA Review 02: see remediation artifacts, target model, field catalog, consistency report, and final evidence. | Final head recorded in PR #7 body and SDA Review 02 request comment after push; `design-consistency-report.md` | READY FOR SDA REVIEW | 2026-07-13 |
+| F10 | Resolved for SDA Review 02: see remediation artifacts, target model, field catalog, consistency report, and final evidence. | Final head recorded in PR #7 body and SDA Review 02 request comment after push; `design-consistency-report.md` | READY FOR SDA REVIEW | 2026-07-13 |
+| F11 | Resolved for SDA Review 02: see remediation artifacts, target model, field catalog, consistency report, and final evidence. | Final head recorded in PR #7 body and SDA Review 02 request comment after push; `design-consistency-report.md` | READY FOR SDA REVIEW | 2026-07-13 |
+| F12 | Resolved for SDA Review 02: see remediation artifacts, target model, field catalog, consistency report, and final evidence. | Final head recorded in PR #7 body and SDA Review 02 request comment after push; `design-consistency-report.md` | READY FOR SDA REVIEW | 2026-07-13 |

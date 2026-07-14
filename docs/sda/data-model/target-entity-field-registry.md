@@ -1,7 +1,7 @@
-# Canonical Data Dictionary
+# Authoritative Target Entity and Field Registry
 
 **Status:** Authoritative within NLI-WO-002 design pack.  
-This dictionary is generated from the authoritative target registry and is used to reconcile the conceptual model, ERD, dictionary, vocabularies, representative records, API projections, mapping, convergence plan, ADRs, and non-executable draft SQL.
+This registry is the source used to reconcile the conceptual model, ERD, dictionary, vocabularies, representative records, API projections, mapping, convergence plan, ADRs, and non-executable draft SQL.
 
 ## Decisions encoded
 

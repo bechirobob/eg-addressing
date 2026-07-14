@@ -1,18 +1,18 @@
-# NLI Request for Information — RFI-NLI-WO-002-001-github-issue-6-access
+# NLI Request for Information — RFI-NLI-WO-002-006-existing-published-looking-pilot-records
 
 **Related work order:** `NLI-WO-002`  
 **Raised by:** `Implementation Agent`  
 **Date:** `2026-07-13`  
 **Required by:** `Before executable NLI-WO-002B implementation for affected area`  
-**Status:** `WITHDRAWN`
+**Status:** `OPEN`
 
 ## 1. Decision question
 
-GitHub issue #6 access
+Existing published-looking pilot records
 
 ## 2. Concrete options and consequences
 
-Access was restored through persistent GitHub API credentials and the issue context is incorporated through the active work order/review path. No policy decision remains.
+Options: A) map as public release snapshots if authority exists; B) downgrade to internal-registry with audit note; C) exception queue. Recommendation: exception queue unless explicit publication authority is recorded.
 
 ## 3. Agent recommendation
 

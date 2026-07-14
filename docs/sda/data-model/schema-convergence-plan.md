@@ -1,63 +1,48 @@
 # Expand–Migrate–Contract Convergence Plan
 
-**Status:** Draft proposal for later NLI-WO-002B authorization
+## Authority boundary
 
-## 1. Non-authorizing note
+NLI-WO-002B remains unauthorized. This plan is implementation-authority detail for future scoping only.
 
-This plan is not a deployment authorization. It describes the likely safe path after SDA accepts the design model.
+## Migration batches and dependencies
 
-## 2. Expand phase
+| Batch | Dependency | Action | Owner | Idempotency/exception handling | Validation/tolerance |
+|---|---|---|---|---|---|
+| B0 backup/readiness | accepted WO-002B | backup, restore drill, migration-state proof | Ops/SDA | abort if backup/restore not proven | zero unresolved readiness errors |
+| B1 reference/source foundations | B0 | create source_authority/package/record/evidence, vocab tables | backend/data | upsert by authority/package checksum | counts match source ledgers |
+| B2 geography/operations | B1 | admin units, names, boundaries, locality, operational areas/coverage | GIS/data | upsert by official/source code | hierarchy no cycles, active parent exists |
+| B3 objects/geometry observations | B1/B2 | roads/segments/names/buildings/entrances/units/landmarks/non-building objects; raw geometry observations | registry/GIS | deterministic source keys; exceptions queue | geometry valid or exceptioned |
+| B4 canonical records/versions | B2/B3 | backfill address_records first, then legacy addresses as compatibility source | registry | natural key = current address_records.id/address_code | source/target counts/checksums match |
+| B5 assertions/events/cases | B4 | normalize record_bundle, events, corrections, disputes, field observations | registry | event idempotency by source+type+time hash | every canonical fact has source/decision |
+| B6 publication aliases/releases | B4/B5 | create public_code_alias, release snapshots, partner/export projections | publication authority | alias non-reuse checks | no internal-only record in public release |
+| B7 dual read/write | B6 | adapters: canonical write with legacy compatibility projection | backend | retriable writes by idempotency key | API parity suite green |
+| B8 cutover | monitoring window | canonical-first reads, freeze legacy direct writes | SDA/Ops | forward-only unless gate fails | parity, latency, error budget within tolerance |
+| B9 contract/deprecate | B8 acceptance | retire fallback reads and legacy mutable paths | SDA | archive before drop | deprecation evidence accepted |
 
-- Add target canonical/reference/evidence/publication tables via reviewed executable migrations.
-- Add compatibility columns/views where needed.
-- Keep current writes unchanged until new write adapters are ready.
-- Add state/vocabulary reference tables or check constraints only after mapping is complete.
-- Add source authority and geometry version tables before backfill.
-- Add spatial indexes after PostGIS restore/readiness proof.
+## Precedence and conflict behavior
 
-## 3. Migrate phase
+1. Existing `address_records` wins over legacy `addresses` for canonical registry facts.
+2. `citizen_geotag_submissions` remains evidence/candidate unless already promoted to address_records.
+3. Field/GIS validated geometry wins over citizen/browser geometry; weaker geometry remains observation.
+4. Publication release snapshots win over mutable current record for historical public proof.
+5. Conflicts go to exception queues, not silent overwrite.
 
-- Backfill administrative units from `provinces` and `admin_units` with source/effective metadata.
-- Backfill operational areas from `territories`.
-- Backfill canonical records from `address_records` first, because it is current canonical case-file layer.
-- Link legacy `addresses` as compatibility/source records, not as a second authority.
-- Convert `citizen_geotag_submissions` into intake/evidence cases.
-- Convert `field_submissions.spatial_evidence` into field observations/evidence metadata.
-- Convert publication packs into publication releases and release items.
-- Compute before/after counts, checksums, relationship checks, geometry validity counts, and publication safety checks.
+## Dual-read/write behavior
 
-## 4. Dual-read / adapter phase
+During compatibility, writes go to canonical target and project to legacy response shapes. Reads use canonical target first with explicit fallback only for unmigrated rows. Public endpoints read only release items. Operator endpoints may show migration exceptions.
 
-- Public lookup reads canonical projection first.
-- Operator search reads canonical records with fallback only where mapped.
-- Publication/export/signage use publication release items.
-- Legacy endpoints keep response shape unless a later API work order authorizes contract changes.
+## Validation SQL examples
 
-## 5. Cutover phase
+- `SELECT COUNT(*) FROM address_records` equals canonical backfill count excluding archived/exceptioned rows.
+- `SELECT public_code, COUNT(*) FROM proposed_public_code_alias GROUP BY public_code HAVING COUNT(*) > 1` returns 0.
+- `SELECT location_record_id, COUNT(*) FROM proposed_location_record_version WHERE is_current GROUP BY 1 HAVING COUNT(*) <> 1` returns 0.
+- `SELECT COUNT(*) FROM proposed_geometry_version WHERE ST_SRID(geom) <> 4326 OR NOT ST_IsValid(geom)` returns 0 except approved exceptions.
+- Public release check: no `publication_release_item` targets a version whose record publication state is below release-approved.
 
-- Freeze legacy write paths or route them through canonical services.
-- Enforce canonical invariants.
-- Monitor audit, counts, query parity, public safety, and geometry parity.
+## Monitoring, rollback, and forward recovery
 
-## 6. Contract phase
+Before cutover, rollback is database restore plus app rollback. After dual-write begins, prefer forward recovery: pause writes, reconcile idempotency keys, replay source records/events, regenerate projections, and verify parity. Contract phase requires a recorded monitoring window with no unresolved exceptions.
 
-- Remove unused fallback reads after evidence window.
-- Deprecate legacy columns/tables only through explicit migration work order.
-- Preserve audit/history and public-code redirect/supersession behavior.
+## National-scale assumptions
 
-## 7. Validation gates
-
-| Gate | Required evidence |
-|---|---|
-| Schema gate | migration dry run, empty DB, upgrade DB, rollback/forward recovery. |
-| Count gate | source/target row counts per mapped entity. |
-| Relationship gate | FK and relationship parity. |
-| Geometry gate | valid geometry counts, null geometry exceptions, SRID check. |
-| Publication gate | no internal registry rows in public projections. |
-| API parity gate | current API responses match expected compatibility projections. |
-| Audit gate | creation/update/publication events have actor/source/time. |
-| Restore gate | backup/restore retains counts, hashes, relationships, geometry. |
-
-## 8. Performance/index assumptions
-
-High-growth tables: source records, intake cases, geometry versions, events, evidence objects, public lookup aliases. Expected indexes: public code unique current, canonical state/update, admin hierarchy, source package, geometry GiST, event record/time, release item record/release, correction/dispute target/status.
+Initial pilot scale: thousands of records. National scale: millions of location records, geometry observations, events, and source records. Index priorities: public code unique lookup, canonical lifecycle/publication filters, source package/record joins, event timeline, PostGIS GiST geometry, admin hierarchy, publication release items. Partition candidates after national rollout: events, source_records, geometry_observations, evidence_objects by time/source package; publication release items by release/projection type.

@@ -1,29 +1,25 @@
-# Canonical location record and addressable objects
+# Canonical record identity and addressable object cardinality
 
 **Status:** Proposed  
 **Date:** 2026-07-13  
 **Related work order:** `NLI-WO-002`  
 
-## Context
+## Context and drivers
 
-Current addresses, geotags, and address_records overlap.
+Review 01 requires the design pack to decide real architecture questions before executable WO-002B work. Drivers: single canonical authority, no silent data loss, reconstructable time/publication state, PostGIS integrity, and compatibility with current pilot data.
 
 ## Decision
 
-Use one canonical location record authority with addressable object references; intake remains evidence.
+`location_record` is the sole canonical address/location anchor; object links are many-role rows; unit records are independent only when separately addressable; road and road_segment identities are separate; entrance is access geometry/context.
 
 ## Alternatives considered
 
-1. Keep current tables and status fields unchanged. Rejected because NLI-WO-002 requires canonical authority clarity.
-2. Copy the proposal schema wholesale. Rejected because it conflicts with current migrations and could create a second canonical authority.
-3. Use the proposed model in this ADR and defer executable implementation to NLI-WO-002B.
+Alternatives: one nullable FK per object; building/unit hierarchy as record identity; road segment as road identity. Rejected due to multi-object and unit/sub-address ambiguity.
 
-## Consequences
+## Consequences and implementation constraints
 
-Avoids second canonical address authority and supports roads, buildings, units, landmarks, parcels, and non-building objects.
+Migration: normalize `address_records` first, add object links, preserve legacy `addresses` as compatibility source. No runtime behavior or executable migration is authorized by this ADR.
 
-No executable migration, API contract, runtime code, infrastructure, or production data change is authorized by this proposed ADR.
+## Validation
 
-## Follow-up
-
-Requires SDA review and later implementation work order before runtime adoption.
+The decision is reflected in `target-model.json`, ERD, data dictionary, draft SQL, current-to-target mapping, representative records, and consistency checker.
