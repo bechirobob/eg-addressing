@@ -64,6 +64,7 @@ route_policies = load_json("docs/sda/data-model/openapi-expected-route-policies.
 reviewed_route_policies = load_json("docs/sda/data-model/openapi-reviewed-route-policies.json")
 projection_contracts = load_json("docs/sda/data-model/openapi-reviewed-projection-contracts.json")
 api_projection_assertions = load_json("docs/sda/data-model/openapi-policy-projection-assertions.json")
+adr_matrix_text = read("docs/sda/data-model/adr-005-009-evidence-matrix.md")
 target_catalog = load_json("docs/sda/data-model/target-schema-catalog.json")
 fixtures = load_json("docs/sda/data-model/representative-records/machine-readable-fixtures.json")
 current_semantics = load_json("docs/sda/data-model/current-field-semantics-reviewed.json")
@@ -482,6 +483,16 @@ for fq in ["geometry_version.promotion_decision_event_id", "geometry_version.pro
 catalog_tables_seen = {c.get("table_name") for c in (target_catalog.get("columns", []) if isinstance(target_catalog, dict) else [])}
 if "lifecycle_transition_policy" not in catalog_tables_seen:
     err("target schema does not include executable lifecycle_transition_policy table")
+
+# ADR Review 07 reconciliation must cite named assertions, not aggregate-only evidence.
+if "Generated checks: 41" in adr_matrix_text or "Errors: 0`" in adr_matrix_text:
+    err("ADR evidence matrix must not cite stale aggregate check counts as acceptance evidence")
+for adr_id in ["ADR-005", "ADR-006", "ADR-007", "ADR-008", "ADR-009"]:
+    if adr_id not in adr_matrix_text:
+        err(f"ADR evidence matrix missing {adr_id}")
+for required in ["F02-source-row-identity", "F04-cardinality-positive", "F05-admin-boundary", "F06-geometry-authority", "F07-lifecycle-positive", "F09-reviewed", "F10-scenario"]:
+    if required not in adr_matrix_text:
+        err(f"ADR evidence matrix missing named assertion family {required}")
 
 # ADRs and ERD coverage.
 if 'write(f"docs/sda/adrs/' in pipeline_text or 'write("docs/sda/adrs/' in pipeline_text:
