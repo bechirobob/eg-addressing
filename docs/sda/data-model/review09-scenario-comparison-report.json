@@ -1,0 +1,747 @@
+{
+  "scenarios": {
+    "administrative-boundary-change": {
+      "assertions": {
+        "F10-review09-administrative-boundary-change-entity_counts": {
+          "evidence_source": "review09-independent-scenario-expected-vs-observed-db-query",
+          "finding": "F10",
+          "status": "passed"
+        },
+        "F10-review09-administrative-boundary-change-entity_ids": {
+          "evidence_source": "review09-independent-scenario-expected-vs-observed-db-query",
+          "finding": "F10",
+          "status": "passed"
+        },
+        "F10-review09-administrative-boundary-change-expected-absences": {
+          "evidence_source": "review09-independent-scenario-expected-vs-observed-db-query",
+          "finding": "F10",
+          "status": "passed"
+        },
+        "F10-review09-administrative-boundary-change-geometry_and_provenance": {
+          "evidence_source": "review09-independent-scenario-expected-vs-observed-db-query",
+          "finding": "F10",
+          "status": "passed"
+        },
+        "F10-review09-administrative-boundary-change-historical_output": {
+          "evidence_source": "review09-independent-scenario-expected-vs-observed-db-query",
+          "finding": "F10",
+          "status": "passed"
+        },
+        "F10-review09-administrative-boundary-change-operator_projection": {
+          "evidence_source": "review09-independent-scenario-expected-vs-observed-db-query",
+          "finding": "F10",
+          "status": "passed"
+        },
+        "F10-review09-administrative-boundary-change-public_projection": {
+          "evidence_source": "review09-independent-scenario-expected-vs-observed-db-query",
+          "finding": "F10",
+          "status": "passed"
+        },
+        "F10-review09-administrative-boundary-change-publication_releases": {
+          "evidence_source": "review09-independent-scenario-expected-vs-observed-db-query",
+          "finding": "F10",
+          "status": "passed"
+        },
+        "F10-review09-administrative-boundary-change-queried_fixture_rows": {
+          "evidence_source": "review09-independent-scenario-expected-vs-observed-db-query",
+          "finding": "F10",
+          "status": "passed"
+        },
+        "F10-review09-administrative-boundary-change-relationship_edges": {
+          "evidence_source": "review09-independent-scenario-expected-vs-observed-db-query",
+          "finding": "F10",
+          "status": "passed"
+        }
+      },
+      "errors": [],
+      "expected_file": "docs/sda/data-model/review09/scenarios/administrative-boundary-change/expected.json",
+      "source_entity_counts": {
+        "administrative_code_history": 1,
+        "administrative_unit": 1,
+        "administrative_unit_version": 2,
+        "building": 1,
+        "building_primary_entrance": 1,
+        "correction_case": 1,
+        "country": 1,
+        "decision_event": 1,
+        "dispute_case": 1,
+        "entrance": 1,
+        "evidence_object": 1,
+        "field_assignment": 1,
+        "field_observation": 1,
+        "geometry_observation": 1,
+        "geometry_quality_assessment": 1,
+        "geometry_transformation": 1,
+        "geometry_version": 1,
+        "intake_case": 1,
+        "landmark": 1,
+        "legacy_crosswalk": 1,
+        "licence": 1,
+        "locality": 1,
+        "location_record": 1,
+        "location_record_assertion": 1,
+        "location_record_object_link": 1,
+        "location_record_relationship": 1,
+        "location_record_version": 1,
+        "migration_exception": 1,
+        "name_record": 1,
+        "non_building_object": 1,
+        "operational_area": 1,
+        "operational_area_coverage": 1,
+        "parcel_reference": 1,
+        "partner_projection": 1,
+        "public_code_alias": 1,
+        "publication_release": 1,
+        "publication_release_item": 1,
+        "registry_subject": 1,
+        "road": 1,
+        "road_segment": 1,
+        "source_authority": 1,
+        "source_package": 1,
+        "source_payload_archive": 1,
+        "source_record": 1,
+        "unit": 1
+      },
+      "source_file": "docs/sda/data-model/review09/scenarios/administrative-boundary-change/source.json",
+      "status": "passed"
+    },
+    "corrected-superseded-address": {
+      "assertions": {
+        "F10-review09-corrected-superseded-address-entity_counts": {
+          "evidence_source": "review09-independent-scenario-expected-vs-observed-db-query",
+          "finding": "F10",
+          "status": "passed"
+        },
+        "F10-review09-corrected-superseded-address-entity_ids": {
+          "evidence_source": "review09-independent-scenario-expected-vs-observed-db-query",
+          "finding": "F10",
+          "status": "passed"
+        },
+        "F10-review09-corrected-superseded-address-expected-absences": {
+          "evidence_source": "review09-independent-scenario-expected-vs-observed-db-query",
+          "finding": "F10",
+          "status": "passed"
+        },
+        "F10-review09-corrected-superseded-address-geometry_and_provenance": {
+          "evidence_source": "review09-independent-scenario-expected-vs-observed-db-query",
+          "finding": "F10",
+          "status": "passed"
+        },
+        "F10-review09-corrected-superseded-address-historical_output": {
+          "evidence_source": "review09-independent-scenario-expected-vs-observed-db-query",
+          "finding": "F10",
+          "status": "passed"
+        },
+        "F10-review09-corrected-superseded-address-operator_projection": {
+          "evidence_source": "review09-independent-scenario-expected-vs-observed-db-query",
+          "finding": "F10",
+          "status": "passed"
+        },
+        "F10-review09-corrected-superseded-address-public_projection": {
+          "evidence_source": "review09-independent-scenario-expected-vs-observed-db-query",
+          "finding": "F10",
+          "status": "passed"
+        },
+        "F10-review09-corrected-superseded-address-publication_releases": {
+          "evidence_source": "review09-independent-scenario-expected-vs-observed-db-query",
+          "finding": "F10",
+          "status": "passed"
+        },
+        "F10-review09-corrected-superseded-address-queried_fixture_rows": {
+          "evidence_source": "review09-independent-scenario-expected-vs-observed-db-query",
+          "finding": "F10",
+          "status": "passed"
+        },
+        "F10-review09-corrected-superseded-address-relationship_edges": {
+          "evidence_source": "review09-independent-scenario-expected-vs-observed-db-query",
+          "finding": "F10",
+          "status": "passed"
+        }
+      },
+      "errors": [],
+      "expected_file": "docs/sda/data-model/review09/scenarios/corrected-superseded-address/expected.json",
+      "source_entity_counts": {
+        "administrative_code_history": 1,
+        "administrative_unit": 1,
+        "administrative_unit_version": 1,
+        "building": 1,
+        "building_primary_entrance": 1,
+        "correction_case": 1,
+        "country": 1,
+        "decision_event": 1,
+        "dispute_case": 1,
+        "entrance": 1,
+        "evidence_object": 1,
+        "field_assignment": 1,
+        "field_observation": 1,
+        "geometry_observation": 1,
+        "geometry_quality_assessment": 1,
+        "geometry_transformation": 1,
+        "geometry_version": 1,
+        "intake_case": 1,
+        "landmark": 1,
+        "legacy_crosswalk": 1,
+        "licence": 1,
+        "locality": 1,
+        "location_record": 1,
+        "location_record_assertion": 1,
+        "location_record_object_link": 2,
+        "location_record_relationship": 1,
+        "location_record_version": 2,
+        "migration_exception": 1,
+        "name_record": 1,
+        "non_building_object": 1,
+        "operational_area": 1,
+        "operational_area_coverage": 1,
+        "parcel_reference": 1,
+        "partner_projection": 1,
+        "public_code_alias": 1,
+        "publication_release": 2,
+        "publication_release_item": 2,
+        "registry_subject": 1,
+        "road": 1,
+        "road_segment": 1,
+        "source_authority": 1,
+        "source_package": 1,
+        "source_payload_archive": 1,
+        "source_record": 1,
+        "unit": 1
+      },
+      "source_file": "docs/sda/data-model/review09/scenarios/corrected-superseded-address/source.json",
+      "status": "passed"
+    },
+    "disputed-geometry": {
+      "assertions": {
+        "F10-review09-disputed-geometry-entity_counts": {
+          "evidence_source": "review09-independent-scenario-expected-vs-observed-db-query",
+          "finding": "F10",
+          "status": "passed"
+        },
+        "F10-review09-disputed-geometry-entity_ids": {
+          "evidence_source": "review09-independent-scenario-expected-vs-observed-db-query",
+          "finding": "F10",
+          "status": "passed"
+        },
+        "F10-review09-disputed-geometry-expected-absences": {
+          "evidence_source": "review09-independent-scenario-expected-vs-observed-db-query",
+          "finding": "F10",
+          "status": "passed"
+        },
+        "F10-review09-disputed-geometry-geometry_and_provenance": {
+          "evidence_source": "review09-independent-scenario-expected-vs-observed-db-query",
+          "finding": "F10",
+          "status": "passed"
+        },
+        "F10-review09-disputed-geometry-historical_output": {
+          "evidence_source": "review09-independent-scenario-expected-vs-observed-db-query",
+          "finding": "F10",
+          "status": "passed"
+        },
+        "F10-review09-disputed-geometry-operator_projection": {
+          "evidence_source": "review09-independent-scenario-expected-vs-observed-db-query",
+          "finding": "F10",
+          "status": "passed"
+        },
+        "F10-review09-disputed-geometry-public_projection": {
+          "evidence_source": "review09-independent-scenario-expected-vs-observed-db-query",
+          "finding": "F10",
+          "status": "passed"
+        },
+        "F10-review09-disputed-geometry-publication_releases": {
+          "evidence_source": "review09-independent-scenario-expected-vs-observed-db-query",
+          "finding": "F10",
+          "status": "passed"
+        },
+        "F10-review09-disputed-geometry-queried_fixture_rows": {
+          "evidence_source": "review09-independent-scenario-expected-vs-observed-db-query",
+          "finding": "F10",
+          "status": "passed"
+        },
+        "F10-review09-disputed-geometry-relationship_edges": {
+          "evidence_source": "review09-independent-scenario-expected-vs-observed-db-query",
+          "finding": "F10",
+          "status": "passed"
+        }
+      },
+      "errors": [],
+      "expected_file": "docs/sda/data-model/review09/scenarios/disputed-geometry/expected.json",
+      "source_entity_counts": {
+        "administrative_code_history": 1,
+        "administrative_unit": 1,
+        "administrative_unit_version": 1,
+        "building": 1,
+        "building_primary_entrance": 1,
+        "correction_case": 1,
+        "country": 1,
+        "decision_event": 1,
+        "dispute_case": 1,
+        "entrance": 1,
+        "evidence_object": 1,
+        "field_assignment": 1,
+        "field_observation": 1,
+        "geometry_observation": 1,
+        "geometry_quality_assessment": 1,
+        "geometry_transformation": 1,
+        "geometry_version": 1,
+        "intake_case": 1,
+        "landmark": 1,
+        "legacy_crosswalk": 1,
+        "licence": 1,
+        "locality": 1,
+        "location_record": 1,
+        "location_record_assertion": 1,
+        "location_record_object_link": 1,
+        "location_record_relationship": 1,
+        "location_record_version": 1,
+        "migration_exception": 1,
+        "name_record": 1,
+        "non_building_object": 1,
+        "operational_area": 1,
+        "operational_area_coverage": 1,
+        "parcel_reference": 1,
+        "partner_projection": 1,
+        "public_code_alias": 1,
+        "publication_release": 1,
+        "publication_release_item": 1,
+        "registry_subject": 1,
+        "road": 1,
+        "road_segment": 1,
+        "source_authority": 1,
+        "source_package": 1,
+        "source_payload_archive": 1,
+        "source_record": 1,
+        "unit": 1
+      },
+      "source_file": "docs/sda/data-model/review09/scenarios/disputed-geometry/source.json",
+      "status": "passed"
+    },
+    "multi-unit-building": {
+      "assertions": {
+        "F10-review09-multi-unit-building-entity_counts": {
+          "evidence_source": "review09-independent-scenario-expected-vs-observed-db-query",
+          "finding": "F10",
+          "status": "passed"
+        },
+        "F10-review09-multi-unit-building-entity_ids": {
+          "evidence_source": "review09-independent-scenario-expected-vs-observed-db-query",
+          "finding": "F10",
+          "status": "passed"
+        },
+        "F10-review09-multi-unit-building-expected-absences": {
+          "evidence_source": "review09-independent-scenario-expected-vs-observed-db-query",
+          "finding": "F10",
+          "status": "passed"
+        },
+        "F10-review09-multi-unit-building-geometry_and_provenance": {
+          "evidence_source": "review09-independent-scenario-expected-vs-observed-db-query",
+          "finding": "F10",
+          "status": "passed"
+        },
+        "F10-review09-multi-unit-building-historical_output": {
+          "evidence_source": "review09-independent-scenario-expected-vs-observed-db-query",
+          "finding": "F10",
+          "status": "passed"
+        },
+        "F10-review09-multi-unit-building-operator_projection": {
+          "evidence_source": "review09-independent-scenario-expected-vs-observed-db-query",
+          "finding": "F10",
+          "status": "passed"
+        },
+        "F10-review09-multi-unit-building-public_projection": {
+          "evidence_source": "review09-independent-scenario-expected-vs-observed-db-query",
+          "finding": "F10",
+          "status": "passed"
+        },
+        "F10-review09-multi-unit-building-publication_releases": {
+          "evidence_source": "review09-independent-scenario-expected-vs-observed-db-query",
+          "finding": "F10",
+          "status": "passed"
+        },
+        "F10-review09-multi-unit-building-queried_fixture_rows": {
+          "evidence_source": "review09-independent-scenario-expected-vs-observed-db-query",
+          "finding": "F10",
+          "status": "passed"
+        },
+        "F10-review09-multi-unit-building-relationship_edges": {
+          "evidence_source": "review09-independent-scenario-expected-vs-observed-db-query",
+          "finding": "F10",
+          "status": "passed"
+        }
+      },
+      "errors": [],
+      "expected_file": "docs/sda/data-model/review09/scenarios/multi-unit-building/expected.json",
+      "source_entity_counts": {
+        "administrative_code_history": 1,
+        "administrative_unit": 1,
+        "administrative_unit_version": 1,
+        "building": 1,
+        "building_primary_entrance": 1,
+        "correction_case": 1,
+        "country": 1,
+        "decision_event": 1,
+        "dispute_case": 1,
+        "entrance": 1,
+        "evidence_object": 1,
+        "field_assignment": 1,
+        "field_observation": 1,
+        "geometry_observation": 1,
+        "geometry_quality_assessment": 1,
+        "geometry_transformation": 1,
+        "geometry_version": 1,
+        "intake_case": 1,
+        "landmark": 1,
+        "legacy_crosswalk": 1,
+        "licence": 1,
+        "locality": 1,
+        "location_record": 3,
+        "location_record_assertion": 1,
+        "location_record_object_link": 5,
+        "location_record_relationship": 1,
+        "location_record_version": 3,
+        "migration_exception": 1,
+        "name_record": 1,
+        "non_building_object": 1,
+        "operational_area": 1,
+        "operational_area_coverage": 1,
+        "parcel_reference": 1,
+        "partner_projection": 1,
+        "public_code_alias": 2,
+        "publication_release": 1,
+        "publication_release_item": 2,
+        "registry_subject": 4,
+        "road": 1,
+        "road_segment": 1,
+        "source_authority": 1,
+        "source_package": 1,
+        "source_payload_archive": 1,
+        "source_record": 1,
+        "unit": 2
+      },
+      "source_file": "docs/sda/data-model/review09/scenarios/multi-unit-building/source.json",
+      "status": "passed"
+    },
+    "no-formal-road-location": {
+      "assertions": {
+        "F10-review09-no-formal-road-location-entity_counts": {
+          "evidence_source": "review09-independent-scenario-expected-vs-observed-db-query",
+          "finding": "F10",
+          "status": "passed"
+        },
+        "F10-review09-no-formal-road-location-entity_ids": {
+          "evidence_source": "review09-independent-scenario-expected-vs-observed-db-query",
+          "finding": "F10",
+          "status": "passed"
+        },
+        "F10-review09-no-formal-road-location-expected-absences": {
+          "evidence_source": "review09-independent-scenario-expected-vs-observed-db-query",
+          "finding": "F10",
+          "status": "passed"
+        },
+        "F10-review09-no-formal-road-location-geometry_and_provenance": {
+          "evidence_source": "review09-independent-scenario-expected-vs-observed-db-query",
+          "finding": "F10",
+          "status": "passed"
+        },
+        "F10-review09-no-formal-road-location-historical_output": {
+          "evidence_source": "review09-independent-scenario-expected-vs-observed-db-query",
+          "finding": "F10",
+          "status": "passed"
+        },
+        "F10-review09-no-formal-road-location-operator_projection": {
+          "evidence_source": "review09-independent-scenario-expected-vs-observed-db-query",
+          "finding": "F10",
+          "status": "passed"
+        },
+        "F10-review09-no-formal-road-location-public_projection": {
+          "evidence_source": "review09-independent-scenario-expected-vs-observed-db-query",
+          "finding": "F10",
+          "status": "passed"
+        },
+        "F10-review09-no-formal-road-location-publication_releases": {
+          "evidence_source": "review09-independent-scenario-expected-vs-observed-db-query",
+          "finding": "F10",
+          "status": "passed"
+        },
+        "F10-review09-no-formal-road-location-queried_fixture_rows": {
+          "evidence_source": "review09-independent-scenario-expected-vs-observed-db-query",
+          "finding": "F10",
+          "status": "passed"
+        },
+        "F10-review09-no-formal-road-location-relationship_edges": {
+          "evidence_source": "review09-independent-scenario-expected-vs-observed-db-query",
+          "finding": "F10",
+          "status": "passed"
+        }
+      },
+      "errors": [],
+      "expected_file": "docs/sda/data-model/review09/scenarios/no-formal-road-location/expected.json",
+      "source_entity_counts": {
+        "administrative_code_history": 1,
+        "administrative_unit": 1,
+        "administrative_unit_version": 1,
+        "building": 1,
+        "building_primary_entrance": 1,
+        "correction_case": 1,
+        "country": 1,
+        "decision_event": 1,
+        "dispute_case": 1,
+        "entrance": 1,
+        "evidence_object": 1,
+        "field_assignment": 1,
+        "field_observation": 1,
+        "geometry_observation": 1,
+        "geometry_quality_assessment": 1,
+        "geometry_transformation": 1,
+        "geometry_version": 1,
+        "intake_case": 1,
+        "landmark": 1,
+        "legacy_crosswalk": 1,
+        "licence": 1,
+        "locality": 1,
+        "location_record": 2,
+        "location_record_assertion": 1,
+        "location_record_object_link": 2,
+        "location_record_relationship": 1,
+        "location_record_version": 2,
+        "migration_exception": 1,
+        "name_record": 1,
+        "non_building_object": 1,
+        "operational_area": 1,
+        "operational_area_coverage": 1,
+        "parcel_reference": 1,
+        "partner_projection": 1,
+        "public_code_alias": 1,
+        "publication_release": 1,
+        "publication_release_item": 1,
+        "registry_subject": 2,
+        "road": 1,
+        "road_segment": 1,
+        "source_authority": 1,
+        "source_package": 1,
+        "source_payload_archive": 1,
+        "source_record": 1,
+        "unit": 1
+      },
+      "source_file": "docs/sda/data-model/review09/scenarios/no-formal-road-location/source.json",
+      "status": "passed"
+    },
+    "rural-landmark-location": {
+      "assertions": {
+        "F10-review09-rural-landmark-location-entity_counts": {
+          "evidence_source": "review09-independent-scenario-expected-vs-observed-db-query",
+          "finding": "F10",
+          "status": "passed"
+        },
+        "F10-review09-rural-landmark-location-entity_ids": {
+          "evidence_source": "review09-independent-scenario-expected-vs-observed-db-query",
+          "finding": "F10",
+          "status": "passed"
+        },
+        "F10-review09-rural-landmark-location-expected-absences": {
+          "evidence_source": "review09-independent-scenario-expected-vs-observed-db-query",
+          "finding": "F10",
+          "status": "passed"
+        },
+        "F10-review09-rural-landmark-location-geometry_and_provenance": {
+          "evidence_source": "review09-independent-scenario-expected-vs-observed-db-query",
+          "finding": "F10",
+          "status": "passed"
+        },
+        "F10-review09-rural-landmark-location-historical_output": {
+          "evidence_source": "review09-independent-scenario-expected-vs-observed-db-query",
+          "finding": "F10",
+          "status": "passed"
+        },
+        "F10-review09-rural-landmark-location-operator_projection": {
+          "evidence_source": "review09-independent-scenario-expected-vs-observed-db-query",
+          "finding": "F10",
+          "status": "passed"
+        },
+        "F10-review09-rural-landmark-location-public_projection": {
+          "evidence_source": "review09-independent-scenario-expected-vs-observed-db-query",
+          "finding": "F10",
+          "status": "passed"
+        },
+        "F10-review09-rural-landmark-location-publication_releases": {
+          "evidence_source": "review09-independent-scenario-expected-vs-observed-db-query",
+          "finding": "F10",
+          "status": "passed"
+        },
+        "F10-review09-rural-landmark-location-queried_fixture_rows": {
+          "evidence_source": "review09-independent-scenario-expected-vs-observed-db-query",
+          "finding": "F10",
+          "status": "passed"
+        },
+        "F10-review09-rural-landmark-location-relationship_edges": {
+          "evidence_source": "review09-independent-scenario-expected-vs-observed-db-query",
+          "finding": "F10",
+          "status": "passed"
+        }
+      },
+      "errors": [],
+      "expected_file": "docs/sda/data-model/review09/scenarios/rural-landmark-location/expected.json",
+      "source_entity_counts": {
+        "administrative_code_history": 1,
+        "administrative_unit": 1,
+        "administrative_unit_version": 1,
+        "building": 1,
+        "building_primary_entrance": 1,
+        "correction_case": 1,
+        "country": 1,
+        "decision_event": 1,
+        "dispute_case": 1,
+        "entrance": 1,
+        "evidence_object": 1,
+        "field_assignment": 1,
+        "field_observation": 1,
+        "geometry_observation": 1,
+        "geometry_quality_assessment": 1,
+        "geometry_transformation": 1,
+        "geometry_version": 1,
+        "intake_case": 1,
+        "landmark": 1,
+        "legacy_crosswalk": 1,
+        "licence": 1,
+        "locality": 1,
+        "location_record": 1,
+        "location_record_assertion": 1,
+        "location_record_object_link": 1,
+        "location_record_relationship": 1,
+        "location_record_version": 1,
+        "migration_exception": 1,
+        "name_record": 1,
+        "non_building_object": 1,
+        "operational_area": 1,
+        "operational_area_coverage": 1,
+        "parcel_reference": 1,
+        "partner_projection": 1,
+        "public_code_alias": 1,
+        "publication_release": 1,
+        "publication_release_item": 1,
+        "registry_subject": 1,
+        "road": 1,
+        "road_segment": 1,
+        "source_authority": 1,
+        "source_package": 1,
+        "source_payload_archive": 1,
+        "source_record": 1,
+        "unit": 1
+      },
+      "source_file": "docs/sda/data-model/review09/scenarios/rural-landmark-location/source.json",
+      "status": "passed"
+    },
+    "urban-street-address": {
+      "assertions": {
+        "F10-review09-urban-street-address-entity_counts": {
+          "evidence_source": "review09-independent-scenario-expected-vs-observed-db-query",
+          "finding": "F10",
+          "status": "passed"
+        },
+        "F10-review09-urban-street-address-entity_ids": {
+          "evidence_source": "review09-independent-scenario-expected-vs-observed-db-query",
+          "finding": "F10",
+          "status": "passed"
+        },
+        "F10-review09-urban-street-address-expected-absences": {
+          "evidence_source": "review09-independent-scenario-expected-vs-observed-db-query",
+          "finding": "F10",
+          "status": "passed"
+        },
+        "F10-review09-urban-street-address-geometry_and_provenance": {
+          "evidence_source": "review09-independent-scenario-expected-vs-observed-db-query",
+          "finding": "F10",
+          "status": "passed"
+        },
+        "F10-review09-urban-street-address-historical_output": {
+          "evidence_source": "review09-independent-scenario-expected-vs-observed-db-query",
+          "finding": "F10",
+          "status": "passed"
+        },
+        "F10-review09-urban-street-address-operator_projection": {
+          "evidence_source": "review09-independent-scenario-expected-vs-observed-db-query",
+          "finding": "F10",
+          "status": "passed"
+        },
+        "F10-review09-urban-street-address-public_projection": {
+          "evidence_source": "review09-independent-scenario-expected-vs-observed-db-query",
+          "finding": "F10",
+          "status": "passed"
+        },
+        "F10-review09-urban-street-address-publication_releases": {
+          "evidence_source": "review09-independent-scenario-expected-vs-observed-db-query",
+          "finding": "F10",
+          "status": "passed"
+        },
+        "F10-review09-urban-street-address-queried_fixture_rows": {
+          "evidence_source": "review09-independent-scenario-expected-vs-observed-db-query",
+          "finding": "F10",
+          "status": "passed"
+        },
+        "F10-review09-urban-street-address-relationship_edges": {
+          "evidence_source": "review09-independent-scenario-expected-vs-observed-db-query",
+          "finding": "F10",
+          "status": "passed"
+        }
+      },
+      "errors": [],
+      "expected_file": "docs/sda/data-model/review09/scenarios/urban-street-address/expected.json",
+      "source_entity_counts": {
+        "administrative_code_history": 1,
+        "administrative_unit": 1,
+        "administrative_unit_version": 1,
+        "building": 1,
+        "building_primary_entrance": 1,
+        "correction_case": 1,
+        "country": 1,
+        "decision_event": 1,
+        "dispute_case": 1,
+        "entrance": 1,
+        "evidence_object": 1,
+        "field_assignment": 1,
+        "field_observation": 1,
+        "geometry_observation": 1,
+        "geometry_quality_assessment": 1,
+        "geometry_transformation": 1,
+        "geometry_version": 1,
+        "intake_case": 1,
+        "landmark": 1,
+        "legacy_crosswalk": 1,
+        "licence": 1,
+        "locality": 1,
+        "location_record": 2,
+        "location_record_assertion": 1,
+        "location_record_object_link": 2,
+        "location_record_relationship": 1,
+        "location_record_version": 2,
+        "migration_exception": 1,
+        "name_record": 1,
+        "non_building_object": 1,
+        "operational_area": 1,
+        "operational_area_coverage": 1,
+        "parcel_reference": 1,
+        "partner_projection": 1,
+        "public_code_alias": 1,
+        "publication_release": 1,
+        "publication_release_item": 1,
+        "registry_subject": 2,
+        "road": 1,
+        "road_segment": 1,
+        "source_authority": 1,
+        "source_package": 1,
+        "source_payload_archive": 1,
+        "source_record": 1,
+        "unit": 1
+      },
+      "source_file": "docs/sda/data-model/review09/scenarios/urban-street-address/source.json",
+      "status": "passed"
+    }
+  },
+  "summary": {
+    "assertions": 70,
+    "errors": [],
+    "execution_mode": "review09-independent-scenario-source-expected-comparison",
+    "failed": [],
+    "scenarios": 7,
+    "status": "passed"
+  }
+}

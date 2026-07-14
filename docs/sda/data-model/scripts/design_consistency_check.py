@@ -68,6 +68,7 @@ api_projection_summary = api_projection_assertions.get("summary", {}) if isinsta
 semantic_mutation_report = load_json("docs/sda/data-model/semantic-mutation-test-report.json")
 integrity_report = load_json("docs/sda/data-model/review08-f04-f07-integrity-report.json")
 reconciliation_report = load_json("docs/sda/data-model/review08-f09-f11-reconciliation-report.json")
+review09_scenario_report = load_json("docs/sda/data-model/review09-scenario-comparison-report.json")
 adr_matrix_text = read("docs/sda/data-model/adr-005-009-evidence-matrix.md")
 target_catalog = load_json("docs/sda/data-model/target-schema-catalog.json")
 fixtures = load_json("docs/sda/data-model/representative-records/machine-readable-fixtures.json")
@@ -372,6 +373,10 @@ review07_scenario_assertions = physical_report.get("review07_scenario_assertions
 review08_scenario_query_results = physical_report.get("review08_scenario_query_results", {}) if isinstance(physical_report, dict) else {}
 review08_query_assertions = [a for scenario in review08_scenario_query_results.values() if isinstance(scenario, dict) for a in scenario.get("assertions", {}).values()]
 gate("F10-review08-persisted-scenario-query-results", "F10", len(review08_scenario_query_results) == 7 and len(review08_query_assertions) >= 63 and all(v.get("status") == "passed" for v in review08_scenario_query_results.values()), "Review 08 F10 must query persisted target DB state for all seven scenarios", "docs/sda/data-model/review08-scenario-query-report.json")
+review09_scenario_summary = review09_scenario_report.get("summary", {}) if isinstance(review09_scenario_report, dict) else {}
+gate("F10-review09-independent-scenario-comparison-passed", "F10", review09_scenario_summary.get("execution_mode") == "review09-independent-scenario-source-expected-comparison" and review09_scenario_summary.get("scenarios") == 7 and review09_scenario_summary.get("assertions", 0) >= 70 and review09_scenario_summary.get("failed") == [] and review09_scenario_summary.get("errors") == [] and review09_scenario_summary.get("status") == "passed", "Review 09 F10 must compare persisted DB query outputs with independent scenario source/expected-result files", "docs/sda/data-model/review09-scenario-comparison-report.json")
+for scenario_name, scenario_result in review09_scenario_report.get("scenarios", {}).items() if isinstance(review09_scenario_report, dict) else []:
+    gate(f"F10-review09-scenario-{scenario_name}", "F10", scenario_result.get("status") == "passed" and scenario_result.get("source_file") and scenario_result.get("expected_file"), "each Review 09 scenario must have independent source and expected files with passing comparison", "docs/sda/data-model/review09-scenario-comparison-report.json")
 for scenario, result in review08_scenario_query_results.items() if isinstance(review08_scenario_query_results, dict) else []:
     required_sections = ["entity_ids", "relationship_edges", "geometry_and_provenance", "publication_releases", "public_projection", "operator_projection", "historical_output"]
     gate(f"F10-review08-query-sections-{scenario}", "F10", result.get("status") == "passed" and all(result.get(section) for section in required_sections) and result.get("queried_fixture_rows", 0) == result.get("expected_fixture_rows", -1), "F10 scenario must include persisted query evidence for entities, relationships, geometry, publication, projections and history", "docs/sda/data-model/review08-scenario-query-report.json")

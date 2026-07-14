@@ -1,0 +1,365 @@
+{
+  "expected": {
+    "entity_counts": {
+      "administrative_code_history": 1,
+      "administrative_unit": 1,
+      "administrative_unit_version": 1,
+      "building": 1,
+      "building_primary_entrance": 1,
+      "correction_case": 1,
+      "country": 1,
+      "decision_event": 1,
+      "dispute_case": 1,
+      "entrance": 1,
+      "evidence_object": 1,
+      "field_assignment": 1,
+      "field_observation": 1,
+      "geometry_observation": 1,
+      "geometry_quality_assessment": 1,
+      "geometry_transformation": 1,
+      "geometry_version": 1,
+      "intake_case": 1,
+      "landmark": 1,
+      "legacy_crosswalk": 1,
+      "licence": 1,
+      "locality": 1,
+      "location_record": 2,
+      "location_record_assertion": 1,
+      "location_record_object_link": 2,
+      "location_record_relationship": 1,
+      "location_record_version": 2,
+      "migration_exception": 1,
+      "name_record": 1,
+      "non_building_object": 1,
+      "operational_area": 1,
+      "operational_area_coverage": 1,
+      "parcel_reference": 1,
+      "partner_projection": 1,
+      "public_code_alias": 1,
+      "publication_release": 1,
+      "publication_release_item": 1,
+      "registry_subject": 2,
+      "road": 1,
+      "road_segment": 1,
+      "source_authority": 1,
+      "source_package": 1,
+      "source_payload_archive": 1,
+      "source_record": 1,
+      "unit": 1
+    },
+    "entity_ids": {
+      "administrative_code_history": [
+        "urban-street-address-administrative_code_history-01"
+      ],
+      "administrative_unit": [
+        "urban-street-address-administrative_unit-01"
+      ],
+      "administrative_unit_version": [
+        "urban-street-address-administrative_unit_version-01"
+      ],
+      "building": [
+        "urban-street-address-building-01"
+      ],
+      "building_primary_entrance": [
+        "urban-street-address-building_primary_entrance-01"
+      ],
+      "correction_case": [
+        "urban-street-address-correction_case-01"
+      ],
+      "country": [
+        "urban-street-address-country-01"
+      ],
+      "decision_event": [
+        "urban-street-address-decision_event-01"
+      ],
+      "dispute_case": [
+        "urban-street-address-dispute_case-01"
+      ],
+      "entrance": [
+        "urban-street-address-entrance-01"
+      ],
+      "evidence_object": [
+        "urban-street-address-evidence_object-01"
+      ],
+      "field_assignment": [
+        "urban-street-address-field_assignment-01"
+      ],
+      "field_observation": [
+        "urban-street-address-field_observation-01"
+      ],
+      "geometry_observation": [
+        "urban-street-address-geometry_observation-01"
+      ],
+      "geometry_quality_assessment": [
+        "urban-street-address-geometry_quality_assessment-01"
+      ],
+      "geometry_transformation": [
+        "urban-street-address-geometry_transformation-01"
+      ],
+      "geometry_version": [
+        "urban-street-address-geometry_version-01"
+      ],
+      "intake_case": [
+        "urban-street-address-intake_case-01"
+      ],
+      "landmark": [
+        "urban-street-address-landmark-01"
+      ],
+      "legacy_crosswalk": [
+        "urban-street-address-legacy_crosswalk-01"
+      ],
+      "licence": [
+        "urban-street-address-licence-01"
+      ],
+      "locality": [
+        "urban-street-address-locality-01"
+      ],
+      "location_record": [
+        "urban-street-address-location_record-01",
+        "urban-street-address-location-record-entrance-positive"
+      ],
+      "location_record_assertion": [
+        "urban-street-address-location_record_assertion-01"
+      ],
+      "location_record_object_link": [
+        "urban-street-address-location_record_object_link-01",
+        "urban-street-address-object-link-entrance-positive-primary"
+      ],
+      "location_record_relationship": [
+        "urban-street-address-location_record_relationship-01"
+      ],
+      "location_record_version": [
+        "urban-street-address-location_record_version-01",
+        "urban-street-address-location-record-version-entrance-positive"
+      ],
+      "migration_exception": [
+        "urban-street-address-migration_exception-01"
+      ],
+      "name_record": [
+        "urban-street-address-name_record-01"
+      ],
+      "non_building_object": [
+        "urban-street-address-non_building_object-01"
+      ],
+      "operational_area": [
+        "urban-street-address-operational_area-01"
+      ],
+      "operational_area_coverage": [
+        "urban-street-address-operational_area_coverage-01"
+      ],
+      "parcel_reference": [
+        "urban-street-address-parcel_reference-01"
+      ],
+      "partner_projection": [
+        "urban-street-address-partner_projection-01"
+      ],
+      "public_code_alias": [
+        "urban-street-address-public_code_alias-01"
+      ],
+      "publication_release": [
+        "urban-street-address-publication_release-01"
+      ],
+      "publication_release_item": [
+        "urban-street-address-publication_release_item-01"
+      ],
+      "registry_subject": [
+        "urban-street-address-registry_subject-01",
+        "urban-street-address-registry-subject-entrance-positive"
+      ],
+      "road": [
+        "urban-street-address-road-01"
+      ],
+      "road_segment": [
+        "urban-street-address-road_segment-01"
+      ],
+      "source_authority": [
+        "urban-street-address-source_authority-01"
+      ],
+      "source_package": [
+        "urban-street-address-source_package-01"
+      ],
+      "source_payload_archive": [
+        "urban-street-address-source_payload_archive-01"
+      ],
+      "source_record": [
+        "urban-street-address-source_record-01"
+      ],
+      "unit": [
+        "urban-street-address-unit-01"
+      ]
+    },
+    "expected_absences": {
+      "forbidden_cross_scenario_entities": [],
+      "forbidden_operator_secret_leakage": [],
+      "forbidden_public_before_release": []
+    },
+    "geometry_and_provenance": {
+      "authority_decisions": [
+        {
+          "actor_id": "decision_event-actor_id-001",
+          "decision_event_id": "urban-street-address-decision_event-01",
+          "decision_outcome": "approved",
+          "decision_type": "approve-geometry",
+          "details_json": "{'institution_id': 'national-gis-authority', 'permission_key': 'geometry.promote', 'territorial_scope': 'national-gis-authority', 'evidence_object_id': 'urban-street-address-evidence_object-01', 'source_observation_id': 'urban-street-address-geometry_observation-01', 'quality_authority_actor_id': 'decision_event-actor_id-001'}"
+        }
+      ],
+      "evidence_objects": [
+        {
+          "classification": "government-internal",
+          "content_hash": "evidence_object-content_hash-value",
+          "evidence_object_id": "urban-street-address-evidence_object-01"
+        }
+      ],
+      "geometry_versions": [
+        {
+          "geometry_role": "building-point",
+          "geometry_version_id": "urban-street-address-geometry_version-01",
+          "promotion_authority_scope": "national-gis-authority",
+          "promotion_decision_event_id": "urban-street-address-decision_event-01",
+          "promotion_evidence_object_id": "urban-street-address-evidence_object-01",
+          "quality_state": "accepted-canonical",
+          "validated_by_actor_id": "decision_event-actor_id-001"
+        }
+      ],
+      "observations": [
+        {
+          "capture_method": "browser-gps",
+          "geometry_observation_id": "urban-street-address-geometry_observation-01",
+          "geometry_role": "building-point"
+        }
+      ]
+    },
+    "historical_output": {
+      "admin_effective_versions": [
+        {
+          "admin_level": "country",
+          "administrative_unit_version_id": "urban-street-address-administrative_unit_version-01",
+          "effective_from": "2026-07-14 00:00:00+00:00",
+          "effective_to": null,
+          "lifecycle_state": "official",
+          "recorded_at": "2026-07-14 00:00:00+00:00"
+        }
+      ],
+      "location_lifecycle_timeline": [
+        {
+          "effective_from": "2026-07-14 00:00:00+00:00",
+          "effective_to": null,
+          "lifecycle_state": "active",
+          "location_record_version_id": "urban-street-address-location_record_version-01",
+          "recorded_at": "2026-07-14 00:00:00+00:00",
+          "recorded_to": null
+        },
+        {
+          "effective_from": "2026-07-14 00:00:00+00:00",
+          "effective_to": null,
+          "lifecycle_state": "active",
+          "location_record_version_id": "urban-street-address-location-record-version-entrance-positive",
+          "recorded_at": "2026-07-14 00:00:00+00:00",
+          "recorded_to": null
+        }
+      ],
+      "publication_versions": [
+        {
+          "location_record_version_id": "urban-street-address-location_record_version-01",
+          "projection_state": "included",
+          "published_label": "publication_release_item-published_label-value"
+        }
+      ]
+    },
+    "operator_projection": {
+      "decision_count": 1,
+      "evidence_count": 1,
+      "geometry": [
+        {
+          "geometry_role": "building-point",
+          "geometry_version_id": "urban-street-address-geometry_version-01",
+          "promotion_decision_event_id": "urban-street-address-decision_event-01",
+          "promotion_evidence_object_id": "urban-street-address-evidence_object-01",
+          "quality_state": "accepted-canonical"
+        }
+      ],
+      "location_versions": [
+        {
+          "effective_from": "2026-07-14 00:00:00+00:00",
+          "effective_to": null,
+          "lifecycle_state": "active",
+          "location_record_id": "urban-street-address-location_record-01",
+          "location_record_version_id": "urban-street-address-location_record_version-01",
+          "recorded_at": "2026-07-14 00:00:00+00:00",
+          "version_number": "1"
+        },
+        {
+          "effective_from": "2026-07-14 00:00:00+00:00",
+          "effective_to": null,
+          "lifecycle_state": "active",
+          "location_record_id": "urban-street-address-location-record-entrance-positive",
+          "location_record_version_id": "urban-street-address-location-record-version-entrance-positive",
+          "recorded_at": "2026-07-14 00:00:00+00:00",
+          "version_number": "1"
+        }
+      ],
+      "names": [
+        {
+          "effective_from": "2026-07-14 00:00:00+00:00",
+          "effective_to": null,
+          "language_code": "es",
+          "name_kind": "official-es",
+          "name_record_id": "urban-street-address-name_record-01",
+          "name_status": "official-current",
+          "name_text": "urban-street-address official name"
+        }
+      ],
+      "object_links": [
+        {
+          "cardinality_rank": "1",
+          "link_id": "urban-street-address-location_record_object_link-01",
+          "location_record_version_id": "urban-street-address-location_record_version-01",
+          "object_role": "primary-subject",
+          "subject_id": "urban-street-address-registry_subject-01"
+        },
+        {
+          "cardinality_rank": "1",
+          "link_id": "urban-street-address-object-link-entrance-positive-primary",
+          "location_record_version_id": "urban-street-address-location-record-version-entrance-positive",
+          "object_role": "primary-subject",
+          "subject_id": "urban-street-address-registry-subject-entrance-positive"
+        }
+      ]
+    },
+    "public_projection": [
+      {
+        "location_record_id": "urban-street-address-location_record-01",
+        "location_record_version_id": "urban-street-address-location_record_version-01",
+        "projection_payload_hash": "publication_release_item-projection_payload_hash-value",
+        "projection_payload_json": "{'entity': 'publication_release_item', 'fixture': True}",
+        "projection_state": "included",
+        "public_code_alias_id": "urban-street-address-public_code_alias-01",
+        "published_label": "publication_release_item-published_label-value"
+      }
+    ],
+    "publication_releases": [
+      {
+        "publication_release_id": "urban-street-address-publication_release-01",
+        "release_state": "approved"
+      }
+    ],
+    "queried_fixture_rows": 49,
+    "relationship_edges": [
+      {
+        "link_id": "urban-street-address-location_record_object_link-01",
+        "location_record_version_id": "urban-street-address-location_record_version-01",
+        "object_role": "primary-subject",
+        "subject_id": "urban-street-address-registry_subject-01"
+      },
+      {
+        "link_id": "urban-street-address-object-link-entrance-positive-primary",
+        "location_record_version_id": "urban-street-address-location-record-version-entrance-positive",
+        "object_role": "primary-subject",
+        "subject_id": "urban-street-address-registry-subject-entrance-positive"
+      }
+    ]
+  },
+  "review_status": "approved-review09-scenario-expected-result",
+  "scenario": "urban-street-address",
+  "version": "review09"
+}

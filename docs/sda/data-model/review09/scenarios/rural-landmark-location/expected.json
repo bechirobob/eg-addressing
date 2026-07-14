@@ -1,0 +1,331 @@
+{
+  "expected": {
+    "entity_counts": {
+      "administrative_code_history": 1,
+      "administrative_unit": 1,
+      "administrative_unit_version": 1,
+      "building": 1,
+      "building_primary_entrance": 1,
+      "correction_case": 1,
+      "country": 1,
+      "decision_event": 1,
+      "dispute_case": 1,
+      "entrance": 1,
+      "evidence_object": 1,
+      "field_assignment": 1,
+      "field_observation": 1,
+      "geometry_observation": 1,
+      "geometry_quality_assessment": 1,
+      "geometry_transformation": 1,
+      "geometry_version": 1,
+      "intake_case": 1,
+      "landmark": 1,
+      "legacy_crosswalk": 1,
+      "licence": 1,
+      "locality": 1,
+      "location_record": 1,
+      "location_record_assertion": 1,
+      "location_record_object_link": 1,
+      "location_record_relationship": 1,
+      "location_record_version": 1,
+      "migration_exception": 1,
+      "name_record": 1,
+      "non_building_object": 1,
+      "operational_area": 1,
+      "operational_area_coverage": 1,
+      "parcel_reference": 1,
+      "partner_projection": 1,
+      "public_code_alias": 1,
+      "publication_release": 1,
+      "publication_release_item": 1,
+      "registry_subject": 1,
+      "road": 1,
+      "road_segment": 1,
+      "source_authority": 1,
+      "source_package": 1,
+      "source_payload_archive": 1,
+      "source_record": 1,
+      "unit": 1
+    },
+    "entity_ids": {
+      "administrative_code_history": [
+        "rural-landmark-location-administrative_code_history-02"
+      ],
+      "administrative_unit": [
+        "rural-landmark-location-administrative_unit-02"
+      ],
+      "administrative_unit_version": [
+        "rural-landmark-location-administrative_unit_version-02"
+      ],
+      "building": [
+        "rural-landmark-location-building-02"
+      ],
+      "building_primary_entrance": [
+        "rural-landmark-location-building_primary_entrance-02"
+      ],
+      "correction_case": [
+        "rural-landmark-location-correction_case-02"
+      ],
+      "country": [
+        "rural-landmark-location-country-02"
+      ],
+      "decision_event": [
+        "rural-landmark-location-decision_event-02"
+      ],
+      "dispute_case": [
+        "rural-landmark-location-dispute_case-02"
+      ],
+      "entrance": [
+        "rural-landmark-location-entrance-02"
+      ],
+      "evidence_object": [
+        "rural-landmark-location-evidence_object-02"
+      ],
+      "field_assignment": [
+        "rural-landmark-location-field_assignment-02"
+      ],
+      "field_observation": [
+        "rural-landmark-location-field_observation-02"
+      ],
+      "geometry_observation": [
+        "rural-landmark-location-geometry_observation-02"
+      ],
+      "geometry_quality_assessment": [
+        "rural-landmark-location-geometry_quality_assessment-02"
+      ],
+      "geometry_transformation": [
+        "rural-landmark-location-geometry_transformation-02"
+      ],
+      "geometry_version": [
+        "rural-landmark-location-geometry_version-02"
+      ],
+      "intake_case": [
+        "rural-landmark-location-intake_case-02"
+      ],
+      "landmark": [
+        "rural-landmark-location-landmark-02"
+      ],
+      "legacy_crosswalk": [
+        "rural-landmark-location-legacy_crosswalk-02"
+      ],
+      "licence": [
+        "rural-landmark-location-licence-02"
+      ],
+      "locality": [
+        "rural-landmark-location-locality-02"
+      ],
+      "location_record": [
+        "rural-landmark-location-location_record-02"
+      ],
+      "location_record_assertion": [
+        "rural-landmark-location-location_record_assertion-02"
+      ],
+      "location_record_object_link": [
+        "rural-landmark-location-location_record_object_link-02"
+      ],
+      "location_record_relationship": [
+        "rural-landmark-location-location_record_relationship-02"
+      ],
+      "location_record_version": [
+        "rural-landmark-location-location_record_version-02"
+      ],
+      "migration_exception": [
+        "rural-landmark-location-migration_exception-02"
+      ],
+      "name_record": [
+        "rural-landmark-location-name_record-02"
+      ],
+      "non_building_object": [
+        "rural-landmark-location-non_building_object-02"
+      ],
+      "operational_area": [
+        "rural-landmark-location-operational_area-02"
+      ],
+      "operational_area_coverage": [
+        "rural-landmark-location-operational_area_coverage-02"
+      ],
+      "parcel_reference": [
+        "rural-landmark-location-parcel_reference-02"
+      ],
+      "partner_projection": [
+        "rural-landmark-location-partner_projection-02"
+      ],
+      "public_code_alias": [
+        "rural-landmark-location-public_code_alias-02"
+      ],
+      "publication_release": [
+        "rural-landmark-location-publication_release-02"
+      ],
+      "publication_release_item": [
+        "rural-landmark-location-publication_release_item-02"
+      ],
+      "registry_subject": [
+        "rural-landmark-location-registry_subject-02"
+      ],
+      "road": [
+        "rural-landmark-location-road-02"
+      ],
+      "road_segment": [
+        "rural-landmark-location-road_segment-02"
+      ],
+      "source_authority": [
+        "rural-landmark-location-source_authority-02"
+      ],
+      "source_package": [
+        "rural-landmark-location-source_package-02"
+      ],
+      "source_payload_archive": [
+        "rural-landmark-location-source_payload_archive-02"
+      ],
+      "source_record": [
+        "rural-landmark-location-source_record-02"
+      ],
+      "unit": [
+        "rural-landmark-location-unit-02"
+      ]
+    },
+    "expected_absences": {
+      "forbidden_cross_scenario_entities": [],
+      "forbidden_operator_secret_leakage": [],
+      "forbidden_public_before_release": []
+    },
+    "geometry_and_provenance": {
+      "authority_decisions": [
+        {
+          "actor_id": "decision_event-actor_id-001",
+          "decision_event_id": "rural-landmark-location-decision_event-02",
+          "decision_outcome": "approved",
+          "decision_type": "approve-geometry",
+          "details_json": "{'institution_id': 'national-gis-authority', 'permission_key': 'geometry.promote', 'territorial_scope': 'national-gis-authority', 'evidence_object_id': 'rural-landmark-location-evidence_object-02', 'source_observation_id': 'rural-landmark-location-geometry_observation-02', 'quality_authority_actor_id': 'decision_event-actor_id-001'}"
+        }
+      ],
+      "evidence_objects": [
+        {
+          "classification": "government-internal",
+          "content_hash": "evidence_object-content_hash-value",
+          "evidence_object_id": "rural-landmark-location-evidence_object-02"
+        }
+      ],
+      "geometry_versions": [
+        {
+          "geometry_role": "landmark-point",
+          "geometry_version_id": "rural-landmark-location-geometry_version-02",
+          "promotion_authority_scope": "national-gis-authority",
+          "promotion_decision_event_id": "rural-landmark-location-decision_event-02",
+          "promotion_evidence_object_id": "rural-landmark-location-evidence_object-02",
+          "quality_state": "accepted-canonical",
+          "validated_by_actor_id": "decision_event-actor_id-001"
+        }
+      ],
+      "observations": [
+        {
+          "capture_method": "browser-gps",
+          "geometry_observation_id": "rural-landmark-location-geometry_observation-02",
+          "geometry_role": "landmark-point"
+        }
+      ]
+    },
+    "historical_output": {
+      "admin_effective_versions": [
+        {
+          "admin_level": "country",
+          "administrative_unit_version_id": "rural-landmark-location-administrative_unit_version-02",
+          "effective_from": "2026-07-14 00:00:00+00:00",
+          "effective_to": null,
+          "lifecycle_state": "official",
+          "recorded_at": "2026-07-14 00:00:00+00:00"
+        }
+      ],
+      "location_lifecycle_timeline": [
+        {
+          "effective_from": "2026-07-14 00:00:00+00:00",
+          "effective_to": null,
+          "lifecycle_state": "active",
+          "location_record_version_id": "rural-landmark-location-location_record_version-02",
+          "recorded_at": "2026-07-14 00:00:00+00:00",
+          "recorded_to": null
+        }
+      ],
+      "publication_versions": [
+        {
+          "location_record_version_id": "rural-landmark-location-location_record_version-02",
+          "projection_state": "included",
+          "published_label": "publication_release_item-published_label-value"
+        }
+      ]
+    },
+    "operator_projection": {
+      "decision_count": 1,
+      "evidence_count": 1,
+      "geometry": [
+        {
+          "geometry_role": "landmark-point",
+          "geometry_version_id": "rural-landmark-location-geometry_version-02",
+          "promotion_decision_event_id": "rural-landmark-location-decision_event-02",
+          "promotion_evidence_object_id": "rural-landmark-location-evidence_object-02",
+          "quality_state": "accepted-canonical"
+        }
+      ],
+      "location_versions": [
+        {
+          "effective_from": "2026-07-14 00:00:00+00:00",
+          "effective_to": null,
+          "lifecycle_state": "active",
+          "location_record_id": "rural-landmark-location-location_record-02",
+          "location_record_version_id": "rural-landmark-location-location_record_version-02",
+          "recorded_at": "2026-07-14 00:00:00+00:00",
+          "version_number": "2"
+        }
+      ],
+      "names": [
+        {
+          "effective_from": "2026-07-14 00:00:00+00:00",
+          "effective_to": null,
+          "language_code": "es",
+          "name_kind": "official-es",
+          "name_record_id": "rural-landmark-location-name_record-02",
+          "name_status": "official-current",
+          "name_text": "rural-landmark-location official name"
+        }
+      ],
+      "object_links": [
+        {
+          "cardinality_rank": "1",
+          "link_id": "rural-landmark-location-location_record_object_link-02",
+          "location_record_version_id": "rural-landmark-location-location_record_version-02",
+          "object_role": "primary-subject",
+          "subject_id": "rural-landmark-location-registry_subject-02"
+        }
+      ]
+    },
+    "public_projection": [
+      {
+        "location_record_id": "rural-landmark-location-location_record-02",
+        "location_record_version_id": "rural-landmark-location-location_record_version-02",
+        "projection_payload_hash": "publication_release_item-projection_payload_hash-value",
+        "projection_payload_json": "{'entity': 'publication_release_item', 'fixture': True}",
+        "projection_state": "included",
+        "public_code_alias_id": "rural-landmark-location-public_code_alias-02",
+        "published_label": "publication_release_item-published_label-value"
+      }
+    ],
+    "publication_releases": [
+      {
+        "publication_release_id": "rural-landmark-location-publication_release-02",
+        "release_state": "approved"
+      }
+    ],
+    "queried_fixture_rows": 45,
+    "relationship_edges": [
+      {
+        "link_id": "rural-landmark-location-location_record_object_link-02",
+        "location_record_version_id": "rural-landmark-location-location_record_version-02",
+        "object_role": "primary-subject",
+        "subject_id": "rural-landmark-location-registry_subject-02"
+      }
+    ]
+  },
+  "review_status": "approved-review09-scenario-expected-result",
+  "scenario": "rural-landmark-location",
+  "version": "review09"
+}

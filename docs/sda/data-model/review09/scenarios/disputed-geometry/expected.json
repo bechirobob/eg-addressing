@@ -1,0 +1,331 @@
+{
+  "expected": {
+    "entity_counts": {
+      "administrative_code_history": 1,
+      "administrative_unit": 1,
+      "administrative_unit_version": 1,
+      "building": 1,
+      "building_primary_entrance": 1,
+      "correction_case": 1,
+      "country": 1,
+      "decision_event": 1,
+      "dispute_case": 1,
+      "entrance": 1,
+      "evidence_object": 1,
+      "field_assignment": 1,
+      "field_observation": 1,
+      "geometry_observation": 1,
+      "geometry_quality_assessment": 1,
+      "geometry_transformation": 1,
+      "geometry_version": 1,
+      "intake_case": 1,
+      "landmark": 1,
+      "legacy_crosswalk": 1,
+      "licence": 1,
+      "locality": 1,
+      "location_record": 1,
+      "location_record_assertion": 1,
+      "location_record_object_link": 1,
+      "location_record_relationship": 1,
+      "location_record_version": 1,
+      "migration_exception": 1,
+      "name_record": 1,
+      "non_building_object": 1,
+      "operational_area": 1,
+      "operational_area_coverage": 1,
+      "parcel_reference": 1,
+      "partner_projection": 1,
+      "public_code_alias": 1,
+      "publication_release": 1,
+      "publication_release_item": 1,
+      "registry_subject": 1,
+      "road": 1,
+      "road_segment": 1,
+      "source_authority": 1,
+      "source_package": 1,
+      "source_payload_archive": 1,
+      "source_record": 1,
+      "unit": 1
+    },
+    "entity_ids": {
+      "administrative_code_history": [
+        "disputed-geometry-administrative_code_history-06"
+      ],
+      "administrative_unit": [
+        "disputed-geometry-administrative_unit-06"
+      ],
+      "administrative_unit_version": [
+        "disputed-geometry-administrative_unit_version-06"
+      ],
+      "building": [
+        "disputed-geometry-building-06"
+      ],
+      "building_primary_entrance": [
+        "disputed-geometry-building_primary_entrance-06"
+      ],
+      "correction_case": [
+        "disputed-geometry-correction_case-06"
+      ],
+      "country": [
+        "disputed-geometry-country-06"
+      ],
+      "decision_event": [
+        "disputed-geometry-decision_event-06"
+      ],
+      "dispute_case": [
+        "disputed-geometry-dispute_case-06"
+      ],
+      "entrance": [
+        "disputed-geometry-entrance-06"
+      ],
+      "evidence_object": [
+        "disputed-geometry-evidence_object-06"
+      ],
+      "field_assignment": [
+        "disputed-geometry-field_assignment-06"
+      ],
+      "field_observation": [
+        "disputed-geometry-field_observation-06"
+      ],
+      "geometry_observation": [
+        "disputed-geometry-geometry_observation-06"
+      ],
+      "geometry_quality_assessment": [
+        "disputed-geometry-geometry_quality_assessment-06"
+      ],
+      "geometry_transformation": [
+        "disputed-geometry-geometry_transformation-06"
+      ],
+      "geometry_version": [
+        "disputed-geometry-geometry_version-06"
+      ],
+      "intake_case": [
+        "disputed-geometry-intake_case-06"
+      ],
+      "landmark": [
+        "disputed-geometry-landmark-06"
+      ],
+      "legacy_crosswalk": [
+        "disputed-geometry-legacy_crosswalk-06"
+      ],
+      "licence": [
+        "disputed-geometry-licence-06"
+      ],
+      "locality": [
+        "disputed-geometry-locality-06"
+      ],
+      "location_record": [
+        "disputed-geometry-location_record-06"
+      ],
+      "location_record_assertion": [
+        "disputed-geometry-location_record_assertion-06"
+      ],
+      "location_record_object_link": [
+        "disputed-geometry-location_record_object_link-06"
+      ],
+      "location_record_relationship": [
+        "disputed-geometry-location_record_relationship-06"
+      ],
+      "location_record_version": [
+        "disputed-geometry-location_record_version-06"
+      ],
+      "migration_exception": [
+        "disputed-geometry-migration_exception-06"
+      ],
+      "name_record": [
+        "disputed-geometry-name_record-06"
+      ],
+      "non_building_object": [
+        "disputed-geometry-non_building_object-06"
+      ],
+      "operational_area": [
+        "disputed-geometry-operational_area-06"
+      ],
+      "operational_area_coverage": [
+        "disputed-geometry-operational_area_coverage-06"
+      ],
+      "parcel_reference": [
+        "disputed-geometry-parcel_reference-06"
+      ],
+      "partner_projection": [
+        "disputed-geometry-partner_projection-06"
+      ],
+      "public_code_alias": [
+        "disputed-geometry-public_code_alias-06"
+      ],
+      "publication_release": [
+        "disputed-geometry-publication_release-06"
+      ],
+      "publication_release_item": [
+        "disputed-geometry-publication_release_item-06"
+      ],
+      "registry_subject": [
+        "disputed-geometry-registry_subject-06"
+      ],
+      "road": [
+        "disputed-geometry-road-06"
+      ],
+      "road_segment": [
+        "disputed-geometry-road_segment-06"
+      ],
+      "source_authority": [
+        "disputed-geometry-source_authority-06"
+      ],
+      "source_package": [
+        "disputed-geometry-source_package-06"
+      ],
+      "source_payload_archive": [
+        "disputed-geometry-source_payload_archive-06"
+      ],
+      "source_record": [
+        "disputed-geometry-source_record-06"
+      ],
+      "unit": [
+        "disputed-geometry-unit-06"
+      ]
+    },
+    "expected_absences": {
+      "forbidden_cross_scenario_entities": [],
+      "forbidden_operator_secret_leakage": [],
+      "forbidden_public_before_release": []
+    },
+    "geometry_and_provenance": {
+      "authority_decisions": [
+        {
+          "actor_id": "decision_event-actor_id-001",
+          "decision_event_id": "disputed-geometry-decision_event-06",
+          "decision_outcome": "approved",
+          "decision_type": "approve-geometry",
+          "details_json": "{'institution_id': 'national-gis-authority', 'permission_key': 'geometry.promote', 'territorial_scope': 'national-gis-authority', 'evidence_object_id': 'disputed-geometry-evidence_object-06', 'source_observation_id': 'disputed-geometry-geometry_observation-06', 'quality_authority_actor_id': 'decision_event-actor_id-001'}"
+        }
+      ],
+      "evidence_objects": [
+        {
+          "classification": "government-internal",
+          "content_hash": "evidence_object-content_hash-value",
+          "evidence_object_id": "disputed-geometry-evidence_object-06"
+        }
+      ],
+      "geometry_versions": [
+        {
+          "geometry_role": "location-point",
+          "geometry_version_id": "disputed-geometry-geometry_version-06",
+          "promotion_authority_scope": "national-gis-authority",
+          "promotion_decision_event_id": "disputed-geometry-decision_event-06",
+          "promotion_evidence_object_id": "disputed-geometry-evidence_object-06",
+          "quality_state": "accepted-canonical",
+          "validated_by_actor_id": "decision_event-actor_id-001"
+        }
+      ],
+      "observations": [
+        {
+          "capture_method": "browser-gps",
+          "geometry_observation_id": "disputed-geometry-geometry_observation-06",
+          "geometry_role": "location-point"
+        }
+      ]
+    },
+    "historical_output": {
+      "admin_effective_versions": [
+        {
+          "admin_level": "country",
+          "administrative_unit_version_id": "disputed-geometry-administrative_unit_version-06",
+          "effective_from": "2026-07-14 00:00:00+00:00",
+          "effective_to": null,
+          "lifecycle_state": "official",
+          "recorded_at": "2026-07-14 00:00:00+00:00"
+        }
+      ],
+      "location_lifecycle_timeline": [
+        {
+          "effective_from": "2026-07-14 00:00:00+00:00",
+          "effective_to": null,
+          "lifecycle_state": "active",
+          "location_record_version_id": "disputed-geometry-location_record_version-06",
+          "recorded_at": "2026-07-14 00:00:00+00:00",
+          "recorded_to": null
+        }
+      ],
+      "publication_versions": [
+        {
+          "location_record_version_id": "disputed-geometry-location_record_version-06",
+          "projection_state": "included",
+          "published_label": "publication_release_item-published_label-value"
+        }
+      ]
+    },
+    "operator_projection": {
+      "decision_count": 1,
+      "evidence_count": 1,
+      "geometry": [
+        {
+          "geometry_role": "location-point",
+          "geometry_version_id": "disputed-geometry-geometry_version-06",
+          "promotion_decision_event_id": "disputed-geometry-decision_event-06",
+          "promotion_evidence_object_id": "disputed-geometry-evidence_object-06",
+          "quality_state": "accepted-canonical"
+        }
+      ],
+      "location_versions": [
+        {
+          "effective_from": "2026-07-14 00:00:00+00:00",
+          "effective_to": null,
+          "lifecycle_state": "active",
+          "location_record_id": "disputed-geometry-location_record-06",
+          "location_record_version_id": "disputed-geometry-location_record_version-06",
+          "recorded_at": "2026-07-14 00:00:00+00:00",
+          "version_number": "6"
+        }
+      ],
+      "names": [
+        {
+          "effective_from": "2026-07-14 00:00:00+00:00",
+          "effective_to": null,
+          "language_code": "es",
+          "name_kind": "official-es",
+          "name_record_id": "disputed-geometry-name_record-06",
+          "name_status": "official-current",
+          "name_text": "disputed-geometry official name"
+        }
+      ],
+      "object_links": [
+        {
+          "cardinality_rank": "1",
+          "link_id": "disputed-geometry-location_record_object_link-06",
+          "location_record_version_id": "disputed-geometry-location_record_version-06",
+          "object_role": "primary-subject",
+          "subject_id": "disputed-geometry-registry_subject-06"
+        }
+      ]
+    },
+    "public_projection": [
+      {
+        "location_record_id": "disputed-geometry-location_record-06",
+        "location_record_version_id": "disputed-geometry-location_record_version-06",
+        "projection_payload_hash": "publication_release_item-projection_payload_hash-value",
+        "projection_payload_json": "{'entity': 'publication_release_item', 'fixture': True}",
+        "projection_state": "included",
+        "public_code_alias_id": "disputed-geometry-public_code_alias-06",
+        "published_label": "publication_release_item-published_label-value"
+      }
+    ],
+    "publication_releases": [
+      {
+        "publication_release_id": "disputed-geometry-publication_release-06",
+        "release_state": "approved"
+      }
+    ],
+    "queried_fixture_rows": 45,
+    "relationship_edges": [
+      {
+        "link_id": "disputed-geometry-location_record_object_link-06",
+        "location_record_version_id": "disputed-geometry-location_record_version-06",
+        "object_role": "primary-subject",
+        "subject_id": "disputed-geometry-registry_subject-06"
+      }
+    ]
+  },
+  "review_status": "approved-review09-scenario-expected-result",
+  "scenario": "disputed-geometry",
+  "version": "review09"
+}
