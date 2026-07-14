@@ -45,31 +45,31 @@
     {
       "group": "WO002-R06-identity-crosswalk-address_record_events",
       "source_fields": "address_record_events.actor_id; address_record_events.address_record_id; address_record_events.id",
-      "target_fields": "legacy_crosswalk.legacy_id",
+      "target_fields": "legacy_crosswalk.legacy_id; migration_exception.migration_exception_id",
       "unit_id": "MU08"
     },
     {
       "group": "WO002-R06-identity-crosswalk-address_records",
       "source_fields": "address_records.id; address_records.source_submission_id; address_records.territory_id",
-      "target_fields": "legacy_crosswalk.legacy_id",
+      "target_fields": "legacy_crosswalk.legacy_id; migration_exception.migration_exception_id",
       "unit_id": "MU09"
     },
     {
       "group": "WO002-R06-identity-crosswalk-addresses",
       "source_fields": "addresses.building_id; addresses.id; addresses.road_id; addresses.superseded_by_address_id; addresses.territory_id",
-      "target_fields": "legacy_crosswalk.legacy_id",
+      "target_fields": "legacy_crosswalk.legacy_id; migration_exception.migration_exception_id",
       "unit_id": "MU10"
     },
     {
       "group": "WO002-R06-identity-crosswalk-admin_units",
       "source_fields": "admin_units.id; admin_units.parent_id",
-      "target_fields": "legacy_crosswalk.legacy_id",
+      "target_fields": "legacy_crosswalk.legacy_id; migration_exception.migration_exception_id",
       "unit_id": "MU11"
     },
     {
       "group": "WO002-R06-identity-crosswalk-audit_logs",
       "source_fields": "audit_logs.actor_user_id; audit_logs.entity_id; audit_logs.id",
-      "target_fields": "legacy_crosswalk.legacy_id",
+      "target_fields": "legacy_crosswalk.legacy_id; migration_exception.migration_exception_id",
       "unit_id": "MU12"
     },
     {
@@ -87,31 +87,31 @@
     {
       "group": "WO002-R06-identity-crosswalk-citizen_geotag_submissions",
       "source_fields": "citizen_geotag_submissions.field_submission_id; citizen_geotag_submissions.id; citizen_geotag_submissions.territory_id",
-      "target_fields": "legacy_crosswalk.legacy_id",
+      "target_fields": "legacy_crosswalk.legacy_id; migration_exception.migration_exception_id",
       "unit_id": "MU15"
     },
     {
       "group": "WO002-R06-identity-crosswalk-development_fixture_batches",
       "source_fields": "development_fixture_batches.batch_id",
-      "target_fields": "legacy_crosswalk.legacy_id",
+      "target_fields": "migration_exception.migration_exception_id",
       "unit_id": "MU16"
     },
     {
       "group": "WO002-R06-identity-crosswalk-development_fixture_records",
       "source_fields": "development_fixture_records.batch_id; development_fixture_records.record_id",
-      "target_fields": "legacy_crosswalk.legacy_id",
+      "target_fields": "migration_exception.migration_exception_id",
       "unit_id": "MU17"
     },
     {
       "group": "WO002-R06-identity-crosswalk-field_assignments",
       "source_fields": "field_assignments.assignment_id; field_assignments.territory_id",
-      "target_fields": "legacy_crosswalk.legacy_id",
+      "target_fields": "legacy_crosswalk.legacy_id; migration_exception.migration_exception_id",
       "unit_id": "MU18"
     },
     {
       "group": "WO002-R06-identity-crosswalk-field_submissions",
       "source_fields": "field_submissions.assignment_id; field_submissions.id; field_submissions.registry_entity_id; field_submissions.territory_id",
-      "target_fields": "legacy_crosswalk.legacy_id",
+      "target_fields": "legacy_crosswalk.legacy_id; migration_exception.migration_exception_id",
       "unit_id": "MU19"
     },
     {
@@ -123,13 +123,13 @@
     {
       "group": "WO002-R06-identity-crosswalk-import_rows",
       "source_fields": "import_rows.committed_submission_id; import_rows.job_id; import_rows.territory_id",
-      "target_fields": "legacy_crosswalk.legacy_id",
+      "target_fields": "legacy_crosswalk.legacy_id; migration_exception.migration_exception_id",
       "unit_id": "MU21"
     },
     {
       "group": "WO002-R06-identity-crosswalk-publication_pack_addresses",
       "source_fields": "publication_pack_addresses.address_id; publication_pack_addresses.publication_pack_id",
-      "target_fields": "legacy_crosswalk.legacy_id",
+      "target_fields": "legacy_crosswalk.legacy_id; migration_exception.migration_exception_id",
       "unit_id": "MU22"
     },
     {
@@ -141,13 +141,13 @@
     {
       "group": "WO002-R06-identity-crosswalk-reference_data_load_history",
       "source_fields": "reference_data_load_history.id; reference_data_load_history.package_id",
-      "target_fields": "legacy_crosswalk.legacy_id",
+      "target_fields": "legacy_crosswalk.legacy_id; migration_exception.migration_exception_id",
       "unit_id": "MU24"
     },
     {
       "group": "WO002-R06-identity-crosswalk-reference_data_loads",
       "source_fields": "reference_data_loads.package_id",
-      "target_fields": "legacy_crosswalk.legacy_id",
+      "target_fields": "migration_exception.migration_exception_id",
       "unit_id": "MU25"
     },
     {

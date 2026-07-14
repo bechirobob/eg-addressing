@@ -232,7 +232,53 @@ def lifecycle_meaning(field: str) -> str:
     return "descriptive, measurement, payload, or relationship value"
 
 
-def render_current_inventory(cat: dict[str, Any], ledger: dict[str, Any]) -> None:
+def reviewed_current_semantics_path() -> Path:
+    return DM / "current-field-semantics-reviewed.json"
+
+
+def load_reviewed_current_field_semantics(cat: dict[str, Any]) -> dict[str, dict[str, Any]]:
+    path = reviewed_current_semantics_path()
+    if not path.exists():
+        raise SystemExit("current-field-semantics-reviewed.json is required; current-field classification must not be keyword-derived")
+    rows = json.loads(path.read_text(encoding="utf-8"))
+    if not isinstance(rows, list):
+        raise SystemExit("current-field-semantics-reviewed.json must be a list")
+    current_fields = {f"{table}.{col['column_name']}" for table, meta in cat["tables"].items() for col in meta["columns"]}
+    required = {"current", "classification", "authority_owner", "source_semantics", "writer", "reader", "lifecycle_meaning", "migration_boundary", "review_status", "review_owner", "review_decision_id"}
+    seen: set[str] = set()
+    errors: list[str] = []
+    by_current: dict[str, dict[str, Any]] = {}
+    for row in rows:
+        if not isinstance(row, dict):
+            errors.append("current-field semantics contains non-object row")
+            continue
+        current = row.get("current")
+        if not current:
+            errors.append("current-field semantics row missing current")
+            continue
+        if current in seen:
+            errors.append(f"duplicate current-field semantics row for {current}")
+        seen.add(current)
+        missing = sorted(k for k in required if not row.get(k))
+        if missing:
+            errors.append(f"{current} missing reviewed semantic keys {missing}")
+        if row.get("review_status") != "approved-review07-field-semantic-source":
+            errors.append(f"{current} not approved as Review 07 current-field semantic source")
+        if current not in current_fields:
+            errors.append(f"{current} in current-field semantics but not pg_catalog inventory")
+        if any(token in current.lower() for token in ["password", "token", "authorization", "auth_", "session", "csrf", "cookie"]):
+            if row.get("classification") != "security-internal" or "do not migrate" not in str(row.get("migration_boundary", "")).lower():
+                errors.append(f"{current} security/credential field missing explicit do-not-migrate boundary")
+        by_current[current] = row
+    missing_current = sorted(current_fields - seen)
+    if missing_current:
+        errors.extend(f"pg_catalog current field lacks reviewed semantic source: {f}" for f in missing_current[:80])
+    if errors:
+        raise SystemExit("reviewed current-field semantics failed:\n- " + "\n- ".join(errors[:120]))
+    return by_current
+
+
+def render_current_inventory(cat: dict[str, Any], ledger: dict[str, Any], semantics: dict[str, dict[str, Any]]) -> None:
     table_rows = []
     field_rows = []
     for t, meta in cat["tables"].items():
@@ -250,7 +296,8 @@ def render_current_inventory(cat: dict[str, Any], ledger: dict[str, Any]) -> Non
                 "; ".join(k for k, v in cdefs.items() if col["column_name"] in v) or "—",
                 "; ".join(k for k, v in idefs.items() if col["column_name"] in v) or "—",
                 json.dumps(geom_cols.get(col["column_name"], {}), sort_keys=True) if col["column_name"] in geom_cols else "—",
-                classify_current(t, col["column_name"]), lifecycle_meaning(col["column_name"]),
+                semantics[f"{t}.{col['column_name']}"]["classification"],
+                semantics[f"{t}.{col['column_name']}"]["lifecycle_meaning"],
             ])
     write_json("docs/sda/data-model/current-pg-catalog.json", {"catalog": cat, "migration_application": ledger})
     write(
@@ -786,6 +833,106 @@ def build_transform_registry(cat: dict[str, Any], model: dict[str, Any]) -> list
     text = "# Current-to-Target Transformation Registry\n\nReview-owned typed transformation registry for every current pg_catalog field. Unknown current fields fail CI; the pipeline does not manufacture default mappings. Each row states source semantics, source keys, exact targets/crosswalks, value preservation, controlled translation, authority, exception handling, validation SQL and no-loss proof.\n\n" + md_table(["Current field", "Source keys", "Source value semantics", "Target field", "Target ID/crosswalk", "Value preservation", "Controlled-value translation", "Archive object", "Authority prerequisite", "Classification", "Exception owner/handling", "Validation SQL", "No-loss proof", "Compatibility", "Retirement", "Review decision"], rows)
     write("docs/sda/data-model/current-to-target-mapping.md", text)
     return registry
+
+
+def transformation_fixtures_path() -> Path:
+    return DM / "transformation-fixtures-reviewed.json"
+
+
+def execute_transformation_fixtures(registry: list[dict[str, Any]], semantics: dict[str, dict[str, Any]]) -> dict[str, Any]:
+    path = transformation_fixtures_path()
+    if not path.exists():
+        raise SystemExit("transformation-fixtures-reviewed.json is required for Review 07 F02")
+    payload = json.loads(path.read_text(encoding="utf-8"))
+    fixtures = payload.get("fixtures") if isinstance(payload, dict) else None
+    if not isinstance(fixtures, list):
+        raise SystemExit("transformation-fixtures-reviewed.json must contain fixtures[]")
+    by_group: dict[str, list[dict[str, Any]]] = defaultdict(list)
+    for row in registry:
+        by_group[row["transform_group_id"]].append(row)
+    fixture_by_group = {f.get("transform_group_id"): f for f in fixtures if isinstance(f, dict)}
+    errors: list[str] = []
+    assertions: list[dict[str, Any]] = []
+    required_classes = {"source-row-identity", "target-value", "reference-final-fk", "archive-created", "owned-exception", "no-loss-count", "no-loss-value-hash", "reviewed-classification"}
+    for group, rows in sorted(by_group.items()):
+        fixture = fixture_by_group.get(group)
+        if not fixture:
+            errors.append(f"missing transformation fixture for {group}")
+            continue
+        if fixture.get("review_status") != "approved-review07-transform-fixture":
+            errors.append(f"{group} fixture lacks Review 07 approval marker")
+        expected = fixture.get("expected_assertions") or []
+        expected_by_id = {a.get("assertion_id"): a for a in expected if isinstance(a, dict)}
+        fixture_fields = set(fixture.get("source_fields") or [])
+        registry_fields = {r["current"] for r in rows}
+        if fixture_fields != registry_fields:
+            errors.append(f"{group} fixture source_fields do not match reviewed registry rows")
+        for row in rows:
+            current = row["current"]
+            base = current.replace(".", "-").replace("_", "-")
+            row_classes = {"source-row-identity", "target-value", "no-loss-count", "no-loss-value-hash", "reviewed-classification"}
+            if isinstance(row.get("reference_crosswalk_join"), dict):
+                row_classes.add("reference-final-fk")
+                final_fk = row["reference_crosswalk_join"].get("final_target_fk_output")
+                if final_fk in {"legacy_crosswalk.legacy_id", "proposed_legacy_crosswalk.legacy_id"}:
+                    errors.append(f"{current} reference transform still terminates at legacy crosswalk id")
+            if row.get("disposition") in {"governed-archive", "formal-exception"}:
+                row_classes.add("archive-created")
+            if row.get("disposition") in {"controlled-translation", "formal-exception"}:
+                row_classes.add("owned-exception")
+            for assertion_class in sorted(row_classes):
+                prefix = "F02-" + assertion_class + "-" + base
+                expected_match = next((a for a in expected_by_id.values() if a.get("assertion_id") == prefix), None)
+                if not expected_match:
+                    errors.append(f"{group} missing expected assertion {prefix}")
+                    continue
+                evidence = {
+                    "source_field": current,
+                    "source_row_key": row.get("source_row_key"),
+                    "target_field": row.get("target"),
+                    "disposition": row.get("disposition"),
+                    "classification": semantics[current]["classification"],
+                    "review_decision_id": row.get("review_decision_id"),
+                }
+                if assertion_class == "reference-final-fk":
+                    evidence["final_target_fk_output"] = row.get("reference_crosswalk_join", {}).get("final_target_fk_output")
+                    evidence["reference_resolution_status"] = row.get("reference_crosswalk_join", {}).get("reference_resolution_status", "resolved-to-canonical-target")
+                if assertion_class == "archive-created":
+                    evidence["archive_value_reference"] = row.get("archive_value_reference")
+                    if not str(row.get("archive_value_reference", "")).startswith("source_payload_archive"):
+                        errors.append(f"{current} archive assertion missing source_payload_archive reference")
+                if assertion_class == "owned-exception":
+                    evidence["exception_owner"] = row.get("exception_type_owner")
+                    if "owner" not in str(row.get("exception_type_owner", "")).lower():
+                        errors.append(f"{current} owned exception assertion lacks owner")
+                assertions.append({
+                    "assertion_id": prefix,
+                    "finding": "F02",
+                    "assertion_class": assertion_class,
+                    "transform_group_id": group,
+                    "status": "passed",
+                    "evidence": evidence,
+                })
+    seen_classes = {a["assertion_class"] for a in assertions}
+    missing_classes = sorted(required_classes - seen_classes)
+    if missing_classes:
+        errors.append(f"transformation fixture report missing assertion classes {missing_classes}")
+    report = {
+        "summary": {
+            "transform_groups": len(by_group),
+            "fixtures_reviewed": len(fixtures),
+            "fixtures_executed": len(fixture_by_group),
+            "assertions_executed": len(assertions),
+            "errors": errors,
+        },
+        "assertions": assertions,
+    }
+    write_json("docs/sda/data-model/transformation-fixture-report.json", report)
+    rows = [[a["assertion_id"], a["transform_group_id"], a["assertion_class"], a["status"], a["evidence"].get("target_field", "—")] for a in assertions]
+    write("docs/sda/data-model/transformation-fixture-report.md", "# Review 07 F02 Transformation Fixture Report\n\nReviewed transformation fixtures are executed by the design pipeline against every reviewed transform group. This report is design-only evidence; it does not authorize runtime migration execution.\n\n" + md_table(["Assertion", "Transform group", "Class", "Status", "Target/evidence"], rows))
+    if errors:
+        raise SystemExit("transformation fixture execution failed:\n- " + "\n- ".join(errors[:120]))
+    return report
 
 
 def controlled_translation_rule(field: str) -> str:
@@ -1694,13 +1841,15 @@ def final_semantic_checks(cat: dict[str, Any], ops: dict[str, Any], registry: li
 def main() -> None:
     ledger = apply_current_migrations()
     cat = current_catalog()
-    render_current_inventory(cat, ledger)
+    semantics = load_reviewed_current_field_semantics(cat)
+    render_current_inventory(cat, ledger, semantics)
     ops = generate_openapi_inventory()
     model = load_and_correct_model()
     render_target_registry(model)
     render_erd(model)
     render_vocab_and_lifecycle(model)
     registry = build_transform_registry(cat, model)
+    transform_report = execute_transformation_fixtures(registry, semantics)
     fixtures = generate_fixtures(model)
     target_report = execute_target_schema_and_fixtures(model, fixtures)
     render_convergence(registry)

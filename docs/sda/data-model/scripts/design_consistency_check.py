@@ -19,10 +19,22 @@ SDA = ROOT / "docs" / "sda"
 DM = SDA / "data-model"
 errors: list[str] = []
 warnings: list[str] = []
+assertion_registry: list[dict[str, str]] = []
 
 
 def err(message: str) -> None:
     errors.append(message)
+
+
+def gate(assertion_id: str, finding: str, condition: bool, message: str, evidence_path: str) -> None:
+    assertion_registry.append({
+        "assertion_id": assertion_id,
+        "finding": finding,
+        "status": "passed" if condition else "failed",
+        "evidence_path": evidence_path,
+    })
+    if not condition:
+        err(f"{assertion_id}: {message}")
 
 
 def load_json(rel: str) -> Any:
@@ -53,6 +65,9 @@ reviewed_route_policies = load_json("docs/sda/data-model/openapi-reviewed-route-
 projection_contracts = load_json("docs/sda/data-model/openapi-reviewed-projection-contracts.json")
 target_catalog = load_json("docs/sda/data-model/target-schema-catalog.json")
 fixtures = load_json("docs/sda/data-model/representative-records/machine-readable-fixtures.json")
+current_semantics = load_json("docs/sda/data-model/current-field-semantics-reviewed.json")
+transform_fixtures = load_json("docs/sda/data-model/transformation-fixtures-reviewed.json")
+transform_fixture_report = load_json("docs/sda/data-model/transformation-fixture-report.json")
 lifecycle_transitions = load_json("docs/sda/data-model/lifecycle-transitions.json")
 report_text = read("docs/sda/data-model/review04-semantic-design-report.md")
 review_text = read("docs/sda/reviews/NLI-WO-002-review-06.md")
@@ -165,6 +180,33 @@ for note_field in ["address_corrections.note", "address_corrections.reviewer_not
         err(f"{note_field} must preserve original value through governed archive reference")
 if len({r.get("transform_group_id") for r in reviewed_registry if isinstance(reviewed_registry, list)}) < 10:
     err("reviewed transformation registry is not grouped into meaningful migration units")
+
+# Review 07 F02 reviewed current-field semantics and executable transformation fixture evidence.
+semantics_by_current = {r.get("current"): r for r in current_semantics if isinstance(current_semantics, list) and isinstance(r, dict)}
+gate("F02-reviewed-current-semantics-cover-current-fields", "F02", len(semantics_by_current) == len(current_fields) and set(semantics_by_current) == set(current_fields), "reviewed current-field semantics must cover every pg_catalog field exactly once", "docs/sda/data-model/current-field-semantics-reviewed.json")
+for current in current_fields:
+    row = semantics_by_current.get(current, {})
+    gate(f"F02-reviewed-current-semantic-{current.replace('.', '-').replace('_', '-')}", "F02", row.get("review_status") == "approved-review07-field-semantic-source" and bool(row.get("review_decision_id")) and bool(row.get("classification")), f"{current} lacks reviewed semantic classification source", "docs/sda/data-model/current-field-semantics-reviewed.json")
+    if any(token in current.lower() for token in ["password", "token", "authorization", "auth_", "session", "csrf", "cookie"]):
+        gate(f"F02-security-boundary-{current.replace('.', '-').replace('_', '-')}", "F02", row.get("classification") == "security-internal" and "do not migrate" in str(row.get("migration_boundary", "")).lower(), f"{current} security field must have explicit do-not-migrate boundary", "docs/sda/data-model/current-field-semantics-reviewed.json")
+fixture_groups = {f.get("transform_group_id") for f in transform_fixtures.get("fixtures", [])} if isinstance(transform_fixtures, dict) else set()
+registry_groups = {r.get("transform_group_id") for r in reviewed_registry if isinstance(reviewed_registry, list)}
+gate("F02-reviewed-fixtures-cover-transform-groups", "F02", fixture_groups == registry_groups, "reviewed transformation fixtures must cover every transform group", "docs/sda/data-model/transformation-fixtures-reviewed.json")
+summary = transform_fixture_report.get("summary", {}) if isinstance(transform_fixture_report, dict) else {}
+report_assertions = transform_fixture_report.get("assertions", []) if isinstance(transform_fixture_report, dict) else []
+gate("F02-transform-fixture-report-clean", "F02", summary.get("errors") == [] and summary.get("transform_groups") == len(registry_groups) and summary.get("fixtures_executed") == len(registry_groups), "transformation fixture report must execute cleanly for every group", "docs/sda/data-model/transformation-fixture-report.json")
+required_f02_classes = {"source-row-identity", "target-value", "reference-final-fk", "archive-created", "owned-exception", "no-loss-count", "no-loss-value-hash", "reviewed-classification"}
+seen_f02_classes = {a.get("assertion_class") for a in report_assertions if isinstance(a, dict) and a.get("status") == "passed"}
+gate("F02-transform-fixture-required-assertion-classes", "F02", required_f02_classes <= seen_f02_classes, f"missing F02 assertion classes {sorted(required_f02_classes - seen_f02_classes)}", "docs/sda/data-model/transformation-fixture-report.json")
+for assertion in report_assertions if isinstance(report_assertions, list) else []:
+    if not isinstance(assertion, dict):
+        continue
+    evidence = assertion.get("evidence") or {}
+    gate(assertion.get("assertion_id", "F02-unnamed-transform-assertion"), "F02", assertion.get("status") == "passed" and bool(evidence) and bool(assertion.get("transform_group_id")), "named transform assertion must have passed status, group, and concrete evidence", "docs/sda/data-model/transformation-fixture-report.json")
+for row in reviewed_registry if isinstance(reviewed_registry, list) else []:
+    ref = row.get("reference_crosswalk_join")
+    if isinstance(ref, dict):
+        gate(f"F02-final-fk-output-{row.get('current','unknown').replace('.', '-').replace('_', '-')}", "F02", ref.get("final_target_fk_output") not in {"legacy_crosswalk.legacy_id", "proposed_legacy_crosswalk.legacy_id"}, f"{row.get('current')} still treats legacy_crosswalk.legacy_id as final FK output", "docs/sda/data-model/transformation-registry-reviewed.json")
 
 # OpenAPI field coverage and auth policy.
 ops = openapi_ops.get("operations", []) if isinstance(openapi_ops, dict) else []
@@ -380,7 +422,7 @@ for i in [2,4,5,6,7,8,9,10,11,12,13]:
 report_lines = [
     "# Design Consistency Report",
     "",
-    "Generated checks: 41",
+    f"Generated checks: {len(assertion_registry)}",
     f"Errors: {len(errors)}",
     f"Warnings: {len(warnings)}",
 ]
@@ -396,6 +438,8 @@ else:
         f"- Transformation rows: {len(registry) if isinstance(registry, list) else 0}",
         f"- Target fields: {len(fields)}",
         f"- Fixture scenarios: {len(scenarios)}",
+        f"- Named assertion gates: {len(assertion_registry)}",
+        f"- F02 transform assertions: {summary.get('assertions_executed', 0)}",
     ])
 report = "\n".join(report_lines) + "\n"
 (DM / "design-consistency-report.md").write_text(report, encoding="utf-8")

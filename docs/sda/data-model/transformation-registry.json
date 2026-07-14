@@ -28,7 +28,9 @@
     "nullable": true,
     "observed_source_values": [],
     "reference_crosswalk_join": {
-      "final_target_fk_output": "proposed_legacy_crosswalk.legacy_id",
+      "final_output_rule": "resolve legacy source key through reviewed crosswalk, then write the canonical target FK; crosswalk legacy_id alone is not accepted as final output",
+      "final_target_fk_output": "location_record.location_record_id",
+      "legacy_crosswalk_output": "legacy_crosswalk.legacy_id",
       "legacy_lookup": "legacy_crosswalk(source_table='addresses', legacy_id=address_corrections.address_id)",
       "referenced_source_entity": "addresses",
       "referenced_source_key": "addresses.id",
@@ -836,7 +838,9 @@
     "nullable": false,
     "observed_source_values": [],
     "reference_crosswalk_join": {
-      "final_target_fk_output": "proposed_legacy_crosswalk.legacy_id",
+      "final_output_rule": "resolve legacy source key through reviewed crosswalk, then write the canonical target FK; crosswalk legacy_id alone is not accepted as final output",
+      "final_target_fk_output": "location_record.location_record_id",
+      "legacy_crosswalk_output": "legacy_crosswalk.legacy_id",
       "legacy_lookup": "legacy_crosswalk(source_table='addresses', legacy_id=address_points.address_id)",
       "referenced_source_entity": "addresses",
       "referenced_source_key": "addresses.id",
@@ -1281,19 +1285,19 @@
     "value_preservation": "exact typed value copied; raw original archived when restricted/exception; source row key and field path retained"
   },
   {
-    "archive_object": "not-required; exact value preserved in typed target/crosswalk",
-    "archive_value_reference": "not applicable",
+    "archive_object": "source_payload_archive",
+    "archive_value_reference": "source_payload_archive.payload_uri#address_record_events.actor_id",
     "authority": "SDA reviewed transformation registry; owner must approve RFI before WO-002B execution",
     "authority_prerequisite": "identity-crosswalk owner approval and source row count reconciliation",
     "classification": "government-internal",
     "compatibility_period": "legacy read compatibility until NLI-WO-002B+2; no public behavior change in WO-002",
     "controlled_value_map": {},
-    "controlled_value_translation": "not controlled; exact value preserved or archived",
+    "controlled_value_translation": "not controlled; unresolved reference becomes owned migration_exception until canonical target authority approves mapping",
     "current": "address_record_events.actor_id",
     "current_pg_type": "text",
     "current_udt": "text",
     "default": null,
-    "disposition": "structured-transform",
+    "disposition": "formal-exception",
     "example_input_output": {
       "input": "123",
       "output": {
@@ -1302,15 +1306,18 @@
       }
     },
     "exception_handling": "unknown/unmapped values create migration_exception with owner, SLA, original archive reference and no public projection",
-    "exception_type_owner": "not applicable unless validation fails",
+    "exception_type_owner": "SDA migration-exception owner for unresolved legacy/operational reference mapping",
     "executable_no_loss_assertion": "SELECT CASE WHEN (SELECT COUNT(*) FROM address_record_events WHERE actor_id IS NOT NULL) = (SELECT COUNT(*) FROM proposed_legacy_crosswalk WHERE legacy_id IS NOT NULL) + (SELECT COUNT(*) FROM source_payload_archive WHERE field_path = 'address_record_events.actor_id') + (SELECT COUNT(*) FROM owned_migration_exception WHERE source_field = 'address_record_events.actor_id') THEN true ELSE raise_exception('no-loss assertion failed for address_record_events.actor_id') END AS ok",
     "loss_risk": "blocked by executable no-loss assertion; restricted values preserved in governed archive",
     "no_loss_proof": "Executable SQL no-loss check compares non-null source address_record_events.actor_id to typed target rows, governed archive rows and owned migration exceptions.",
     "nullable": true,
     "observed_source_values": [],
     "reference_crosswalk_join": {
-      "final_target_fk_output": "proposed_legacy_crosswalk.legacy_id",
+      "final_output_rule": "unresolved legacy/operational reference does not produce a canonical FK in WO-002; preserve legacy value in crosswalk/archive and create an owned migration_exception until domain owner approves the target mapping",
+      "final_target_fk_output": "migration_exception.migration_exception_id",
+      "legacy_crosswalk_output": "legacy_crosswalk.legacy_id",
       "legacy_lookup": "legacy_crosswalk(source_table='address_record_events', legacy_id=address_record_events.actor_id)",
+      "reference_resolution_status": "owned-exception-required-pending-canonical-target-authority",
       "referenced_source_entity": "address_record_events",
       "referenced_source_key": "address_record_events.actor_id",
       "source_entity": "address_record_events",
@@ -1335,19 +1342,22 @@
       "target_table": "legacy_crosswalk"
     },
     "source_value_semantics": "preserve source identifier in legacy_crosswalk and join to canonical target id by table-specific migration unit",
-    "target": "legacy_crosswalk.legacy_id",
-    "target_id_generation": "Resolve address_record_events.actor_id through legacy_crosswalk(source_table='address_record_events', legacy_id=address_record_events.actor_id) and write proposed_legacy_crosswalk.legacy_id; unresolved references create owned migration_exception.",
+    "target": "migration_exception.migration_exception_id",
+    "target_id_generation": "No canonical FK generated in WO-002; unresolved source reference is preserved and assigned migration_exception.migration_exception_id for owner triage.",
     "target_ids_and_crosswalks": "address_record_events.id joins legacy_crosswalk(source_table=address_record_events, legacy_id=address_record_events.id); referenced FK ids resolve through target_entity-specific crosswalk before insert",
     "target_rows_fields": [
       "legacy_crosswalk.legacy_id",
       "legacy_crosswalk.source_table",
-      "legacy_crosswalk.legacy_id",
       "legacy_crosswalk.target_entity",
-      "legacy_crosswalk.target_id"
+      "legacy_crosswalk.target_id",
+      "migration_exception.migration_exception_id",
+      "migration_exception.owner",
+      "migration_exception.source_field",
+      "migration_exception.source_key"
     ],
     "transform_group_id": "WO002-R06-identity-crosswalk-address_record_events",
     "validation_sql": "SELECT COUNT(*) AS checked_rows, COUNT(actor_id) AS non_null_rows FROM address_record_events",
-    "value_preservation": "exact typed value copied; raw original archived when restricted/exception; source row key and field path retained"
+    "value_preservation": "exact source reference value preserved in governed archive and migration exception details; no silent FK coercion"
   },
   {
     "archive_object": "source_payload_archive.payload_uri",
@@ -1457,19 +1467,19 @@
     "value_preservation": "exact typed value copied; raw original archived when restricted/exception; source row key and field path retained"
   },
   {
-    "archive_object": "not-required; exact value preserved in typed target/crosswalk",
-    "archive_value_reference": "not applicable",
+    "archive_object": "source_payload_archive",
+    "archive_value_reference": "source_payload_archive.payload_uri#address_record_events.address_record_id",
     "authority": "SDA reviewed transformation registry; owner must approve RFI before WO-002B execution",
     "authority_prerequisite": "identity-crosswalk owner approval and source row count reconciliation",
     "classification": "government-internal",
     "compatibility_period": "legacy read compatibility until NLI-WO-002B+2; no public behavior change in WO-002",
     "controlled_value_map": {},
-    "controlled_value_translation": "not controlled; exact value preserved or archived",
+    "controlled_value_translation": "not controlled; unresolved reference becomes owned migration_exception until canonical target authority approves mapping",
     "current": "address_record_events.address_record_id",
     "current_pg_type": "text",
     "current_udt": "text",
     "default": null,
-    "disposition": "structured-transform",
+    "disposition": "formal-exception",
     "example_input_output": {
       "input": "123",
       "output": {
@@ -1478,15 +1488,18 @@
       }
     },
     "exception_handling": "unknown/unmapped values create migration_exception with owner, SLA, original archive reference and no public projection",
-    "exception_type_owner": "not applicable unless validation fails",
+    "exception_type_owner": "SDA migration-exception owner for unresolved legacy/operational reference mapping",
     "executable_no_loss_assertion": "SELECT CASE WHEN (SELECT COUNT(*) FROM address_record_events WHERE address_record_id IS NOT NULL) = (SELECT COUNT(*) FROM proposed_legacy_crosswalk WHERE legacy_id IS NOT NULL) + (SELECT COUNT(*) FROM source_payload_archive WHERE field_path = 'address_record_events.address_record_id') + (SELECT COUNT(*) FROM owned_migration_exception WHERE source_field = 'address_record_events.address_record_id') THEN true ELSE raise_exception('no-loss assertion failed for address_record_events.address_record_id') END AS ok",
     "loss_risk": "blocked by executable no-loss assertion; restricted values preserved in governed archive",
     "no_loss_proof": "Executable SQL no-loss check compares non-null source address_record_events.address_record_id to typed target rows, governed archive rows and owned migration exceptions.",
     "nullable": false,
     "observed_source_values": [],
     "reference_crosswalk_join": {
-      "final_target_fk_output": "proposed_legacy_crosswalk.legacy_id",
+      "final_output_rule": "unresolved legacy/operational reference does not produce a canonical FK in WO-002; preserve legacy value in crosswalk/archive and create an owned migration_exception until domain owner approves the target mapping",
+      "final_target_fk_output": "migration_exception.migration_exception_id",
+      "legacy_crosswalk_output": "legacy_crosswalk.legacy_id",
       "legacy_lookup": "legacy_crosswalk(source_table='address_record_events', legacy_id=address_record_events.address_record_id)",
+      "reference_resolution_status": "owned-exception-required-pending-canonical-target-authority",
       "referenced_source_entity": "address_record_events",
       "referenced_source_key": "address_record_events.address_record_id",
       "source_entity": "address_record_events",
@@ -1511,19 +1524,22 @@
       "target_table": "legacy_crosswalk"
     },
     "source_value_semantics": "preserve source identifier in legacy_crosswalk and join to canonical target id by table-specific migration unit",
-    "target": "legacy_crosswalk.legacy_id",
-    "target_id_generation": "Resolve address_record_events.address_record_id through legacy_crosswalk(source_table='address_record_events', legacy_id=address_record_events.address_record_id) and write proposed_legacy_crosswalk.legacy_id; unresolved references create owned migration_exception.",
+    "target": "migration_exception.migration_exception_id",
+    "target_id_generation": "No canonical FK generated in WO-002; unresolved source reference is preserved and assigned migration_exception.migration_exception_id for owner triage.",
     "target_ids_and_crosswalks": "address_record_events.id joins legacy_crosswalk(source_table=address_record_events, legacy_id=address_record_events.id); referenced FK ids resolve through target_entity-specific crosswalk before insert",
     "target_rows_fields": [
       "legacy_crosswalk.legacy_id",
       "legacy_crosswalk.source_table",
-      "legacy_crosswalk.legacy_id",
       "legacy_crosswalk.target_entity",
-      "legacy_crosswalk.target_id"
+      "legacy_crosswalk.target_id",
+      "migration_exception.migration_exception_id",
+      "migration_exception.owner",
+      "migration_exception.source_field",
+      "migration_exception.source_key"
     ],
     "transform_group_id": "WO002-R06-identity-crosswalk-address_record_events",
     "validation_sql": "SELECT COUNT(*) AS checked_rows, COUNT(address_record_id) AS non_null_rows FROM address_record_events",
-    "value_preservation": "exact typed value copied; raw original archived when restricted/exception; source row key and field path retained"
+    "value_preservation": "exact source reference value preserved in governed archive and migration exception details; no silent FK coercion"
   },
   {
     "archive_object": "not-required; exact value preserved in typed target/crosswalk",
@@ -2290,7 +2306,9 @@
     "nullable": true,
     "observed_source_values": [],
     "reference_crosswalk_join": {
-      "final_target_fk_output": "proposed_source_payload_archive.payload_uri",
+      "final_output_rule": "resolve legacy source key through reviewed crosswalk, then write the canonical target FK; crosswalk legacy_id alone is not accepted as final output",
+      "final_target_fk_output": "administrative_unit.administrative_unit_id",
+      "legacy_crosswalk_output": "legacy_crosswalk.legacy_id",
       "legacy_lookup": "legacy_crosswalk(source_table='provinces', legacy_id=address_records.province_code)",
       "referenced_source_entity": "provinces",
       "referenced_source_key": "provinces.code",
@@ -2487,19 +2505,19 @@
     "value_preservation": "exact typed value copied; raw original archived when restricted/exception; source row key and field path retained"
   },
   {
-    "archive_object": "not-required; exact value preserved in typed target/crosswalk",
-    "archive_value_reference": "not applicable",
+    "archive_object": "source_payload_archive",
+    "archive_value_reference": "source_payload_archive.payload_uri#address_records.source_submission_id",
     "authority": "SDA reviewed transformation registry; owner must approve RFI before WO-002B execution",
     "authority_prerequisite": "identity-crosswalk owner approval and source row count reconciliation",
     "classification": "government-internal",
     "compatibility_period": "legacy read compatibility until NLI-WO-002B+2; no public behavior change in WO-002",
     "controlled_value_map": {},
-    "controlled_value_translation": "not controlled; exact value preserved or archived",
+    "controlled_value_translation": "not controlled; unresolved reference becomes owned migration_exception until canonical target authority approves mapping",
     "current": "address_records.source_submission_id",
     "current_pg_type": "text",
     "current_udt": "text",
     "default": null,
-    "disposition": "structured-transform",
+    "disposition": "formal-exception",
     "example_input_output": {
       "input": "123",
       "output": {
@@ -2508,15 +2526,18 @@
       }
     },
     "exception_handling": "unknown/unmapped values create migration_exception with owner, SLA, original archive reference and no public projection",
-    "exception_type_owner": "not applicable unless validation fails",
+    "exception_type_owner": "SDA migration-exception owner for unresolved legacy/operational reference mapping",
     "executable_no_loss_assertion": "SELECT CASE WHEN (SELECT COUNT(*) FROM address_records WHERE source_submission_id IS NOT NULL) = (SELECT COUNT(*) FROM proposed_legacy_crosswalk WHERE legacy_id IS NOT NULL) + (SELECT COUNT(*) FROM source_payload_archive WHERE field_path = 'address_records.source_submission_id') + (SELECT COUNT(*) FROM owned_migration_exception WHERE source_field = 'address_records.source_submission_id') THEN true ELSE raise_exception('no-loss assertion failed for address_records.source_submission_id') END AS ok",
     "loss_risk": "blocked by executable no-loss assertion; restricted values preserved in governed archive",
     "no_loss_proof": "Executable SQL no-loss check compares non-null source address_records.source_submission_id to typed target rows, governed archive rows and owned migration exceptions.",
     "nullable": true,
     "observed_source_values": [],
     "reference_crosswalk_join": {
-      "final_target_fk_output": "proposed_legacy_crosswalk.legacy_id",
+      "final_output_rule": "unresolved legacy/operational reference does not produce a canonical FK in WO-002; preserve legacy value in crosswalk/archive and create an owned migration_exception until domain owner approves the target mapping",
+      "final_target_fk_output": "migration_exception.migration_exception_id",
+      "legacy_crosswalk_output": "legacy_crosswalk.legacy_id",
       "legacy_lookup": "legacy_crosswalk(source_table='address_records', legacy_id=address_records.source_submission_id)",
+      "reference_resolution_status": "owned-exception-required-pending-canonical-target-authority",
       "referenced_source_entity": "address_records",
       "referenced_source_key": "address_records.source_submission_id",
       "source_entity": "address_records",
@@ -2541,19 +2562,22 @@
       "target_table": "legacy_crosswalk"
     },
     "source_value_semantics": "preserve source identifier in legacy_crosswalk and join to canonical target id by table-specific migration unit",
-    "target": "legacy_crosswalk.legacy_id",
-    "target_id_generation": "Resolve address_records.source_submission_id through legacy_crosswalk(source_table='address_records', legacy_id=address_records.source_submission_id) and write proposed_legacy_crosswalk.legacy_id; unresolved references create owned migration_exception.",
+    "target": "migration_exception.migration_exception_id",
+    "target_id_generation": "No canonical FK generated in WO-002; unresolved source reference is preserved and assigned migration_exception.migration_exception_id for owner triage.",
     "target_ids_and_crosswalks": "address_records.id joins legacy_crosswalk(source_table=address_records, legacy_id=address_records.id); referenced FK ids resolve through target_entity-specific crosswalk before insert",
     "target_rows_fields": [
       "legacy_crosswalk.legacy_id",
       "legacy_crosswalk.source_table",
-      "legacy_crosswalk.legacy_id",
       "legacy_crosswalk.target_entity",
-      "legacy_crosswalk.target_id"
+      "legacy_crosswalk.target_id",
+      "migration_exception.migration_exception_id",
+      "migration_exception.owner",
+      "migration_exception.source_field",
+      "migration_exception.source_key"
     ],
     "transform_group_id": "WO002-R06-identity-crosswalk-address_records",
     "validation_sql": "SELECT COUNT(*) AS checked_rows, COUNT(source_submission_id) AS non_null_rows FROM address_records",
-    "value_preservation": "exact typed value copied; raw original archived when restricted/exception; source row key and field path retained"
+    "value_preservation": "exact source reference value preserved in governed archive and migration exception details; no silent FK coercion"
   },
   {
     "archive_object": "source_payload_archive.payload_uri",
@@ -2636,7 +2660,9 @@
     "nullable": true,
     "observed_source_values": [],
     "reference_crosswalk_join": {
-      "final_target_fk_output": "proposed_legacy_crosswalk.legacy_id",
+      "final_output_rule": "resolve legacy source key through reviewed crosswalk, then write the canonical target FK; crosswalk legacy_id alone is not accepted as final output",
+      "final_target_fk_output": "operational_area.operational_area_id",
+      "legacy_crosswalk_output": "legacy_crosswalk.legacy_id",
       "legacy_lookup": "legacy_crosswalk(source_table='territories', legacy_id=address_records.territory_id)",
       "referenced_source_entity": "territories",
       "referenced_source_key": "territories.id",
@@ -2760,7 +2786,9 @@
     "nullable": false,
     "observed_source_values": [],
     "reference_crosswalk_join": {
-      "final_target_fk_output": "proposed_legacy_crosswalk.legacy_id",
+      "final_output_rule": "resolve legacy source key through reviewed crosswalk, then write the canonical target FK; crosswalk legacy_id alone is not accepted as final output",
+      "final_target_fk_output": "building.building_id",
+      "legacy_crosswalk_output": "legacy_crosswalk.legacy_id",
       "legacy_lookup": "legacy_crosswalk(source_table='building', legacy_id=addresses.building_id)",
       "referenced_source_entity": "building",
       "referenced_source_key": "building.id",
@@ -3095,7 +3123,9 @@
     "nullable": false,
     "observed_source_values": [],
     "reference_crosswalk_join": {
-      "final_target_fk_output": "proposed_source_payload_archive.payload_uri",
+      "final_output_rule": "resolve legacy source key through reviewed crosswalk, then write the canonical target FK; crosswalk legacy_id alone is not accepted as final output",
+      "final_target_fk_output": "administrative_unit.administrative_unit_id",
+      "legacy_crosswalk_output": "legacy_crosswalk.legacy_id",
       "legacy_lookup": "legacy_crosswalk(source_table='provinces', legacy_id=addresses.province_code)",
       "referenced_source_entity": "provinces",
       "referenced_source_key": "provinces.code",
@@ -3271,7 +3301,9 @@
     "nullable": false,
     "observed_source_values": [],
     "reference_crosswalk_join": {
-      "final_target_fk_output": "proposed_legacy_crosswalk.legacy_id",
+      "final_output_rule": "resolve legacy source key through reviewed crosswalk, then write the canonical target FK; crosswalk legacy_id alone is not accepted as final output",
+      "final_target_fk_output": "road.road_id",
+      "legacy_crosswalk_output": "legacy_crosswalk.legacy_id",
       "legacy_lookup": "legacy_crosswalk(source_table='road', legacy_id=addresses.road_id)",
       "referenced_source_entity": "road",
       "referenced_source_key": "road.id",
@@ -3416,19 +3448,19 @@
     "value_preservation": "exact typed value copied; raw original archived when restricted/exception; source row key and field path retained"
   },
   {
-    "archive_object": "not-required; exact value preserved in typed target/crosswalk",
-    "archive_value_reference": "not applicable",
+    "archive_object": "source_payload_archive",
+    "archive_value_reference": "source_payload_archive.payload_uri#addresses.superseded_by_address_id",
     "authority": "SDA reviewed transformation registry; owner must approve RFI before WO-002B execution",
     "authority_prerequisite": "identity-crosswalk owner approval and source row count reconciliation",
     "classification": "government-internal",
     "compatibility_period": "legacy read compatibility until NLI-WO-002B+2; no public behavior change in WO-002",
     "controlled_value_map": {},
-    "controlled_value_translation": "not controlled; exact value preserved or archived",
+    "controlled_value_translation": "not controlled; unresolved reference becomes owned migration_exception until canonical target authority approves mapping",
     "current": "addresses.superseded_by_address_id",
     "current_pg_type": "text",
     "current_udt": "text",
     "default": null,
-    "disposition": "structured-transform",
+    "disposition": "formal-exception",
     "example_input_output": {
       "input": "123",
       "output": {
@@ -3437,15 +3469,18 @@
       }
     },
     "exception_handling": "unknown/unmapped values create migration_exception with owner, SLA, original archive reference and no public projection",
-    "exception_type_owner": "not applicable unless validation fails",
+    "exception_type_owner": "SDA migration-exception owner for unresolved legacy/operational reference mapping",
     "executable_no_loss_assertion": "SELECT CASE WHEN (SELECT COUNT(*) FROM addresses WHERE superseded_by_address_id IS NOT NULL) = (SELECT COUNT(*) FROM proposed_legacy_crosswalk WHERE legacy_id IS NOT NULL) + (SELECT COUNT(*) FROM source_payload_archive WHERE field_path = 'addresses.superseded_by_address_id') + (SELECT COUNT(*) FROM owned_migration_exception WHERE source_field = 'addresses.superseded_by_address_id') THEN true ELSE raise_exception('no-loss assertion failed for addresses.superseded_by_address_id') END AS ok",
     "loss_risk": "blocked by executable no-loss assertion; restricted values preserved in governed archive",
     "no_loss_proof": "Executable SQL no-loss check compares non-null source addresses.superseded_by_address_id to typed target rows, governed archive rows and owned migration exceptions.",
     "nullable": true,
     "observed_source_values": [],
     "reference_crosswalk_join": {
-      "final_target_fk_output": "proposed_legacy_crosswalk.legacy_id",
+      "final_output_rule": "unresolved legacy/operational reference does not produce a canonical FK in WO-002; preserve legacy value in crosswalk/archive and create an owned migration_exception until domain owner approves the target mapping",
+      "final_target_fk_output": "migration_exception.migration_exception_id",
+      "legacy_crosswalk_output": "legacy_crosswalk.legacy_id",
       "legacy_lookup": "legacy_crosswalk(source_table='addresses', legacy_id=addresses.superseded_by_address_id)",
+      "reference_resolution_status": "owned-exception-required-pending-canonical-target-authority",
       "referenced_source_entity": "addresses",
       "referenced_source_key": "addresses.superseded_by_address_id",
       "source_entity": "addresses",
@@ -3470,19 +3505,22 @@
       "target_table": "legacy_crosswalk"
     },
     "source_value_semantics": "preserve source identifier in legacy_crosswalk and join to canonical target id by table-specific migration unit",
-    "target": "legacy_crosswalk.legacy_id",
-    "target_id_generation": "Resolve addresses.superseded_by_address_id through legacy_crosswalk(source_table='addresses', legacy_id=addresses.superseded_by_address_id) and write proposed_legacy_crosswalk.legacy_id; unresolved references create owned migration_exception.",
+    "target": "migration_exception.migration_exception_id",
+    "target_id_generation": "No canonical FK generated in WO-002; unresolved source reference is preserved and assigned migration_exception.migration_exception_id for owner triage.",
     "target_ids_and_crosswalks": "addresses.id joins legacy_crosswalk(source_table=addresses, legacy_id=addresses.id); referenced FK ids resolve through target_entity-specific crosswalk before insert",
     "target_rows_fields": [
       "legacy_crosswalk.legacy_id",
       "legacy_crosswalk.source_table",
-      "legacy_crosswalk.legacy_id",
       "legacy_crosswalk.target_entity",
-      "legacy_crosswalk.target_id"
+      "legacy_crosswalk.target_id",
+      "migration_exception.migration_exception_id",
+      "migration_exception.owner",
+      "migration_exception.source_field",
+      "migration_exception.source_key"
     ],
     "transform_group_id": "WO002-R06-identity-crosswalk-addresses",
     "validation_sql": "SELECT COUNT(*) AS checked_rows, COUNT(superseded_by_address_id) AS non_null_rows FROM addresses",
-    "value_preservation": "exact typed value copied; raw original archived when restricted/exception; source row key and field path retained"
+    "value_preservation": "exact source reference value preserved in governed archive and migration exception details; no silent FK coercion"
   },
   {
     "archive_object": "not-required; exact value preserved in typed target/crosswalk",
@@ -3513,7 +3551,9 @@
     "nullable": false,
     "observed_source_values": [],
     "reference_crosswalk_join": {
-      "final_target_fk_output": "proposed_legacy_crosswalk.legacy_id",
+      "final_output_rule": "resolve legacy source key through reviewed crosswalk, then write the canonical target FK; crosswalk legacy_id alone is not accepted as final output",
+      "final_target_fk_output": "operational_area.operational_area_id",
+      "legacy_crosswalk_output": "legacy_crosswalk.legacy_id",
       "legacy_lookup": "legacy_crosswalk(source_table='territories', legacy_id=addresses.territory_id)",
       "referenced_source_entity": "territories",
       "referenced_source_key": "territories.id",
@@ -3991,19 +4031,19 @@
     "value_preservation": "exact typed value copied; raw original archived when restricted/exception; source row key and field path retained"
   },
   {
-    "archive_object": "not-required; exact value preserved in typed target/crosswalk",
-    "archive_value_reference": "not applicable",
+    "archive_object": "source_payload_archive",
+    "archive_value_reference": "source_payload_archive.payload_uri#admin_units.parent_id",
     "authority": "SDA reviewed transformation registry; owner must approve RFI before WO-002B execution",
     "authority_prerequisite": "identity-crosswalk owner approval and source row count reconciliation",
     "classification": "government-internal",
     "compatibility_period": "legacy read compatibility until NLI-WO-002B+2; no public behavior change in WO-002",
     "controlled_value_map": {},
-    "controlled_value_translation": "not controlled; exact value preserved or archived",
+    "controlled_value_translation": "not controlled; unresolved reference becomes owned migration_exception until canonical target authority approves mapping",
     "current": "admin_units.parent_id",
     "current_pg_type": "text",
     "current_udt": "text",
     "default": null,
-    "disposition": "structured-transform",
+    "disposition": "formal-exception",
     "example_input_output": {
       "input": "123",
       "output": {
@@ -4012,15 +4052,18 @@
       }
     },
     "exception_handling": "unknown/unmapped values create migration_exception with owner, SLA, original archive reference and no public projection",
-    "exception_type_owner": "not applicable unless validation fails",
+    "exception_type_owner": "SDA migration-exception owner for unresolved legacy/operational reference mapping",
     "executable_no_loss_assertion": "SELECT CASE WHEN (SELECT COUNT(*) FROM admin_units WHERE parent_id IS NOT NULL) = (SELECT COUNT(*) FROM proposed_legacy_crosswalk WHERE legacy_id IS NOT NULL) + (SELECT COUNT(*) FROM source_payload_archive WHERE field_path = 'admin_units.parent_id') + (SELECT COUNT(*) FROM owned_migration_exception WHERE source_field = 'admin_units.parent_id') THEN true ELSE raise_exception('no-loss assertion failed for admin_units.parent_id') END AS ok",
     "loss_risk": "blocked by executable no-loss assertion; restricted values preserved in governed archive",
     "no_loss_proof": "Executable SQL no-loss check compares non-null source admin_units.parent_id to typed target rows, governed archive rows and owned migration exceptions.",
     "nullable": true,
     "observed_source_values": [],
     "reference_crosswalk_join": {
-      "final_target_fk_output": "proposed_legacy_crosswalk.legacy_id",
+      "final_output_rule": "unresolved legacy/operational reference does not produce a canonical FK in WO-002; preserve legacy value in crosswalk/archive and create an owned migration_exception until domain owner approves the target mapping",
+      "final_target_fk_output": "migration_exception.migration_exception_id",
+      "legacy_crosswalk_output": "legacy_crosswalk.legacy_id",
       "legacy_lookup": "legacy_crosswalk(source_table='admin_units', legacy_id=admin_units.parent_id)",
+      "reference_resolution_status": "owned-exception-required-pending-canonical-target-authority",
       "referenced_source_entity": "admin_units",
       "referenced_source_key": "admin_units.parent_id",
       "source_entity": "admin_units",
@@ -4045,19 +4088,22 @@
       "target_table": "legacy_crosswalk"
     },
     "source_value_semantics": "preserve source identifier in legacy_crosswalk and join to canonical target id by table-specific migration unit",
-    "target": "legacy_crosswalk.legacy_id",
-    "target_id_generation": "Resolve admin_units.parent_id through legacy_crosswalk(source_table='admin_units', legacy_id=admin_units.parent_id) and write proposed_legacy_crosswalk.legacy_id; unresolved references create owned migration_exception.",
+    "target": "migration_exception.migration_exception_id",
+    "target_id_generation": "No canonical FK generated in WO-002; unresolved source reference is preserved and assigned migration_exception.migration_exception_id for owner triage.",
     "target_ids_and_crosswalks": "admin_units.id joins legacy_crosswalk(source_table=admin_units, legacy_id=admin_units.id); referenced FK ids resolve through target_entity-specific crosswalk before insert",
     "target_rows_fields": [
       "legacy_crosswalk.legacy_id",
       "legacy_crosswalk.source_table",
-      "legacy_crosswalk.legacy_id",
       "legacy_crosswalk.target_entity",
-      "legacy_crosswalk.target_id"
+      "legacy_crosswalk.target_id",
+      "migration_exception.migration_exception_id",
+      "migration_exception.owner",
+      "migration_exception.source_field",
+      "migration_exception.source_key"
     ],
     "transform_group_id": "WO002-R06-identity-crosswalk-admin_units",
     "validation_sql": "SELECT COUNT(*) AS checked_rows, COUNT(parent_id) AS non_null_rows FROM admin_units",
-    "value_preservation": "exact typed value copied; raw original archived when restricted/exception; source row key and field path retained"
+    "value_preservation": "exact source reference value preserved in governed archive and migration exception details; no silent FK coercion"
   },
   {
     "archive_object": "source_payload_archive.payload_uri",
@@ -4085,7 +4131,9 @@
     "nullable": true,
     "observed_source_values": [],
     "reference_crosswalk_join": {
-      "final_target_fk_output": "proposed_source_payload_archive.payload_uri",
+      "final_output_rule": "resolve legacy source key through reviewed crosswalk, then write the canonical target FK; crosswalk legacy_id alone is not accepted as final output",
+      "final_target_fk_output": "administrative_unit.administrative_unit_id",
+      "legacy_crosswalk_output": "legacy_crosswalk.legacy_id",
       "legacy_lookup": "legacy_crosswalk(source_table='provinces', legacy_id=admin_units.province_code)",
       "referenced_source_entity": "provinces",
       "referenced_source_key": "provinces.code",
@@ -4389,19 +4437,19 @@
     "value_preservation": "exact typed value copied; raw original archived when restricted/exception; source row key and field path retained"
   },
   {
-    "archive_object": "not-required; exact value preserved in typed target/crosswalk",
-    "archive_value_reference": "not applicable",
+    "archive_object": "source_payload_archive",
+    "archive_value_reference": "source_payload_archive.payload_uri#audit_logs.actor_user_id",
     "authority": "SDA reviewed transformation registry; owner must approve RFI before WO-002B execution",
     "authority_prerequisite": "identity-crosswalk owner approval and source row count reconciliation",
     "classification": "government-internal",
     "compatibility_period": "legacy read compatibility until NLI-WO-002B+2; no public behavior change in WO-002",
     "controlled_value_map": {},
-    "controlled_value_translation": "not controlled; exact value preserved or archived",
+    "controlled_value_translation": "not controlled; unresolved reference becomes owned migration_exception until canonical target authority approves mapping",
     "current": "audit_logs.actor_user_id",
     "current_pg_type": "text",
     "current_udt": "text",
     "default": null,
-    "disposition": "structured-transform",
+    "disposition": "formal-exception",
     "example_input_output": {
       "input": "123",
       "output": {
@@ -4410,15 +4458,18 @@
       }
     },
     "exception_handling": "unknown/unmapped values create migration_exception with owner, SLA, original archive reference and no public projection",
-    "exception_type_owner": "not applicable unless validation fails",
+    "exception_type_owner": "SDA migration-exception owner for unresolved legacy/operational reference mapping",
     "executable_no_loss_assertion": "SELECT CASE WHEN (SELECT COUNT(*) FROM audit_logs WHERE actor_user_id IS NOT NULL) = (SELECT COUNT(*) FROM proposed_legacy_crosswalk WHERE legacy_id IS NOT NULL) + (SELECT COUNT(*) FROM source_payload_archive WHERE field_path = 'audit_logs.actor_user_id') + (SELECT COUNT(*) FROM owned_migration_exception WHERE source_field = 'audit_logs.actor_user_id') THEN true ELSE raise_exception('no-loss assertion failed for audit_logs.actor_user_id') END AS ok",
     "loss_risk": "blocked by executable no-loss assertion; restricted values preserved in governed archive",
     "no_loss_proof": "Executable SQL no-loss check compares non-null source audit_logs.actor_user_id to typed target rows, governed archive rows and owned migration exceptions.",
     "nullable": true,
     "observed_source_values": [],
     "reference_crosswalk_join": {
-      "final_target_fk_output": "proposed_legacy_crosswalk.legacy_id",
+      "final_output_rule": "unresolved legacy/operational reference does not produce a canonical FK in WO-002; preserve legacy value in crosswalk/archive and create an owned migration_exception until domain owner approves the target mapping",
+      "final_target_fk_output": "migration_exception.migration_exception_id",
+      "legacy_crosswalk_output": "legacy_crosswalk.legacy_id",
       "legacy_lookup": "legacy_crosswalk(source_table='audit_logs', legacy_id=audit_logs.actor_user_id)",
+      "reference_resolution_status": "owned-exception-required-pending-canonical-target-authority",
       "referenced_source_entity": "audit_logs",
       "referenced_source_key": "audit_logs.actor_user_id",
       "source_entity": "audit_logs",
@@ -4443,19 +4494,22 @@
       "target_table": "legacy_crosswalk"
     },
     "source_value_semantics": "preserve source identifier in legacy_crosswalk and join to canonical target id by table-specific migration unit",
-    "target": "legacy_crosswalk.legacy_id",
-    "target_id_generation": "Resolve audit_logs.actor_user_id through legacy_crosswalk(source_table='audit_logs', legacy_id=audit_logs.actor_user_id) and write proposed_legacy_crosswalk.legacy_id; unresolved references create owned migration_exception.",
+    "target": "migration_exception.migration_exception_id",
+    "target_id_generation": "No canonical FK generated in WO-002; unresolved source reference is preserved and assigned migration_exception.migration_exception_id for owner triage.",
     "target_ids_and_crosswalks": "audit_logs.id joins legacy_crosswalk(source_table=audit_logs, legacy_id=audit_logs.id); referenced FK ids resolve through target_entity-specific crosswalk before insert",
     "target_rows_fields": [
       "legacy_crosswalk.legacy_id",
       "legacy_crosswalk.source_table",
-      "legacy_crosswalk.legacy_id",
       "legacy_crosswalk.target_entity",
-      "legacy_crosswalk.target_id"
+      "legacy_crosswalk.target_id",
+      "migration_exception.migration_exception_id",
+      "migration_exception.owner",
+      "migration_exception.source_field",
+      "migration_exception.source_key"
     ],
     "transform_group_id": "WO002-R06-identity-crosswalk-audit_logs",
     "validation_sql": "SELECT COUNT(*) AS checked_rows, COUNT(actor_user_id) AS non_null_rows FROM audit_logs",
-    "value_preservation": "exact typed value copied; raw original archived when restricted/exception; source row key and field path retained"
+    "value_preservation": "exact source reference value preserved in governed archive and migration exception details; no silent FK coercion"
   },
   {
     "archive_object": "not-required; exact value preserved in typed target/crosswalk",
@@ -4620,19 +4674,19 @@
     "value_preservation": "exact typed value copied; raw original archived when restricted/exception; source row key and field path retained"
   },
   {
-    "archive_object": "not-required; exact value preserved in typed target/crosswalk",
-    "archive_value_reference": "not applicable",
+    "archive_object": "source_payload_archive",
+    "archive_value_reference": "source_payload_archive.payload_uri#audit_logs.entity_id",
     "authority": "SDA reviewed transformation registry; owner must approve RFI before WO-002B execution",
     "authority_prerequisite": "identity-crosswalk owner approval and source row count reconciliation",
     "classification": "government-internal",
     "compatibility_period": "legacy read compatibility until NLI-WO-002B+2; no public behavior change in WO-002",
     "controlled_value_map": {},
-    "controlled_value_translation": "not controlled; exact value preserved or archived",
+    "controlled_value_translation": "not controlled; unresolved reference becomes owned migration_exception until canonical target authority approves mapping",
     "current": "audit_logs.entity_id",
     "current_pg_type": "text",
     "current_udt": "text",
     "default": null,
-    "disposition": "structured-transform",
+    "disposition": "formal-exception",
     "example_input_output": {
       "input": "123",
       "output": {
@@ -4641,15 +4695,18 @@
       }
     },
     "exception_handling": "unknown/unmapped values create migration_exception with owner, SLA, original archive reference and no public projection",
-    "exception_type_owner": "not applicable unless validation fails",
+    "exception_type_owner": "SDA migration-exception owner for unresolved legacy/operational reference mapping",
     "executable_no_loss_assertion": "SELECT CASE WHEN (SELECT COUNT(*) FROM audit_logs WHERE entity_id IS NOT NULL) = (SELECT COUNT(*) FROM proposed_legacy_crosswalk WHERE legacy_id IS NOT NULL) + (SELECT COUNT(*) FROM source_payload_archive WHERE field_path = 'audit_logs.entity_id') + (SELECT COUNT(*) FROM owned_migration_exception WHERE source_field = 'audit_logs.entity_id') THEN true ELSE raise_exception('no-loss assertion failed for audit_logs.entity_id') END AS ok",
     "loss_risk": "blocked by executable no-loss assertion; restricted values preserved in governed archive",
     "no_loss_proof": "Executable SQL no-loss check compares non-null source audit_logs.entity_id to typed target rows, governed archive rows and owned migration exceptions.",
     "nullable": false,
     "observed_source_values": [],
     "reference_crosswalk_join": {
-      "final_target_fk_output": "proposed_legacy_crosswalk.legacy_id",
+      "final_output_rule": "unresolved legacy/operational reference does not produce a canonical FK in WO-002; preserve legacy value in crosswalk/archive and create an owned migration_exception until domain owner approves the target mapping",
+      "final_target_fk_output": "migration_exception.migration_exception_id",
+      "legacy_crosswalk_output": "legacy_crosswalk.legacy_id",
       "legacy_lookup": "legacy_crosswalk(source_table='audit_logs', legacy_id=audit_logs.entity_id)",
+      "reference_resolution_status": "owned-exception-required-pending-canonical-target-authority",
       "referenced_source_entity": "audit_logs",
       "referenced_source_key": "audit_logs.entity_id",
       "source_entity": "audit_logs",
@@ -4674,19 +4731,22 @@
       "target_table": "legacy_crosswalk"
     },
     "source_value_semantics": "preserve source identifier in legacy_crosswalk and join to canonical target id by table-specific migration unit",
-    "target": "legacy_crosswalk.legacy_id",
-    "target_id_generation": "Resolve audit_logs.entity_id through legacy_crosswalk(source_table='audit_logs', legacy_id=audit_logs.entity_id) and write proposed_legacy_crosswalk.legacy_id; unresolved references create owned migration_exception.",
+    "target": "migration_exception.migration_exception_id",
+    "target_id_generation": "No canonical FK generated in WO-002; unresolved source reference is preserved and assigned migration_exception.migration_exception_id for owner triage.",
     "target_ids_and_crosswalks": "audit_logs.id joins legacy_crosswalk(source_table=audit_logs, legacy_id=audit_logs.id); referenced FK ids resolve through target_entity-specific crosswalk before insert",
     "target_rows_fields": [
       "legacy_crosswalk.legacy_id",
       "legacy_crosswalk.source_table",
-      "legacy_crosswalk.legacy_id",
       "legacy_crosswalk.target_entity",
-      "legacy_crosswalk.target_id"
+      "legacy_crosswalk.target_id",
+      "migration_exception.migration_exception_id",
+      "migration_exception.owner",
+      "migration_exception.source_field",
+      "migration_exception.source_key"
     ],
     "transform_group_id": "WO002-R06-identity-crosswalk-audit_logs",
     "validation_sql": "SELECT COUNT(*) AS checked_rows, COUNT(entity_id) AS non_null_rows FROM audit_logs",
-    "value_preservation": "exact typed value copied; raw original archived when restricted/exception; source row key and field path retained"
+    "value_preservation": "exact source reference value preserved in governed archive and migration exception details; no silent FK coercion"
   },
   {
     "archive_object": "source_payload_archive.payload_uri",
@@ -5099,7 +5159,9 @@
     "nullable": false,
     "observed_source_values": [],
     "reference_crosswalk_join": {
-      "final_target_fk_output": "proposed_legacy_crosswalk.legacy_id",
+      "final_output_rule": "resolve legacy source key through reviewed crosswalk, then write the canonical target FK; crosswalk legacy_id alone is not accepted as final output",
+      "final_target_fk_output": "actor.actor_id",
+      "legacy_crosswalk_output": "legacy_crosswalk.legacy_id",
       "legacy_lookup": "legacy_crosswalk(source_table='users', legacy_id=auth_tokens.user_id)",
       "referenced_source_entity": "users",
       "referenced_source_key": "users.id",
@@ -5388,7 +5450,9 @@
     "nullable": false,
     "observed_source_values": [],
     "reference_crosswalk_join": {
-      "final_target_fk_output": "proposed_legacy_crosswalk.legacy_id",
+      "final_output_rule": "resolve legacy source key through reviewed crosswalk, then write the canonical target FK; crosswalk legacy_id alone is not accepted as final output",
+      "final_target_fk_output": "road.road_id",
+      "legacy_crosswalk_output": "legacy_crosswalk.legacy_id",
       "legacy_lookup": "legacy_crosswalk(source_table='road', legacy_id=buildings.road_id)",
       "referenced_source_entity": "road",
       "referenced_source_key": "road.id",
@@ -5561,7 +5625,9 @@
     "nullable": false,
     "observed_source_values": [],
     "reference_crosswalk_join": {
-      "final_target_fk_output": "proposed_legacy_crosswalk.legacy_id",
+      "final_output_rule": "resolve legacy source key through reviewed crosswalk, then write the canonical target FK; crosswalk legacy_id alone is not accepted as final output",
+      "final_target_fk_output": "operational_area.operational_area_id",
+      "legacy_crosswalk_output": "legacy_crosswalk.legacy_id",
       "legacy_lookup": "legacy_crosswalk(source_table='territories', legacy_id=buildings.territory_id)",
       "referenced_source_entity": "territories",
       "referenced_source_key": "territories.id",
@@ -6252,19 +6318,19 @@
     "value_preservation": "exact typed value copied; raw original archived when restricted/exception; source row key and field path retained"
   },
   {
-    "archive_object": "not-required; exact value preserved in typed target/crosswalk",
-    "archive_value_reference": "not applicable",
+    "archive_object": "source_payload_archive",
+    "archive_value_reference": "source_payload_archive.payload_uri#citizen_geotag_submissions.field_submission_id",
     "authority": "SDA reviewed transformation registry; owner must approve RFI before WO-002B execution",
     "authority_prerequisite": "identity-crosswalk owner approval and source row count reconciliation",
     "classification": "government-internal",
     "compatibility_period": "legacy read compatibility until NLI-WO-002B+2; no public behavior change in WO-002",
     "controlled_value_map": {},
-    "controlled_value_translation": "not controlled; exact value preserved or archived",
+    "controlled_value_translation": "not controlled; unresolved reference becomes owned migration_exception until canonical target authority approves mapping",
     "current": "citizen_geotag_submissions.field_submission_id",
     "current_pg_type": "text",
     "current_udt": "text",
     "default": null,
-    "disposition": "structured-transform",
+    "disposition": "formal-exception",
     "example_input_output": {
       "input": "123",
       "output": {
@@ -6273,15 +6339,18 @@
       }
     },
     "exception_handling": "unknown/unmapped values create migration_exception with owner, SLA, original archive reference and no public projection",
-    "exception_type_owner": "not applicable unless validation fails",
+    "exception_type_owner": "SDA migration-exception owner for unresolved legacy/operational reference mapping",
     "executable_no_loss_assertion": "SELECT CASE WHEN (SELECT COUNT(*) FROM citizen_geotag_submissions WHERE field_submission_id IS NOT NULL) = (SELECT COUNT(*) FROM proposed_legacy_crosswalk WHERE legacy_id IS NOT NULL) + (SELECT COUNT(*) FROM source_payload_archive WHERE field_path = 'citizen_geotag_submissions.field_submission_id') + (SELECT COUNT(*) FROM owned_migration_exception WHERE source_field = 'citizen_geotag_submissions.field_submission_id') THEN true ELSE raise_exception('no-loss assertion failed for citizen_geotag_submissions.field_submission_id') END AS ok",
     "loss_risk": "blocked by executable no-loss assertion; restricted values preserved in governed archive",
     "no_loss_proof": "Executable SQL no-loss check compares non-null source citizen_geotag_submissions.field_submission_id to typed target rows, governed archive rows and owned migration exceptions.",
     "nullable": true,
     "observed_source_values": [],
     "reference_crosswalk_join": {
-      "final_target_fk_output": "proposed_legacy_crosswalk.legacy_id",
+      "final_output_rule": "unresolved legacy/operational reference does not produce a canonical FK in WO-002; preserve legacy value in crosswalk/archive and create an owned migration_exception until domain owner approves the target mapping",
+      "final_target_fk_output": "migration_exception.migration_exception_id",
+      "legacy_crosswalk_output": "legacy_crosswalk.legacy_id",
       "legacy_lookup": "legacy_crosswalk(source_table='citizen_geotag_submissions', legacy_id=citizen_geotag_submissions.field_submission_id)",
+      "reference_resolution_status": "owned-exception-required-pending-canonical-target-authority",
       "referenced_source_entity": "citizen_geotag_submissions",
       "referenced_source_key": "citizen_geotag_submissions.field_submission_id",
       "source_entity": "citizen_geotag_submissions",
@@ -6306,19 +6375,22 @@
       "target_table": "legacy_crosswalk"
     },
     "source_value_semantics": "preserve source identifier in legacy_crosswalk and join to canonical target id by table-specific migration unit",
-    "target": "legacy_crosswalk.legacy_id",
-    "target_id_generation": "Resolve citizen_geotag_submissions.field_submission_id through legacy_crosswalk(source_table='citizen_geotag_submissions', legacy_id=citizen_geotag_submissions.field_submission_id) and write proposed_legacy_crosswalk.legacy_id; unresolved references create owned migration_exception.",
+    "target": "migration_exception.migration_exception_id",
+    "target_id_generation": "No canonical FK generated in WO-002; unresolved source reference is preserved and assigned migration_exception.migration_exception_id for owner triage.",
     "target_ids_and_crosswalks": "citizen_geotag_submissions.id joins legacy_crosswalk(source_table=citizen_geotag_submissions, legacy_id=citizen_geotag_submissions.id); referenced FK ids resolve through target_entity-specific crosswalk before insert",
     "target_rows_fields": [
       "legacy_crosswalk.legacy_id",
       "legacy_crosswalk.source_table",
-      "legacy_crosswalk.legacy_id",
       "legacy_crosswalk.target_entity",
-      "legacy_crosswalk.target_id"
+      "legacy_crosswalk.target_id",
+      "migration_exception.migration_exception_id",
+      "migration_exception.owner",
+      "migration_exception.source_field",
+      "migration_exception.source_key"
     ],
     "transform_group_id": "WO002-R06-identity-crosswalk-citizen_geotag_submissions",
     "validation_sql": "SELECT COUNT(*) AS checked_rows, COUNT(field_submission_id) AS non_null_rows FROM citizen_geotag_submissions",
-    "value_preservation": "exact typed value copied; raw original archived when restricted/exception; source row key and field path retained"
+    "value_preservation": "exact source reference value preserved in governed archive and migration exception details; no silent FK coercion"
   },
   {
     "archive_object": "not-required; exact value preserved in typed target/crosswalk",
@@ -7441,7 +7513,9 @@
     "nullable": true,
     "observed_source_values": [],
     "reference_crosswalk_join": {
-      "final_target_fk_output": "proposed_legacy_crosswalk.legacy_id",
+      "final_output_rule": "resolve legacy source key through reviewed crosswalk, then write the canonical target FK; crosswalk legacy_id alone is not accepted as final output",
+      "final_target_fk_output": "operational_area.operational_area_id",
+      "legacy_crosswalk_output": "legacy_crosswalk.legacy_id",
       "legacy_lookup": "legacy_crosswalk(source_table='territories', legacy_id=citizen_geotag_submissions.territory_id)",
       "referenced_source_entity": "territories",
       "referenced_source_key": "territories.id",
@@ -7537,19 +7611,19 @@
     "value_preservation": "exact typed value copied; raw original archived when restricted/exception; source row key and field path retained"
   },
   {
-    "archive_object": "not-required; exact value preserved in typed target/crosswalk",
-    "archive_value_reference": "not applicable",
+    "archive_object": "source_payload_archive",
+    "archive_value_reference": "source_payload_archive.payload_uri#development_fixture_batches.batch_id",
     "authority": "SDA reviewed transformation registry; owner must approve RFI before WO-002B execution",
     "authority_prerequisite": "identity-crosswalk owner approval and source row count reconciliation",
     "classification": "government-internal",
     "compatibility_period": "legacy read compatibility until NLI-WO-002B+2; no public behavior change in WO-002",
     "controlled_value_map": {},
-    "controlled_value_translation": "not controlled; exact value preserved or archived",
+    "controlled_value_translation": "not controlled; unresolved reference becomes owned migration_exception until canonical target authority approves mapping",
     "current": "development_fixture_batches.batch_id",
     "current_pg_type": "text",
     "current_udt": "text",
     "default": null,
-    "disposition": "structured-transform",
+    "disposition": "formal-exception",
     "example_input_output": {
       "input": "123",
       "output": {
@@ -7558,15 +7632,18 @@
       }
     },
     "exception_handling": "unknown/unmapped values create migration_exception with owner, SLA, original archive reference and no public projection",
-    "exception_type_owner": "not applicable unless validation fails",
+    "exception_type_owner": "SDA migration-exception owner for unresolved legacy/operational reference mapping",
     "executable_no_loss_assertion": "SELECT CASE WHEN (SELECT COUNT(*) FROM development_fixture_batches WHERE batch_id IS NOT NULL) = (SELECT COUNT(*) FROM proposed_legacy_crosswalk WHERE legacy_id IS NOT NULL) + (SELECT COUNT(*) FROM source_payload_archive WHERE field_path = 'development_fixture_batches.batch_id') + (SELECT COUNT(*) FROM owned_migration_exception WHERE source_field = 'development_fixture_batches.batch_id') THEN true ELSE raise_exception('no-loss assertion failed for development_fixture_batches.batch_id') END AS ok",
     "loss_risk": "blocked by executable no-loss assertion; restricted values preserved in governed archive",
     "no_loss_proof": "Executable SQL no-loss check compares non-null source development_fixture_batches.batch_id to typed target rows, governed archive rows and owned migration exceptions.",
     "nullable": false,
     "observed_source_values": [],
     "reference_crosswalk_join": {
-      "final_target_fk_output": "proposed_legacy_crosswalk.legacy_id",
+      "final_output_rule": "unresolved legacy/operational reference does not produce a canonical FK in WO-002; preserve legacy value in crosswalk/archive and create an owned migration_exception until domain owner approves the target mapping",
+      "final_target_fk_output": "migration_exception.migration_exception_id",
+      "legacy_crosswalk_output": "legacy_crosswalk.legacy_id",
       "legacy_lookup": "legacy_crosswalk(source_table='development_fixture_batches', legacy_id=development_fixture_batches.batch_id)",
+      "reference_resolution_status": "owned-exception-required-pending-canonical-target-authority",
       "referenced_source_entity": "development_fixture_batches",
       "referenced_source_key": "development_fixture_batches.batch_id",
       "source_entity": "development_fixture_batches",
@@ -7591,19 +7668,22 @@
       "target_table": "legacy_crosswalk"
     },
     "source_value_semantics": "preserve source identifier in legacy_crosswalk and join to canonical target id by table-specific migration unit",
-    "target": "legacy_crosswalk.legacy_id",
-    "target_id_generation": "Resolve development_fixture_batches.batch_id through legacy_crosswalk(source_table='development_fixture_batches', legacy_id=development_fixture_batches.batch_id) and write proposed_legacy_crosswalk.legacy_id; unresolved references create owned migration_exception.",
+    "target": "migration_exception.migration_exception_id",
+    "target_id_generation": "No canonical FK generated in WO-002; unresolved source reference is preserved and assigned migration_exception.migration_exception_id for owner triage.",
     "target_ids_and_crosswalks": "development_fixture_batches.<stable-row-hash> joins legacy_crosswalk(source_table=development_fixture_batches, legacy_id=development_fixture_batches.<stable-row-hash>); referenced FK ids resolve through target_entity-specific crosswalk before insert",
     "target_rows_fields": [
       "legacy_crosswalk.legacy_id",
       "legacy_crosswalk.source_table",
-      "legacy_crosswalk.legacy_id",
       "legacy_crosswalk.target_entity",
-      "legacy_crosswalk.target_id"
+      "legacy_crosswalk.target_id",
+      "migration_exception.migration_exception_id",
+      "migration_exception.owner",
+      "migration_exception.source_field",
+      "migration_exception.source_key"
     ],
     "transform_group_id": "WO002-R06-identity-crosswalk-development_fixture_batches",
     "validation_sql": "SELECT COUNT(*) AS checked_rows, COUNT(batch_id) AS non_null_rows FROM development_fixture_batches",
-    "value_preservation": "exact typed value copied; raw original archived when restricted/exception; source row key and field path retained"
+    "value_preservation": "exact source reference value preserved in governed archive and migration exception details; no silent FK coercion"
   },
   {
     "archive_object": "not-required; exact value preserved in typed target/crosswalk",
@@ -7872,19 +7952,19 @@
     "value_preservation": "exact typed value copied; raw original archived when restricted/exception; source row key and field path retained"
   },
   {
-    "archive_object": "not-required; exact value preserved in typed target/crosswalk",
-    "archive_value_reference": "not applicable",
+    "archive_object": "source_payload_archive",
+    "archive_value_reference": "source_payload_archive.payload_uri#development_fixture_records.batch_id",
     "authority": "SDA reviewed transformation registry; owner must approve RFI before WO-002B execution",
     "authority_prerequisite": "identity-crosswalk owner approval and source row count reconciliation",
     "classification": "government-internal",
     "compatibility_period": "legacy read compatibility until NLI-WO-002B+2; no public behavior change in WO-002",
     "controlled_value_map": {},
-    "controlled_value_translation": "not controlled; exact value preserved or archived",
+    "controlled_value_translation": "not controlled; unresolved reference becomes owned migration_exception until canonical target authority approves mapping",
     "current": "development_fixture_records.batch_id",
     "current_pg_type": "text",
     "current_udt": "text",
     "default": null,
-    "disposition": "structured-transform",
+    "disposition": "formal-exception",
     "example_input_output": {
       "input": "123",
       "output": {
@@ -7893,15 +7973,18 @@
       }
     },
     "exception_handling": "unknown/unmapped values create migration_exception with owner, SLA, original archive reference and no public projection",
-    "exception_type_owner": "not applicable unless validation fails",
+    "exception_type_owner": "SDA migration-exception owner for unresolved legacy/operational reference mapping",
     "executable_no_loss_assertion": "SELECT CASE WHEN (SELECT COUNT(*) FROM development_fixture_records WHERE batch_id IS NOT NULL) = (SELECT COUNT(*) FROM proposed_legacy_crosswalk WHERE legacy_id IS NOT NULL) + (SELECT COUNT(*) FROM source_payload_archive WHERE field_path = 'development_fixture_records.batch_id') + (SELECT COUNT(*) FROM owned_migration_exception WHERE source_field = 'development_fixture_records.batch_id') THEN true ELSE raise_exception('no-loss assertion failed for development_fixture_records.batch_id') END AS ok",
     "loss_risk": "blocked by executable no-loss assertion; restricted values preserved in governed archive",
     "no_loss_proof": "Executable SQL no-loss check compares non-null source development_fixture_records.batch_id to typed target rows, governed archive rows and owned migration exceptions.",
     "nullable": false,
     "observed_source_values": [],
     "reference_crosswalk_join": {
-      "final_target_fk_output": "proposed_legacy_crosswalk.legacy_id",
+      "final_output_rule": "unresolved legacy/operational reference does not produce a canonical FK in WO-002; preserve legacy value in crosswalk/archive and create an owned migration_exception until domain owner approves the target mapping",
+      "final_target_fk_output": "migration_exception.migration_exception_id",
+      "legacy_crosswalk_output": "legacy_crosswalk.legacy_id",
       "legacy_lookup": "legacy_crosswalk(source_table='development_fixture_records', legacy_id=development_fixture_records.batch_id)",
+      "reference_resolution_status": "owned-exception-required-pending-canonical-target-authority",
       "referenced_source_entity": "development_fixture_records",
       "referenced_source_key": "development_fixture_records.batch_id",
       "source_entity": "development_fixture_records",
@@ -7926,19 +8009,22 @@
       "target_table": "legacy_crosswalk"
     },
     "source_value_semantics": "preserve source identifier in legacy_crosswalk and join to canonical target id by table-specific migration unit",
-    "target": "legacy_crosswalk.legacy_id",
-    "target_id_generation": "Resolve development_fixture_records.batch_id through legacy_crosswalk(source_table='development_fixture_records', legacy_id=development_fixture_records.batch_id) and write proposed_legacy_crosswalk.legacy_id; unresolved references create owned migration_exception.",
+    "target": "migration_exception.migration_exception_id",
+    "target_id_generation": "No canonical FK generated in WO-002; unresolved source reference is preserved and assigned migration_exception.migration_exception_id for owner triage.",
     "target_ids_and_crosswalks": "development_fixture_records.record_id joins legacy_crosswalk(source_table=development_fixture_records, legacy_id=development_fixture_records.record_id); referenced FK ids resolve through target_entity-specific crosswalk before insert",
     "target_rows_fields": [
       "legacy_crosswalk.legacy_id",
       "legacy_crosswalk.source_table",
-      "legacy_crosswalk.legacy_id",
       "legacy_crosswalk.target_entity",
-      "legacy_crosswalk.target_id"
+      "legacy_crosswalk.target_id",
+      "migration_exception.migration_exception_id",
+      "migration_exception.owner",
+      "migration_exception.source_field",
+      "migration_exception.source_key"
     ],
     "transform_group_id": "WO002-R06-identity-crosswalk-development_fixture_records",
     "validation_sql": "SELECT COUNT(*) AS checked_rows, COUNT(batch_id) AS non_null_rows FROM development_fixture_records",
-    "value_preservation": "exact typed value copied; raw original archived when restricted/exception; source row key and field path retained"
+    "value_preservation": "exact source reference value preserved in governed archive and migration exception details; no silent FK coercion"
   },
   {
     "archive_object": "not-required; exact value preserved in typed target/crosswalk",
@@ -7996,19 +8082,19 @@
     "value_preservation": "exact typed value copied; raw original archived when restricted/exception; source row key and field path retained"
   },
   {
-    "archive_object": "not-required; exact value preserved in typed target/crosswalk",
-    "archive_value_reference": "not applicable",
+    "archive_object": "source_payload_archive",
+    "archive_value_reference": "source_payload_archive.payload_uri#development_fixture_records.record_id",
     "authority": "SDA reviewed transformation registry; owner must approve RFI before WO-002B execution",
     "authority_prerequisite": "identity-crosswalk owner approval and source row count reconciliation",
     "classification": "government-internal",
     "compatibility_period": "legacy read compatibility until NLI-WO-002B+2; no public behavior change in WO-002",
     "controlled_value_map": {},
-    "controlled_value_translation": "not controlled; exact value preserved or archived",
+    "controlled_value_translation": "not controlled; unresolved reference becomes owned migration_exception until canonical target authority approves mapping",
     "current": "development_fixture_records.record_id",
     "current_pg_type": "text",
     "current_udt": "text",
     "default": null,
-    "disposition": "structured-transform",
+    "disposition": "formal-exception",
     "example_input_output": {
       "input": "123",
       "output": {
@@ -8017,15 +8103,18 @@
       }
     },
     "exception_handling": "unknown/unmapped values create migration_exception with owner, SLA, original archive reference and no public projection",
-    "exception_type_owner": "not applicable unless validation fails",
+    "exception_type_owner": "SDA migration-exception owner for unresolved legacy/operational reference mapping",
     "executable_no_loss_assertion": "SELECT CASE WHEN (SELECT COUNT(*) FROM development_fixture_records WHERE record_id IS NOT NULL) = (SELECT COUNT(*) FROM proposed_legacy_crosswalk WHERE legacy_id IS NOT NULL) + (SELECT COUNT(*) FROM source_payload_archive WHERE field_path = 'development_fixture_records.record_id') + (SELECT COUNT(*) FROM owned_migration_exception WHERE source_field = 'development_fixture_records.record_id') THEN true ELSE raise_exception('no-loss assertion failed for development_fixture_records.record_id') END AS ok",
     "loss_risk": "blocked by executable no-loss assertion; restricted values preserved in governed archive",
     "no_loss_proof": "Executable SQL no-loss check compares non-null source development_fixture_records.record_id to typed target rows, governed archive rows and owned migration exceptions.",
     "nullable": false,
     "observed_source_values": [],
     "reference_crosswalk_join": {
-      "final_target_fk_output": "proposed_legacy_crosswalk.legacy_id",
+      "final_output_rule": "unresolved legacy/operational reference does not produce a canonical FK in WO-002; preserve legacy value in crosswalk/archive and create an owned migration_exception until domain owner approves the target mapping",
+      "final_target_fk_output": "migration_exception.migration_exception_id",
+      "legacy_crosswalk_output": "legacy_crosswalk.legacy_id",
       "legacy_lookup": "legacy_crosswalk(source_table='development_fixture_records', legacy_id=development_fixture_records.record_id)",
+      "reference_resolution_status": "owned-exception-required-pending-canonical-target-authority",
       "referenced_source_entity": "development_fixture_records",
       "referenced_source_key": "development_fixture_records.record_id",
       "source_entity": "development_fixture_records",
@@ -8050,19 +8139,22 @@
       "target_table": "legacy_crosswalk"
     },
     "source_value_semantics": "preserve source identifier in legacy_crosswalk and join to canonical target id by table-specific migration unit",
-    "target": "legacy_crosswalk.legacy_id",
-    "target_id_generation": "Resolve development_fixture_records.record_id through legacy_crosswalk(source_table='development_fixture_records', legacy_id=development_fixture_records.record_id) and write proposed_legacy_crosswalk.legacy_id; unresolved references create owned migration_exception.",
+    "target": "migration_exception.migration_exception_id",
+    "target_id_generation": "No canonical FK generated in WO-002; unresolved source reference is preserved and assigned migration_exception.migration_exception_id for owner triage.",
     "target_ids_and_crosswalks": "development_fixture_records.record_id joins legacy_crosswalk(source_table=development_fixture_records, legacy_id=development_fixture_records.record_id); referenced FK ids resolve through target_entity-specific crosswalk before insert",
     "target_rows_fields": [
       "legacy_crosswalk.legacy_id",
       "legacy_crosswalk.source_table",
-      "legacy_crosswalk.legacy_id",
       "legacy_crosswalk.target_entity",
-      "legacy_crosswalk.target_id"
+      "legacy_crosswalk.target_id",
+      "migration_exception.migration_exception_id",
+      "migration_exception.owner",
+      "migration_exception.source_field",
+      "migration_exception.source_key"
     ],
     "transform_group_id": "WO002-R06-identity-crosswalk-development_fixture_records",
     "validation_sql": "SELECT COUNT(*) AS checked_rows, COUNT(record_id) AS non_null_rows FROM development_fixture_records",
-    "value_preservation": "exact typed value copied; raw original archived when restricted/exception; source row key and field path retained"
+    "value_preservation": "exact source reference value preserved in governed archive and migration exception details; no silent FK coercion"
   },
   {
     "archive_object": "not-required; exact value preserved in typed target/crosswalk",
@@ -8175,19 +8267,19 @@
     "value_preservation": "exact typed value copied; raw original archived when restricted/exception; source row key and field path retained"
   },
   {
-    "archive_object": "not-required; exact value preserved in typed target/crosswalk",
-    "archive_value_reference": "not applicable",
+    "archive_object": "source_payload_archive",
+    "archive_value_reference": "source_payload_archive.payload_uri#field_assignments.assignment_id",
     "authority": "SDA reviewed transformation registry; owner must approve RFI before WO-002B execution",
     "authority_prerequisite": "identity-crosswalk owner approval and source row count reconciliation",
     "classification": "government-internal",
     "compatibility_period": "legacy read compatibility until NLI-WO-002B+2; no public behavior change in WO-002",
     "controlled_value_map": {},
-    "controlled_value_translation": "not controlled; exact value preserved or archived",
+    "controlled_value_translation": "not controlled; unresolved reference becomes owned migration_exception until canonical target authority approves mapping",
     "current": "field_assignments.assignment_id",
     "current_pg_type": "text",
     "current_udt": "text",
     "default": null,
-    "disposition": "structured-transform",
+    "disposition": "formal-exception",
     "example_input_output": {
       "input": "123",
       "output": {
@@ -8196,15 +8288,18 @@
       }
     },
     "exception_handling": "unknown/unmapped values create migration_exception with owner, SLA, original archive reference and no public projection",
-    "exception_type_owner": "not applicable unless validation fails",
+    "exception_type_owner": "SDA migration-exception owner for unresolved legacy/operational reference mapping",
     "executable_no_loss_assertion": "SELECT CASE WHEN (SELECT COUNT(*) FROM field_assignments WHERE assignment_id IS NOT NULL) = (SELECT COUNT(*) FROM proposed_legacy_crosswalk WHERE legacy_id IS NOT NULL) + (SELECT COUNT(*) FROM source_payload_archive WHERE field_path = 'field_assignments.assignment_id') + (SELECT COUNT(*) FROM owned_migration_exception WHERE source_field = 'field_assignments.assignment_id') THEN true ELSE raise_exception('no-loss assertion failed for field_assignments.assignment_id') END AS ok",
     "loss_risk": "blocked by executable no-loss assertion; restricted values preserved in governed archive",
     "no_loss_proof": "Executable SQL no-loss check compares non-null source field_assignments.assignment_id to typed target rows, governed archive rows and owned migration exceptions.",
     "nullable": false,
     "observed_source_values": [],
     "reference_crosswalk_join": {
-      "final_target_fk_output": "proposed_legacy_crosswalk.legacy_id",
+      "final_output_rule": "unresolved legacy/operational reference does not produce a canonical FK in WO-002; preserve legacy value in crosswalk/archive and create an owned migration_exception until domain owner approves the target mapping",
+      "final_target_fk_output": "migration_exception.migration_exception_id",
+      "legacy_crosswalk_output": "legacy_crosswalk.legacy_id",
       "legacy_lookup": "legacy_crosswalk(source_table='field_assignments', legacy_id=field_assignments.assignment_id)",
+      "reference_resolution_status": "owned-exception-required-pending-canonical-target-authority",
       "referenced_source_entity": "field_assignments",
       "referenced_source_key": "field_assignments.assignment_id",
       "source_entity": "field_assignments",
@@ -8229,19 +8324,22 @@
       "target_table": "legacy_crosswalk"
     },
     "source_value_semantics": "preserve source identifier in legacy_crosswalk and join to canonical target id by table-specific migration unit",
-    "target": "legacy_crosswalk.legacy_id",
-    "target_id_generation": "Resolve field_assignments.assignment_id through legacy_crosswalk(source_table='field_assignments', legacy_id=field_assignments.assignment_id) and write proposed_legacy_crosswalk.legacy_id; unresolved references create owned migration_exception.",
+    "target": "migration_exception.migration_exception_id",
+    "target_id_generation": "No canonical FK generated in WO-002; unresolved source reference is preserved and assigned migration_exception.migration_exception_id for owner triage.",
     "target_ids_and_crosswalks": "field_assignments.<stable-row-hash> joins legacy_crosswalk(source_table=field_assignments, legacy_id=field_assignments.<stable-row-hash>); referenced FK ids resolve through target_entity-specific crosswalk before insert",
     "target_rows_fields": [
       "legacy_crosswalk.legacy_id",
       "legacy_crosswalk.source_table",
-      "legacy_crosswalk.legacy_id",
       "legacy_crosswalk.target_entity",
-      "legacy_crosswalk.target_id"
+      "legacy_crosswalk.target_id",
+      "migration_exception.migration_exception_id",
+      "migration_exception.owner",
+      "migration_exception.source_field",
+      "migration_exception.source_key"
     ],
     "transform_group_id": "WO002-R06-identity-crosswalk-field_assignments",
     "validation_sql": "SELECT COUNT(*) AS checked_rows, COUNT(assignment_id) AS non_null_rows FROM field_assignments",
-    "value_preservation": "exact typed value copied; raw original archived when restricted/exception; source row key and field path retained"
+    "value_preservation": "exact source reference value preserved in governed archive and migration exception details; no silent FK coercion"
   },
   {
     "archive_object": "not-required; exact value preserved in typed target/crosswalk",
@@ -8535,7 +8633,9 @@
     "nullable": false,
     "observed_source_values": [],
     "reference_crosswalk_join": {
-      "final_target_fk_output": "proposed_legacy_crosswalk.legacy_id",
+      "final_output_rule": "resolve legacy source key through reviewed crosswalk, then write the canonical target FK; crosswalk legacy_id alone is not accepted as final output",
+      "final_target_fk_output": "operational_area.operational_area_id",
+      "legacy_crosswalk_output": "legacy_crosswalk.legacy_id",
       "legacy_lookup": "legacy_crosswalk(source_table='territories', legacy_id=field_assignments.territory_id)",
       "referenced_source_entity": "territories",
       "referenced_source_key": "territories.id",
@@ -8576,19 +8676,19 @@
     "value_preservation": "exact typed value copied; raw original archived when restricted/exception; source row key and field path retained"
   },
   {
-    "archive_object": "not-required; exact value preserved in typed target/crosswalk",
-    "archive_value_reference": "not applicable",
+    "archive_object": "source_payload_archive",
+    "archive_value_reference": "source_payload_archive.payload_uri#field_submissions.assignment_id",
     "authority": "SDA reviewed transformation registry; owner must approve RFI before WO-002B execution",
     "authority_prerequisite": "identity-crosswalk owner approval and source row count reconciliation",
     "classification": "government-internal",
     "compatibility_period": "legacy read compatibility until NLI-WO-002B+2; no public behavior change in WO-002",
     "controlled_value_map": {},
-    "controlled_value_translation": "not controlled; exact value preserved or archived",
+    "controlled_value_translation": "not controlled; unresolved reference becomes owned migration_exception until canonical target authority approves mapping",
     "current": "field_submissions.assignment_id",
     "current_pg_type": "text",
     "current_udt": "text",
     "default": null,
-    "disposition": "structured-transform",
+    "disposition": "formal-exception",
     "example_input_output": {
       "input": "123",
       "output": {
@@ -8597,15 +8697,18 @@
       }
     },
     "exception_handling": "unknown/unmapped values create migration_exception with owner, SLA, original archive reference and no public projection",
-    "exception_type_owner": "not applicable unless validation fails",
+    "exception_type_owner": "SDA migration-exception owner for unresolved legacy/operational reference mapping",
     "executable_no_loss_assertion": "SELECT CASE WHEN (SELECT COUNT(*) FROM field_submissions WHERE assignment_id IS NOT NULL) = (SELECT COUNT(*) FROM proposed_legacy_crosswalk WHERE legacy_id IS NOT NULL) + (SELECT COUNT(*) FROM source_payload_archive WHERE field_path = 'field_submissions.assignment_id') + (SELECT COUNT(*) FROM owned_migration_exception WHERE source_field = 'field_submissions.assignment_id') THEN true ELSE raise_exception('no-loss assertion failed for field_submissions.assignment_id') END AS ok",
     "loss_risk": "blocked by executable no-loss assertion; restricted values preserved in governed archive",
     "no_loss_proof": "Executable SQL no-loss check compares non-null source field_submissions.assignment_id to typed target rows, governed archive rows and owned migration exceptions.",
     "nullable": true,
     "observed_source_values": [],
     "reference_crosswalk_join": {
-      "final_target_fk_output": "proposed_legacy_crosswalk.legacy_id",
+      "final_output_rule": "unresolved legacy/operational reference does not produce a canonical FK in WO-002; preserve legacy value in crosswalk/archive and create an owned migration_exception until domain owner approves the target mapping",
+      "final_target_fk_output": "migration_exception.migration_exception_id",
+      "legacy_crosswalk_output": "legacy_crosswalk.legacy_id",
       "legacy_lookup": "legacy_crosswalk(source_table='field_submissions', legacy_id=field_submissions.assignment_id)",
+      "reference_resolution_status": "owned-exception-required-pending-canonical-target-authority",
       "referenced_source_entity": "field_submissions",
       "referenced_source_key": "field_submissions.assignment_id",
       "source_entity": "field_submissions",
@@ -8630,19 +8733,22 @@
       "target_table": "legacy_crosswalk"
     },
     "source_value_semantics": "preserve source identifier in legacy_crosswalk and join to canonical target id by table-specific migration unit",
-    "target": "legacy_crosswalk.legacy_id",
-    "target_id_generation": "Resolve field_submissions.assignment_id through legacy_crosswalk(source_table='field_submissions', legacy_id=field_submissions.assignment_id) and write proposed_legacy_crosswalk.legacy_id; unresolved references create owned migration_exception.",
+    "target": "migration_exception.migration_exception_id",
+    "target_id_generation": "No canonical FK generated in WO-002; unresolved source reference is preserved and assigned migration_exception.migration_exception_id for owner triage.",
     "target_ids_and_crosswalks": "field_submissions.id joins legacy_crosswalk(source_table=field_submissions, legacy_id=field_submissions.id); referenced FK ids resolve through target_entity-specific crosswalk before insert",
     "target_rows_fields": [
       "legacy_crosswalk.legacy_id",
       "legacy_crosswalk.source_table",
-      "legacy_crosswalk.legacy_id",
       "legacy_crosswalk.target_entity",
-      "legacy_crosswalk.target_id"
+      "legacy_crosswalk.target_id",
+      "migration_exception.migration_exception_id",
+      "migration_exception.owner",
+      "migration_exception.source_field",
+      "migration_exception.source_key"
     ],
     "transform_group_id": "WO002-R06-identity-crosswalk-field_submissions",
     "validation_sql": "SELECT COUNT(*) AS checked_rows, COUNT(assignment_id) AS non_null_rows FROM field_submissions",
-    "value_preservation": "exact typed value copied; raw original archived when restricted/exception; source row key and field path retained"
+    "value_preservation": "exact source reference value preserved in governed archive and migration exception details; no silent FK coercion"
   },
   {
     "archive_object": "not-required; exact value preserved in typed target/crosswalk",
@@ -8917,19 +9023,19 @@
     "value_preservation": "exact typed value copied; raw original archived when restricted/exception; source row key and field path retained"
   },
   {
-    "archive_object": "not-required; exact value preserved in typed target/crosswalk",
-    "archive_value_reference": "not applicable",
+    "archive_object": "source_payload_archive",
+    "archive_value_reference": "source_payload_archive.payload_uri#field_submissions.registry_entity_id",
     "authority": "SDA reviewed transformation registry; owner must approve RFI before WO-002B execution",
     "authority_prerequisite": "identity-crosswalk owner approval and source row count reconciliation",
     "classification": "government-internal",
     "compatibility_period": "legacy read compatibility until NLI-WO-002B+2; no public behavior change in WO-002",
     "controlled_value_map": {},
-    "controlled_value_translation": "not controlled; exact value preserved or archived",
+    "controlled_value_translation": "not controlled; unresolved reference becomes owned migration_exception until canonical target authority approves mapping",
     "current": "field_submissions.registry_entity_id",
     "current_pg_type": "text",
     "current_udt": "text",
     "default": null,
-    "disposition": "structured-transform",
+    "disposition": "formal-exception",
     "example_input_output": {
       "input": "123",
       "output": {
@@ -8938,15 +9044,18 @@
       }
     },
     "exception_handling": "unknown/unmapped values create migration_exception with owner, SLA, original archive reference and no public projection",
-    "exception_type_owner": "not applicable unless validation fails",
+    "exception_type_owner": "SDA migration-exception owner for unresolved legacy/operational reference mapping",
     "executable_no_loss_assertion": "SELECT CASE WHEN (SELECT COUNT(*) FROM field_submissions WHERE registry_entity_id IS NOT NULL) = (SELECT COUNT(*) FROM proposed_legacy_crosswalk WHERE legacy_id IS NOT NULL) + (SELECT COUNT(*) FROM source_payload_archive WHERE field_path = 'field_submissions.registry_entity_id') + (SELECT COUNT(*) FROM owned_migration_exception WHERE source_field = 'field_submissions.registry_entity_id') THEN true ELSE raise_exception('no-loss assertion failed for field_submissions.registry_entity_id') END AS ok",
     "loss_risk": "blocked by executable no-loss assertion; restricted values preserved in governed archive",
     "no_loss_proof": "Executable SQL no-loss check compares non-null source field_submissions.registry_entity_id to typed target rows, governed archive rows and owned migration exceptions.",
     "nullable": true,
     "observed_source_values": [],
     "reference_crosswalk_join": {
-      "final_target_fk_output": "proposed_legacy_crosswalk.legacy_id",
+      "final_output_rule": "unresolved legacy/operational reference does not produce a canonical FK in WO-002; preserve legacy value in crosswalk/archive and create an owned migration_exception until domain owner approves the target mapping",
+      "final_target_fk_output": "migration_exception.migration_exception_id",
+      "legacy_crosswalk_output": "legacy_crosswalk.legacy_id",
       "legacy_lookup": "legacy_crosswalk(source_table='field_submissions', legacy_id=field_submissions.registry_entity_id)",
+      "reference_resolution_status": "owned-exception-required-pending-canonical-target-authority",
       "referenced_source_entity": "field_submissions",
       "referenced_source_key": "field_submissions.registry_entity_id",
       "source_entity": "field_submissions",
@@ -8971,19 +9080,22 @@
       "target_table": "legacy_crosswalk"
     },
     "source_value_semantics": "preserve source identifier in legacy_crosswalk and join to canonical target id by table-specific migration unit",
-    "target": "legacy_crosswalk.legacy_id",
-    "target_id_generation": "Resolve field_submissions.registry_entity_id through legacy_crosswalk(source_table='field_submissions', legacy_id=field_submissions.registry_entity_id) and write proposed_legacy_crosswalk.legacy_id; unresolved references create owned migration_exception.",
+    "target": "migration_exception.migration_exception_id",
+    "target_id_generation": "No canonical FK generated in WO-002; unresolved source reference is preserved and assigned migration_exception.migration_exception_id for owner triage.",
     "target_ids_and_crosswalks": "field_submissions.id joins legacy_crosswalk(source_table=field_submissions, legacy_id=field_submissions.id); referenced FK ids resolve through target_entity-specific crosswalk before insert",
     "target_rows_fields": [
       "legacy_crosswalk.legacy_id",
       "legacy_crosswalk.source_table",
-      "legacy_crosswalk.legacy_id",
       "legacy_crosswalk.target_entity",
-      "legacy_crosswalk.target_id"
+      "legacy_crosswalk.target_id",
+      "migration_exception.migration_exception_id",
+      "migration_exception.owner",
+      "migration_exception.source_field",
+      "migration_exception.source_key"
     ],
     "transform_group_id": "WO002-R06-identity-crosswalk-field_submissions",
     "validation_sql": "SELECT COUNT(*) AS checked_rows, COUNT(registry_entity_id) AS non_null_rows FROM field_submissions",
-    "value_preservation": "exact typed value copied; raw original archived when restricted/exception; source row key and field path retained"
+    "value_preservation": "exact source reference value preserved in governed archive and migration exception details; no silent FK coercion"
   },
   {
     "archive_object": "source_payload_archive.payload_uri",
@@ -9277,7 +9389,9 @@
     "nullable": false,
     "observed_source_values": [],
     "reference_crosswalk_join": {
-      "final_target_fk_output": "proposed_legacy_crosswalk.legacy_id",
+      "final_output_rule": "resolve legacy source key through reviewed crosswalk, then write the canonical target FK; crosswalk legacy_id alone is not accepted as final output",
+      "final_target_fk_output": "operational_area.operational_area_id",
+      "legacy_crosswalk_output": "legacy_crosswalk.legacy_id",
       "legacy_lookup": "legacy_crosswalk(source_table='territories', legacy_id=field_submissions.territory_id)",
       "referenced_source_entity": "territories",
       "referenced_source_key": "territories.id",
@@ -9862,19 +9976,19 @@
     "value_preservation": "exact typed value copied; raw original archived when restricted/exception; source row key and field path retained"
   },
   {
-    "archive_object": "not-required; exact value preserved in typed target/crosswalk",
-    "archive_value_reference": "not applicable",
+    "archive_object": "source_payload_archive",
+    "archive_value_reference": "source_payload_archive.payload_uri#import_rows.committed_submission_id",
     "authority": "SDA reviewed transformation registry; owner must approve RFI before WO-002B execution",
     "authority_prerequisite": "identity-crosswalk owner approval and source row count reconciliation",
     "classification": "government-internal",
     "compatibility_period": "legacy read compatibility until NLI-WO-002B+2; no public behavior change in WO-002",
     "controlled_value_map": {},
-    "controlled_value_translation": "not controlled; exact value preserved or archived",
+    "controlled_value_translation": "not controlled; unresolved reference becomes owned migration_exception until canonical target authority approves mapping",
     "current": "import_rows.committed_submission_id",
     "current_pg_type": "text",
     "current_udt": "text",
     "default": null,
-    "disposition": "structured-transform",
+    "disposition": "formal-exception",
     "example_input_output": {
       "input": "123",
       "output": {
@@ -9883,15 +9997,18 @@
       }
     },
     "exception_handling": "unknown/unmapped values create migration_exception with owner, SLA, original archive reference and no public projection",
-    "exception_type_owner": "not applicable unless validation fails",
+    "exception_type_owner": "SDA migration-exception owner for unresolved legacy/operational reference mapping",
     "executable_no_loss_assertion": "SELECT CASE WHEN (SELECT COUNT(*) FROM import_rows WHERE committed_submission_id IS NOT NULL) = (SELECT COUNT(*) FROM proposed_legacy_crosswalk WHERE legacy_id IS NOT NULL) + (SELECT COUNT(*) FROM source_payload_archive WHERE field_path = 'import_rows.committed_submission_id') + (SELECT COUNT(*) FROM owned_migration_exception WHERE source_field = 'import_rows.committed_submission_id') THEN true ELSE raise_exception('no-loss assertion failed for import_rows.committed_submission_id') END AS ok",
     "loss_risk": "blocked by executable no-loss assertion; restricted values preserved in governed archive",
     "no_loss_proof": "Executable SQL no-loss check compares non-null source import_rows.committed_submission_id to typed target rows, governed archive rows and owned migration exceptions.",
     "nullable": true,
     "observed_source_values": [],
     "reference_crosswalk_join": {
-      "final_target_fk_output": "proposed_legacy_crosswalk.legacy_id",
+      "final_output_rule": "unresolved legacy/operational reference does not produce a canonical FK in WO-002; preserve legacy value in crosswalk/archive and create an owned migration_exception until domain owner approves the target mapping",
+      "final_target_fk_output": "migration_exception.migration_exception_id",
+      "legacy_crosswalk_output": "legacy_crosswalk.legacy_id",
       "legacy_lookup": "legacy_crosswalk(source_table='import_rows', legacy_id=import_rows.committed_submission_id)",
+      "reference_resolution_status": "owned-exception-required-pending-canonical-target-authority",
       "referenced_source_entity": "import_rows",
       "referenced_source_key": "import_rows.committed_submission_id",
       "source_entity": "import_rows",
@@ -9916,34 +10033,37 @@
       "target_table": "legacy_crosswalk"
     },
     "source_value_semantics": "preserve source identifier in legacy_crosswalk and join to canonical target id by table-specific migration unit",
-    "target": "legacy_crosswalk.legacy_id",
-    "target_id_generation": "Resolve import_rows.committed_submission_id through legacy_crosswalk(source_table='import_rows', legacy_id=import_rows.committed_submission_id) and write proposed_legacy_crosswalk.legacy_id; unresolved references create owned migration_exception.",
+    "target": "migration_exception.migration_exception_id",
+    "target_id_generation": "No canonical FK generated in WO-002; unresolved source reference is preserved and assigned migration_exception.migration_exception_id for owner triage.",
     "target_ids_and_crosswalks": "import_rows.<stable-row-hash> joins legacy_crosswalk(source_table=import_rows, legacy_id=import_rows.<stable-row-hash>); referenced FK ids resolve through target_entity-specific crosswalk before insert",
     "target_rows_fields": [
       "legacy_crosswalk.legacy_id",
       "legacy_crosswalk.source_table",
-      "legacy_crosswalk.legacy_id",
       "legacy_crosswalk.target_entity",
-      "legacy_crosswalk.target_id"
+      "legacy_crosswalk.target_id",
+      "migration_exception.migration_exception_id",
+      "migration_exception.owner",
+      "migration_exception.source_field",
+      "migration_exception.source_key"
     ],
     "transform_group_id": "WO002-R06-identity-crosswalk-import_rows",
     "validation_sql": "SELECT COUNT(*) AS checked_rows, COUNT(committed_submission_id) AS non_null_rows FROM import_rows",
-    "value_preservation": "exact typed value copied; raw original archived when restricted/exception; source row key and field path retained"
+    "value_preservation": "exact source reference value preserved in governed archive and migration exception details; no silent FK coercion"
   },
   {
-    "archive_object": "not-required; exact value preserved in typed target/crosswalk",
-    "archive_value_reference": "not applicable",
+    "archive_object": "source_payload_archive",
+    "archive_value_reference": "source_payload_archive.payload_uri#import_rows.job_id",
     "authority": "SDA reviewed transformation registry; owner must approve RFI before WO-002B execution",
     "authority_prerequisite": "identity-crosswalk owner approval and source row count reconciliation",
     "classification": "government-internal",
     "compatibility_period": "legacy read compatibility until NLI-WO-002B+2; no public behavior change in WO-002",
     "controlled_value_map": {},
-    "controlled_value_translation": "not controlled; exact value preserved or archived",
+    "controlled_value_translation": "not controlled; unresolved reference becomes owned migration_exception until canonical target authority approves mapping",
     "current": "import_rows.job_id",
     "current_pg_type": "text",
     "current_udt": "text",
     "default": null,
-    "disposition": "structured-transform",
+    "disposition": "formal-exception",
     "example_input_output": {
       "input": "123",
       "output": {
@@ -9952,15 +10072,18 @@
       }
     },
     "exception_handling": "unknown/unmapped values create migration_exception with owner, SLA, original archive reference and no public projection",
-    "exception_type_owner": "not applicable unless validation fails",
+    "exception_type_owner": "SDA migration-exception owner for unresolved legacy/operational reference mapping",
     "executable_no_loss_assertion": "SELECT CASE WHEN (SELECT COUNT(*) FROM import_rows WHERE job_id IS NOT NULL) = (SELECT COUNT(*) FROM proposed_legacy_crosswalk WHERE legacy_id IS NOT NULL) + (SELECT COUNT(*) FROM source_payload_archive WHERE field_path = 'import_rows.job_id') + (SELECT COUNT(*) FROM owned_migration_exception WHERE source_field = 'import_rows.job_id') THEN true ELSE raise_exception('no-loss assertion failed for import_rows.job_id') END AS ok",
     "loss_risk": "blocked by executable no-loss assertion; restricted values preserved in governed archive",
     "no_loss_proof": "Executable SQL no-loss check compares non-null source import_rows.job_id to typed target rows, governed archive rows and owned migration exceptions.",
     "nullable": false,
     "observed_source_values": [],
     "reference_crosswalk_join": {
-      "final_target_fk_output": "proposed_legacy_crosswalk.legacy_id",
+      "final_output_rule": "unresolved legacy/operational reference does not produce a canonical FK in WO-002; preserve legacy value in crosswalk/archive and create an owned migration_exception until domain owner approves the target mapping",
+      "final_target_fk_output": "migration_exception.migration_exception_id",
+      "legacy_crosswalk_output": "legacy_crosswalk.legacy_id",
       "legacy_lookup": "legacy_crosswalk(source_table='import_rows', legacy_id=import_rows.job_id)",
+      "reference_resolution_status": "owned-exception-required-pending-canonical-target-authority",
       "referenced_source_entity": "import_rows",
       "referenced_source_key": "import_rows.job_id",
       "source_entity": "import_rows",
@@ -9985,19 +10108,22 @@
       "target_table": "legacy_crosswalk"
     },
     "source_value_semantics": "preserve source identifier in legacy_crosswalk and join to canonical target id by table-specific migration unit",
-    "target": "legacy_crosswalk.legacy_id",
-    "target_id_generation": "Resolve import_rows.job_id through legacy_crosswalk(source_table='import_rows', legacy_id=import_rows.job_id) and write proposed_legacy_crosswalk.legacy_id; unresolved references create owned migration_exception.",
+    "target": "migration_exception.migration_exception_id",
+    "target_id_generation": "No canonical FK generated in WO-002; unresolved source reference is preserved and assigned migration_exception.migration_exception_id for owner triage.",
     "target_ids_and_crosswalks": "import_rows.<stable-row-hash> joins legacy_crosswalk(source_table=import_rows, legacy_id=import_rows.<stable-row-hash>); referenced FK ids resolve through target_entity-specific crosswalk before insert",
     "target_rows_fields": [
       "legacy_crosswalk.legacy_id",
       "legacy_crosswalk.source_table",
-      "legacy_crosswalk.legacy_id",
       "legacy_crosswalk.target_entity",
-      "legacy_crosswalk.target_id"
+      "legacy_crosswalk.target_id",
+      "migration_exception.migration_exception_id",
+      "migration_exception.owner",
+      "migration_exception.source_field",
+      "migration_exception.source_key"
     ],
     "transform_group_id": "WO002-R06-identity-crosswalk-import_rows",
     "validation_sql": "SELECT COUNT(*) AS checked_rows, COUNT(job_id) AS non_null_rows FROM import_rows",
-    "value_preservation": "exact typed value copied; raw original archived when restricted/exception; source row key and field path retained"
+    "value_preservation": "exact source reference value preserved in governed archive and migration exception details; no silent FK coercion"
   },
   {
     "archive_object": "source_payload_archive.payload_uri",
@@ -10184,7 +10310,9 @@
     "nullable": false,
     "observed_source_values": [],
     "reference_crosswalk_join": {
-      "final_target_fk_output": "proposed_legacy_crosswalk.legacy_id",
+      "final_output_rule": "resolve legacy source key through reviewed crosswalk, then write the canonical target FK; crosswalk legacy_id alone is not accepted as final output",
+      "final_target_fk_output": "operational_area.operational_area_id",
+      "legacy_crosswalk_output": "legacy_crosswalk.legacy_id",
       "legacy_lookup": "legacy_crosswalk(source_table='territories', legacy_id=import_rows.territory_id)",
       "referenced_source_entity": "territories",
       "referenced_source_key": "territories.id",
@@ -10522,7 +10650,9 @@
     "nullable": false,
     "observed_source_values": [],
     "reference_crosswalk_join": {
-      "final_target_fk_output": "proposed_legacy_crosswalk.legacy_id",
+      "final_output_rule": "resolve legacy source key through reviewed crosswalk, then write the canonical target FK; crosswalk legacy_id alone is not accepted as final output",
+      "final_target_fk_output": "location_record.location_record_id",
+      "legacy_crosswalk_output": "legacy_crosswalk.legacy_id",
       "legacy_lookup": "legacy_crosswalk(source_table='addresses', legacy_id=publication_pack_addresses.address_id)",
       "referenced_source_entity": "addresses",
       "referenced_source_key": "addresses.id",
@@ -10563,19 +10693,19 @@
     "value_preservation": "exact typed value copied; raw original archived when restricted/exception; source row key and field path retained"
   },
   {
-    "archive_object": "not-required; exact value preserved in typed target/crosswalk",
-    "archive_value_reference": "not applicable",
+    "archive_object": "source_payload_archive",
+    "archive_value_reference": "source_payload_archive.payload_uri#publication_pack_addresses.publication_pack_id",
     "authority": "SDA reviewed transformation registry; owner must approve RFI before WO-002B execution",
     "authority_prerequisite": "identity-crosswalk owner approval and source row count reconciliation",
     "classification": "government-internal",
     "compatibility_period": "legacy read compatibility until NLI-WO-002B+2; no public behavior change in WO-002",
     "controlled_value_map": {},
-    "controlled_value_translation": "not controlled; exact value preserved or archived",
+    "controlled_value_translation": "not controlled; unresolved reference becomes owned migration_exception until canonical target authority approves mapping",
     "current": "publication_pack_addresses.publication_pack_id",
     "current_pg_type": "text",
     "current_udt": "text",
     "default": null,
-    "disposition": "structured-transform",
+    "disposition": "formal-exception",
     "example_input_output": {
       "input": "123",
       "output": {
@@ -10584,15 +10714,18 @@
       }
     },
     "exception_handling": "unknown/unmapped values create migration_exception with owner, SLA, original archive reference and no public projection",
-    "exception_type_owner": "not applicable unless validation fails",
+    "exception_type_owner": "SDA migration-exception owner for unresolved legacy/operational reference mapping",
     "executable_no_loss_assertion": "SELECT CASE WHEN (SELECT COUNT(*) FROM publication_pack_addresses WHERE publication_pack_id IS NOT NULL) = (SELECT COUNT(*) FROM proposed_legacy_crosswalk WHERE legacy_id IS NOT NULL) + (SELECT COUNT(*) FROM source_payload_archive WHERE field_path = 'publication_pack_addresses.publication_pack_id') + (SELECT COUNT(*) FROM owned_migration_exception WHERE source_field = 'publication_pack_addresses.publication_pack_id') THEN true ELSE raise_exception('no-loss assertion failed for publication_pack_addresses.publication_pack_id') END AS ok",
     "loss_risk": "blocked by executable no-loss assertion; restricted values preserved in governed archive",
     "no_loss_proof": "Executable SQL no-loss check compares non-null source publication_pack_addresses.publication_pack_id to typed target rows, governed archive rows and owned migration exceptions.",
     "nullable": false,
     "observed_source_values": [],
     "reference_crosswalk_join": {
-      "final_target_fk_output": "proposed_legacy_crosswalk.legacy_id",
+      "final_output_rule": "unresolved legacy/operational reference does not produce a canonical FK in WO-002; preserve legacy value in crosswalk/archive and create an owned migration_exception until domain owner approves the target mapping",
+      "final_target_fk_output": "migration_exception.migration_exception_id",
+      "legacy_crosswalk_output": "legacy_crosswalk.legacy_id",
       "legacy_lookup": "legacy_crosswalk(source_table='publication_pack_addresses', legacy_id=publication_pack_addresses.publication_pack_id)",
+      "reference_resolution_status": "owned-exception-required-pending-canonical-target-authority",
       "referenced_source_entity": "publication_pack_addresses",
       "referenced_source_key": "publication_pack_addresses.publication_pack_id",
       "source_entity": "publication_pack_addresses",
@@ -10617,19 +10750,22 @@
       "target_table": "legacy_crosswalk"
     },
     "source_value_semantics": "preserve source identifier in legacy_crosswalk and join to canonical target id by table-specific migration unit",
-    "target": "legacy_crosswalk.legacy_id",
-    "target_id_generation": "Resolve publication_pack_addresses.publication_pack_id through legacy_crosswalk(source_table='publication_pack_addresses', legacy_id=publication_pack_addresses.publication_pack_id) and write proposed_legacy_crosswalk.legacy_id; unresolved references create owned migration_exception.",
+    "target": "migration_exception.migration_exception_id",
+    "target_id_generation": "No canonical FK generated in WO-002; unresolved source reference is preserved and assigned migration_exception.migration_exception_id for owner triage.",
     "target_ids_and_crosswalks": "publication_pack_addresses.address_id joins legacy_crosswalk(source_table=publication_pack_addresses, legacy_id=publication_pack_addresses.address_id); referenced FK ids resolve through target_entity-specific crosswalk before insert",
     "target_rows_fields": [
       "legacy_crosswalk.legacy_id",
       "legacy_crosswalk.source_table",
-      "legacy_crosswalk.legacy_id",
       "legacy_crosswalk.target_entity",
-      "legacy_crosswalk.target_id"
+      "legacy_crosswalk.target_id",
+      "migration_exception.migration_exception_id",
+      "migration_exception.owner",
+      "migration_exception.source_field",
+      "migration_exception.source_key"
     ],
     "transform_group_id": "WO002-R06-identity-crosswalk-publication_pack_addresses",
     "validation_sql": "SELECT COUNT(*) AS checked_rows, COUNT(publication_pack_id) AS non_null_rows FROM publication_pack_addresses",
-    "value_preservation": "exact typed value copied; raw original archived when restricted/exception; source row key and field path retained"
+    "value_preservation": "exact source reference value preserved in governed archive and migration exception details; no silent FK coercion"
   },
   {
     "archive_object": "source_payload_archive.payload_uri",
@@ -11228,19 +11364,19 @@
     "value_preservation": "exact typed value copied; raw original archived when restricted/exception; source row key and field path retained"
   },
   {
-    "archive_object": "not-required; exact value preserved in typed target/crosswalk",
-    "archive_value_reference": "not applicable",
+    "archive_object": "source_payload_archive",
+    "archive_value_reference": "source_payload_archive.payload_uri#reference_data_load_history.package_id",
     "authority": "SDA reviewed transformation registry; owner must approve RFI before WO-002B execution",
     "authority_prerequisite": "identity-crosswalk owner approval and source row count reconciliation",
     "classification": "government-internal",
     "compatibility_period": "legacy read compatibility until NLI-WO-002B+2; no public behavior change in WO-002",
     "controlled_value_map": {},
-    "controlled_value_translation": "not controlled; exact value preserved or archived",
+    "controlled_value_translation": "not controlled; unresolved reference becomes owned migration_exception until canonical target authority approves mapping",
     "current": "reference_data_load_history.package_id",
     "current_pg_type": "text",
     "current_udt": "text",
     "default": null,
-    "disposition": "structured-transform",
+    "disposition": "formal-exception",
     "example_input_output": {
       "input": "123",
       "output": {
@@ -11249,15 +11385,18 @@
       }
     },
     "exception_handling": "unknown/unmapped values create migration_exception with owner, SLA, original archive reference and no public projection",
-    "exception_type_owner": "not applicable unless validation fails",
+    "exception_type_owner": "SDA migration-exception owner for unresolved legacy/operational reference mapping",
     "executable_no_loss_assertion": "SELECT CASE WHEN (SELECT COUNT(*) FROM reference_data_load_history WHERE package_id IS NOT NULL) = (SELECT COUNT(*) FROM proposed_legacy_crosswalk WHERE legacy_id IS NOT NULL) + (SELECT COUNT(*) FROM source_payload_archive WHERE field_path = 'reference_data_load_history.package_id') + (SELECT COUNT(*) FROM owned_migration_exception WHERE source_field = 'reference_data_load_history.package_id') THEN true ELSE raise_exception('no-loss assertion failed for reference_data_load_history.package_id') END AS ok",
     "loss_risk": "blocked by executable no-loss assertion; restricted values preserved in governed archive",
     "no_loss_proof": "Executable SQL no-loss check compares non-null source reference_data_load_history.package_id to typed target rows, governed archive rows and owned migration exceptions.",
     "nullable": false,
     "observed_source_values": [],
     "reference_crosswalk_join": {
-      "final_target_fk_output": "proposed_legacy_crosswalk.legacy_id",
+      "final_output_rule": "unresolved legacy/operational reference does not produce a canonical FK in WO-002; preserve legacy value in crosswalk/archive and create an owned migration_exception until domain owner approves the target mapping",
+      "final_target_fk_output": "migration_exception.migration_exception_id",
+      "legacy_crosswalk_output": "legacy_crosswalk.legacy_id",
       "legacy_lookup": "legacy_crosswalk(source_table='reference_data_load_history', legacy_id=reference_data_load_history.package_id)",
+      "reference_resolution_status": "owned-exception-required-pending-canonical-target-authority",
       "referenced_source_entity": "reference_data_load_history",
       "referenced_source_key": "reference_data_load_history.package_id",
       "source_entity": "reference_data_load_history",
@@ -11282,19 +11421,22 @@
       "target_table": "legacy_crosswalk"
     },
     "source_value_semantics": "preserve source identifier in legacy_crosswalk and join to canonical target id by table-specific migration unit",
-    "target": "legacy_crosswalk.legacy_id",
-    "target_id_generation": "Resolve reference_data_load_history.package_id through legacy_crosswalk(source_table='reference_data_load_history', legacy_id=reference_data_load_history.package_id) and write proposed_legacy_crosswalk.legacy_id; unresolved references create owned migration_exception.",
+    "target": "migration_exception.migration_exception_id",
+    "target_id_generation": "No canonical FK generated in WO-002; unresolved source reference is preserved and assigned migration_exception.migration_exception_id for owner triage.",
     "target_ids_and_crosswalks": "reference_data_load_history.id joins legacy_crosswalk(source_table=reference_data_load_history, legacy_id=reference_data_load_history.id); referenced FK ids resolve through target_entity-specific crosswalk before insert",
     "target_rows_fields": [
       "legacy_crosswalk.legacy_id",
       "legacy_crosswalk.source_table",
-      "legacy_crosswalk.legacy_id",
       "legacy_crosswalk.target_entity",
-      "legacy_crosswalk.target_id"
+      "legacy_crosswalk.target_id",
+      "migration_exception.migration_exception_id",
+      "migration_exception.owner",
+      "migration_exception.source_field",
+      "migration_exception.source_key"
     ],
     "transform_group_id": "WO002-R06-identity-crosswalk-reference_data_load_history",
     "validation_sql": "SELECT COUNT(*) AS checked_rows, COUNT(package_id) AS non_null_rows FROM reference_data_load_history",
-    "value_preservation": "exact typed value copied; raw original archived when restricted/exception; source row key and field path retained"
+    "value_preservation": "exact source reference value preserved in governed archive and migration exception details; no silent FK coercion"
   },
   {
     "archive_object": "source_payload_archive.payload_uri",
@@ -11612,19 +11754,19 @@
     "value_preservation": "exact typed value copied; raw original archived when restricted/exception; source row key and field path retained"
   },
   {
-    "archive_object": "not-required; exact value preserved in typed target/crosswalk",
-    "archive_value_reference": "not applicable",
+    "archive_object": "source_payload_archive",
+    "archive_value_reference": "source_payload_archive.payload_uri#reference_data_loads.package_id",
     "authority": "SDA reviewed transformation registry; owner must approve RFI before WO-002B execution",
     "authority_prerequisite": "identity-crosswalk owner approval and source row count reconciliation",
     "classification": "government-internal",
     "compatibility_period": "legacy read compatibility until NLI-WO-002B+2; no public behavior change in WO-002",
     "controlled_value_map": {},
-    "controlled_value_translation": "not controlled; exact value preserved or archived",
+    "controlled_value_translation": "not controlled; unresolved reference becomes owned migration_exception until canonical target authority approves mapping",
     "current": "reference_data_loads.package_id",
     "current_pg_type": "text",
     "current_udt": "text",
     "default": null,
-    "disposition": "structured-transform",
+    "disposition": "formal-exception",
     "example_input_output": {
       "input": "123",
       "output": {
@@ -11633,15 +11775,18 @@
       }
     },
     "exception_handling": "unknown/unmapped values create migration_exception with owner, SLA, original archive reference and no public projection",
-    "exception_type_owner": "not applicable unless validation fails",
+    "exception_type_owner": "SDA migration-exception owner for unresolved legacy/operational reference mapping",
     "executable_no_loss_assertion": "SELECT CASE WHEN (SELECT COUNT(*) FROM reference_data_loads WHERE package_id IS NOT NULL) = (SELECT COUNT(*) FROM proposed_legacy_crosswalk WHERE legacy_id IS NOT NULL) + (SELECT COUNT(*) FROM source_payload_archive WHERE field_path = 'reference_data_loads.package_id') + (SELECT COUNT(*) FROM owned_migration_exception WHERE source_field = 'reference_data_loads.package_id') THEN true ELSE raise_exception('no-loss assertion failed for reference_data_loads.package_id') END AS ok",
     "loss_risk": "blocked by executable no-loss assertion; restricted values preserved in governed archive",
     "no_loss_proof": "Executable SQL no-loss check compares non-null source reference_data_loads.package_id to typed target rows, governed archive rows and owned migration exceptions.",
     "nullable": false,
     "observed_source_values": [],
     "reference_crosswalk_join": {
-      "final_target_fk_output": "proposed_legacy_crosswalk.legacy_id",
+      "final_output_rule": "unresolved legacy/operational reference does not produce a canonical FK in WO-002; preserve legacy value in crosswalk/archive and create an owned migration_exception until domain owner approves the target mapping",
+      "final_target_fk_output": "migration_exception.migration_exception_id",
+      "legacy_crosswalk_output": "legacy_crosswalk.legacy_id",
       "legacy_lookup": "legacy_crosswalk(source_table='reference_data_loads', legacy_id=reference_data_loads.package_id)",
+      "reference_resolution_status": "owned-exception-required-pending-canonical-target-authority",
       "referenced_source_entity": "reference_data_loads",
       "referenced_source_key": "reference_data_loads.package_id",
       "source_entity": "reference_data_loads",
@@ -11666,19 +11811,22 @@
       "target_table": "legacy_crosswalk"
     },
     "source_value_semantics": "preserve source identifier in legacy_crosswalk and join to canonical target id by table-specific migration unit",
-    "target": "legacy_crosswalk.legacy_id",
-    "target_id_generation": "Resolve reference_data_loads.package_id through legacy_crosswalk(source_table='reference_data_loads', legacy_id=reference_data_loads.package_id) and write proposed_legacy_crosswalk.legacy_id; unresolved references create owned migration_exception.",
+    "target": "migration_exception.migration_exception_id",
+    "target_id_generation": "No canonical FK generated in WO-002; unresolved source reference is preserved and assigned migration_exception.migration_exception_id for owner triage.",
     "target_ids_and_crosswalks": "reference_data_loads.<stable-row-hash> joins legacy_crosswalk(source_table=reference_data_loads, legacy_id=reference_data_loads.<stable-row-hash>); referenced FK ids resolve through target_entity-specific crosswalk before insert",
     "target_rows_fields": [
       "legacy_crosswalk.legacy_id",
       "legacy_crosswalk.source_table",
-      "legacy_crosswalk.legacy_id",
       "legacy_crosswalk.target_entity",
-      "legacy_crosswalk.target_id"
+      "legacy_crosswalk.target_id",
+      "migration_exception.migration_exception_id",
+      "migration_exception.owner",
+      "migration_exception.source_field",
+      "migration_exception.source_key"
     ],
     "transform_group_id": "WO002-R06-identity-crosswalk-reference_data_loads",
     "validation_sql": "SELECT COUNT(*) AS checked_rows, COUNT(package_id) AS non_null_rows FROM reference_data_loads",
-    "value_preservation": "exact typed value copied; raw original archived when restricted/exception; source row key and field path retained"
+    "value_preservation": "exact source reference value preserved in governed archive and migration exception details; no silent FK coercion"
   },
   {
     "archive_object": "source_payload_archive.payload_uri",
@@ -12189,7 +12337,9 @@
     "nullable": false,
     "observed_source_values": [],
     "reference_crosswalk_join": {
-      "final_target_fk_output": "proposed_legacy_crosswalk.legacy_id",
+      "final_output_rule": "resolve legacy source key through reviewed crosswalk, then write the canonical target FK; crosswalk legacy_id alone is not accepted as final output",
+      "final_target_fk_output": "operational_area.operational_area_id",
+      "legacy_crosswalk_output": "legacy_crosswalk.legacy_id",
       "legacy_lookup": "legacy_crosswalk(source_table='territories', legacy_id=roads.territory_id)",
       "referenced_source_entity": "territories",
       "referenced_source_key": "territories.id",
@@ -12573,7 +12723,9 @@
     "nullable": true,
     "observed_source_values": [],
     "reference_crosswalk_join": {
-      "final_target_fk_output": "proposed_legacy_crosswalk.legacy_id",
+      "final_output_rule": "resolve legacy source key through reviewed crosswalk, then write the canonical target FK; crosswalk legacy_id alone is not accepted as final output",
+      "final_target_fk_output": "administrative_unit.administrative_unit_id",
+      "legacy_crosswalk_output": "legacy_crosswalk.legacy_id",
       "legacy_lookup": "legacy_crosswalk(source_table='admin_units', legacy_id=territories.admin_unit_id)",
       "referenced_source_entity": "admin_units",
       "referenced_source_key": "admin_units.id",
@@ -12859,7 +13011,9 @@
     "nullable": false,
     "observed_source_values": [],
     "reference_crosswalk_join": {
-      "final_target_fk_output": "proposed_source_payload_archive.payload_uri",
+      "final_output_rule": "resolve legacy source key through reviewed crosswalk, then write the canonical target FK; crosswalk legacy_id alone is not accepted as final output",
+      "final_target_fk_output": "administrative_unit.administrative_unit_id",
+      "legacy_crosswalk_output": "legacy_crosswalk.legacy_id",
       "legacy_lookup": "legacy_crosswalk(source_table='provinces', legacy_id=territories.province_code)",
       "referenced_source_entity": "provinces",
       "referenced_source_key": "provinces.code",
