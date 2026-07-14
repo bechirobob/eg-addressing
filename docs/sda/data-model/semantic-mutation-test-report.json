@@ -1,50 +1,99 @@
 {
   "results": [
     {
-      "evidence": "legacy crosswalk final FK regression detected",
-      "mutation": "incorrect-transformation-final-fk-output",
+      "execution_mode": "temp-workspace-actual-design-checker",
+      "exit_code": 1,
+      "expected_reason": "named transform assertion must come from disposable DB execution",
+      "mutation": "wrong-transformed-output",
+      "observed_excerpt": "# Design Consistency Report\n\nGenerated checks: 6427\nErrors: 15\nWarnings: 0\n\n## Errors\n- F02-no-loss-count-address-corrections-address-id: named transform assertion must come from disposable DB execution with source/target hashes and output IDs\n- F12-semantic-mutation-suite-passed: semantic mutation suite must catch all required defect classes\n- F12-mutation-incorrect-transformation-final-fk-output: semantic mutation report missing incorrect-transformation-final-fk-output\n- F12-mutation-missing-required-semantic-trigger: semantic mutation report missing missing-required-semantic-trigger\n- F12-mutation-wrong-route-policy-source: semantic mutation report missing wrong-route-policy-source\n- F12-mutation-credential-projection-business-archive: semantic mutation report missing credential-projection-business-archive\n- F12-mutation-invalid-multi-unit-scenario: semantic mutation report missing invalid-multi-unit-scenario\n- F12-mutation-temporal-chain-reciprocity-break: semantic mutation report missing temporal-chain-reciprocity-break\n- F12-mutation-unexpected-negative-operation-success: semantic mutation report missing unexpected-negative-operation-success\n- F12-mutation-geometry-permission-binding-removed: semantic mutation report missing geometry-permission-binding-removed\n- missing ADR-005\n- missing ADR-006\n- missing ADR-007\n- missing ADR-008\n- missing ADR-009\n",
       "status": "passed"
     },
     {
-      "evidence": "required trigger removal detected",
-      "mutation": "missing-required-semantic-trigger",
+      "execution_mode": "temp-workspace-actual-design-checker",
+      "exit_code": 1,
+      "expected_reason": "archive-created assertion must include governed archive row evidence",
+      "mutation": "missing-archive-or-final-fk",
+      "observed_excerpt": "# Design Consistency Report\n\nGenerated checks: 6427\nErrors: 16\nWarnings: 0\n\n## Errors\n- F02-reference-final-fk-address-corrections-address-id: reference-final-fk assertion must include resolved final canonical FK evidence\n- F02-archive-created-address-corrections-note: archive-created assertion must include governed archive row evidence\n- F12-semantic-mutation-suite-passed: semantic mutation suite must catch all required defect classes\n- F12-mutation-incorrect-transformation-final-fk-output: semantic mutation report missing incorrect-transformation-final-fk-output\n- F12-mutation-missing-required-semantic-trigger: semantic mutation report missing missing-required-semantic-trigger\n- F12-mutation-wrong-route-policy-source: semantic mutation report missing wrong-route-policy-source\n- F12-mutation-credential-projection-business-archive: semantic mutation report missing credential-projection-business-archive\n- F12-mutation-invalid-multi-unit-scenario: semantic mutation report missing invalid-multi-unit-scenario\n- F12-mutation-temporal-chain-reciprocity-break: semantic mutation report missing temporal-chain-reciprocity-break\n- F12-mutation-unexpected-negative-operation-success: semantic mutation report missing unexpected-negative-operation-success\n- F12-mutation-geometry-permission-binding-removed: semantic mutation report missing geometry-permission-binding-removed\n- missing ADR-005\n- missing ADR-006\n- missing ADR-007\n- missing ADR-008\n- missing ADR-009\n",
       "status": "passed"
     },
     {
-      "evidence": "non-reviewed route policy source detected",
-      "mutation": "wrong-route-policy-source",
+      "execution_mode": "temp-workspace-actual-design-checker",
+      "exit_code": 1,
+      "expected_reason": "missing classification",
+      "mutation": "wrong-field-classification",
+      "observed_excerpt": "# Design Consistency Report\n\nGenerated checks: 6427\nErrors: 15\nWarnings: 0\n\n## Errors\n- OpenAPI contract address_corrections_api_v1_address_corrections_get field status missing classification\n- F12-semantic-mutation-suite-passed: semantic mutation suite must catch all required defect classes\n- F12-mutation-incorrect-transformation-final-fk-output: semantic mutation report missing incorrect-transformation-final-fk-output\n- F12-mutation-missing-required-semantic-trigger: semantic mutation report missing missing-required-semantic-trigger\n- F12-mutation-wrong-route-policy-source: semantic mutation report missing wrong-route-policy-source\n- F12-mutation-credential-projection-business-archive: semantic mutation report missing credential-projection-business-archive\n- F12-mutation-invalid-multi-unit-scenario: semantic mutation report missing invalid-multi-unit-scenario\n- F12-mutation-temporal-chain-reciprocity-break: semantic mutation report missing temporal-chain-reciprocity-break\n- F12-mutation-unexpected-negative-operation-success: semantic mutation report missing unexpected-negative-operation-success\n- F12-mutation-geometry-permission-binding-removed: semantic mutation report missing geometry-permission-binding-removed\n- missing ADR-005\n- missing ADR-006\n- missing ADR-007\n- missing ADR-008\n- missing ADR-009\n",
       "status": "passed"
     },
     {
-      "evidence": "authorization business-data migration detected",
-      "mutation": "credential-projection-business-archive",
+      "execution_mode": "temp-workspace-actual-design-checker",
+      "exit_code": 1,
+      "expected_reason": "target schema actual trigger catalog missing required semantic triggers",
+      "mutation": "removed-cardinality-constraint",
+      "observed_excerpt": "# Design Consistency Report\n\nGenerated checks: 6427\nErrors: 15\nWarnings: 0\n\n## Errors\n- target schema actual trigger catalog missing required semantic triggers: ['required_object_roles_trg']\n- F12-semantic-mutation-suite-passed: semantic mutation suite must catch all required defect classes\n- F12-mutation-incorrect-transformation-final-fk-output: semantic mutation report missing incorrect-transformation-final-fk-output\n- F12-mutation-missing-required-semantic-trigger: semantic mutation report missing missing-required-semantic-trigger\n- F12-mutation-wrong-route-policy-source: semantic mutation report missing wrong-route-policy-source\n- F12-mutation-credential-projection-business-archive: semantic mutation report missing credential-projection-business-archive\n- F12-mutation-invalid-multi-unit-scenario: semantic mutation report missing invalid-multi-unit-scenario\n- F12-mutation-temporal-chain-reciprocity-break: semantic mutation report missing temporal-chain-reciprocity-break\n- F12-mutation-unexpected-negative-operation-success: semantic mutation report missing unexpected-negative-operation-success\n- F12-mutation-geometry-permission-binding-removed: semantic mutation report missing geometry-permission-binding-removed\n- missing ADR-005\n- missing ADR-006\n- missing ADR-007\n- missing ADR-008\n- missing ADR-009\n",
       "status": "passed"
     },
     {
-      "evidence": "missing second canonical unit detected",
-      "mutation": "invalid-multi-unit-scenario",
+      "execution_mode": "temp-workspace-actual-design-checker",
+      "exit_code": 1,
+      "expected_reason": "invalid-temporal-overlap was not produced by real SQL/policy execution",
+      "mutation": "temporal-cycle-or-overlap",
+      "observed_excerpt": "# Design Consistency Report\n\nGenerated checks: 6427\nErrors: 15\nWarnings: 0\n\n## Errors\n- negative fixture invalid-temporal-overlap was not produced by real SQL/policy execution: {'error_class': 'ExclusionViolation', 'expected_message': 'conflicting key value violates exclusion constraint', 'status': 'passed-invalidly'}\n- F12-semantic-mutation-suite-passed: semantic mutation suite must catch all required defect classes\n- F12-mutation-incorrect-transformation-final-fk-output: semantic mutation report missing incorrect-transformation-final-fk-output\n- F12-mutation-missing-required-semantic-trigger: semantic mutation report missing missing-required-semantic-trigger\n- F12-mutation-wrong-route-policy-source: semantic mutation report missing wrong-route-policy-source\n- F12-mutation-credential-projection-business-archive: semantic mutation report missing credential-projection-business-archive\n- F12-mutation-invalid-multi-unit-scenario: semantic mutation report missing invalid-multi-unit-scenario\n- F12-mutation-temporal-chain-reciprocity-break: semantic mutation report missing temporal-chain-reciprocity-break\n- F12-mutation-unexpected-negative-operation-success: semantic mutation report missing unexpected-negative-operation-success\n- F12-mutation-geometry-permission-binding-removed: semantic mutation report missing geometry-permission-binding-removed\n- missing ADR-005\n- missing ADR-006\n- missing ADR-007\n- missing ADR-008\n- missing ADR-009\n",
       "status": "passed"
     },
     {
-      "evidence": "missing reciprocal temporal chain detected",
-      "mutation": "temporal-chain-reciprocity-break",
+      "execution_mode": "temp-workspace-actual-design-checker",
+      "exit_code": 1,
+      "expected_reason": "geometry promotion trigger does not bind actor permission",
+      "mutation": "weakened-geometry-authority",
+      "observed_excerpt": "# Design Consistency Report\n\nGenerated checks: 6427\nErrors: 15\nWarnings: 0\n\n## Errors\n- geometry promotion trigger does not bind actor permission to geometry_role_matrix promotion_permission\n- F12-semantic-mutation-suite-passed: semantic mutation suite must catch all required defect classes\n- F12-mutation-incorrect-transformation-final-fk-output: semantic mutation report missing incorrect-transformation-final-fk-output\n- F12-mutation-missing-required-semantic-trigger: semantic mutation report missing missing-required-semantic-trigger\n- F12-mutation-wrong-route-policy-source: semantic mutation report missing wrong-route-policy-source\n- F12-mutation-credential-projection-business-archive: semantic mutation report missing credential-projection-business-archive\n- F12-mutation-invalid-multi-unit-scenario: semantic mutation report missing invalid-multi-unit-scenario\n- F12-mutation-temporal-chain-reciprocity-break: semantic mutation report missing temporal-chain-reciprocity-break\n- F12-mutation-unexpected-negative-operation-success: semantic mutation report missing unexpected-negative-operation-success\n- F12-mutation-geometry-permission-binding-removed: semantic mutation report missing geometry-permission-binding-removed\n- missing ADR-005\n- missing ADR-006\n- missing ADR-007\n- missing ADR-008\n- missing ADR-009\n",
       "status": "passed"
     },
     {
-      "evidence": "negative harness regression absence detected",
-      "mutation": "unexpected-negative-operation-success",
+      "execution_mode": "temp-workspace-actual-design-checker",
+      "exit_code": 1,
+      "expected_reason": "every authored lifecycle transition",
+      "mutation": "missing-lifecycle-transition",
+      "observed_excerpt": "# Design Consistency Report\n\nGenerated checks: 6426\nErrors: 15\nWarnings: 0\n\n## Errors\n- F07-lifecycle-positive-graph-executed: every authored lifecycle transition must be loaded into lifecycle_transition_policy and pass validate_lifecycle_transition\n- F12-semantic-mutation-suite-passed: semantic mutation suite must catch all required defect classes\n- F12-mutation-incorrect-transformation-final-fk-output: semantic mutation report missing incorrect-transformation-final-fk-output\n- F12-mutation-missing-required-semantic-trigger: semantic mutation report missing missing-required-semantic-trigger\n- F12-mutation-wrong-route-policy-source: semantic mutation report missing wrong-route-policy-source\n- F12-mutation-credential-projection-business-archive: semantic mutation report missing credential-projection-business-archive\n- F12-mutation-invalid-multi-unit-scenario: semantic mutation report missing invalid-multi-unit-scenario\n- F12-mutation-temporal-chain-reciprocity-break: semantic mutation report missing temporal-chain-reciprocity-break\n- F12-mutation-unexpected-negative-operation-success: semantic mutation report missing unexpected-negative-operation-success\n- F12-mutation-geometry-permission-binding-removed: semantic mutation report missing geometry-permission-binding-removed\n- missing ADR-005\n- missing ADR-006\n- missing ADR-007\n- missing ADR-008\n- missing ADR-009\n",
       "status": "passed"
     },
     {
-      "evidence": "geometry permission binding removal detected",
-      "mutation": "geometry-permission-binding-removed",
+      "execution_mode": "temp-workspace-actual-design-checker",
+      "exit_code": 1,
+      "expected_reason": "route policy must be independently reviewed",
+      "mutation": "wrong-api-policy",
+      "observed_excerpt": "# Design Consistency Report\n\nGenerated checks: 6427\nErrors: 16\nWarnings: 0\n\n## Errors\n- openapi-expected-route-policies must exactly mirror independently reviewed route policy registry\n- F08-reviewed-route-policy-DELETE--api-v1-addresses-{address_id}: route policy must be independently reviewed and not claim observed AST as expected authority\n- F12-semantic-mutation-suite-passed: semantic mutation suite must catch all required defect classes\n- F12-mutation-incorrect-transformation-final-fk-output: semantic mutation report missing incorrect-transformation-final-fk-output\n- F12-mutation-missing-required-semantic-trigger: semantic mutation report missing missing-required-semantic-trigger\n- F12-mutation-wrong-route-policy-source: semantic mutation report missing wrong-route-policy-source\n- F12-mutation-credential-projection-business-archive: semantic mutation report missing credential-projection-business-archive\n- F12-mutation-invalid-multi-unit-scenario: semantic mutation report missing invalid-multi-unit-scenario\n- F12-mutation-temporal-chain-reciprocity-break: semantic mutation report missing temporal-chain-reciprocity-break\n- F12-mutation-unexpected-negative-operation-success: semantic mutation report missing unexpected-negative-operation-success\n- F12-mutation-geometry-permission-binding-removed: semantic mutation report missing geometry-permission-binding-removed\n- missing ADR-005\n- missing ADR-006\n- missing ADR-007\n- missing ADR-008\n- missing ADR-009\n",
+      "status": "passed"
+    },
+    {
+      "execution_mode": "temp-workspace-actual-design-checker",
+      "exit_code": 1,
+      "expected_reason": "every successful response must have exact reviewed response fields",
+      "mutation": "missing-api-response-field-projection",
+      "observed_excerpt": "# Design Consistency Report\n\nGenerated checks: 6425\nErrors: 15\nWarnings: 0\n\n## Errors\n- F08-success-response-fields-address_corrections_api_v1_address_corrections_get-200: every successful response must have exact reviewed response fields\n- F12-semantic-mutation-suite-passed: semantic mutation suite must catch all required defect classes\n- F12-mutation-incorrect-transformation-final-fk-output: semantic mutation report missing incorrect-transformation-final-fk-output\n- F12-mutation-missing-required-semantic-trigger: semantic mutation report missing missing-required-semantic-trigger\n- F12-mutation-wrong-route-policy-source: semantic mutation report missing wrong-route-policy-source\n- F12-mutation-credential-projection-business-archive: semantic mutation report missing credential-projection-business-archive\n- F12-mutation-invalid-multi-unit-scenario: semantic mutation report missing invalid-multi-unit-scenario\n- F12-mutation-temporal-chain-reciprocity-break: semantic mutation report missing temporal-chain-reciprocity-break\n- F12-mutation-unexpected-negative-operation-success: semantic mutation report missing unexpected-negative-operation-success\n- F12-mutation-geometry-permission-binding-removed: semantic mutation report missing geometry-permission-binding-removed\n- missing ADR-005\n- missing ADR-006\n- missing ADR-007\n- missing ADR-008\n- missing ADR-009\n",
+      "status": "passed"
+    },
+    {
+      "execution_mode": "temp-workspace-actual-design-checker",
+      "exit_code": 1,
+      "expected_reason": "F10 scenario must include persisted query evidence",
+      "mutation": "broken-scenario-output",
+      "observed_excerpt": "# Design Consistency Report\n\nGenerated checks: 6427\nErrors: 15\nWarnings: 0\n\n## Errors\n- F10-review08-query-sections-multi-unit-building: F10 scenario must include persisted query evidence for entities, relationships, geometry, publication, projections and history\n- F12-semantic-mutation-suite-passed: semantic mutation suite must catch all required defect classes\n- F12-mutation-incorrect-transformation-final-fk-output: semantic mutation report missing incorrect-transformation-final-fk-output\n- F12-mutation-missing-required-semantic-trigger: semantic mutation report missing missing-required-semantic-trigger\n- F12-mutation-wrong-route-policy-source: semantic mutation report missing wrong-route-policy-source\n- F12-mutation-credential-projection-business-archive: semantic mutation report missing credential-projection-business-archive\n- F12-mutation-invalid-multi-unit-scenario: semantic mutation report missing invalid-multi-unit-scenario\n- F12-mutation-temporal-chain-reciprocity-break: semantic mutation report missing temporal-chain-reciprocity-break\n- F12-mutation-unexpected-negative-operation-success: semantic mutation report missing unexpected-negative-operation-success\n- F12-mutation-geometry-permission-binding-removed: semantic mutation report missing geometry-permission-binding-removed\n- missing ADR-005\n- missing ADR-006\n- missing ADR-007\n- missing ADR-008\n- missing ADR-009\n",
+      "status": "passed"
+    },
+    {
+      "execution_mode": "temp-workspace-actual-design-checker",
+      "exit_code": 1,
+      "expected_reason": "negative harness false-pass regression",
+      "mutation": "negative-harness-false-pass-regression",
+      "observed_excerpt": "# Design Consistency Report\n\nGenerated checks: 6427\nErrors: 15\nWarnings: 0\n\n## Errors\n- negative harness false-pass regression did not prove successful invalid actions fail outside the exception handler\n- F12-semantic-mutation-suite-passed: semantic mutation suite must catch all required defect classes\n- F12-mutation-incorrect-transformation-final-fk-output: semantic mutation report missing incorrect-transformation-final-fk-output\n- F12-mutation-missing-required-semantic-trigger: semantic mutation report missing missing-required-semantic-trigger\n- F12-mutation-wrong-route-policy-source: semantic mutation report missing wrong-route-policy-source\n- F12-mutation-credential-projection-business-archive: semantic mutation report missing credential-projection-business-archive\n- F12-mutation-invalid-multi-unit-scenario: semantic mutation report missing invalid-multi-unit-scenario\n- F12-mutation-temporal-chain-reciprocity-break: semantic mutation report missing temporal-chain-reciprocity-break\n- F12-mutation-unexpected-negative-operation-success: semantic mutation report missing unexpected-negative-operation-success\n- F12-mutation-geometry-permission-binding-removed: semantic mutation report missing geometry-permission-binding-removed\n- missing ADR-005\n- missing ADR-006\n- missing ADR-007\n- missing ADR-008\n- missing ADR-009\n",
       "status": "passed"
     }
   ],
   "summary": {
-    "caught": 8,
+    "caught": 11,
+    "execution_mode": "review08-temp-workspace-actual-pipeline-checker",
     "failed": 0,
-    "mutations": 8,
+    "mutations": 11,
     "status": "passed"
   }
 }

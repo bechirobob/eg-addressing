@@ -214,6 +214,12 @@ for assertion in report_assertions if isinstance(report_assertions, list) else [
         continue
     evidence = assertion.get("evidence") or {}
     gate(assertion.get("assertion_id", "F02-unnamed-transform-assertion"), "F02", assertion.get("status") == "passed" and bool(evidence) and bool(assertion.get("transform_group_id")) and evidence.get("execution_mode") == "review08-disposable-source-to-target-db-execution" and bool(evidence.get("target_output_id")) and bool(evidence.get("source_value_hash")) and bool(evidence.get("target_value_hash")), "named transform assertion must come from disposable DB execution with source/target hashes and output IDs", "docs/sda/data-model/transformation-fixture-report.json")
+    if assertion.get("assertion_class") == "reference-final-fk":
+        gate(assertion.get("assertion_id", "F02-final-fk-evidence"), "F02", bool(evidence.get("final_canonical_fk")), "reference-final-fk assertion must include resolved final canonical FK evidence", "docs/sda/data-model/transformation-fixture-report.json")
+    if assertion.get("assertion_class") == "archive-created":
+        gate(assertion.get("assertion_id", "F02-archive-evidence"), "F02", bool(evidence.get("archive_id")), "archive-created assertion must include governed archive row evidence", "docs/sda/data-model/transformation-fixture-report.json")
+    if assertion.get("assertion_class") == "owned-exception":
+        gate(assertion.get("assertion_id", "F02-exception-evidence"), "F02", bool(evidence.get("exception_id")), "owned-exception assertion must include owned exception row evidence", "docs/sda/data-model/transformation-fixture-report.json")
 for row in reviewed_registry if isinstance(reviewed_registry, list) else []:
     ref = row.get("reference_crosswalk_join")
     if isinstance(ref, dict):
@@ -296,7 +302,9 @@ for op in ops:
         err(f"OpenAPI operation {op.get('operation_id')} projection contract has no fields")
     for resp in op.get("responses", []):
         if str(resp.get("status", "")).startswith("2") and not resp.get("fields"):
-            bad = [cf for cf in contract_fields if cf.get("direction") == f"response:{resp.get('status')}" and cf.get("field") == "<empty/error envelope>"]
+            response_contract_fields = [cf for cf in contract_fields if cf.get("direction") == f"response:{resp.get('status')}"]
+            gate(f"F08-success-response-fields-{op.get('operation_id')}-{resp.get('status')}", "F08", bool(response_contract_fields), "every successful response must have exact reviewed response fields", "docs/sda/data-model/openapi-reviewed-projection-contracts.json")
+            bad = [cf for cf in response_contract_fields if cf.get("field") == "<empty/error envelope>" or cf.get("field") == "response.body.reviewed_payload"]
             if bad:
                 err(f"OpenAPI operation {op.get('operation_id')} has generic empty 2xx projection contract")
     for cf in contract_fields:
@@ -328,6 +336,11 @@ if physical_report.get("inserted_fixture_rows", 0) < len(entities):
     err("fixture insertion count does not cover every entity")
 if physical_report.get("missing_required_triggers"):
     err(f"target schema missing required semantic triggers: {physical_report.get('missing_required_triggers')}")
+actual_trigger_names = {t.get("trigger_name") for t in target_catalog.get("triggers", []) if isinstance(t, dict)}
+required_trigger_names = {"registry_subject_native_trg", "required_object_roles_trg", "location_record_version_chain_trg", "public_code_alias_chain_trg", "publication_prerequisite_trg", "geometry_version_semantics_trg", "geometry_observation_semantics_trg"}
+missing_actual_triggers = sorted(required_trigger_names - actual_trigger_names)
+if missing_actual_triggers:
+    err(f"target schema actual trigger catalog missing required semantic triggers: {missing_actual_triggers}")
 if physical_report.get("trigger_count", 0) < 7:
     err("target schema does not catalog required semantic triggers")
 if len(target_catalog.get("constraints", [])) < physical_report.get("constraint_count", 0):
@@ -499,9 +512,9 @@ if "lifecycle_transition_policy" not in catalog_tables_seen:
 
 # ADR Review 07 reconciliation must cite named assertions, not aggregate-only evidence.
 mutation_summary = semantic_mutation_report.get("summary", {}) if isinstance(semantic_mutation_report, dict) else {}
-gate("F12-semantic-mutation-suite-passed", "F12", mutation_summary.get("status") == "passed" and mutation_summary.get("mutations", 0) >= 8 and mutation_summary.get("failed") == 0, "semantic mutation suite must catch all required defect classes", "docs/sda/data-model/semantic-mutation-test-report.json")
+gate("F12-semantic-mutation-suite-passed", "F12", mutation_summary.get("execution_mode") == "review08-temp-workspace-actual-pipeline-checker" and mutation_summary.get("status") == "passed" and mutation_summary.get("mutations", 0) >= 11 and mutation_summary.get("failed") == 0, "semantic mutation suite must run actual temp-workspace checker executions and catch all required defect classes", "docs/sda/data-model/semantic-mutation-test-report.json")
 mutation_names = {r.get("mutation") for r in semantic_mutation_report.get("results", [])} if isinstance(semantic_mutation_report, dict) else set()
-for required_mutation in ["incorrect-transformation-final-fk-output", "missing-required-semantic-trigger", "wrong-route-policy-source", "credential-projection-business-archive", "invalid-multi-unit-scenario", "temporal-chain-reciprocity-break", "unexpected-negative-operation-success", "geometry-permission-binding-removed"]:
+for required_mutation in ["wrong-transformed-output", "missing-archive-or-final-fk", "wrong-field-classification", "removed-cardinality-constraint", "temporal-cycle-or-overlap", "weakened-geometry-authority", "missing-lifecycle-transition", "wrong-api-policy", "missing-api-response-field-projection", "broken-scenario-output", "negative-harness-false-pass-regression"]:
     gate(f"F12-mutation-{required_mutation}", "F12", required_mutation in mutation_names, f"semantic mutation report missing {required_mutation}", "docs/sda/data-model/semantic-mutation-test-report.json")
 
 # ADR Review 07 reconciliation must cite named assertions, not aggregate-only evidence.

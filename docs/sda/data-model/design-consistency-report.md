@@ -1,6 +1,6 @@
 # Design Consistency Report
 
-Generated checks: 6137
+Generated checks: 6430
 Errors: 0
 Warnings: 0
 
@@ -10,7 +10,7 @@ Warnings: 0
 - Transformation rows: 237
 - Target fields: 357
 - Fixture scenarios: 7
-- Named assertion gates: 6137
+- Named assertion gates: 6430
 - F02 transform assertions: 1370
 - F02 source/target rows executed: 237/237
 - F02 failure probes caught: 8/8
@@ -21,4 +21,4 @@ Warnings: 0
 - F10 persisted scenario DB query assertions: 63
 - F06 geometry authority negatives: 4
 - F08 API projection assertions: 1709
-- F12 semantic mutations caught: 8
+- F12 semantic mutations caught: 11
