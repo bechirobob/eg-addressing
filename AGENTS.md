@@ -32,26 +32,45 @@ Before modifying code or controlled design artifacts:
 1. Read `docs/sda/README.md`.
 2. Read the active work order in `docs/sda/work-orders/`.
 3. Read every standard and ADR referenced by that work order.
-4. Read `docs/agent-skills/README.md` and `docs/agent-skills/FAILURE-PREVENTION.md`.
-5. Select and read every applicable `docs/agent-skills/skills/*/SKILL.md` module.
-6. Inspect the current implementation and tests affected by the work.
-7. Return a concise implementation plan mapped to every acceptance criterion before making changes.
+4. Read `docs/agent-skills/README.md`.
+5. Read `docs/agent-skills/PROJECT-COVERAGE-MATRIX.md` and `docs/agent-skills/FAILURE-PREVENTION.md`.
+6. Read `docs/agent-skills/skills-manifest.json` or its rendered routing table.
+7. Select and read every applicable `docs/agent-skills/skills/*/SKILL.md` module from both the cross-cutting and whole-project domain layers.
+8. Inspect the current implementation, workflows, tests, migrations, contracts, infrastructure, runbooks, and evidence affected by the work.
+9. Return a concise implementation plan mapped to every acceptance criterion before making changes.
 
 ## Required skill routing
 
-The repository skills system defines repeatable procedures for intake, reconnaissance, planning, architecture decisions, scope/Git control, migrations, data modelling, APIs and authorization, security/privacy, GIS, UI/accessibility, CI/release, operations/DR, documentation, and SDA review remediation.
+The repository skills system has two layers:
+
+- **Cross-cutting delivery and governance skills `01–15`** — intake, reconnaissance, planning, architecture decisions, scope/Git control, migrations, semantic data design, API/identity, security/privacy, GIS, UI/accessibility, CI/evidence, operations/DR, documentation, and SDA remediation.
+- **Whole-project product and platform skills `16–30`** — system architecture, frontend, backend, citizen services, registry operations, field/offline work, verification, publication, integrations, worker/batch processing, analytics, infrastructure, performance, adoption, and programme planning.
 
 Before changing files, the agent must record in its implementation plan:
 
 ```text
-Skills invoked:
+Cross-cutting skills invoked:
+- <skill> — why it applies
+
+Project-domain skills invoked:
 - <skill> — why it applies
 
 Skills considered but not applicable:
 - <skill> — why it does not apply
 ```
 
-Use the routing table in `docs/agent-skills/README.md`. Skills are subordinate to the active work order and SDA authority; they never authorize work outside the approved scope.
+Use the routing table in `docs/agent-skills/README.md` and the complete module/role/lifecycle map in `docs/agent-skills/PROJECT-COVERAGE-MATRIX.md`.
+
+A task is not fully routed until the agent has assessed all affected:
+
+- repository areas;
+- NLI bounded domains;
+- public/operator/field/partner applications;
+- user roles and institutional scopes;
+- data/API/GIS/security/infrastructure surfaces;
+- release, operation, training, support, and recovery paths.
+
+Skills are subordinate to the active work order and SDA authority; they never authorize work outside the approved scope.
 
 For a fresh or reset agent session, use `docs/agent-skills/AGENT-BOOTSTRAP.md` as the operating instruction.
 
@@ -69,8 +88,9 @@ The following rules may not be bypassed without an explicit SDA decision:
 - Authentication and authorization must be enforced server-side. Interface visibility is not an authorization control.
 - Sensitive identity, location, evidence, publication, export, and administrative actions must be audited.
 - Official publication, certificates, signage, or partner release must remain locked until the required institutional authority is recorded.
-- No new external service, database, framework, identity provider, geocoder, map source, workflow state, or data class may be introduced silently.
+- No new external service, database, framework, identity provider, geocoder, map source, workflow state, metric, public data product, or data class may be introduced silently.
 - Secrets, private keys, production credentials, personal data extracts, runtime volumes, and local operator notes must not be committed.
+- Analytical stores, integrations, worker queues, frontend caches, and local field storage must not become competing canonical authorities.
 
 ## Implementation conduct
 
@@ -78,7 +98,7 @@ For each work order:
 
 - Work on the branch named by the work order, or use `nli/<work-order-id>-<description>` when no branch is specified.
 - Keep changes inside the approved scope.
-- Identify database, API, security, workflow, deployment, localization, accessibility, and operational effects before implementation.
+- Identify architecture, database, API, identity, security, GIS, frontend, backend, citizen, operator, field, integration, analytics, deployment, localization, accessibility, training, support, and operational effects before implementation.
 - Preserve backwards compatibility unless the work order explicitly authorizes a breaking change and supplies a transition plan.
 - Use explicit controlled vocabularies and state transitions. Do not create status strings ad hoc.
 - Preserve the restrained, human-designed interface direction. Avoid decorative dashboard patterns, unnecessary cards, gradients, shadows, glass effects, and excessive interaction steps.
@@ -88,6 +108,7 @@ For each work order:
 - Never suppress a failing control merely to make CI pass.
 - Separate unrelated defects into their own issue/branch/PR. A correct fix in the wrong work order is a scope violation.
 - Bind evidence to the exact implementation head using the sequence defined in the skills system; do not fabricate a self-referential commit SHA.
+- Include deployment, monitoring, backup/recovery, support, training, and rollout consequences when the change affects operational capability.
 
 ## Request for Information
 
@@ -99,7 +120,7 @@ Raise an RFI before proceeding when the work would require any of the following:
 - adding or exposing a sensitive data field;
 - changing retention, archival, or deletion behavior;
 - adding an external dependency or service with operational or licensing impact;
-- introducing a new role, permission, scope, or workflow state;
+- introducing a new role, permission, scope, workflow state, metric authority, or partner purpose;
 - changing the authoritative data source;
 - accepting data loss, downtime, compatibility breakage, or a security exception.
 
@@ -110,17 +131,18 @@ An RFI must state the question, why a decision is needed, options considered, th
 Every implementation pull request must reference its work order and include:
 
 - acceptance-criterion status, one criterion at a time;
-- skills invoked and completed;
-- changed files and affected domains;
+- cross-cutting and project-domain skills invoked and completed;
+- changed files, bounded domains, modules, user roles, environments, and affected workflows;
 - database migration and rollback/forward-recovery details;
 - API and generated-contract changes;
+- frontend/backend/field/worker/integration/analytics effects where applicable;
 - tests executed and their results;
 - screenshots for changed user workflows at required widths and roles;
-- security, privacy, accessibility, localization, deployment, and operational effects;
+- security, privacy, accessibility, localization, deployment, operational, training, support, and rollout effects;
 - residual risks, limitations, and deferred items;
 - RFIs and approved deviations.
 
-A statement such as “done” is not evidence. Point to a commit, migration, test, screenshot, trace, report, or documented review result.
+A statement such as “done” is not evidence. Point to a commit, migration, test, screenshot, trace, report, browser/device run, restore exercise, or documented review result.
 
 ## Review remediation
 
@@ -131,7 +153,8 @@ When resolving SDA findings:
 - do not rewrite reviewer outcome, finding class, observation, required resolution, or disposition;
 - give each finding its own root cause, fixing commit, exact evidence, and residual condition;
 - do not bulk-stamp every finding with the same generic report;
-- rerun required checks at the new exact implementation head.
+- rerun required checks at the new exact implementation head;
+- reassess all affected project-domain skills rather than fixing only the visible code line.
 
 ## Completion and claims
 
