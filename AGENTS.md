@@ -27,13 +27,33 @@ Do not guess when a material conflict remains. Raise an RFI using `docs/sda/temp
 
 ## Required reading before implementation
 
-Before modifying code:
+Before modifying code or controlled design artifacts:
 
 1. Read `docs/sda/README.md`.
 2. Read the active work order in `docs/sda/work-orders/`.
 3. Read every standard and ADR referenced by that work order.
-4. Inspect the current implementation and tests affected by the work.
-5. Return a concise implementation plan mapped to every acceptance criterion before making changes.
+4. Read `docs/agent-skills/README.md` and `docs/agent-skills/FAILURE-PREVENTION.md`.
+5. Select and read every applicable `docs/agent-skills/skills/*/SKILL.md` module.
+6. Inspect the current implementation and tests affected by the work.
+7. Return a concise implementation plan mapped to every acceptance criterion before making changes.
+
+## Required skill routing
+
+The repository skills system defines repeatable procedures for intake, reconnaissance, planning, architecture decisions, scope/Git control, migrations, data modelling, APIs and authorization, security/privacy, GIS, UI/accessibility, CI/release, operations/DR, documentation, and SDA review remediation.
+
+Before changing files, the agent must record in its implementation plan:
+
+```text
+Skills invoked:
+- <skill> — why it applies
+
+Skills considered but not applicable:
+- <skill> — why it does not apply
+```
+
+Use the routing table in `docs/agent-skills/README.md`. Skills are subordinate to the active work order and SDA authority; they never authorize work outside the approved scope.
+
+For a fresh or reset agent session, use `docs/agent-skills/AGENT-BOOTSTRAP.md` as the operating instruction.
 
 ## Protected architecture rules
 
@@ -66,6 +86,8 @@ For each work order:
 - Prefer simple, supportable technology over novelty.
 - Add tests with the implementation rather than after it.
 - Never suppress a failing control merely to make CI pass.
+- Separate unrelated defects into their own issue/branch/PR. A correct fix in the wrong work order is a scope violation.
+- Bind evidence to the exact implementation head using the sequence defined in the skills system; do not fabricate a self-referential commit SHA.
 
 ## Request for Information
 
@@ -88,6 +110,7 @@ An RFI must state the question, why a decision is needed, options considered, th
 Every implementation pull request must reference its work order and include:
 
 - acceptance-criterion status, one criterion at a time;
+- skills invoked and completed;
 - changed files and affected domains;
 - database migration and rollback/forward-recovery details;
 - API and generated-contract changes;
@@ -98,6 +121,17 @@ Every implementation pull request must reference its work order and include:
 - RFIs and approved deviations.
 
 A statement such as “done” is not evidence. Point to a commit, migration, test, screenshot, trace, report, or documented review result.
+
+## Review remediation
+
+When resolving SDA findings:
+
+- read the full controlled review record;
+- update only the designated agent resolution-log section;
+- do not rewrite reviewer outcome, finding class, observation, required resolution, or disposition;
+- give each finding its own root cause, fixing commit, exact evidence, and residual condition;
+- do not bulk-stamp every finding with the same generic report;
+- rerun required checks at the new exact implementation head.
 
 ## Completion and claims
 
@@ -110,8 +144,9 @@ Implementation completion is not SDA acceptance. The SDA records one of:
 
 Use accurate readiness language:
 
-- **implemented** means code exists;
+- **implemented** means code or controlled design exists;
 - **tested** means named automated or manual evidence exists;
+- **ready for SDA review** means the implementation and evidence are submitted at an exact head;
 - **pilot-ready** means controlled pilot criteria are satisfied;
 - **agency-ready** means scoped institutional access and operational controls are satisfied;
 - **publication-ready** means authority, data, audit, and release gates are satisfied;
