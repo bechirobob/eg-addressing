@@ -263,14 +263,14 @@ Keep PR #7 draft and unmerged. NLI-WO-002B remains unauthorized.
 
 | Finding | Agent response | Commit/evidence | SDA disposition | Date |
 |---|---|---|---|---|
-| F02 | Pending | — | OPEN | 2026-07-14 |
-| F04 | Pending | — | OPEN | 2026-07-14 |
-| F05 | Pending | — | OPEN | 2026-07-14 |
-| F06 | Pending | — | OPEN | 2026-07-14 |
-| F07 | Pending | — | OPEN | 2026-07-14 |
-| F08 | Pending | — | OPEN | 2026-07-14 |
-| F09 | Pending | — | OPEN | 2026-07-14 |
-| F10 | Pending | — | OPEN | 2026-07-14 |
-| F11 | Pending | — | OPEN | 2026-07-14 |
-| F12 | Pending | — | OPEN | 2026-07-14 |
-| F13 | Separate maintenance PR #8 | PR #8 remains separate | RESOLVED FOR PR #7 / EXTERNAL MAINTENANCE OPEN | 2026-07-14 |
+| F02 | Separated reviewed source fixtures, independently reviewed expected target fixtures, and transform implementation. The transform now inserts real target identities before target/crosswalk/relationship/archive/exception rows, compares observed rows against independent expected rows, enforces true idempotency, and catches 10/10 full F02 failure probes. | `dc677a6`; `review09-source-fixtures-reviewed.json`; `review09-expected-target-fixtures-reviewed.json`; `review09-transform-implementation-reviewed.json`; `transformation-fixture-report.json` | READY FOR REVIEW 10 | 2026-07-14 |
+| F04 | Added Review 09 executed record-role matrix covering valid/required/optional roles, invalid/missing role cases, invalid subject/role cases, maxima, retired/deleted/merged subjects, successor behavior and multilingual official-name history. | `f146979`; `review09-f04-record-role-execution-report.json` | READY FOR REVIEW 10 | 2026-07-14 |
+| F05 | Added Review 09 temporal strategy/execution report with mutable-entity strategy registry, named-date reconstruction coverage and negative temporal chain cases. | `f146979`; `review09-f05-temporal-execution-report.json` | READY FOR REVIEW 10 | 2026-07-14 |
+| F06 | Added Review 09 typed geometry/authority execution report covering identity, institution, permission, scope, decision authority, observation, evidence and quality assessment relationships plus positive/negative matrix evidence. | `f146979`; `review09-f06-typed-geometry-authority-report.json` | READY FOR REVIEW 10 | 2026-07-14 |
+| F07 | Added Review 09 lifecycle graph validator evidence for reviewed initial states, reachability, terminality, re-entry, orphan/conflict detection and actor/permission/scope/evidence/audit/public-effect prerequisites. | `f146979`; `review09-f07-lifecycle-graph-report.json` | READY FOR REVIEW 10 | 2026-07-14 |
+| F08 | Replaced observed-derived contract writing with independent expected API contracts and separate observed controlled response fixtures. Comparator fails unresolved dynamic responses and refuses invented fallback success fields. | `8c4a8a5`; `openapi-expected-contracts-reviewed.json`; `openapi-observed-response-fixtures-reviewed.json`; `openapi-policy-projection-assertions.json` | READY FOR REVIEW 10 | 2026-07-14 |
+| F09 | Revalidated all 90 convergence units only after Review 09 F02/F04-F10/F12 suites passed, using Review 09 F02 execution mode and real idempotency status. | `e2aeefa`; `review09-f09-f11-reconciliation-report.json` | READY FOR REVIEW 10 | 2026-07-14 |
+| F10 | Added independent minimal source and expected-result files for all seven scenarios and compared persisted target DB query output against those expected results, including presence/absence sections. | `555f354`; `review09/scenarios/*/{source,expected}.json`; `review09-scenario-comparison-report.json` | READY FOR REVIEW 10 | 2026-07-14 |
+| F11 | Refreshed ADR-005..ADR-009 evidence matrix to bind proposed ADR statements to specific Review 09 executable assertions/artifacts while preserving RFIs and NLI-WO-002B lock. | `e2aeefa`; `adr-005-009-evidence-matrix.md` | READY FOR REVIEW 10 | 2026-07-14 |
+| F12 | Replaced generated-report mutation checks with temp-repository full-pipeline mutations against authoritative design sources, expected fixtures, transform implementation, API expectations, scenario expectations and lifecycle/negative harness evidence. All 11 required defect classes are caught. | `36d8884`; `review09_semantic_mutation_tests.py`; `semantic-mutation-test-report.json` | READY FOR REVIEW 10 | 2026-07-14 |
+| F13 | Separate maintenance PR #8 remains separate; PR #7 has not copied PR #8's migration-ledger/runtime fix. | changed-path guard; PR state verification pending exact-head closeout | RESOLVED FOR PR #7 / EXTERNAL MAINTENANCE OPEN | 2026-07-14 |
