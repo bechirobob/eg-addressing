@@ -1,90 +1,120 @@
 # Lifecycle State Machines
 
-All transitions record `decision_event` or equivalent audit context with actor/permission/scope, authority, evidence/reason, effective time, recorded time, visibility, reversal/appeal behavior, and invalid-transition handling. Invalid transitions are rejected in service logic and surfaced as migration exceptions during WO-002B backfills.
+Each lifecycle is separate. Every transition records actor/permission/scope, authority, evidence, effective time, recorded time, audit event, visibility, reversal/appeal, and invalid-transition behavior.
 
-## `intake_state` transitions
+## `canonical_record_lifecycle` transitions
 
-| From | To | Event | Actor/permission/scope | Authority/evidence | Visibility | Reversal/appeal | Invalid transition |
-|---|---|---|---|---|---|---|---|
-| submitted | under-review | open review | registry reviewer | source_record | internal | close/reject/promote | Reject transition; log decision/migration exception |
-| under-review | needs-field-check | requires field proof | registry reviewer | review note | internal | return to under-review | Reject transition; log decision/migration exception |
-| needs-field-check | promoted-to-canonical | evidence accepted | registry authority | field_observation + decision_event | internal | correction/dispute | Reject transition; log decision/migration exception |
-| under-review | rejected | invalid/duplicate | registry reviewer | reason | restricted | appeal via correction/dispute | Reject transition; log decision/migration exception |
-| promoted-to-canonical | closed | case closed | system | location_record | internal | none | Reject transition; log decision/migration exception |
+| From | To | Event | Actor/permission/scope | Authority/evidence | Effective/recorded time | Visibility | Reversal/appeal | Invalid transition |
+|---|---|---|---|---|---|---|---|---|
+| candidate | under-review | advance-candidate-to-under-review | Registry Authority | decision_event + evidence_record | record effective_from/effective_to and recorded_at | operator unless public release | appeal creates case/correction | reject; migration_exception |
+| under-review | active | advance-under-review-to-active | Registry Authority | decision_event + evidence_record | record effective_from/effective_to and recorded_at | operator unless public release | appeal creates case/correction | reject; migration_exception |
+| active | corrected | advance-active-to-corrected | Registry Authority | decision_event + evidence_record | record effective_from/effective_to and recorded_at | operator unless public release | appeal creates case/correction | reject; migration_exception |
+| corrected | superseded | advance-corrected-to-superseded | Registry Authority | decision_event + evidence_record | record effective_from/effective_to and recorded_at | operator unless public release | appeal creates case/correction | reject; migration_exception |
+| superseded | disputed | advance-superseded-to-disputed | Registry Authority | decision_event + evidence_record | record effective_from/effective_to and recorded_at | operator unless public release | appeal creates case/correction | reject; migration_exception |
+| disputed | retired | advance-disputed-to-retired | Registry Authority | decision_event + evidence_record | record effective_from/effective_to and recorded_at | operator unless public release | appeal creates case/correction | reject; migration_exception |
+| retired | revoked | advance-retired-to-revoked | Registry Authority | decision_event + evidence_record | record effective_from/effective_to and recorded_at | operator unless public release | appeal creates case/correction | reject; migration_exception |
+| revoked | <terminal or authority-reopened> | reopen/appeal only when listed by owner | Registry Authority | decision_event required | new interval/version | operator | appeal path explicit | reject |
 
-Vocabulary coverage for `intake_state`: `submitted`, `under-review`, `needs-field-check`, `duplicate-review`, `rejected`, `promoted-to-canonical`, `closed`. Values not shown as a `From` state are terminal, exception, or derived states handled by invalid-transition rejection and audit/exception records.
+## `reference_object_lifecycle` transitions
 
-## `field_verification_state` transitions
+| From | To | Event | Actor/permission/scope | Authority/evidence | Effective/recorded time | Visibility | Reversal/appeal | Invalid transition |
+|---|---|---|---|---|---|---|---|---|
+| candidate | active | advance-candidate-to-active | Registry/GIS Authority | decision_event + evidence_record | record effective_from/effective_to and recorded_at | operator unless public release | appeal creates case/correction | reject; migration_exception |
+| active | corrected | advance-active-to-corrected | Registry/GIS Authority | decision_event + evidence_record | record effective_from/effective_to and recorded_at | operator unless public release | appeal creates case/correction | reject; migration_exception |
+| corrected | superseded | advance-corrected-to-superseded | Registry/GIS Authority | decision_event + evidence_record | record effective_from/effective_to and recorded_at | operator unless public release | appeal creates case/correction | reject; migration_exception |
+| superseded | retired | advance-superseded-to-retired | Registry/GIS Authority | decision_event + evidence_record | record effective_from/effective_to and recorded_at | operator unless public release | appeal creates case/correction | reject; migration_exception |
+| retired | revoked | advance-retired-to-revoked | Registry/GIS Authority | decision_event + evidence_record | record effective_from/effective_to and recorded_at | operator unless public release | appeal creates case/correction | reject; migration_exception |
+| revoked | <terminal or authority-reopened> | reopen/appeal only when listed by owner | Registry/GIS Authority | decision_event required | new interval/version | operator | appeal path explicit | reject |
 
-| From | To | Event | Actor/permission/scope | Authority/evidence | Visibility | Reversal/appeal | Invalid transition |
-|---|---|---|---|---|---|---|---|
-| assigned | in-progress | work started | field team | assignment | internal | cancel | Reject transition; log decision/migration exception |
-| in-progress | field-captured | capture complete | field team | geometry/evidence | restricted | needs-recapture | Reject transition; log decision/migration exception |
-| field-captured | evidence-under-review | submit review | supervisor | evidence | restricted | reject/approve | Reject transition; log decision/migration exception |
-| evidence-under-review | evidence-approved | approve | supervisor | decision_event | internal | dispute | Reject transition; log decision/migration exception |
-| evidence-approved | linked-to-canonical | promote/link | registry authority | location_record_assertion | internal | correction | Reject transition; log decision/migration exception |
-| evidence-under-review | needs-recapture | quality fail | supervisor | quality reason | internal | recapture | Reject transition; log decision/migration exception |
+## `operational_area_lifecycle` transitions
 
-Vocabulary coverage for `field_verification_state`: `assigned`, `in-progress`, `field-captured`, `evidence-under-review`, `evidence-approved`, `evidence-rejected`, `needs-recapture`, `linked-to-canonical`, `cancelled`. Values not shown as a `From` state are terminal, exception, or derived states handled by invalid-transition rejection and audit/exception records.
+| From | To | Event | Actor/permission/scope | Authority/evidence | Effective/recorded time | Visibility | Reversal/appeal | Invalid transition |
+|---|---|---|---|---|---|---|---|---|
+| planned | active | advance-planned-to-active | Operations Authority | decision_event + evidence_record | record effective_from/effective_to and recorded_at | operator unless public release | appeal creates case/correction | reject; migration_exception |
+| active | suspended | advance-active-to-suspended | Operations Authority | decision_event + evidence_record | record effective_from/effective_to and recorded_at | operator unless public release | appeal creates case/correction | reject; migration_exception |
+| suspended | closed | advance-suspended-to-closed | Operations Authority | decision_event + evidence_record | record effective_from/effective_to and recorded_at | operator unless public release | appeal creates case/correction | reject; migration_exception |
+| closed | archived | advance-closed-to-archived | Operations Authority | decision_event + evidence_record | record effective_from/effective_to and recorded_at | operator unless public release | appeal creates case/correction | reject; migration_exception |
+| archived | <terminal or authority-reopened> | reopen/appeal only when listed by owner | Operations Authority | decision_event required | new interval/version | operator | appeal path explicit | reject |
 
-## `lifecycle_state` transitions
+## `source_authority_lifecycle` transitions
 
-| From | To | Event | Actor/permission/scope | Authority/evidence | Visibility | Reversal/appeal | Invalid transition |
-|---|---|---|---|---|---|---|---|
-| draft-candidate | registry-review | review opened | registry reviewer | source/evidence | internal | reject | Reject transition; log decision/migration exception |
-| registry-review | registry-ready | approved internal | registry authority | decision_event | internal | correction/dispute | Reject transition; log decision/migration exception |
-| registry-ready | active | activate | registry authority | effective version | internal unless release | supersede/retire | Reject transition; log decision/migration exception |
-| active | disputed | dispute opened | authorized reporter/operator | dispute_case | public caution only if release policy allows | resolve | Reject transition; log decision/migration exception |
-| active | superseded | successor approved | registry authority | relationship | public alias redirect/warning by release | none | Reject transition; log decision/migration exception |
-| active | retired | retire | registry authority | reason | retired public behavior by release | new decision | Reject transition; log decision/migration exception |
+| From | To | Event | Actor/permission/scope | Authority/evidence | Effective/recorded time | Visibility | Reversal/appeal | Invalid transition |
+|---|---|---|---|---|---|---|---|---|
+| candidate | trusted | advance-candidate-to-trusted | SDA | decision_event + evidence_record | record effective_from/effective_to and recorded_at | operator unless public release | appeal creates case/correction | reject; migration_exception |
+| trusted | deprecated | advance-trusted-to-deprecated | SDA | decision_event + evidence_record | record effective_from/effective_to and recorded_at | operator unless public release | appeal creates case/correction | reject; migration_exception |
+| deprecated | revoked | advance-deprecated-to-revoked | SDA | decision_event + evidence_record | record effective_from/effective_to and recorded_at | operator unless public release | appeal creates case/correction | reject; migration_exception |
+| revoked | <terminal or authority-reopened> | reopen/appeal only when listed by owner | SDA | decision_event required | new interval/version | operator | appeal path explicit | reject |
 
-Vocabulary coverage for `lifecycle_state`: `draft-candidate`, `registry-review`, `registry-ready`, `active`, `corrected`, `superseded`, `retired`, `disputed`, `revoked`. Values not shown as a `From` state are terminal, exception, or derived states handled by invalid-transition rejection and audit/exception records.
+## `name_lifecycle` transitions
+
+| From | To | Event | Actor/permission/scope | Authority/evidence | Effective/recorded time | Visibility | Reversal/appeal | Invalid transition |
+|---|---|---|---|---|---|---|---|---|
+| candidate | official-current | advance-candidate-to-official-current | Registry/GIS Authority | decision_event + evidence_record | record effective_from/effective_to and recorded_at | operator unless public release | appeal creates case/correction | reject; migration_exception |
+| official-current | official-historical | advance-official-current-to-official-historical | Registry/GIS Authority | decision_event + evidence_record | record effective_from/effective_to and recorded_at | operator unless public release | appeal creates case/correction | reject; migration_exception |
+| official-historical | alternate | advance-official-historical-to-alternate | Registry/GIS Authority | decision_event + evidence_record | record effective_from/effective_to and recorded_at | operator unless public release | appeal creates case/correction | reject; migration_exception |
+| alternate | disputed | advance-alternate-to-disputed | Registry/GIS Authority | decision_event + evidence_record | record effective_from/effective_to and recorded_at | operator unless public release | appeal creates case/correction | reject; migration_exception |
+| disputed | retired | advance-disputed-to-retired | Registry/GIS Authority | decision_event + evidence_record | record effective_from/effective_to and recorded_at | operator unless public release | appeal creates case/correction | reject; migration_exception |
+| retired | rejected | advance-retired-to-rejected | Registry/GIS Authority | decision_event + evidence_record | record effective_from/effective_to and recorded_at | operator unless public release | appeal creates case/correction | reject; migration_exception |
+| rejected | <terminal or authority-reopened> | reopen/appeal only when listed by owner | Registry/GIS Authority | decision_event required | new interval/version | operator | appeal path explicit | reject |
+
+## `case_lifecycle` transitions
+
+| From | To | Event | Actor/permission/scope | Authority/evidence | Effective/recorded time | Visibility | Reversal/appeal | Invalid transition |
+|---|---|---|---|---|---|---|---|---|
+| submitted | under-review | advance-submitted-to-under-review | Registry Authority | decision_event + evidence_record | record effective_from/effective_to and recorded_at | operator unless public release | appeal creates case/correction | reject; migration_exception |
+| under-review | needs-evidence | advance-under-review-to-needs-evidence | Registry Authority | decision_event + evidence_record | record effective_from/effective_to and recorded_at | operator unless public release | appeal creates case/correction | reject; migration_exception |
+| needs-evidence | approved | advance-needs-evidence-to-approved | Registry Authority | decision_event + evidence_record | record effective_from/effective_to and recorded_at | operator unless public release | appeal creates case/correction | reject; migration_exception |
+| approved | rejected | advance-approved-to-rejected | Registry Authority | decision_event + evidence_record | record effective_from/effective_to and recorded_at | operator unless public release | appeal creates case/correction | reject; migration_exception |
+| rejected | resolved | advance-rejected-to-resolved | Registry Authority | decision_event + evidence_record | record effective_from/effective_to and recorded_at | operator unless public release | appeal creates case/correction | reject; migration_exception |
+| resolved | closed | advance-resolved-to-closed | Registry Authority | decision_event + evidence_record | record effective_from/effective_to and recorded_at | operator unless public release | appeal creates case/correction | reject; migration_exception |
+| closed | <terminal or authority-reopened> | reopen/appeal only when listed by owner | Registry Authority | decision_event required | new interval/version | operator | appeal path explicit | reject |
 
 ## `geometry_quality_state` transitions
 
-| From | To | Event | Actor/permission/scope | Authority/evidence | Visibility | Reversal/appeal | Invalid transition |
-|---|---|---|---|---|---|---|---|
-| observed | quality-checked | automated checks | GIS system | quality_assessment | restricted | reject/review | Reject transition; log decision/migration exception |
-| quality-checked | reviewed | human review | GIS reviewer | evidence | restricted | reject | Reject transition; log decision/migration exception |
-| reviewed | accepted-canonical | approve | GIS authority | decision_event | operator/public per release | dispute/supersede | Reject transition; log decision/migration exception |
-| accepted-canonical | disputed | dispute | authorized actor | dispute_case | public caution/suspend | resolve | Reject transition; log decision/migration exception |
-| accepted-canonical | superseded | new version | GIS authority | successor | historical only | none | Reject transition; log decision/migration exception |
+| From | To | Event | Actor/permission/scope | Authority/evidence | Effective/recorded time | Visibility | Reversal/appeal | Invalid transition |
+|---|---|---|---|---|---|---|---|---|
+| accepted-canonical | disputed | advance-accepted-canonical-to-disputed | GIS/Data Authority | decision_event + evidence_record | record effective_from/effective_to and recorded_at | operator unless public release | appeal creates case/correction | reject; migration_exception |
+| disputed | observed | advance-disputed-to-observed | GIS/Data Authority | decision_event + evidence_record | record effective_from/effective_to and recorded_at | operator unless public release | appeal creates case/correction | reject; migration_exception |
+| observed | quality-checked | advance-observed-to-quality-checked | GIS/Data Authority | decision_event + evidence_record | record effective_from/effective_to and recorded_at | operator unless public release | appeal creates case/correction | reject; migration_exception |
+| quality-checked | rejected | advance-quality-checked-to-rejected | GIS/Data Authority | decision_event + evidence_record | record effective_from/effective_to and recorded_at | operator unless public release | appeal creates case/correction | reject; migration_exception |
+| rejected | reviewed | advance-rejected-to-reviewed | GIS/Data Authority | decision_event + evidence_record | record effective_from/effective_to and recorded_at | operator unless public release | appeal creates case/correction | reject; migration_exception |
+| reviewed | superseded | advance-reviewed-to-superseded | GIS/Data Authority | decision_event + evidence_record | record effective_from/effective_to and recorded_at | operator unless public release | appeal creates case/correction | reject; migration_exception |
+| superseded | valid-with-warning | advance-superseded-to-valid-with-warning | GIS/Data Authority | decision_event + evidence_record | record effective_from/effective_to and recorded_at | operator unless public release | appeal creates case/correction | reject; migration_exception |
+| valid-with-warning | <terminal or authority-reopened> | reopen/appeal only when listed by owner | GIS/Data Authority | decision_event required | new interval/version | operator | appeal path explicit | reject |
 
-Vocabulary coverage for `geometry_quality_state`: `observed`, `quality-checked`, `reviewed`, `accepted-canonical`, `valid-with-warning`, `rejected`, `disputed`, `superseded`. Values not shown as a `From` state are terminal, exception, or derived states handled by invalid-transition rejection and audit/exception records.
+## `publication_lifecycle` transitions
 
-## `publication_release_state` transitions
+| From | To | Event | Actor/permission/scope | Authority/evidence | Effective/recorded time | Visibility | Reversal/appeal | Invalid transition |
+|---|---|---|---|---|---|---|---|---|
+| approval-requested | approved | advance-approval-requested-to-approved | Publication Authority | decision_event + evidence_record | record effective_from/effective_to and recorded_at | operator unless public release | appeal creates case/correction | reject; migration_exception |
+| approved | draft | advance-approved-to-draft | Publication Authority | decision_event + evidence_record | record effective_from/effective_to and recorded_at | operator unless public release | appeal creates case/correction | reject; migration_exception |
+| draft | published | advance-draft-to-published | Publication Authority | decision_event + evidence_record | record effective_from/effective_to and recorded_at | operator unless public release | appeal creates case/correction | reject; migration_exception |
+| published | suspended | advance-published-to-suspended | Publication Authority | decision_event + evidence_record | record effective_from/effective_to and recorded_at | operator unless public release | appeal creates case/correction | reject; migration_exception |
+| suspended | withdrawn | advance-suspended-to-withdrawn | Publication Authority | decision_event + evidence_record | record effective_from/effective_to and recorded_at | operator unless public release | appeal creates case/correction | reject; migration_exception |
+| withdrawn | <terminal or authority-reopened> | reopen/appeal only when listed by owner | Publication Authority | decision_event required | new interval/version | operator | appeal path explicit | reject |
 
-| From | To | Event | Actor/permission/scope | Authority/evidence | Visibility | Reversal/appeal | Invalid transition |
-|---|---|---|---|---|---|---|---|
-| draft | approval-requested | submit | publication preparer | manifest | internal | withdraw | Reject transition; log decision/migration exception |
-| approval-requested | approved | approve | Publication Authority | authority_reference | internal | withdraw | Reject transition; log decision/migration exception |
-| approved | published | publish | Publication Authority | immutable manifest | public/partner | suspend/withdraw | Reject transition; log decision/migration exception |
-| published | suspended | suspend | Publication Authority | reason | hidden/caution | republish/withdraw | Reject transition; log decision/migration exception |
-| published | withdrawn | withdraw | Publication Authority | reason | withdrawn | new release only | Reject transition; log decision/migration exception |
+## `intake_state` transitions
 
-Vocabulary coverage for `publication_release_state`: `draft`, `approval-requested`, `approved`, `published`, `suspended`, `withdrawn`. Values not shown as a `From` state are terminal, exception, or derived states handled by invalid-transition rejection and audit/exception records.
+| From | To | Event | Actor/permission/scope | Authority/evidence | Effective/recorded time | Visibility | Reversal/appeal | Invalid transition |
+|---|---|---|---|---|---|---|---|---|
+| closed | duplicate-review | advance-closed-to-duplicate-review | Registry Authority | decision_event + evidence_record | record effective_from/effective_to and recorded_at | operator unless public release | appeal creates case/correction | reject; migration_exception |
+| duplicate-review | needs-field-check | advance-duplicate-review-to-needs-field-check | Registry Authority | decision_event + evidence_record | record effective_from/effective_to and recorded_at | operator unless public release | appeal creates case/correction | reject; migration_exception |
+| needs-field-check | promoted-to-canonical | advance-needs-field-check-to-promoted-to-canonical | Registry Authority | decision_event + evidence_record | record effective_from/effective_to and recorded_at | operator unless public release | appeal creates case/correction | reject; migration_exception |
+| promoted-to-canonical | rejected | advance-promoted-to-canonical-to-rejected | Registry Authority | decision_event + evidence_record | record effective_from/effective_to and recorded_at | operator unless public release | appeal creates case/correction | reject; migration_exception |
+| rejected | submitted | advance-rejected-to-submitted | Registry Authority | decision_event + evidence_record | record effective_from/effective_to and recorded_at | operator unless public release | appeal creates case/correction | reject; migration_exception |
+| submitted | under-review | advance-submitted-to-under-review | Registry Authority | decision_event + evidence_record | record effective_from/effective_to and recorded_at | operator unless public release | appeal creates case/correction | reject; migration_exception |
+| under-review | <terminal or authority-reopened> | reopen/appeal only when listed by owner | Registry Authority | decision_event required | new interval/version | operator | appeal path explicit | reject |
 
-## `case_state` transitions
+## `field_verification_state` transitions
 
-| From | To | Event | Actor/permission/scope | Authority/evidence | Visibility | Reversal/appeal | Invalid transition |
-|---|---|---|---|---|---|---|---|
-| submitted | under-review | triage | case reviewer | case | restricted | close/reject | Reject transition; log decision/migration exception |
-| under-review | needs-evidence | evidence missing | case reviewer | reason | restricted | resume | Reject transition; log decision/migration exception |
-| under-review | approved | approve | authority | decision_event | internal | resolve | Reject transition; log decision/migration exception |
-| approved | resolved | apply outcome | system/authority | version/release | operator/public if released | closed | Reject transition; log decision/migration exception |
-| under-review | rejected | reject | authority | reason | restricted | appeal | Reject transition; log decision/migration exception |
-| resolved | closed | close | system | resolution | internal | none | Reject transition; log decision/migration exception |
-
-Vocabulary coverage for `case_state`: `submitted`, `under-review`, `needs-evidence`, `approved`, `rejected`, `resolved`, `closed`. Values not shown as a `From` state are terminal, exception, or derived states handled by invalid-transition rejection and audit/exception records.
-
-## `name_status` transitions
-
-| From | To | Event | Actor/permission/scope | Authority/evidence | Visibility | Reversal/appeal | Invalid transition |
-|---|---|---|---|---|---|---|---|
-| candidate | under-review | review | GIS/registry reviewer | source | internal | reject/approve | Reject transition; log decision/migration exception |
-| under-review | official-current | approve | GIS/registry authority | decision_event | public after release | historical/retire | Reject transition; log decision/migration exception |
-| official-current | official-historical | new name approved | GIS/registry authority | successor | history | none | Reject transition; log decision/migration exception |
-| under-review | alternate | approve alternate | authority | source | public/internal per classification | retire | Reject transition; log decision/migration exception |
-| under-review | rejected | reject | authority | reason | internal | resubmit | Reject transition; log decision/migration exception |
-
-Vocabulary coverage for `name_status`: `candidate`, `under-review`, `official-current`, `official-historical`, `alternate`, `retired`, `rejected`, `disputed`. Values not shown as a `From` state are terminal, exception, or derived states handled by invalid-transition rejection and audit/exception records.
+| From | To | Event | Actor/permission/scope | Authority/evidence | Effective/recorded time | Visibility | Reversal/appeal | Invalid transition |
+|---|---|---|---|---|---|---|---|---|
+| assigned | cancelled | advance-assigned-to-cancelled | Field Operations Authority | decision_event + evidence_record | record effective_from/effective_to and recorded_at | operator unless public release | appeal creates case/correction | reject; migration_exception |
+| cancelled | evidence-approved | advance-cancelled-to-evidence-approved | Field Operations Authority | decision_event + evidence_record | record effective_from/effective_to and recorded_at | operator unless public release | appeal creates case/correction | reject; migration_exception |
+| evidence-approved | evidence-rejected | advance-evidence-approved-to-evidence-rejected | Field Operations Authority | decision_event + evidence_record | record effective_from/effective_to and recorded_at | operator unless public release | appeal creates case/correction | reject; migration_exception |
+| evidence-rejected | evidence-under-review | advance-evidence-rejected-to-evidence-under-review | Field Operations Authority | decision_event + evidence_record | record effective_from/effective_to and recorded_at | operator unless public release | appeal creates case/correction | reject; migration_exception |
+| evidence-under-review | field-captured | advance-evidence-under-review-to-field-captured | Field Operations Authority | decision_event + evidence_record | record effective_from/effective_to and recorded_at | operator unless public release | appeal creates case/correction | reject; migration_exception |
+| field-captured | in-progress | advance-field-captured-to-in-progress | Field Operations Authority | decision_event + evidence_record | record effective_from/effective_to and recorded_at | operator unless public release | appeal creates case/correction | reject; migration_exception |
+| in-progress | linked-to-canonical | advance-in-progress-to-linked-to-canonical | Field Operations Authority | decision_event + evidence_record | record effective_from/effective_to and recorded_at | operator unless public release | appeal creates case/correction | reject; migration_exception |
+| linked-to-canonical | needs-recapture | advance-linked-to-canonical-to-needs-recapture | Field Operations Authority | decision_event + evidence_record | record effective_from/effective_to and recorded_at | operator unless public release | appeal creates case/correction | reject; migration_exception |
+| needs-recapture | <terminal or authority-reopened> | reopen/appeal only when listed by owner | Field Operations Authority | decision_event required | new interval/version | operator | appeal path explicit | reject |

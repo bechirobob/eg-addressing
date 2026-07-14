@@ -1,21 +1,23 @@
 erDiagram
-  COUNTRY {
-    text country_id
-    char_2 iso2_code
-    text official_name_es
-    text official_name_en
-    text lifecycle_state
-    text source_authority_id
-    timestamptz created_at
+  administrative_code_history {
+    text admin_code_history_id PK
+    text administrative_unit_id
+    text code_scheme
+    text official_code
+    timestamptz effective_from
+    timestamptz effective_to
+    timestamptz recorded_from
+    timestamptz recorded_to
+    text source_id
   }
-  ADMINISTRATIVE_UNIT {
+  administrative_unit {
     text administrative_unit_id
     text country_id
     text stable_code
     timestamptz created_at
     timestamptz retired_at
   }
-  ADMINISTRATIVE_UNIT_VERSION {
+  administrative_unit_version {
     text administrative_unit_version_id
     text administrative_unit_id
     text parent_administrative_unit_id
@@ -28,64 +30,7 @@ erDiagram
     text source_authority_id
     text classification
   }
-  NAME_RECORD {
-    text name_record_id
-    text subject_entity
-    text subject_id
-    text language_code
-    text name_kind
-    text name_status
-    text name_text
-    text normalized_text
-    text source_record_id
-    timestamptz effective_from
-    timestamptz effective_to
-  }
-  OPERATIONAL_AREA {
-    text operational_area_id
-    text area_type
-    text name_record_id
-    text purpose
-    text lifecycle_state
-    text authority_owner
-    timestamptz effective_from
-    timestamptz effective_to
-    text classification
-  }
-  OPERATIONAL_AREA_COVERAGE {
-    text coverage_id
-    text operational_area_id
-    text administrative_unit_id
-    text geometry_version_id
-    text coverage_role
-    timestamptz effective_from
-    timestamptz effective_to
-  }
-  ROAD {
-    text road_id
-    text road_class
-    text lifecycle_state
-    text source_authority_id
-    timestamptz created_at
-  }
-  ROAD_SEGMENT {
-    text road_segment_id
-    text road_id
-    integer sequence_number
-    numeric_12_2 measured_length_m
-    text lifecycle_state
-    timestamptz effective_from
-    timestamptz effective_to
-  }
-  PARCEL_REFERENCE {
-    text parcel_reference_id
-    text external_parcel_id
-    text source_authority_id
-    text classification
-    timestamptz effective_from
-    timestamptz effective_to
-  }
-  BUILDING {
+  building {
     text building_id
     text usage_class
     text lifecycle_state
@@ -93,7 +38,53 @@ erDiagram
     timestamptz effective_from
     timestamptz effective_to
   }
-  ENTRANCE {
+  building_primary_entrance {
+    text building_primary_entrance_id
+    text building_id
+    text entrance_id
+    timestamptz effective_from
+    timestamptz effective_to
+  }
+  correction_case {
+    text correction_case_id
+    text target_location_record_id
+    text target_public_code
+    text correction_type
+    text case_state
+    timestamptz submitted_at
+    timestamptz resolved_at
+    text resolution_event_id
+  }
+  country {
+    text country_id
+    char_2_ iso2_code
+    text official_name_es
+    text official_name_en
+    text lifecycle_state
+    text source_authority_id
+    timestamptz created_at
+  }
+  decision_event {
+    text decision_event_id
+    text decision_type
+    text actor_id
+    text authority_id
+    text reason_code
+    jsonb details_json
+    timestamptz effective_at
+    timestamptz recorded_at
+  }
+  dispute_case {
+    text dispute_case_id
+    text target_entity
+    text target_id
+    text dispute_type
+    text case_state
+    timestamptz opened_at
+    timestamptz resolved_at
+    text resolution_event_id
+  }
+  entrance {
     text entrance_id
     text building_id
     text entrance_role
@@ -101,25 +92,100 @@ erDiagram
     timestamptz effective_from
     timestamptz effective_to
   }
-  BUILDING_PRIMARY_ENTRANCE {
-    text building_primary_entrance_id
-    text building_id
-    text entrance_id
-    timestamptz effective_from
-    timestamptz effective_to
-  }
-  UNIT {
-    text unit_id
-    text building_id
-    text parent_unit_id
-    text unit_label
-    text unit_type
-    text lifecycle_state
+  evidence_object {
+    text evidence_object_id
+    text source_record_id
+    text storage_uri
+    text content_hash
+    text media_type
     text classification
+    timestamptz captured_at
+    text retention_state
+  }
+  field_assignment {
+    text assignment_id
+    text operational_area_id
+    text task_type
+    text team
+    text priority
+    text assignment_state
+    timestamptz created_at
+    timestamptz closed_at
+  }
+  field_observation {
+    text field_observation_id
+    text intake_case_id
+    text assignment_id
+    text observation_type
+    text verification_state
+    text source_record_id
+    text geometry_observation_id
+    text notes_classification
+    timestamptz recorded_at
+  }
+  geometry_observation {
+    text geometry_observation_id
+    text subject_hint_entity
+    text subject_hint_id
+    geometry_Geometry_4326_ observed_geom
+    text geometry_role
+    text capture_method
+    numeric_10_2_ horizontal_accuracy_m
+    text source_record_id
+    text evidence_object_id
+    text licence_id
+    timestamptz observed_at
+    timestamptz recorded_at
+    text classification
+  }
+  geometry_quality_assessment {
+    text quality_assessment_id
+    text geometry_version_id
+    text check_name
+    text check_result
+    jsonb tolerance_json
+    jsonb measured_value_json
+    timestamptz assessed_at
+    text assessed_by_actor_id
+  }
+  geometry_transformation {
+    text transformation_id
+    text source_crs
+    text target_crs
+    text algorithm
+    text algorithm_version
+    jsonb parameters_json
+    timestamptz performed_at
+  }
+  geometry_version {
+    text geometry_version_id
+    text subject_entity
+    text subject_id
+    text geometry_role
+    geometry_Geometry_4326_ geom
+    text source_observation_id
+    text transformation_id
+    text validation_method
+    text validated_by_actor_id
+    text quality_state
     timestamptz effective_from
     timestamptz effective_to
+    timestamptz recorded_at
+    timestamptz recorded_to
+    text superseded_by_geometry_version_id
+    text dispute_case_id
+    text classification
   }
-  LANDMARK {
+  intake_case {
+    text intake_case_id
+    text source_record_id
+    text submitted_label
+    text intake_state
+    text provisional_code
+    timestamptz created_at
+    timestamptz closed_at
+  }
+  landmark {
     text landmark_id
     text landmark_type
     text lifecycle_state
@@ -127,7 +193,23 @@ erDiagram
     timestamptz effective_from
     timestamptz effective_to
   }
-  LOCALITY {
+  legacy_crosswalk {
+    text legacy_crosswalk_id PK
+    text source_table
+    text source_field
+    text legacy_id
+    text target_entity
+    text target_id
+    timestamptz created_at
+  }
+  licence {
+    text licence_id
+    text licence_name
+    text licence_uri
+    text usage_restriction
+    text classification
+  }
+  locality {
     text locality_id
     text administrative_unit_id
     text locality_type
@@ -136,22 +218,44 @@ erDiagram
     timestamptz effective_from
     timestamptz effective_to
   }
-  NON_BUILDING_OBJECT {
-    text object_id
-    text object_type
-    text lifecycle_state
-    text source_authority_id
-    timestamptz effective_from
-    timestamptz effective_to
-  }
-  LOCATION_RECORD {
+  location_record {
     text location_record_id
     text record_type
     timestamptz created_at
     timestamptz retired_at
     text classification
   }
-  LOCATION_RECORD_VERSION {
+  location_record_assertion {
+    text assertion_id
+    text location_record_version_id
+    text target_entity
+    text target_field
+    jsonb value_json
+    text source_record_id
+    text evidence_object_id
+    text decision_event_id
+    text classification
+  }
+  location_record_object_link {
+    text link_id
+    text location_record_version_id
+    text object_entity
+    text object_id
+    text object_role
+    integer cardinality_rank
+    timestamptz effective_from
+    timestamptz effective_to
+  }
+  location_record_relationship {
+    text relationship_id
+    text from_location_record_id
+    text to_location_record_id
+    text relationship_type
+    timestamptz effective_from
+    timestamptz effective_to
+    text source_decision_event_id
+  }
+  location_record_version {
     text location_record_version_id
     text location_record_id
     integer version_number
@@ -170,234 +274,7 @@ erDiagram
     text supersession_reason
     text source_decision_event_id
   }
-  LOCATION_RECORD_OBJECT_LINK {
-    text link_id
-    text location_record_version_id
-    text object_entity
-    text object_id
-    text object_role
-    integer cardinality_rank
-    timestamptz effective_from
-    timestamptz effective_to
-  }
-  LOCATION_RECORD_RELATIONSHIP {
-    text relationship_id
-    text from_location_record_id
-    text to_location_record_id
-    text relationship_type
-    timestamptz effective_from
-    timestamptz effective_to
-    text source_decision_event_id
-  }
-  PUBLIC_CODE_ALIAS {
-    text public_code_alias_id
-    text location_record_id
-    text public_code
-    text code_scheme
-    text code_state
-    timestamptz reserved_at
-    timestamptz issued_at
-    timestamptz retired_at
-    text predecessor_alias_id
-    text successor_alias_id
-  }
-  GEOMETRY_OBSERVATION {
-    text geometry_observation_id
-    text subject_hint_entity
-    text subject_hint_id
-    geometry_Geometry_4326 observed_geom
-    text geometry_role
-    text capture_method
-    numeric_10_2 horizontal_accuracy_m
-    text source_record_id
-    text evidence_object_id
-    text licence_id
-    timestamptz observed_at
-    timestamptz recorded_at
-    text classification
-  }
-  GEOMETRY_VERSION {
-    text geometry_version_id
-    text subject_entity
-    text subject_id
-    text geometry_role
-    geometry_Geometry_4326 geom
-    text source_observation_id
-    text transformation_id
-    text validation_method
-    text validated_by_actor_id
-    text quality_state
-    timestamptz effective_from
-    timestamptz effective_to
-    timestamptz recorded_at
-    timestamptz recorded_to
-    text superseded_by_geometry_version_id
-    text dispute_case_id
-    text classification
-  }
-  GEOMETRY_TRANSFORMATION {
-    text transformation_id
-    text source_crs
-    text target_crs
-    text algorithm
-    text algorithm_version
-    jsonb parameters_json
-    timestamptz performed_at
-  }
-  GEOMETRY_QUALITY_ASSESSMENT {
-    text quality_assessment_id
-    text geometry_version_id
-    text check_name
-    text check_result
-    jsonb tolerance_json
-    jsonb measured_value_json
-    timestamptz assessed_at
-    text assessed_by_actor_id
-  }
-  LICENCE {
-    text licence_id
-    text licence_name
-    text licence_uri
-    text usage_restriction
-    text classification
-  }
-  SOURCE_AUTHORITY {
-    text source_authority_id
-    text authority_name
-    text authority_class
-    text legal_basis
-    text status
-  }
-  SOURCE_PACKAGE {
-    text source_package_id
-    text source_authority_id
-    text package_name
-    text package_checksum
-    text licence_id
-    timestamptz loaded_at
-    jsonb load_context
-  }
-  SOURCE_RECORD {
-    text source_record_id
-    text source_package_id
-    text source_key
-    text raw_payload_hash
-    text raw_payload_classification
-    timestamptz recorded_at
-  }
-  EVIDENCE_OBJECT {
-    text evidence_object_id
-    text source_record_id
-    text storage_uri
-    text content_hash
-    text media_type
-    text classification
-    timestamptz captured_at
-    text retention_state
-  }
-  DECISION_EVENT {
-    text decision_event_id
-    text decision_type
-    text actor_id
-    text authority_id
-    text reason_code
-    jsonb details_json
-    timestamptz effective_at
-    timestamptz recorded_at
-  }
-  LOCATION_RECORD_ASSERTION {
-    text assertion_id
-    text location_record_version_id
-    text target_entity
-    text target_field
-    jsonb value_json
-    text source_record_id
-    text evidence_object_id
-    text decision_event_id
-    text classification
-  }
-  INTAKE_CASE {
-    text intake_case_id
-    text source_record_id
-    text submitted_label
-    text intake_state
-    text provisional_code
-    timestamptz created_at
-    timestamptz closed_at
-  }
-  FIELD_ASSIGNMENT {
-    text assignment_id
-    text operational_area_id
-    text task_type
-    text team
-    text priority
-    text assignment_state
-    timestamptz created_at
-    timestamptz closed_at
-  }
-  FIELD_OBSERVATION {
-    text field_observation_id
-    text intake_case_id
-    text assignment_id
-    text observation_type
-    text verification_state
-    text source_record_id
-    text geometry_observation_id
-    text notes_classification
-    timestamptz recorded_at
-  }
-  CORRECTION_CASE {
-    text correction_case_id
-    text target_location_record_id
-    text target_public_code
-    text correction_type
-    text case_state
-    timestamptz submitted_at
-    timestamptz resolved_at
-    text resolution_event_id
-  }
-  DISPUTE_CASE {
-    text dispute_case_id
-    text target_entity
-    text target_id
-    text dispute_type
-    text case_state
-    timestamptz opened_at
-    timestamptz resolved_at
-    text resolution_event_id
-  }
-  PUBLICATION_RELEASE {
-    text publication_release_id
-    text release_state
-    text authority_reference
-    text projection_type
-    timestamptz effective_at
-    timestamptz recorded_at
-    text immutable_manifest_hash
-    text manifest_storage_uri
-    text created_by_actor_id
-  }
-  PUBLICATION_RELEASE_ITEM {
-    text publication_release_item_id
-    text publication_release_id
-    text location_record_id
-    text location_record_version_id
-    text public_code_alias_id
-    jsonb projection_payload_json
-    text projection_payload_hash
-    text projection_state
-    text published_label
-    text published_geometry_policy
-  }
-  PARTNER_PROJECTION {
-    text partner_projection_id
-    text publication_release_item_id
-    text partner_scope
-    jsonb response_field_set
-    text classification
-    timestamptz expires_at
-  }
-  MIGRATION_EXCEPTION {
+  migration_exception {
     text migration_exception_id
     text batch_id
     text source_table
@@ -410,76 +287,232 @@ erDiagram
     timestamptz created_at
     timestamptz resolved_at
   }
-  SOURCE_AUTHORITY ||--o{ COUNTRY : source_authority_id
-  COUNTRY ||--o{ ADMINISTRATIVE_UNIT : country_id
-  ADMINISTRATIVE_UNIT ||--o{ ADMINISTRATIVE_UNIT_VERSION : administrative_unit_id
-  ADMINISTRATIVE_UNIT ||--o{ ADMINISTRATIVE_UNIT_VERSION : parent_administrative_unit_id
-  SOURCE_AUTHORITY ||--o{ ADMINISTRATIVE_UNIT_VERSION : source_authority_id
-  SOURCE_RECORD ||--o{ NAME_RECORD : source_record_id
-  NAME_RECORD ||--o{ OPERATIONAL_AREA : name_record_id
-  OPERATIONAL_AREA ||--o{ OPERATIONAL_AREA_COVERAGE : operational_area_id
-  ADMINISTRATIVE_UNIT ||--o{ OPERATIONAL_AREA_COVERAGE : administrative_unit_id
-  GEOMETRY_VERSION ||--o{ OPERATIONAL_AREA_COVERAGE : geometry_version_id
-  SOURCE_AUTHORITY ||--o{ ROAD : source_authority_id
-  ROAD ||--o{ ROAD_SEGMENT : road_id
-  SOURCE_AUTHORITY ||--o{ PARCEL_REFERENCE : source_authority_id
-  SOURCE_AUTHORITY ||--o{ BUILDING : source_authority_id
-  BUILDING ||--o{ ENTRANCE : building_id
-  BUILDING ||--o{ BUILDING_PRIMARY_ENTRANCE : building_id
-  ENTRANCE ||--o{ BUILDING_PRIMARY_ENTRANCE : entrance_id
-  BUILDING ||--o{ UNIT : building_id
-  UNIT ||--o{ UNIT : parent_unit_id
-  SOURCE_AUTHORITY ||--o{ LANDMARK : source_authority_id
-  ADMINISTRATIVE_UNIT ||--o{ LOCALITY : administrative_unit_id
-  SOURCE_AUTHORITY ||--o{ LOCALITY : source_authority_id
-  SOURCE_AUTHORITY ||--o{ NON_BUILDING_OBJECT : source_authority_id
-  LOCATION_RECORD ||--o{ LOCATION_RECORD_VERSION : location_record_id
-  ADMINISTRATIVE_UNIT_VERSION ||--o{ LOCATION_RECORD_VERSION : administrative_unit_version_id
-  LOCALITY ||--o{ LOCATION_RECORD_VERSION : locality_id
-  LOCATION_RECORD_VERSION ||--o{ LOCATION_RECORD_VERSION : predecessor_version_id
-  LOCATION_RECORD_VERSION ||--o{ LOCATION_RECORD_VERSION : successor_version_id
-  CORRECTION_CASE ||--o{ LOCATION_RECORD_VERSION : correction_case_id
-  DECISION_EVENT ||--o{ LOCATION_RECORD_VERSION : source_decision_event_id
-  LOCATION_RECORD_VERSION ||--o{ LOCATION_RECORD_OBJECT_LINK : location_record_version_id
-  LOCATION_RECORD ||--o{ LOCATION_RECORD_RELATIONSHIP : from_location_record_id
-  LOCATION_RECORD ||--o{ LOCATION_RECORD_RELATIONSHIP : to_location_record_id
-  DECISION_EVENT ||--o{ LOCATION_RECORD_RELATIONSHIP : source_decision_event_id
-  LOCATION_RECORD ||--o{ PUBLIC_CODE_ALIAS : location_record_id
-  PUBLIC_CODE_ALIAS ||--o{ PUBLIC_CODE_ALIAS : predecessor_alias_id
-  PUBLIC_CODE_ALIAS ||--o{ PUBLIC_CODE_ALIAS : successor_alias_id
-  SOURCE_RECORD ||--o{ GEOMETRY_OBSERVATION : source_record_id
-  EVIDENCE_OBJECT ||--o{ GEOMETRY_OBSERVATION : evidence_object_id
-  LICENCE ||--o{ GEOMETRY_OBSERVATION : licence_id
-  GEOMETRY_OBSERVATION ||--o{ GEOMETRY_VERSION : source_observation_id
-  GEOMETRY_TRANSFORMATION ||--o{ GEOMETRY_VERSION : transformation_id
-  GEOMETRY_VERSION ||--o{ GEOMETRY_VERSION : superseded_by_geometry_version_id
-  DISPUTE_CASE ||--o{ GEOMETRY_VERSION : dispute_case_id
-  GEOMETRY_VERSION ||--o{ GEOMETRY_QUALITY_ASSESSMENT : geometry_version_id
-  SOURCE_AUTHORITY ||--o{ SOURCE_PACKAGE : source_authority_id
-  LICENCE ||--o{ SOURCE_PACKAGE : licence_id
-  SOURCE_PACKAGE ||--o{ SOURCE_RECORD : source_package_id
-  SOURCE_RECORD ||--o{ EVIDENCE_OBJECT : source_record_id
-  SOURCE_AUTHORITY ||--o{ DECISION_EVENT : authority_id
-  LOCATION_RECORD_VERSION ||--o{ LOCATION_RECORD_ASSERTION : location_record_version_id
-  SOURCE_RECORD ||--o{ LOCATION_RECORD_ASSERTION : source_record_id
-  EVIDENCE_OBJECT ||--o{ LOCATION_RECORD_ASSERTION : evidence_object_id
-  DECISION_EVENT ||--o{ LOCATION_RECORD_ASSERTION : decision_event_id
-  SOURCE_RECORD ||--o{ INTAKE_CASE : source_record_id
-  OPERATIONAL_AREA ||--o{ FIELD_ASSIGNMENT : operational_area_id
-  INTAKE_CASE ||--o{ FIELD_OBSERVATION : intake_case_id
-  FIELD_ASSIGNMENT ||--o{ FIELD_OBSERVATION : assignment_id
-  SOURCE_RECORD ||--o{ FIELD_OBSERVATION : source_record_id
-  GEOMETRY_OBSERVATION ||--o{ FIELD_OBSERVATION : geometry_observation_id
-  LOCATION_RECORD ||--o{ CORRECTION_CASE : target_location_record_id
-  DECISION_EVENT ||--o{ CORRECTION_CASE : resolution_event_id
-  DECISION_EVENT ||--o{ DISPUTE_CASE : resolution_event_id
-  PUBLICATION_RELEASE ||--o{ PUBLICATION_RELEASE_ITEM : publication_release_id
-  LOCATION_RECORD ||--o{ PUBLICATION_RELEASE_ITEM : location_record_id
-  LOCATION_RECORD_VERSION ||--o{ PUBLICATION_RELEASE_ITEM : location_record_version_id
-  PUBLIC_CODE_ALIAS ||--o{ PUBLICATION_RELEASE_ITEM : public_code_alias_id
-  PUBLICATION_RELEASE_ITEM ||--o{ PARTNER_PROJECTION : publication_release_item_id
-  LOCATION_RECORD ||--o{ LOCATION_RECORD_VERSION : version_history
-  LOCATION_RECORD_VERSION ||--o{ LOCATION_RECORD_OBJECT_LINK : object_roles
-  PUBLICATION_RELEASE ||--o{ PUBLICATION_RELEASE_ITEM : immutable_items
-  PUBLICATION_RELEASE_ITEM }o--|| LOCATION_RECORD_VERSION : exact_version
-  PUBLICATION_RELEASE_ITEM }o--|| PUBLIC_CODE_ALIAS : exact_alias
+  name_record {
+    text name_record_id
+    text subject_entity
+    text subject_id
+    text language_code
+    text name_kind
+    text name_status
+    text name_text
+    text normalized_text
+    text source_record_id
+    timestamptz effective_from
+    timestamptz effective_to
+  }
+  non_building_object {
+    text object_id
+    text object_type
+    text lifecycle_state
+    text source_authority_id
+    timestamptz effective_from
+    timestamptz effective_to
+  }
+  operational_area {
+    text operational_area_id
+    text area_type
+    text name_record_id
+    text purpose
+    text lifecycle_state
+    text authority_owner
+    timestamptz effective_from
+    timestamptz effective_to
+    text classification
+  }
+  operational_area_coverage {
+    text coverage_id
+    text operational_area_id
+    text administrative_unit_id
+    text geometry_version_id
+    text coverage_role
+    timestamptz effective_from
+    timestamptz effective_to
+  }
+  parcel_reference {
+    text parcel_reference_id
+    text external_parcel_id
+    text source_authority_id
+    text classification
+    timestamptz effective_from
+    timestamptz effective_to
+  }
+  partner_projection {
+    text partner_projection_id
+    text publication_release_item_id
+    text partner_scope
+    jsonb response_field_set
+    text classification
+    timestamptz expires_at
+  }
+  public_code_alias {
+    text public_code_alias_id
+    text location_record_id
+    text public_code
+    text code_scheme
+    text code_state
+    timestamptz reserved_at
+    timestamptz issued_at
+    timestamptz retired_at
+    text predecessor_alias_id
+    text successor_alias_id
+  }
+  publication_release {
+    text publication_release_id
+    text release_state
+    text authority_reference
+    text projection_type
+    timestamptz effective_at
+    timestamptz recorded_at
+    text immutable_manifest_hash
+    text manifest_storage_uri
+    text created_by_actor_id
+  }
+  publication_release_item {
+    text publication_release_item_id
+    text publication_release_id
+    text location_record_id
+    text location_record_version_id
+    text public_code_alias_id
+    jsonb projection_payload_json
+    text projection_payload_hash
+    text projection_state
+    text published_label
+    text published_geometry_policy
+  }
+  registry_subject {
+    text subject_id PK
+    text subject_entity
+    text subject_native_id
+    timestamptz created_at
+  }
+  road {
+    text road_id
+    text road_class
+    text lifecycle_state
+    text source_authority_id
+    timestamptz created_at
+  }
+  road_segment {
+    text road_segment_id
+    text road_id
+    integer sequence_number
+    numeric_12_2_ measured_length_m
+    text lifecycle_state
+    timestamptz effective_from
+    timestamptz effective_to
+  }
+  source_authority {
+    text source_authority_id
+    text authority_name
+    text authority_class
+    text legal_basis
+    text status
+  }
+  source_package {
+    text source_package_id
+    text source_authority_id
+    text package_name
+    text package_checksum
+    text licence_id
+    timestamptz loaded_at
+    jsonb load_context
+  }
+  source_payload_archive {
+    text archive_id PK
+    text source_record_id
+    text payload_uri
+    text payload_hash_sha256
+    text classification
+    text retention_state
+    timestamptz created_at
+  }
+  source_record {
+    text source_record_id
+    text source_package_id
+    text source_key
+    text raw_payload_hash
+    text raw_payload_classification
+    timestamptz recorded_at
+  }
+  unit {
+    text unit_id
+    text building_id
+    text parent_unit_id
+    text unit_label
+    text unit_type
+    text lifecycle_state
+    text classification
+    timestamptz effective_from
+    timestamptz effective_to
+  }
+  administrative_unit ||--o{ administrative_code_history : administrative_unit_id
+  source_record ||--o{ administrative_code_history : source_id
+  country ||--o{ administrative_unit : country_id
+  administrative_unit ||--o{ administrative_unit_version : administrative_unit_id
+  administrative_unit ||--o{ administrative_unit_version : parent_administrative_unit_id
+  source_authority ||--o{ administrative_unit_version : source_authority_id
+  source_authority ||--o{ building : source_authority_id
+  building ||--o{ building_primary_entrance : building_id
+  entrance ||--o{ building_primary_entrance : entrance_id
+  location_record ||--o{ correction_case : target_location_record_id
+  decision_event ||--o{ correction_case : resolution_event_id
+  source_authority ||--o{ country : source_authority_id
+  source_authority ||--o{ decision_event : authority_id
+  decision_event ||--o{ dispute_case : resolution_event_id
+  building ||--o{ entrance : building_id
+  source_record ||--o{ evidence_object : source_record_id
+  operational_area ||--o{ field_assignment : operational_area_id
+  intake_case ||--o{ field_observation : intake_case_id
+  field_assignment ||--o{ field_observation : assignment_id
+  source_record ||--o{ field_observation : source_record_id
+  geometry_observation ||--o{ field_observation : geometry_observation_id
+  source_record ||--o{ geometry_observation : source_record_id
+  evidence_object ||--o{ geometry_observation : evidence_object_id
+  licence ||--o{ geometry_observation : licence_id
+  geometry_version ||--o{ geometry_quality_assessment : geometry_version_id
+  geometry_observation ||--o{ geometry_version : source_observation_id
+  geometry_transformation ||--o{ geometry_version : transformation_id
+  geometry_version ||--o{ geometry_version : superseded_by_geometry_version_id
+  dispute_case ||--o{ geometry_version : dispute_case_id
+  source_record ||--o{ intake_case : source_record_id
+  source_authority ||--o{ landmark : source_authority_id
+  administrative_unit ||--o{ locality : administrative_unit_id
+  source_authority ||--o{ locality : source_authority_id
+  location_record_version ||--o{ location_record_assertion : location_record_version_id
+  source_record ||--o{ location_record_assertion : source_record_id
+  evidence_object ||--o{ location_record_assertion : evidence_object_id
+  decision_event ||--o{ location_record_assertion : decision_event_id
+  location_record_version ||--o{ location_record_object_link : location_record_version_id
+  location_record ||--o{ location_record_relationship : from_location_record_id
+  location_record ||--o{ location_record_relationship : to_location_record_id
+  decision_event ||--o{ location_record_relationship : source_decision_event_id
+  location_record ||--o{ location_record_version : location_record_id
+  administrative_unit_version ||--o{ location_record_version : administrative_unit_version_id
+  locality ||--o{ location_record_version : locality_id
+  location_record_version ||--o{ location_record_version : predecessor_version_id
+  location_record_version ||--o{ location_record_version : successor_version_id
+  correction_case ||--o{ location_record_version : correction_case_id
+  decision_event ||--o{ location_record_version : source_decision_event_id
+  source_record ||--o{ name_record : source_record_id
+  source_authority ||--o{ non_building_object : source_authority_id
+  name_record ||--o{ operational_area : name_record_id
+  operational_area ||--o{ operational_area_coverage : operational_area_id
+  administrative_unit ||--o{ operational_area_coverage : administrative_unit_id
+  geometry_version ||--o{ operational_area_coverage : geometry_version_id
+  source_authority ||--o{ parcel_reference : source_authority_id
+  publication_release_item ||--o{ partner_projection : publication_release_item_id
+  location_record ||--o{ public_code_alias : location_record_id
+  public_code_alias ||--o{ public_code_alias : predecessor_alias_id
+  public_code_alias ||--o{ public_code_alias : successor_alias_id
+  publication_release ||--o{ publication_release_item : publication_release_id
+  location_record ||--o{ publication_release_item : location_record_id
+  location_record_version ||--o{ publication_release_item : location_record_version_id
+  public_code_alias ||--o{ publication_release_item : public_code_alias_id
+  source_authority ||--o{ road : source_authority_id
+  road ||--o{ road_segment : road_id
+  source_authority ||--o{ source_package : source_authority_id
+  licence ||--o{ source_package : licence_id
+  source_record ||--o{ source_payload_archive : source_record_id
+  source_package ||--o{ source_record : source_package_id
+  building ||--o{ unit : building_id
+  unit ||--o{ unit : parent_unit_id

@@ -8,6 +8,168 @@
     "single_current_version_mechanism": "Open recorded interval: recorded_to IS NULL is the only authoritative current-version marker. Pointers and booleans are derived views only and not stored in the target model."
   },
   "entities": {
+    "administrative_code_history": {
+      "description": "Effective-dated official administrative codes; codes are not permanent identity.",
+      "fields": [
+        {
+          "authority_owner": "SDA/Registry Authority",
+          "classification": "government-internal",
+          "constraints": [
+            "PRIMARY KEY"
+          ],
+          "default": null,
+          "definition": "Stable history row id.",
+          "fk": null,
+          "name": "admin_code_history_id",
+          "nullable": false,
+          "pg_type": "text",
+          "projection": {
+            "operator": "allowed by role",
+            "public": "never unless released"
+          },
+          "temporal_behavior": "recorded-time governed",
+          "vocabulary": null
+        },
+        {
+          "authority_owner": "SDA/Registry Authority",
+          "classification": "government-internal",
+          "constraints": [],
+          "default": null,
+          "definition": "Administrative identity.",
+          "fk": "administrative_unit.administrative_unit_id",
+          "name": "administrative_unit_id",
+          "nullable": false,
+          "pg_type": "text",
+          "projection": {
+            "operator": "allowed by role",
+            "public": "never unless released"
+          },
+          "temporal_behavior": "recorded-time governed",
+          "vocabulary": null
+        },
+        {
+          "authority_owner": "SDA/Registry Authority",
+          "classification": "government-internal",
+          "constraints": [],
+          "default": "'national-admin-code'",
+          "definition": "Code scheme/version.",
+          "fk": null,
+          "name": "code_scheme",
+          "nullable": false,
+          "pg_type": "text",
+          "projection": {
+            "operator": "allowed by role",
+            "public": "never unless released"
+          },
+          "temporal_behavior": "recorded-time governed",
+          "vocabulary": null
+        },
+        {
+          "authority_owner": "SDA/Registry Authority",
+          "classification": "government-internal",
+          "constraints": [
+            "not identity"
+          ],
+          "default": null,
+          "definition": "Official code value effective for interval.",
+          "fk": null,
+          "name": "official_code",
+          "nullable": false,
+          "pg_type": "text",
+          "projection": {
+            "operator": "allowed by role",
+            "public": "never unless released"
+          },
+          "temporal_behavior": "recorded-time governed",
+          "vocabulary": null
+        },
+        {
+          "authority_owner": "SDA/Registry Authority",
+          "classification": "government-internal",
+          "constraints": [],
+          "default": null,
+          "definition": "Effective start.",
+          "fk": null,
+          "name": "effective_from",
+          "nullable": false,
+          "pg_type": "timestamptz",
+          "projection": {
+            "operator": "allowed by role",
+            "public": "never unless released"
+          },
+          "temporal_behavior": "recorded-time governed",
+          "vocabulary": null
+        },
+        {
+          "authority_owner": "SDA/Registry Authority",
+          "classification": "government-internal",
+          "constraints": [],
+          "default": null,
+          "definition": "Effective end.",
+          "fk": null,
+          "name": "effective_to",
+          "nullable": true,
+          "pg_type": "timestamptz",
+          "projection": {
+            "operator": "allowed by role",
+            "public": "never unless released"
+          },
+          "temporal_behavior": "recorded-time governed",
+          "vocabulary": null
+        },
+        {
+          "authority_owner": "SDA/Registry Authority",
+          "classification": "government-internal",
+          "constraints": [],
+          "default": "now()",
+          "definition": "Recorded start.",
+          "fk": null,
+          "name": "recorded_from",
+          "nullable": false,
+          "pg_type": "timestamptz",
+          "projection": {
+            "operator": "allowed by role",
+            "public": "never unless released"
+          },
+          "temporal_behavior": "recorded-time governed",
+          "vocabulary": null
+        },
+        {
+          "authority_owner": "SDA/Registry Authority",
+          "classification": "government-internal",
+          "constraints": [],
+          "default": null,
+          "definition": "Recorded end.",
+          "fk": null,
+          "name": "recorded_to",
+          "nullable": true,
+          "pg_type": "timestamptz",
+          "projection": {
+            "operator": "allowed by role",
+            "public": "never unless released"
+          },
+          "temporal_behavior": "recorded-time governed",
+          "vocabulary": null
+        },
+        {
+          "authority_owner": "SDA/Registry Authority",
+          "classification": "government-internal",
+          "constraints": [],
+          "default": null,
+          "definition": "Source authority.",
+          "fk": "source_record.source_record_id",
+          "name": "source_id",
+          "nullable": false,
+          "pg_type": "text",
+          "projection": {
+            "operator": "allowed by role",
+            "public": "never unless released"
+          },
+          "temporal_behavior": "recorded-time governed",
+          "vocabulary": null
+        }
+      ]
+    },
     "administrative_unit": {
       "description": "Stable administrative identity independent of mutable names, hierarchy, and boundaries.",
       "domain": "Administrative Geography",
@@ -294,7 +456,7 @@
           "pg_type": "text",
           "projection": "operator",
           "temporal_behavior": "current fact",
-          "vocabulary": "lifecycle_state"
+          "vocabulary": "reference_object_lifecycle"
         },
         {
           "authority_owner": "Registry Authority",
@@ -614,7 +776,7 @@
           "pg_type": "text",
           "projection": "operator",
           "temporal_behavior": "current fact",
-          "vocabulary": "lifecycle_state"
+          "vocabulary": "reference_object_lifecycle"
         },
         {
           "authority_owner": "Registry Authority",
@@ -922,14 +1084,14 @@
           "classification": "government-internal",
           "constraints": [],
           "default": "'access-point'",
-          "definition": "Entrance/access role.",
+          "definition": "Entrance/access role. Review 03 correction: uses entity-specific vocabulary.",
           "fk": null,
           "name": "entrance_role",
           "nullable": false,
           "pg_type": "text",
           "projection": "operator",
           "temporal_behavior": "current fact",
-          "vocabulary": "object_role"
+          "vocabulary": "entrance_role"
         },
         {
           "authority_owner": "Registry Authority",
@@ -943,7 +1105,7 @@
           "pg_type": "text",
           "projection": "operator",
           "temporal_behavior": "current fact",
-          "vocabulary": "lifecycle_state"
+          "vocabulary": "reference_object_lifecycle"
         },
         {
           "authority_owner": "Registry Authority",
@@ -1590,14 +1752,14 @@
           "classification": "government-internal",
           "constraints": [],
           "default": null,
-          "definition": "Result value.",
+          "definition": "Result value. Review 03 correction: uses entity-specific vocabulary.",
           "fk": null,
           "name": "check_result",
           "nullable": false,
           "pg_type": "text",
           "projection": "operator",
           "temporal_behavior": "current fact",
-          "vocabulary": "geometry_quality_state"
+          "vocabulary": "quality_check_result"
         },
         {
           "authority_owner": "Registry Authority",
@@ -2144,14 +2306,14 @@
           "classification": "government-internal",
           "constraints": [],
           "default": "'landmark'",
-          "definition": "Landmark type.",
+          "definition": "Landmark type. Review 03 correction: uses entity-specific vocabulary.",
           "fk": null,
           "name": "landmark_type",
           "nullable": false,
           "pg_type": "text",
           "projection": "operator",
           "temporal_behavior": "current fact",
-          "vocabulary": "record_type"
+          "vocabulary": "landmark_type"
         },
         {
           "authority_owner": "Registry Authority",
@@ -2165,7 +2327,7 @@
           "pg_type": "text",
           "projection": "operator",
           "temporal_behavior": "current fact",
-          "vocabulary": "lifecycle_state"
+          "vocabulary": "reference_object_lifecycle"
         },
         {
           "authority_owner": "Registry Authority",
@@ -2211,6 +2373,132 @@
         }
       ],
       "owner": "Registry Authority"
+    },
+    "legacy_crosswalk": {
+      "description": "Per-field legacy-to-target crosswalk for reversible migration and compatibility reads.",
+      "fields": [
+        {
+          "authority_owner": "SDA/Registry Authority",
+          "classification": "government-internal",
+          "constraints": [
+            "PRIMARY KEY"
+          ],
+          "default": null,
+          "definition": "Stable crosswalk row id.",
+          "fk": null,
+          "name": "legacy_crosswalk_id",
+          "nullable": false,
+          "pg_type": "text",
+          "projection": {
+            "operator": "allowed by role",
+            "public": "never unless released"
+          },
+          "temporal_behavior": "recorded-time governed",
+          "vocabulary": null
+        },
+        {
+          "authority_owner": "SDA/Registry Authority",
+          "classification": "government-internal",
+          "constraints": [],
+          "default": null,
+          "definition": "Current source table name.",
+          "fk": null,
+          "name": "source_table",
+          "nullable": false,
+          "pg_type": "text",
+          "projection": {
+            "operator": "allowed by role",
+            "public": "never unless released"
+          },
+          "temporal_behavior": "recorded-time governed",
+          "vocabulary": null
+        },
+        {
+          "authority_owner": "SDA/Registry Authority",
+          "classification": "government-internal",
+          "constraints": [],
+          "default": null,
+          "definition": "Current source field name.",
+          "fk": null,
+          "name": "source_field",
+          "nullable": false,
+          "pg_type": "text",
+          "projection": {
+            "operator": "allowed by role",
+            "public": "never unless released"
+          },
+          "temporal_behavior": "recorded-time governed",
+          "vocabulary": null
+        },
+        {
+          "authority_owner": "SDA/Registry Authority",
+          "classification": "government-internal",
+          "constraints": [],
+          "default": null,
+          "definition": "Current source primary or natural key value.",
+          "fk": null,
+          "name": "legacy_id",
+          "nullable": false,
+          "pg_type": "text",
+          "projection": {
+            "operator": "allowed by role",
+            "public": "never unless released"
+          },
+          "temporal_behavior": "recorded-time governed",
+          "vocabulary": null
+        },
+        {
+          "authority_owner": "SDA/Registry Authority",
+          "classification": "government-internal",
+          "constraints": [],
+          "default": null,
+          "definition": "Target entity name.",
+          "fk": null,
+          "name": "target_entity",
+          "nullable": false,
+          "pg_type": "text",
+          "projection": {
+            "operator": "allowed by role",
+            "public": "never unless released"
+          },
+          "temporal_behavior": "recorded-time governed",
+          "vocabulary": null
+        },
+        {
+          "authority_owner": "SDA/Registry Authority",
+          "classification": "government-internal",
+          "constraints": [],
+          "default": null,
+          "definition": "Target row identifier.",
+          "fk": null,
+          "name": "target_id",
+          "nullable": false,
+          "pg_type": "text",
+          "projection": {
+            "operator": "allowed by role",
+            "public": "never unless released"
+          },
+          "temporal_behavior": "recorded-time governed",
+          "vocabulary": null
+        },
+        {
+          "authority_owner": "SDA/Registry Authority",
+          "classification": "government-internal",
+          "constraints": [],
+          "default": "now()",
+          "definition": "Crosswalk creation time.",
+          "fk": null,
+          "name": "created_at",
+          "nullable": false,
+          "pg_type": "timestamptz",
+          "projection": {
+            "operator": "allowed by role",
+            "public": "never unless released"
+          },
+          "temporal_behavior": "recorded-time governed",
+          "vocabulary": null
+        }
+      ]
     },
     "licence": {
       "description": "Licence/usage terms for external data or evidence.",
@@ -2347,7 +2635,7 @@
           "pg_type": "text",
           "projection": "operator",
           "temporal_behavior": "current fact",
-          "vocabulary": "lifecycle_state"
+          "vocabulary": "reference_object_lifecycle"
         },
         {
           "authority_owner": "Registry Authority",
@@ -2894,7 +3182,7 @@
           "pg_type": "text",
           "projection": "operator",
           "temporal_behavior": "current fact",
-          "vocabulary": "lifecycle_state"
+          "vocabulary": "canonical_record_lifecycle"
         },
         {
           "authority_owner": "Registry Authority",
@@ -3432,14 +3720,14 @@
           "classification": "government-internal",
           "constraints": [],
           "default": null,
-          "definition": "Object type.",
+          "definition": "Object type. Review 03 correction: uses entity-specific vocabulary.",
           "fk": null,
           "name": "object_type",
           "nullable": false,
           "pg_type": "text",
           "projection": "operator",
           "temporal_behavior": "current fact",
-          "vocabulary": "record_type"
+          "vocabulary": "non_building_object_type"
         },
         {
           "authority_owner": "Registry Authority",
@@ -3453,7 +3741,7 @@
           "pg_type": "text",
           "projection": "operator",
           "temporal_behavior": "current fact",
-          "vocabulary": "lifecycle_state"
+          "vocabulary": "reference_object_lifecycle"
         },
         {
           "authority_owner": "Registry Authority",
@@ -3572,7 +3860,7 @@
           "pg_type": "text",
           "projection": "operator",
           "temporal_behavior": "current fact",
-          "vocabulary": "lifecycle_state"
+          "vocabulary": "operational_area_lifecycle"
         },
         {
           "authority_owner": "Registry Authority",
@@ -4350,6 +4638,86 @@
       ],
       "owner": "Publication Authority"
     },
+    "registry_subject": {
+      "description": "Shared subject registry for polymorphic names, object links, disputes and geometry subjects.",
+      "fields": [
+        {
+          "authority_owner": "SDA/Registry Authority",
+          "classification": "government-internal",
+          "constraints": [
+            "PRIMARY KEY",
+            "ULID-compatible"
+          ],
+          "default": null,
+          "definition": "Stable ULID-compatible subject identifier.",
+          "fk": null,
+          "name": "subject_id",
+          "nullable": false,
+          "pg_type": "text",
+          "projection": {
+            "operator": "allowed by role",
+            "public": "never unless released"
+          },
+          "temporal_behavior": "recorded-time governed",
+          "vocabulary": null
+        },
+        {
+          "authority_owner": "SDA/Registry Authority",
+          "classification": "government-internal",
+          "constraints": [
+            "CHECK subject_entity in allowed subject set"
+          ],
+          "default": null,
+          "definition": "Allowed target entity name.",
+          "fk": null,
+          "name": "subject_entity",
+          "nullable": false,
+          "pg_type": "text",
+          "projection": {
+            "operator": "allowed by role",
+            "public": "never unless released"
+          },
+          "temporal_behavior": "recorded-time governed",
+          "vocabulary": null
+        },
+        {
+          "authority_owner": "SDA/Registry Authority",
+          "classification": "government-internal",
+          "constraints": [
+            "validated by subject trigger"
+          ],
+          "default": null,
+          "definition": "ID in the subject entity table.",
+          "fk": null,
+          "name": "subject_native_id",
+          "nullable": false,
+          "pg_type": "text",
+          "projection": {
+            "operator": "allowed by role",
+            "public": "never unless released"
+          },
+          "temporal_behavior": "recorded-time governed",
+          "vocabulary": null
+        },
+        {
+          "authority_owner": "SDA/Registry Authority",
+          "classification": "government-internal",
+          "constraints": [],
+          "default": "now()",
+          "definition": "Recorded creation time.",
+          "fk": null,
+          "name": "created_at",
+          "nullable": false,
+          "pg_type": "timestamptz",
+          "projection": {
+            "operator": "allowed by role",
+            "public": "never unless released"
+          },
+          "temporal_behavior": "recorded-time governed",
+          "vocabulary": null
+        }
+      ]
+    },
     "road": {
       "description": "Named access corridor identity independent of geometry segmentation.",
       "domain": "Addressable Objects",
@@ -4394,7 +4762,7 @@
           "pg_type": "text",
           "projection": "operator",
           "temporal_behavior": "current fact",
-          "vocabulary": "lifecycle_state"
+          "vocabulary": "reference_object_lifecycle"
         },
         {
           "authority_owner": "Registry Authority",
@@ -4499,7 +4867,7 @@
           "pg_type": "text",
           "projection": "operator",
           "temporal_behavior": "current fact",
-          "vocabulary": "lifecycle_state"
+          "vocabulary": "reference_object_lifecycle"
         },
         {
           "authority_owner": "Registry Authority",
@@ -4714,6 +5082,132 @@
       ],
       "owner": "Data Authority"
     },
+    "source_payload_archive": {
+      "description": "Governed preservation for restricted raw source values; hash is integrity evidence, not the archive.",
+      "fields": [
+        {
+          "authority_owner": "SDA/Registry Authority",
+          "classification": "government-internal",
+          "constraints": [
+            "PRIMARY KEY"
+          ],
+          "default": null,
+          "definition": "Archive object id.",
+          "fk": null,
+          "name": "archive_id",
+          "nullable": false,
+          "pg_type": "text",
+          "projection": {
+            "operator": "allowed by role",
+            "public": "never unless released"
+          },
+          "temporal_behavior": "recorded-time governed",
+          "vocabulary": null
+        },
+        {
+          "authority_owner": "SDA/Registry Authority",
+          "classification": "government-internal",
+          "constraints": [],
+          "default": null,
+          "definition": "Source record.",
+          "fk": "source_record.source_record_id",
+          "name": "source_record_id",
+          "nullable": false,
+          "pg_type": "text",
+          "projection": {
+            "operator": "allowed by role",
+            "public": "never unless released"
+          },
+          "temporal_behavior": "recorded-time governed",
+          "vocabulary": null
+        },
+        {
+          "authority_owner": "SDA/Registry Authority",
+          "classification": "government-internal",
+          "constraints": [],
+          "default": null,
+          "definition": "Controlled encrypted object/storage URI.",
+          "fk": null,
+          "name": "payload_uri",
+          "nullable": false,
+          "pg_type": "text",
+          "projection": {
+            "operator": "allowed by role",
+            "public": "never unless released"
+          },
+          "temporal_behavior": "recorded-time governed",
+          "vocabulary": null
+        },
+        {
+          "authority_owner": "SDA/Registry Authority",
+          "classification": "government-internal",
+          "constraints": [],
+          "default": null,
+          "definition": "Integrity hash for archived payload.",
+          "fk": null,
+          "name": "payload_hash_sha256",
+          "nullable": false,
+          "pg_type": "text",
+          "projection": {
+            "operator": "allowed by role",
+            "public": "never unless released"
+          },
+          "temporal_behavior": "recorded-time governed",
+          "vocabulary": null
+        },
+        {
+          "authority_owner": "SDA/Registry Authority",
+          "classification": "government-internal",
+          "constraints": [],
+          "default": "'restricted'",
+          "definition": "Payload classification.",
+          "fk": null,
+          "name": "classification",
+          "nullable": false,
+          "pg_type": "text",
+          "projection": {
+            "operator": "allowed by role",
+            "public": "never unless released"
+          },
+          "temporal_behavior": "recorded-time governed",
+          "vocabulary": "classification"
+        },
+        {
+          "authority_owner": "SDA/Registry Authority",
+          "classification": "government-internal",
+          "constraints": [],
+          "default": "'active'",
+          "definition": "Retention state.",
+          "fk": null,
+          "name": "retention_state",
+          "nullable": false,
+          "pg_type": "text",
+          "projection": {
+            "operator": "allowed by role",
+            "public": "never unless released"
+          },
+          "temporal_behavior": "recorded-time governed",
+          "vocabulary": "retention_state"
+        },
+        {
+          "authority_owner": "SDA/Registry Authority",
+          "classification": "government-internal",
+          "constraints": [],
+          "default": "now()",
+          "definition": "Archive creation time.",
+          "fk": null,
+          "name": "created_at",
+          "nullable": false,
+          "pg_type": "timestamptz",
+          "projection": {
+            "operator": "allowed by role",
+            "public": "never unless released"
+          },
+          "temporal_behavior": "recorded-time governed",
+          "vocabulary": null
+        }
+      ]
+    },
     "source_record": {
       "description": "Immutable source row/submission key and raw payload hash.",
       "domain": "Source and Evidence",
@@ -4870,14 +5364,14 @@
           "classification": "government-internal",
           "constraints": [],
           "default": "'unit'",
-          "definition": "Unit type.",
+          "definition": "Unit type. Review 03 correction: uses entity-specific vocabulary.",
           "fk": null,
           "name": "unit_type",
           "nullable": false,
           "pg_type": "text",
           "projection": "operator",
           "temporal_behavior": "current fact",
-          "vocabulary": "record_type"
+          "vocabulary": "unit_type"
         },
         {
           "authority_owner": "Registry Authority",
@@ -4891,7 +5385,7 @@
           "pg_type": "text",
           "projection": "operator",
           "temporal_behavior": "current fact",
-          "vocabulary": "lifecycle_state"
+          "vocabulary": "reference_object_lifecycle"
         },
         {
           "authority_owner": "Registry Authority",
@@ -5209,6 +5703,19 @@
         "province": "First-level administrative unit."
       }
     },
+    "canonical_record_lifecycle": {
+      "owner": "Registry Authority",
+      "values": {
+        "active": "Current approved canonical state.",
+        "candidate": "Candidate record.",
+        "corrected": "Corrected by later version.",
+        "disputed": "Active dispute.",
+        "retired": "Retired.",
+        "revoked": "Revoked.",
+        "superseded": "Superseded.",
+        "under-review": "Registry review."
+      }
+    },
     "capture_method": {
       "owner": "GIS/Data Authority",
       "values": {
@@ -5218,6 +5725,18 @@
         "imported-geometry": "Imported geometry.",
         "manual-map-point": "Manual map correction.",
         "surveyed": "Surveyed/authoritative capture."
+      }
+    },
+    "case_lifecycle": {
+      "owner": "Registry Authority",
+      "values": {
+        "approved": "Approved.",
+        "closed": "Closed.",
+        "needs-evidence": "Needs evidence.",
+        "rejected": "Rejected.",
+        "resolved": "Resolved.",
+        "submitted": "Submitted.",
+        "under-review": "Under review."
       }
     },
     "case_state": {
@@ -5284,6 +5803,16 @@
         "publication": "Publication/projection dispute."
       }
     },
+    "entrance_role": {
+      "owner": "Registry Authority",
+      "values": {
+        "emergency": "Emergency entrance.",
+        "gate": "Compound/gate access.",
+        "main": "Main entrance.",
+        "secondary": "Secondary entrance.",
+        "service": "Service entrance."
+      }
+    },
     "field_verification_state": {
       "owner": "Field Operations Authority",
       "values": {
@@ -5338,6 +5867,18 @@
         "under-review": "Under review."
       }
     },
+    "landmark_type": {
+      "owner": "Registry/GIS Authority",
+      "values": {
+        "clinic": "Clinic/health point.",
+        "market": "Market.",
+        "natural-feature": "Natural feature.",
+        "other": "Other approved landmark.",
+        "public-office": "Public office.",
+        "religious-site": "Religious site.",
+        "school": "School."
+      }
+    },
     "lifecycle_state": {
       "owner": "Registry Authority",
       "values": {
@@ -5373,6 +5914,18 @@
         "official-es": "Official Spanish written form."
       }
     },
+    "name_lifecycle": {
+      "owner": "Registry/GIS Authority",
+      "values": {
+        "alternate": "Alternate.",
+        "candidate": "Candidate.",
+        "disputed": "Disputed.",
+        "official-current": "Current official.",
+        "official-historical": "Historical official.",
+        "rejected": "Rejected.",
+        "retired": "Retired."
+      }
+    },
     "name_status": {
       "owner": "Registry/GIS Authority",
       "values": {
@@ -5386,6 +5939,16 @@
         "under-review": "Name under review."
       }
     },
+    "non_building_object_type": {
+      "owner": "Registry Authority",
+      "values": {
+        "delivery-point": "Delivery point.",
+        "infrastructure-node": "Infrastructure node.",
+        "other": "Other approved object.",
+        "public-space": "Public space.",
+        "utility-asset": "Utility asset."
+      }
+    },
     "object_role": {
       "owner": "Registry Authority",
       "values": {
@@ -5396,6 +5959,16 @@
         "nearby-landmark": "Landmark used for description.",
         "parent-building": "Parent building for unit.",
         "primary-subject": "Main object represented by the record version."
+      }
+    },
+    "operational_area_lifecycle": {
+      "owner": "Operations Authority",
+      "values": {
+        "active": "Active.",
+        "archived": "Archived.",
+        "closed": "Closed.",
+        "planned": "Planned.",
+        "suspended": "Suspended."
       }
     },
     "operational_area_type": {
@@ -5438,6 +6011,17 @@
         "withdrawn": "Removed from public/partner projection."
       }
     },
+    "publication_lifecycle": {
+      "owner": "Publication Authority",
+      "values": {
+        "approval-requested": "Submitted for authority approval.",
+        "approved": "Approved for release but not yet published.",
+        "draft": "Release being prepared.",
+        "published": "Published to named audience.",
+        "suspended": "Temporarily hidden or restricted.",
+        "withdrawn": "Release withdrawn by authority."
+      }
+    },
     "publication_release_state": {
       "owner": "Publication Authority",
       "values": {
@@ -5447,6 +6031,15 @@
         "published": "Published to named audience.",
         "suspended": "Temporarily hidden or restricted.",
         "withdrawn": "Release withdrawn by authority."
+      }
+    },
+    "quality_check_result": {
+      "owner": "GIS/Data Authority",
+      "values": {
+        "failed": "Check failed.",
+        "not-applicable": "Check not applicable.",
+        "passed": "Check passed.",
+        "passed-with-warning": "Check passed with warning."
       }
     },
     "record_type": {
@@ -5459,6 +6052,17 @@
         "non-building-object": "Other authorized addressable object.",
         "service-location": "Service/delivery location not tied to building.",
         "unit": "Separately addressable unit/sub-address."
+      }
+    },
+    "reference_object_lifecycle": {
+      "owner": "Registry/GIS Authority",
+      "values": {
+        "active": "Active object.",
+        "candidate": "Candidate reference object.",
+        "corrected": "Corrected by later object version.",
+        "retired": "Retired.",
+        "revoked": "Revoked.",
+        "superseded": "Superseded."
       }
     },
     "relationship_type": {
@@ -5505,6 +6109,25 @@
         "registry-authority": "Registry decision.",
         "unverified-field": "Unverified field observation.",
         "verified-field": "Verified field observation."
+      }
+    },
+    "source_authority_lifecycle": {
+      "owner": "SDA",
+      "values": {
+        "candidate": "Candidate source.",
+        "deprecated": "Deprecated source.",
+        "revoked": "Revoked source.",
+        "trusted": "Trusted source."
+      }
+    },
+    "unit_type": {
+      "owner": "Registry Authority",
+      "values": {
+        "apartment": "Apartment/flat.",
+        "compound-unit": "Compound/yard unit.",
+        "office-suite": "Office suite.",
+        "room": "Room-level unit.",
+        "shop-unit": "Shop/commercial unit."
       }
     }
   }

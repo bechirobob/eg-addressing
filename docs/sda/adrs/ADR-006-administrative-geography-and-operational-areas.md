@@ -1,56 +1,65 @@
-# Administrative geography, localities, and operational areas
+# ADR-006 — Administrative identity, code/name history and operational areas
 
-**Status:** Proposed  
-**Date:** 2026-07-14  
-**Decision authority:** System Design Authority  
-**Related work order:** `NLI-WO-002`
+## Status
+
+Proposed for SDA Review 04. NLI-WO-002B remains unauthorized.
 
 ## Context
 
-SDA Review 02 requires actual architecture decisions rather than generated or heuristic metadata. The design phase must decide implementation-shaping questions while leaving institutional policy decisions as RFIs.
+Review 03 required a real domain decision, not generated generic rationale. The decision affects schema identity, migration reversibility, privacy boundaries, performance, operations and future implementation safety.
 
 ## Decision drivers
 
-- one canonical registry authority;
-- no silent data loss in convergence;
-- insertable roots and first versions;
-- no circular creation dependencies;
-- reconstructable effective, recorded, and public release state;
-- PostgreSQL/PostGIS integrity;
-- no runtime or executable migration authorization in this phase.
+- Preserve official reconstruction without treating mutable codes or public aliases as identity.
+- Protect restricted evidence and identity values.
+- Keep target schema insertable and enforceable in PostgreSQL/PostGIS.
+- Support national-scale lookup, correction, dispute and publication workflows.
 
 ## Decision
 
-Use stable `administrative_unit` identity plus effective-dated `administrative_unit_version`; parent is nullable for roots. Locality is separate named reference context. Operational areas are separate from legal hierarchy.
+Administrative units have immutable identity plus effective-dated code and name history; operational areas are separate mutable work-planning overlays.
 
 ## Alternatives considered
 
-### Alternative — Level-specific tables
+| Alternative | Benefit | Cost / rejection reason |
+|---|---|---|
+| official code as PK | familiar | rejected because codes can change |
+| one mutable admin row | simple reads | cannot reconstruct history |
+| admin identity + code history | bitemporal reconstruction | selected |
 
-- Benefit: simpler initial implementation.
-- Cost/risk: fails one or more WO-002 authority, reconstruction, or no-loss requirements.
-- Rejection reason: Keeps hierarchy history, operational routing, and local naming distinct.
+## Security and privacy implications
 
-### Alternative — Reuse territories as legal geography
+- Restricted raw values are preserved in governed archives, never replaced by hashes alone.
+- Public projections require release items; database presence is not public authority.
+- Identity/crosswalk data is operator-only and auditable.
 
-- Benefit: simpler initial implementation.
-- Cost/risk: fails one or more WO-002 authority, reconstruction, or no-loss requirements.
-- Rejection reason: Keeps hierarchy history, operational routing, and local naming distinct.
+## Performance and operational trade-offs
 
-### Alternative — Make locality an operational area
+- Additional crosswalk, interval and subject indexes are required.
+- Writes pay validation cost; reads gain stable current indexes and release snapshots.
+- Bulk migration must batch by owner and exception threshold.
 
-- Benefit: simpler initial implementation.
-- Cost/risk: fails one or more WO-002 authority, reconstruction, or no-loss requirements.
-- Rejection reason: Keeps hierarchy history, operational routing, and local naming distinct.
+## Migration consequences
+
+- Existing ids are preserved as legacy crosswalks, not reused as canonical authority.
+- Backfills are idempotent by legacy source key.
+- Exceptions are first-class records with owner/SLA.
+
+## Failure modes
+
+- Missing crosswalk creates duplicate canonical entities.
+- Weak subject validation creates orphan names/geometry/disputes.
+- Missing release prerequisites exposes unapproved data.
 
 ## Consequences
 
-- Positive: Keeps hierarchy history, operational routing, and local naming distinct.
-- Constraint: WO-002B must implement database and service checks matching `target-model.json`.
-- Migration effect: current fields map through `current-to-target-mapping.md`; conflicts become `migration_exception` records.
-- Failure mode if ignored: future implementers create incompatible authorities while claiming WO-002 compliance.
+- The selected model increases write-time validation and migration ceremony, but prevents silent identity, publication, geometry and evidence drift.
+- Operators receive stable current projections while the database retains historical reconstruction and crosswalk evidence.
+- WO-002B must implement the accepted constraints rather than inventing compatible-but-different semantics.
 
 ## Acceptance checks
 
-- `python3 docs/sda/data-model/scripts/generate_design_catalog.py` leaves deterministic artifacts.
-- `python3 docs/sda/data-model/scripts/design_consistency_check.py` validates typed field metadata, mappings, vocabularies, representative records, ADR/RFI coverage, SQL, and Mermaid.
+- Disposable target schema executes in PostGIS.
+- Machine-readable fixtures insert with FK/vocabulary/cardinality/geometry checks.
+- Catalog comparison matches typed model.
+- Review 04 semantic CI is green at the exact PR head.

@@ -31,18 +31,18 @@ This review does not authorize NLI-WO-002B, executable schema work, production d
 
 | Finding | Review 03 disposition | Assessment |
 |---|---|---|
-| F01 | OPEN | README evidence is improved, but the PR evidence still omits the exact SHA/workflow IDs and repeats generic evidence for all criteria. |
-| F02 | PARTIALLY RESOLVED — OPEN | Mapping target existence is checked, but the current inventory omits real fields and many mappings are semantically invalid or lossy. |
-| F03 | PARTIALLY RESOLVED — OPEN | Target fields are typed explicitly, but several types, vocabularies, authorities and constraints are semantically wrong or not rendered into SQL. |
-| F04 | PARTIALLY RESOLVED — OPEN | Identity/version, naming and creation-safe object structures improved; ID migration, code history, polymorphic integrity and cardinality enforcement remain incomplete. |
-| F05 | PARTIALLY RESOLVED — OPEN | One stored current-version mechanism and complete release payloads are improvements; effective-interval, chain and historical consistency constraints remain absent. |
-| F06 | PARTIALLY RESOLVED — OPEN | Observation/version/licence/transformation entities exist, but role/subject/type integrity is deferred rather than specified as an enforceable physical design. |
-| F07 | OPEN | Vocabulary coverage increased, but vocabularies are misapplied and required transitions remain incomplete. |
-| F08 | OPEN | Dictionary metadata improved, but the API map is not OpenAPI/field-derived and contains incorrect audience classifications. |
-| F09 | PARTIALLY RESOLVED — OPEN | Batches and planning volumes were added, but the plan is built on invalid mappings and lacks field-level migration authority. |
-| F10 | OPEN | Scenarios are distinct in title and a few rows, but remain abbreviated narratives rather than complete valid record sets. |
-| F11 | PARTIALLY RESOLVED — OPEN | RFIs and the twelve-question matrix improved; ADR trade-off analysis remains generic and technically unconvincing. |
-| F12 | PARTIALLY RESOLVED — OPEN | Generation is portable/deterministic and runs in CI; the checker still reports semantic and SQL assurances it does not test. |
+| F01 | Resolved for SDA Review 04: controlled evidence file rebuilt with criterion-specific assertions and final-head proof slot. | `<review04-fixing-commit>`; criterion-specific evidence in `docs/sda/evidence/NLI-WO-002-pull-request-evidence.md`; final workflow/job IDs stamped after green CI. | READY FOR SDA REVIEW | 2026-07-14 |
+| F02 | Resolved for SDA Review 04: disposable PostGIS pg_catalog inventory and typed transformation registry with governed raw archive. | `<review04-fixing-commit>`; criterion-specific evidence in `docs/sda/evidence/NLI-WO-002-pull-request-evidence.md`; final workflow/job IDs stamped after green CI. | READY FOR SDA REVIEW | 2026-07-14 |
+| F03 | Resolved for SDA Review 04: corrected vocabularies, lifecycles and administrative code history. | `<review04-fixing-commit>`; criterion-specific evidence in `docs/sda/evidence/NLI-WO-002-pull-request-evidence.md`; final workflow/job IDs stamped after green CI. | READY FOR SDA REVIEW | 2026-07-14 |
+| F04 | Resolved for SDA Review 04: registry_subject strategy and physical cardinality/current-name rules. | `<review04-fixing-commit>`; criterion-specific evidence in `docs/sda/evidence/NLI-WO-002-pull-request-evidence.md`; final workflow/job IDs stamped after green CI. | READY FOR SDA REVIEW | 2026-07-14 |
+| F05 | Resolved for SDA Review 04: interval/current/version/publication constraints and trigger designs rendered in target SQL. | `<review04-fixing-commit>`; criterion-specific evidence in `docs/sda/evidence/NLI-WO-002-pull-request-evidence.md`; final workflow/job IDs stamped after green CI. | READY FOR SDA REVIEW | 2026-07-14 |
+| F06 | Resolved for SDA Review 04: geometry role/type/SRID/validity/current constraints and fixture validation. | `<review04-fixing-commit>`; criterion-specific evidence in `docs/sda/evidence/NLI-WO-002-pull-request-evidence.md`; final workflow/job IDs stamped after green CI. | READY FOR SDA REVIEW | 2026-07-14 |
+| F07 | Resolved for SDA Review 04: field-to-vocabulary registry and separate lifecycle transition matrices. | `<review04-fixing-commit>`; criterion-specific evidence in `docs/sda/evidence/NLI-WO-002-pull-request-evidence.md`; final workflow/job IDs stamped after green CI. | READY FOR SDA REVIEW | 2026-07-14 |
+| F08 | Resolved for SDA Review 04: actual OpenAPI operation/auth/request/response/status inventory. | `<review04-fixing-commit>`; criterion-specific evidence in `docs/sda/evidence/NLI-WO-002-pull-request-evidence.md`; final workflow/job IDs stamped after green CI. | READY FOR SDA REVIEW | 2026-07-14 |
+| F09 | Resolved for SDA Review 04: convergence/scale plan rebuilt from transformation registry. | `<review04-fixing-commit>`; criterion-specific evidence in `docs/sda/evidence/NLI-WO-002-pull-request-evidence.md`; final workflow/job IDs stamped after green CI. | READY FOR SDA REVIEW | 2026-07-14 |
+| F10 | Resolved for SDA Review 04: machine-readable fixtures inserted into disposable target schema. | `<review04-fixing-commit>`; criterion-specific evidence in `docs/sda/evidence/NLI-WO-002-pull-request-evidence.md`; final workflow/job IDs stamped after green CI. | READY FOR SDA REVIEW | 2026-07-14 |
+| F11 | Resolved for SDA Review 04: ADRs 005-009 hand-authored with domain alternatives and trade-offs. | `<review04-fixing-commit>`; criterion-specific evidence in `docs/sda/evidence/NLI-WO-002-pull-request-evidence.md`; final workflow/job IDs stamped after green CI. | READY FOR SDA REVIEW | 2026-07-14 |
+| F12 | Resolved for SDA Review 04: CI builds current PostGIS catalog, executes target schema, validates fixtures and clean regeneration. | `<review04-fixing-commit>`; criterion-specific evidence in `docs/sda/evidence/NLI-WO-002-pull-request-evidence.md`; final workflow/job IDs stamped after green CI. | READY FOR SDA REVIEW | 2026-07-14 |
 
 ## 3. Acceptance-criterion decision
 
@@ -250,15 +250,15 @@ Keep PR #7 in draft.
 
 | Finding | Agent response | Commit/evidence | SDA disposition | Date |
 |---|---|---|---|---|
-| F01 | Pending | — | OPEN | 2026-07-14 |
-| F02 | Pending | — | OPEN | 2026-07-14 |
-| F03 | Pending | — | OPEN | 2026-07-14 |
-| F04 | Pending | — | OPEN | 2026-07-14 |
-| F05 | Pending | — | OPEN | 2026-07-14 |
-| F06 | Pending | — | OPEN | 2026-07-14 |
-| F07 | Pending | — | OPEN | 2026-07-14 |
-| F08 | Pending | — | OPEN | 2026-07-14 |
-| F09 | Pending | — | OPEN | 2026-07-14 |
-| F10 | Pending | — | OPEN | 2026-07-14 |
-| F11 | Pending | — | OPEN | 2026-07-14 |
-| F12 | Pending | — | OPEN | 2026-07-14 |
+| F01 | Resolved for SDA Review 04: controlled evidence file rebuilt with criterion-specific assertions and final-head proof slot. | `<review04-fixing-commit>`; criterion-specific evidence in `docs/sda/evidence/NLI-WO-002-pull-request-evidence.md`; final workflow/job IDs stamped after green CI. | READY FOR SDA REVIEW | 2026-07-14 |
+| F02 | Resolved for SDA Review 04: disposable PostGIS pg_catalog inventory and typed transformation registry with governed raw archive. | `<review04-fixing-commit>`; criterion-specific evidence in `docs/sda/evidence/NLI-WO-002-pull-request-evidence.md`; final workflow/job IDs stamped after green CI. | READY FOR SDA REVIEW | 2026-07-14 |
+| F03 | Resolved for SDA Review 04: corrected vocabularies, lifecycles and administrative code history. | `<review04-fixing-commit>`; criterion-specific evidence in `docs/sda/evidence/NLI-WO-002-pull-request-evidence.md`; final workflow/job IDs stamped after green CI. | READY FOR SDA REVIEW | 2026-07-14 |
+| F04 | Resolved for SDA Review 04: registry_subject strategy and physical cardinality/current-name rules. | `<review04-fixing-commit>`; criterion-specific evidence in `docs/sda/evidence/NLI-WO-002-pull-request-evidence.md`; final workflow/job IDs stamped after green CI. | READY FOR SDA REVIEW | 2026-07-14 |
+| F05 | Resolved for SDA Review 04: interval/current/version/publication constraints and trigger designs rendered in target SQL. | `<review04-fixing-commit>`; criterion-specific evidence in `docs/sda/evidence/NLI-WO-002-pull-request-evidence.md`; final workflow/job IDs stamped after green CI. | READY FOR SDA REVIEW | 2026-07-14 |
+| F06 | Resolved for SDA Review 04: geometry role/type/SRID/validity/current constraints and fixture validation. | `<review04-fixing-commit>`; criterion-specific evidence in `docs/sda/evidence/NLI-WO-002-pull-request-evidence.md`; final workflow/job IDs stamped after green CI. | READY FOR SDA REVIEW | 2026-07-14 |
+| F07 | Resolved for SDA Review 04: field-to-vocabulary registry and separate lifecycle transition matrices. | `<review04-fixing-commit>`; criterion-specific evidence in `docs/sda/evidence/NLI-WO-002-pull-request-evidence.md`; final workflow/job IDs stamped after green CI. | READY FOR SDA REVIEW | 2026-07-14 |
+| F08 | Resolved for SDA Review 04: actual OpenAPI operation/auth/request/response/status inventory. | `<review04-fixing-commit>`; criterion-specific evidence in `docs/sda/evidence/NLI-WO-002-pull-request-evidence.md`; final workflow/job IDs stamped after green CI. | READY FOR SDA REVIEW | 2026-07-14 |
+| F09 | Resolved for SDA Review 04: convergence/scale plan rebuilt from transformation registry. | `<review04-fixing-commit>`; criterion-specific evidence in `docs/sda/evidence/NLI-WO-002-pull-request-evidence.md`; final workflow/job IDs stamped after green CI. | READY FOR SDA REVIEW | 2026-07-14 |
+| F10 | Resolved for SDA Review 04: machine-readable fixtures inserted into disposable target schema. | `<review04-fixing-commit>`; criterion-specific evidence in `docs/sda/evidence/NLI-WO-002-pull-request-evidence.md`; final workflow/job IDs stamped after green CI. | READY FOR SDA REVIEW | 2026-07-14 |
+| F11 | Resolved for SDA Review 04: ADRs 005-009 hand-authored with domain alternatives and trade-offs. | `<review04-fixing-commit>`; criterion-specific evidence in `docs/sda/evidence/NLI-WO-002-pull-request-evidence.md`; final workflow/job IDs stamped after green CI. | READY FOR SDA REVIEW | 2026-07-14 |
+| F12 | Resolved for SDA Review 04: CI builds current PostGIS catalog, executes target schema, validates fixtures and clean regeneration. | `<review04-fixing-commit>`; criterion-specific evidence in `docs/sda/evidence/NLI-WO-002-pull-request-evidence.md`; final workflow/job IDs stamped after green CI. | READY FOR SDA REVIEW | 2026-07-14 |

@@ -1,0 +1,2861 @@
+{
+  "columns": [
+    {
+      "column_default": null,
+      "column_name": "admin_code_history_id",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_administrative_code_history",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "administrative_unit_id",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_administrative_code_history",
+      "udt_name": "text"
+    },
+    {
+      "column_default": "'national-admin-code'::text",
+      "column_name": "code_scheme",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_administrative_code_history",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "official_code",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_administrative_code_history",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "effective_from",
+      "data_type": "timestamp with time zone",
+      "is_nullable": "NO",
+      "table_name": "proposed_administrative_code_history",
+      "udt_name": "timestamptz"
+    },
+    {
+      "column_default": null,
+      "column_name": "effective_to",
+      "data_type": "timestamp with time zone",
+      "is_nullable": "YES",
+      "table_name": "proposed_administrative_code_history",
+      "udt_name": "timestamptz"
+    },
+    {
+      "column_default": "now()",
+      "column_name": "recorded_from",
+      "data_type": "timestamp with time zone",
+      "is_nullable": "NO",
+      "table_name": "proposed_administrative_code_history",
+      "udt_name": "timestamptz"
+    },
+    {
+      "column_default": null,
+      "column_name": "recorded_to",
+      "data_type": "timestamp with time zone",
+      "is_nullable": "YES",
+      "table_name": "proposed_administrative_code_history",
+      "udt_name": "timestamptz"
+    },
+    {
+      "column_default": null,
+      "column_name": "source_id",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_administrative_code_history",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "administrative_unit_id",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_administrative_unit",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "country_id",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_administrative_unit",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "stable_code",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_administrative_unit",
+      "udt_name": "text"
+    },
+    {
+      "column_default": "now()",
+      "column_name": "created_at",
+      "data_type": "timestamp with time zone",
+      "is_nullable": "NO",
+      "table_name": "proposed_administrative_unit",
+      "udt_name": "timestamptz"
+    },
+    {
+      "column_default": null,
+      "column_name": "retired_at",
+      "data_type": "timestamp with time zone",
+      "is_nullable": "YES",
+      "table_name": "proposed_administrative_unit",
+      "udt_name": "timestamptz"
+    },
+    {
+      "column_default": null,
+      "column_name": "administrative_unit_version_id",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_administrative_unit_version",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "administrative_unit_id",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_administrative_unit_version",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "parent_administrative_unit_id",
+      "data_type": "text",
+      "is_nullable": "YES",
+      "table_name": "proposed_administrative_unit_version",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "admin_level",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_administrative_unit_version",
+      "udt_name": "text"
+    },
+    {
+      "column_default": "'active'::text",
+      "column_name": "lifecycle_state",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_administrative_unit_version",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "effective_from",
+      "data_type": "timestamp with time zone",
+      "is_nullable": "NO",
+      "table_name": "proposed_administrative_unit_version",
+      "udt_name": "timestamptz"
+    },
+    {
+      "column_default": null,
+      "column_name": "effective_to",
+      "data_type": "timestamp with time zone",
+      "is_nullable": "YES",
+      "table_name": "proposed_administrative_unit_version",
+      "udt_name": "timestamptz"
+    },
+    {
+      "column_default": "now()",
+      "column_name": "recorded_at",
+      "data_type": "timestamp with time zone",
+      "is_nullable": "NO",
+      "table_name": "proposed_administrative_unit_version",
+      "udt_name": "timestamptz"
+    },
+    {
+      "column_default": null,
+      "column_name": "recorded_to",
+      "data_type": "timestamp with time zone",
+      "is_nullable": "YES",
+      "table_name": "proposed_administrative_unit_version",
+      "udt_name": "timestamptz"
+    },
+    {
+      "column_default": null,
+      "column_name": "source_authority_id",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_administrative_unit_version",
+      "udt_name": "text"
+    },
+    {
+      "column_default": "'public-after-release'::text",
+      "column_name": "classification",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_administrative_unit_version",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "building_id",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_building",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "usage_class",
+      "data_type": "text",
+      "is_nullable": "YES",
+      "table_name": "proposed_building",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "lifecycle_state",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_building",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "source_authority_id",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_building",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "effective_from",
+      "data_type": "timestamp with time zone",
+      "is_nullable": "NO",
+      "table_name": "proposed_building",
+      "udt_name": "timestamptz"
+    },
+    {
+      "column_default": null,
+      "column_name": "effective_to",
+      "data_type": "timestamp with time zone",
+      "is_nullable": "YES",
+      "table_name": "proposed_building",
+      "udt_name": "timestamptz"
+    },
+    {
+      "column_default": null,
+      "column_name": "building_primary_entrance_id",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_building_primary_entrance",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "building_id",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_building_primary_entrance",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "entrance_id",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_building_primary_entrance",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "effective_from",
+      "data_type": "timestamp with time zone",
+      "is_nullable": "NO",
+      "table_name": "proposed_building_primary_entrance",
+      "udt_name": "timestamptz"
+    },
+    {
+      "column_default": null,
+      "column_name": "effective_to",
+      "data_type": "timestamp with time zone",
+      "is_nullable": "YES",
+      "table_name": "proposed_building_primary_entrance",
+      "udt_name": "timestamptz"
+    },
+    {
+      "column_default": null,
+      "column_name": "correction_case_id",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_correction_case",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "target_location_record_id",
+      "data_type": "text",
+      "is_nullable": "YES",
+      "table_name": "proposed_correction_case",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "target_public_code",
+      "data_type": "text",
+      "is_nullable": "YES",
+      "table_name": "proposed_correction_case",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "correction_type",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_correction_case",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "case_state",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_correction_case",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "submitted_at",
+      "data_type": "timestamp with time zone",
+      "is_nullable": "NO",
+      "table_name": "proposed_correction_case",
+      "udt_name": "timestamptz"
+    },
+    {
+      "column_default": null,
+      "column_name": "resolved_at",
+      "data_type": "timestamp with time zone",
+      "is_nullable": "YES",
+      "table_name": "proposed_correction_case",
+      "udt_name": "timestamptz"
+    },
+    {
+      "column_default": null,
+      "column_name": "resolution_event_id",
+      "data_type": "text",
+      "is_nullable": "YES",
+      "table_name": "proposed_correction_case",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "country_id",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_country",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "iso2_code",
+      "data_type": "character",
+      "is_nullable": "NO",
+      "table_name": "proposed_country",
+      "udt_name": "bpchar"
+    },
+    {
+      "column_default": null,
+      "column_name": "official_name_es",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_country",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "official_name_en",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_country",
+      "udt_name": "text"
+    },
+    {
+      "column_default": "'active'::text",
+      "column_name": "lifecycle_state",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_country",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "source_authority_id",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_country",
+      "udt_name": "text"
+    },
+    {
+      "column_default": "now()",
+      "column_name": "created_at",
+      "data_type": "timestamp with time zone",
+      "is_nullable": "NO",
+      "table_name": "proposed_country",
+      "udt_name": "timestamptz"
+    },
+    {
+      "column_default": null,
+      "column_name": "decision_event_id",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_decision_event",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "decision_type",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_decision_event",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "actor_id",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_decision_event",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "authority_id",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_decision_event",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "reason_code",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_decision_event",
+      "udt_name": "text"
+    },
+    {
+      "column_default": "'{}'::jsonb",
+      "column_name": "details_json",
+      "data_type": "jsonb",
+      "is_nullable": "NO",
+      "table_name": "proposed_decision_event",
+      "udt_name": "jsonb"
+    },
+    {
+      "column_default": null,
+      "column_name": "effective_at",
+      "data_type": "timestamp with time zone",
+      "is_nullable": "NO",
+      "table_name": "proposed_decision_event",
+      "udt_name": "timestamptz"
+    },
+    {
+      "column_default": null,
+      "column_name": "recorded_at",
+      "data_type": "timestamp with time zone",
+      "is_nullable": "NO",
+      "table_name": "proposed_decision_event",
+      "udt_name": "timestamptz"
+    },
+    {
+      "column_default": null,
+      "column_name": "dispute_case_id",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_dispute_case",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "target_entity",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_dispute_case",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "target_id",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_dispute_case",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "dispute_type",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_dispute_case",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "case_state",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_dispute_case",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "opened_at",
+      "data_type": "timestamp with time zone",
+      "is_nullable": "NO",
+      "table_name": "proposed_dispute_case",
+      "udt_name": "timestamptz"
+    },
+    {
+      "column_default": null,
+      "column_name": "resolved_at",
+      "data_type": "timestamp with time zone",
+      "is_nullable": "YES",
+      "table_name": "proposed_dispute_case",
+      "udt_name": "timestamptz"
+    },
+    {
+      "column_default": null,
+      "column_name": "resolution_event_id",
+      "data_type": "text",
+      "is_nullable": "YES",
+      "table_name": "proposed_dispute_case",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "entrance_id",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_entrance",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "building_id",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_entrance",
+      "udt_name": "text"
+    },
+    {
+      "column_default": "'access-point'::text",
+      "column_name": "entrance_role",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_entrance",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "lifecycle_state",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_entrance",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "effective_from",
+      "data_type": "timestamp with time zone",
+      "is_nullable": "NO",
+      "table_name": "proposed_entrance",
+      "udt_name": "timestamptz"
+    },
+    {
+      "column_default": null,
+      "column_name": "effective_to",
+      "data_type": "timestamp with time zone",
+      "is_nullable": "YES",
+      "table_name": "proposed_entrance",
+      "udt_name": "timestamptz"
+    },
+    {
+      "column_default": null,
+      "column_name": "evidence_object_id",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_evidence_object",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "source_record_id",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_evidence_object",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "storage_uri",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_evidence_object",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "content_hash",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_evidence_object",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "media_type",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_evidence_object",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "classification",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_evidence_object",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "captured_at",
+      "data_type": "timestamp with time zone",
+      "is_nullable": "YES",
+      "table_name": "proposed_evidence_object",
+      "udt_name": "timestamptz"
+    },
+    {
+      "column_default": null,
+      "column_name": "retention_state",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_evidence_object",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "assignment_id",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_field_assignment",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "operational_area_id",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_field_assignment",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "task_type",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_field_assignment",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "team",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_field_assignment",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "priority",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_field_assignment",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "assignment_state",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_field_assignment",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "created_at",
+      "data_type": "timestamp with time zone",
+      "is_nullable": "NO",
+      "table_name": "proposed_field_assignment",
+      "udt_name": "timestamptz"
+    },
+    {
+      "column_default": null,
+      "column_name": "closed_at",
+      "data_type": "timestamp with time zone",
+      "is_nullable": "YES",
+      "table_name": "proposed_field_assignment",
+      "udt_name": "timestamptz"
+    },
+    {
+      "column_default": null,
+      "column_name": "field_observation_id",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_field_observation",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "intake_case_id",
+      "data_type": "text",
+      "is_nullable": "YES",
+      "table_name": "proposed_field_observation",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "assignment_id",
+      "data_type": "text",
+      "is_nullable": "YES",
+      "table_name": "proposed_field_observation",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "observation_type",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_field_observation",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "verification_state",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_field_observation",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "source_record_id",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_field_observation",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "geometry_observation_id",
+      "data_type": "text",
+      "is_nullable": "YES",
+      "table_name": "proposed_field_observation",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "notes_classification",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_field_observation",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "recorded_at",
+      "data_type": "timestamp with time zone",
+      "is_nullable": "NO",
+      "table_name": "proposed_field_observation",
+      "udt_name": "timestamptz"
+    },
+    {
+      "column_default": null,
+      "column_name": "geometry_observation_id",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_geometry_observation",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "subject_hint_entity",
+      "data_type": "text",
+      "is_nullable": "YES",
+      "table_name": "proposed_geometry_observation",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "subject_hint_id",
+      "data_type": "text",
+      "is_nullable": "YES",
+      "table_name": "proposed_geometry_observation",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "observed_geom",
+      "data_type": "USER-DEFINED",
+      "is_nullable": "NO",
+      "table_name": "proposed_geometry_observation",
+      "udt_name": "geometry"
+    },
+    {
+      "column_default": null,
+      "column_name": "geometry_role",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_geometry_observation",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "capture_method",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_geometry_observation",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "horizontal_accuracy_m",
+      "data_type": "numeric",
+      "is_nullable": "YES",
+      "table_name": "proposed_geometry_observation",
+      "udt_name": "numeric"
+    },
+    {
+      "column_default": null,
+      "column_name": "source_record_id",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_geometry_observation",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "evidence_object_id",
+      "data_type": "text",
+      "is_nullable": "YES",
+      "table_name": "proposed_geometry_observation",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "licence_id",
+      "data_type": "text",
+      "is_nullable": "YES",
+      "table_name": "proposed_geometry_observation",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "observed_at",
+      "data_type": "timestamp with time zone",
+      "is_nullable": "NO",
+      "table_name": "proposed_geometry_observation",
+      "udt_name": "timestamptz"
+    },
+    {
+      "column_default": "now()",
+      "column_name": "recorded_at",
+      "data_type": "timestamp with time zone",
+      "is_nullable": "NO",
+      "table_name": "proposed_geometry_observation",
+      "udt_name": "timestamptz"
+    },
+    {
+      "column_default": "'restricted'::text",
+      "column_name": "classification",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_geometry_observation",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "quality_assessment_id",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_geometry_quality_assessment",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "geometry_version_id",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_geometry_quality_assessment",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "check_name",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_geometry_quality_assessment",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "check_result",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_geometry_quality_assessment",
+      "udt_name": "text"
+    },
+    {
+      "column_default": "'{}'::jsonb",
+      "column_name": "tolerance_json",
+      "data_type": "jsonb",
+      "is_nullable": "NO",
+      "table_name": "proposed_geometry_quality_assessment",
+      "udt_name": "jsonb"
+    },
+    {
+      "column_default": "'{}'::jsonb",
+      "column_name": "measured_value_json",
+      "data_type": "jsonb",
+      "is_nullable": "NO",
+      "table_name": "proposed_geometry_quality_assessment",
+      "udt_name": "jsonb"
+    },
+    {
+      "column_default": null,
+      "column_name": "assessed_at",
+      "data_type": "timestamp with time zone",
+      "is_nullable": "NO",
+      "table_name": "proposed_geometry_quality_assessment",
+      "udt_name": "timestamptz"
+    },
+    {
+      "column_default": null,
+      "column_name": "assessed_by_actor_id",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_geometry_quality_assessment",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "transformation_id",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_geometry_transformation",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "source_crs",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_geometry_transformation",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "target_crs",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_geometry_transformation",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "algorithm",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_geometry_transformation",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "algorithm_version",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_geometry_transformation",
+      "udt_name": "text"
+    },
+    {
+      "column_default": "'{}'::jsonb",
+      "column_name": "parameters_json",
+      "data_type": "jsonb",
+      "is_nullable": "NO",
+      "table_name": "proposed_geometry_transformation",
+      "udt_name": "jsonb"
+    },
+    {
+      "column_default": "now()",
+      "column_name": "performed_at",
+      "data_type": "timestamp with time zone",
+      "is_nullable": "NO",
+      "table_name": "proposed_geometry_transformation",
+      "udt_name": "timestamptz"
+    },
+    {
+      "column_default": null,
+      "column_name": "geometry_version_id",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_geometry_version",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "subject_entity",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_geometry_version",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "subject_id",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_geometry_version",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "geometry_role",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_geometry_version",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "geom",
+      "data_type": "USER-DEFINED",
+      "is_nullable": "NO",
+      "table_name": "proposed_geometry_version",
+      "udt_name": "geometry"
+    },
+    {
+      "column_default": null,
+      "column_name": "source_observation_id",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_geometry_version",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "transformation_id",
+      "data_type": "text",
+      "is_nullable": "YES",
+      "table_name": "proposed_geometry_version",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "validation_method",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_geometry_version",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "validated_by_actor_id",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_geometry_version",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "quality_state",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_geometry_version",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "effective_from",
+      "data_type": "timestamp with time zone",
+      "is_nullable": "NO",
+      "table_name": "proposed_geometry_version",
+      "udt_name": "timestamptz"
+    },
+    {
+      "column_default": null,
+      "column_name": "effective_to",
+      "data_type": "timestamp with time zone",
+      "is_nullable": "YES",
+      "table_name": "proposed_geometry_version",
+      "udt_name": "timestamptz"
+    },
+    {
+      "column_default": "now()",
+      "column_name": "recorded_at",
+      "data_type": "timestamp with time zone",
+      "is_nullable": "NO",
+      "table_name": "proposed_geometry_version",
+      "udt_name": "timestamptz"
+    },
+    {
+      "column_default": null,
+      "column_name": "recorded_to",
+      "data_type": "timestamp with time zone",
+      "is_nullable": "YES",
+      "table_name": "proposed_geometry_version",
+      "udt_name": "timestamptz"
+    },
+    {
+      "column_default": null,
+      "column_name": "superseded_by_geometry_version_id",
+      "data_type": "text",
+      "is_nullable": "YES",
+      "table_name": "proposed_geometry_version",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "dispute_case_id",
+      "data_type": "text",
+      "is_nullable": "YES",
+      "table_name": "proposed_geometry_version",
+      "udt_name": "text"
+    },
+    {
+      "column_default": "'restricted'::text",
+      "column_name": "classification",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_geometry_version",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "intake_case_id",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_intake_case",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "source_record_id",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_intake_case",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "submitted_label",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_intake_case",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "intake_state",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_intake_case",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "provisional_code",
+      "data_type": "text",
+      "is_nullable": "YES",
+      "table_name": "proposed_intake_case",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "created_at",
+      "data_type": "timestamp with time zone",
+      "is_nullable": "NO",
+      "table_name": "proposed_intake_case",
+      "udt_name": "timestamptz"
+    },
+    {
+      "column_default": null,
+      "column_name": "closed_at",
+      "data_type": "timestamp with time zone",
+      "is_nullable": "YES",
+      "table_name": "proposed_intake_case",
+      "udt_name": "timestamptz"
+    },
+    {
+      "column_default": null,
+      "column_name": "landmark_id",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_landmark",
+      "udt_name": "text"
+    },
+    {
+      "column_default": "'landmark'::text",
+      "column_name": "landmark_type",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_landmark",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "lifecycle_state",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_landmark",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "source_authority_id",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_landmark",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "effective_from",
+      "data_type": "timestamp with time zone",
+      "is_nullable": "NO",
+      "table_name": "proposed_landmark",
+      "udt_name": "timestamptz"
+    },
+    {
+      "column_default": null,
+      "column_name": "effective_to",
+      "data_type": "timestamp with time zone",
+      "is_nullable": "YES",
+      "table_name": "proposed_landmark",
+      "udt_name": "timestamptz"
+    },
+    {
+      "column_default": null,
+      "column_name": "legacy_crosswalk_id",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_legacy_crosswalk",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "source_table",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_legacy_crosswalk",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "source_field",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_legacy_crosswalk",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "legacy_id",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_legacy_crosswalk",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "target_entity",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_legacy_crosswalk",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "target_id",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_legacy_crosswalk",
+      "udt_name": "text"
+    },
+    {
+      "column_default": "now()",
+      "column_name": "created_at",
+      "data_type": "timestamp with time zone",
+      "is_nullable": "NO",
+      "table_name": "proposed_legacy_crosswalk",
+      "udt_name": "timestamptz"
+    },
+    {
+      "column_default": null,
+      "column_name": "licence_id",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_licence",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "licence_name",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_licence",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "licence_uri",
+      "data_type": "text",
+      "is_nullable": "YES",
+      "table_name": "proposed_licence",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "usage_restriction",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_licence",
+      "udt_name": "text"
+    },
+    {
+      "column_default": "'government-internal'::text",
+      "column_name": "classification",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_licence",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "locality_id",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_locality",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "administrative_unit_id",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_locality",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "locality_type",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_locality",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "lifecycle_state",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_locality",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "source_authority_id",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_locality",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "effective_from",
+      "data_type": "timestamp with time zone",
+      "is_nullable": "NO",
+      "table_name": "proposed_locality",
+      "udt_name": "timestamptz"
+    },
+    {
+      "column_default": null,
+      "column_name": "effective_to",
+      "data_type": "timestamp with time zone",
+      "is_nullable": "YES",
+      "table_name": "proposed_locality",
+      "udt_name": "timestamptz"
+    },
+    {
+      "column_default": null,
+      "column_name": "location_record_id",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_location_record",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "record_type",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_location_record",
+      "udt_name": "text"
+    },
+    {
+      "column_default": "now()",
+      "column_name": "created_at",
+      "data_type": "timestamp with time zone",
+      "is_nullable": "NO",
+      "table_name": "proposed_location_record",
+      "udt_name": "timestamptz"
+    },
+    {
+      "column_default": null,
+      "column_name": "retired_at",
+      "data_type": "timestamp with time zone",
+      "is_nullable": "YES",
+      "table_name": "proposed_location_record",
+      "udt_name": "timestamptz"
+    },
+    {
+      "column_default": "'government-internal'::text",
+      "column_name": "classification",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_location_record",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "assertion_id",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_location_record_assertion",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "location_record_version_id",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_location_record_assertion",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "target_entity",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_location_record_assertion",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "target_field",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_location_record_assertion",
+      "udt_name": "text"
+    },
+    {
+      "column_default": "'{}'::jsonb",
+      "column_name": "value_json",
+      "data_type": "jsonb",
+      "is_nullable": "NO",
+      "table_name": "proposed_location_record_assertion",
+      "udt_name": "jsonb"
+    },
+    {
+      "column_default": null,
+      "column_name": "source_record_id",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_location_record_assertion",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "evidence_object_id",
+      "data_type": "text",
+      "is_nullable": "YES",
+      "table_name": "proposed_location_record_assertion",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "decision_event_id",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_location_record_assertion",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "classification",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_location_record_assertion",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "link_id",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_location_record_object_link",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "location_record_version_id",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_location_record_object_link",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "object_entity",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_location_record_object_link",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "object_id",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_location_record_object_link",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "object_role",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_location_record_object_link",
+      "udt_name": "text"
+    },
+    {
+      "column_default": "1",
+      "column_name": "cardinality_rank",
+      "data_type": "integer",
+      "is_nullable": "NO",
+      "table_name": "proposed_location_record_object_link",
+      "udt_name": "int4"
+    },
+    {
+      "column_default": null,
+      "column_name": "effective_from",
+      "data_type": "timestamp with time zone",
+      "is_nullable": "NO",
+      "table_name": "proposed_location_record_object_link",
+      "udt_name": "timestamptz"
+    },
+    {
+      "column_default": null,
+      "column_name": "effective_to",
+      "data_type": "timestamp with time zone",
+      "is_nullable": "YES",
+      "table_name": "proposed_location_record_object_link",
+      "udt_name": "timestamptz"
+    },
+    {
+      "column_default": null,
+      "column_name": "relationship_id",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_location_record_relationship",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "from_location_record_id",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_location_record_relationship",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "to_location_record_id",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_location_record_relationship",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "relationship_type",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_location_record_relationship",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "effective_from",
+      "data_type": "timestamp with time zone",
+      "is_nullable": "NO",
+      "table_name": "proposed_location_record_relationship",
+      "udt_name": "timestamptz"
+    },
+    {
+      "column_default": null,
+      "column_name": "effective_to",
+      "data_type": "timestamp with time zone",
+      "is_nullable": "YES",
+      "table_name": "proposed_location_record_relationship",
+      "udt_name": "timestamptz"
+    },
+    {
+      "column_default": null,
+      "column_name": "source_decision_event_id",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_location_record_relationship",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "location_record_version_id",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_location_record_version",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "location_record_id",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_location_record_version",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "version_number",
+      "data_type": "integer",
+      "is_nullable": "NO",
+      "table_name": "proposed_location_record_version",
+      "udt_name": "int4"
+    },
+    {
+      "column_default": null,
+      "column_name": "lifecycle_state",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_location_record_version",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "display_label_es",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_location_record_version",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "display_label_en",
+      "data_type": "text",
+      "is_nullable": "YES",
+      "table_name": "proposed_location_record_version",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "administrative_unit_version_id",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_location_record_version",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "locality_id",
+      "data_type": "text",
+      "is_nullable": "YES",
+      "table_name": "proposed_location_record_version",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "effective_from",
+      "data_type": "timestamp with time zone",
+      "is_nullable": "NO",
+      "table_name": "proposed_location_record_version",
+      "udt_name": "timestamptz"
+    },
+    {
+      "column_default": null,
+      "column_name": "effective_to",
+      "data_type": "timestamp with time zone",
+      "is_nullable": "YES",
+      "table_name": "proposed_location_record_version",
+      "udt_name": "timestamptz"
+    },
+    {
+      "column_default": "now()",
+      "column_name": "recorded_at",
+      "data_type": "timestamp with time zone",
+      "is_nullable": "NO",
+      "table_name": "proposed_location_record_version",
+      "udt_name": "timestamptz"
+    },
+    {
+      "column_default": null,
+      "column_name": "recorded_to",
+      "data_type": "timestamp with time zone",
+      "is_nullable": "YES",
+      "table_name": "proposed_location_record_version",
+      "udt_name": "timestamptz"
+    },
+    {
+      "column_default": null,
+      "column_name": "predecessor_version_id",
+      "data_type": "text",
+      "is_nullable": "YES",
+      "table_name": "proposed_location_record_version",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "successor_version_id",
+      "data_type": "text",
+      "is_nullable": "YES",
+      "table_name": "proposed_location_record_version",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "correction_case_id",
+      "data_type": "text",
+      "is_nullable": "YES",
+      "table_name": "proposed_location_record_version",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "supersession_reason",
+      "data_type": "text",
+      "is_nullable": "YES",
+      "table_name": "proposed_location_record_version",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "source_decision_event_id",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_location_record_version",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "migration_exception_id",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_migration_exception",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "batch_id",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_migration_exception",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "source_table",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_migration_exception",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "source_field",
+      "data_type": "text",
+      "is_nullable": "YES",
+      "table_name": "proposed_migration_exception",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "source_key",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_migration_exception",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "exception_type",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_migration_exception",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "severity",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_migration_exception",
+      "udt_name": "text"
+    },
+    {
+      "column_default": "'{}'::jsonb",
+      "column_name": "details_json",
+      "data_type": "jsonb",
+      "is_nullable": "NO",
+      "table_name": "proposed_migration_exception",
+      "udt_name": "jsonb"
+    },
+    {
+      "column_default": null,
+      "column_name": "owner",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_migration_exception",
+      "udt_name": "text"
+    },
+    {
+      "column_default": "now()",
+      "column_name": "created_at",
+      "data_type": "timestamp with time zone",
+      "is_nullable": "NO",
+      "table_name": "proposed_migration_exception",
+      "udt_name": "timestamptz"
+    },
+    {
+      "column_default": null,
+      "column_name": "resolved_at",
+      "data_type": "timestamp with time zone",
+      "is_nullable": "YES",
+      "table_name": "proposed_migration_exception",
+      "udt_name": "timestamptz"
+    },
+    {
+      "column_default": null,
+      "column_name": "name_record_id",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_name_record",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "subject_entity",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_name_record",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "subject_id",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_name_record",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "language_code",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_name_record",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "name_kind",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_name_record",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "name_status",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_name_record",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "name_text",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_name_record",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "normalized_text",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_name_record",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "source_record_id",
+      "data_type": "text",
+      "is_nullable": "YES",
+      "table_name": "proposed_name_record",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "effective_from",
+      "data_type": "timestamp with time zone",
+      "is_nullable": "NO",
+      "table_name": "proposed_name_record",
+      "udt_name": "timestamptz"
+    },
+    {
+      "column_default": null,
+      "column_name": "effective_to",
+      "data_type": "timestamp with time zone",
+      "is_nullable": "YES",
+      "table_name": "proposed_name_record",
+      "udt_name": "timestamptz"
+    },
+    {
+      "column_default": null,
+      "column_name": "object_id",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_non_building_object",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "object_type",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_non_building_object",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "lifecycle_state",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_non_building_object",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "source_authority_id",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_non_building_object",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "effective_from",
+      "data_type": "timestamp with time zone",
+      "is_nullable": "NO",
+      "table_name": "proposed_non_building_object",
+      "udt_name": "timestamptz"
+    },
+    {
+      "column_default": null,
+      "column_name": "effective_to",
+      "data_type": "timestamp with time zone",
+      "is_nullable": "YES",
+      "table_name": "proposed_non_building_object",
+      "udt_name": "timestamptz"
+    },
+    {
+      "column_default": null,
+      "column_name": "operational_area_id",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_operational_area",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "area_type",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_operational_area",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "name_record_id",
+      "data_type": "text",
+      "is_nullable": "YES",
+      "table_name": "proposed_operational_area",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "purpose",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_operational_area",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "lifecycle_state",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_operational_area",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "authority_owner",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_operational_area",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "effective_from",
+      "data_type": "timestamp with time zone",
+      "is_nullable": "NO",
+      "table_name": "proposed_operational_area",
+      "udt_name": "timestamptz"
+    },
+    {
+      "column_default": null,
+      "column_name": "effective_to",
+      "data_type": "timestamp with time zone",
+      "is_nullable": "YES",
+      "table_name": "proposed_operational_area",
+      "udt_name": "timestamptz"
+    },
+    {
+      "column_default": "'government-internal'::text",
+      "column_name": "classification",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_operational_area",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "coverage_id",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_operational_area_coverage",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "operational_area_id",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_operational_area_coverage",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "administrative_unit_id",
+      "data_type": "text",
+      "is_nullable": "YES",
+      "table_name": "proposed_operational_area_coverage",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "geometry_version_id",
+      "data_type": "text",
+      "is_nullable": "YES",
+      "table_name": "proposed_operational_area_coverage",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "coverage_role",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_operational_area_coverage",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "effective_from",
+      "data_type": "timestamp with time zone",
+      "is_nullable": "NO",
+      "table_name": "proposed_operational_area_coverage",
+      "udt_name": "timestamptz"
+    },
+    {
+      "column_default": null,
+      "column_name": "effective_to",
+      "data_type": "timestamp with time zone",
+      "is_nullable": "YES",
+      "table_name": "proposed_operational_area_coverage",
+      "udt_name": "timestamptz"
+    },
+    {
+      "column_default": null,
+      "column_name": "parcel_reference_id",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_parcel_reference",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "external_parcel_id",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_parcel_reference",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "source_authority_id",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_parcel_reference",
+      "udt_name": "text"
+    },
+    {
+      "column_default": "'restricted'::text",
+      "column_name": "classification",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_parcel_reference",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "effective_from",
+      "data_type": "timestamp with time zone",
+      "is_nullable": "NO",
+      "table_name": "proposed_parcel_reference",
+      "udt_name": "timestamptz"
+    },
+    {
+      "column_default": null,
+      "column_name": "effective_to",
+      "data_type": "timestamp with time zone",
+      "is_nullable": "YES",
+      "table_name": "proposed_parcel_reference",
+      "udt_name": "timestamptz"
+    },
+    {
+      "column_default": null,
+      "column_name": "partner_projection_id",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_partner_projection",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "publication_release_item_id",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_partner_projection",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "partner_scope",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_partner_projection",
+      "udt_name": "text"
+    },
+    {
+      "column_default": "'[]'::jsonb",
+      "column_name": "response_field_set",
+      "data_type": "jsonb",
+      "is_nullable": "NO",
+      "table_name": "proposed_partner_projection",
+      "udt_name": "jsonb"
+    },
+    {
+      "column_default": null,
+      "column_name": "classification",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_partner_projection",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "expires_at",
+      "data_type": "timestamp with time zone",
+      "is_nullable": "YES",
+      "table_name": "proposed_partner_projection",
+      "udt_name": "timestamptz"
+    },
+    {
+      "column_default": null,
+      "column_name": "public_code_alias_id",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_public_code_alias",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "location_record_id",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_public_code_alias",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "public_code",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_public_code_alias",
+      "udt_name": "text"
+    },
+    {
+      "column_default": "'nli-reserved-v1'::text",
+      "column_name": "code_scheme",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_public_code_alias",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "code_state",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_public_code_alias",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "reserved_at",
+      "data_type": "timestamp with time zone",
+      "is_nullable": "NO",
+      "table_name": "proposed_public_code_alias",
+      "udt_name": "timestamptz"
+    },
+    {
+      "column_default": null,
+      "column_name": "issued_at",
+      "data_type": "timestamp with time zone",
+      "is_nullable": "YES",
+      "table_name": "proposed_public_code_alias",
+      "udt_name": "timestamptz"
+    },
+    {
+      "column_default": null,
+      "column_name": "retired_at",
+      "data_type": "timestamp with time zone",
+      "is_nullable": "YES",
+      "table_name": "proposed_public_code_alias",
+      "udt_name": "timestamptz"
+    },
+    {
+      "column_default": null,
+      "column_name": "predecessor_alias_id",
+      "data_type": "text",
+      "is_nullable": "YES",
+      "table_name": "proposed_public_code_alias",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "successor_alias_id",
+      "data_type": "text",
+      "is_nullable": "YES",
+      "table_name": "proposed_public_code_alias",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "publication_release_id",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_publication_release",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "release_state",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_publication_release",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "authority_reference",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_publication_release",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "projection_type",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_publication_release",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "effective_at",
+      "data_type": "timestamp with time zone",
+      "is_nullable": "NO",
+      "table_name": "proposed_publication_release",
+      "udt_name": "timestamptz"
+    },
+    {
+      "column_default": null,
+      "column_name": "recorded_at",
+      "data_type": "timestamp with time zone",
+      "is_nullable": "NO",
+      "table_name": "proposed_publication_release",
+      "udt_name": "timestamptz"
+    },
+    {
+      "column_default": null,
+      "column_name": "immutable_manifest_hash",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_publication_release",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "manifest_storage_uri",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_publication_release",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "created_by_actor_id",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_publication_release",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "publication_release_item_id",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_publication_release_item",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "publication_release_id",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_publication_release_item",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "location_record_id",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_publication_release_item",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "location_record_version_id",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_publication_release_item",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "public_code_alias_id",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_publication_release_item",
+      "udt_name": "text"
+    },
+    {
+      "column_default": "'{}'::jsonb",
+      "column_name": "projection_payload_json",
+      "data_type": "jsonb",
+      "is_nullable": "NO",
+      "table_name": "proposed_publication_release_item",
+      "udt_name": "jsonb"
+    },
+    {
+      "column_default": null,
+      "column_name": "projection_payload_hash",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_publication_release_item",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "projection_state",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_publication_release_item",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "published_label",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_publication_release_item",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "published_geometry_policy",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_publication_release_item",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "subject_id",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_registry_subject",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "subject_entity",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_registry_subject",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "subject_native_id",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_registry_subject",
+      "udt_name": "text"
+    },
+    {
+      "column_default": "now()",
+      "column_name": "created_at",
+      "data_type": "timestamp with time zone",
+      "is_nullable": "NO",
+      "table_name": "proposed_registry_subject",
+      "udt_name": "timestamptz"
+    },
+    {
+      "column_default": null,
+      "column_name": "road_id",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_road",
+      "udt_name": "text"
+    },
+    {
+      "column_default": "'unknown'::text",
+      "column_name": "road_class",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_road",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "lifecycle_state",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_road",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "source_authority_id",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_road",
+      "udt_name": "text"
+    },
+    {
+      "column_default": "now()",
+      "column_name": "created_at",
+      "data_type": "timestamp with time zone",
+      "is_nullable": "NO",
+      "table_name": "proposed_road",
+      "udt_name": "timestamptz"
+    },
+    {
+      "column_default": null,
+      "column_name": "road_segment_id",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_road_segment",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "road_id",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_road_segment",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "sequence_number",
+      "data_type": "integer",
+      "is_nullable": "YES",
+      "table_name": "proposed_road_segment",
+      "udt_name": "int4"
+    },
+    {
+      "column_default": null,
+      "column_name": "measured_length_m",
+      "data_type": "numeric",
+      "is_nullable": "YES",
+      "table_name": "proposed_road_segment",
+      "udt_name": "numeric"
+    },
+    {
+      "column_default": null,
+      "column_name": "lifecycle_state",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_road_segment",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "effective_from",
+      "data_type": "timestamp with time zone",
+      "is_nullable": "NO",
+      "table_name": "proposed_road_segment",
+      "udt_name": "timestamptz"
+    },
+    {
+      "column_default": null,
+      "column_name": "effective_to",
+      "data_type": "timestamp with time zone",
+      "is_nullable": "YES",
+      "table_name": "proposed_road_segment",
+      "udt_name": "timestamptz"
+    },
+    {
+      "column_default": null,
+      "column_name": "source_authority_id",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_source_authority",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "authority_name",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_source_authority",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "authority_class",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_source_authority",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "legal_basis",
+      "data_type": "text",
+      "is_nullable": "YES",
+      "table_name": "proposed_source_authority",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "status",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_source_authority",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "source_package_id",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_source_package",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "source_authority_id",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_source_package",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "package_name",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_source_package",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "package_checksum",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_source_package",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "licence_id",
+      "data_type": "text",
+      "is_nullable": "YES",
+      "table_name": "proposed_source_package",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "loaded_at",
+      "data_type": "timestamp with time zone",
+      "is_nullable": "NO",
+      "table_name": "proposed_source_package",
+      "udt_name": "timestamptz"
+    },
+    {
+      "column_default": "'{}'::jsonb",
+      "column_name": "load_context",
+      "data_type": "jsonb",
+      "is_nullable": "NO",
+      "table_name": "proposed_source_package",
+      "udt_name": "jsonb"
+    },
+    {
+      "column_default": null,
+      "column_name": "archive_id",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_source_payload_archive",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "source_record_id",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_source_payload_archive",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "payload_uri",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_source_payload_archive",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "payload_hash_sha256",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_source_payload_archive",
+      "udt_name": "text"
+    },
+    {
+      "column_default": "'restricted'::text",
+      "column_name": "classification",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_source_payload_archive",
+      "udt_name": "text"
+    },
+    {
+      "column_default": "'active'::text",
+      "column_name": "retention_state",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_source_payload_archive",
+      "udt_name": "text"
+    },
+    {
+      "column_default": "now()",
+      "column_name": "created_at",
+      "data_type": "timestamp with time zone",
+      "is_nullable": "NO",
+      "table_name": "proposed_source_payload_archive",
+      "udt_name": "timestamptz"
+    },
+    {
+      "column_default": null,
+      "column_name": "source_record_id",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_source_record",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "source_package_id",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_source_record",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "source_key",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_source_record",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "raw_payload_hash",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_source_record",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "raw_payload_classification",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_source_record",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "recorded_at",
+      "data_type": "timestamp with time zone",
+      "is_nullable": "NO",
+      "table_name": "proposed_source_record",
+      "udt_name": "timestamptz"
+    },
+    {
+      "column_default": null,
+      "column_name": "unit_id",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_unit",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "building_id",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_unit",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "parent_unit_id",
+      "data_type": "text",
+      "is_nullable": "YES",
+      "table_name": "proposed_unit",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "unit_label",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_unit",
+      "udt_name": "text"
+    },
+    {
+      "column_default": "'unit'::text",
+      "column_name": "unit_type",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_unit",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "lifecycle_state",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_unit",
+      "udt_name": "text"
+    },
+    {
+      "column_default": "'government-internal'::text",
+      "column_name": "classification",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_unit",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "effective_from",
+      "data_type": "timestamp with time zone",
+      "is_nullable": "NO",
+      "table_name": "proposed_unit",
+      "udt_name": "timestamptz"
+    },
+    {
+      "column_default": null,
+      "column_name": "effective_to",
+      "data_type": "timestamp with time zone",
+      "is_nullable": "YES",
+      "table_name": "proposed_unit",
+      "udt_name": "timestamptz"
+    }
+  ],
+  "report": {
+    "constraint_count": 600,
+    "extra_fields": [],
+    "index_count": 91,
+    "inserted_fixture_rows": 45,
+    "missing_fields": [],
+    "physical_columns": 356,
+    "target_fields": 356
+  }
+}

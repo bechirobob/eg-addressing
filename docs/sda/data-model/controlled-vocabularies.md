@@ -1,243 +1,584 @@
 # Controlled Vocabulary Registry
 
+One authoritative field-to-vocabulary registry. Review 04 separates canonical records, reference objects, operational areas, source authorities, names, cases, geometry, and publication lifecycles.
+
 ## Field-to-vocabulary registry
 
-| Controlled field | Vocabulary | Owner | Classification |
+| Target field | Vocabulary | Owner | Allowed values |
 |---|---|---|---|
-| `country.lifecycle_state` | `lifecycle_state` | Registry Authority | government-internal |
-| `administrative_unit_version.admin_level` | `admin_level` | Registry Authority | government-internal |
-| `administrative_unit_version.lifecycle_state` | `lifecycle_state` | Registry Authority | government-internal |
-| `administrative_unit_version.classification` | `classification` | Registry Authority | government-internal |
-| `name_record.name_kind` | `name_kind` | Registry Authority | government-internal |
-| `name_record.name_status` | `name_status` | Registry Authority | government-internal |
-| `operational_area.area_type` | `operational_area_type` | Registry Authority | government-internal |
-| `operational_area.lifecycle_state` | `lifecycle_state` | Registry Authority | government-internal |
-| `operational_area.classification` | `classification` | Registry Authority | government-internal |
-| `operational_area_coverage.coverage_role` | `coverage_role` | Registry Authority | government-internal |
-| `road.road_class` | `road_class` | Registry Authority | government-internal |
-| `road.lifecycle_state` | `lifecycle_state` | Registry Authority | government-internal |
-| `road_segment.lifecycle_state` | `lifecycle_state` | Registry Authority | government-internal |
-| `parcel_reference.classification` | `classification` | Registry Authority | government-internal |
-| `building.lifecycle_state` | `lifecycle_state` | Registry Authority | government-internal |
-| `entrance.entrance_role` | `object_role` | Registry Authority | government-internal |
-| `entrance.lifecycle_state` | `lifecycle_state` | Registry Authority | government-internal |
-| `unit.unit_type` | `record_type` | Registry Authority | government-internal |
-| `unit.lifecycle_state` | `lifecycle_state` | Registry Authority | government-internal |
-| `unit.classification` | `classification` | Registry Authority | government-internal |
-| `landmark.landmark_type` | `record_type` | Registry Authority | government-internal |
-| `landmark.lifecycle_state` | `lifecycle_state` | Registry Authority | government-internal |
-| `locality.locality_type` | `locality_type` | Registry Authority | government-internal |
-| `locality.lifecycle_state` | `lifecycle_state` | Registry Authority | government-internal |
-| `non_building_object.object_type` | `record_type` | Registry Authority | government-internal |
-| `non_building_object.lifecycle_state` | `lifecycle_state` | Registry Authority | government-internal |
-| `location_record.record_type` | `record_type` | Registry Authority | government-internal |
-| `location_record.classification` | `classification` | Registry Authority | government-internal |
-| `location_record_version.lifecycle_state` | `lifecycle_state` | Registry Authority | government-internal |
-| `location_record_object_link.object_role` | `object_role` | Registry Authority | government-internal |
-| `location_record_relationship.relationship_type` | `relationship_type` | Registry Authority | government-internal |
-| `public_code_alias.code_state` | `public_code_state` | Registry Authority | government-internal |
-| `geometry_observation.geometry_role` | `geometry_role` | Registry Authority | government-internal |
-| `geometry_observation.capture_method` | `capture_method` | Registry Authority | government-internal |
-| `geometry_observation.classification` | `classification` | Registry Authority | government-internal |
-| `geometry_version.geometry_role` | `geometry_role` | Registry Authority | government-internal |
-| `geometry_version.quality_state` | `geometry_quality_state` | Registry Authority | government-internal |
-| `geometry_version.classification` | `classification` | Registry Authority | government-internal |
-| `geometry_quality_assessment.check_result` | `geometry_quality_state` | Registry Authority | government-internal |
-| `licence.classification` | `classification` | Registry Authority | government-internal |
-| `source_authority.authority_class` | `source_authority_class` | Registry Authority | government-internal |
-| `source_authority.status` | `lifecycle_state` | Registry Authority | government-internal |
-| `source_record.raw_payload_classification` | `classification` | Registry Authority | government-internal |
-| `evidence_object.classification` | `classification` | Registry Authority | government-internal |
-| `evidence_object.retention_state` | `retention_state` | Registry Authority | government-internal |
-| `decision_event.decision_type` | `decision_type` | Registry Authority | government-internal |
-| `location_record_assertion.classification` | `classification` | Registry Authority | government-internal |
-| `intake_case.intake_state` | `intake_state` | Registry Authority | government-internal |
-| `field_assignment.assignment_state` | `field_verification_state` | Registry Authority | government-internal |
-| `field_observation.verification_state` | `field_verification_state` | Registry Authority | government-internal |
-| `field_observation.notes_classification` | `classification` | Registry Authority | government-internal |
-| `correction_case.correction_type` | `correction_type` | Registry Authority | government-internal |
-| `correction_case.case_state` | `case_state` | Registry Authority | government-internal |
-| `dispute_case.dispute_type` | `dispute_type` | Registry Authority | government-internal |
-| `dispute_case.case_state` | `case_state` | Registry Authority | government-internal |
-| `publication_release.release_state` | `publication_release_state` | Registry Authority | government-internal |
-| `publication_release.projection_type` | `projection_type` | Registry Authority | government-internal |
-| `publication_release_item.projection_state` | `publication_item_state` | Registry Authority | government-internal |
-| `partner_projection.classification` | `classification` | Registry Authority | government-internal |
+| `administrative_unit_version.admin_level` | `admin_level` | GIS/Data Authority | country, district, local_council, municipality, province |
+| `administrative_unit_version.lifecycle_state` | `lifecycle_state` | Registry Authority | active, corrected, disputed, draft-candidate, registry-ready, registry-review, retired, revoked, superseded |
+| `administrative_unit_version.classification` | `classification` | Legal/Privacy Authority | government-internal, highly-restricted, public, public-after-release, restricted, security-internal |
+| `building.lifecycle_state` | `reference_object_lifecycle` | Registry/GIS Authority | candidate, active, corrected, superseded, retired, revoked |
+| `correction_case.correction_type` | `correction_type` | Registry Authority | administrative-context, classification, duplicate, geometry, label |
+| `correction_case.case_state` | `case_state` | Registry Authority | approved, closed, needs-evidence, rejected, resolved, submitted, under-review |
+| `country.lifecycle_state` | `reference_object_lifecycle` | Registry/GIS Authority | candidate, active, corrected, superseded, retired, revoked |
+| `decision_event.decision_type` | `decision_type` | SDA/Registry Authority | approve-geometry, approve-publication, correct-record, promote-record, resolve-dispute, supersede-record, withdraw-publication |
+| `dispute_case.dispute_type` | `dispute_type` | Registry Authority | authority, duplicate, geometry, name, publication |
+| `dispute_case.case_state` | `case_state` | Registry Authority | approved, closed, needs-evidence, rejected, resolved, submitted, under-review |
+| `entrance.entrance_role` | `entrance_role` | Registry Authority | main, secondary, service, emergency, gate |
+| `entrance.lifecycle_state` | `reference_object_lifecycle` | Registry/GIS Authority | candidate, active, corrected, superseded, retired, revoked |
+| `evidence_object.classification` | `classification` | Legal/Privacy Authority | government-internal, highly-restricted, public, public-after-release, restricted, security-internal |
+| `evidence_object.retention_state` | `retention_state` | Legal/Privacy Authority | active, disposed-metadata-retained, legal-hold, scheduled-disposal |
+| `field_assignment.assignment_state` | `field_verification_state` | Field Operations Authority | assigned, cancelled, evidence-approved, evidence-rejected, evidence-under-review, field-captured, in-progress, linked-to-canonical, needs-recapture |
+| `field_observation.verification_state` | `field_verification_state` | Field Operations Authority | assigned, cancelled, evidence-approved, evidence-rejected, evidence-under-review, field-captured, in-progress, linked-to-canonical, needs-recapture |
+| `field_observation.notes_classification` | `classification` | Legal/Privacy Authority | government-internal, highly-restricted, public, public-after-release, restricted, security-internal |
+| `geometry_observation.geometry_role` | `geometry_role` | GIS/Data Authority | admin-boundary, building-footprint, building-point, entrance-point, landmark-area, landmark-point, location-point, operational-boundary, parcel-boundary, road-centerline |
+| `geometry_observation.capture_method` | `capture_method` | GIS/Data Authority | browser-gps, derived-from-source, field-device-gps, imported-geometry, manual-map-point, surveyed |
+| `geometry_observation.classification` | `classification` | Legal/Privacy Authority | government-internal, highly-restricted, public, public-after-release, restricted, security-internal |
+| `geometry_quality_assessment.check_result` | `quality_check_result` | GIS/Data Authority | passed, passed-with-warning, failed, not-applicable |
+| `geometry_version.geometry_role` | `geometry_role` | GIS/Data Authority | admin-boundary, building-footprint, building-point, entrance-point, landmark-area, landmark-point, location-point, operational-boundary, parcel-boundary, road-centerline |
+| `geometry_version.quality_state` | `geometry_quality_state` | GIS/Data Authority | accepted-canonical, disputed, observed, quality-checked, rejected, reviewed, superseded, valid-with-warning |
+| `geometry_version.classification` | `classification` | Legal/Privacy Authority | government-internal, highly-restricted, public, public-after-release, restricted, security-internal |
+| `intake_case.intake_state` | `intake_state` | Registry Authority | closed, duplicate-review, needs-field-check, promoted-to-canonical, rejected, submitted, under-review |
+| `landmark.landmark_type` | `landmark_type` | Registry/GIS Authority | school, clinic, market, religious-site, public-office, natural-feature, other |
+| `landmark.lifecycle_state` | `reference_object_lifecycle` | Registry/GIS Authority | candidate, active, corrected, superseded, retired, revoked |
+| `licence.classification` | `classification` | Legal/Privacy Authority | government-internal, highly-restricted, public, public-after-release, restricted, security-internal |
+| `locality.locality_type` | `locality_type` | GIS/Data Authority | informal_area, neighbourhood, quarter, settlement, village |
+| `locality.lifecycle_state` | `reference_object_lifecycle` | Registry/GIS Authority | candidate, active, corrected, superseded, retired, revoked |
+| `location_record.record_type` | `record_type` | Registry Authority | address, building, entrance, landmark, non-building-object, service-location, unit |
+| `location_record.classification` | `classification` | Legal/Privacy Authority | government-internal, highly-restricted, public, public-after-release, restricted, security-internal |
+| `location_record_assertion.classification` | `classification` | Legal/Privacy Authority | government-internal, highly-restricted, public, public-after-release, restricted, security-internal |
+| `location_record_object_link.object_role` | `object_role` | Registry Authority | access-point, context-locality, context-road, external-parcel-reference, nearby-landmark, parent-building, primary-subject |
+| `location_record_relationship.relationship_type` | `relationship_type` | Registry Authority | contains, corrects, duplicates, near, served-by, supersedes |
+| `location_record_version.lifecycle_state` | `canonical_record_lifecycle` | Registry Authority | candidate, under-review, active, corrected, superseded, disputed, retired, revoked |
+| `name_record.name_kind` | `name_kind` | Registry/GIS Authority | alternate, historical, local, normalized-search, official-en, official-es |
+| `name_record.name_status` | `name_status` | Registry/GIS Authority | alternate, candidate, disputed, official-current, official-historical, rejected, retired, under-review |
+| `non_building_object.object_type` | `non_building_object_type` | Registry Authority | utility-asset, public-space, delivery-point, infrastructure-node, other |
+| `non_building_object.lifecycle_state` | `reference_object_lifecycle` | Registry/GIS Authority | candidate, active, corrected, superseded, retired, revoked |
+| `operational_area.area_type` | `operational_area_type` | Operations Authority | campaign, incident, rollout, routing, service |
+| `operational_area.lifecycle_state` | `operational_area_lifecycle` | Operations Authority | planned, active, suspended, closed, archived |
+| `operational_area.classification` | `classification` | Legal/Privacy Authority | government-internal, highly-restricted, public, public-after-release, restricted, security-internal |
+| `operational_area_coverage.coverage_role` | `coverage_role` | Operations Authority | context, excluded, partial, primary |
+| `parcel_reference.classification` | `classification` | Legal/Privacy Authority | government-internal, highly-restricted, public, public-after-release, restricted, security-internal |
+| `partner_projection.classification` | `classification` | Legal/Privacy Authority | government-internal, highly-restricted, public, public-after-release, restricted, security-internal |
+| `public_code_alias.code_state` | `public_code_state` | Programme Owner / Registry Authority | active-public, blocked, reserved-internal, retired, revoked, superseded |
+| `publication_release.release_state` | `publication_release_state` | Publication Authority | approval-requested, approved, draft, published, suspended, withdrawn |
+| `publication_release.projection_type` | `projection_type` | Publication Authority | operator-case-file, partner-api, public-lookup, signage-export, statistics |
+| `publication_release_item.projection_state` | `publication_item_state` | Publication Authority | included, redacted, superseded, withdrawn |
+| `road.road_class` | `road_class` | Registry/GIS Authority | path, road, service-road, street, track, unknown |
+| `road.lifecycle_state` | `reference_object_lifecycle` | Registry/GIS Authority | candidate, active, corrected, superseded, retired, revoked |
+| `road_segment.lifecycle_state` | `reference_object_lifecycle` | Registry/GIS Authority | candidate, active, corrected, superseded, retired, revoked |
+| `source_authority.authority_class` | `source_authority_class` | SDA | citizen-submitted, derived-system, external-map-suggestion, fixture-training, gis-data-authority, imported-provisional, official-government, registry-authority, unverified-field, verified-field |
+| `source_authority.status` | `lifecycle_state` | Registry Authority | active, corrected, disputed, draft-candidate, registry-ready, registry-review, retired, revoked, superseded |
+| `source_payload_archive.classification` | `classification` | Legal/Privacy Authority | government-internal, highly-restricted, public, public-after-release, restricted, security-internal |
+| `source_payload_archive.retention_state` | `retention_state` | Legal/Privacy Authority | active, disposed-metadata-retained, legal-hold, scheduled-disposal |
+| `source_record.raw_payload_classification` | `classification` | Legal/Privacy Authority | government-internal, highly-restricted, public, public-after-release, restricted, security-internal |
+| `unit.unit_type` | `unit_type` | Registry Authority | apartment, office-suite, room, shop-unit, compound-unit |
+| `unit.lifecycle_state` | `reference_object_lifecycle` | Registry/GIS Authority | candidate, active, corrected, superseded, retired, revoked |
+| `unit.classification` | `classification` | Legal/Privacy Authority | government-internal, highly-restricted, public, public-after-release, restricted, security-internal |
 
-## Vocabulary values
+## `admin_level`
 
-| Vocabulary | Value | Definition | Owner | Terminal | Legacy mapping | Invalid/deprecated behavior |
-|---|---|---|---|---|---|---|
-| `admin_level` | `country` | Sovereign country row. | GIS/Data Authority | no | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `admin_level` | `province` | First-level administrative unit. | GIS/Data Authority | no | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `admin_level` | `district` | District-level administrative unit. | GIS/Data Authority | no | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `admin_level` | `municipality` | Municipality-level administrative unit. | GIS/Data Authority | no | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `admin_level` | `local_council` | Recognized lower level when authorized. | GIS/Data Authority | no | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `lifecycle_state` | `draft-candidate` | Candidate not yet under authority review. | Registry Authority | no | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `lifecycle_state` | `registry-review` | Under registry review. | Registry Authority | no | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `lifecycle_state` | `registry-ready` | Approved for internal registry use only. | Registry Authority | no | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `lifecycle_state` | `active` | Current active canonical state. | Registry Authority | no | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `lifecycle_state` | `corrected` | Corrected by later version. | Registry Authority | no | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `lifecycle_state` | `superseded` | Replaced by successor record or version. | Registry Authority | yes | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `lifecycle_state` | `retired` | No longer valid for current use. | Registry Authority | yes | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `lifecycle_state` | `disputed` | Subject to unresolved dispute. | Registry Authority | no | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `lifecycle_state` | `revoked` | Invalidated by authority. | Registry Authority | yes | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `publication_release_state` | `draft` | Release being prepared. | Publication Authority | no | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `publication_release_state` | `approval-requested` | Submitted for authority approval. | Publication Authority | no | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `publication_release_state` | `approved` | Approved for release but not yet published. | Publication Authority | no | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `publication_release_state` | `published` | Published to named audience. | Publication Authority | no | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `publication_release_state` | `suspended` | Temporarily hidden or restricted. | Publication Authority | no | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `publication_release_state` | `withdrawn` | Release withdrawn by authority. | Publication Authority | yes | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `publication_item_state` | `included` | Included in release manifest. | Publication Authority | no | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `publication_item_state` | `redacted` | Included with redaction. | Publication Authority | no | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `publication_item_state` | `withdrawn` | Removed from public/partner projection. | Publication Authority | yes | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `publication_item_state` | `superseded` | Replaced by later release item. | Publication Authority | yes | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `public_code_state` | `reserved-internal` | Reserved but not public. | Programme Owner / Registry Authority | no | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `public_code_state` | `active-public` | Currently released public code. | Programme Owner / Registry Authority | no | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `public_code_state` | `superseded` | Replaced by a successor alias. | Programme Owner / Registry Authority | yes | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `public_code_state` | `retired` | No longer assigned to current records. | Programme Owner / Registry Authority | yes | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `public_code_state` | `revoked` | Invalidated by authority. | Programme Owner / Registry Authority | yes | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `public_code_state` | `blocked` | Reserved to prevent future use. | Programme Owner / Registry Authority | yes | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `name_kind` | `official-es` | Official Spanish written form. | Registry/GIS Authority | no | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `name_kind` | `official-en` | Approved English presentation. | Registry/GIS Authority | no | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `name_kind` | `local` | Local/community name. | Registry/GIS Authority | no | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `name_kind` | `alternate` | Alternate known spelling/name. | Registry/GIS Authority | no | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `name_kind` | `historical` | Former name retained for history. | Registry/GIS Authority | no | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `name_kind` | `normalized-search` | Search-only normalized value, not authoritative display. | Registry/GIS Authority | no | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `name_status` | `candidate` | Suggested name. | Registry/GIS Authority | no | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `name_status` | `under-review` | Name under review. | Registry/GIS Authority | no | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `name_status` | `official-current` | Current approved name. | Registry/GIS Authority | no | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `name_status` | `official-historical` | Previously approved name. | Registry/GIS Authority | no | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `name_status` | `alternate` | Allowed alternate display/search name. | Registry/GIS Authority | no | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `name_status` | `retired` | No longer used. | Registry/GIS Authority | yes | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `name_status` | `rejected` | Rejected candidate. | Registry/GIS Authority | yes | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `name_status` | `disputed` | Name dispute unresolved. | Registry/GIS Authority | no | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `locality_type` | `settlement` | Settlement/locality context. | GIS/Data Authority | no | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `locality_type` | `neighbourhood` | Neighbourhood not necessarily legal hierarchy. | GIS/Data Authority | no | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `locality_type` | `village` | Village/local reference. | GIS/Data Authority | no | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `locality_type` | `quarter` | Urban quarter/barrio. | GIS/Data Authority | no | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `locality_type` | `informal_area` | Recognized operational/local context pending authority. | GIS/Data Authority | no | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `operational_area_type` | `campaign` | Field campaign area. | Operations Authority | no | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `operational_area_type` | `routing` | Intake routing area. | Operations Authority | no | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `operational_area_type` | `rollout` | Rollout sequence area. | Operations Authority | no | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `operational_area_type` | `service` | Service coverage area. | Operations Authority | no | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `operational_area_type` | `incident` | Temporary incident/project zone. | Operations Authority | no | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `coverage_role` | `primary` | Primary covered unit. | Operations Authority | no | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `coverage_role` | `partial` | Partially covered unit. | Operations Authority | no | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `coverage_role` | `excluded` | Explicitly excluded area. | Operations Authority | no | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `coverage_role` | `context` | Context only. | Operations Authority | no | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `road_class` | `road` | General road. | Registry/GIS Authority | no | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `road_class` | `street` | Urban street. | Registry/GIS Authority | no | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `road_class` | `track` | Track/unpaved access. | Registry/GIS Authority | no | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `road_class` | `path` | Pedestrian or local path. | Registry/GIS Authority | no | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `road_class` | `service-road` | Service/access road. | Registry/GIS Authority | no | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `road_class` | `unknown` | Unknown class pending validation. | Registry/GIS Authority | no | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `geometry_role` | `admin-boundary` | Administrative polygon/multipolygon. | GIS/Data Authority | no | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `geometry_role` | `operational-boundary` | Operational area polygon/multipolygon. | GIS/Data Authority | no | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `geometry_role` | `road-centerline` | Road or segment line/multiline. | GIS/Data Authority | no | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `geometry_role` | `building-footprint` | Building polygon/multipolygon. | GIS/Data Authority | no | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `geometry_role` | `building-point` | Building representative point. | GIS/Data Authority | no | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `geometry_role` | `entrance-point` | Entrance/access point. | GIS/Data Authority | no | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `geometry_role` | `location-point` | Address/location point. | GIS/Data Authority | no | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `geometry_role` | `landmark-point` | Landmark point. | GIS/Data Authority | no | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `geometry_role` | `landmark-area` | Landmark polygon/multipolygon. | GIS/Data Authority | no | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `geometry_role` | `parcel-boundary` | External parcel polygon when authorized. | GIS/Data Authority | no | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `geometry_quality_state` | `observed` | Raw observation captured. | GIS/Data Authority | no | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `geometry_quality_state` | `quality-checked` | Automated checks passed or recorded. | GIS/Data Authority | no | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `geometry_quality_state` | `reviewed` | Human/system authority reviewed. | GIS/Data Authority | no | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `geometry_quality_state` | `accepted-canonical` | Approved canonical geometry. | GIS/Data Authority | no | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `geometry_quality_state` | `valid-with-warning` | Approved with documented warning. | GIS/Data Authority | no | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `geometry_quality_state` | `rejected` | Rejected for canonical use. | GIS/Data Authority | yes | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `geometry_quality_state` | `disputed` | Dispute unresolved. | GIS/Data Authority | no | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `geometry_quality_state` | `superseded` | Replaced by newer geometry version. | GIS/Data Authority | yes | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `source_authority_class` | `official-government` | Official government source. | SDA | no | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `source_authority_class` | `registry-authority` | Registry decision. | SDA | no | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `source_authority_class` | `gis-data-authority` | GIS/data steward. | SDA | no | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `source_authority_class` | `verified-field` | Verified field observation. | SDA | no | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `source_authority_class` | `unverified-field` | Unverified field observation. | SDA | no | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `source_authority_class` | `citizen-submitted` | Citizen submission. | SDA | no | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `source_authority_class` | `imported-provisional` | Imported provisional source. | SDA | no | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `source_authority_class` | `external-map-suggestion` | External map/geocoder suggestion. | SDA | no | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `source_authority_class` | `derived-system` | System-derived value. | SDA | no | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `source_authority_class` | `fixture-training` | Fixture/training data. | SDA | no | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `classification` | `public` | Approved public data. | Legal/Privacy Authority | no | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `classification` | `public-after-release` | Internal until published through release. | Legal/Privacy Authority | no | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `classification` | `government-internal` | Internal government/operator use. | Legal/Privacy Authority | no | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `classification` | `restricted` | Sensitive operational/evidence/location data. | Legal/Privacy Authority | no | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `classification` | `highly-restricted` | Identity/security-sensitive data. | Legal/Privacy Authority | no | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `classification` | `security-internal` | Security/session credential data. | Legal/Privacy Authority | no | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `record_type` | `address` | Address/location record with public/protected lookup purpose. | Registry Authority | no | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `record_type` | `building` | Building-level canonical location. | Registry Authority | no | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `record_type` | `unit` | Separately addressable unit/sub-address. | Registry Authority | no | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `record_type` | `entrance` | Separately addressable entrance/access point. | Registry Authority | no | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `record_type` | `landmark` | Landmark-based location. | Registry Authority | no | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `record_type` | `non-building-object` | Other authorized addressable object. | Registry Authority | no | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `record_type` | `service-location` | Service/delivery location not tied to building. | Registry Authority | no | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `object_role` | `primary-subject` | Main object represented by the record version. | Registry Authority | no | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `object_role` | `access-point` | Access/entrance object. | Registry Authority | no | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `object_role` | `context-road` | Road/segment context. | Registry Authority | no | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `object_role` | `context-locality` | Locality context. | Registry Authority | no | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `object_role` | `nearby-landmark` | Landmark used for description. | Registry Authority | no | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `object_role` | `parent-building` | Parent building for unit. | Registry Authority | no | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `object_role` | `external-parcel-reference` | Optional external parcel context. | Registry Authority | no | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `relationship_type` | `supersedes` | Record replaces another. | Registry Authority | no | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `relationship_type` | `corrects` | Record/version corrects another. | Registry Authority | no | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `relationship_type` | `duplicates` | Potential/confirmed duplicate. | Registry Authority | no | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `relationship_type` | `contains` | Container relationship. | Registry Authority | no | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `relationship_type` | `served-by` | Service/access relationship. | Registry Authority | no | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `relationship_type` | `near` | Nearby/context relationship. | Registry Authority | no | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `capture_method` | `browser-gps` | Browser GPS coordinate. | GIS/Data Authority | no | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `capture_method` | `field-device-gps` | Field device GPS. | GIS/Data Authority | no | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `capture_method` | `manual-map-point` | Manual map correction. | GIS/Data Authority | no | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `capture_method` | `imported-geometry` | Imported geometry. | GIS/Data Authority | no | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `capture_method` | `derived-from-source` | Derived from source geometry. | GIS/Data Authority | no | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `capture_method` | `surveyed` | Surveyed/authoritative capture. | GIS/Data Authority | no | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `case_state` | `submitted` | Case submitted. | Registry Authority | no | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `case_state` | `under-review` | Under review. | Registry Authority | no | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `case_state` | `needs-evidence` | More evidence required. | Registry Authority | no | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `case_state` | `approved` | Approved. | Registry Authority | no | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `case_state` | `rejected` | Rejected. | Registry Authority | yes | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `case_state` | `resolved` | Resolved. | Registry Authority | no | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `case_state` | `closed` | Closed. | Registry Authority | yes | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `correction_type` | `label` | Label/name correction. | Registry Authority | no | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `correction_type` | `geometry` | Geometry correction. | Registry Authority | no | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `correction_type` | `classification` | Classification/visibility correction. | Registry Authority | no | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `correction_type` | `duplicate` | Duplicate/merge correction. | Registry Authority | no | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `correction_type` | `administrative-context` | Admin/locality context correction. | Registry Authority | no | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `dispute_type` | `geometry` | Geometry dispute. | Registry Authority | no | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `dispute_type` | `name` | Name/label dispute. | Registry Authority | no | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `dispute_type` | `authority` | Authority/source dispute. | Registry Authority | no | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `dispute_type` | `publication` | Publication/projection dispute. | Registry Authority | no | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `dispute_type` | `duplicate` | Duplicate/supersession dispute. | Registry Authority | no | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `intake_state` | `submitted` | Submitted by citizen/operator/import. | Registry Authority | no | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `intake_state` | `under-review` | Under review. | Registry Authority | no | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `intake_state` | `needs-field-check` | Needs field verification. | Registry Authority | no | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `intake_state` | `duplicate-review` | Possible duplicate. | Registry Authority | no | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `intake_state` | `rejected` | Rejected. | Registry Authority | yes | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `intake_state` | `promoted-to-canonical` | Promoted to canonical record. | Registry Authority | no | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `intake_state` | `closed` | Closed without promotion. | Registry Authority | yes | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `field_verification_state` | `assigned` | Assigned to field team. | Field Operations Authority | no | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `field_verification_state` | `in-progress` | Capture in progress. | Field Operations Authority | no | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `field_verification_state` | `field-captured` | Evidence captured. | Field Operations Authority | no | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `field_verification_state` | `evidence-under-review` | Supervisor review. | Field Operations Authority | no | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `field_verification_state` | `evidence-approved` | Approved as evidence. | Field Operations Authority | no | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `field_verification_state` | `evidence-rejected` | Rejected evidence. | Field Operations Authority | no | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `field_verification_state` | `needs-recapture` | Recapture required. | Field Operations Authority | no | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `field_verification_state` | `linked-to-canonical` | Linked to canonical record. | Field Operations Authority | no | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `field_verification_state` | `cancelled` | Cancelled. | Field Operations Authority | yes | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `decision_type` | `promote-record` | Promote candidate to canonical. | SDA/Registry Authority | no | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `decision_type` | `approve-geometry` | Approve geometry version. | SDA/Registry Authority | no | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `decision_type` | `correct-record` | Apply correction. | SDA/Registry Authority | no | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `decision_type` | `supersede-record` | Supersede record/version. | SDA/Registry Authority | no | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `decision_type` | `approve-publication` | Approve release. | SDA/Registry Authority | no | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `decision_type` | `withdraw-publication` | Withdraw release. | SDA/Registry Authority | no | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `decision_type` | `resolve-dispute` | Resolve dispute. | SDA/Registry Authority | no | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `retention_state` | `active` | Retained for active use. | Legal/Privacy Authority | no | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `retention_state` | `legal-hold` | Held by legal/audit requirement. | Legal/Privacy Authority | no | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `retention_state` | `scheduled-disposal` | Scheduled for disposal after approval. | Legal/Privacy Authority | no | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `retention_state` | `disposed-metadata-retained` | Object disposed, metadata retained. | Legal/Privacy Authority | yes | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `projection_type` | `public-lookup` | Public lookup/proof. | Publication Authority | no | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `projection_type` | `operator-case-file` | Protected operator case file. | Publication Authority | no | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `projection_type` | `partner-api` | Partner-scoped API projection. | Publication Authority | no | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `projection_type` | `signage-export` | Signage/export projection. | Publication Authority | no | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
-| `projection_type` | `statistics` | Aggregated/statistical projection. | Publication Authority | no | current legacy values are mapped in `current-to-target-mapping.md`; unmapped values become migration exceptions | invalid value rejected or placed in exception queue during WO-002B |
+Owner: **GIS/Data Authority**
+
+| Value | Meaning |
+|---|---|
+| country | Sovereign country row. |
+| district | District-level administrative unit. |
+| local_council | Recognized lower level when authorized. |
+| municipality | Municipality-level administrative unit. |
+| province | First-level administrative unit. |
+
+## `canonical_record_lifecycle`
+
+Owner: **Registry Authority**
+
+| Value | Meaning |
+|---|---|
+| candidate | Candidate record. |
+| under-review | Registry review. |
+| active | Current approved canonical state. |
+| corrected | Corrected by later version. |
+| superseded | Superseded. |
+| disputed | Active dispute. |
+| retired | Retired. |
+| revoked | Revoked. |
+
+## `capture_method`
+
+Owner: **GIS/Data Authority**
+
+| Value | Meaning |
+|---|---|
+| browser-gps | Browser GPS coordinate. |
+| derived-from-source | Derived from source geometry. |
+| field-device-gps | Field device GPS. |
+| imported-geometry | Imported geometry. |
+| manual-map-point | Manual map correction. |
+| surveyed | Surveyed/authoritative capture. |
+
+## `case_lifecycle`
+
+Owner: **Registry Authority**
+
+| Value | Meaning |
+|---|---|
+| submitted | Submitted. |
+| under-review | Under review. |
+| needs-evidence | Needs evidence. |
+| approved | Approved. |
+| rejected | Rejected. |
+| resolved | Resolved. |
+| closed | Closed. |
+
+## `case_state`
+
+Owner: **Registry Authority**
+
+| Value | Meaning |
+|---|---|
+| approved | Approved. |
+| closed | Closed. |
+| needs-evidence | More evidence required. |
+| rejected | Rejected. |
+| resolved | Resolved. |
+| submitted | Case submitted. |
+| under-review | Under review. |
+
+## `classification`
+
+Owner: **Legal/Privacy Authority**
+
+| Value | Meaning |
+|---|---|
+| government-internal | Internal government/operator use. |
+| highly-restricted | Identity/security-sensitive data. |
+| public | Approved public data. |
+| public-after-release | Internal until published through release. |
+| restricted | Sensitive operational/evidence/location data. |
+| security-internal | Security/session credential data. |
+
+## `correction_type`
+
+Owner: **Registry Authority**
+
+| Value | Meaning |
+|---|---|
+| administrative-context | Admin/locality context correction. |
+| classification | Classification/visibility correction. |
+| duplicate | Duplicate/merge correction. |
+| geometry | Geometry correction. |
+| label | Label/name correction. |
+
+## `coverage_role`
+
+Owner: **Operations Authority**
+
+| Value | Meaning |
+|---|---|
+| context | Context only. |
+| excluded | Explicitly excluded area. |
+| partial | Partially covered unit. |
+| primary | Primary covered unit. |
+
+## `decision_type`
+
+Owner: **SDA/Registry Authority**
+
+| Value | Meaning |
+|---|---|
+| approve-geometry | Approve geometry version. |
+| approve-publication | Approve release. |
+| correct-record | Apply correction. |
+| promote-record | Promote candidate to canonical. |
+| resolve-dispute | Resolve dispute. |
+| supersede-record | Supersede record/version. |
+| withdraw-publication | Withdraw release. |
+
+## `dispute_type`
+
+Owner: **Registry Authority**
+
+| Value | Meaning |
+|---|---|
+| authority | Authority/source dispute. |
+| duplicate | Duplicate/supersession dispute. |
+| geometry | Geometry dispute. |
+| name | Name/label dispute. |
+| publication | Publication/projection dispute. |
+
+## `entrance_role`
+
+Owner: **Registry Authority**
+
+| Value | Meaning |
+|---|---|
+| main | Main entrance. |
+| secondary | Secondary entrance. |
+| service | Service entrance. |
+| emergency | Emergency entrance. |
+| gate | Compound/gate access. |
+
+## `field_verification_state`
+
+Owner: **Field Operations Authority**
+
+| Value | Meaning |
+|---|---|
+| assigned | Assigned to field team. |
+| cancelled | Cancelled. |
+| evidence-approved | Approved as evidence. |
+| evidence-rejected | Rejected evidence. |
+| evidence-under-review | Supervisor review. |
+| field-captured | Evidence captured. |
+| in-progress | Capture in progress. |
+| linked-to-canonical | Linked to canonical record. |
+| needs-recapture | Recapture required. |
+
+## `geometry_quality_state`
+
+Owner: **GIS/Data Authority**
+
+| Value | Meaning |
+|---|---|
+| accepted-canonical | Approved canonical geometry. |
+| disputed | Dispute unresolved. |
+| observed | Raw observation captured. |
+| quality-checked | Automated checks passed or recorded. |
+| rejected | Rejected for canonical use. |
+| reviewed | Human/system authority reviewed. |
+| superseded | Replaced by newer geometry version. |
+| valid-with-warning | Approved with documented warning. |
+
+## `geometry_role`
+
+Owner: **GIS/Data Authority**
+
+| Value | Meaning |
+|---|---|
+| admin-boundary | Administrative polygon/multipolygon. |
+| building-footprint | Building polygon/multipolygon. |
+| building-point | Building representative point. |
+| entrance-point | Entrance/access point. |
+| landmark-area | Landmark polygon/multipolygon. |
+| landmark-point | Landmark point. |
+| location-point | Address/location point. |
+| operational-boundary | Operational area polygon/multipolygon. |
+| parcel-boundary | External parcel polygon when authorized. |
+| road-centerline | Road or segment line/multiline. |
+
+## `intake_state`
+
+Owner: **Registry Authority**
+
+| Value | Meaning |
+|---|---|
+| closed | Closed without promotion. |
+| duplicate-review | Possible duplicate. |
+| needs-field-check | Needs field verification. |
+| promoted-to-canonical | Promoted to canonical record. |
+| rejected | Rejected. |
+| submitted | Submitted by citizen/operator/import. |
+| under-review | Under review. |
+
+## `landmark_type`
+
+Owner: **Registry/GIS Authority**
+
+| Value | Meaning |
+|---|---|
+| school | School. |
+| clinic | Clinic/health point. |
+| market | Market. |
+| religious-site | Religious site. |
+| public-office | Public office. |
+| natural-feature | Natural feature. |
+| other | Other approved landmark. |
+
+## `lifecycle_state`
+
+Owner: **Registry Authority**
+
+| Value | Meaning |
+|---|---|
+| active | Current active canonical state. |
+| corrected | Corrected by later version. |
+| disputed | Subject to unresolved dispute. |
+| draft-candidate | Candidate not yet under authority review. |
+| registry-ready | Approved for internal registry use only. |
+| registry-review | Under registry review. |
+| retired | No longer valid for current use. |
+| revoked | Invalidated by authority. |
+| superseded | Replaced by successor record or version. |
+
+## `locality_type`
+
+Owner: **GIS/Data Authority**
+
+| Value | Meaning |
+|---|---|
+| informal_area | Recognized operational/local context pending authority. |
+| neighbourhood | Neighbourhood not necessarily legal hierarchy. |
+| quarter | Urban quarter/barrio. |
+| settlement | Settlement/locality context. |
+| village | Village/local reference. |
+
+## `name_kind`
+
+Owner: **Registry/GIS Authority**
+
+| Value | Meaning |
+|---|---|
+| alternate | Alternate known spelling/name. |
+| historical | Former name retained for history. |
+| local | Local/community name. |
+| normalized-search | Search-only normalized value, not authoritative display. |
+| official-en | Approved English presentation. |
+| official-es | Official Spanish written form. |
+
+## `name_lifecycle`
+
+Owner: **Registry/GIS Authority**
+
+| Value | Meaning |
+|---|---|
+| candidate | Candidate. |
+| official-current | Current official. |
+| official-historical | Historical official. |
+| alternate | Alternate. |
+| disputed | Disputed. |
+| retired | Retired. |
+| rejected | Rejected. |
+
+## `name_status`
+
+Owner: **Registry/GIS Authority**
+
+| Value | Meaning |
+|---|---|
+| alternate | Allowed alternate display/search name. |
+| candidate | Suggested name. |
+| disputed | Name dispute unresolved. |
+| official-current | Current approved name. |
+| official-historical | Previously approved name. |
+| rejected | Rejected candidate. |
+| retired | No longer used. |
+| under-review | Name under review. |
+
+## `non_building_object_type`
+
+Owner: **Registry Authority**
+
+| Value | Meaning |
+|---|---|
+| utility-asset | Utility asset. |
+| public-space | Public space. |
+| delivery-point | Delivery point. |
+| infrastructure-node | Infrastructure node. |
+| other | Other approved object. |
+
+## `object_role`
+
+Owner: **Registry Authority**
+
+| Value | Meaning |
+|---|---|
+| access-point | Access/entrance object. |
+| context-locality | Locality context. |
+| context-road | Road/segment context. |
+| external-parcel-reference | Optional external parcel context. |
+| nearby-landmark | Landmark used for description. |
+| parent-building | Parent building for unit. |
+| primary-subject | Main object represented by the record version. |
+
+## `operational_area_lifecycle`
+
+Owner: **Operations Authority**
+
+| Value | Meaning |
+|---|---|
+| planned | Planned. |
+| active | Active. |
+| suspended | Suspended. |
+| closed | Closed. |
+| archived | Archived. |
+
+## `operational_area_type`
+
+Owner: **Operations Authority**
+
+| Value | Meaning |
+|---|---|
+| campaign | Field campaign area. |
+| incident | Temporary incident/project zone. |
+| rollout | Rollout sequence area. |
+| routing | Intake routing area. |
+| service | Service coverage area. |
+
+## `projection_type`
+
+Owner: **Publication Authority**
+
+| Value | Meaning |
+|---|---|
+| operator-case-file | Protected operator case file. |
+| partner-api | Partner-scoped API projection. |
+| public-lookup | Public lookup/proof. |
+| signage-export | Signage/export projection. |
+| statistics | Aggregated/statistical projection. |
+
+## `public_code_state`
+
+Owner: **Programme Owner / Registry Authority**
+
+| Value | Meaning |
+|---|---|
+| active-public | Currently released public code. |
+| blocked | Reserved to prevent future use. |
+| reserved-internal | Reserved but not public. |
+| retired | No longer assigned to current records. |
+| revoked | Invalidated by authority. |
+| superseded | Replaced by a successor alias. |
+
+## `publication_item_state`
+
+Owner: **Publication Authority**
+
+| Value | Meaning |
+|---|---|
+| included | Included in release manifest. |
+| redacted | Included with redaction. |
+| superseded | Replaced by later release item. |
+| withdrawn | Removed from public/partner projection. |
+
+## `publication_lifecycle`
+
+Owner: **Publication Authority**
+
+| Value | Meaning |
+|---|---|
+| approval-requested | Submitted for authority approval. |
+| approved | Approved for release but not yet published. |
+| draft | Release being prepared. |
+| published | Published to named audience. |
+| suspended | Temporarily hidden or restricted. |
+| withdrawn | Release withdrawn by authority. |
+
+## `publication_release_state`
+
+Owner: **Publication Authority**
+
+| Value | Meaning |
+|---|---|
+| approval-requested | Submitted for authority approval. |
+| approved | Approved for release but not yet published. |
+| draft | Release being prepared. |
+| published | Published to named audience. |
+| suspended | Temporarily hidden or restricted. |
+| withdrawn | Release withdrawn by authority. |
+
+## `quality_check_result`
+
+Owner: **GIS/Data Authority**
+
+| Value | Meaning |
+|---|---|
+| passed | Check passed. |
+| passed-with-warning | Check passed with warning. |
+| failed | Check failed. |
+| not-applicable | Check not applicable. |
+
+## `record_type`
+
+Owner: **Registry Authority**
+
+| Value | Meaning |
+|---|---|
+| address | Address/location record with public/protected lookup purpose. |
+| building | Building-level canonical location. |
+| entrance | Separately addressable entrance/access point. |
+| landmark | Landmark-based location. |
+| non-building-object | Other authorized addressable object. |
+| service-location | Service/delivery location not tied to building. |
+| unit | Separately addressable unit/sub-address. |
+
+## `reference_object_lifecycle`
+
+Owner: **Registry/GIS Authority**
+
+| Value | Meaning |
+|---|---|
+| candidate | Candidate reference object. |
+| active | Active object. |
+| corrected | Corrected by later object version. |
+| superseded | Superseded. |
+| retired | Retired. |
+| revoked | Revoked. |
+
+## `relationship_type`
+
+Owner: **Registry Authority**
+
+| Value | Meaning |
+|---|---|
+| contains | Container relationship. |
+| corrects | Record/version corrects another. |
+| duplicates | Potential/confirmed duplicate. |
+| near | Nearby/context relationship. |
+| served-by | Service/access relationship. |
+| supersedes | Record replaces another. |
+
+## `retention_state`
+
+Owner: **Legal/Privacy Authority**
+
+| Value | Meaning |
+|---|---|
+| active | Retained for active use. |
+| disposed-metadata-retained | Object disposed, metadata retained. |
+| legal-hold | Held by legal/audit requirement. |
+| scheduled-disposal | Scheduled for disposal after approval. |
+
+## `road_class`
+
+Owner: **Registry/GIS Authority**
+
+| Value | Meaning |
+|---|---|
+| path | Pedestrian or local path. |
+| road | General road. |
+| service-road | Service/access road. |
+| street | Urban street. |
+| track | Track/unpaved access. |
+| unknown | Unknown class pending validation. |
+
+## `source_authority_class`
+
+Owner: **SDA**
+
+| Value | Meaning |
+|---|---|
+| citizen-submitted | Citizen submission. |
+| derived-system | System-derived value. |
+| external-map-suggestion | External map/geocoder suggestion. |
+| fixture-training | Fixture/training data. |
+| gis-data-authority | GIS/data steward. |
+| imported-provisional | Imported provisional source. |
+| official-government | Official government source. |
+| registry-authority | Registry decision. |
+| unverified-field | Unverified field observation. |
+| verified-field | Verified field observation. |
+
+## `source_authority_lifecycle`
+
+Owner: **SDA**
+
+| Value | Meaning |
+|---|---|
+| candidate | Candidate source. |
+| trusted | Trusted source. |
+| deprecated | Deprecated source. |
+| revoked | Revoked source. |
+
+## `unit_type`
+
+Owner: **Registry Authority**
+
+| Value | Meaning |
+|---|---|
+| apartment | Apartment/flat. |
+| office-suite | Office suite. |
+| room | Room-level unit. |
+| shop-unit | Shop/commercial unit. |
+| compound-unit | Compound/yard unit. |

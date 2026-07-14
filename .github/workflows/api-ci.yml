@@ -28,6 +28,20 @@ jobs:
   sda-design-model:
     name: sda-design-model
     runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgis/postgis:16-3.4
+        env:
+          POSTGRES_DB: addressing_design
+          POSTGRES_USER: addressing
+          POSTGRES_PASSWORD: ci_password
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U addressing -d addressing_design"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 10
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -37,9 +51,16 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: Regenerate and validate NLI-WO-002 design pack
+      - name: Install design validation dependencies
+        run: python -m pip install -r services/api/requirements.txt
+
+      - name: Regenerate and validate NLI-WO-002 Review 04 design pack
+        env:
+          PYTHONPATH: services/api
+          DATABASE_URL: postgresql://addressing@127.0.0.1:5432/addressing_design
+          PGPASSWORD: ci_password
         run: |
-          python3 docs/sda/data-model/scripts/generate_design_catalog.py
+          python3 docs/sda/data-model/scripts/review04_design_pipeline.py
           python3 docs/sda/data-model/scripts/design_consistency_check.py
           git diff --exit-code docs/sda/data-model docs/sda/adrs docs/sda/rfis docs/sda/evidence docs/sda/implementation-plans docs/sda/reviews
 
