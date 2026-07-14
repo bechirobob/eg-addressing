@@ -1557,7 +1557,7 @@ def execute_target_schema_and_fixtures(model: dict[str, Any], fixtures: dict[str
         cur.execute("SELECT tablename, indexname, indexdef FROM pg_indexes WHERE schemaname='nli_wo002_target' ORDER BY tablename, indexname")
         last_indexes = [dict(r) for r in cur.fetchall()]
         last_index_count = len(last_indexes)
-        cur.execute("SELECT event_object_table AS table_name, trigger_name, action_timing, event_manipulation FROM information_schema.triggers WHERE trigger_schema='nli_wo002_target' ORDER BY event_object_table, trigger_name")
+        cur.execute("SELECT event_object_table AS table_name, trigger_name, action_timing, event_manipulation FROM information_schema.triggers WHERE trigger_schema='nli_wo002_target' ORDER BY event_object_table, trigger_name, action_timing, event_manipulation")
         last_triggers = [dict(r) for r in cur.fetchall()]
     physical_fields = {f"{r['table_name'].replace('proposed_','')}.{r['column_name']}": r for r in last_cols if r["table_name"].startswith("proposed_")}
     expected = target_field_index(model)
@@ -1630,34 +1630,93 @@ def render_erd(model: dict[str, Any]) -> None:
     write("docs/sda/data-model/canonical-logical-erd.mmd", "\n".join(lines))
 
 
-def render_convergence(registry: list[dict[str, Any]]) -> None:
-    groups: dict[str, list[dict[str, Any]]] = defaultdict(list)
-    for r in registry:
-        groups[r.get("transform_group_id", r["target"].split(".", 1)[0])].append(r)
+def reviewed_convergence_units_path() -> Path:
+    return DM / "schema-convergence-units-reviewed.json"
+
+
+def load_reviewed_convergence_units(registry: list[dict[str, Any]], transform_report: dict[str, Any]) -> dict[str, Any]:
+    path = reviewed_convergence_units_path()
+    if not path.exists():
+        raise SystemExit("schema-convergence-units-reviewed.json is required for Review 07 F09")
+    payload = json.loads(path.read_text(encoding="utf-8"))
+    units = payload.get("migration_units") if isinstance(payload, dict) else None
+    if not isinstance(units, list):
+        raise SystemExit("schema-convergence-units-reviewed.json must contain migration_units[]")
+    registry_groups = {r["transform_group_id"] for r in registry}
+    passed_assertions = {a["assertion_id"] for a in transform_report.get("assertions", []) if a.get("status") == "passed"}
+    errors: list[str] = []
+    unit_ids: set[str] = set()
+    required_keys = {
+        "unit_id", "transform_group_id", "review_status", "review_owner", "depends_on",
+        "source_fields", "target_fields", "transform_assertion_ids", "application_version_matrix",
+        "write_ownership", "exception_schema_sla", "idempotency", "conflict_precedence",
+        "validation", "recovery", "monitoring_window", "cutover_abort_gates",
+        "retirement_proof", "scale_assumption_status",
+    }
+    for unit in units:
+        if not isinstance(unit, dict):
+            errors.append("convergence unit contains non-object row")
+            continue
+        uid = unit.get("unit_id")
+        if uid in unit_ids:
+            errors.append(f"duplicate convergence unit {uid}")
+        unit_ids.add(uid)
+        missing = sorted(k for k in required_keys if k not in unit or unit.get(k) in (None, "") or (k != "depends_on" and unit.get(k) == []))
+        if missing:
+            errors.append(f"{uid} missing convergence keys {missing}")
+        group = unit.get("transform_group_id")
+        if group not in registry_groups:
+            errors.append(f"{uid} references unknown transform group {group}")
+        if unit.get("review_status") != "approved-review07-convergence-unit":
+            errors.append(f"{uid} lacks Review 07 convergence review status")
+        missing_assertions = sorted(set(unit.get("transform_assertion_ids") or []) - passed_assertions)
+        if missing_assertions:
+            errors.append(f"{uid} references non-passing F02 assertions {missing_assertions[:5]}")
+        if not any("SDA" in gate or "WO-002B" in gate for gate in unit.get("cutover_abort_gates", [])):
+            errors.append(f"{uid} cutover gates do not preserve SDA/future WO-002B authority")
+        matrix = unit.get("application_version_matrix", {})
+        if "PR #7" not in str(matrix) or "WO-002B" not in str(matrix):
+            errors.append(f"{uid} application version matrix does not state PR #7 no-runtime-change / WO-002B future boundary")
+        if "owner" not in str(unit.get("exception_schema_sla", {})).lower():
+            errors.append(f"{uid} exception schema/SLA lacks owner")
+        if unit.get("scale_assumption_status") != "owner-pending; not national production readiness evidence":
+            errors.append(f"{uid} overclaims scale readiness")
+    if set(u.get("transform_group_id") for u in units if isinstance(u, dict)) != registry_groups:
+        errors.append("reviewed convergence units do not exactly cover reviewed transform groups")
+    if errors:
+        raise SystemExit("reviewed convergence units failed:\n- " + "\n- ".join(errors[:120]))
+    return payload
+
+
+def render_convergence(registry: list[dict[str, Any]], transform_report: dict[str, Any]) -> None:
+    payload = load_reviewed_convergence_units(registry, transform_report)
+    units = payload["migration_units"]
+    scale = payload.get("scale_assumptions", [])
+    write_json("docs/sda/data-model/schema-convergence-units.json", payload)
     rows = []
-    for i, (group, items) in enumerate(sorted(groups.items()), 1):
-        fields = "; ".join(r["current"] for r in sorted(items, key=lambda x: x["current"]))
-        targets = "; ".join(sorted({r["target"] for r in items}))
-        keys = "; ".join(sorted({r["source_row_key"] for r in items}))
-        validations = " | ".join(sorted({r["executable_no_loss_assertion"] for r in items})[:6])
+    for unit in units:
         rows.append([
-            f"MU{i:02d}", group, fields, targets, keys,
-            "legacy_crosswalk(source_table, legacy_id, target_entity, target_id) + source_payload_archive(field_path) + owned migration_exception",
-            "WO-002: read-only design; WO-002B future dual-read, then dual-write only after SDA authorization",
-            "idempotent by transform_group_id + source_row_key + target field; reruns update only matching target draft rows",
-            "source typed value wins when authoritative; controlled map wins for lifecycle/status; archive preserves restricted/raw original; unowned conflicts abort",
-            validations,
-            "backup before migration unit; forward recovery through re-running idempotent group; abort on any unowned exception or no-loss mismatch",
-            "observe exception count, row parity, target projection parity and publication lock for one release window",
-            "cut only when zero unowned exceptions, dual-read parity passes, and SDA accepts Review 06+ implementation plan",
+            unit["unit_id"],
+            unit["transform_group_id"],
+            "; ".join(unit["source_fields"]),
+            "; ".join(unit["target_fields"]),
+            "; ".join(unit.get("final_fk_outputs") or ["—"]),
+            "; ".join(unit["transform_assertion_ids"][:12]) + ("; …" if len(unit["transform_assertion_ids"]) > 12 else ""),
+            "; ".join(unit.get("depends_on") or ["none"]),
+            unit["application_version_matrix"]["current"] + " / " + unit["application_version_matrix"]["migrate"],
+            unit["write_ownership"]["current_writer"] + "; " + unit["write_ownership"]["future_target_writer"],
+            unit["exception_schema_sla"]["exception_table"] + ": " + unit["exception_schema_sla"]["owner"] + " — " + unit["exception_schema_sla"]["sla"],
+            ", ".join(unit["idempotency"]["key"]),
+            "; ".join(unit["conflict_precedence"]),
+            unit["validation"]["sql"] + "; tolerance: " + unit["validation"]["tolerance"],
+            unit["recovery"]["backup_boundary"] + "; " + unit["recovery"]["forward_recovery"] + "; " + unit["recovery"]["rollback_boundary"],
+            unit["monitoring_window"],
+            "; ".join(unit["cutover_abort_gates"]),
+            unit["retirement_proof"]["legacy_field_retirement_condition"] + "; " + unit["retirement_proof"]["runtime_change_authority"],
+            unit["scale_assumption_status"],
         ])
-    scale = [
-        ["Location records", "Current pilot extrapolation + EG province rollout planning", "2026-07-14", "low 300k / base 1.2M / high 2.5M records over five years", "public lookup 50 QPS base / 500 surge; operator writes batch-windowed", "Registry Authority approval pending"],
-        ["Geometry observations", "Field capture model: 2-4 observations per canonical subject plus correction history", "2026-07-14", "low 600k / base 3M / high 8M observations", "PostGIS GiST by subject/role/current plus province/year partition candidate above 10M", "GIS/Data Authority approval pending"],
-        ["Evidence/archive", "Restricted evidence retention assumption; media-heavy workflows separated from registry rows", "2026-07-14", "low 2TB / base 8TB / high 20TB object storage", "encrypted object store; DB stores hash/URI/classification only", "Publication/Records Authority approval pending"],
-    ]
-    write_json("docs/sda/data-model/schema-convergence-units.json", {"migration_units": groups.keys().__class__(groups.keys()) if False else [{"unit_id": row[0], "group": row[1], "source_fields": row[2], "target_fields": row[3]} for row in rows], "scale_assumptions": scale})
-    write("docs/sda/data-model/schema-convergence-plan.md", "# Expand–Migrate–Contract Convergence and Scale Plan\n\nBuilt only after the Review 06 transformation groups are loaded. NLI-WO-002B remains unauthorized; this is a reviewed migration-unit design source for later approval, not executable migration authority.\n\n" + md_table(["Unit", "Transform group", "Complete source fields", "Target rows/fields", "Source keys", "Crosswalk/exception schema", "Read/write behavior", "Idempotency", "Conflict precedence", "Validation/tolerance", "Recovery point", "Monitoring window", "Cutover/abort gate"], rows) + "\n\n## Workload, storage, retention, concurrency and query assumptions\n\n" + md_table(["Area", "Source", "Baseline date", "Confidence range/horizon", "Workload/capacity model", "Approving owner"], scale))
+    scale_rows = [[s.get("area"), s.get("source"), s.get("baseline_date"), s.get("confidence_range_horizon"), s.get("workload_capacity_model"), s.get("approving_owner")] for s in scale]
+    write("docs/sda/data-model/schema-convergence-plan.md", "# Expand–Migrate–Contract Convergence and Scale Plan\n\nBuilt from the reviewed Review 07 convergence-unit source and only after passing F02 transformation assertions. NLI-WO-002B remains unauthorized; this is a reviewed migration-unit design source for later approval, not executable migration authority.\n\n" + md_table(["Unit", "Transform group", "Complete source fields", "Target rows/fields", "Final FK outputs", "Passing F02 assertion IDs", "Dependencies", "Application version matrix", "Write ownership", "Exception schema/SLA", "Idempotency key", "Conflict precedence", "Validation/tolerance", "Recovery boundary", "Monitoring window", "Cutover/abort gates", "Retirement proof", "Scale status"], rows) + "\n\n## Workload, storage, retention, concurrency and query assumptions\n\n" + md_table(["Area", "Source", "Baseline date", "Confidence range/horizon", "Workload/capacity model", "Approving owner"], scale_rows))
 
 
 def render_adrs() -> None:
@@ -1852,7 +1911,7 @@ def main() -> None:
     transform_report = execute_transformation_fixtures(registry, semantics)
     fixtures = generate_fixtures(model)
     target_report = execute_target_schema_and_fixtures(model, fixtures)
-    render_convergence(registry)
+    render_convergence(registry, transform_report)
     render_adrs()
     render_evidence(cat, ops, registry, target_report)
     update_review_log()

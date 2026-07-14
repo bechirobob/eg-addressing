@@ -4894,12 +4894,6 @@
     },
     {
       "action_timing": "BEFORE",
-      "event_manipulation": "UPDATE",
-      "table_name": "proposed_geometry_observation",
-      "trigger_name": "geometry_observation_semantics_trg"
-    },
-    {
-      "action_timing": "BEFORE",
       "event_manipulation": "INSERT",
       "table_name": "proposed_geometry_observation",
       "trigger_name": "geometry_observation_semantics_trg"
@@ -4908,7 +4902,7 @@
       "action_timing": "BEFORE",
       "event_manipulation": "UPDATE",
       "table_name": "proposed_geometry_observation",
-      "trigger_name": "geometry_observation_subject_trg"
+      "trigger_name": "geometry_observation_semantics_trg"
     },
     {
       "action_timing": "BEFORE",
@@ -4919,12 +4913,18 @@
     {
       "action_timing": "BEFORE",
       "event_manipulation": "UPDATE",
+      "table_name": "proposed_geometry_observation",
+      "trigger_name": "geometry_observation_subject_trg"
+    },
+    {
+      "action_timing": "BEFORE",
+      "event_manipulation": "INSERT",
       "table_name": "proposed_geometry_version",
       "trigger_name": "geometry_version_semantics_trg"
     },
     {
       "action_timing": "BEFORE",
-      "event_manipulation": "INSERT",
+      "event_manipulation": "UPDATE",
       "table_name": "proposed_geometry_version",
       "trigger_name": "geometry_version_semantics_trg"
     },
@@ -4966,12 +4966,6 @@
     },
     {
       "action_timing": "AFTER",
-      "event_manipulation": "UPDATE",
-      "table_name": "proposed_location_record_version",
-      "trigger_name": "location_record_version_chain_trg"
-    },
-    {
-      "action_timing": "AFTER",
       "event_manipulation": "INSERT",
       "table_name": "proposed_location_record_version",
       "trigger_name": "location_record_version_chain_trg"
@@ -4980,7 +4974,7 @@
       "action_timing": "AFTER",
       "event_manipulation": "UPDATE",
       "table_name": "proposed_location_record_version",
-      "trigger_name": "required_object_roles_trg"
+      "trigger_name": "location_record_version_chain_trg"
     },
     {
       "action_timing": "AFTER",
@@ -4989,10 +4983,10 @@
       "trigger_name": "required_object_roles_trg"
     },
     {
-      "action_timing": "BEFORE",
+      "action_timing": "AFTER",
       "event_manipulation": "UPDATE",
-      "table_name": "proposed_name_record",
-      "trigger_name": "current_official_name_trg"
+      "table_name": "proposed_location_record_version",
+      "trigger_name": "required_object_roles_trg"
     },
     {
       "action_timing": "BEFORE",
@@ -5003,12 +4997,18 @@
     {
       "action_timing": "BEFORE",
       "event_manipulation": "UPDATE",
+      "table_name": "proposed_name_record",
+      "trigger_name": "current_official_name_trg"
+    },
+    {
+      "action_timing": "BEFORE",
+      "event_manipulation": "INSERT",
       "table_name": "proposed_name_record",
       "trigger_name": "name_record_subject_trg"
     },
     {
       "action_timing": "BEFORE",
-      "event_manipulation": "INSERT",
+      "event_manipulation": "UPDATE",
       "table_name": "proposed_name_record",
       "trigger_name": "name_record_subject_trg"
     },
@@ -5026,13 +5026,13 @@
     },
     {
       "action_timing": "AFTER",
-      "event_manipulation": "UPDATE",
+      "event_manipulation": "INSERT",
       "table_name": "proposed_publication_release_item",
       "trigger_name": "publication_prerequisite_trg"
     },
     {
       "action_timing": "AFTER",
-      "event_manipulation": "INSERT",
+      "event_manipulation": "UPDATE",
       "table_name": "proposed_publication_release_item",
       "trigger_name": "publication_prerequisite_trg"
     },
@@ -5044,13 +5044,13 @@
     },
     {
       "action_timing": "AFTER",
-      "event_manipulation": "UPDATE",
+      "event_manipulation": "INSERT",
       "table_name": "proposed_registry_subject",
       "trigger_name": "registry_subject_native_trg"
     },
     {
       "action_timing": "AFTER",
-      "event_manipulation": "INSERT",
+      "event_manipulation": "UPDATE",
       "table_name": "proposed_registry_subject",
       "trigger_name": "registry_subject_native_trg"
     }

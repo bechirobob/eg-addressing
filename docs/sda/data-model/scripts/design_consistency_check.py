@@ -68,6 +68,8 @@ fixtures = load_json("docs/sda/data-model/representative-records/machine-readabl
 current_semantics = load_json("docs/sda/data-model/current-field-semantics-reviewed.json")
 transform_fixtures = load_json("docs/sda/data-model/transformation-fixtures-reviewed.json")
 transform_fixture_report = load_json("docs/sda/data-model/transformation-fixture-report.json")
+reviewed_convergence_units = load_json("docs/sda/data-model/schema-convergence-units-reviewed.json")
+convergence_units = load_json("docs/sda/data-model/schema-convergence-units.json")
 lifecycle_transitions = load_json("docs/sda/data-model/lifecycle-transitions.json")
 report_text = read("docs/sda/data-model/review04-semantic-design-report.md")
 review_text = read("docs/sda/reviews/NLI-WO-002-review-06.md")
@@ -207,6 +209,36 @@ for row in reviewed_registry if isinstance(reviewed_registry, list) else []:
     ref = row.get("reference_crosswalk_join")
     if isinstance(ref, dict):
         gate(f"F02-final-fk-output-{row.get('current','unknown').replace('.', '-').replace('_', '-')}", "F02", ref.get("final_target_fk_output") not in {"legacy_crosswalk.legacy_id", "proposed_legacy_crosswalk.legacy_id"}, f"{row.get('current')} still treats legacy_crosswalk.legacy_id as final FK output", "docs/sda/data-model/transformation-registry-reviewed.json")
+
+# Review 07 F09 convergence units must be reviewed implementation-authority units tied to passing F02 assertions.
+reviewed_units = reviewed_convergence_units.get("migration_units", []) if isinstance(reviewed_convergence_units, dict) else []
+generated_units = convergence_units.get("migration_units", []) if isinstance(convergence_units, dict) else []
+reviewed_unit_groups = {u.get("transform_group_id") for u in reviewed_units if isinstance(u, dict)}
+generated_unit_groups = {u.get("transform_group_id") for u in generated_units if isinstance(u, dict)}
+passed_f02_assertions = {a.get("assertion_id") for a in report_assertions if isinstance(a, dict) and a.get("status") == "passed"}
+gate("F09-reviewed-convergence-covers-transform-groups", "F09", reviewed_unit_groups == registry_groups and generated_unit_groups == registry_groups, "reviewed and generated convergence units must exactly cover transform groups", "docs/sda/data-model/schema-convergence-units-reviewed.json")
+gate("F09-generated-convergence-derived-from-reviewed-source", "F09", reviewed_convergence_units == convergence_units, "generated schema-convergence-units.json must match reviewed convergence source", "docs/sda/data-model/schema-convergence-units.json")
+required_unit_keys = {"unit_id", "transform_group_id", "review_status", "review_owner", "depends_on", "source_fields", "target_fields", "transform_assertion_ids", "application_version_matrix", "write_ownership", "exception_schema_sla", "idempotency", "conflict_precedence", "validation", "recovery", "monitoring_window", "cutover_abort_gates", "retirement_proof", "scale_assumption_status"}
+unit_ids = {u.get("unit_id") for u in reviewed_units if isinstance(u, dict)}
+for unit in reviewed_units if isinstance(reviewed_units, list) else []:
+    if not isinstance(unit, dict):
+        continue
+    uid = unit.get("unit_id", "F09-unnamed-unit")
+    missing = sorted(k for k in required_unit_keys if k not in unit or unit.get(k) in (None, "") or (k != "depends_on" and unit.get(k) == []))
+    gate(f"F09-unit-required-fields-{uid}", "F09", not missing, f"{uid} missing required convergence fields {missing}", "docs/sda/data-model/schema-convergence-units-reviewed.json")
+    gate(f"F09-unit-review-status-{uid}", "F09", unit.get("review_status") == "approved-review07-convergence-unit" and bool(unit.get("review_owner")), f"{uid} lacks reviewed source provenance", "docs/sda/data-model/schema-convergence-units-reviewed.json")
+    assertion_ids = set(unit.get("transform_assertion_ids") or [])
+    gate(f"F09-unit-f02-assertions-passed-{uid}", "F09", bool(assertion_ids) and assertion_ids <= passed_f02_assertions, f"{uid} must reference only passing F02 assertion IDs", "docs/sda/data-model/transformation-fixture-report.json")
+    if any(isinstance(r.get("reference_crosswalk_join"), dict) for r in reviewed_registry if r.get("transform_group_id") == unit.get("transform_group_id")):
+        gate(f"F09-unit-final-fk-outputs-{uid}", "F09", bool(unit.get("final_fk_outputs")) and not any(x in {"legacy_crosswalk.legacy_id", "proposed_legacy_crosswalk.legacy_id"} for x in unit.get("final_fk_outputs", [])), f"{uid} must declare concrete final FK outputs or owned exception outputs", "docs/sda/data-model/schema-convergence-units-reviewed.json")
+    matrix = unit.get("application_version_matrix", {})
+    gate(f"F09-unit-app-version-matrix-{uid}", "F09", all(k in matrix for k in ["current", "expand", "migrate", "contract"]) and "PR #7" in str(matrix) and "WO-002B" in str(matrix), f"{uid} missing no-runtime-change / future WO-002B matrix", "docs/sda/data-model/schema-convergence-units-reviewed.json")
+    gate(f"F09-unit-write-ownership-{uid}", "F09", "unauthorized" in str(unit.get("write_ownership", {})).lower(), f"{uid} must state target writes unauthorized in PR #7", "docs/sda/data-model/schema-convergence-units-reviewed.json")
+    gate(f"F09-unit-exception-sla-{uid}", "F09", "owner" in str(unit.get("exception_schema_sla", {})).lower() and "abort" in str(unit.get("exception_schema_sla", {})).lower(), f"{uid} exception schema/SLA must include owner and abort condition", "docs/sda/data-model/schema-convergence-units-reviewed.json")
+    gate(f"F09-unit-idempotency-{uid}", "F09", "source_row_key" in str(unit.get("idempotency", {})), f"{uid} must use source-row idempotency key", "docs/sda/data-model/schema-convergence-units-reviewed.json")
+    gate(f"F09-unit-recovery-boundary-{uid}", "F09", "no production rollback" in str(unit.get("recovery", {})).lower() and "design only" in str(unit.get("recovery", {})).lower(), f"{uid} must not claim production rollback/migration authority", "docs/sda/data-model/schema-convergence-units-reviewed.json")
+    gate(f"F09-unit-cutover-gates-{uid}", "F09", any("SDA" in g for g in unit.get("cutover_abort_gates", [])) and any("WO-002B" in g for g in unit.get("cutover_abort_gates", [])), f"{uid} cutover gates must preserve SDA and future WO-002B authority", "docs/sda/data-model/schema-convergence-units-reviewed.json")
+    gate(f"F09-unit-scale-status-{uid}", "F09", unit.get("scale_assumption_status") == "owner-pending; not national production readiness evidence", f"{uid} overclaims scale readiness", "docs/sda/data-model/schema-convergence-units-reviewed.json")
 
 # OpenAPI field coverage and auth policy.
 ops = openapi_ops.get("operations", []) if isinstance(openapi_ops, dict) else []
@@ -440,6 +472,7 @@ else:
         f"- Fixture scenarios: {len(scenarios)}",
         f"- Named assertion gates: {len(assertion_registry)}",
         f"- F02 transform assertions: {summary.get('assertions_executed', 0)}",
+        f"- F09 convergence units: {len(reviewed_units) if isinstance(reviewed_units, list) else 0}",
     ])
 report = "\n".join(report_lines) + "\n"
 (DM / "design-consistency-report.md").write_text(report, encoding="utf-8")
