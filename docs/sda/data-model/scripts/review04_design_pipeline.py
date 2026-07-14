@@ -29,7 +29,7 @@ DM = SDA / "data-model"
 REVIEW = SDA / "reviews" / "NLI-WO-002-review-03.md"
 DATE = "2026-07-14"
 BRANCH = "nli/wo-002-canonical-location-model"
-FIXING_COMMIT_PLACEHOLDER = "<review04-fixing-commit>"
+FIXING_COMMIT_PLACEHOLDER = "bf4a203d24ac031a170f71480338f4ab4a1e4d90"
 FINAL_HEAD_NOTE = "Exact final head, workflow IDs, job IDs, and changed-path proof are recorded in this evidence file after the final green CI head."
 
 try:
