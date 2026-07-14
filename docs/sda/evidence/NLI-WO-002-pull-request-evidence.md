@@ -1,54 +1,62 @@
-# NLI-WO-002 Pull Request Evidence — Review 07
+# NLI-WO-002 Pull Request Evidence — Review 07 Remediation
 
 Draft PR #7 remains draft and unmerged. NLI-WO-002B remains unauthorized.
 
-## Exact implementation head validated before evidence closeout
+## Final implementation head pending exact-head CI
 
-- Implementation/stamp head validated by GitHub Actions: `f36cda7d68a6131ffdd1c11b86d2569860686788`
-- API CI run `29337375340`: **success**
-  - `migration-lifecycle` job `87099934845`: success
-  - `api-image-runtime` job `87099934865`: success
-  - `sda-design-model` job `87099934876`: success
-  - `api-tests` job `87099934897`: success
-- Frontend CI run `29337375180`: **success**
-  - `frontend` job `87099934523`: success
+- Local implementation head before final push: `63f7cbbb6e5cf875514f9c3ca3e89f5fbfc5d6f4`
+- Final GitHub Actions workflow/job IDs must be recorded after this head is pushed and exact-head CI completes.
+- SDA Review 08 has **not** been requested yet.
 
-Final PR-head CI after this evidence closeout is recorded in the SDA Review 07 request comment.
-
-## Review 06 remediation commits
+## Review 07 remediation commits
 
 | Purpose | Commit |
 |---|---|
-| Review 06 semantic remediation | `1cf7d555a08de750c580b87de14bc2020dc7a052` |
-| Review 06 resolution evidence stamp | `f36cda7d68a6131ffdd1c11b86d2569860686788` |
-| Migration-ledger runtime fix split out | Maintenance PR #8, not PR #7 |
+| Negative harness false-pass fix | `c677c2bd853dc6a21e8fc2c9800f7e499e922122` |
+| F02 executable transformation fixtures | `4a451ae` |
+| F09 reviewed convergence units | `6bb445c` |
+| F04/F05/F10 scenario and temporal assertions | `80e1764` |
+| F06 geometry promotion authority binding | `0294e12` |
+| F08 API policy/projection evidence | `d283589` |
+| F11 ADR assertion reconciliation | `4918b53` |
+| F12 semantic mutation probes | `88b0914` |
+| S16 self-audit/resolution log | `63f7cbb` |
 
 ## Criterion-specific evidence matrix
 
 | Criterion | Status | Assertion | Evidence | Remaining condition |
 |---|---|---|---|---|
-| AC-01 | READY FOR SDA REVIEW | pg_catalog inventory generated from disposable migrated PostGIS DB: 25 tables, 237 fields, ledger included. | Review 07 semantic-design CI exact-head run; design report Generated checks: 41, Errors: 0. | SDA acceptance pending |
-| AC-02 | READY FOR SDA REVIEW | location_record remains sole canonical anchor; subject registry/crosswalks prevent second address authority. | Target model, subject registry checks, reviewed transformation registry. | SDA acceptance pending |
-| AC-03 | READY FOR SDA REVIEW | administrative code history and name history are separated from identity. | Target registry and target schema validation. | SDA acceptance pending |
-| AC-04 | READY FOR SDA REVIEW | operational area lifecycle remains separate from administrative units. | Controlled vocabulary/lifecycle registry. | SDA acceptance pending |
-| AC-05 | READY FOR SDA REVIEW | record/object matrix is keyed by actual canonical record_type values, not standard-address. | Executed target schema and semantic checker. | SDA acceptance pending |
-| AC-06 | READY FOR SDA REVIEW | internal IDs, public aliases and legacy crosswalks are separated with exact reference-crosswalk joins. | Reviewed transformation rows and ADR-005. | SDA acceptance pending |
-| AC-07 | READY FOR SDA REVIEW | lifecycle graphs load into executable transition policy and are checked for field bindings/edge metadata. | Lifecycle registry and target helper table catalog. | SDA acceptance pending |
-| AC-08 | READY FOR SDA REVIEW | version, alias and geometry supersession rules include no-self/reciprocal/same-owner/acyclic checks. | Target SQL triggers and negative execution. | SDA acceptance pending |
-| AC-09 | READY FOR SDA REVIEW | geometry promotion requires authorized decision, evidence object, authority scope, accepted quality and same-subject/role supersession. | Target model, target SQL trigger and scenario fixtures. | SDA acceptance pending |
-| AC-10 | READY FOR SDA REVIEW | name records and subject integrity are enforced through registry-subject FK and current-name rule. | Target schema validation. | SDA acceptance pending |
-| AC-11 | READY FOR SDA REVIEW | governed archive and source/crosswalk joins preserve original facts and exception paths. | Reviewed transformation registry. | SDA acceptance pending |
-| AC-12 | READY FOR SDA REVIEW | classifications are explicit in current/target mapping and API contracts. | API projection contracts and field registry. | SDA acceptance pending |
-| AC-13 | READY FOR SDA REVIEW | field-to-vocabulary registry and transition graphs are validated. | Controlled vocabularies and lifecycle transitions. | SDA acceptance pending |
-| AC-14 | READY FOR SDA REVIEW | target schema executed; constraints, indexes, triggers and helper policy tables cataloged. | Target schema validation report. | SDA acceptance pending |
-| AC-15 | READY FOR SDA REVIEW | 105 OpenAPI operations have exact method/path/handler/auth/roles and concrete projection contracts. | Route policy and projection contract registries. | SDA acceptance pending |
-| AC-16 | READY FOR SDA REVIEW | transformation registry covers 237 current fields with executable SELECT no-loss assertions and reference joins. | Transformation registry and semantic checker. | SDA acceptance pending |
-| AC-17 | READY FOR SDA REVIEW | convergence plan is rebuilt after accepted transformation rows and no longer uses pseudo-ASSERT validation. | Schema convergence plan. | SDA acceptance pending |
-| AC-18 | READY FOR SDA REVIEW | seven scenario builders insert 342 target rows and execute seven negative cases. | Machine-readable fixtures and target report. | SDA acceptance pending |
-| AC-19 | READY FOR SDA REVIEW | scale assumptions remain explicitly review inputs, not implementation authorization. | Convergence plan and Review 06 resolution log. | SDA acceptance pending |
-| AC-20 | READY FOR SDA REVIEW | dependency-safe target SQL executes in disposable PostGIS and catalog parity is checked. | sda-design-model job evidence; final PR-head job IDs are in the Review 07 request comment. | SDA acceptance pending |
-| AC-21 | READY FOR SDA REVIEW | ADRs 005-009 are hand-maintained source docs with Review 07 assertion reconciliation. | ADRs 005-009. | SDA acceptance pending |
-| AC-22 | READY FOR SDA REVIEW | PR #7 excludes runtime code, executable migrations, app code, production data and env files; migration-ledger fix is split to PR #8. | Changed-path proof and PR state. | SDA acceptance pending |
+| AC-01 | READY FOR SDA REVIEW | pg_catalog inventory generated from disposable migrated PostGIS DB: 25 tables, 237 fields; reviewed current-field semantics added. | `current-pg-catalog.json`, `current-field-semantics-reviewed.json`, design report `Generated checks: 5016`, `Errors: 0`. | SDA acceptance pending |
+| AC-02 | READY FOR SDA REVIEW | `location_record` remains canonical anchor; source identity/crosswalk assertions are named and checked. | F02 fixture report; target model. | SDA acceptance pending |
+| AC-03 | READY FOR SDA REVIEW | administrative version/history scenario includes old/new versions and temporal assertions. | `review07-scenario-temporal-assertions.md`. | SDA acceptance pending |
+| AC-04 | READY FOR SDA REVIEW | operational area remains separate from administrative units and convergence units preserve ownership boundary. | target model; convergence plan. | SDA acceptance pending |
+| AC-05 | READY FOR SDA REVIEW | all canonical record types appear in positive inserted fixtures; multi-unit records are independent. | machine-readable fixtures; F04/F10 assertions. | SDA acceptance pending |
+| AC-06 | READY FOR SDA REVIEW | internal IDs, public aliases, legacy crosswalks and unresolved references are separated; crosswalk-only final FK regressions fail. | F02 report; ADR-005 matrix row. | SDA acceptance pending |
+| AC-07 | READY FOR SDA REVIEW | lifecycle policy table is populated and all 96 reviewed transitions execute positively. | `target-schema-catalog.json`; lifecycle transitions. | SDA acceptance pending |
+| AC-08 | READY FOR SDA REVIEW | temporal/version scenarios prove corrected/superseded and administrative old/new history. | F05/F10 scenario assertions; mutation tests. | SDA acceptance pending |
+| AC-09 | READY FOR SDA REVIEW | geometry promotion binds decision type/outcome, permission, institution/scope, observation, evidence and quality actor; four authority negatives reject. | physical SQL; target catalog; negative fixture report. | SDA acceptance pending |
+| AC-10 | READY FOR SDA REVIEW | name records and subject integrity remain enforced; cardinality and scenario assertions cover subject links. | target schema/catalog. | SDA acceptance pending |
+| AC-11 | READY FOR SDA REVIEW | governed archive/source/crosswalk joins are represented in executable F02 assertions and exception paths. | transformation fixture report. | SDA acceptance pending |
+| AC-12 | READY FOR SDA REVIEW | current/API classifications use reviewed sources; credential/header fields are non-business migration boundaries. | current semantics and API projection contracts. | SDA acceptance pending |
+| AC-13 | READY FOR SDA REVIEW | lifecycle graphs are reviewed, loaded and positively exercised. | lifecycle assertion results. | SDA acceptance pending |
+| AC-14 | READY FOR SDA REVIEW | target schema executes; 11 negative cases reject; mutation tests catch missing trigger/constraint regressions. | target schema validation; semantic mutation report. | SDA acceptance pending |
+| AC-15 | READY FOR SDA REVIEW | 105 OpenAPI operations have independently reviewed route policies and 1,164 field projection assertions. | API policy/projection assertions. | SDA acceptance pending |
+| AC-16 | READY FOR SDA REVIEW | transformation registry covers 237 current fields with 90 fixtures and 1,370 named assertions. | F02 fixture report. | SDA acceptance pending |
+| AC-17 | READY FOR SDA REVIEW | 90 convergence units are reviewed and tied to passing F02 assertions; no production migration authority claimed. | reviewed convergence units and plan. | SDA acceptance pending |
+| AC-18 | READY FOR SDA REVIEW | seven scenario builders insert 342 target rows, execute 11 negative cases and expose 49 F04/F05/F10 assertions. | machine-readable fixtures; target report. | SDA acceptance pending |
+| AC-19 | READY FOR SDA REVIEW | scale assumptions remain owner-pending and not production readiness evidence. | convergence units/plan. | SDA acceptance pending |
+| AC-20 | READY FOR SDA REVIEW | disposable PostGIS target SQL executes; physical catalog parity is checked; semantic mutation probes pass. | target schema report; mutation report. | SDA acceptance pending |
+| AC-21 | READY FOR SDA REVIEW | ADR-005..ADR-009 map acceptance claims to named assertions and visible unresolved conditions; ADRs remain proposed. | ADR evidence matrix and ADR sections. | SDA acceptance pending |
+| AC-22 | READY FOR SDA REVIEW | PR #7 excludes prohibited runtime paths; migration-ledger fix remains separate in PR #8. | changed-path proof and S16 audit. | SDA acceptance pending |
+
+## Local verification before final push
+
+- `review04_design_pipeline.py`: PASS against disposable PostGIS.
+- `review07_semantic_mutation_tests.py`: PASS, 8/8 mutations caught.
+- `design_consistency_check.py`: PASS, `Generated checks: 5016`, `Errors: 0`, `Warnings: 0`.
+- `validate_skill_pack.py`: PASS, 31 skills, 44 Markdown files.
+- `git diff --check`: PASS.
+- Prohibited path guard: PASS; no changes under `services/api/**`, `infra/scripts/migrate.py`, `infra/migrations/**`, `apps/**`, `infra/docker/**`, `data/**`, or `.env*`.
 
 ## Changed-path proof
 
