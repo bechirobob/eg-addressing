@@ -67,6 +67,7 @@ api_projection_assertions = load_json("docs/sda/data-model/openapi-policy-projec
 api_projection_summary = api_projection_assertions.get("summary", {}) if isinstance(api_projection_assertions, dict) else {}
 semantic_mutation_report = load_json("docs/sda/data-model/semantic-mutation-test-report.json")
 integrity_report = load_json("docs/sda/data-model/review08-f04-f07-integrity-report.json")
+reconciliation_report = load_json("docs/sda/data-model/review08-f09-f11-reconciliation-report.json")
 adr_matrix_text = read("docs/sda/data-model/adr-005-009-evidence-matrix.md")
 target_catalog = load_json("docs/sda/data-model/target-schema-catalog.json")
 fixtures = load_json("docs/sda/data-model/representative-records/machine-readable-fixtures.json")
@@ -255,6 +256,9 @@ for unit in reviewed_units if isinstance(reviewed_units, list) else []:
     gate(f"F09-unit-recovery-boundary-{uid}", "F09", "no production rollback" in str(unit.get("recovery", {})).lower() and "design only" in str(unit.get("recovery", {})).lower(), f"{uid} must not claim production rollback/migration authority", "docs/sda/data-model/schema-convergence-units-reviewed.json")
     gate(f"F09-unit-cutover-gates-{uid}", "F09", any("SDA" in g for g in unit.get("cutover_abort_gates", [])) and any("WO-002B" in g for g in unit.get("cutover_abort_gates", [])), f"{uid} cutover gates must preserve SDA and future WO-002B authority", "docs/sda/data-model/schema-convergence-units-reviewed.json")
     gate(f"F09-unit-scale-status-{uid}", "F09", unit.get("scale_assumption_status") == "owner-pending; not national production readiness evidence", f"{uid} overclaims scale readiness", "docs/sda/data-model/schema-convergence-units-reviewed.json")
+
+reconciliation_summary = reconciliation_report.get("summary", {}) if isinstance(reconciliation_report, dict) else {}
+gate("F09-F11-review08-reconciliation-passed", "F09/F11", reconciliation_summary.get("execution_mode") == "review08-f09-f11-revalidation" and reconciliation_summary.get("status") == "passed" and reconciliation_summary.get("units_passed") == len(reviewed_units) and reconciliation_summary.get("errors") == [], "F09/F11 reconciliation must revalidate convergence units and ADR evidence after Review 08 executable guarantees", "docs/sda/data-model/review08-f09-f11-reconciliation-report.json")
 
 # OpenAPI field coverage and auth policy.
 ops = openapi_ops.get("operations", []) if isinstance(openapi_ops, dict) else []
