@@ -62,3 +62,19 @@ Missing subject rejects write; duplicate primary object rejects write; hard dele
 ## Acceptance checks
 
 Negative fixtures reject missing subject and duplicate primary role; checker fails if opaque subject/entity fields return.
+
+## Evidence-linked conditions
+
+- Condition: decision acceptance is limited to assertions executed by `review04_design_pipeline.py` and `design_consistency_check.py`.
+- Evidence: target schema validation report, lifecycle binding registry, transformation registry, policy contracts and scenario validation report.
+- Boundary: NLI-WO-002B remains unauthorized until SDA explicitly accepts the model.
+
+## Unresolved RFIs
+
+- No executable production migration authority is granted by this ADR.
+- Institutional owner approval, operational rollout windows and production data retention rules remain future SDA/institution decisions.
+
+## Acceptance tests
+
+- CI must fail if the ADR claims a constraint absent from the model policy registry or target validation report.
+- CI must fail if Review 05 resolution rows are updated outside the Review 05 resolution log.

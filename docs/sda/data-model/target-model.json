@@ -306,6 +306,7 @@
           "default": "'active'",
           "definition": "Version lifecycle state. Review 04 correction: entity-specific lifecycle.",
           "fk": null,
+          "lifecycle_graph": "administrative_unit_lifecycle",
           "name": "lifecycle_state",
           "nullable": false,
           "pg_type": "text",
@@ -447,12 +448,13 @@
           "default": null,
           "definition": "Building lifecycle. Review 04 correction: entity-specific lifecycle.",
           "fk": null,
+          "lifecycle_graph": "building_lifecycle",
           "name": "lifecycle_state",
           "nullable": false,
           "pg_type": "text",
           "projection": "operator",
           "temporal_behavior": "current fact",
-          "vocabulary": "reference_object_lifecycle"
+          "vocabulary": "building_lifecycle"
         },
         {
           "authority_owner": "Registry Authority",
@@ -643,12 +645,13 @@
           "default": null,
           "definition": "Correction case state.",
           "fk": null,
+          "lifecycle_graph": "case_lifecycle",
           "name": "case_state",
           "nullable": false,
           "pg_type": "text",
           "projection": "operator",
           "temporal_behavior": "current fact",
-          "vocabulary": "case_state"
+          "vocabulary": "case_lifecycle"
         },
         {
           "authority_owner": "Registry Authority",
@@ -767,12 +770,13 @@
           "default": "'active'",
           "definition": "Reference lifecycle state.",
           "fk": null,
+          "lifecycle_graph": "country_lifecycle",
           "name": "lifecycle_state",
           "nullable": false,
           "pg_type": "text",
           "projection": "operator",
           "temporal_behavior": "current fact",
-          "vocabulary": "reference_object_lifecycle"
+          "vocabulary": "country_lifecycle"
         },
         {
           "authority_owner": "Registry Authority",
@@ -963,12 +967,13 @@
           "default": null,
           "definition": "Dispute state.",
           "fk": null,
+          "lifecycle_graph": "case_lifecycle",
           "name": "case_state",
           "nullable": false,
           "pg_type": "text",
           "projection": "operator",
           "temporal_behavior": "current fact",
-          "vocabulary": "case_state"
+          "vocabulary": "case_lifecycle"
         },
         {
           "authority_owner": "Registry Authority",
@@ -1087,12 +1092,13 @@
           "default": null,
           "definition": "Entrance lifecycle.",
           "fk": null,
+          "lifecycle_graph": "entrance_lifecycle",
           "name": "lifecycle_state",
           "nullable": false,
           "pg_type": "text",
           "projection": "operator",
           "temporal_behavior": "current fact",
-          "vocabulary": "reference_object_lifecycle"
+          "vocabulary": "entrance_lifecycle"
         },
         {
           "authority_owner": "Registry Authority",
@@ -2035,6 +2041,7 @@
           "default": null,
           "definition": "Geometry quality/lifecycle state.",
           "fk": null,
+          "lifecycle_graph": "geometry_quality_state",
           "name": "quality_state",
           "nullable": false,
           "pg_type": "text",
@@ -2295,12 +2302,13 @@
           "default": null,
           "definition": "Landmark lifecycle.",
           "fk": null,
+          "lifecycle_graph": "landmark_lifecycle",
           "name": "lifecycle_state",
           "nullable": false,
           "pg_type": "text",
           "projection": "operator",
           "temporal_behavior": "current fact",
-          "vocabulary": "reference_object_lifecycle"
+          "vocabulary": "landmark_lifecycle"
         },
         {
           "authority_owner": "Registry Authority",
@@ -2603,12 +2611,13 @@
           "default": null,
           "definition": "Locality lifecycle. Review 04 correction: entity-specific lifecycle.",
           "fk": null,
+          "lifecycle_graph": "locality_lifecycle",
           "name": "lifecycle_state",
           "nullable": false,
           "pg_type": "text",
           "projection": "operator",
           "temporal_behavior": "current fact",
-          "vocabulary": "reference_object_lifecycle"
+          "vocabulary": "locality_lifecycle"
         },
         {
           "authority_owner": "Registry Authority",
@@ -3143,6 +3152,7 @@
           "default": null,
           "definition": "Registry lifecycle state for this version. Review 04 correction: entity-specific lifecycle.",
           "fk": null,
+          "lifecycle_graph": "canonical_record_lifecycle",
           "name": "lifecycle_state",
           "nullable": false,
           "pg_type": "text",
@@ -3578,12 +3588,13 @@
           "default": null,
           "definition": "Name lifecycle status.",
           "fk": null,
+          "lifecycle_graph": "name_lifecycle",
           "name": "name_status",
           "nullable": false,
           "pg_type": "text",
           "projection": "operator",
           "temporal_behavior": "current fact",
-          "vocabulary": "name_status"
+          "vocabulary": "name_lifecycle"
         },
         {
           "authority_owner": "Registry Authority",
@@ -3703,12 +3714,13 @@
           "default": null,
           "definition": "Object lifecycle.",
           "fk": null,
+          "lifecycle_graph": "non_building_object_lifecycle",
           "name": "lifecycle_state",
           "nullable": false,
           "pg_type": "text",
           "projection": "operator",
           "temporal_behavior": "current fact",
-          "vocabulary": "reference_object_lifecycle"
+          "vocabulary": "non_building_object_lifecycle"
         },
         {
           "authority_owner": "Registry Authority",
@@ -3822,6 +3834,7 @@
           "default": null,
           "definition": "Operational area lifecycle. Review 04 correction: entity-specific lifecycle.",
           "fk": null,
+          "lifecycle_graph": "operational_area_lifecycle",
           "name": "lifecycle_state",
           "nullable": false,
           "pg_type": "text",
@@ -4356,12 +4369,13 @@
           "default": null,
           "definition": "Release lifecycle.",
           "fk": null,
+          "lifecycle_graph": "publication_lifecycle",
           "name": "release_state",
           "nullable": false,
           "pg_type": "text",
           "projection": "operator",
           "temporal_behavior": "current fact",
-          "vocabulary": "publication_release_state"
+          "vocabulary": "publication_lifecycle"
         },
         {
           "authority_owner": "Registry Authority",
@@ -4655,25 +4669,6 @@
         {
           "authority_owner": "SDA/Registry Authority",
           "classification": "government-internal",
-          "constraints": [
-            "validated by subject trigger"
-          ],
-          "default": null,
-          "definition": "ID in the subject entity table.",
-          "fk": null,
-          "name": "subject_native_id",
-          "nullable": false,
-          "pg_type": "text",
-          "projection": {
-            "operator": "allowed by role",
-            "public": "never unless released"
-          },
-          "temporal_behavior": "recorded-time governed",
-          "vocabulary": null
-        },
-        {
-          "authority_owner": "SDA/Registry Authority",
-          "classification": "government-internal",
           "constraints": [],
           "default": "now()",
           "definition": "Recorded creation time.",
@@ -4691,7 +4686,9 @@
         {
           "authority_owner": "SDA/Registry Authority",
           "classification": "government-internal",
-          "constraints": [],
+          "constraints": [
+            "validated by deferred native subject trigger"
+          ],
           "default": null,
           "definition": "Native target-table identifier represented by this subject.",
           "fk": null,
@@ -4797,12 +4794,13 @@
           "default": null,
           "definition": "Road lifecycle. Review 04 correction: entity-specific lifecycle.",
           "fk": null,
+          "lifecycle_graph": "road_lifecycle",
           "name": "lifecycle_state",
           "nullable": false,
           "pg_type": "text",
           "projection": "operator",
           "temporal_behavior": "current fact",
-          "vocabulary": "reference_object_lifecycle"
+          "vocabulary": "road_lifecycle"
         },
         {
           "authority_owner": "Registry Authority",
@@ -4902,12 +4900,13 @@
           "default": null,
           "definition": "Segment lifecycle. Review 04 correction: entity-specific lifecycle.",
           "fk": null,
+          "lifecycle_graph": "road_segment_lifecycle",
           "name": "lifecycle_state",
           "nullable": false,
           "pg_type": "text",
           "projection": "operator",
           "temporal_behavior": "current fact",
-          "vocabulary": "reference_object_lifecycle"
+          "vocabulary": "road_segment_lifecycle"
         },
         {
           "authority_owner": "Registry Authority",
@@ -5007,12 +5006,13 @@
           "default": null,
           "definition": "Authority lifecycle.",
           "fk": null,
+          "lifecycle_graph": "source_authority_lifecycle",
           "name": "status",
           "nullable": false,
           "pg_type": "text",
           "projection": "operator",
           "temporal_behavior": "current fact",
-          "vocabulary": "lifecycle_state"
+          "vocabulary": "source_authority_lifecycle"
         }
       ],
       "owner": "SDA"
@@ -5420,12 +5420,13 @@
           "default": null,
           "definition": "Unit lifecycle. Review 04 correction: entity-specific lifecycle.",
           "fk": null,
+          "lifecycle_graph": "unit_lifecycle",
           "name": "lifecycle_state",
           "nullable": false,
           "pg_type": "text",
           "projection": "operator",
           "temporal_behavior": "current fact",
-          "vocabulary": "reference_object_lifecycle"
+          "vocabulary": "unit_lifecycle"
         },
         {
           "authority_owner": "Registry Authority",
@@ -5474,98 +5475,84 @@
     }
   },
   "generated_at_policy": "deterministic; no wall-clock timestamp embedded",
+  "lifecycle_field_bindings": {
+    "administrative_unit_version.lifecycle_state": "administrative_unit_lifecycle",
+    "building.lifecycle_state": "building_lifecycle",
+    "correction_case.case_state": "case_lifecycle",
+    "country.lifecycle_state": "country_lifecycle",
+    "dispute_case.case_state": "case_lifecycle",
+    "entrance.lifecycle_state": "entrance_lifecycle",
+    "geometry_version.quality_state": "geometry_quality_state",
+    "landmark.lifecycle_state": "landmark_lifecycle",
+    "locality.lifecycle_state": "locality_lifecycle",
+    "location_record_version.lifecycle_state": "canonical_record_lifecycle",
+    "name_record.name_status": "name_lifecycle",
+    "non_building_object.lifecycle_state": "non_building_object_lifecycle",
+    "operational_area.lifecycle_state": "operational_area_lifecycle",
+    "publication_release.release_state": "publication_lifecycle",
+    "road.lifecycle_state": "road_lifecycle",
+    "road_segment.lifecycle_state": "road_segment_lifecycle",
+    "source_authority.status": "source_authority_lifecycle",
+    "unit.lifecycle_state": "unit_lifecycle"
+  },
   "record_object_cardinality": {
-    "address": {
-      "max_per_role": {
-        "access-point": 1,
-        "primary-subject": 1
+    "standard-address": {
+      "access-point": {
+        "allowed_subject_entities": [
+          "entrance"
+        ],
+        "max": 4,
+        "merge_behavior": "repoint-on-approved-merge",
+        "min": 0,
+        "required": false,
+        "retirement_behavior": "retire-link"
       },
-      "optional": [
-        "context-road",
-        "access-point",
-        "nearby-landmark",
-        "external-parcel-reference",
-        "context-locality"
-      ],
-      "required": [
-        "primary-subject"
-      ]
-    },
-    "building": {
-      "max_per_role": {
-        "primary-subject": 1
+      "context-locality": {
+        "allowed_subject_entities": [
+          "locality",
+          "administrative_unit"
+        ],
+        "max": 1,
+        "merge_behavior": "repoint-on-approved-merge",
+        "min": 0,
+        "required": false,
+        "retirement_behavior": "retain-history-disable-current"
       },
-      "optional": [
-        "context-road",
-        "access-point",
-        "external-parcel-reference"
-      ],
-      "required": [
-        "primary-subject"
-      ]
-    },
-    "entrance": {
-      "max_per_role": {
-        "primary-subject": 1
+      "context-road": {
+        "allowed_subject_entities": [
+          "road",
+          "road_segment"
+        ],
+        "max": 1,
+        "merge_behavior": "repoint-on-approved-merge",
+        "min": 0,
+        "required": false,
+        "retirement_behavior": "retain-history-disable-current"
       },
-      "optional": [
-        "parent-building",
-        "context-road"
-      ],
-      "required": [
-        "primary-subject"
-      ]
-    },
-    "landmark": {
-      "max_per_role": {
-        "primary-subject": 1
+      "nearby-landmark": {
+        "allowed_subject_entities": [
+          "landmark"
+        ],
+        "max": 5,
+        "merge_behavior": "repoint-on-approved-merge",
+        "min": 0,
+        "required": false,
+        "retirement_behavior": "retain-context"
       },
-      "optional": [
-        "context-locality",
-        "context-road"
-      ],
-      "required": [
-        "primary-subject"
-      ]
-    },
-    "non-building-object": {
-      "max_per_role": {
-        "primary-subject": 1
-      },
-      "optional": [
-        "context-road",
-        "context-locality"
-      ],
-      "required": [
-        "primary-subject"
-      ]
-    },
-    "service-location": {
-      "max_per_role": {
-        "primary-subject": 1
-      },
-      "optional": [
-        "nearby-landmark",
-        "context-road",
-        "context-locality"
-      ],
-      "required": [
-        "primary-subject"
-      ]
-    },
-    "unit": {
-      "max_per_role": {
-        "parent-building": 1,
-        "primary-subject": 1
-      },
-      "optional": [
-        "access-point",
-        "context-road"
-      ],
-      "required": [
-        "primary-subject",
-        "parent-building"
-      ]
+      "primary-subject": {
+        "allowed_subject_entities": [
+          "building",
+          "unit",
+          "non_building_object",
+          "landmark",
+          "location_record"
+        ],
+        "max": 1,
+        "merge_behavior": "repoint-through-successor-subject",
+        "min": 1,
+        "required": true,
+        "retirement_behavior": "retire-link-with-record-version"
+      }
     }
   },
   "reserved_questions": [
@@ -5644,89 +5631,102 @@
   ],
   "role_geometry_rules": {
     "admin-boundary": {
-      "subjects": [
-        "administrative_unit_version"
+      "geometry_types": [
+        "POLYGON",
+        "MULTIPOLYGON"
       ],
-      "types": [
-        "Polygon",
-        "MultiPolygon"
+      "observation_allowed": true,
+      "promotion_prerequisite": "government boundary authority approval",
+      "subject_entities": [
+        "administrative_unit"
       ]
     },
     "building-footprint": {
-      "subjects": [
-        "building"
+      "geometry_types": [
+        "POLYGON",
+        "MULTIPOLYGON"
       ],
-      "types": [
-        "Polygon",
-        "MultiPolygon"
+      "observation_allowed": true,
+      "promotion_prerequisite": "GIS quality accepted-canonical",
+      "subject_entities": [
+        "building"
       ]
     },
     "building-point": {
-      "subjects": [
-        "building"
+      "geometry_types": [
+        "POINT"
       ],
-      "types": [
-        "Point"
+      "observation_allowed": true,
+      "promotion_prerequisite": "geometry-quality accepted-canonical + registry-approval audit",
+      "subject_entities": [
+        "building"
       ]
     },
     "entrance-point": {
-      "subjects": [
-        "entrance"
+      "geometry_types": [
+        "POINT"
       ],
-      "types": [
-        "Point"
-      ]
-    },
-    "landmark-area": {
-      "subjects": [
-        "landmark"
-      ],
-      "types": [
-        "Polygon",
-        "MultiPolygon"
+      "observation_allowed": true,
+      "promotion_prerequisite": "field evidence + geometry-quality accepted-canonical",
+      "subject_entities": [
+        "entrance",
+        "unit",
+        "building"
       ]
     },
     "landmark-point": {
-      "subjects": [
-        "landmark"
+      "geometry_types": [
+        "POINT"
       ],
-      "types": [
-        "Point"
+      "observation_allowed": true,
+      "promotion_prerequisite": "GIS authority approval",
+      "subject_entities": [
+        "landmark"
       ]
     },
     "location-point": {
-      "subjects": [
-        "location_record_version"
+      "geometry_types": [
+        "POINT"
       ],
-      "types": [
-        "Point"
+      "observation_allowed": true,
+      "promotion_prerequisite": "registry decision + release not public until publication",
+      "subject_entities": [
+        "location_record",
+        "non_building_object"
       ]
     },
     "operational-boundary": {
-      "subjects": [
-        "operational_area"
+      "geometry_types": [
+        "POLYGON",
+        "MULTIPOLYGON"
       ],
-      "types": [
-        "Polygon",
-        "MultiPolygon"
+      "observation_allowed": true,
+      "promotion_prerequisite": "operations authority approval",
+      "subject_entities": [
+        "operational_area"
       ]
     },
     "parcel-boundary": {
-      "subjects": [
-        "parcel_reference"
+      "geometry_types": [
+        "POLYGON",
+        "MULTIPOLYGON"
       ],
-      "types": [
-        "Polygon",
-        "MultiPolygon"
+      "observation_allowed": true,
+      "promotion_prerequisite": "land/registry authority approval",
+      "subject_entities": [
+        "location_record"
       ]
     },
     "road-centerline": {
-      "subjects": [
-        "road_segment"
+      "geometry_types": [
+        "LINESTRING",
+        "MULTILINESTRING"
       ],
-      "types": [
-        "LineString",
-        "MultiLineString"
+      "observation_allowed": true,
+      "promotion_prerequisite": "GIS authority approval + length check",
+      "subject_entities": [
+        "road",
+        "road_segment"
       ]
     }
   },
@@ -5832,6 +5832,13 @@
         "label": "Label/name correction."
       }
     },
+    "country_lifecycle": {
+      "owner": "Registry Authority",
+      "values": {
+        "active": "Active country authority row.",
+        "retired": "Retired historical country row."
+      }
+    },
     "coverage_role": {
       "owner": "Operations Authority",
       "values": {
@@ -5869,6 +5876,15 @@
         "geometry": "Geometry dispute.",
         "name": "Name/label dispute.",
         "publication": "Publication/projection dispute."
+      }
+    },
+    "entrance_lifecycle": {
+      "owner": "Registry Authority",
+      "values": {
+        "active": "Active entrance.",
+        "candidate": "Candidate entrance.",
+        "retired": "Retired entrance.",
+        "revoked": "Revoked entrance."
       }
     },
     "entrance_role": {
@@ -5933,6 +5949,15 @@
         "rejected": "Rejected.",
         "submitted": "Submitted by citizen/operator/import.",
         "under-review": "Under review."
+      }
+    },
+    "landmark_lifecycle": {
+      "owner": "Registry/GIS Authority",
+      "values": {
+        "candidate": "Candidate landmark.",
+        "official": "Official landmark.",
+        "retired": "Retired landmark.",
+        "revoked": "Revoked landmark."
       }
     },
     "landmark_type": {
@@ -6014,6 +6039,15 @@
         "rejected": "Rejected candidate.",
         "retired": "No longer used.",
         "under-review": "Name under review."
+      }
+    },
+    "non_building_object_lifecycle": {
+      "owner": "Registry Authority",
+      "values": {
+        "active": "Active object.",
+        "candidate": "Candidate object.",
+        "retired": "Retired object.",
+        "revoked": "Revoked object."
       }
     },
     "non_building_object_type": {

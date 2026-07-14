@@ -30,7 +30,7 @@ This registry is the single source for dictionary, SQL, mapping validation, fixt
 | `administrative_unit_version.classification` | Visibility classification for this version. | text | no | 'public-after-release' | — | classification | Registry Authority | government-internal | "operator" | current fact | — |
 | `building.building_id` | Building identity. | text | no | — | — | — | Registry Authority | government-internal | "operator" | current fact | — |
 | `building.usage_class` | Building usage class where known. | text | yes | — | — | — | Registry Authority | government-internal | "operator" | current fact | — |
-| `building.lifecycle_state` | Building lifecycle. Review 04 correction: entity-specific lifecycle. | text | no | — | — | reference_object_lifecycle | Registry Authority | government-internal | "operator" | current fact | — |
+| `building.lifecycle_state` | Building lifecycle. Review 04 correction: entity-specific lifecycle. | text | no | — | — | building_lifecycle | Registry Authority | government-internal | "operator" | current fact | — |
 | `building.source_authority_id` | Building source/authority. | text | no | — | source_authority.source_authority_id | — | Registry Authority | government-internal | "operator" | current fact | — |
 | `building.effective_from` | Building effective start. | timestamptz | no | — | — | — | Registry Authority | government-internal | "operator" | effective time | — |
 | `building.effective_to` | Building effective end. | timestamptz | yes | — | — | — | Registry Authority | government-internal | "operator" | effective time | — |
@@ -43,7 +43,7 @@ This registry is the single source for dictionary, SQL, mapping validation, fixt
 | `correction_case.target_location_record_id` | Target record, if resolved. | text | yes | — | location_record.location_record_id | — | Registry Authority | government-internal | "operator" | current fact | — |
 | `correction_case.target_public_code` | Submitted/target public code, if applicable. | text | yes | — | — | — | Registry Authority | government-internal | "operator" | current fact | — |
 | `correction_case.correction_type` | Correction type. | text | no | — | — | correction_type | Registry Authority | government-internal | "operator" | current fact | — |
-| `correction_case.case_state` | Correction case state. | text | no | — | — | case_state | Registry Authority | government-internal | "operator" | current fact | — |
+| `correction_case.case_state` | Correction case state. | text | no | — | — | case_lifecycle | Registry Authority | government-internal | "operator" | current fact | — |
 | `correction_case.submitted_at` | Submission time. | timestamptz | no | — | — | — | Registry Authority | government-internal | "operator" | recorded time | — |
 | `correction_case.resolved_at` | Resolution time. | timestamptz | yes | — | — | — | Registry Authority | government-internal | "operator" | recorded time | — |
 | `correction_case.resolution_event_id` | Decision resolving case. | text | yes | — | decision_event.decision_event_id | — | Registry Authority | government-internal | "operator" | current fact | — |
@@ -51,7 +51,7 @@ This registry is the single source for dictionary, SQL, mapping validation, fixt
 | `country.iso2_code` | ISO-3166 alpha-2 country code. | char(2) | no | — | — | — | Registry Authority | government-internal | "operator" | current fact | UNIQUE; CHECK iso2_code = upper(iso2_code) |
 | `country.official_name_es` | Official Spanish country name. | text | no | — | — | — | Registry Authority | government-internal | "operator" | current fact | — |
 | `country.official_name_en` | Approved English presentation name. | text | no | — | — | — | Registry Authority | government-internal | "operator" | current fact | — |
-| `country.lifecycle_state` | Reference lifecycle state. | text | no | 'active' | — | reference_object_lifecycle | Registry Authority | government-internal | "operator" | current fact | — |
+| `country.lifecycle_state` | Reference lifecycle state. | text | no | 'active' | — | country_lifecycle | Registry Authority | government-internal | "operator" | current fact | — |
 | `country.source_authority_id` | Authority that issued this country reference. | text | no | — | source_authority.source_authority_id | — | Registry Authority | government-internal | "operator" | current fact | — |
 | `country.created_at` | Recorded creation time. | timestamptz | no | now() | — | — | Registry Authority | government-internal | "operator" | recorded time | — |
 | `decision_event.decision_event_id` | Decision event identity. | text | no | — | — | — | Registry Authority | government-internal | "operator" | current fact | — |
@@ -64,7 +64,7 @@ This registry is the single source for dictionary, SQL, mapping validation, fixt
 | `decision_event.recorded_at` | Decision recorded time. | timestamptz | no | — | — | — | Registry Authority | government-internal | "operator" | recorded time | — |
 | `dispute_case.dispute_case_id` | Dispute identity. | text | no | — | — | — | Registry Authority | government-internal | "operator" | current fact | — |
 | `dispute_case.dispute_type` | Dispute type. | text | no | — | — | dispute_type | Registry Authority | government-internal | "operator" | current fact | — |
-| `dispute_case.case_state` | Dispute state. | text | no | — | — | case_state | Registry Authority | government-internal | "operator" | current fact | — |
+| `dispute_case.case_state` | Dispute state. | text | no | — | — | case_lifecycle | Registry Authority | government-internal | "operator" | current fact | — |
 | `dispute_case.opened_at` | Opened time. | timestamptz | no | — | — | — | Registry Authority | government-internal | "operator" | recorded time | — |
 | `dispute_case.resolved_at` | Resolved time. | timestamptz | yes | — | — | — | Registry Authority | government-internal | "operator" | recorded time | — |
 | `dispute_case.resolution_event_id` | Resolution decision. | text | yes | — | decision_event.decision_event_id | — | Registry Authority | government-internal | "operator" | current fact | — |
@@ -72,7 +72,7 @@ This registry is the single source for dictionary, SQL, mapping validation, fixt
 | `entrance.entrance_id` | Entrance identity. | text | no | — | — | — | Registry Authority | government-internal | "operator" | current fact | — |
 | `entrance.building_id` | Building served by entrance. | text | no | — | building.building_id | — | Registry Authority | government-internal | "operator" | current fact | — |
 | `entrance.entrance_role` | Entrance/access role. Review 03 correction: uses entity-specific vocabulary. | text | no | 'access-point' | — | entrance_role | Registry Authority | government-internal | "operator" | current fact | — |
-| `entrance.lifecycle_state` | Entrance lifecycle. | text | no | — | — | reference_object_lifecycle | Registry Authority | government-internal | "operator" | current fact | — |
+| `entrance.lifecycle_state` | Entrance lifecycle. | text | no | — | — | entrance_lifecycle | Registry Authority | government-internal | "operator" | current fact | — |
 | `entrance.effective_from` | Entrance effective start. | timestamptz | no | — | — | — | Registry Authority | government-internal | "operator" | effective time | — |
 | `entrance.effective_to` | Entrance effective end. | timestamptz | yes | — | — | — | Registry Authority | government-internal | "operator" | effective time | — |
 | `evidence_object.evidence_object_id` | Evidence identity. | text | no | — | — | — | Registry Authority | government-internal | "operator" | current fact | — |
@@ -152,7 +152,7 @@ This registry is the single source for dictionary, SQL, mapping validation, fixt
 | `intake_case.closed_at` | Case closure time. | timestamptz | yes | — | — | — | Registry Authority | government-internal | "operator" | recorded time | — |
 | `landmark.landmark_id` | Landmark identity. | text | no | — | — | — | Registry Authority | government-internal | "operator" | current fact | — |
 | `landmark.landmark_type` | Landmark type. Review 03 correction: uses entity-specific vocabulary. | text | no | 'landmark' | — | landmark_type | Registry Authority | government-internal | "operator" | current fact | — |
-| `landmark.lifecycle_state` | Landmark lifecycle. | text | no | — | — | reference_object_lifecycle | Registry Authority | government-internal | "operator" | current fact | — |
+| `landmark.lifecycle_state` | Landmark lifecycle. | text | no | — | — | landmark_lifecycle | Registry Authority | government-internal | "operator" | current fact | — |
 | `landmark.source_authority_id` | Landmark source. | text | no | — | source_authority.source_authority_id | — | Registry Authority | government-internal | "operator" | current fact | — |
 | `landmark.effective_from` | Landmark effective start. | timestamptz | no | — | — | — | Registry Authority | government-internal | "operator" | effective time | — |
 | `landmark.effective_to` | Landmark effective end. | timestamptz | yes | — | — | — | Registry Authority | government-internal | "operator" | effective time | — |
@@ -171,7 +171,7 @@ This registry is the single source for dictionary, SQL, mapping validation, fixt
 | `locality.locality_id` | Locality identity. | text | no | — | — | — | Registry Authority | government-internal | "operator" | current fact | — |
 | `locality.administrative_unit_id` | Containing or governing administrative unit. | text | no | — | administrative_unit.administrative_unit_id | — | Registry Authority | government-internal | "operator" | current fact | — |
 | `locality.locality_type` | Locality type. | text | no | — | — | locality_type | Registry Authority | government-internal | "operator" | current fact | — |
-| `locality.lifecycle_state` | Locality lifecycle. Review 04 correction: entity-specific lifecycle. | text | no | — | — | reference_object_lifecycle | Registry Authority | government-internal | "operator" | current fact | — |
+| `locality.lifecycle_state` | Locality lifecycle. Review 04 correction: entity-specific lifecycle. | text | no | — | — | locality_lifecycle | Registry Authority | government-internal | "operator" | current fact | — |
 | `locality.source_authority_id` | Locality source/authority. | text | no | — | source_authority.source_authority_id | — | Registry Authority | government-internal | "operator" | current fact | — |
 | `locality.effective_from` | Locality effective start. | timestamptz | no | — | — | — | Registry Authority | government-internal | "operator" | effective time | — |
 | `locality.effective_to` | Locality effective end. | timestamptz | yes | — | — | — | Registry Authority | government-internal | "operator" | effective time | — |
@@ -235,7 +235,7 @@ This registry is the single source for dictionary, SQL, mapping validation, fixt
 | `name_record.subject_id` | Shared registry subject reference. | text | no | — | registry_subject.subject_id | — | SDA/Registry Authority | government-internal | {"operator": "allowed by role", "public": "never unless released"} | recorded-time governed | subject must exist and be active or linked through retirement policy |
 | `name_record.language_code` | BCP-47 language code, e.g. es-GQ or en. | text | no | — | — | — | Registry Authority | government-internal | "operator" | current fact | CHECK language_code <> '' |
 | `name_record.name_kind` | Kind of name. | text | no | — | — | name_kind | Registry Authority | government-internal | "operator" | current fact | — |
-| `name_record.name_status` | Name lifecycle status. | text | no | — | — | name_status | Registry Authority | government-internal | "operator" | current fact | — |
+| `name_record.name_status` | Name lifecycle status. | text | no | — | — | name_lifecycle | Registry Authority | government-internal | "operator" | current fact | — |
 | `name_record.name_text` | Authoritative or candidate written name preserving accents/spelling. | text | no | — | — | — | Registry Authority | government-internal | "operator" | current fact | — |
 | `name_record.normalized_text` | Search-only normalized form; never replaces name_text. | text | no | — | — | — | Registry Authority | government-internal | "operator" | current fact | — |
 | `name_record.source_record_id` | Source/evidence for the name. | text | yes | — | source_record.source_record_id | — | Registry Authority | government-internal | "operator" | current fact | — |
@@ -243,7 +243,7 @@ This registry is the single source for dictionary, SQL, mapping validation, fixt
 | `name_record.effective_to` | Name effective end. | timestamptz | yes | — | — | — | Registry Authority | government-internal | "operator" | effective time | — |
 | `non_building_object.object_id` | Object identity. | text | no | — | — | — | Registry Authority | government-internal | "operator" | current fact | — |
 | `non_building_object.object_type` | Object type. Review 03 correction: uses entity-specific vocabulary. | text | no | — | — | non_building_object_type | Registry Authority | government-internal | "operator" | current fact | — |
-| `non_building_object.lifecycle_state` | Object lifecycle. | text | no | — | — | reference_object_lifecycle | Registry Authority | government-internal | "operator" | current fact | — |
+| `non_building_object.lifecycle_state` | Object lifecycle. | text | no | — | — | non_building_object_lifecycle | Registry Authority | government-internal | "operator" | current fact | — |
 | `non_building_object.source_authority_id` | Object source. | text | no | — | source_authority.source_authority_id | — | Registry Authority | government-internal | "operator" | current fact | — |
 | `non_building_object.effective_from` | Object effective start. | timestamptz | no | — | — | — | Registry Authority | government-internal | "operator" | effective time | — |
 | `non_building_object.effective_to` | Object effective end. | timestamptz | yes | — | — | — | Registry Authority | government-internal | "operator" | effective time | — |
@@ -286,7 +286,7 @@ This registry is the single source for dictionary, SQL, mapping validation, fixt
 | `public_code_alias.predecessor_alias_id` | Prior alias if superseded. | text | yes | — | public_code_alias.public_code_alias_id | — | Registry Authority | government-internal | "operator" | current fact | — |
 | `public_code_alias.successor_alias_id` | Successor alias after supersession. | text | yes | — | public_code_alias.public_code_alias_id | — | Registry Authority | government-internal | "operator" | current fact | — |
 | `publication_release.publication_release_id` | Release identity. | text | no | — | — | — | Registry Authority | government-internal | "operator" | current fact | — |
-| `publication_release.release_state` | Release lifecycle. | text | no | — | — | publication_release_state | Registry Authority | government-internal | "operator" | current fact | — |
+| `publication_release.release_state` | Release lifecycle. | text | no | — | — | publication_lifecycle | Registry Authority | government-internal | "operator" | current fact | — |
 | `publication_release.authority_reference` | Named approval/authority reference. | text | no | — | — | — | Registry Authority | government-internal | "operator" | current fact | — |
 | `publication_release.projection_type` | Projection audience/type. | text | no | — | — | projection_type | Registry Authority | government-internal | "operator" | current fact | — |
 | `publication_release.effective_at` | Release effective time. | timestamptz | no | — | — | — | Registry Authority | government-internal | "operator" | effective time | — |
@@ -306,29 +306,28 @@ This registry is the single source for dictionary, SQL, mapping validation, fixt
 | `publication_release_item.published_geometry_policy` | Geometry precision/generalization policy for release. | text | no | — | — | — | Registry Authority | government-internal | "operator" | current fact | — |
 | `registry_subject.subject_id` | Registered subject identity. | text | no | — | — | — | SDA/Registry Authority | government-internal | {"operator": "allowed by role", "public": "never unless released"} | recorded-time governed | PRIMARY KEY |
 | `registry_subject.subject_entity` | Subject entity/type registered for polymorphic-safe links. | text | no | — | — | — | SDA/Registry Authority | government-internal | {"operator": "allowed by role", "public": "never unless released"} | recorded-time governed | CHECK subject_entity in allowed subject set |
-| `registry_subject.subject_native_id` | ID in the subject entity table. | text | no | — | — | — | SDA/Registry Authority | government-internal | {"operator": "allowed by role", "public": "never unless released"} | recorded-time governed | validated by subject trigger |
 | `registry_subject.created_at` | Recorded creation time. | timestamptz | no | now() | — | — | SDA/Registry Authority | government-internal | {"operator": "allowed by role", "public": "never unless released"} | recorded-time governed | — |
-| `registry_subject.native_id` | Native target-table identifier represented by this subject. | text | no | — | — | — | SDA/Registry Authority | government-internal | {"operator": "allowed by role", "public": "never unless released"} | recorded-time governed | — |
+| `registry_subject.native_id` | Native target-table identifier represented by this subject. | text | no | — | — | — | SDA/Registry Authority | government-internal | {"operator": "allowed by role", "public": "never unless released"} | recorded-time governed | validated by deferred native subject trigger |
 | `registry_subject.subject_state` | Subject active/retired/delete policy state. | text | no | 'active' | — | subject_lifecycle | SDA/Registry Authority | government-internal | {"operator": "allowed by role", "public": "never unless released"} | recorded-time governed | — |
 | `registry_subject.retired_at` | Retirement/deletion policy timestamp. | timestamptz | yes | — | — | — | SDA/Registry Authority | government-internal | {"operator": "allowed by role", "public": "never unless released"} | recorded-time governed | — |
 | `registry_subject.delete_policy` | Delete behavior for linked names/geometry/disputes/objects. | text | no | 'retire-only' | — | delete_policy | SDA/Registry Authority | government-internal | {"operator": "allowed by role", "public": "never unless released"} | recorded-time governed | — |
 | `road.road_id` | Road identity. | text | no | — | — | — | Registry Authority | government-internal | "operator" | current fact | — |
 | `road.road_class` | Road class. | text | no | 'unknown' | — | road_class | Registry Authority | government-internal | "operator" | current fact | — |
-| `road.lifecycle_state` | Road lifecycle. Review 04 correction: entity-specific lifecycle. | text | no | — | — | reference_object_lifecycle | Registry Authority | government-internal | "operator" | current fact | — |
+| `road.lifecycle_state` | Road lifecycle. Review 04 correction: entity-specific lifecycle. | text | no | — | — | road_lifecycle | Registry Authority | government-internal | "operator" | current fact | — |
 | `road.source_authority_id` | Road authority/source. | text | no | — | source_authority.source_authority_id | — | Registry Authority | government-internal | "operator" | current fact | — |
 | `road.created_at` | Recorded creation. | timestamptz | no | now() | — | — | Registry Authority | government-internal | "operator" | recorded time | — |
 | `road_segment.road_segment_id` | Segment identity. | text | no | — | — | — | Registry Authority | government-internal | "operator" | current fact | — |
 | `road_segment.road_id` | Owning road. | text | no | — | road.road_id | — | Registry Authority | government-internal | "operator" | current fact | — |
 | `road_segment.sequence_number` | Optional ordering within road. | integer | yes | — | — | — | Registry Authority | government-internal | "operator" | current fact | — |
 | `road_segment.measured_length_m` | Measured length in meters; NULL until geometry validated. | numeric(12,2) | yes | — | — | — | Registry Authority | government-internal | "operator" | current fact | — |
-| `road_segment.lifecycle_state` | Segment lifecycle. Review 04 correction: entity-specific lifecycle. | text | no | — | — | reference_object_lifecycle | Registry Authority | government-internal | "operator" | current fact | — |
+| `road_segment.lifecycle_state` | Segment lifecycle. Review 04 correction: entity-specific lifecycle. | text | no | — | — | road_segment_lifecycle | Registry Authority | government-internal | "operator" | current fact | — |
 | `road_segment.effective_from` | Segment effective start. | timestamptz | no | — | — | — | Registry Authority | government-internal | "operator" | effective time | — |
 | `road_segment.effective_to` | Segment effective end. | timestamptz | yes | — | — | — | Registry Authority | government-internal | "operator" | effective time | — |
 | `source_authority.source_authority_id` | Authority identity. | text | no | — | — | — | Registry Authority | government-internal | "operator" | current fact | — |
 | `source_authority.authority_name` | Authority name. | text | no | — | — | — | Registry Authority | government-internal | "operator" | current fact | — |
 | `source_authority.authority_class` | Authority class. | text | no | — | — | source_authority_class | Registry Authority | government-internal | "operator" | current fact | — |
 | `source_authority.legal_basis` | Legal/institutional basis if known. | text | yes | — | — | — | Registry Authority | government-internal | "operator" | current fact | — |
-| `source_authority.status` | Authority lifecycle. | text | no | — | — | lifecycle_state | Registry Authority | government-internal | "operator" | current fact | — |
+| `source_authority.status` | Authority lifecycle. | text | no | — | — | source_authority_lifecycle | Registry Authority | government-internal | "operator" | current fact | — |
 | `source_package.source_package_id` | Package identity. | text | no | — | — | — | Registry Authority | government-internal | "operator" | current fact | — |
 | `source_package.source_authority_id` | Package authority. | text | no | — | source_authority.source_authority_id | — | Registry Authority | government-internal | "operator" | current fact | — |
 | `source_package.package_name` | Package name. | text | no | — | — | — | Registry Authority | government-internal | "operator" | current fact | — |
@@ -354,7 +353,7 @@ This registry is the single source for dictionary, SQL, mapping validation, fixt
 | `unit.parent_unit_id` | Optional parent unit for nested units. | text | yes | — | unit.unit_id | — | Registry Authority | government-internal | "operator" | current fact | — |
 | `unit.unit_label` | Human-readable unit label. | text | no | — | — | — | Registry Authority | government-internal | "operator" | current fact | — |
 | `unit.unit_type` | Unit type. Review 03 correction: uses entity-specific vocabulary. | text | no | 'unit' | — | unit_type | Registry Authority | government-internal | "operator" | current fact | — |
-| `unit.lifecycle_state` | Unit lifecycle. Review 04 correction: entity-specific lifecycle. | text | no | — | — | reference_object_lifecycle | Registry Authority | government-internal | "operator" | current fact | — |
+| `unit.lifecycle_state` | Unit lifecycle. Review 04 correction: entity-specific lifecycle. | text | no | — | — | unit_lifecycle | Registry Authority | government-internal | "operator" | current fact | — |
 | `unit.classification` | Unit visibility classification. | text | no | 'government-internal' | — | classification | Registry Authority | government-internal | "operator" | current fact | — |
 | `unit.effective_from` | Unit effective start. | timestamptz | no | — | — | — | Registry Authority | government-internal | "operator" | effective time | — |
 | `unit.effective_to` | Unit effective end. | timestamptz | yes | — | — | — | Registry Authority | government-internal | "operator" | effective time | — |

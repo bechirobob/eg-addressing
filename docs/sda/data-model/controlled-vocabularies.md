@@ -9,15 +9,15 @@ One authoritative field-to-vocabulary registry. Review 05 separates canonical re
 | `administrative_unit_version.admin_level` | `admin_level` | GIS/Data Authority | country, district, local_council, municipality, province |
 | `administrative_unit_version.lifecycle_state` | `administrative_unit_lifecycle` | GIS/Data Authority | proposed, official, historical, retired, revoked |
 | `administrative_unit_version.classification` | `classification` | Legal/Privacy Authority | government-internal, highly-restricted, public, public-after-release, restricted, security-internal |
-| `building.lifecycle_state` | `reference_object_lifecycle` | Registry/GIS Authority | candidate, active, corrected, superseded, retired, revoked |
+| `building.lifecycle_state` | `building_lifecycle` | Registry Authority | candidate, active, demolished, retired, revoked |
 | `correction_case.correction_type` | `correction_type` | Registry Authority | administrative-context, classification, duplicate, geometry, label |
-| `correction_case.case_state` | `case_state` | Registry Authority | approved, closed, needs-evidence, rejected, resolved, submitted, under-review |
-| `country.lifecycle_state` | `reference_object_lifecycle` | Registry/GIS Authority | candidate, active, corrected, superseded, retired, revoked |
+| `correction_case.case_state` | `case_lifecycle` | Registry Authority | submitted, under-review, needs-evidence, approved, rejected, resolved, closed |
+| `country.lifecycle_state` | `country_lifecycle` | Registry Authority | active, retired |
 | `decision_event.decision_type` | `decision_type` | SDA/Registry Authority | approve-geometry, approve-publication, correct-record, promote-record, resolve-dispute, supersede-record, withdraw-publication |
 | `dispute_case.dispute_type` | `dispute_type` | Registry Authority | authority, duplicate, geometry, name, publication |
-| `dispute_case.case_state` | `case_state` | Registry Authority | approved, closed, needs-evidence, rejected, resolved, submitted, under-review |
+| `dispute_case.case_state` | `case_lifecycle` | Registry Authority | submitted, under-review, needs-evidence, approved, rejected, resolved, closed |
 | `entrance.entrance_role` | `entrance_role` | Registry Authority | main, secondary, service, emergency, gate |
-| `entrance.lifecycle_state` | `reference_object_lifecycle` | Registry/GIS Authority | candidate, active, corrected, superseded, retired, revoked |
+| `entrance.lifecycle_state` | `entrance_lifecycle` | Registry Authority | candidate, active, retired, revoked |
 | `evidence_object.classification` | `classification` | Legal/Privacy Authority | government-internal, highly-restricted, public, public-after-release, restricted, security-internal |
 | `evidence_object.retention_state` | `retention_state` | Legal/Privacy Authority | active, disposed-metadata-retained, legal-hold, scheduled-disposal |
 | `field_assignment.assignment_state` | `field_verification_state` | Field Operations Authority | assigned, cancelled, evidence-approved, evidence-rejected, evidence-under-review, field-captured, in-progress, linked-to-canonical, needs-recapture |
@@ -32,10 +32,10 @@ One authoritative field-to-vocabulary registry. Review 05 separates canonical re
 | `geometry_version.classification` | `classification` | Legal/Privacy Authority | government-internal, highly-restricted, public, public-after-release, restricted, security-internal |
 | `intake_case.intake_state` | `intake_state` | Registry Authority | closed, duplicate-review, needs-field-check, promoted-to-canonical, rejected, submitted, under-review |
 | `landmark.landmark_type` | `landmark_type` | Registry/GIS Authority | school, clinic, market, religious-site, public-office, natural-feature, other |
-| `landmark.lifecycle_state` | `reference_object_lifecycle` | Registry/GIS Authority | candidate, active, corrected, superseded, retired, revoked |
+| `landmark.lifecycle_state` | `landmark_lifecycle` | Registry/GIS Authority | candidate, official, retired, revoked |
 | `licence.classification` | `classification` | Legal/Privacy Authority | government-internal, highly-restricted, public, public-after-release, restricted, security-internal |
 | `locality.locality_type` | `locality_type` | GIS/Data Authority | informal_area, neighbourhood, quarter, settlement, village |
-| `locality.lifecycle_state` | `reference_object_lifecycle` | Registry/GIS Authority | candidate, active, corrected, superseded, retired, revoked |
+| `locality.lifecycle_state` | `locality_lifecycle` | Registry/GIS Authority | candidate, official, renamed, retired |
 | `location_record.record_type` | `record_type` | Registry Authority | address, building, entrance, landmark, non-building-object, service-location, unit |
 | `location_record.classification` | `classification` | Legal/Privacy Authority | government-internal, highly-restricted, public, public-after-release, restricted, security-internal |
 | `location_record_assertion.classification` | `classification` | Legal/Privacy Authority | government-internal, highly-restricted, public, public-after-release, restricted, security-internal |
@@ -43,9 +43,9 @@ One authoritative field-to-vocabulary registry. Review 05 separates canonical re
 | `location_record_relationship.relationship_type` | `relationship_type` | Registry Authority | contains, corrects, duplicates, near, served-by, supersedes |
 | `location_record_version.lifecycle_state` | `canonical_record_lifecycle` | Registry Authority | candidate, under-review, active, corrected, superseded, disputed, retired, revoked |
 | `name_record.name_kind` | `name_kind` | Registry/GIS Authority | alternate, historical, local, normalized-search, official-en, official-es |
-| `name_record.name_status` | `name_status` | Registry/GIS Authority | alternate, candidate, disputed, official-current, official-historical, rejected, retired, under-review |
+| `name_record.name_status` | `name_lifecycle` | Registry/GIS Authority | candidate, official-current, official-historical, alternate, disputed, retired, rejected |
 | `non_building_object.object_type` | `non_building_object_type` | Registry Authority | utility-asset, public-space, delivery-point, infrastructure-node, other |
-| `non_building_object.lifecycle_state` | `reference_object_lifecycle` | Registry/GIS Authority | candidate, active, corrected, superseded, retired, revoked |
+| `non_building_object.lifecycle_state` | `non_building_object_lifecycle` | Registry Authority | candidate, active, retired, revoked |
 | `operational_area.area_type` | `operational_area_type` | Operations Authority | campaign, incident, rollout, routing, service |
 | `operational_area.lifecycle_state` | `operational_area_lifecycle` | Operations Authority | planned, active, suspended, closed, archived |
 | `operational_area.classification` | `classification` | Legal/Privacy Authority | government-internal, highly-restricted, public, public-after-release, restricted, security-internal |
@@ -53,21 +53,21 @@ One authoritative field-to-vocabulary registry. Review 05 separates canonical re
 | `parcel_reference.classification` | `classification` | Legal/Privacy Authority | government-internal, highly-restricted, public, public-after-release, restricted, security-internal |
 | `partner_projection.classification` | `classification` | Legal/Privacy Authority | government-internal, highly-restricted, public, public-after-release, restricted, security-internal |
 | `public_code_alias.code_state` | `public_code_state` | Programme Owner / Registry Authority | active-public, blocked, reserved-internal, retired, revoked, superseded |
-| `publication_release.release_state` | `publication_release_state` | Publication Authority | approval-requested, approved, draft, published, suspended, withdrawn |
+| `publication_release.release_state` | `publication_lifecycle` | Publication Authority | approval-requested, approved, draft, published, suspended, withdrawn |
 | `publication_release.projection_type` | `projection_type` | Publication Authority | operator-case-file, partner-api, public-lookup, signage-export, statistics |
 | `publication_release_item.projection_state` | `publication_item_state` | Publication Authority | included, redacted, superseded, withdrawn |
 | `registry_subject.subject_state` | `subject_lifecycle` | Registry Authority | active, retired, merged, deleted-prohibited |
 | `registry_subject.delete_policy` | `delete_policy` | Registry Authority | retire-only, cascade-prohibited, merge-required |
 | `road.road_class` | `road_class` | Registry/GIS Authority | path, road, service-road, street, track, unknown |
-| `road.lifecycle_state` | `reference_object_lifecycle` | Registry/GIS Authority | candidate, active, corrected, superseded, retired, revoked |
-| `road_segment.lifecycle_state` | `reference_object_lifecycle` | Registry/GIS Authority | candidate, active, corrected, superseded, retired, revoked |
+| `road.lifecycle_state` | `road_lifecycle` | GIS/Data Authority | candidate, field-verified, official, superseded, retired |
+| `road_segment.lifecycle_state` | `road_segment_lifecycle` | GIS/Data Authority | draft, active, realigned, retired |
 | `source_authority.authority_class` | `source_authority_class` | SDA | citizen-submitted, derived-system, external-map-suggestion, fixture-training, gis-data-authority, imported-provisional, official-government, registry-authority, unverified-field, verified-field |
-| `source_authority.status` | `lifecycle_state` | Registry Authority | active, corrected, disputed, draft-candidate, registry-ready, registry-review, retired, revoked, superseded |
+| `source_authority.status` | `source_authority_lifecycle` | SDA | candidate, trusted, deprecated, revoked |
 | `source_payload_archive.classification` | `classification` | Legal/Privacy Authority | government-internal, highly-restricted, public, public-after-release, restricted, security-internal |
 | `source_payload_archive.retention_state` | `retention_state` | Legal/Privacy Authority | active, disposed-metadata-retained, legal-hold, scheduled-disposal |
 | `source_record.raw_payload_classification` | `classification` | Legal/Privacy Authority | government-internal, highly-restricted, public, public-after-release, restricted, security-internal |
 | `unit.unit_type` | `unit_type` | Registry Authority | apartment, office-suite, room, shop-unit, compound-unit |
-| `unit.lifecycle_state` | `reference_object_lifecycle` | Registry/GIS Authority | candidate, active, corrected, superseded, retired, revoked |
+| `unit.lifecycle_state` | `unit_lifecycle` | Registry Authority | candidate, active, merged, split, retired |
 | `unit.classification` | `classification` | Legal/Privacy Authority | government-internal, highly-restricted, public, public-after-release, restricted, security-internal |
 
 ## `admin_level`
@@ -187,6 +187,15 @@ Owner: **Registry Authority**
 | geometry | Geometry correction. |
 | label | Label/name correction. |
 
+## `country_lifecycle`
+
+Owner: **Registry Authority**
+
+| Value | Meaning |
+|---|---|
+| active | Active country authority row. |
+| retired | Retired historical country row. |
+
 ## `coverage_role`
 
 Owner: **Operations Authority**
@@ -233,6 +242,17 @@ Owner: **Registry Authority**
 | geometry | Geometry dispute. |
 | name | Name/label dispute. |
 | publication | Publication/projection dispute. |
+
+## `entrance_lifecycle`
+
+Owner: **Registry Authority**
+
+| Value | Meaning |
+|---|---|
+| candidate | Candidate entrance. |
+| active | Active entrance. |
+| retired | Retired entrance. |
+| revoked | Revoked entrance. |
 
 ## `entrance_role`
 
@@ -307,6 +327,17 @@ Owner: **Registry Authority**
 | rejected | Rejected. |
 | submitted | Submitted by citizen/operator/import. |
 | under-review | Under review. |
+
+## `landmark_lifecycle`
+
+Owner: **Registry/GIS Authority**
+
+| Value | Meaning |
+|---|---|
+| candidate | Candidate landmark. |
+| official | Official landmark. |
+| retired | Retired landmark. |
+| revoked | Revoked landmark. |
 
 ## `landmark_type`
 
@@ -402,6 +433,17 @@ Owner: **Registry/GIS Authority**
 | rejected | Rejected candidate. |
 | retired | No longer used. |
 | under-review | Name under review. |
+
+## `non_building_object_lifecycle`
+
+Owner: **Registry Authority**
+
+| Value | Meaning |
+|---|---|
+| candidate | Candidate object. |
+| active | Active object. |
+| retired | Retired object. |
+| revoked | Revoked object. |
 
 ## `non_building_object_type`
 

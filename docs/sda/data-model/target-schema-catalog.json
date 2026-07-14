@@ -2417,14 +2417,6 @@
       "udt_name": "text"
     },
     {
-      "column_default": null,
-      "column_name": "subject_native_id",
-      "data_type": "text",
-      "is_nullable": "NO",
-      "table_name": "proposed_registry_subject",
-      "udt_name": "text"
-    },
-    {
       "column_default": "now()",
       "column_name": "created_at",
       "data_type": "timestamp with time zone",
@@ -2833,30 +2825,1885 @@
       "udt_name": "timestamptz"
     }
   ],
+  "constraints": [
+    {
+      "constraint_name": "geometry_role_matrix_pkey",
+      "constraint_type": "PRIMARY KEY",
+      "table_name": "geometry_role_matrix"
+    },
+    {
+      "constraint_name": "proposed_administrative_code_history_administrative_unit_id_fk",
+      "constraint_type": "FOREIGN KEY",
+      "table_name": "proposed_administrative_code_history"
+    },
+    {
+      "constraint_name": "proposed_administrative_code_history_effective_interval_ck",
+      "constraint_type": "CHECK",
+      "table_name": "proposed_administrative_code_history"
+    },
+    {
+      "constraint_name": "proposed_administrative_code_history_pk",
+      "constraint_type": "PRIMARY KEY",
+      "table_name": "proposed_administrative_code_history"
+    },
+    {
+      "constraint_name": "proposed_administrative_code_history_recorded_interval_ck",
+      "constraint_type": "CHECK",
+      "table_name": "proposed_administrative_code_history"
+    },
+    {
+      "constraint_name": "proposed_administrative_code_history_source_id_fk",
+      "constraint_type": "FOREIGN KEY",
+      "table_name": "proposed_administrative_code_history"
+    },
+    {
+      "constraint_name": "proposed_administrative_unit_country_id_fk",
+      "constraint_type": "FOREIGN KEY",
+      "table_name": "proposed_administrative_unit"
+    },
+    {
+      "constraint_name": "proposed_administrative_unit_pk",
+      "constraint_type": "PRIMARY KEY",
+      "table_name": "proposed_administrative_unit"
+    },
+    {
+      "constraint_name": "proposed_administrative_unit_version_admin_level_vocab_fk",
+      "constraint_type": "FOREIGN KEY",
+      "table_name": "proposed_administrative_unit_version"
+    },
+    {
+      "constraint_name": "proposed_administrative_unit_version_administrative_unit_id_fk",
+      "constraint_type": "FOREIGN KEY",
+      "table_name": "proposed_administrative_unit_version"
+    },
+    {
+      "constraint_name": "proposed_administrative_unit_version_classification_vocab_fk",
+      "constraint_type": "FOREIGN KEY",
+      "table_name": "proposed_administrative_unit_version"
+    },
+    {
+      "constraint_name": "proposed_administrative_unit_version_effective_interval_ck",
+      "constraint_type": "CHECK",
+      "table_name": "proposed_administrative_unit_version"
+    },
+    {
+      "constraint_name": "proposed_administrative_unit_version_lifecycle_state_vocab_fk",
+      "constraint_type": "FOREIGN KEY",
+      "table_name": "proposed_administrative_unit_version"
+    },
+    {
+      "constraint_name": "proposed_administrative_unit_version_parent_administrative_unit",
+      "constraint_type": "FOREIGN KEY",
+      "table_name": "proposed_administrative_unit_version"
+    },
+    {
+      "constraint_name": "proposed_administrative_unit_version_pk",
+      "constraint_type": "PRIMARY KEY",
+      "table_name": "proposed_administrative_unit_version"
+    },
+    {
+      "constraint_name": "proposed_administrative_unit_version_source_authority_id_fk",
+      "constraint_type": "FOREIGN KEY",
+      "table_name": "proposed_administrative_unit_version"
+    },
+    {
+      "constraint_name": "proposed_building_effective_interval_ck",
+      "constraint_type": "CHECK",
+      "table_name": "proposed_building"
+    },
+    {
+      "constraint_name": "proposed_building_lifecycle_state_vocab_fk",
+      "constraint_type": "FOREIGN KEY",
+      "table_name": "proposed_building"
+    },
+    {
+      "constraint_name": "proposed_building_pk",
+      "constraint_type": "PRIMARY KEY",
+      "table_name": "proposed_building"
+    },
+    {
+      "constraint_name": "proposed_building_source_authority_id_fk",
+      "constraint_type": "FOREIGN KEY",
+      "table_name": "proposed_building"
+    },
+    {
+      "constraint_name": "proposed_building_primary_entrance_building_id_fk",
+      "constraint_type": "FOREIGN KEY",
+      "table_name": "proposed_building_primary_entrance"
+    },
+    {
+      "constraint_name": "proposed_building_primary_entrance_effective_interval_ck",
+      "constraint_type": "CHECK",
+      "table_name": "proposed_building_primary_entrance"
+    },
+    {
+      "constraint_name": "proposed_building_primary_entrance_entrance_id_fk",
+      "constraint_type": "FOREIGN KEY",
+      "table_name": "proposed_building_primary_entrance"
+    },
+    {
+      "constraint_name": "proposed_building_primary_entrance_pk",
+      "constraint_type": "PRIMARY KEY",
+      "table_name": "proposed_building_primary_entrance"
+    },
+    {
+      "constraint_name": "proposed_correction_case_case_state_vocab_fk",
+      "constraint_type": "FOREIGN KEY",
+      "table_name": "proposed_correction_case"
+    },
+    {
+      "constraint_name": "proposed_correction_case_correction_type_vocab_fk",
+      "constraint_type": "FOREIGN KEY",
+      "table_name": "proposed_correction_case"
+    },
+    {
+      "constraint_name": "proposed_correction_case_pk",
+      "constraint_type": "PRIMARY KEY",
+      "table_name": "proposed_correction_case"
+    },
+    {
+      "constraint_name": "proposed_correction_case_resolution_event_id_fk",
+      "constraint_type": "FOREIGN KEY",
+      "table_name": "proposed_correction_case"
+    },
+    {
+      "constraint_name": "proposed_correction_case_target_location_record_id_fk",
+      "constraint_type": "FOREIGN KEY",
+      "table_name": "proposed_correction_case"
+    },
+    {
+      "constraint_name": "proposed_country_lifecycle_state_vocab_fk",
+      "constraint_type": "FOREIGN KEY",
+      "table_name": "proposed_country"
+    },
+    {
+      "constraint_name": "proposed_country_pk",
+      "constraint_type": "PRIMARY KEY",
+      "table_name": "proposed_country"
+    },
+    {
+      "constraint_name": "proposed_country_source_authority_id_fk",
+      "constraint_type": "FOREIGN KEY",
+      "table_name": "proposed_country"
+    },
+    {
+      "constraint_name": "proposed_decision_event_authority_id_fk",
+      "constraint_type": "FOREIGN KEY",
+      "table_name": "proposed_decision_event"
+    },
+    {
+      "constraint_name": "proposed_decision_event_decision_type_vocab_fk",
+      "constraint_type": "FOREIGN KEY",
+      "table_name": "proposed_decision_event"
+    },
+    {
+      "constraint_name": "proposed_decision_event_pk",
+      "constraint_type": "PRIMARY KEY",
+      "table_name": "proposed_decision_event"
+    },
+    {
+      "constraint_name": "proposed_dispute_case_case_state_vocab_fk",
+      "constraint_type": "FOREIGN KEY",
+      "table_name": "proposed_dispute_case"
+    },
+    {
+      "constraint_name": "proposed_dispute_case_dispute_type_vocab_fk",
+      "constraint_type": "FOREIGN KEY",
+      "table_name": "proposed_dispute_case"
+    },
+    {
+      "constraint_name": "proposed_dispute_case_pk",
+      "constraint_type": "PRIMARY KEY",
+      "table_name": "proposed_dispute_case"
+    },
+    {
+      "constraint_name": "proposed_dispute_case_resolution_event_id_fk",
+      "constraint_type": "FOREIGN KEY",
+      "table_name": "proposed_dispute_case"
+    },
+    {
+      "constraint_name": "proposed_dispute_case_subject_id_fk",
+      "constraint_type": "FOREIGN KEY",
+      "table_name": "proposed_dispute_case"
+    },
+    {
+      "constraint_name": "proposed_entrance_building_id_fk",
+      "constraint_type": "FOREIGN KEY",
+      "table_name": "proposed_entrance"
+    },
+    {
+      "constraint_name": "proposed_entrance_effective_interval_ck",
+      "constraint_type": "CHECK",
+      "table_name": "proposed_entrance"
+    },
+    {
+      "constraint_name": "proposed_entrance_entrance_role_vocab_fk",
+      "constraint_type": "FOREIGN KEY",
+      "table_name": "proposed_entrance"
+    },
+    {
+      "constraint_name": "proposed_entrance_lifecycle_state_vocab_fk",
+      "constraint_type": "FOREIGN KEY",
+      "table_name": "proposed_entrance"
+    },
+    {
+      "constraint_name": "proposed_entrance_pk",
+      "constraint_type": "PRIMARY KEY",
+      "table_name": "proposed_entrance"
+    },
+    {
+      "constraint_name": "proposed_evidence_object_classification_vocab_fk",
+      "constraint_type": "FOREIGN KEY",
+      "table_name": "proposed_evidence_object"
+    },
+    {
+      "constraint_name": "proposed_evidence_object_pk",
+      "constraint_type": "PRIMARY KEY",
+      "table_name": "proposed_evidence_object"
+    },
+    {
+      "constraint_name": "proposed_evidence_object_retention_state_vocab_fk",
+      "constraint_type": "FOREIGN KEY",
+      "table_name": "proposed_evidence_object"
+    },
+    {
+      "constraint_name": "proposed_evidence_object_source_record_id_fk",
+      "constraint_type": "FOREIGN KEY",
+      "table_name": "proposed_evidence_object"
+    },
+    {
+      "constraint_name": "proposed_field_assignment_assignment_state_vocab_fk",
+      "constraint_type": "FOREIGN KEY",
+      "table_name": "proposed_field_assignment"
+    },
+    {
+      "constraint_name": "proposed_field_assignment_operational_area_id_fk",
+      "constraint_type": "FOREIGN KEY",
+      "table_name": "proposed_field_assignment"
+    },
+    {
+      "constraint_name": "proposed_field_assignment_pk",
+      "constraint_type": "PRIMARY KEY",
+      "table_name": "proposed_field_assignment"
+    },
+    {
+      "constraint_name": "proposed_field_observation_assignment_id_fk",
+      "constraint_type": "FOREIGN KEY",
+      "table_name": "proposed_field_observation"
+    },
+    {
+      "constraint_name": "proposed_field_observation_geometry_observation_id_fk",
+      "constraint_type": "FOREIGN KEY",
+      "table_name": "proposed_field_observation"
+    },
+    {
+      "constraint_name": "proposed_field_observation_intake_case_id_fk",
+      "constraint_type": "FOREIGN KEY",
+      "table_name": "proposed_field_observation"
+    },
+    {
+      "constraint_name": "proposed_field_observation_notes_classification_vocab_fk",
+      "constraint_type": "FOREIGN KEY",
+      "table_name": "proposed_field_observation"
+    },
+    {
+      "constraint_name": "proposed_field_observation_pk",
+      "constraint_type": "PRIMARY KEY",
+      "table_name": "proposed_field_observation"
+    },
+    {
+      "constraint_name": "proposed_field_observation_source_record_id_fk",
+      "constraint_type": "FOREIGN KEY",
+      "table_name": "proposed_field_observation"
+    },
+    {
+      "constraint_name": "proposed_field_observation_verification_state_vocab_fk",
+      "constraint_type": "FOREIGN KEY",
+      "table_name": "proposed_field_observation"
+    },
+    {
+      "constraint_name": "proposed_geometry_observation_capture_method_vocab_fk",
+      "constraint_type": "FOREIGN KEY",
+      "table_name": "proposed_geometry_observation"
+    },
+    {
+      "constraint_name": "proposed_geometry_observation_classification_vocab_fk",
+      "constraint_type": "FOREIGN KEY",
+      "table_name": "proposed_geometry_observation"
+    },
+    {
+      "constraint_name": "proposed_geometry_observation_evidence_object_id_fk",
+      "constraint_type": "FOREIGN KEY",
+      "table_name": "proposed_geometry_observation"
+    },
+    {
+      "constraint_name": "proposed_geometry_observation_geometry_role_vocab_fk",
+      "constraint_type": "FOREIGN KEY",
+      "table_name": "proposed_geometry_observation"
+    },
+    {
+      "constraint_name": "proposed_geometry_observation_licence_id_fk",
+      "constraint_type": "FOREIGN KEY",
+      "table_name": "proposed_geometry_observation"
+    },
+    {
+      "constraint_name": "proposed_geometry_observation_observed_geom_valid_ck",
+      "constraint_type": "CHECK",
+      "table_name": "proposed_geometry_observation"
+    },
+    {
+      "constraint_name": "proposed_geometry_observation_pk",
+      "constraint_type": "PRIMARY KEY",
+      "table_name": "proposed_geometry_observation"
+    },
+    {
+      "constraint_name": "proposed_geometry_observation_source_record_id_fk",
+      "constraint_type": "FOREIGN KEY",
+      "table_name": "proposed_geometry_observation"
+    },
+    {
+      "constraint_name": "proposed_geometry_observation_subject_id_fk",
+      "constraint_type": "FOREIGN KEY",
+      "table_name": "proposed_geometry_observation"
+    },
+    {
+      "constraint_name": "proposed_geometry_quality_assessment_check_result_vocab_fk",
+      "constraint_type": "FOREIGN KEY",
+      "table_name": "proposed_geometry_quality_assessment"
+    },
+    {
+      "constraint_name": "proposed_geometry_quality_assessment_geometry_version_id_fk",
+      "constraint_type": "FOREIGN KEY",
+      "table_name": "proposed_geometry_quality_assessment"
+    },
+    {
+      "constraint_name": "proposed_geometry_quality_assessment_pk",
+      "constraint_type": "PRIMARY KEY",
+      "table_name": "proposed_geometry_quality_assessment"
+    },
+    {
+      "constraint_name": "proposed_geometry_transformation_pk",
+      "constraint_type": "PRIMARY KEY",
+      "table_name": "proposed_geometry_transformation"
+    },
+    {
+      "constraint_name": "proposed_geometry_version_classification_vocab_fk",
+      "constraint_type": "FOREIGN KEY",
+      "table_name": "proposed_geometry_version"
+    },
+    {
+      "constraint_name": "proposed_geometry_version_dispute_case_id_fk",
+      "constraint_type": "FOREIGN KEY",
+      "table_name": "proposed_geometry_version"
+    },
+    {
+      "constraint_name": "proposed_geometry_version_effective_interval_ck",
+      "constraint_type": "CHECK",
+      "table_name": "proposed_geometry_version"
+    },
+    {
+      "constraint_name": "proposed_geometry_version_geom_valid_ck",
+      "constraint_type": "CHECK",
+      "table_name": "proposed_geometry_version"
+    },
+    {
+      "constraint_name": "proposed_geometry_version_geometry_role_vocab_fk",
+      "constraint_type": "FOREIGN KEY",
+      "table_name": "proposed_geometry_version"
+    },
+    {
+      "constraint_name": "proposed_geometry_version_pk",
+      "constraint_type": "PRIMARY KEY",
+      "table_name": "proposed_geometry_version"
+    },
+    {
+      "constraint_name": "proposed_geometry_version_quality_state_vocab_fk",
+      "constraint_type": "FOREIGN KEY",
+      "table_name": "proposed_geometry_version"
+    },
+    {
+      "constraint_name": "proposed_geometry_version_source_observation_id_fk",
+      "constraint_type": "FOREIGN KEY",
+      "table_name": "proposed_geometry_version"
+    },
+    {
+      "constraint_name": "proposed_geometry_version_subject_id_fk",
+      "constraint_type": "FOREIGN KEY",
+      "table_name": "proposed_geometry_version"
+    },
+    {
+      "constraint_name": "proposed_geometry_version_superseded_by_geometry_version_id_fk",
+      "constraint_type": "FOREIGN KEY",
+      "table_name": "proposed_geometry_version"
+    },
+    {
+      "constraint_name": "proposed_geometry_version_transformation_id_fk",
+      "constraint_type": "FOREIGN KEY",
+      "table_name": "proposed_geometry_version"
+    },
+    {
+      "constraint_name": "proposed_intake_case_intake_state_vocab_fk",
+      "constraint_type": "FOREIGN KEY",
+      "table_name": "proposed_intake_case"
+    },
+    {
+      "constraint_name": "proposed_intake_case_pk",
+      "constraint_type": "PRIMARY KEY",
+      "table_name": "proposed_intake_case"
+    },
+    {
+      "constraint_name": "proposed_intake_case_source_record_id_fk",
+      "constraint_type": "FOREIGN KEY",
+      "table_name": "proposed_intake_case"
+    },
+    {
+      "constraint_name": "proposed_landmark_effective_interval_ck",
+      "constraint_type": "CHECK",
+      "table_name": "proposed_landmark"
+    },
+    {
+      "constraint_name": "proposed_landmark_landmark_type_vocab_fk",
+      "constraint_type": "FOREIGN KEY",
+      "table_name": "proposed_landmark"
+    },
+    {
+      "constraint_name": "proposed_landmark_lifecycle_state_vocab_fk",
+      "constraint_type": "FOREIGN KEY",
+      "table_name": "proposed_landmark"
+    },
+    {
+      "constraint_name": "proposed_landmark_pk",
+      "constraint_type": "PRIMARY KEY",
+      "table_name": "proposed_landmark"
+    },
+    {
+      "constraint_name": "proposed_landmark_source_authority_id_fk",
+      "constraint_type": "FOREIGN KEY",
+      "table_name": "proposed_landmark"
+    },
+    {
+      "constraint_name": "proposed_legacy_crosswalk_pk",
+      "constraint_type": "PRIMARY KEY",
+      "table_name": "proposed_legacy_crosswalk"
+    },
+    {
+      "constraint_name": "proposed_licence_classification_vocab_fk",
+      "constraint_type": "FOREIGN KEY",
+      "table_name": "proposed_licence"
+    },
+    {
+      "constraint_name": "proposed_licence_pk",
+      "constraint_type": "PRIMARY KEY",
+      "table_name": "proposed_licence"
+    },
+    {
+      "constraint_name": "proposed_locality_administrative_unit_id_fk",
+      "constraint_type": "FOREIGN KEY",
+      "table_name": "proposed_locality"
+    },
+    {
+      "constraint_name": "proposed_locality_effective_interval_ck",
+      "constraint_type": "CHECK",
+      "table_name": "proposed_locality"
+    },
+    {
+      "constraint_name": "proposed_locality_lifecycle_state_vocab_fk",
+      "constraint_type": "FOREIGN KEY",
+      "table_name": "proposed_locality"
+    },
+    {
+      "constraint_name": "proposed_locality_locality_type_vocab_fk",
+      "constraint_type": "FOREIGN KEY",
+      "table_name": "proposed_locality"
+    },
+    {
+      "constraint_name": "proposed_locality_pk",
+      "constraint_type": "PRIMARY KEY",
+      "table_name": "proposed_locality"
+    },
+    {
+      "constraint_name": "proposed_locality_source_authority_id_fk",
+      "constraint_type": "FOREIGN KEY",
+      "table_name": "proposed_locality"
+    },
+    {
+      "constraint_name": "proposed_location_record_classification_vocab_fk",
+      "constraint_type": "FOREIGN KEY",
+      "table_name": "proposed_location_record"
+    },
+    {
+      "constraint_name": "proposed_location_record_pk",
+      "constraint_type": "PRIMARY KEY",
+      "table_name": "proposed_location_record"
+    },
+    {
+      "constraint_name": "proposed_location_record_record_type_vocab_fk",
+      "constraint_type": "FOREIGN KEY",
+      "table_name": "proposed_location_record"
+    },
+    {
+      "constraint_name": "proposed_location_record_assertion_classification_vocab_fk",
+      "constraint_type": "FOREIGN KEY",
+      "table_name": "proposed_location_record_assertion"
+    },
+    {
+      "constraint_name": "proposed_location_record_assertion_decision_event_id_fk",
+      "constraint_type": "FOREIGN KEY",
+      "table_name": "proposed_location_record_assertion"
+    },
+    {
+      "constraint_name": "proposed_location_record_assertion_evidence_object_id_fk",
+      "constraint_type": "FOREIGN KEY",
+      "table_name": "proposed_location_record_assertion"
+    },
+    {
+      "constraint_name": "proposed_location_record_assertion_location_record_version_id_f",
+      "constraint_type": "FOREIGN KEY",
+      "table_name": "proposed_location_record_assertion"
+    },
+    {
+      "constraint_name": "proposed_location_record_assertion_pk",
+      "constraint_type": "PRIMARY KEY",
+      "table_name": "proposed_location_record_assertion"
+    },
+    {
+      "constraint_name": "proposed_location_record_assertion_source_record_id_fk",
+      "constraint_type": "FOREIGN KEY",
+      "table_name": "proposed_location_record_assertion"
+    },
+    {
+      "constraint_name": "proposed_location_record_object_link_effective_interval_ck",
+      "constraint_type": "CHECK",
+      "table_name": "proposed_location_record_object_link"
+    },
+    {
+      "constraint_name": "proposed_location_record_object_link_location_record_version_id",
+      "constraint_type": "FOREIGN KEY",
+      "table_name": "proposed_location_record_object_link"
+    },
+    {
+      "constraint_name": "proposed_location_record_object_link_object_role_vocab_fk",
+      "constraint_type": "FOREIGN KEY",
+      "table_name": "proposed_location_record_object_link"
+    },
+    {
+      "constraint_name": "proposed_location_record_object_link_pk",
+      "constraint_type": "PRIMARY KEY",
+      "table_name": "proposed_location_record_object_link"
+    },
+    {
+      "constraint_name": "proposed_location_record_object_link_subject_id_fk",
+      "constraint_type": "FOREIGN KEY",
+      "table_name": "proposed_location_record_object_link"
+    },
+    {
+      "constraint_name": "proposed_object_link_interval_ck",
+      "constraint_type": "CHECK",
+      "table_name": "proposed_location_record_object_link"
+    },
+    {
+      "constraint_name": "proposed_location_record_relationship_effective_interval_ck",
+      "constraint_type": "CHECK",
+      "table_name": "proposed_location_record_relationship"
+    },
+    {
+      "constraint_name": "proposed_location_record_relationship_from_location_record_id_f",
+      "constraint_type": "FOREIGN KEY",
+      "table_name": "proposed_location_record_relationship"
+    },
+    {
+      "constraint_name": "proposed_location_record_relationship_pk",
+      "constraint_type": "PRIMARY KEY",
+      "table_name": "proposed_location_record_relationship"
+    },
+    {
+      "constraint_name": "proposed_location_record_relationship_relationship_type_vocab_f",
+      "constraint_type": "FOREIGN KEY",
+      "table_name": "proposed_location_record_relationship"
+    },
+    {
+      "constraint_name": "proposed_location_record_relationship_source_decision_event_id_",
+      "constraint_type": "FOREIGN KEY",
+      "table_name": "proposed_location_record_relationship"
+    },
+    {
+      "constraint_name": "proposed_location_record_relationship_to_location_record_id_fk",
+      "constraint_type": "FOREIGN KEY",
+      "table_name": "proposed_location_record_relationship"
+    },
+    {
+      "constraint_name": "proposed_location_record_version_administrative_unit_version_id",
+      "constraint_type": "FOREIGN KEY",
+      "table_name": "proposed_location_record_version"
+    },
+    {
+      "constraint_name": "proposed_location_record_version_correction_case_id_fk",
+      "constraint_type": "FOREIGN KEY",
+      "table_name": "proposed_location_record_version"
+    },
+    {
+      "constraint_name": "proposed_location_record_version_effective_interval_ck",
+      "constraint_type": "CHECK",
+      "table_name": "proposed_location_record_version"
+    },
+    {
+      "constraint_name": "proposed_location_record_version_lifecycle_state_vocab_fk",
+      "constraint_type": "FOREIGN KEY",
+      "table_name": "proposed_location_record_version"
+    },
+    {
+      "constraint_name": "proposed_location_record_version_locality_id_fk",
+      "constraint_type": "FOREIGN KEY",
+      "table_name": "proposed_location_record_version"
+    },
+    {
+      "constraint_name": "proposed_location_record_version_location_record_id_fk",
+      "constraint_type": "FOREIGN KEY",
+      "table_name": "proposed_location_record_version"
+    },
+    {
+      "constraint_name": "proposed_location_record_version_pk",
+      "constraint_type": "PRIMARY KEY",
+      "table_name": "proposed_location_record_version"
+    },
+    {
+      "constraint_name": "proposed_location_record_version_predecessor_version_id_fk",
+      "constraint_type": "FOREIGN KEY",
+      "table_name": "proposed_location_record_version"
+    },
+    {
+      "constraint_name": "proposed_location_record_version_source_decision_event_id_fk",
+      "constraint_type": "FOREIGN KEY",
+      "table_name": "proposed_location_record_version"
+    },
+    {
+      "constraint_name": "proposed_location_record_version_successor_version_id_fk",
+      "constraint_type": "FOREIGN KEY",
+      "table_name": "proposed_location_record_version"
+    },
+    {
+      "constraint_name": "proposed_migration_exception_pk",
+      "constraint_type": "PRIMARY KEY",
+      "table_name": "proposed_migration_exception"
+    },
+    {
+      "constraint_name": "proposed_name_record_effective_interval_ck",
+      "constraint_type": "CHECK",
+      "table_name": "proposed_name_record"
+    },
+    {
+      "constraint_name": "proposed_name_record_name_kind_vocab_fk",
+      "constraint_type": "FOREIGN KEY",
+      "table_name": "proposed_name_record"
+    },
+    {
+      "constraint_name": "proposed_name_record_name_status_vocab_fk",
+      "constraint_type": "FOREIGN KEY",
+      "table_name": "proposed_name_record"
+    },
+    {
+      "constraint_name": "proposed_name_record_pk",
+      "constraint_type": "PRIMARY KEY",
+      "table_name": "proposed_name_record"
+    },
+    {
+      "constraint_name": "proposed_name_record_source_record_id_fk",
+      "constraint_type": "FOREIGN KEY",
+      "table_name": "proposed_name_record"
+    },
+    {
+      "constraint_name": "proposed_name_record_subject_id_fk",
+      "constraint_type": "FOREIGN KEY",
+      "table_name": "proposed_name_record"
+    },
+    {
+      "constraint_name": "proposed_non_building_object_effective_interval_ck",
+      "constraint_type": "CHECK",
+      "table_name": "proposed_non_building_object"
+    },
+    {
+      "constraint_name": "proposed_non_building_object_lifecycle_state_vocab_fk",
+      "constraint_type": "FOREIGN KEY",
+      "table_name": "proposed_non_building_object"
+    },
+    {
+      "constraint_name": "proposed_non_building_object_object_type_vocab_fk",
+      "constraint_type": "FOREIGN KEY",
+      "table_name": "proposed_non_building_object"
+    },
+    {
+      "constraint_name": "proposed_non_building_object_pk",
+      "constraint_type": "PRIMARY KEY",
+      "table_name": "proposed_non_building_object"
+    },
+    {
+      "constraint_name": "proposed_non_building_object_source_authority_id_fk",
+      "constraint_type": "FOREIGN KEY",
+      "table_name": "proposed_non_building_object"
+    },
+    {
+      "constraint_name": "proposed_operational_area_area_type_vocab_fk",
+      "constraint_type": "FOREIGN KEY",
+      "table_name": "proposed_operational_area"
+    },
+    {
+      "constraint_name": "proposed_operational_area_classification_vocab_fk",
+      "constraint_type": "FOREIGN KEY",
+      "table_name": "proposed_operational_area"
+    },
+    {
+      "constraint_name": "proposed_operational_area_effective_interval_ck",
+      "constraint_type": "CHECK",
+      "table_name": "proposed_operational_area"
+    },
+    {
+      "constraint_name": "proposed_operational_area_lifecycle_state_vocab_fk",
+      "constraint_type": "FOREIGN KEY",
+      "table_name": "proposed_operational_area"
+    },
+    {
+      "constraint_name": "proposed_operational_area_name_record_id_fk",
+      "constraint_type": "FOREIGN KEY",
+      "table_name": "proposed_operational_area"
+    },
+    {
+      "constraint_name": "proposed_operational_area_pk",
+      "constraint_type": "PRIMARY KEY",
+      "table_name": "proposed_operational_area"
+    },
+    {
+      "constraint_name": "proposed_operational_area_coverage_administrative_unit_id_fk",
+      "constraint_type": "FOREIGN KEY",
+      "table_name": "proposed_operational_area_coverage"
+    },
+    {
+      "constraint_name": "proposed_operational_area_coverage_coverage_role_vocab_fk",
+      "constraint_type": "FOREIGN KEY",
+      "table_name": "proposed_operational_area_coverage"
+    },
+    {
+      "constraint_name": "proposed_operational_area_coverage_effective_interval_ck",
+      "constraint_type": "CHECK",
+      "table_name": "proposed_operational_area_coverage"
+    },
+    {
+      "constraint_name": "proposed_operational_area_coverage_geometry_version_id_fk",
+      "constraint_type": "FOREIGN KEY",
+      "table_name": "proposed_operational_area_coverage"
+    },
+    {
+      "constraint_name": "proposed_operational_area_coverage_operational_area_id_fk",
+      "constraint_type": "FOREIGN KEY",
+      "table_name": "proposed_operational_area_coverage"
+    },
+    {
+      "constraint_name": "proposed_operational_area_coverage_pk",
+      "constraint_type": "PRIMARY KEY",
+      "table_name": "proposed_operational_area_coverage"
+    },
+    {
+      "constraint_name": "proposed_parcel_reference_classification_vocab_fk",
+      "constraint_type": "FOREIGN KEY",
+      "table_name": "proposed_parcel_reference"
+    },
+    {
+      "constraint_name": "proposed_parcel_reference_effective_interval_ck",
+      "constraint_type": "CHECK",
+      "table_name": "proposed_parcel_reference"
+    },
+    {
+      "constraint_name": "proposed_parcel_reference_pk",
+      "constraint_type": "PRIMARY KEY",
+      "table_name": "proposed_parcel_reference"
+    },
+    {
+      "constraint_name": "proposed_parcel_reference_source_authority_id_fk",
+      "constraint_type": "FOREIGN KEY",
+      "table_name": "proposed_parcel_reference"
+    },
+    {
+      "constraint_name": "proposed_partner_projection_classification_vocab_fk",
+      "constraint_type": "FOREIGN KEY",
+      "table_name": "proposed_partner_projection"
+    },
+    {
+      "constraint_name": "proposed_partner_projection_pk",
+      "constraint_type": "PRIMARY KEY",
+      "table_name": "proposed_partner_projection"
+    },
+    {
+      "constraint_name": "proposed_partner_projection_publication_release_item_id_fk",
+      "constraint_type": "FOREIGN KEY",
+      "table_name": "proposed_partner_projection"
+    },
+    {
+      "constraint_name": "proposed_public_code_alias_code_state_vocab_fk",
+      "constraint_type": "FOREIGN KEY",
+      "table_name": "proposed_public_code_alias"
+    },
+    {
+      "constraint_name": "proposed_public_code_alias_location_record_id_fk",
+      "constraint_type": "FOREIGN KEY",
+      "table_name": "proposed_public_code_alias"
+    },
+    {
+      "constraint_name": "proposed_public_code_alias_pk",
+      "constraint_type": "PRIMARY KEY",
+      "table_name": "proposed_public_code_alias"
+    },
+    {
+      "constraint_name": "proposed_public_code_alias_predecessor_alias_id_fk",
+      "constraint_type": "FOREIGN KEY",
+      "table_name": "proposed_public_code_alias"
+    },
+    {
+      "constraint_name": "proposed_public_code_alias_successor_alias_id_fk",
+      "constraint_type": "FOREIGN KEY",
+      "table_name": "proposed_public_code_alias"
+    },
+    {
+      "constraint_name": "proposed_publication_release_pk",
+      "constraint_type": "PRIMARY KEY",
+      "table_name": "proposed_publication_release"
+    },
+    {
+      "constraint_name": "proposed_publication_release_projection_type_vocab_fk",
+      "constraint_type": "FOREIGN KEY",
+      "table_name": "proposed_publication_release"
+    },
+    {
+      "constraint_name": "proposed_publication_release_release_state_vocab_fk",
+      "constraint_type": "FOREIGN KEY",
+      "table_name": "proposed_publication_release"
+    },
+    {
+      "constraint_name": "proposed_publication_release_item_location_record_id_fk",
+      "constraint_type": "FOREIGN KEY",
+      "table_name": "proposed_publication_release_item"
+    },
+    {
+      "constraint_name": "proposed_publication_release_item_location_record_version_id_fk",
+      "constraint_type": "FOREIGN KEY",
+      "table_name": "proposed_publication_release_item"
+    },
+    {
+      "constraint_name": "proposed_publication_release_item_pk",
+      "constraint_type": "PRIMARY KEY",
+      "table_name": "proposed_publication_release_item"
+    },
+    {
+      "constraint_name": "proposed_publication_release_item_projection_state_vocab_fk",
+      "constraint_type": "FOREIGN KEY",
+      "table_name": "proposed_publication_release_item"
+    },
+    {
+      "constraint_name": "proposed_publication_release_item_public_code_alias_id_fk",
+      "constraint_type": "FOREIGN KEY",
+      "table_name": "proposed_publication_release_item"
+    },
+    {
+      "constraint_name": "proposed_publication_release_item_publication_release_id_fk",
+      "constraint_type": "FOREIGN KEY",
+      "table_name": "proposed_publication_release_item"
+    },
+    {
+      "constraint_name": "proposed_registry_subject_delete_policy_vocab_fk",
+      "constraint_type": "FOREIGN KEY",
+      "table_name": "proposed_registry_subject"
+    },
+    {
+      "constraint_name": "proposed_registry_subject_pk",
+      "constraint_type": "PRIMARY KEY",
+      "table_name": "proposed_registry_subject"
+    },
+    {
+      "constraint_name": "proposed_registry_subject_subject_state_vocab_fk",
+      "constraint_type": "FOREIGN KEY",
+      "table_name": "proposed_registry_subject"
+    },
+    {
+      "constraint_name": "proposed_road_lifecycle_state_vocab_fk",
+      "constraint_type": "FOREIGN KEY",
+      "table_name": "proposed_road"
+    },
+    {
+      "constraint_name": "proposed_road_pk",
+      "constraint_type": "PRIMARY KEY",
+      "table_name": "proposed_road"
+    },
+    {
+      "constraint_name": "proposed_road_road_class_vocab_fk",
+      "constraint_type": "FOREIGN KEY",
+      "table_name": "proposed_road"
+    },
+    {
+      "constraint_name": "proposed_road_source_authority_id_fk",
+      "constraint_type": "FOREIGN KEY",
+      "table_name": "proposed_road"
+    },
+    {
+      "constraint_name": "proposed_road_segment_effective_interval_ck",
+      "constraint_type": "CHECK",
+      "table_name": "proposed_road_segment"
+    },
+    {
+      "constraint_name": "proposed_road_segment_lifecycle_state_vocab_fk",
+      "constraint_type": "FOREIGN KEY",
+      "table_name": "proposed_road_segment"
+    },
+    {
+      "constraint_name": "proposed_road_segment_pk",
+      "constraint_type": "PRIMARY KEY",
+      "table_name": "proposed_road_segment"
+    },
+    {
+      "constraint_name": "proposed_road_segment_road_id_fk",
+      "constraint_type": "FOREIGN KEY",
+      "table_name": "proposed_road_segment"
+    },
+    {
+      "constraint_name": "proposed_source_authority_authority_class_vocab_fk",
+      "constraint_type": "FOREIGN KEY",
+      "table_name": "proposed_source_authority"
+    },
+    {
+      "constraint_name": "proposed_source_authority_pk",
+      "constraint_type": "PRIMARY KEY",
+      "table_name": "proposed_source_authority"
+    },
+    {
+      "constraint_name": "proposed_source_authority_status_vocab_fk",
+      "constraint_type": "FOREIGN KEY",
+      "table_name": "proposed_source_authority"
+    },
+    {
+      "constraint_name": "proposed_source_package_licence_id_fk",
+      "constraint_type": "FOREIGN KEY",
+      "table_name": "proposed_source_package"
+    },
+    {
+      "constraint_name": "proposed_source_package_pk",
+      "constraint_type": "PRIMARY KEY",
+      "table_name": "proposed_source_package"
+    },
+    {
+      "constraint_name": "proposed_source_package_source_authority_id_fk",
+      "constraint_type": "FOREIGN KEY",
+      "table_name": "proposed_source_package"
+    },
+    {
+      "constraint_name": "proposed_source_payload_archive_classification_vocab_fk",
+      "constraint_type": "FOREIGN KEY",
+      "table_name": "proposed_source_payload_archive"
+    },
+    {
+      "constraint_name": "proposed_source_payload_archive_pk",
+      "constraint_type": "PRIMARY KEY",
+      "table_name": "proposed_source_payload_archive"
+    },
+    {
+      "constraint_name": "proposed_source_payload_archive_retention_state_vocab_fk",
+      "constraint_type": "FOREIGN KEY",
+      "table_name": "proposed_source_payload_archive"
+    },
+    {
+      "constraint_name": "proposed_source_payload_archive_source_record_id_fk",
+      "constraint_type": "FOREIGN KEY",
+      "table_name": "proposed_source_payload_archive"
+    },
+    {
+      "constraint_name": "proposed_source_record_pk",
+      "constraint_type": "PRIMARY KEY",
+      "table_name": "proposed_source_record"
+    },
+    {
+      "constraint_name": "proposed_source_record_raw_payload_classification_vocab_fk",
+      "constraint_type": "FOREIGN KEY",
+      "table_name": "proposed_source_record"
+    },
+    {
+      "constraint_name": "proposed_source_record_source_package_id_fk",
+      "constraint_type": "FOREIGN KEY",
+      "table_name": "proposed_source_record"
+    },
+    {
+      "constraint_name": "proposed_unit_building_id_fk",
+      "constraint_type": "FOREIGN KEY",
+      "table_name": "proposed_unit"
+    },
+    {
+      "constraint_name": "proposed_unit_classification_vocab_fk",
+      "constraint_type": "FOREIGN KEY",
+      "table_name": "proposed_unit"
+    },
+    {
+      "constraint_name": "proposed_unit_effective_interval_ck",
+      "constraint_type": "CHECK",
+      "table_name": "proposed_unit"
+    },
+    {
+      "constraint_name": "proposed_unit_lifecycle_state_vocab_fk",
+      "constraint_type": "FOREIGN KEY",
+      "table_name": "proposed_unit"
+    },
+    {
+      "constraint_name": "proposed_unit_parent_unit_id_fk",
+      "constraint_type": "FOREIGN KEY",
+      "table_name": "proposed_unit"
+    },
+    {
+      "constraint_name": "proposed_unit_pk",
+      "constraint_type": "PRIMARY KEY",
+      "table_name": "proposed_unit"
+    },
+    {
+      "constraint_name": "proposed_unit_unit_type_vocab_fk",
+      "constraint_type": "FOREIGN KEY",
+      "table_name": "proposed_unit"
+    },
+    {
+      "constraint_name": "record_object_role_matrix_pkey",
+      "constraint_type": "PRIMARY KEY",
+      "table_name": "record_object_role_matrix"
+    },
+    {
+      "constraint_name": "subject_entity_registry_pkey",
+      "constraint_type": "PRIMARY KEY",
+      "table_name": "subject_entity_registry"
+    },
+    {
+      "constraint_name": "vocab_admin_level_pkey",
+      "constraint_type": "PRIMARY KEY",
+      "table_name": "vocab_admin_level"
+    },
+    {
+      "constraint_name": "vocab_administrative_unit_lifecycle_pkey",
+      "constraint_type": "PRIMARY KEY",
+      "table_name": "vocab_administrative_unit_lifecycle"
+    },
+    {
+      "constraint_name": "vocab_building_lifecycle_pkey",
+      "constraint_type": "PRIMARY KEY",
+      "table_name": "vocab_building_lifecycle"
+    },
+    {
+      "constraint_name": "vocab_canonical_record_lifecycle_pkey",
+      "constraint_type": "PRIMARY KEY",
+      "table_name": "vocab_canonical_record_lifecycle"
+    },
+    {
+      "constraint_name": "vocab_capture_method_pkey",
+      "constraint_type": "PRIMARY KEY",
+      "table_name": "vocab_capture_method"
+    },
+    {
+      "constraint_name": "vocab_case_lifecycle_pkey",
+      "constraint_type": "PRIMARY KEY",
+      "table_name": "vocab_case_lifecycle"
+    },
+    {
+      "constraint_name": "vocab_case_state_pkey",
+      "constraint_type": "PRIMARY KEY",
+      "table_name": "vocab_case_state"
+    },
+    {
+      "constraint_name": "vocab_classification_pkey",
+      "constraint_type": "PRIMARY KEY",
+      "table_name": "vocab_classification"
+    },
+    {
+      "constraint_name": "vocab_correction_type_pkey",
+      "constraint_type": "PRIMARY KEY",
+      "table_name": "vocab_correction_type"
+    },
+    {
+      "constraint_name": "vocab_country_lifecycle_pkey",
+      "constraint_type": "PRIMARY KEY",
+      "table_name": "vocab_country_lifecycle"
+    },
+    {
+      "constraint_name": "vocab_coverage_role_pkey",
+      "constraint_type": "PRIMARY KEY",
+      "table_name": "vocab_coverage_role"
+    },
+    {
+      "constraint_name": "vocab_decision_type_pkey",
+      "constraint_type": "PRIMARY KEY",
+      "table_name": "vocab_decision_type"
+    },
+    {
+      "constraint_name": "vocab_delete_policy_pkey",
+      "constraint_type": "PRIMARY KEY",
+      "table_name": "vocab_delete_policy"
+    },
+    {
+      "constraint_name": "vocab_dispute_type_pkey",
+      "constraint_type": "PRIMARY KEY",
+      "table_name": "vocab_dispute_type"
+    },
+    {
+      "constraint_name": "vocab_entrance_lifecycle_pkey",
+      "constraint_type": "PRIMARY KEY",
+      "table_name": "vocab_entrance_lifecycle"
+    },
+    {
+      "constraint_name": "vocab_entrance_role_pkey",
+      "constraint_type": "PRIMARY KEY",
+      "table_name": "vocab_entrance_role"
+    },
+    {
+      "constraint_name": "vocab_field_verification_state_pkey",
+      "constraint_type": "PRIMARY KEY",
+      "table_name": "vocab_field_verification_state"
+    },
+    {
+      "constraint_name": "vocab_geometry_quality_state_pkey",
+      "constraint_type": "PRIMARY KEY",
+      "table_name": "vocab_geometry_quality_state"
+    },
+    {
+      "constraint_name": "vocab_geometry_role_pkey",
+      "constraint_type": "PRIMARY KEY",
+      "table_name": "vocab_geometry_role"
+    },
+    {
+      "constraint_name": "vocab_intake_state_pkey",
+      "constraint_type": "PRIMARY KEY",
+      "table_name": "vocab_intake_state"
+    },
+    {
+      "constraint_name": "vocab_landmark_lifecycle_pkey",
+      "constraint_type": "PRIMARY KEY",
+      "table_name": "vocab_landmark_lifecycle"
+    },
+    {
+      "constraint_name": "vocab_landmark_type_pkey",
+      "constraint_type": "PRIMARY KEY",
+      "table_name": "vocab_landmark_type"
+    },
+    {
+      "constraint_name": "vocab_lifecycle_state_pkey",
+      "constraint_type": "PRIMARY KEY",
+      "table_name": "vocab_lifecycle_state"
+    },
+    {
+      "constraint_name": "vocab_locality_lifecycle_pkey",
+      "constraint_type": "PRIMARY KEY",
+      "table_name": "vocab_locality_lifecycle"
+    },
+    {
+      "constraint_name": "vocab_locality_type_pkey",
+      "constraint_type": "PRIMARY KEY",
+      "table_name": "vocab_locality_type"
+    },
+    {
+      "constraint_name": "vocab_name_kind_pkey",
+      "constraint_type": "PRIMARY KEY",
+      "table_name": "vocab_name_kind"
+    },
+    {
+      "constraint_name": "vocab_name_lifecycle_pkey",
+      "constraint_type": "PRIMARY KEY",
+      "table_name": "vocab_name_lifecycle"
+    },
+    {
+      "constraint_name": "vocab_name_status_pkey",
+      "constraint_type": "PRIMARY KEY",
+      "table_name": "vocab_name_status"
+    },
+    {
+      "constraint_name": "vocab_non_building_object_lifecycle_pkey",
+      "constraint_type": "PRIMARY KEY",
+      "table_name": "vocab_non_building_object_lifecycle"
+    },
+    {
+      "constraint_name": "vocab_non_building_object_type_pkey",
+      "constraint_type": "PRIMARY KEY",
+      "table_name": "vocab_non_building_object_type"
+    },
+    {
+      "constraint_name": "vocab_object_role_pkey",
+      "constraint_type": "PRIMARY KEY",
+      "table_name": "vocab_object_role"
+    },
+    {
+      "constraint_name": "vocab_operational_area_lifecycle_pkey",
+      "constraint_type": "PRIMARY KEY",
+      "table_name": "vocab_operational_area_lifecycle"
+    },
+    {
+      "constraint_name": "vocab_operational_area_type_pkey",
+      "constraint_type": "PRIMARY KEY",
+      "table_name": "vocab_operational_area_type"
+    },
+    {
+      "constraint_name": "vocab_projection_type_pkey",
+      "constraint_type": "PRIMARY KEY",
+      "table_name": "vocab_projection_type"
+    },
+    {
+      "constraint_name": "vocab_public_code_state_pkey",
+      "constraint_type": "PRIMARY KEY",
+      "table_name": "vocab_public_code_state"
+    },
+    {
+      "constraint_name": "vocab_publication_item_state_pkey",
+      "constraint_type": "PRIMARY KEY",
+      "table_name": "vocab_publication_item_state"
+    },
+    {
+      "constraint_name": "vocab_publication_lifecycle_pkey",
+      "constraint_type": "PRIMARY KEY",
+      "table_name": "vocab_publication_lifecycle"
+    },
+    {
+      "constraint_name": "vocab_publication_release_state_pkey",
+      "constraint_type": "PRIMARY KEY",
+      "table_name": "vocab_publication_release_state"
+    },
+    {
+      "constraint_name": "vocab_quality_check_result_pkey",
+      "constraint_type": "PRIMARY KEY",
+      "table_name": "vocab_quality_check_result"
+    },
+    {
+      "constraint_name": "vocab_record_type_pkey",
+      "constraint_type": "PRIMARY KEY",
+      "table_name": "vocab_record_type"
+    },
+    {
+      "constraint_name": "vocab_reference_object_lifecycle_pkey",
+      "constraint_type": "PRIMARY KEY",
+      "table_name": "vocab_reference_object_lifecycle"
+    },
+    {
+      "constraint_name": "vocab_relationship_type_pkey",
+      "constraint_type": "PRIMARY KEY",
+      "table_name": "vocab_relationship_type"
+    },
+    {
+      "constraint_name": "vocab_retention_state_pkey",
+      "constraint_type": "PRIMARY KEY",
+      "table_name": "vocab_retention_state"
+    },
+    {
+      "constraint_name": "vocab_road_class_pkey",
+      "constraint_type": "PRIMARY KEY",
+      "table_name": "vocab_road_class"
+    },
+    {
+      "constraint_name": "vocab_road_lifecycle_pkey",
+      "constraint_type": "PRIMARY KEY",
+      "table_name": "vocab_road_lifecycle"
+    },
+    {
+      "constraint_name": "vocab_road_segment_lifecycle_pkey",
+      "constraint_type": "PRIMARY KEY",
+      "table_name": "vocab_road_segment_lifecycle"
+    },
+    {
+      "constraint_name": "vocab_source_authority_class_pkey",
+      "constraint_type": "PRIMARY KEY",
+      "table_name": "vocab_source_authority_class"
+    },
+    {
+      "constraint_name": "vocab_source_authority_lifecycle_pkey",
+      "constraint_type": "PRIMARY KEY",
+      "table_name": "vocab_source_authority_lifecycle"
+    },
+    {
+      "constraint_name": "vocab_subject_lifecycle_pkey",
+      "constraint_type": "PRIMARY KEY",
+      "table_name": "vocab_subject_lifecycle"
+    },
+    {
+      "constraint_name": "vocab_unit_lifecycle_pkey",
+      "constraint_type": "PRIMARY KEY",
+      "table_name": "vocab_unit_lifecycle"
+    },
+    {
+      "constraint_name": "vocab_unit_type_pkey",
+      "constraint_type": "PRIMARY KEY",
+      "table_name": "vocab_unit_type"
+    }
+  ],
+  "indexes": [
+    {
+      "indexdef": "CREATE UNIQUE INDEX geometry_role_matrix_pkey ON nli_wo002_target.geometry_role_matrix USING btree (geometry_role)",
+      "indexname": "geometry_role_matrix_pkey",
+      "tablename": "geometry_role_matrix"
+    },
+    {
+      "indexdef": "CREATE INDEX proposed_admin_code_history_effective_excl ON nli_wo002_target.proposed_administrative_code_history USING gist (administrative_unit_id, code_scheme, tstzrange(effective_from, COALESCE(effective_to, 'infinity'::timestamp with time zone), '[)'::text))",
+      "indexname": "proposed_admin_code_history_effective_excl",
+      "tablename": "proposed_administrative_code_history"
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX proposed_admin_code_history_one_current ON nli_wo002_target.proposed_administrative_code_history USING btree (administrative_unit_id, code_scheme) WHERE ((recorded_to IS NULL) AND (effective_to IS NULL))",
+      "indexname": "proposed_admin_code_history_one_current",
+      "tablename": "proposed_administrative_code_history"
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX proposed_administrative_code_history_pk ON nli_wo002_target.proposed_administrative_code_history USING btree (admin_code_history_id)",
+      "indexname": "proposed_administrative_code_history_pk",
+      "tablename": "proposed_administrative_code_history"
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX proposed_administrative_unit_pk ON nli_wo002_target.proposed_administrative_unit USING btree (administrative_unit_id)",
+      "indexname": "proposed_administrative_unit_pk",
+      "tablename": "proposed_administrative_unit"
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX proposed_administrative_unit_version_pk ON nli_wo002_target.proposed_administrative_unit_version USING btree (administrative_unit_version_id)",
+      "indexname": "proposed_administrative_unit_version_pk",
+      "tablename": "proposed_administrative_unit_version"
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX proposed_building_pk ON nli_wo002_target.proposed_building USING btree (building_id)",
+      "indexname": "proposed_building_pk",
+      "tablename": "proposed_building"
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX proposed_building_primary_entrance_pk ON nli_wo002_target.proposed_building_primary_entrance USING btree (building_primary_entrance_id)",
+      "indexname": "proposed_building_primary_entrance_pk",
+      "tablename": "proposed_building_primary_entrance"
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX proposed_correction_case_pk ON nli_wo002_target.proposed_correction_case USING btree (correction_case_id)",
+      "indexname": "proposed_correction_case_pk",
+      "tablename": "proposed_correction_case"
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX proposed_country_pk ON nli_wo002_target.proposed_country USING btree (country_id)",
+      "indexname": "proposed_country_pk",
+      "tablename": "proposed_country"
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX proposed_decision_event_pk ON nli_wo002_target.proposed_decision_event USING btree (decision_event_id)",
+      "indexname": "proposed_decision_event_pk",
+      "tablename": "proposed_decision_event"
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX proposed_dispute_case_pk ON nli_wo002_target.proposed_dispute_case USING btree (dispute_case_id)",
+      "indexname": "proposed_dispute_case_pk",
+      "tablename": "proposed_dispute_case"
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX proposed_entrance_pk ON nli_wo002_target.proposed_entrance USING btree (entrance_id)",
+      "indexname": "proposed_entrance_pk",
+      "tablename": "proposed_entrance"
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX proposed_evidence_object_pk ON nli_wo002_target.proposed_evidence_object USING btree (evidence_object_id)",
+      "indexname": "proposed_evidence_object_pk",
+      "tablename": "proposed_evidence_object"
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX proposed_field_assignment_pk ON nli_wo002_target.proposed_field_assignment USING btree (assignment_id)",
+      "indexname": "proposed_field_assignment_pk",
+      "tablename": "proposed_field_assignment"
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX proposed_field_observation_pk ON nli_wo002_target.proposed_field_observation USING btree (field_observation_id)",
+      "indexname": "proposed_field_observation_pk",
+      "tablename": "proposed_field_observation"
+    },
+    {
+      "indexdef": "CREATE INDEX proposed_geometry_observation_observed_geom_gist ON nli_wo002_target.proposed_geometry_observation USING gist (observed_geom)",
+      "indexname": "proposed_geometry_observation_observed_geom_gist",
+      "tablename": "proposed_geometry_observation"
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX proposed_geometry_observation_pk ON nli_wo002_target.proposed_geometry_observation USING btree (geometry_observation_id)",
+      "indexname": "proposed_geometry_observation_pk",
+      "tablename": "proposed_geometry_observation"
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX proposed_geometry_quality_assessment_pk ON nli_wo002_target.proposed_geometry_quality_assessment USING btree (quality_assessment_id)",
+      "indexname": "proposed_geometry_quality_assessment_pk",
+      "tablename": "proposed_geometry_quality_assessment"
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX proposed_geometry_transformation_pk ON nli_wo002_target.proposed_geometry_transformation USING btree (transformation_id)",
+      "indexname": "proposed_geometry_transformation_pk",
+      "tablename": "proposed_geometry_transformation"
+    },
+    {
+      "indexdef": "CREATE INDEX proposed_geometry_version_effective_excl ON nli_wo002_target.proposed_geometry_version USING gist (subject_id, geometry_role, tstzrange(effective_from, COALESCE(effective_to, 'infinity'::timestamp with time zone), '[)'::text))",
+      "indexname": "proposed_geometry_version_effective_excl",
+      "tablename": "proposed_geometry_version"
+    },
+    {
+      "indexdef": "CREATE INDEX proposed_geometry_version_geom_gist ON nli_wo002_target.proposed_geometry_version USING gist (geom)",
+      "indexname": "proposed_geometry_version_geom_gist",
+      "tablename": "proposed_geometry_version"
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX proposed_geometry_version_one_current ON nli_wo002_target.proposed_geometry_version USING btree (subject_id, geometry_role) WHERE (recorded_to IS NULL)",
+      "indexname": "proposed_geometry_version_one_current",
+      "tablename": "proposed_geometry_version"
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX proposed_geometry_version_pk ON nli_wo002_target.proposed_geometry_version USING btree (geometry_version_id)",
+      "indexname": "proposed_geometry_version_pk",
+      "tablename": "proposed_geometry_version"
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX proposed_intake_case_pk ON nli_wo002_target.proposed_intake_case USING btree (intake_case_id)",
+      "indexname": "proposed_intake_case_pk",
+      "tablename": "proposed_intake_case"
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX proposed_landmark_pk ON nli_wo002_target.proposed_landmark USING btree (landmark_id)",
+      "indexname": "proposed_landmark_pk",
+      "tablename": "proposed_landmark"
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX proposed_legacy_crosswalk_pk ON nli_wo002_target.proposed_legacy_crosswalk USING btree (legacy_crosswalk_id)",
+      "indexname": "proposed_legacy_crosswalk_pk",
+      "tablename": "proposed_legacy_crosswalk"
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX proposed_licence_pk ON nli_wo002_target.proposed_licence USING btree (licence_id)",
+      "indexname": "proposed_licence_pk",
+      "tablename": "proposed_licence"
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX proposed_locality_pk ON nli_wo002_target.proposed_locality USING btree (locality_id)",
+      "indexname": "proposed_locality_pk",
+      "tablename": "proposed_locality"
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX proposed_location_record_pk ON nli_wo002_target.proposed_location_record USING btree (location_record_id)",
+      "indexname": "proposed_location_record_pk",
+      "tablename": "proposed_location_record"
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX proposed_location_record_assertion_pk ON nli_wo002_target.proposed_location_record_assertion USING btree (assertion_id)",
+      "indexname": "proposed_location_record_assertion_pk",
+      "tablename": "proposed_location_record_assertion"
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX proposed_location_record_object_link_pk ON nli_wo002_target.proposed_location_record_object_link USING btree (link_id)",
+      "indexname": "proposed_location_record_object_link_pk",
+      "tablename": "proposed_location_record_object_link"
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX proposed_location_record_relationship_pk ON nli_wo002_target.proposed_location_record_relationship USING btree (relationship_id)",
+      "indexname": "proposed_location_record_relationship_pk",
+      "tablename": "proposed_location_record_relationship"
+    },
+    {
+      "indexdef": "CREATE INDEX proposed_location_record_version_effective_excl ON nli_wo002_target.proposed_location_record_version USING gist (location_record_id, tstzrange(effective_from, COALESCE(effective_to, 'infinity'::timestamp with time zone), '[)'::text))",
+      "indexname": "proposed_location_record_version_effective_excl",
+      "tablename": "proposed_location_record_version"
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX proposed_location_record_version_one_current ON nli_wo002_target.proposed_location_record_version USING btree (location_record_id) WHERE (recorded_to IS NULL)",
+      "indexname": "proposed_location_record_version_one_current",
+      "tablename": "proposed_location_record_version"
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX proposed_location_record_version_pk ON nli_wo002_target.proposed_location_record_version USING btree (location_record_version_id)",
+      "indexname": "proposed_location_record_version_pk",
+      "tablename": "proposed_location_record_version"
+    },
+    {
+      "indexdef": "CREATE INDEX proposed_location_record_version_recorded_excl ON nli_wo002_target.proposed_location_record_version USING gist (location_record_id, tstzrange(recorded_at, COALESCE(recorded_to, 'infinity'::timestamp with time zone), '[)'::text))",
+      "indexname": "proposed_location_record_version_recorded_excl",
+      "tablename": "proposed_location_record_version"
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX proposed_migration_exception_pk ON nli_wo002_target.proposed_migration_exception USING btree (migration_exception_id)",
+      "indexname": "proposed_migration_exception_pk",
+      "tablename": "proposed_migration_exception"
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX proposed_name_record_one_current_official ON nli_wo002_target.proposed_name_record USING btree (subject_id, language_code) WHERE ((name_kind ~~ 'official%'::text) AND (name_status = 'official-current'::text))",
+      "indexname": "proposed_name_record_one_current_official",
+      "tablename": "proposed_name_record"
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX proposed_name_record_pk ON nli_wo002_target.proposed_name_record USING btree (name_record_id)",
+      "indexname": "proposed_name_record_pk",
+      "tablename": "proposed_name_record"
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX proposed_non_building_object_pk ON nli_wo002_target.proposed_non_building_object USING btree (object_id)",
+      "indexname": "proposed_non_building_object_pk",
+      "tablename": "proposed_non_building_object"
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX proposed_operational_area_pk ON nli_wo002_target.proposed_operational_area USING btree (operational_area_id)",
+      "indexname": "proposed_operational_area_pk",
+      "tablename": "proposed_operational_area"
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX proposed_operational_area_coverage_pk ON nli_wo002_target.proposed_operational_area_coverage USING btree (coverage_id)",
+      "indexname": "proposed_operational_area_coverage_pk",
+      "tablename": "proposed_operational_area_coverage"
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX proposed_parcel_reference_pk ON nli_wo002_target.proposed_parcel_reference USING btree (parcel_reference_id)",
+      "indexname": "proposed_parcel_reference_pk",
+      "tablename": "proposed_parcel_reference"
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX proposed_partner_projection_pk ON nli_wo002_target.proposed_partner_projection USING btree (partner_projection_id)",
+      "indexname": "proposed_partner_projection_pk",
+      "tablename": "proposed_partner_projection"
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX proposed_public_code_alias_one_current ON nli_wo002_target.proposed_public_code_alias USING btree (location_record_id) WHERE ((successor_alias_id IS NULL) AND (code_state = 'active-public'::text))",
+      "indexname": "proposed_public_code_alias_one_current",
+      "tablename": "proposed_public_code_alias"
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX proposed_public_code_alias_pk ON nli_wo002_target.proposed_public_code_alias USING btree (public_code_alias_id)",
+      "indexname": "proposed_public_code_alias_pk",
+      "tablename": "proposed_public_code_alias"
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX proposed_publication_release_pk ON nli_wo002_target.proposed_publication_release USING btree (publication_release_id)",
+      "indexname": "proposed_publication_release_pk",
+      "tablename": "proposed_publication_release"
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX proposed_publication_release_item_pk ON nli_wo002_target.proposed_publication_release_item USING btree (publication_release_item_id)",
+      "indexname": "proposed_publication_release_item_pk",
+      "tablename": "proposed_publication_release_item"
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX proposed_registry_subject_pk ON nli_wo002_target.proposed_registry_subject USING btree (subject_id)",
+      "indexname": "proposed_registry_subject_pk",
+      "tablename": "proposed_registry_subject"
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX proposed_road_pk ON nli_wo002_target.proposed_road USING btree (road_id)",
+      "indexname": "proposed_road_pk",
+      "tablename": "proposed_road"
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX proposed_road_segment_pk ON nli_wo002_target.proposed_road_segment USING btree (road_segment_id)",
+      "indexname": "proposed_road_segment_pk",
+      "tablename": "proposed_road_segment"
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX proposed_source_authority_pk ON nli_wo002_target.proposed_source_authority USING btree (source_authority_id)",
+      "indexname": "proposed_source_authority_pk",
+      "tablename": "proposed_source_authority"
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX proposed_source_package_pk ON nli_wo002_target.proposed_source_package USING btree (source_package_id)",
+      "indexname": "proposed_source_package_pk",
+      "tablename": "proposed_source_package"
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX proposed_source_payload_archive_pk ON nli_wo002_target.proposed_source_payload_archive USING btree (archive_id)",
+      "indexname": "proposed_source_payload_archive_pk",
+      "tablename": "proposed_source_payload_archive"
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX proposed_source_record_pk ON nli_wo002_target.proposed_source_record USING btree (source_record_id)",
+      "indexname": "proposed_source_record_pk",
+      "tablename": "proposed_source_record"
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX proposed_unit_pk ON nli_wo002_target.proposed_unit USING btree (unit_id)",
+      "indexname": "proposed_unit_pk",
+      "tablename": "proposed_unit"
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX record_object_role_matrix_pkey ON nli_wo002_target.record_object_role_matrix USING btree (record_type, object_role)",
+      "indexname": "record_object_role_matrix_pkey",
+      "tablename": "record_object_role_matrix"
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX subject_entity_registry_pkey ON nli_wo002_target.subject_entity_registry USING btree (entity_name)",
+      "indexname": "subject_entity_registry_pkey",
+      "tablename": "subject_entity_registry"
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX vocab_admin_level_pkey ON nli_wo002_target.vocab_admin_level USING btree (value)",
+      "indexname": "vocab_admin_level_pkey",
+      "tablename": "vocab_admin_level"
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX vocab_administrative_unit_lifecycle_pkey ON nli_wo002_target.vocab_administrative_unit_lifecycle USING btree (value)",
+      "indexname": "vocab_administrative_unit_lifecycle_pkey",
+      "tablename": "vocab_administrative_unit_lifecycle"
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX vocab_building_lifecycle_pkey ON nli_wo002_target.vocab_building_lifecycle USING btree (value)",
+      "indexname": "vocab_building_lifecycle_pkey",
+      "tablename": "vocab_building_lifecycle"
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX vocab_canonical_record_lifecycle_pkey ON nli_wo002_target.vocab_canonical_record_lifecycle USING btree (value)",
+      "indexname": "vocab_canonical_record_lifecycle_pkey",
+      "tablename": "vocab_canonical_record_lifecycle"
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX vocab_capture_method_pkey ON nli_wo002_target.vocab_capture_method USING btree (value)",
+      "indexname": "vocab_capture_method_pkey",
+      "tablename": "vocab_capture_method"
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX vocab_case_lifecycle_pkey ON nli_wo002_target.vocab_case_lifecycle USING btree (value)",
+      "indexname": "vocab_case_lifecycle_pkey",
+      "tablename": "vocab_case_lifecycle"
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX vocab_case_state_pkey ON nli_wo002_target.vocab_case_state USING btree (value)",
+      "indexname": "vocab_case_state_pkey",
+      "tablename": "vocab_case_state"
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX vocab_classification_pkey ON nli_wo002_target.vocab_classification USING btree (value)",
+      "indexname": "vocab_classification_pkey",
+      "tablename": "vocab_classification"
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX vocab_correction_type_pkey ON nli_wo002_target.vocab_correction_type USING btree (value)",
+      "indexname": "vocab_correction_type_pkey",
+      "tablename": "vocab_correction_type"
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX vocab_country_lifecycle_pkey ON nli_wo002_target.vocab_country_lifecycle USING btree (value)",
+      "indexname": "vocab_country_lifecycle_pkey",
+      "tablename": "vocab_country_lifecycle"
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX vocab_coverage_role_pkey ON nli_wo002_target.vocab_coverage_role USING btree (value)",
+      "indexname": "vocab_coverage_role_pkey",
+      "tablename": "vocab_coverage_role"
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX vocab_decision_type_pkey ON nli_wo002_target.vocab_decision_type USING btree (value)",
+      "indexname": "vocab_decision_type_pkey",
+      "tablename": "vocab_decision_type"
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX vocab_delete_policy_pkey ON nli_wo002_target.vocab_delete_policy USING btree (value)",
+      "indexname": "vocab_delete_policy_pkey",
+      "tablename": "vocab_delete_policy"
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX vocab_dispute_type_pkey ON nli_wo002_target.vocab_dispute_type USING btree (value)",
+      "indexname": "vocab_dispute_type_pkey",
+      "tablename": "vocab_dispute_type"
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX vocab_entrance_lifecycle_pkey ON nli_wo002_target.vocab_entrance_lifecycle USING btree (value)",
+      "indexname": "vocab_entrance_lifecycle_pkey",
+      "tablename": "vocab_entrance_lifecycle"
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX vocab_entrance_role_pkey ON nli_wo002_target.vocab_entrance_role USING btree (value)",
+      "indexname": "vocab_entrance_role_pkey",
+      "tablename": "vocab_entrance_role"
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX vocab_field_verification_state_pkey ON nli_wo002_target.vocab_field_verification_state USING btree (value)",
+      "indexname": "vocab_field_verification_state_pkey",
+      "tablename": "vocab_field_verification_state"
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX vocab_geometry_quality_state_pkey ON nli_wo002_target.vocab_geometry_quality_state USING btree (value)",
+      "indexname": "vocab_geometry_quality_state_pkey",
+      "tablename": "vocab_geometry_quality_state"
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX vocab_geometry_role_pkey ON nli_wo002_target.vocab_geometry_role USING btree (value)",
+      "indexname": "vocab_geometry_role_pkey",
+      "tablename": "vocab_geometry_role"
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX vocab_intake_state_pkey ON nli_wo002_target.vocab_intake_state USING btree (value)",
+      "indexname": "vocab_intake_state_pkey",
+      "tablename": "vocab_intake_state"
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX vocab_landmark_lifecycle_pkey ON nli_wo002_target.vocab_landmark_lifecycle USING btree (value)",
+      "indexname": "vocab_landmark_lifecycle_pkey",
+      "tablename": "vocab_landmark_lifecycle"
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX vocab_landmark_type_pkey ON nli_wo002_target.vocab_landmark_type USING btree (value)",
+      "indexname": "vocab_landmark_type_pkey",
+      "tablename": "vocab_landmark_type"
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX vocab_lifecycle_state_pkey ON nli_wo002_target.vocab_lifecycle_state USING btree (value)",
+      "indexname": "vocab_lifecycle_state_pkey",
+      "tablename": "vocab_lifecycle_state"
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX vocab_locality_lifecycle_pkey ON nli_wo002_target.vocab_locality_lifecycle USING btree (value)",
+      "indexname": "vocab_locality_lifecycle_pkey",
+      "tablename": "vocab_locality_lifecycle"
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX vocab_locality_type_pkey ON nli_wo002_target.vocab_locality_type USING btree (value)",
+      "indexname": "vocab_locality_type_pkey",
+      "tablename": "vocab_locality_type"
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX vocab_name_kind_pkey ON nli_wo002_target.vocab_name_kind USING btree (value)",
+      "indexname": "vocab_name_kind_pkey",
+      "tablename": "vocab_name_kind"
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX vocab_name_lifecycle_pkey ON nli_wo002_target.vocab_name_lifecycle USING btree (value)",
+      "indexname": "vocab_name_lifecycle_pkey",
+      "tablename": "vocab_name_lifecycle"
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX vocab_name_status_pkey ON nli_wo002_target.vocab_name_status USING btree (value)",
+      "indexname": "vocab_name_status_pkey",
+      "tablename": "vocab_name_status"
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX vocab_non_building_object_lifecycle_pkey ON nli_wo002_target.vocab_non_building_object_lifecycle USING btree (value)",
+      "indexname": "vocab_non_building_object_lifecycle_pkey",
+      "tablename": "vocab_non_building_object_lifecycle"
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX vocab_non_building_object_type_pkey ON nli_wo002_target.vocab_non_building_object_type USING btree (value)",
+      "indexname": "vocab_non_building_object_type_pkey",
+      "tablename": "vocab_non_building_object_type"
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX vocab_object_role_pkey ON nli_wo002_target.vocab_object_role USING btree (value)",
+      "indexname": "vocab_object_role_pkey",
+      "tablename": "vocab_object_role"
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX vocab_operational_area_lifecycle_pkey ON nli_wo002_target.vocab_operational_area_lifecycle USING btree (value)",
+      "indexname": "vocab_operational_area_lifecycle_pkey",
+      "tablename": "vocab_operational_area_lifecycle"
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX vocab_operational_area_type_pkey ON nli_wo002_target.vocab_operational_area_type USING btree (value)",
+      "indexname": "vocab_operational_area_type_pkey",
+      "tablename": "vocab_operational_area_type"
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX vocab_projection_type_pkey ON nli_wo002_target.vocab_projection_type USING btree (value)",
+      "indexname": "vocab_projection_type_pkey",
+      "tablename": "vocab_projection_type"
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX vocab_public_code_state_pkey ON nli_wo002_target.vocab_public_code_state USING btree (value)",
+      "indexname": "vocab_public_code_state_pkey",
+      "tablename": "vocab_public_code_state"
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX vocab_publication_item_state_pkey ON nli_wo002_target.vocab_publication_item_state USING btree (value)",
+      "indexname": "vocab_publication_item_state_pkey",
+      "tablename": "vocab_publication_item_state"
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX vocab_publication_lifecycle_pkey ON nli_wo002_target.vocab_publication_lifecycle USING btree (value)",
+      "indexname": "vocab_publication_lifecycle_pkey",
+      "tablename": "vocab_publication_lifecycle"
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX vocab_publication_release_state_pkey ON nli_wo002_target.vocab_publication_release_state USING btree (value)",
+      "indexname": "vocab_publication_release_state_pkey",
+      "tablename": "vocab_publication_release_state"
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX vocab_quality_check_result_pkey ON nli_wo002_target.vocab_quality_check_result USING btree (value)",
+      "indexname": "vocab_quality_check_result_pkey",
+      "tablename": "vocab_quality_check_result"
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX vocab_record_type_pkey ON nli_wo002_target.vocab_record_type USING btree (value)",
+      "indexname": "vocab_record_type_pkey",
+      "tablename": "vocab_record_type"
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX vocab_reference_object_lifecycle_pkey ON nli_wo002_target.vocab_reference_object_lifecycle USING btree (value)",
+      "indexname": "vocab_reference_object_lifecycle_pkey",
+      "tablename": "vocab_reference_object_lifecycle"
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX vocab_relationship_type_pkey ON nli_wo002_target.vocab_relationship_type USING btree (value)",
+      "indexname": "vocab_relationship_type_pkey",
+      "tablename": "vocab_relationship_type"
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX vocab_retention_state_pkey ON nli_wo002_target.vocab_retention_state USING btree (value)",
+      "indexname": "vocab_retention_state_pkey",
+      "tablename": "vocab_retention_state"
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX vocab_road_class_pkey ON nli_wo002_target.vocab_road_class USING btree (value)",
+      "indexname": "vocab_road_class_pkey",
+      "tablename": "vocab_road_class"
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX vocab_road_lifecycle_pkey ON nli_wo002_target.vocab_road_lifecycle USING btree (value)",
+      "indexname": "vocab_road_lifecycle_pkey",
+      "tablename": "vocab_road_lifecycle"
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX vocab_road_segment_lifecycle_pkey ON nli_wo002_target.vocab_road_segment_lifecycle USING btree (value)",
+      "indexname": "vocab_road_segment_lifecycle_pkey",
+      "tablename": "vocab_road_segment_lifecycle"
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX vocab_source_authority_class_pkey ON nli_wo002_target.vocab_source_authority_class USING btree (value)",
+      "indexname": "vocab_source_authority_class_pkey",
+      "tablename": "vocab_source_authority_class"
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX vocab_source_authority_lifecycle_pkey ON nli_wo002_target.vocab_source_authority_lifecycle USING btree (value)",
+      "indexname": "vocab_source_authority_lifecycle_pkey",
+      "tablename": "vocab_source_authority_lifecycle"
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX vocab_subject_lifecycle_pkey ON nli_wo002_target.vocab_subject_lifecycle USING btree (value)",
+      "indexname": "vocab_subject_lifecycle_pkey",
+      "tablename": "vocab_subject_lifecycle"
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX vocab_unit_lifecycle_pkey ON nli_wo002_target.vocab_unit_lifecycle USING btree (value)",
+      "indexname": "vocab_unit_lifecycle_pkey",
+      "tablename": "vocab_unit_lifecycle"
+    },
+    {
+      "indexdef": "CREATE UNIQUE INDEX vocab_unit_type_pkey ON nli_wo002_target.vocab_unit_type USING btree (value)",
+      "indexname": "vocab_unit_type_pkey",
+      "tablename": "vocab_unit_type"
+    }
+  ],
   "report": {
-    "constraint_count": 631,
+    "constraint_count": 260,
     "extra_fields": [],
     "field_parity_errors": [],
-    "index_count": 103,
-    "inserted_fixture_rows": 315,
+    "index_count": 110,
+    "inserted_fixture_rows": 322,
     "missing_fields": [],
+    "missing_required_triggers": [],
     "negative_results": {
-      "invalid-cardinality-primary-object": "rejected",
-      "invalid-geometry-role-type": "rejected",
-      "invalid-publication-prerequisite": "rejected-by-publication-prerequisite-check",
-      "invalid-self-supersession": "rejected",
-      "invalid-state-transition": "rejected-by-lifecycle-transition-check",
-      "invalid-subject-reference": "rejected",
-      "invalid-temporal-overlap": "rejected-by-exclusion-constraint-design"
+      "invalid-cardinality-primary-object": "rejected-by-real-execution",
+      "invalid-geometry-role-type": "rejected-by-real-execution",
+      "invalid-publication-prerequisite": "rejected-by-real-execution",
+      "invalid-self-supersession": "rejected-by-real-execution",
+      "invalid-state-transition": "rejected-by-real-execution",
+      "invalid-subject-reference": "rejected-by-real-execution",
+      "invalid-temporal-overlap": "rejected-by-real-execution"
     },
-    "physical_columns": 354,
+    "physical_columns": 353,
     "scenario_results": {
       "administrative-boundary-change": {
-        "inserted_rows": 45,
+        "inserted_rows": 46,
         "status": "passed"
       },
       "corrected-superseded-address": {
-        "inserted_rows": 45,
+        "inserted_rows": 49,
         "status": "passed"
       },
       "disputed-geometry": {
@@ -2864,7 +4711,7 @@
         "status": "passed"
       },
       "multi-unit-building": {
-        "inserted_rows": 45,
+        "inserted_rows": 47,
         "status": "passed"
       },
       "no-formal-road-location": {
@@ -2880,6 +4727,183 @@
         "status": "passed"
       }
     },
-    "target_fields": 354
-  }
+    "target_fields": 353,
+    "trigger_count": 29
+  },
+  "triggers": [
+    {
+      "action_timing": "BEFORE",
+      "event_manipulation": "UPDATE",
+      "table_name": "proposed_dispute_case",
+      "trigger_name": "dispute_case_subject_trg"
+    },
+    {
+      "action_timing": "BEFORE",
+      "event_manipulation": "INSERT",
+      "table_name": "proposed_dispute_case",
+      "trigger_name": "dispute_case_subject_trg"
+    },
+    {
+      "action_timing": "BEFORE",
+      "event_manipulation": "UPDATE",
+      "table_name": "proposed_geometry_observation",
+      "trigger_name": "geometry_observation_semantics_trg"
+    },
+    {
+      "action_timing": "BEFORE",
+      "event_manipulation": "INSERT",
+      "table_name": "proposed_geometry_observation",
+      "trigger_name": "geometry_observation_semantics_trg"
+    },
+    {
+      "action_timing": "BEFORE",
+      "event_manipulation": "UPDATE",
+      "table_name": "proposed_geometry_observation",
+      "trigger_name": "geometry_observation_subject_trg"
+    },
+    {
+      "action_timing": "BEFORE",
+      "event_manipulation": "INSERT",
+      "table_name": "proposed_geometry_observation",
+      "trigger_name": "geometry_observation_subject_trg"
+    },
+    {
+      "action_timing": "BEFORE",
+      "event_manipulation": "UPDATE",
+      "table_name": "proposed_geometry_version",
+      "trigger_name": "geometry_version_semantics_trg"
+    },
+    {
+      "action_timing": "BEFORE",
+      "event_manipulation": "INSERT",
+      "table_name": "proposed_geometry_version",
+      "trigger_name": "geometry_version_semantics_trg"
+    },
+    {
+      "action_timing": "BEFORE",
+      "event_manipulation": "UPDATE",
+      "table_name": "proposed_geometry_version",
+      "trigger_name": "geometry_version_subject_trg"
+    },
+    {
+      "action_timing": "BEFORE",
+      "event_manipulation": "INSERT",
+      "table_name": "proposed_geometry_version",
+      "trigger_name": "geometry_version_subject_trg"
+    },
+    {
+      "action_timing": "BEFORE",
+      "event_manipulation": "INSERT",
+      "table_name": "proposed_location_record_object_link",
+      "trigger_name": "object_link_subject_trg"
+    },
+    {
+      "action_timing": "BEFORE",
+      "event_manipulation": "UPDATE",
+      "table_name": "proposed_location_record_object_link",
+      "trigger_name": "object_link_subject_trg"
+    },
+    {
+      "action_timing": "BEFORE",
+      "event_manipulation": "UPDATE",
+      "table_name": "proposed_location_record_object_link",
+      "trigger_name": "object_role_cardinality_trg"
+    },
+    {
+      "action_timing": "BEFORE",
+      "event_manipulation": "INSERT",
+      "table_name": "proposed_location_record_object_link",
+      "trigger_name": "object_role_cardinality_trg"
+    },
+    {
+      "action_timing": "AFTER",
+      "event_manipulation": "UPDATE",
+      "table_name": "proposed_location_record_version",
+      "trigger_name": "location_record_version_chain_trg"
+    },
+    {
+      "action_timing": "AFTER",
+      "event_manipulation": "INSERT",
+      "table_name": "proposed_location_record_version",
+      "trigger_name": "location_record_version_chain_trg"
+    },
+    {
+      "action_timing": "AFTER",
+      "event_manipulation": "INSERT",
+      "table_name": "proposed_location_record_version",
+      "trigger_name": "required_object_roles_trg"
+    },
+    {
+      "action_timing": "AFTER",
+      "event_manipulation": "UPDATE",
+      "table_name": "proposed_location_record_version",
+      "trigger_name": "required_object_roles_trg"
+    },
+    {
+      "action_timing": "BEFORE",
+      "event_manipulation": "INSERT",
+      "table_name": "proposed_name_record",
+      "trigger_name": "current_official_name_trg"
+    },
+    {
+      "action_timing": "BEFORE",
+      "event_manipulation": "UPDATE",
+      "table_name": "proposed_name_record",
+      "trigger_name": "current_official_name_trg"
+    },
+    {
+      "action_timing": "BEFORE",
+      "event_manipulation": "INSERT",
+      "table_name": "proposed_name_record",
+      "trigger_name": "name_record_subject_trg"
+    },
+    {
+      "action_timing": "BEFORE",
+      "event_manipulation": "UPDATE",
+      "table_name": "proposed_name_record",
+      "trigger_name": "name_record_subject_trg"
+    },
+    {
+      "action_timing": "AFTER",
+      "event_manipulation": "UPDATE",
+      "table_name": "proposed_public_code_alias",
+      "trigger_name": "public_code_alias_chain_trg"
+    },
+    {
+      "action_timing": "AFTER",
+      "event_manipulation": "INSERT",
+      "table_name": "proposed_public_code_alias",
+      "trigger_name": "public_code_alias_chain_trg"
+    },
+    {
+      "action_timing": "AFTER",
+      "event_manipulation": "INSERT",
+      "table_name": "proposed_publication_release_item",
+      "trigger_name": "publication_prerequisite_trg"
+    },
+    {
+      "action_timing": "AFTER",
+      "event_manipulation": "UPDATE",
+      "table_name": "proposed_publication_release_item",
+      "trigger_name": "publication_prerequisite_trg"
+    },
+    {
+      "action_timing": "BEFORE",
+      "event_manipulation": "DELETE",
+      "table_name": "proposed_registry_subject",
+      "trigger_name": "registry_subject_delete_policy_trg"
+    },
+    {
+      "action_timing": "AFTER",
+      "event_manipulation": "UPDATE",
+      "table_name": "proposed_registry_subject",
+      "trigger_name": "registry_subject_native_trg"
+    },
+    {
+      "action_timing": "AFTER",
+      "event_manipulation": "INSERT",
+      "table_name": "proposed_registry_subject",
+      "trigger_name": "registry_subject_native_trg"
+    }
+  ]
 }

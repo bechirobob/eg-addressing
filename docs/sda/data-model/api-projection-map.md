@@ -17,10 +17,10 @@ Generated from the actual FastAPI OpenAPI document plus source authorization cal
 | GET | `/api/v1/address-records/search` | `address_record_search_api_v1_address_records_search_get` | role-required | viewer | 200, 422 | services/api/app/main.py:1892-1901 |
 | GET | `/api/v1/address-records/{address_code}` | `address_record_case_file_api_v1_address_records__address_code__get` | role-required | viewer | 200, 422 | services/api/app/main.py:1944-1950 |
 | GET | `/api/v1/address-records/{address_code}/certificate` | `address_record_certificate_endpoint_api_v1_address_records__address_code__certificate_get` | role-required | viewer | 200, 422 | services/api/app/main.py:1954-1962 |
-| GET | `/api/v1/addresses` | `list_addresses_api_v1_addresses_get` | role-required | editor | 200, 422 | services/api/app/main.py:1481-1489 |
+| GET | `/api/v1/addresses` | `list_addresses_api_v1_addresses_get` | role-required | admin, editor, viewer | 200, 422 | services/api/app/main.py:1481-1489 |
 | POST | `/api/v1/addresses` | `create_address_endpoint_api_v1_addresses_post` | role-required | editor | 201, 422 | services/api/app/main.py:1481-1489 |
 | DELETE | `/api/v1/addresses/{address_id}` | `archive_address_endpoint_api_v1_addresses__address_id__delete` | role-required | admin | 200, 422 | services/api/app/main.py:1507-1513 |
-| GET | `/api/v1/addresses/{address_id}` | `address_detail_api_v1_addresses__address_id__get` | role-required | admin | 200, 422 | services/api/app/main.py:1507-1513 |
+| GET | `/api/v1/addresses/{address_id}` | `address_detail_api_v1_addresses__address_id__get` | role-required | admin, editor, viewer | 200, 422 | services/api/app/main.py:1507-1513 |
 | PATCH | `/api/v1/addresses/{address_id}` | `update_address_endpoint_api_v1_addresses__address_id__patch` | role-required | admin | 200, 422 | services/api/app/main.py:1507-1513 |
 | GET | `/api/v1/admin-units` | `admin_units_api_v1_admin_units_get` | public | — | 200, 422 | services/api/app/main.py:1234-1239 |
 | GET | `/api/v1/admin/users` | `admin_list_users_api_v1_admin_users_get` | role-required | admin | 200, 422 | services/api/app/main.py:1168-1176 |
@@ -30,7 +30,7 @@ Generated from the actual FastAPI OpenAPI document plus source authorization cal
 | POST | `/api/v1/admin/users/{user_id}/revoke-sessions` | `admin_revoke_user_sessions_api_v1_admin_users__user_id__revoke_sessions_post` | role-required | admin | 200, 422 | services/api/app/main.py:1209-1219 |
 | GET | `/api/v1/audit-logs` | `audit_logs_api_v1_audit_logs_get` | role-required | admin | 200, 422 | services/api/app/main.py:1352-1355 |
 | POST | `/api/v1/auth/login` | `login_api_v1_auth_login_post` | public | — | 200, 422 | services/api/app/main.py:1112-1141 |
-| POST | `/api/v1/auth/logout` | `auth_logout_api_v1_auth_logout_post` | public | — | 204, 422 | services/api/app/main.py:1150-1157 |
+| POST | `/api/v1/auth/logout` | `auth_logout_api_v1_auth_logout_post` | session-required | — | 204, 422 | services/api/app/main.py:1150-1157 |
 | GET | `/api/v1/auth/me` | `auth_me_api_v1_auth_me_get` | authenticated | — | 200, 422 | services/api/app/main.py:1145-1146 |
 | GET | `/api/v1/buildings` | `list_buildings_api_v1_buildings_get` | role-required | editor | 200, 422 | services/api/app/main.py:1428-1436 |
 | POST | `/api/v1/buildings` | `create_building_endpoint_api_v1_buildings_post` | role-required | editor | 201, 422 | services/api/app/main.py:1428-1436 |

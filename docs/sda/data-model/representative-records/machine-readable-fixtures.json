@@ -46,9 +46,22 @@
         {
           "admin_level": "country",
           "administrative_unit_id": "administrative-boundary-change-administrative_unit-07",
-          "administrative_unit_version_id": "administrative-boundary-change-administrative_unit_version-07",
+          "administrative_unit_version_id": "administrative-boundary-change-admin-version-old",
           "classification": "government-internal",
-          "effective_from": "2026-07-14T00:00:00Z",
+          "effective_from": "2020-01-01T00:00:00Z",
+          "effective_to": "2026-07-01T00:00:00Z",
+          "lifecycle_state": "historical",
+          "parent_administrative_unit_id": "administrative-boundary-change-administrative_unit-07",
+          "recorded_at": "2026-07-14T00:00:00Z",
+          "source_authority_id": "administrative-boundary-change-source_authority-07"
+        },
+        {
+          "admin_level": "country",
+          "administrative_unit_id": "administrative-boundary-change-administrative_unit-07",
+          "administrative_unit_version_id": "administrative-boundary-change-admin-version-new",
+          "classification": "government-internal",
+          "effective_from": "2026-07-01T00:00:00Z",
+          "effective_to": null,
           "lifecycle_state": "official",
           "parent_administrative_unit_id": "administrative-boundary-change-administrative_unit-07",
           "recorded_at": "2026-07-14T00:00:00Z",
@@ -73,7 +86,7 @@
       ],
       "correction_case": [
         {
-          "case_state": "approved",
+          "case_state": "submitted",
           "correction_case_id": "administrative-boundary-change-correction_case-07",
           "correction_type": "administrative-context",
           "resolution_event_id": "administrative-boundary-change-decision_event-07",
@@ -86,7 +99,7 @@
           "country_id": "administrative-boundary-change-country-07",
           "created_at": "2026-07-14T00:00:00Z",
           "iso2_code": "GQ",
-          "lifecycle_state": "candidate",
+          "lifecycle_state": "active",
           "official_name_en": "country-official_name_en-value",
           "official_name_es": "country-official_name_es-value",
           "source_authority_id": "administrative-boundary-change-source_authority-07"
@@ -109,7 +122,7 @@
       ],
       "dispute_case": [
         {
-          "case_state": "approved",
+          "case_state": "submitted",
           "dispute_case_id": "administrative-boundary-change-dispute_case-07",
           "dispute_type": "authority",
           "opened_at": "2026-07-14T00:00:00Z",
@@ -318,7 +331,7 @@
       ],
       "location_record_version": [
         {
-          "administrative_unit_version_id": "administrative-boundary-change-administrative_unit_version-07",
+          "administrative_unit_version_id": "administrative-boundary-change-admin-version-new",
           "correction_case_id": "administrative-boundary-change-correction_case-07",
           "display_label_es": "location_record_version-display_label_es-value",
           "effective_from": "2026-07-14T00:00:00Z",
@@ -432,7 +445,7 @@
           "projection_type": "operator-case-file",
           "publication_release_id": "administrative-boundary-change-publication_release-07",
           "recorded_at": "2026-07-14T00:00:00Z",
-          "release_state": "approval-requested"
+          "release_state": "approved"
         }
       ],
       "publication_release_item": [
@@ -459,7 +472,6 @@
           "native_id": "administrative-boundary-change-administrative_unit-07",
           "subject_entity": "administrative_unit",
           "subject_id": "administrative-boundary-change-registry_subject-07",
-          "subject_native_id": "registry_subject-subject_native_id-001",
           "subject_state": "active"
         }
       ],
@@ -475,7 +487,7 @@
       "road_segment": [
         {
           "effective_from": "2026-07-14T00:00:00Z",
-          "lifecycle_state": "candidate",
+          "lifecycle_state": "draft",
           "road_id": "administrative-boundary-change-road-07",
           "road_segment_id": "administrative-boundary-change-road_segment-07"
         }
@@ -485,7 +497,7 @@
           "authority_class": "citizen-submitted",
           "authority_name": "source_authority-authority_name-value",
           "source_authority_id": "administrative-boundary-change-source_authority-07",
-          "status": "active"
+          "status": "candidate"
         }
       ],
       "source_package": [
@@ -586,7 +598,7 @@
       ],
       "correction_case": [
         {
-          "case_state": "approved",
+          "case_state": "submitted",
           "correction_case_id": "corrected-superseded-address-correction_case-05",
           "correction_type": "administrative-context",
           "resolution_event_id": "corrected-superseded-address-decision_event-05",
@@ -599,7 +611,7 @@
           "country_id": "corrected-superseded-address-country-05",
           "created_at": "2026-07-14T00:00:00Z",
           "iso2_code": "GQ",
-          "lifecycle_state": "candidate",
+          "lifecycle_state": "active",
           "official_name_en": "country-official_name_en-value",
           "official_name_es": "country-official_name_es-value",
           "source_authority_id": "corrected-superseded-address-source_authority-05"
@@ -622,7 +634,7 @@
       ],
       "dispute_case": [
         {
-          "case_state": "approved",
+          "case_state": "submitted",
           "dispute_case_id": "corrected-superseded-address-dispute_case-05",
           "dispute_type": "authority",
           "opened_at": "2026-07-14T00:00:00Z",
@@ -799,7 +811,7 @@
           "classification": "government-internal",
           "decision_event_id": "corrected-superseded-address-decision_event-05",
           "evidence_object_id": "corrected-superseded-address-evidence_object-05",
-          "location_record_version_id": "corrected-superseded-address-location_record_version-05",
+          "location_record_version_id": "corrected-superseded-address-location-record-version-v2",
           "source_record_id": "corrected-superseded-address-source_record-05",
           "target_entity": "location_record_assertion-target_entity-value",
           "target_field": "location_record_assertion-target_field-value",
@@ -812,9 +824,19 @@
       "location_record_object_link": [
         {
           "cardinality_rank": 1,
-          "effective_from": "2026-07-14T00:00:00Z",
+          "effective_from": "2026-01-01T00:00:00Z",
+          "effective_to": "2026-06-01T00:00:00Z",
           "link_id": "corrected-superseded-address-location_record_object_link-05",
-          "location_record_version_id": "corrected-superseded-address-location_record_version-05",
+          "location_record_version_id": "corrected-superseded-address-location-record-version-v1",
+          "object_role": "primary-subject",
+          "subject_id": "corrected-superseded-address-registry_subject-05"
+        },
+        {
+          "cardinality_rank": 1,
+          "effective_from": "2026-06-01T00:00:00Z",
+          "effective_to": null,
+          "link_id": "corrected-superseded-address-object-link-v2",
+          "location_record_version_id": "corrected-superseded-address-location-record-version-v2",
           "object_role": "primary-subject",
           "subject_id": "corrected-superseded-address-registry_subject-05"
         }
@@ -834,14 +856,33 @@
           "administrative_unit_version_id": "corrected-superseded-address-administrative_unit_version-05",
           "correction_case_id": "corrected-superseded-address-correction_case-05",
           "display_label_es": "location_record_version-display_label_es-value",
-          "effective_from": "2026-07-14T00:00:00Z",
+          "effective_from": "2026-01-01T00:00:00Z",
+          "effective_to": "2026-06-01T00:00:00Z",
+          "lifecycle_state": "corrected",
+          "locality_id": "corrected-superseded-address-locality-05",
+          "location_record_id": "corrected-superseded-address-location_record-05",
+          "location_record_version_id": "corrected-superseded-address-location-record-version-v1",
+          "recorded_at": "2026-01-02T00:00:00Z",
+          "recorded_to": "2026-06-02T00:00:00Z",
+          "source_decision_event_id": "corrected-superseded-address-decision_event-05",
+          "successor_version_id": "corrected-superseded-address-location-record-version-v2",
+          "version_number": 1
+        },
+        {
+          "administrative_unit_version_id": "corrected-superseded-address-administrative_unit_version-05",
+          "correction_case_id": "corrected-superseded-address-correction_case-05",
+          "display_label_es": "location_record_version-display_label_es-value",
+          "effective_from": "2026-06-01T00:00:00Z",
+          "effective_to": null,
           "lifecycle_state": "active",
           "locality_id": "corrected-superseded-address-locality-05",
           "location_record_id": "corrected-superseded-address-location_record-05",
-          "location_record_version_id": "corrected-superseded-address-location_record_version-05",
-          "recorded_at": "2026-07-14T00:00:00Z",
+          "location_record_version_id": "corrected-superseded-address-location-record-version-v2",
+          "predecessor_version_id": "corrected-superseded-address-location-record-version-v1",
+          "recorded_at": "2026-06-02T00:00:00Z",
+          "recorded_to": null,
           "source_decision_event_id": "corrected-superseded-address-decision_event-05",
-          "version_number": 5
+          "version_number": 2
         }
       ],
       "migration_exception": [
@@ -945,13 +986,24 @@
           "projection_type": "operator-case-file",
           "publication_release_id": "corrected-superseded-address-publication_release-05",
           "recorded_at": "2026-07-14T00:00:00Z",
-          "release_state": "approval-requested"
+          "release_state": "approved"
+        },
+        {
+          "authority_reference": "publication_release-authority_reference-value",
+          "created_by_actor_id": "publication_release-created_by_actor_id-001",
+          "effective_at": "2026-06-03T00:00:00Z",
+          "immutable_manifest_hash": "publication_release-immutable_manifest_hash-value",
+          "manifest_storage_uri": "publication_release-manifest_storage_uri-value",
+          "projection_type": "operator-case-file",
+          "publication_release_id": "corrected-superseded-address-publication-release-corrected",
+          "recorded_at": "2026-07-14T00:00:00Z",
+          "release_state": "published"
         }
       ],
       "publication_release_item": [
         {
           "location_record_id": "corrected-superseded-address-location_record-05",
-          "location_record_version_id": "corrected-superseded-address-location_record_version-05",
+          "location_record_version_id": "corrected-superseded-address-location-record-version-v2",
           "projection_payload_hash": "publication_release_item-projection_payload_hash-value",
           "projection_payload_json": {
             "entity": "publication_release_item",
@@ -963,6 +1015,21 @@
           "publication_release_item_id": "corrected-superseded-address-publication_release_item-05",
           "published_geometry_policy": "publication_release_item-published_geometry_policy-value",
           "published_label": "publication_release_item-published_label-value"
+        },
+        {
+          "location_record_id": "corrected-superseded-address-location_record-05",
+          "location_record_version_id": "corrected-superseded-address-location-record-version-v2",
+          "projection_payload_hash": "publication_release_item-projection_payload_hash-value",
+          "projection_payload_json": {
+            "entity": "publication_release_item",
+            "fixture": true
+          },
+          "projection_state": "included",
+          "public_code_alias_id": "corrected-superseded-address-public_code_alias-05",
+          "publication_release_id": "corrected-superseded-address-publication-release-corrected",
+          "publication_release_item_id": "corrected-superseded-address-publication-release-item-corrected",
+          "published_geometry_policy": "publication_release_item-published_geometry_policy-value",
+          "published_label": "publication_release_item-published_label-value"
         }
       ],
       "registry_subject": [
@@ -972,7 +1039,6 @@
           "native_id": "corrected-superseded-address-location_record-05",
           "subject_entity": "location_record",
           "subject_id": "corrected-superseded-address-registry_subject-05",
-          "subject_native_id": "registry_subject-subject_native_id-001",
           "subject_state": "active"
         }
       ],
@@ -988,7 +1054,7 @@
       "road_segment": [
         {
           "effective_from": "2026-07-14T00:00:00Z",
-          "lifecycle_state": "candidate",
+          "lifecycle_state": "draft",
           "road_id": "corrected-superseded-address-road-05",
           "road_segment_id": "corrected-superseded-address-road_segment-05"
         }
@@ -998,7 +1064,7 @@
           "authority_class": "citizen-submitted",
           "authority_name": "source_authority-authority_name-value",
           "source_authority_id": "corrected-superseded-address-source_authority-05",
-          "status": "active"
+          "status": "candidate"
         }
       ],
       "source_package": [
@@ -1099,7 +1165,7 @@
       ],
       "correction_case": [
         {
-          "case_state": "approved",
+          "case_state": "submitted",
           "correction_case_id": "disputed-geometry-correction_case-06",
           "correction_type": "administrative-context",
           "resolution_event_id": "disputed-geometry-decision_event-06",
@@ -1112,7 +1178,7 @@
           "country_id": "disputed-geometry-country-06",
           "created_at": "2026-07-14T00:00:00Z",
           "iso2_code": "GQ",
-          "lifecycle_state": "candidate",
+          "lifecycle_state": "active",
           "official_name_en": "country-official_name_en-value",
           "official_name_es": "country-official_name_es-value",
           "source_authority_id": "disputed-geometry-source_authority-06"
@@ -1135,7 +1201,7 @@
       ],
       "dispute_case": [
         {
-          "case_state": "approved",
+          "case_state": "resolved",
           "dispute_case_id": "disputed-geometry-dispute_case-06",
           "dispute_type": "authority",
           "opened_at": "2026-07-14T00:00:00Z",
@@ -1458,7 +1524,7 @@
           "projection_type": "operator-case-file",
           "publication_release_id": "disputed-geometry-publication_release-06",
           "recorded_at": "2026-07-14T00:00:00Z",
-          "release_state": "approval-requested"
+          "release_state": "approved"
         }
       ],
       "publication_release_item": [
@@ -1482,10 +1548,9 @@
         {
           "created_at": "2026-07-14T00:00:00Z",
           "delete_policy": "retire-only",
-          "native_id": "disputed-geometry-geometry_version-06",
-          "subject_entity": "geometry_version",
+          "native_id": "disputed-geometry-location_record-06",
+          "subject_entity": "location_record",
           "subject_id": "disputed-geometry-registry_subject-06",
-          "subject_native_id": "registry_subject-subject_native_id-001",
           "subject_state": "active"
         }
       ],
@@ -1501,7 +1566,7 @@
       "road_segment": [
         {
           "effective_from": "2026-07-14T00:00:00Z",
-          "lifecycle_state": "candidate",
+          "lifecycle_state": "draft",
           "road_id": "disputed-geometry-road-06",
           "road_segment_id": "disputed-geometry-road_segment-06"
         }
@@ -1511,7 +1576,7 @@
           "authority_class": "citizen-submitted",
           "authority_name": "source_authority-authority_name-value",
           "source_authority_id": "disputed-geometry-source_authority-06",
-          "status": "active"
+          "status": "candidate"
         }
       ],
       "source_package": [
@@ -1612,7 +1677,7 @@
       ],
       "correction_case": [
         {
-          "case_state": "approved",
+          "case_state": "submitted",
           "correction_case_id": "multi-unit-building-correction_case-03",
           "correction_type": "administrative-context",
           "resolution_event_id": "multi-unit-building-decision_event-03",
@@ -1625,7 +1690,7 @@
           "country_id": "multi-unit-building-country-03",
           "created_at": "2026-07-14T00:00:00Z",
           "iso2_code": "GQ",
-          "lifecycle_state": "candidate",
+          "lifecycle_state": "active",
           "official_name_en": "country-official_name_en-value",
           "official_name_es": "country-official_name_es-value",
           "source_authority_id": "multi-unit-building-source_authority-03"
@@ -1648,7 +1713,7 @@
       ],
       "dispute_case": [
         {
-          "case_state": "approved",
+          "case_state": "submitted",
           "dispute_case_id": "multi-unit-building-dispute_case-03",
           "dispute_type": "authority",
           "opened_at": "2026-07-14T00:00:00Z",
@@ -1706,7 +1771,7 @@
           "classification": "government-internal",
           "evidence_object_id": "multi-unit-building-evidence_object-03",
           "geometry_observation_id": "multi-unit-building-geometry_observation-03",
-          "geometry_role": "location-point",
+          "geometry_role": "entrance-point",
           "licence_id": "multi-unit-building-licence-03",
           "observed_at": "2026-07-14T00:00:00Z",
           "observed_geom": "SRID=4326;POINT(8.78 3.75)",
@@ -1971,7 +2036,7 @@
           "projection_type": "operator-case-file",
           "publication_release_id": "multi-unit-building-publication_release-03",
           "recorded_at": "2026-07-14T00:00:00Z",
-          "release_state": "approval-requested"
+          "release_state": "approved"
         }
       ],
       "publication_release_item": [
@@ -1998,7 +2063,14 @@
           "native_id": "multi-unit-building-unit-03",
           "subject_entity": "unit",
           "subject_id": "multi-unit-building-registry_subject-03",
-          "subject_native_id": "registry_subject-subject_native_id-001",
+          "subject_state": "active"
+        },
+        {
+          "created_at": "2026-07-14T00:00:00Z",
+          "delete_policy": "retire-only",
+          "native_id": "multi-unit-building-unit-02",
+          "subject_entity": "unit",
+          "subject_id": "multi-unit-building-registry-subject-unit-02",
           "subject_state": "active"
         }
       ],
@@ -2014,7 +2086,7 @@
       "road_segment": [
         {
           "effective_from": "2026-07-14T00:00:00Z",
-          "lifecycle_state": "candidate",
+          "lifecycle_state": "draft",
           "road_id": "multi-unit-building-road-03",
           "road_segment_id": "multi-unit-building-road_segment-03"
         }
@@ -2024,7 +2096,7 @@
           "authority_class": "citizen-submitted",
           "authority_name": "source_authority-authority_name-value",
           "source_authority_id": "multi-unit-building-source_authority-03",
-          "status": "active"
+          "status": "candidate"
         }
       ],
       "source_package": [
@@ -2071,6 +2143,16 @@
           "parent_unit_id": "multi-unit-building-unit-03",
           "unit_id": "multi-unit-building-unit-03",
           "unit_label": "unit-unit_label-value",
+          "unit_type": "apartment"
+        },
+        {
+          "building_id": "multi-unit-building-building-03",
+          "classification": "government-internal",
+          "effective_from": "2026-07-14T00:00:00Z",
+          "lifecycle_state": "candidate",
+          "parent_unit_id": "multi-unit-building-unit-03",
+          "unit_id": "multi-unit-building-unit-02",
+          "unit_label": "Unit B",
           "unit_type": "apartment"
         }
       ]
@@ -2125,7 +2207,7 @@
       ],
       "correction_case": [
         {
-          "case_state": "approved",
+          "case_state": "submitted",
           "correction_case_id": "no-formal-road-location-correction_case-04",
           "correction_type": "administrative-context",
           "resolution_event_id": "no-formal-road-location-decision_event-04",
@@ -2138,7 +2220,7 @@
           "country_id": "no-formal-road-location-country-04",
           "created_at": "2026-07-14T00:00:00Z",
           "iso2_code": "GQ",
-          "lifecycle_state": "candidate",
+          "lifecycle_state": "active",
           "official_name_en": "country-official_name_en-value",
           "official_name_es": "country-official_name_es-value",
           "source_authority_id": "no-formal-road-location-source_authority-04"
@@ -2161,7 +2243,7 @@
       ],
       "dispute_case": [
         {
-          "case_state": "approved",
+          "case_state": "submitted",
           "dispute_case_id": "no-formal-road-location-dispute_case-04",
           "dispute_type": "authority",
           "opened_at": "2026-07-14T00:00:00Z",
@@ -2484,7 +2566,7 @@
           "projection_type": "operator-case-file",
           "publication_release_id": "no-formal-road-location-publication_release-04",
           "recorded_at": "2026-07-14T00:00:00Z",
-          "release_state": "approval-requested"
+          "release_state": "approved"
         }
       ],
       "publication_release_item": [
@@ -2511,7 +2593,6 @@
           "native_id": "no-formal-road-location-location_record-04",
           "subject_entity": "location_record",
           "subject_id": "no-formal-road-location-registry_subject-04",
-          "subject_native_id": "registry_subject-subject_native_id-001",
           "subject_state": "active"
         }
       ],
@@ -2527,7 +2608,7 @@
       "road_segment": [
         {
           "effective_from": "2026-07-14T00:00:00Z",
-          "lifecycle_state": "candidate",
+          "lifecycle_state": "draft",
           "road_id": "no-formal-road-location-road-04",
           "road_segment_id": "no-formal-road-location-road_segment-04"
         }
@@ -2537,7 +2618,7 @@
           "authority_class": "citizen-submitted",
           "authority_name": "source_authority-authority_name-value",
           "source_authority_id": "no-formal-road-location-source_authority-04",
-          "status": "active"
+          "status": "candidate"
         }
       ],
       "source_package": [
@@ -2638,7 +2719,7 @@
       ],
       "correction_case": [
         {
-          "case_state": "approved",
+          "case_state": "submitted",
           "correction_case_id": "rural-landmark-location-correction_case-02",
           "correction_type": "administrative-context",
           "resolution_event_id": "rural-landmark-location-decision_event-02",
@@ -2651,7 +2732,7 @@
           "country_id": "rural-landmark-location-country-02",
           "created_at": "2026-07-14T00:00:00Z",
           "iso2_code": "GQ",
-          "lifecycle_state": "candidate",
+          "lifecycle_state": "active",
           "official_name_en": "country-official_name_en-value",
           "official_name_es": "country-official_name_es-value",
           "source_authority_id": "rural-landmark-location-source_authority-02"
@@ -2674,7 +2755,7 @@
       ],
       "dispute_case": [
         {
-          "case_state": "approved",
+          "case_state": "submitted",
           "dispute_case_id": "rural-landmark-location-dispute_case-02",
           "dispute_type": "authority",
           "opened_at": "2026-07-14T00:00:00Z",
@@ -2732,7 +2813,7 @@
           "classification": "government-internal",
           "evidence_object_id": "rural-landmark-location-evidence_object-02",
           "geometry_observation_id": "rural-landmark-location-geometry_observation-02",
-          "geometry_role": "location-point",
+          "geometry_role": "landmark-point",
           "licence_id": "rural-landmark-location-licence-02",
           "observed_at": "2026-07-14T00:00:00Z",
           "observed_geom": "SRID=4326;POINT(8.78 3.75)",
@@ -2997,7 +3078,7 @@
           "projection_type": "operator-case-file",
           "publication_release_id": "rural-landmark-location-publication_release-02",
           "recorded_at": "2026-07-14T00:00:00Z",
-          "release_state": "approval-requested"
+          "release_state": "approved"
         }
       ],
       "publication_release_item": [
@@ -3024,7 +3105,6 @@
           "native_id": "rural-landmark-location-landmark-02",
           "subject_entity": "landmark",
           "subject_id": "rural-landmark-location-registry_subject-02",
-          "subject_native_id": "registry_subject-subject_native_id-001",
           "subject_state": "active"
         }
       ],
@@ -3040,7 +3120,7 @@
       "road_segment": [
         {
           "effective_from": "2026-07-14T00:00:00Z",
-          "lifecycle_state": "candidate",
+          "lifecycle_state": "draft",
           "road_id": "rural-landmark-location-road-02",
           "road_segment_id": "rural-landmark-location-road_segment-02"
         }
@@ -3050,7 +3130,7 @@
           "authority_class": "citizen-submitted",
           "authority_name": "source_authority-authority_name-value",
           "source_authority_id": "rural-landmark-location-source_authority-02",
-          "status": "active"
+          "status": "candidate"
         }
       ],
       "source_package": [
@@ -3151,7 +3231,7 @@
       ],
       "correction_case": [
         {
-          "case_state": "approved",
+          "case_state": "submitted",
           "correction_case_id": "urban-street-address-correction_case-01",
           "correction_type": "administrative-context",
           "resolution_event_id": "urban-street-address-decision_event-01",
@@ -3164,7 +3244,7 @@
           "country_id": "urban-street-address-country-01",
           "created_at": "2026-07-14T00:00:00Z",
           "iso2_code": "GQ",
-          "lifecycle_state": "candidate",
+          "lifecycle_state": "active",
           "official_name_en": "country-official_name_en-value",
           "official_name_es": "country-official_name_es-value",
           "source_authority_id": "urban-street-address-source_authority-01"
@@ -3187,7 +3267,7 @@
       ],
       "dispute_case": [
         {
-          "case_state": "approved",
+          "case_state": "submitted",
           "dispute_case_id": "urban-street-address-dispute_case-01",
           "dispute_type": "authority",
           "opened_at": "2026-07-14T00:00:00Z",
@@ -3245,7 +3325,7 @@
           "classification": "government-internal",
           "evidence_object_id": "urban-street-address-evidence_object-01",
           "geometry_observation_id": "urban-street-address-geometry_observation-01",
-          "geometry_role": "location-point",
+          "geometry_role": "building-point",
           "licence_id": "urban-street-address-licence-01",
           "observed_at": "2026-07-14T00:00:00Z",
           "observed_geom": "SRID=4326;POINT(8.78 3.75)",
@@ -3510,7 +3590,7 @@
           "projection_type": "operator-case-file",
           "publication_release_id": "urban-street-address-publication_release-01",
           "recorded_at": "2026-07-14T00:00:00Z",
-          "release_state": "approval-requested"
+          "release_state": "approved"
         }
       ],
       "publication_release_item": [
@@ -3537,7 +3617,6 @@
           "native_id": "urban-street-address-building-01",
           "subject_entity": "building",
           "subject_id": "urban-street-address-registry_subject-01",
-          "subject_native_id": "registry_subject-subject_native_id-001",
           "subject_state": "active"
         }
       ],
@@ -3553,7 +3632,7 @@
       "road_segment": [
         {
           "effective_from": "2026-07-14T00:00:00Z",
-          "lifecycle_state": "candidate",
+          "lifecycle_state": "draft",
           "road_id": "urban-street-address-road-01",
           "road_segment_id": "urban-street-address-road_segment-01"
         }
@@ -3563,7 +3642,7 @@
           "authority_class": "citizen-submitted",
           "authority_name": "source_authority-authority_name-value",
           "source_authority_id": "urban-street-address-source_authority-01",
-          "status": "active"
+          "status": "candidate"
         }
       ],
       "source_package": [

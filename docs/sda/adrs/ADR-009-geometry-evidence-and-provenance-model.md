@@ -62,3 +62,19 @@ Wrong geometry type rejects; missing subject rejects; self supersession rejects;
 ## Acceptance checks
 
 Positive fixtures cover admin boundary, operational boundary, road, building, entrance, location and landmark roles; negative geometry fixtures reject wrong type and self-supersession.
+
+## Evidence-linked conditions
+
+- Condition: decision acceptance is limited to assertions executed by `review04_design_pipeline.py` and `design_consistency_check.py`.
+- Evidence: target schema validation report, lifecycle binding registry, transformation registry, policy contracts and scenario validation report.
+- Boundary: NLI-WO-002B remains unauthorized until SDA explicitly accepts the model.
+
+## Unresolved RFIs
+
+- No executable production migration authority is granted by this ADR.
+- Institutional owner approval, operational rollout windows and production data retention rules remain future SDA/institution decisions.
+
+## Acceptance tests
+
+- CI must fail if the ADR claims a constraint absent from the model policy registry or target validation report.
+- CI must fail if Review 05 resolution rows are updated outside the Review 05 resolution log.
