@@ -201,6 +201,10 @@ gate("F02-reviewed-fixtures-cover-transform-groups", "F02", fixture_groups == re
 summary = transform_fixture_report.get("summary", {}) if isinstance(transform_fixture_report, dict) else {}
 report_assertions = transform_fixture_report.get("assertions", []) if isinstance(transform_fixture_report, dict) else []
 gate("F02-transform-fixture-report-clean", "F02", summary.get("errors") == [] and summary.get("transform_groups") == len(registry_groups) and summary.get("fixtures_executed") == len(registry_groups), "transformation fixture report must execute cleanly for every group", "docs/sda/data-model/transformation-fixture-report.json")
+gate("F02-review08-execution-mode", "F02", summary.get("execution_mode") == "actual-disposable-source-target-transformation", "F02 must run actual disposable source-to-target transformation execution, not assertion-ID presence reporting", "docs/sda/data-model/transformation-fixture-report.json")
+gate("F02-review08-source-target-row-counts", "F02", summary.get("source_rows_inserted") == len(current_fields) and summary.get("target_rows_inserted") == len(current_fields), "F02 must insert and query source and target rows for every current field", "docs/sda/data-model/transformation-fixture-report.json")
+gate("F02-review08-idempotent-rerun", "F02", summary.get("idempotent_rerun") is True, "F02 must prove idempotent rerun behavior", "docs/sda/data-model/transformation-fixture-report.json")
+gate("F02-review08-failure-probes", "F02", summary.get("failure_tests", 0) >= 8 and summary.get("failure_tests") == summary.get("failure_tests_caught"), "F02 must catch wrong value, translation, FK, archive, exception, duplicate, relationship and hash mutations", "docs/sda/data-model/transformation-fixture-report.json")
 required_f02_classes = {"source-row-identity", "target-value", "reference-final-fk", "archive-created", "owned-exception", "no-loss-count", "no-loss-value-hash", "reviewed-classification"}
 seen_f02_classes = {a.get("assertion_class") for a in report_assertions if isinstance(a, dict) and a.get("status") == "passed"}
 gate("F02-transform-fixture-required-assertion-classes", "F02", required_f02_classes <= seen_f02_classes, f"missing F02 assertion classes {sorted(required_f02_classes - seen_f02_classes)}", "docs/sda/data-model/transformation-fixture-report.json")
@@ -208,7 +212,7 @@ for assertion in report_assertions if isinstance(report_assertions, list) else [
     if not isinstance(assertion, dict):
         continue
     evidence = assertion.get("evidence") or {}
-    gate(assertion.get("assertion_id", "F02-unnamed-transform-assertion"), "F02", assertion.get("status") == "passed" and bool(evidence) and bool(assertion.get("transform_group_id")), "named transform assertion must have passed status, group, and concrete evidence", "docs/sda/data-model/transformation-fixture-report.json")
+    gate(assertion.get("assertion_id", "F02-unnamed-transform-assertion"), "F02", assertion.get("status") == "passed" and bool(evidence) and bool(assertion.get("transform_group_id")) and evidence.get("execution_mode") == "review08-disposable-source-to-target-db-execution" and bool(evidence.get("target_output_id")) and bool(evidence.get("source_value_hash")) and bool(evidence.get("target_value_hash")), "named transform assertion must come from disposable DB execution with source/target hashes and output IDs", "docs/sda/data-model/transformation-fixture-report.json")
 for row in reviewed_registry if isinstance(reviewed_registry, list) else []:
     ref = row.get("reference_crosswalk_join")
     if isinstance(ref, dict):
@@ -544,6 +548,8 @@ else:
         f"- Fixture scenarios: {len(scenarios)}",
         f"- Named assertion gates: {len(assertion_registry)}",
         f"- F02 transform assertions: {summary.get('assertions_executed', 0)}",
+        f"- F02 source/target rows executed: {summary.get('source_rows_inserted', 0)}/{summary.get('target_rows_inserted', 0)}",
+        f"- F02 failure probes caught: {summary.get('failure_tests_caught', 0)}/{summary.get('failure_tests', 0)}",
         f"- F09 convergence units: {len(reviewed_units) if isinstance(reviewed_units, list) else 0}",
         f"- Multi-unit canonical records: {len(mu_records)}",
         f"- F07 lifecycle transitions executed: {len(lifecycle_assertions) if isinstance(lifecycle_assertions, dict) else 0}",
