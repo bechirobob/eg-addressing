@@ -82,7 +82,7 @@ Select by **effects**, not task title. Use `docs/agent/PROJECT-COVERAGE-MATRIX.m
 - data, API, GIS, evidence, publication, worker, infrastructure, and analytics surfaces;
 - release, monitoring, support, training, rollout, and recovery paths.
 
-A task is not fully routed until these surfaces have been considered and applicable/not-applicable skills are recorded in the task context pack.
+A task is not fully routed until these surfaces have been considered and applicable/not-applicable skills are recorded in the task context pack. The task context and PR evidence must state the affected modules/roles/environments explicitly.
 
 ## Protected architecture rules
 
