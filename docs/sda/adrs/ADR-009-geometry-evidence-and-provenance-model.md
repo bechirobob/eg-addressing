@@ -2,7 +2,7 @@
 
 ## Status
 
-Proposed for SDA Review 05. NLI-WO-002B remains unauthorized.
+Proposed for SDA Review 07. NLI-WO-002B remains unauthorized until SDA acceptance and a separate implementation work order.
 
 ## Decision owner
 
@@ -77,4 +77,11 @@ Positive fixtures cover admin boundary, operational boundary, road, building, en
 ## Acceptance tests
 
 - CI must fail if the ADR claims a constraint absent from the model policy registry or target validation report.
-- CI must fail if Review 05 resolution rows are updated outside the Review 05 resolution log.
+- CI must fail if Review 06 resolution rows are updated outside the Review 06 resolution log.
+
+
+## Review 07 assertion reconciliation
+
+- Evidence source: `docs/sda/data-model/design-consistency-report.md` (`Generated checks: 41`, `Errors: 0`) and `docs/sda/data-model/target-schema-validation-report.md`.
+- This ADR remains proposed until SDA Review 07 accepts the named assertions; it does not authorize NLI-WO-002B or production migration.
+- Any claim about runtime behavior is out of scope for PR #7; the migration-ledger race fix is isolated in maintenance PR #8.

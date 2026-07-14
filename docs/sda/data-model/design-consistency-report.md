@@ -1,6 +1,6 @@
 # Design Consistency Report
 
-Generated checks: 24
+Generated checks: 41
 Errors: 0
 Warnings: 0
 
@@ -8,5 +8,5 @@ Warnings: 0
 - Current pg_catalog fields: 237
 - OpenAPI operations: 105
 - Transformation rows: 237
-- Target fields: 353
+- Target fields: 357
 - Fixture scenarios: 7

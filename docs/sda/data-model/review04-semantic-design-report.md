@@ -1,4 +1,4 @@
-# Review 06 Semantic Design Report
+# Review 07 Semantic Design Report
 
 Errors: 0
 
@@ -10,7 +10,7 @@ Errors: 0
 - Target typed model corrected for vocabularies, lifecycles, code history and subject strategy.
 - Dependency-safe target schema executed and compared to typed model.
 - Machine-readable fixtures inserted and validated by database constraints.
-- Review 05 F02-F12 evidence rows updated to READY FOR SDA REVIEW.
+- Review 06 F02 and F04-F13 evidence rows updated to READY FOR SDA REVIEW.
 
 ## Metrics
 
@@ -20,5 +20,5 @@ Errors: 0
 | current_fields | 237 |
 | operations | 105 |
 | registry_rows | 237 |
-| target_fields | 353 |
-| fixture_rows | 322 |
+| target_fields | 357 |
+| fixture_rows | 324 |

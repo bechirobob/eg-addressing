@@ -26,8 +26,9 @@
         },
         "operation_id": "root__get",
         "optional_auth": false,
-        "review_notes": "Independent expected policy registry for SDA Review 06; not generated during pipeline execution.",
-        "review_status": "reviewed-route-policy-r06",
+        "path": "/",
+        "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+        "review_status": "reviewed-route-policy-r07",
         "roles": [],
         "route": "/",
         "session_required": false,
@@ -71,9 +72,11 @@
         },
         "operation_id": "address_corrections_api_v1_address_corrections_get",
         "optional_auth": false,
-        "review_notes": "Independent expected policy registry for SDA Review 06; not generated during pipeline execution.",
-        "review_status": "reviewed-route-policy-r06",
+        "path": "/api/v1/address-corrections",
+        "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+        "review_status": "reviewed-route-policy-r07",
         "roles": [
+          "admin",
           "editor"
         ],
         "route": "/api/v1/address-corrections",
@@ -161,9 +164,11 @@
         },
         "operation_id": "reject_address_correction_api_v1_address_corrections__correction_id__reject_post",
         "optional_auth": false,
-        "review_notes": "Independent expected policy registry for SDA Review 06; not generated during pipeline execution.",
-        "review_status": "reviewed-route-policy-r06",
+        "path": "/api/v1/address-corrections/{correction_id}/reject",
+        "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+        "review_status": "reviewed-route-policy-r07",
         "roles": [
+          "admin",
           "editor"
         ],
         "route": "/api/v1/address-corrections/{correction_id}/reject",
@@ -257,9 +262,11 @@
         },
         "operation_id": "resolve_address_correction_api_v1_address_corrections__correction_id__resolve_post",
         "optional_auth": false,
-        "review_notes": "Independent expected policy registry for SDA Review 06; not generated during pipeline execution.",
-        "review_status": "reviewed-route-policy-r06",
+        "path": "/api/v1/address-corrections/{correction_id}/resolve",
+        "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+        "review_status": "reviewed-route-policy-r07",
         "roles": [
+          "admin",
           "editor"
         ],
         "route": "/api/v1/address-corrections/{correction_id}/resolve",
@@ -353,9 +360,11 @@
         },
         "operation_id": "mark_address_correction_under_review_api_v1_address_corrections__correction_id__under_review_post",
         "optional_auth": false,
-        "review_notes": "Independent expected policy registry for SDA Review 06; not generated during pipeline execution.",
-        "review_status": "reviewed-route-policy-r06",
+        "path": "/api/v1/address-corrections/{correction_id}/under-review",
+        "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+        "review_status": "reviewed-route-policy-r07",
         "roles": [
+          "admin",
           "editor"
         ],
         "route": "/api/v1/address-corrections/{correction_id}/under-review",
@@ -450,9 +459,12 @@
         },
         "operation_id": "address_records_export_endpoint_api_v1_address_records_export_get",
         "optional_auth": false,
-        "review_notes": "Independent expected policy registry for SDA Review 06; not generated during pipeline execution.",
-        "review_status": "reviewed-route-policy-r06",
+        "path": "/api/v1/address-records/export",
+        "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+        "review_status": "reviewed-route-policy-r07",
         "roles": [
+          "admin",
+          "editor",
           "viewer"
         ],
         "route": "/api/v1/address-records/export",
@@ -541,9 +553,12 @@
         },
         "operation_id": "address_record_holds_endpoint_api_v1_address_records_holds_get",
         "optional_auth": false,
-        "review_notes": "Independent expected policy registry for SDA Review 06; not generated during pipeline execution.",
-        "review_status": "reviewed-route-policy-r06",
+        "path": "/api/v1/address-records/holds",
+        "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+        "review_status": "reviewed-route-policy-r07",
         "roles": [
+          "admin",
+          "editor",
           "viewer"
         ],
         "route": "/api/v1/address-records/holds",
@@ -638,9 +653,12 @@
         },
         "operation_id": "address_records_nearby_endpoint_api_v1_address_records_nearby_get",
         "optional_auth": false,
-        "review_notes": "Independent expected policy registry for SDA Review 06; not generated during pipeline execution.",
-        "review_status": "reviewed-route-policy-r06",
+        "path": "/api/v1/address-records/nearby",
+        "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+        "review_status": "reviewed-route-policy-r07",
         "roles": [
+          "admin",
+          "editor",
           "viewer"
         ],
         "route": "/api/v1/address-records/nearby",
@@ -747,9 +765,12 @@
         },
         "operation_id": "address_record_search_api_v1_address_records_search_get",
         "optional_auth": false,
-        "review_notes": "Independent expected policy registry for SDA Review 06; not generated during pipeline execution.",
-        "review_status": "reviewed-route-policy-r06",
+        "path": "/api/v1/address-records/search",
+        "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+        "review_status": "reviewed-route-policy-r07",
         "roles": [
+          "admin",
+          "editor",
           "viewer"
         ],
         "route": "/api/v1/address-records/search",
@@ -856,9 +877,12 @@
         },
         "operation_id": "address_record_case_file_api_v1_address_records__address_code__get",
         "optional_auth": false,
-        "review_notes": "Independent expected policy registry for SDA Review 06; not generated during pipeline execution.",
-        "review_status": "reviewed-route-policy-r06",
+        "path": "/api/v1/address-records/{address_code}",
+        "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+        "review_status": "reviewed-route-policy-r07",
         "roles": [
+          "admin",
+          "editor",
           "viewer"
         ],
         "route": "/api/v1/address-records/{address_code}",
@@ -947,9 +971,12 @@
         },
         "operation_id": "address_record_certificate_endpoint_api_v1_address_records__address_code__certificate_get",
         "optional_auth": false,
-        "review_notes": "Independent expected policy registry for SDA Review 06; not generated during pipeline execution.",
-        "review_status": "reviewed-route-policy-r06",
+        "path": "/api/v1/address-records/{address_code}/certificate",
+        "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+        "review_status": "reviewed-route-policy-r07",
         "roles": [
+          "admin",
+          "editor",
           "viewer"
         ],
         "route": "/api/v1/address-records/{address_code}/certificate",
@@ -1017,9 +1044,9 @@
         "auth": "role-required",
         "delegated_policy_helpers": [],
         "expected_key": "GET /api/v1/addresses",
-        "function": "create_address_endpoint",
-        "handler": "create_address_endpoint",
-        "method": "POST",
+        "function": "list_addresses",
+        "handler": "list_addresses",
+        "method": "GET",
         "observed": {
           "analysis": "function-ast-boundary",
           "auth": "role-required",
@@ -1038,8 +1065,9 @@
         },
         "operation_id": "list_addresses_api_v1_addresses_get",
         "optional_auth": false,
-        "review_notes": "Independent expected policy registry for SDA Review 06; not generated during pipeline execution.",
-        "review_status": "reviewed-route-policy-r06",
+        "path": "/api/v1/addresses",
+        "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+        "review_status": "reviewed-route-policy-r07",
         "roles": [
           "admin",
           "editor",
@@ -1047,7 +1075,7 @@
         ],
         "route": "/api/v1/addresses",
         "session_required": true,
-        "source": "services/api/app/main.py:1481-1489"
+        "source": "services/api/app/main.py:1464-1467"
       },
       "request_fields": [
         {
@@ -1160,9 +1188,11 @@
         },
         "operation_id": "create_address_endpoint_api_v1_addresses_post",
         "optional_auth": false,
-        "review_notes": "Independent expected policy registry for SDA Review 06; not generated during pipeline execution.",
-        "review_status": "reviewed-route-policy-r06",
+        "path": "/api/v1/addresses",
+        "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+        "review_status": "reviewed-route-policy-r07",
         "roles": [
+          "admin",
           "editor"
         ],
         "route": "/api/v1/addresses",
@@ -1333,8 +1363,9 @@
         },
         "operation_id": "archive_address_endpoint_api_v1_addresses__address_id__delete",
         "optional_auth": false,
-        "review_notes": "Independent expected policy registry for SDA Review 06; not generated during pipeline execution.",
-        "review_status": "reviewed-route-policy-r06",
+        "path": "/api/v1/addresses/{address_id}",
+        "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+        "review_status": "reviewed-route-policy-r07",
         "roles": [
           "admin"
         ],
@@ -1403,9 +1434,9 @@
         "auth": "role-required",
         "delegated_policy_helpers": [],
         "expected_key": "GET /api/v1/addresses/{address_id}",
-        "function": "archive_address_endpoint",
-        "handler": "archive_address_endpoint",
-        "method": "DELETE",
+        "function": "address_detail",
+        "handler": "address_detail",
+        "method": "GET",
         "observed": {
           "analysis": "function-ast-boundary",
           "auth": "role-required",
@@ -1424,8 +1455,9 @@
         },
         "operation_id": "address_detail_api_v1_addresses__address_id__get",
         "optional_auth": false,
-        "review_notes": "Independent expected policy registry for SDA Review 06; not generated during pipeline execution.",
-        "review_status": "reviewed-route-policy-r06",
+        "path": "/api/v1/addresses/{address_id}",
+        "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+        "review_status": "reviewed-route-policy-r07",
         "roles": [
           "admin",
           "editor",
@@ -1433,7 +1465,7 @@
         ],
         "route": "/api/v1/addresses/{address_id}",
         "session_required": true,
-        "source": "services/api/app/main.py:1507-1513"
+        "source": "services/api/app/main.py:1471-1477"
       },
       "request_fields": [
         {
@@ -1496,9 +1528,9 @@
         "auth": "role-required",
         "delegated_policy_helpers": [],
         "expected_key": "PATCH /api/v1/addresses/{address_id}",
-        "function": "archive_address_endpoint",
-        "handler": "archive_address_endpoint",
-        "method": "DELETE",
+        "function": "update_address_endpoint",
+        "handler": "update_address_endpoint",
+        "method": "PATCH",
         "observed": {
           "analysis": "function-ast-boundary",
           "auth": "role-required",
@@ -1516,14 +1548,16 @@
         },
         "operation_id": "update_address_endpoint_api_v1_addresses__address_id__patch",
         "optional_auth": false,
-        "review_notes": "Independent expected policy registry for SDA Review 06; not generated during pipeline execution.",
-        "review_status": "reviewed-route-policy-r06",
+        "path": "/api/v1/addresses/{address_id}",
+        "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+        "review_status": "reviewed-route-policy-r07",
         "roles": [
-          "admin"
+          "admin",
+          "editor"
         ],
         "route": "/api/v1/addresses/{address_id}",
         "session_required": true,
-        "source": "services/api/app/main.py:1507-1513"
+        "source": "services/api/app/main.py:1493-1503"
       },
       "request_fields": [
         {
@@ -1693,8 +1727,9 @@
         },
         "operation_id": "admin_units_api_v1_admin_units_get",
         "optional_auth": false,
-        "review_notes": "Independent expected policy registry for SDA Review 06; not generated during pipeline execution.",
-        "review_status": "reviewed-route-policy-r06",
+        "path": "/api/v1/admin-units",
+        "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+        "review_status": "reviewed-route-policy-r07",
         "roles": [],
         "route": "/api/v1/admin-units",
         "session_required": false,
@@ -1767,9 +1802,9 @@
         "auth": "role-required",
         "delegated_policy_helpers": [],
         "expected_key": "GET /api/v1/admin/users",
-        "function": "admin_create_user",
-        "handler": "admin_create_user",
-        "method": "POST",
+        "function": "admin_list_users",
+        "handler": "admin_list_users",
+        "method": "GET",
         "observed": {
           "analysis": "function-ast-boundary",
           "auth": "role-required",
@@ -1786,14 +1821,15 @@
         },
         "operation_id": "admin_list_users_api_v1_admin_users_get",
         "optional_auth": false,
-        "review_notes": "Independent expected policy registry for SDA Review 06; not generated during pipeline execution.",
-        "review_status": "reviewed-route-policy-r06",
+        "path": "/api/v1/admin/users",
+        "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+        "review_status": "reviewed-route-policy-r07",
         "roles": [
           "admin"
         ],
         "route": "/api/v1/admin/users",
         "session_required": true,
-        "source": "services/api/app/main.py:1168-1176"
+        "source": "services/api/app/main.py:1161-1164"
       },
       "request_fields": [
         {
@@ -1869,8 +1905,9 @@
         },
         "operation_id": "admin_create_user_api_v1_admin_users_post",
         "optional_auth": false,
-        "review_notes": "Independent expected policy registry for SDA Review 06; not generated during pipeline execution.",
-        "review_status": "reviewed-route-policy-r06",
+        "path": "/api/v1/admin/users",
+        "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+        "review_status": "reviewed-route-policy-r07",
         "roles": [
           "admin"
         ],
@@ -1976,8 +2013,9 @@
         },
         "operation_id": "admin_update_user_api_v1_admin_users__user_id__patch",
         "optional_auth": false,
-        "review_notes": "Independent expected policy registry for SDA Review 06; not generated during pipeline execution.",
-        "review_status": "reviewed-route-policy-r06",
+        "path": "/api/v1/admin/users/{user_id}",
+        "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+        "review_status": "reviewed-route-policy-r07",
         "roles": [
           "admin"
         ],
@@ -2089,8 +2127,9 @@
         },
         "operation_id": "admin_disable_user_api_v1_admin_users__user_id__disable_post",
         "optional_auth": false,
-        "review_notes": "Independent expected policy registry for SDA Review 06; not generated during pipeline execution.",
-        "review_status": "reviewed-route-policy-r06",
+        "path": "/api/v1/admin/users/{user_id}/disable",
+        "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+        "review_status": "reviewed-route-policy-r07",
         "roles": [
           "admin"
         ],
@@ -2178,8 +2217,9 @@
         },
         "operation_id": "admin_revoke_user_sessions_api_v1_admin_users__user_id__revoke_sessions_post",
         "optional_auth": false,
-        "review_notes": "Independent expected policy registry for SDA Review 06; not generated during pipeline execution.",
-        "review_status": "reviewed-route-policy-r06",
+        "path": "/api/v1/admin/users/{user_id}/revoke-sessions",
+        "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+        "review_status": "reviewed-route-policy-r07",
         "roles": [
           "admin"
         ],
@@ -2267,8 +2307,9 @@
         },
         "operation_id": "audit_logs_api_v1_audit_logs_get",
         "optional_auth": false,
-        "review_notes": "Independent expected policy registry for SDA Review 06; not generated during pipeline execution.",
-        "review_status": "reviewed-route-policy-r06",
+        "path": "/api/v1/audit-logs",
+        "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+        "review_status": "reviewed-route-policy-r07",
         "roles": [
           "admin"
         ],
@@ -2372,8 +2413,9 @@
         },
         "operation_id": "login_api_v1_auth_login_post",
         "optional_auth": false,
-        "review_notes": "Independent expected policy registry for SDA Review 06; not generated during pipeline execution.",
-        "review_status": "reviewed-route-policy-r06",
+        "path": "/api/v1/auth/login",
+        "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+        "review_status": "reviewed-route-policy-r07",
         "roles": [],
         "route": "/api/v1/auth/login",
         "session_required": false,
@@ -2457,8 +2499,9 @@
         },
         "operation_id": "auth_logout_api_v1_auth_logout_post",
         "optional_auth": false,
-        "review_notes": "Independent expected policy registry for SDA Review 06; not generated during pipeline execution.",
-        "review_status": "reviewed-route-policy-r06",
+        "path": "/api/v1/auth/logout",
+        "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+        "review_status": "reviewed-route-policy-r07",
         "roles": [],
         "route": "/api/v1/auth/logout",
         "session_required": true,
@@ -2542,8 +2585,9 @@
         },
         "operation_id": "auth_me_api_v1_auth_me_get",
         "optional_auth": false,
-        "review_notes": "Independent expected policy registry for SDA Review 06; not generated during pipeline execution.",
-        "review_status": "reviewed-route-policy-r06",
+        "path": "/api/v1/auth/me",
+        "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+        "review_status": "reviewed-route-policy-r07",
         "roles": [],
         "route": "/api/v1/auth/me",
         "session_required": true,
@@ -2610,9 +2654,9 @@
         "auth": "role-required",
         "delegated_policy_helpers": [],
         "expected_key": "GET /api/v1/buildings",
-        "function": "create_building_endpoint",
-        "handler": "create_building_endpoint",
-        "method": "POST",
+        "function": "list_buildings",
+        "handler": "list_buildings",
+        "method": "GET",
         "observed": {
           "analysis": "function-ast-boundary",
           "auth": "role-required",
@@ -2631,14 +2675,17 @@
         },
         "operation_id": "list_buildings_api_v1_buildings_get",
         "optional_auth": false,
-        "review_notes": "Independent expected policy registry for SDA Review 06; not generated during pipeline execution.",
-        "review_status": "reviewed-route-policy-r06",
+        "path": "/api/v1/buildings",
+        "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+        "review_status": "reviewed-route-policy-r07",
         "roles": [
-          "editor"
+          "admin",
+          "editor",
+          "viewer"
         ],
         "route": "/api/v1/buildings",
         "session_required": true,
-        "source": "services/api/app/main.py:1428-1436"
+        "source": "services/api/app/main.py:1411-1414"
       },
       "request_fields": [
         {
@@ -2745,9 +2792,11 @@
         },
         "operation_id": "create_building_endpoint_api_v1_buildings_post",
         "optional_auth": false,
-        "review_notes": "Independent expected policy registry for SDA Review 06; not generated during pipeline execution.",
-        "review_status": "reviewed-route-policy-r06",
+        "path": "/api/v1/buildings",
+        "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+        "review_status": "reviewed-route-policy-r07",
         "roles": [
+          "admin",
           "editor"
         ],
         "route": "/api/v1/buildings",
@@ -2858,8 +2907,9 @@
         },
         "operation_id": "archive_building_endpoint_api_v1_buildings__building_id__delete",
         "optional_auth": false,
-        "review_notes": "Independent expected policy registry for SDA Review 06; not generated during pipeline execution.",
-        "review_status": "reviewed-route-policy-r06",
+        "path": "/api/v1/buildings/{building_id}",
+        "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+        "review_status": "reviewed-route-policy-r07",
         "roles": [
           "admin"
         ],
@@ -2928,9 +2978,9 @@
         "auth": "role-required",
         "delegated_policy_helpers": [],
         "expected_key": "GET /api/v1/buildings/{building_id}",
-        "function": "archive_building_endpoint",
-        "handler": "archive_building_endpoint",
-        "method": "DELETE",
+        "function": "building_detail",
+        "handler": "building_detail",
+        "method": "GET",
         "observed": {
           "analysis": "function-ast-boundary",
           "auth": "role-required",
@@ -2949,14 +2999,17 @@
         },
         "operation_id": "building_detail_api_v1_buildings__building_id__get",
         "optional_auth": false,
-        "review_notes": "Independent expected policy registry for SDA Review 06; not generated during pipeline execution.",
-        "review_status": "reviewed-route-policy-r06",
+        "path": "/api/v1/buildings/{building_id}",
+        "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+        "review_status": "reviewed-route-policy-r07",
         "roles": [
-          "admin"
+          "admin",
+          "editor",
+          "viewer"
         ],
         "route": "/api/v1/buildings/{building_id}",
         "session_required": true,
-        "source": "services/api/app/main.py:1454-1460"
+        "source": "services/api/app/main.py:1418-1424"
       },
       "request_fields": [
         {
@@ -3019,9 +3072,9 @@
         "auth": "role-required",
         "delegated_policy_helpers": [],
         "expected_key": "PATCH /api/v1/buildings/{building_id}",
-        "function": "archive_building_endpoint",
-        "handler": "archive_building_endpoint",
-        "method": "DELETE",
+        "function": "update_building_endpoint",
+        "handler": "update_building_endpoint",
+        "method": "PATCH",
         "observed": {
           "analysis": "function-ast-boundary",
           "auth": "role-required",
@@ -3039,14 +3092,16 @@
         },
         "operation_id": "update_building_endpoint_api_v1_buildings__building_id__patch",
         "optional_auth": false,
-        "review_notes": "Independent expected policy registry for SDA Review 06; not generated during pipeline execution.",
-        "review_status": "reviewed-route-policy-r06",
+        "path": "/api/v1/buildings/{building_id}",
+        "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+        "review_status": "reviewed-route-policy-r07",
         "roles": [
-          "admin"
+          "admin",
+          "editor"
         ],
         "route": "/api/v1/buildings/{building_id}",
         "session_required": true,
-        "source": "services/api/app/main.py:1454-1460"
+        "source": "services/api/app/main.py:1440-1450"
       },
       "request_fields": [
         {
@@ -3160,9 +3215,12 @@
         },
         "operation_id": "field_assignments_api_v1_field_assignments_get",
         "optional_auth": false,
-        "review_notes": "Independent expected policy registry for SDA Review 06; not generated during pipeline execution.",
-        "review_status": "reviewed-route-policy-r06",
+        "path": "/api/v1/field/assignments",
+        "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+        "review_status": "reviewed-route-policy-r07",
         "roles": [
+          "admin",
+          "editor",
           "viewer"
         ],
         "route": "/api/v1/field/assignments",
@@ -3245,9 +3303,12 @@
         },
         "operation_id": "field_geotag_tasks_api_v1_field_geotag_tasks_get",
         "optional_auth": false,
-        "review_notes": "Independent expected policy registry for SDA Review 06; not generated during pipeline execution.",
-        "review_status": "reviewed-route-policy-r06",
+        "path": "/api/v1/field/geotag-tasks",
+        "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+        "review_status": "reviewed-route-policy-r07",
         "roles": [
+          "admin",
+          "editor",
           "viewer"
         ],
         "route": "/api/v1/field/geotag-tasks",
@@ -3341,9 +3402,11 @@
         },
         "operation_id": "record_field_geotag_task_evidence_api_v1_field_geotag_tasks__submission_id__evidence_post",
         "optional_auth": false,
-        "review_notes": "Independent expected policy registry for SDA Review 06; not generated during pipeline execution.",
-        "review_status": "reviewed-route-policy-r06",
+        "path": "/api/v1/field/geotag-tasks/{submission_id}/evidence",
+        "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+        "review_status": "reviewed-route-policy-r07",
         "roles": [
+          "admin",
           "editor"
         ],
         "route": "/api/v1/field/geotag-tasks/{submission_id}/evidence",
@@ -3449,9 +3512,11 @@
         },
         "operation_id": "update_field_geotag_task_status_api_v1_field_geotag_tasks__submission_id__status_post",
         "optional_auth": false,
-        "review_notes": "Independent expected policy registry for SDA Review 06; not generated during pipeline execution.",
-        "review_status": "reviewed-route-policy-r06",
+        "path": "/api/v1/field/geotag-tasks/{submission_id}/status",
+        "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+        "review_status": "reviewed-route-policy-r07",
         "roles": [
+          "admin",
           "editor"
         ],
         "route": "/api/v1/field/geotag-tasks/{submission_id}/status",
@@ -3551,9 +3616,11 @@
         },
         "operation_id": "enrich_field_spatial_evidence_endpoint_api_v1_field_spatial_evidence_enrich_post",
         "optional_auth": false,
-        "review_notes": "Independent expected policy registry for SDA Review 06; not generated during pipeline execution.",
-        "review_status": "reviewed-route-policy-r06",
+        "path": "/api/v1/field/spatial-evidence/enrich",
+        "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+        "review_status": "reviewed-route-policy-r07",
         "roles": [
+          "admin",
           "editor"
         ],
         "route": "/api/v1/field/spatial-evidence/enrich",
@@ -3633,9 +3700,9 @@
         "auth": "role-required",
         "delegated_policy_helpers": [],
         "expected_key": "GET /api/v1/field/submissions",
-        "function": "create_field_submission_endpoint",
-        "handler": "create_field_submission_endpoint",
-        "method": "POST",
+        "function": "field_submissions",
+        "handler": "field_submissions",
+        "method": "GET",
         "observed": {
           "analysis": "function-ast-boundary",
           "auth": "role-required",
@@ -3654,14 +3721,17 @@
         },
         "operation_id": "field_submissions_api_v1_field_submissions_get",
         "optional_auth": false,
-        "review_notes": "Independent expected policy registry for SDA Review 06; not generated during pipeline execution.",
-        "review_status": "reviewed-route-policy-r06",
+        "path": "/api/v1/field/submissions",
+        "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+        "review_status": "reviewed-route-policy-r07",
         "roles": [
-          "editor"
+          "admin",
+          "editor",
+          "viewer"
         ],
         "route": "/api/v1/field/submissions",
         "session_required": true,
-        "source": "services/api/app/main.py:1571-1579"
+        "source": "services/api/app/main.py:1553-1556"
       },
       "request_fields": [
         {
@@ -3762,9 +3832,11 @@
         },
         "operation_id": "create_field_submission_endpoint_api_v1_field_submissions_post",
         "optional_auth": false,
-        "review_notes": "Independent expected policy registry for SDA Review 06; not generated during pipeline execution.",
-        "review_status": "reviewed-route-policy-r06",
+        "path": "/api/v1/field/submissions",
+        "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+        "review_status": "reviewed-route-policy-r07",
         "roles": [
+          "admin",
           "editor"
         ],
         "route": "/api/v1/field/submissions",
@@ -3894,9 +3966,11 @@
         },
         "operation_id": "approve_submission_endpoint_api_v1_field_submissions__submission_id__approve_post",
         "optional_auth": false,
-        "review_notes": "Independent expected policy registry for SDA Review 06; not generated during pipeline execution.",
-        "review_status": "reviewed-route-policy-r06",
+        "path": "/api/v1/field/submissions/{submission_id}/approve",
+        "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+        "review_status": "reviewed-route-policy-r07",
         "roles": [
+          "admin",
           "editor"
         ],
         "route": "/api/v1/field/submissions/{submission_id}/approve",
@@ -3984,9 +4058,11 @@
         },
         "operation_id": "upload_field_submission_evidence_file_api_v1_field_submissions__submission_id__evidence_files_post",
         "optional_auth": false,
-        "review_notes": "Independent expected policy registry for SDA Review 06; not generated during pipeline execution.",
-        "review_status": "reviewed-route-policy-r06",
+        "path": "/api/v1/field/submissions/{submission_id}/evidence-files",
+        "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+        "review_status": "reviewed-route-policy-r07",
         "roles": [
+          "admin",
           "editor"
         ],
         "route": "/api/v1/field/submissions/{submission_id}/evidence-files",
@@ -4087,9 +4163,12 @@
         },
         "operation_id": "download_field_submission_evidence_file_api_v1_field_submissions__submission_id__evidence_files__file_id__get",
         "optional_auth": false,
-        "review_notes": "Independent expected policy registry for SDA Review 06; not generated during pipeline execution.",
-        "review_status": "reviewed-route-policy-r06",
+        "path": "/api/v1/field/submissions/{submission_id}/evidence-files/{file_id}",
+        "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+        "review_status": "reviewed-route-policy-r07",
         "roles": [
+          "admin",
+          "editor",
           "viewer"
         ],
         "route": "/api/v1/field/submissions/{submission_id}/evidence-files/{file_id}",
@@ -4184,9 +4263,12 @@
         },
         "operation_id": "field_submission_evidence_history_api_v1_field_submissions__submission_id__evidence_history_get",
         "optional_auth": false,
-        "review_notes": "Independent expected policy registry for SDA Review 06; not generated during pipeline execution.",
-        "review_status": "reviewed-route-policy-r06",
+        "path": "/api/v1/field/submissions/{submission_id}/evidence-history",
+        "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+        "review_status": "reviewed-route-policy-r07",
         "roles": [
+          "admin",
+          "editor",
           "viewer"
         ],
         "route": "/api/v1/field/submissions/{submission_id}/evidence-history",
@@ -4280,9 +4362,11 @@
         },
         "operation_id": "review_field_submission_evidence_endpoint_api_v1_field_submissions__submission_id__evidence_review_post",
         "optional_auth": false,
-        "review_notes": "Independent expected policy registry for SDA Review 06; not generated during pipeline execution.",
-        "review_status": "reviewed-route-policy-r06",
+        "path": "/api/v1/field/submissions/{submission_id}/evidence-review",
+        "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+        "review_status": "reviewed-route-policy-r07",
         "roles": [
+          "admin",
           "editor"
         ],
         "route": "/api/v1/field/submissions/{submission_id}/evidence-review",
@@ -4394,9 +4478,11 @@
         },
         "operation_id": "reject_submission_endpoint_api_v1_field_submissions__submission_id__reject_post",
         "optional_auth": false,
-        "review_notes": "Independent expected policy registry for SDA Review 06; not generated during pipeline execution.",
-        "review_status": "reviewed-route-policy-r06",
+        "path": "/api/v1/field/submissions/{submission_id}/reject",
+        "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+        "review_status": "reviewed-route-policy-r07",
         "roles": [
+          "admin",
           "editor"
         ],
         "route": "/api/v1/field/submissions/{submission_id}/reject",
@@ -4490,9 +4576,11 @@
         },
         "operation_id": "rework_submission_endpoint_api_v1_field_submissions__submission_id__rework_post",
         "optional_auth": false,
-        "review_notes": "Independent expected policy registry for SDA Review 06; not generated during pipeline execution.",
-        "review_status": "reviewed-route-policy-r06",
+        "path": "/api/v1/field/submissions/{submission_id}/rework",
+        "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+        "review_status": "reviewed-route-policy-r07",
         "roles": [
+          "admin",
           "editor"
         ],
         "route": "/api/v1/field/submissions/{submission_id}/rework",
@@ -4586,9 +4674,11 @@
         },
         "operation_id": "mark_submission_under_review_api_v1_field_submissions__submission_id__under_review_post",
         "optional_auth": false,
-        "review_notes": "Independent expected policy registry for SDA Review 06; not generated during pipeline execution.",
-        "review_status": "reviewed-route-policy-r06",
+        "path": "/api/v1/field/submissions/{submission_id}/under-review",
+        "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+        "review_status": "reviewed-route-policy-r07",
         "roles": [
+          "admin",
           "editor"
         ],
         "route": "/api/v1/field/submissions/{submission_id}/under-review",
@@ -4683,9 +4773,12 @@
         },
         "operation_id": "geotag_submissions_api_v1_geotag_submissions_get",
         "optional_auth": false,
-        "review_notes": "Independent expected policy registry for SDA Review 06; not generated during pipeline execution.",
-        "review_status": "reviewed-route-policy-r06",
+        "path": "/api/v1/geotag-submissions",
+        "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+        "review_status": "reviewed-route-policy-r07",
         "roles": [
+          "admin",
+          "editor",
           "viewer"
         ],
         "route": "/api/v1/geotag-submissions",
@@ -4780,9 +4873,12 @@
         },
         "operation_id": "geotag_sla_drilldown_api_v1_geotag_submissions_automation_sla_drilldown_get",
         "optional_auth": false,
-        "review_notes": "Independent expected policy registry for SDA Review 06; not generated during pipeline execution.",
-        "review_status": "reviewed-route-policy-r06",
+        "path": "/api/v1/geotag-submissions/automation/sla-drilldown",
+        "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+        "review_status": "reviewed-route-policy-r07",
         "roles": [
+          "admin",
+          "editor",
           "viewer"
         ],
         "route": "/api/v1/geotag-submissions/automation/sla-drilldown",
@@ -4871,9 +4967,12 @@
         },
         "operation_id": "geotag_automation_summary_api_v1_geotag_submissions_automation_summary_get",
         "optional_auth": false,
-        "review_notes": "Independent expected policy registry for SDA Review 06; not generated during pipeline execution.",
-        "review_status": "reviewed-route-policy-r06",
+        "path": "/api/v1/geotag-submissions/automation/summary",
+        "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+        "review_status": "reviewed-route-policy-r07",
         "roles": [
+          "admin",
+          "editor",
           "viewer"
         ],
         "route": "/api/v1/geotag-submissions/automation/summary",
@@ -4956,9 +5055,12 @@
         },
         "operation_id": "geotag_duplicates_summary_api_v1_geotag_submissions_duplicates_summary_get",
         "optional_auth": false,
-        "review_notes": "Independent expected policy registry for SDA Review 06; not generated during pipeline execution.",
-        "review_status": "reviewed-route-policy-r06",
+        "path": "/api/v1/geotag-submissions/duplicates/summary",
+        "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+        "review_status": "reviewed-route-policy-r07",
         "roles": [
+          "admin",
+          "editor",
           "viewer"
         ],
         "route": "/api/v1/geotag-submissions/duplicates/summary",
@@ -5041,9 +5143,12 @@
         },
         "operation_id": "geotag_certificate_api_v1_geotag_submissions__submission_id__certificate_get",
         "optional_auth": false,
-        "review_notes": "Independent expected policy registry for SDA Review 06; not generated during pipeline execution.",
-        "review_status": "reviewed-route-policy-r06",
+        "path": "/api/v1/geotag-submissions/{submission_id}/certificate",
+        "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+        "review_status": "reviewed-route-policy-r07",
         "roles": [
+          "admin",
+          "editor",
           "viewer"
         ],
         "route": "/api/v1/geotag-submissions/{submission_id}/certificate",
@@ -5131,9 +5236,11 @@
         },
         "operation_id": "geotag_duplicate_decision_api_v1_geotag_submissions__submission_id__duplicate_decision_post",
         "optional_auth": false,
-        "review_notes": "Independent expected policy registry for SDA Review 06; not generated during pipeline execution.",
-        "review_status": "reviewed-route-policy-r06",
+        "path": "/api/v1/geotag-submissions/{submission_id}/duplicate-decision",
+        "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+        "review_status": "reviewed-route-policy-r07",
         "roles": [
+          "admin",
           "editor"
         ],
         "route": "/api/v1/geotag-submissions/{submission_id}/duplicate-decision",
@@ -5233,9 +5340,11 @@
         },
         "operation_id": "send_geotag_to_field_check_api_v1_geotag_submissions__submission_id__field_check_post",
         "optional_auth": false,
-        "review_notes": "Independent expected policy registry for SDA Review 06; not generated during pipeline execution.",
-        "review_status": "reviewed-route-policy-r06",
+        "path": "/api/v1/geotag-submissions/{submission_id}/field-check",
+        "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+        "review_status": "reviewed-route-policy-r07",
         "roles": [
+          "admin",
           "editor"
         ],
         "route": "/api/v1/geotag-submissions/{submission_id}/field-check",
@@ -5330,9 +5439,12 @@
         },
         "operation_id": "geotag_submission_history_api_v1_geotag_submissions__submission_id__history_get",
         "optional_auth": false,
-        "review_notes": "Independent expected policy registry for SDA Review 06; not generated during pipeline execution.",
-        "review_status": "reviewed-route-policy-r06",
+        "path": "/api/v1/geotag-submissions/{submission_id}/history",
+        "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+        "review_status": "reviewed-route-policy-r07",
         "roles": [
+          "admin",
+          "editor",
           "viewer"
         ],
         "route": "/api/v1/geotag-submissions/{submission_id}/history",
@@ -5420,9 +5532,11 @@
         },
         "operation_id": "geotag_identity_review_api_v1_geotag_submissions__submission_id__identity_post",
         "optional_auth": false,
-        "review_notes": "Independent expected policy registry for SDA Review 06; not generated during pipeline execution.",
-        "review_status": "reviewed-route-policy-r06",
+        "path": "/api/v1/geotag-submissions/{submission_id}/identity",
+        "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+        "review_status": "reviewed-route-policy-r07",
         "roles": [
+          "admin",
           "editor"
         ],
         "route": "/api/v1/geotag-submissions/{submission_id}/identity",
@@ -5528,9 +5642,11 @@
         },
         "operation_id": "simulate_geotag_publication_api_v1_geotag_submissions__submission_id__publication_simulation_post",
         "optional_auth": false,
-        "review_notes": "Independent expected policy registry for SDA Review 06; not generated during pipeline execution.",
-        "review_status": "reviewed-route-policy-r06",
+        "path": "/api/v1/geotag-submissions/{submission_id}/publication-simulation",
+        "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+        "review_status": "reviewed-route-policy-r07",
         "roles": [
+          "admin",
           "editor"
         ],
         "route": "/api/v1/geotag-submissions/{submission_id}/publication-simulation",
@@ -5623,8 +5739,9 @@
         },
         "operation_id": "publish_geotag_case_file_api_v1_geotag_submissions__submission_id__publish_post",
         "optional_auth": false,
-        "review_notes": "Independent expected policy registry for SDA Review 06; not generated during pipeline execution.",
-        "review_status": "reviewed-route-policy-r06",
+        "path": "/api/v1/geotag-submissions/{submission_id}/publish",
+        "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+        "review_status": "reviewed-route-policy-r07",
         "roles": [
           "admin"
         ],
@@ -5719,9 +5836,11 @@
         },
         "operation_id": "mark_geotag_registry_ready_api_v1_geotag_submissions__submission_id__registry_ready_post",
         "optional_auth": false,
-        "review_notes": "Independent expected policy registry for SDA Review 06; not generated during pipeline execution.",
-        "review_status": "reviewed-route-policy-r06",
+        "path": "/api/v1/geotag-submissions/{submission_id}/registry-ready",
+        "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+        "review_status": "reviewed-route-policy-r07",
         "roles": [
+          "admin",
           "editor"
         ],
         "route": "/api/v1/geotag-submissions/{submission_id}/registry-ready",
@@ -5815,9 +5934,11 @@
         },
         "operation_id": "reject_geotag_submission_api_v1_geotag_submissions__submission_id__reject_post",
         "optional_auth": false,
-        "review_notes": "Independent expected policy registry for SDA Review 06; not generated during pipeline execution.",
-        "review_status": "reviewed-route-policy-r06",
+        "path": "/api/v1/geotag-submissions/{submission_id}/reject",
+        "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+        "review_status": "reviewed-route-policy-r07",
         "roles": [
+          "admin",
           "editor"
         ],
         "route": "/api/v1/geotag-submissions/{submission_id}/reject",
@@ -5911,9 +6032,11 @@
         },
         "operation_id": "geotag_road_suggestion_review_api_v1_geotag_submissions__submission_id__road_suggestion_post",
         "optional_auth": false,
-        "review_notes": "Independent expected policy registry for SDA Review 06; not generated during pipeline execution.",
-        "review_status": "reviewed-route-policy-r06",
+        "path": "/api/v1/geotag-submissions/{submission_id}/road-suggestion",
+        "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+        "review_status": "reviewed-route-policy-r07",
         "roles": [
+          "admin",
           "editor"
         ],
         "route": "/api/v1/geotag-submissions/{submission_id}/road-suggestion",
@@ -6019,9 +6142,11 @@
         },
         "operation_id": "mark_geotag_under_review_api_v1_geotag_submissions__submission_id__under_review_post",
         "optional_auth": false,
-        "review_notes": "Independent expected policy registry for SDA Review 06; not generated during pipeline execution.",
-        "review_status": "reviewed-route-policy-r06",
+        "path": "/api/v1/geotag-submissions/{submission_id}/under-review",
+        "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+        "review_status": "reviewed-route-policy-r07",
         "roles": [
+          "admin",
           "editor"
         ],
         "route": "/api/v1/geotag-submissions/{submission_id}/under-review",
@@ -6112,8 +6237,9 @@
         },
         "operation_id": "health_api_v1_health_get",
         "optional_auth": false,
-        "review_notes": "Independent expected policy registry for SDA Review 06; not generated during pipeline execution.",
-        "review_status": "reviewed-route-policy-r06",
+        "path": "/api/v1/health",
+        "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+        "review_status": "reviewed-route-policy-r07",
         "roles": [],
         "route": "/api/v1/health",
         "session_required": false,
@@ -6137,9 +6263,9 @@
         "auth": "role-required",
         "delegated_policy_helpers": [],
         "expected_key": "GET /api/v1/imports/jobs",
-        "function": "create_import_job_endpoint",
-        "handler": "create_import_job_endpoint",
-        "method": "POST",
+        "function": "import_jobs",
+        "handler": "import_jobs",
+        "method": "GET",
         "observed": {
           "analysis": "function-ast-boundary",
           "auth": "role-required",
@@ -6158,14 +6284,17 @@
         },
         "operation_id": "import_jobs_api_v1_imports_jobs_get",
         "optional_auth": false,
-        "review_notes": "Independent expected policy registry for SDA Review 06; not generated during pipeline execution.",
-        "review_status": "reviewed-route-policy-r06",
+        "path": "/api/v1/imports/jobs",
+        "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+        "review_status": "reviewed-route-policy-r07",
         "roles": [
-          "editor"
+          "admin",
+          "editor",
+          "viewer"
         ],
         "route": "/api/v1/imports/jobs",
         "session_required": true,
-        "source": "services/api/app/main.py:2189-2197"
+        "source": "services/api/app/main.py:2172-2175"
       },
       "request_fields": [
         {
@@ -6242,9 +6371,11 @@
         },
         "operation_id": "create_import_job_endpoint_api_v1_imports_jobs_post",
         "optional_auth": false,
-        "review_notes": "Independent expected policy registry for SDA Review 06; not generated during pipeline execution.",
-        "review_status": "reviewed-route-policy-r06",
+        "path": "/api/v1/imports/jobs",
+        "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+        "review_status": "reviewed-route-policy-r07",
         "roles": [
+          "admin",
           "editor"
         ],
         "route": "/api/v1/imports/jobs",
@@ -6374,9 +6505,11 @@
         },
         "operation_id": "commit_import_job_endpoint_api_v1_imports_jobs__job_id__commit_post",
         "optional_auth": false,
-        "review_notes": "Independent expected policy registry for SDA Review 06; not generated during pipeline execution.",
-        "review_status": "reviewed-route-policy-r06",
+        "path": "/api/v1/imports/jobs/{job_id}/commit",
+        "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+        "review_status": "reviewed-route-policy-r07",
         "roles": [
+          "admin",
           "editor"
         ],
         "route": "/api/v1/imports/jobs/{job_id}/commit",
@@ -6465,9 +6598,12 @@
         },
         "operation_id": "import_rows_api_v1_imports_jobs__job_id__rows_get",
         "optional_auth": false,
-        "review_notes": "Independent expected policy registry for SDA Review 06; not generated during pipeline execution.",
-        "review_status": "reviewed-route-policy-r06",
+        "path": "/api/v1/imports/jobs/{job_id}/rows",
+        "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+        "review_status": "reviewed-route-policy-r07",
         "roles": [
+          "admin",
+          "editor",
           "viewer"
         ],
         "route": "/api/v1/imports/jobs/{job_id}/rows",
@@ -6552,8 +6688,9 @@
         },
         "operation_id": "meta_api_v1_meta_get",
         "optional_auth": false,
-        "review_notes": "Independent expected policy registry for SDA Review 06; not generated during pipeline execution.",
-        "review_status": "reviewed-route-policy-r06",
+        "path": "/api/v1/meta",
+        "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+        "review_status": "reviewed-route-policy-r07",
         "roles": [],
         "route": "/api/v1/meta",
         "session_required": false,
@@ -6598,9 +6735,12 @@
         },
         "operation_id": "operator_command_center_api_v1_operator_command_center_get",
         "optional_auth": false,
-        "review_notes": "Independent expected policy registry for SDA Review 06; not generated during pipeline execution.",
-        "review_status": "reviewed-route-policy-r06",
+        "path": "/api/v1/operator/command-center",
+        "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+        "review_status": "reviewed-route-policy-r07",
         "roles": [
+          "admin",
+          "editor",
           "viewer"
         ],
         "route": "/api/v1/operator/command-center",
@@ -6681,8 +6821,9 @@
         },
         "operation_id": "operator_demo_fixture_cleanup_api_v1_operator_demo_fixtures_cleanup_post",
         "optional_auth": false,
-        "review_notes": "Independent expected policy registry for SDA Review 06; not generated during pipeline execution.",
-        "review_status": "reviewed-route-policy-r06",
+        "path": "/api/v1/operator/demo-fixtures/cleanup",
+        "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+        "review_status": "reviewed-route-policy-r07",
         "roles": [
           "admin"
         ],
@@ -6766,9 +6907,12 @@
         },
         "operation_id": "operator_demo_fixture_status_api_v1_operator_demo_fixtures_status_get",
         "optional_auth": false,
-        "review_notes": "Independent expected policy registry for SDA Review 06; not generated during pipeline execution.",
-        "review_status": "reviewed-route-policy-r06",
+        "path": "/api/v1/operator/demo-fixtures/status",
+        "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+        "review_status": "reviewed-route-policy-r07",
         "roles": [
+          "admin",
+          "editor",
           "viewer"
         ],
         "route": "/api/v1/operator/demo-fixtures/status",
@@ -6851,9 +6995,12 @@
         },
         "operation_id": "operator_migration_status_api_v1_operator_migrations_status_get",
         "optional_auth": false,
-        "review_notes": "Independent expected policy registry for SDA Review 06; not generated during pipeline execution.",
-        "review_status": "reviewed-route-policy-r06",
+        "path": "/api/v1/operator/migrations/status",
+        "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+        "review_status": "reviewed-route-policy-r07",
         "roles": [
+          "admin",
+          "editor",
           "viewer"
         ],
         "route": "/api/v1/operator/migrations/status",
@@ -6936,9 +7083,12 @@
         },
         "operation_id": "operator_postgis_readiness_api_v1_operator_postgis_readiness_get",
         "optional_auth": false,
-        "review_notes": "Independent expected policy registry for SDA Review 06; not generated during pipeline execution.",
-        "review_status": "reviewed-route-policy-r06",
+        "path": "/api/v1/operator/postgis/readiness",
+        "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+        "review_status": "reviewed-route-policy-r07",
         "roles": [
+          "admin",
+          "editor",
           "viewer"
         ],
         "route": "/api/v1/operator/postgis/readiness",
@@ -7021,9 +7171,12 @@
         },
         "operation_id": "operator_production_readiness_api_v1_operator_production_readiness_get",
         "optional_auth": false,
-        "review_notes": "Independent expected policy registry for SDA Review 06; not generated during pipeline execution.",
-        "review_status": "reviewed-route-policy-r06",
+        "path": "/api/v1/operator/production-readiness",
+        "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+        "review_status": "reviewed-route-policy-r07",
         "roles": [
+          "admin",
+          "editor",
           "viewer"
         ],
         "route": "/api/v1/operator/production-readiness",
@@ -7106,9 +7259,12 @@
         },
         "operation_id": "operator_restore_drill_latest_api_v1_operator_restore_drill_latest_get",
         "optional_auth": false,
-        "review_notes": "Independent expected policy registry for SDA Review 06; not generated during pipeline execution.",
-        "review_status": "reviewed-route-policy-r06",
+        "path": "/api/v1/operator/restore-drill/latest",
+        "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+        "review_status": "reviewed-route-policy-r07",
         "roles": [
+          "admin",
+          "editor",
           "viewer"
         ],
         "route": "/api/v1/operator/restore-drill/latest",
@@ -7192,9 +7348,13 @@
         },
         "operation_id": "pilot_readiness_summary_endpoint_api_v1_pilot_readiness_summary_get",
         "optional_auth": false,
-        "review_notes": "Independent expected policy registry for SDA Review 06; not generated during pipeline execution.",
-        "review_status": "reviewed-route-policy-r06",
+        "path": "/api/v1/pilot-readiness/summary",
+        "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+        "review_status": "reviewed-route-policy-r07",
         "roles": [
+          "admin",
+          "agency_viewer",
+          "editor",
           "viewer"
         ],
         "route": "/api/v1/pilot-readiness/summary",
@@ -7273,8 +7433,9 @@
         },
         "operation_id": "list_public_provinces_api_v1_provinces_get",
         "optional_auth": false,
-        "review_notes": "Independent expected policy registry for SDA Review 06; not generated during pipeline execution.",
-        "review_status": "reviewed-route-policy-r06",
+        "path": "/api/v1/provinces",
+        "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+        "review_status": "reviewed-route-policy-r07",
         "roles": [],
         "route": "/api/v1/provinces",
         "session_required": false,
@@ -7315,8 +7476,9 @@
         },
         "operation_id": "public_address_code_lookup_api_v1_public_address_code__code__get",
         "optional_auth": false,
-        "review_notes": "Independent expected policy registry for SDA Review 06; not generated during pipeline execution.",
-        "review_status": "reviewed-route-policy-r06",
+        "path": "/api/v1/public/address-code/{code}",
+        "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+        "review_status": "reviewed-route-policy-r07",
         "roles": [],
         "route": "/api/v1/public/address-code/{code}",
         "session_required": false,
@@ -7394,8 +7556,9 @@
         },
         "operation_id": "public_address_code_record_api_v1_public_address_code__code__record_get",
         "optional_auth": false,
-        "review_notes": "Independent expected policy registry for SDA Review 06; not generated during pipeline execution.",
-        "review_status": "reviewed-route-policy-r06",
+        "path": "/api/v1/public/address-code/{code}/record",
+        "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+        "review_status": "reviewed-route-policy-r07",
         "roles": [],
         "route": "/api/v1/public/address-code/{code}/record",
         "session_required": false,
@@ -7473,8 +7636,9 @@
         },
         "operation_id": "create_public_correction_api_v1_public_corrections_post",
         "optional_auth": false,
-        "review_notes": "Independent expected policy registry for SDA Review 06; not generated during pipeline execution.",
-        "review_status": "reviewed-route-policy-r06",
+        "path": "/api/v1/public/corrections",
+        "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+        "review_status": "reviewed-route-policy-r07",
         "roles": [],
         "route": "/api/v1/public/corrections",
         "session_required": false,
@@ -7600,8 +7764,9 @@
         },
         "operation_id": "create_public_geotag_submission_api_v1_public_geotag_submissions_post",
         "optional_auth": false,
-        "review_notes": "Independent expected policy registry for SDA Review 06; not generated during pipeline execution.",
-        "review_status": "reviewed-route-policy-r06",
+        "path": "/api/v1/public/geotag-submissions",
+        "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+        "review_status": "reviewed-route-policy-r07",
         "roles": [],
         "route": "/api/v1/public/geotag-submissions",
         "session_required": false,
@@ -7787,8 +7952,9 @@
         },
         "operation_id": "public_geotag_submission_tracking_api_v1_public_geotag_submissions__submission_id__tracking_get",
         "optional_auth": false,
-        "review_notes": "Independent expected policy registry for SDA Review 06; not generated during pipeline execution.",
-        "review_status": "reviewed-route-policy-r06",
+        "path": "/api/v1/public/geotag-submissions/{submission_id}/tracking",
+        "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+        "review_status": "reviewed-route-policy-r07",
         "roles": [],
         "route": "/api/v1/public/geotag-submissions/{submission_id}/tracking",
         "session_required": false,
@@ -7866,8 +8032,9 @@
         },
         "operation_id": "public_geotag_preview_api_v1_public_geotag_preview_post",
         "optional_auth": false,
-        "review_notes": "Independent expected policy registry for SDA Review 06; not generated during pipeline execution.",
-        "review_status": "reviewed-route-policy-r06",
+        "path": "/api/v1/public/geotag/preview",
+        "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+        "review_status": "reviewed-route-policy-r07",
         "roles": [],
         "route": "/api/v1/public/geotag/preview",
         "session_required": false,
@@ -7963,8 +8130,9 @@
         },
         "operation_id": "public_road_suggestion_api_v1_public_geotag_road_suggestion_post",
         "optional_auth": false,
-        "review_notes": "Independent expected policy registry for SDA Review 06; not generated during pipeline execution.",
-        "review_status": "reviewed-route-policy-r06",
+        "path": "/api/v1/public/geotag/road-suggestion",
+        "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+        "review_status": "reviewed-route-policy-r07",
         "roles": [],
         "route": "/api/v1/public/geotag/road-suggestion",
         "session_required": false,
@@ -8048,8 +8216,9 @@
         },
         "operation_id": "public_issuance_lookup_api_v1_public_issuance__query__get",
         "optional_auth": false,
-        "review_notes": "Independent expected policy registry for SDA Review 06; not generated during pipeline execution.",
-        "review_status": "reviewed-route-policy-r06",
+        "path": "/api/v1/public/issuance/{query}",
+        "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+        "review_status": "reviewed-route-policy-r07",
         "roles": [],
         "route": "/api/v1/public/issuance/{query}",
         "session_required": false,
@@ -8127,8 +8296,9 @@
         },
         "operation_id": "public_territory_options_api_v1_public_territory_options_get",
         "optional_auth": false,
-        "review_notes": "Independent expected policy registry for SDA Review 06; not generated during pipeline execution.",
-        "review_status": "reviewed-route-policy-r06",
+        "path": "/api/v1/public/territory-options",
+        "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+        "review_status": "reviewed-route-policy-r07",
         "roles": [],
         "route": "/api/v1/public/territory-options",
         "session_required": false,
@@ -8206,8 +8376,9 @@
         },
         "operation_id": "public_tracking_lookup_api_v1_public_tracking__lookup_code__get",
         "optional_auth": false,
-        "review_notes": "Independent expected policy registry for SDA Review 06; not generated during pipeline execution.",
-        "review_status": "reviewed-route-policy-r06",
+        "path": "/api/v1/public/tracking/{lookup_code}",
+        "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+        "review_status": "reviewed-route-policy-r07",
         "roles": [],
         "route": "/api/v1/public/tracking/{lookup_code}",
         "session_required": false,
@@ -8285,8 +8456,9 @@
         },
         "operation_id": "public_verification_lookup_api_v1_public_verification__query__get",
         "optional_auth": false,
-        "review_notes": "Independent expected policy registry for SDA Review 06; not generated during pipeline execution.",
-        "review_status": "reviewed-route-policy-r06",
+        "path": "/api/v1/public/verification/{query}",
+        "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+        "review_status": "reviewed-route-policy-r07",
         "roles": [],
         "route": "/api/v1/public/verification/{query}",
         "session_required": false,
@@ -8347,9 +8519,9 @@
         "auth": "role-required",
         "delegated_policy_helpers": [],
         "expected_key": "GET /api/v1/publication/packs",
-        "function": "create_publication_pack_endpoint",
-        "handler": "create_publication_pack_endpoint",
-        "method": "POST",
+        "function": "publication_packs",
+        "handler": "publication_packs",
+        "method": "GET",
         "observed": {
           "analysis": "function-ast-boundary",
           "auth": "role-required",
@@ -8368,14 +8540,17 @@
         },
         "operation_id": "publication_packs_api_v1_publication_packs_get",
         "optional_auth": false,
-        "review_notes": "Independent expected policy registry for SDA Review 06; not generated during pipeline execution.",
-        "review_status": "reviewed-route-policy-r06",
+        "path": "/api/v1/publication/packs",
+        "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+        "review_status": "reviewed-route-policy-r07",
         "roles": [
-          "editor"
+          "admin",
+          "editor",
+          "viewer"
         ],
         "route": "/api/v1/publication/packs",
         "session_required": true,
-        "source": "services/api/app/main.py:2220-2230"
+        "source": "services/api/app/main.py:2213-2216"
       },
       "request_fields": [
         {
@@ -8452,9 +8627,11 @@
         },
         "operation_id": "create_publication_pack_endpoint_api_v1_publication_packs_post",
         "optional_auth": false,
-        "review_notes": "Independent expected policy registry for SDA Review 06; not generated during pipeline execution.",
-        "review_status": "reviewed-route-policy-r06",
+        "path": "/api/v1/publication/packs",
+        "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+        "review_status": "reviewed-route-policy-r07",
         "roles": [
+          "admin",
           "editor"
         ],
         "route": "/api/v1/publication/packs",
@@ -8559,8 +8736,9 @@
         },
         "operation_id": "publish_publication_pack_endpoint_api_v1_publication_packs__pack_id__publish_post",
         "optional_auth": false,
-        "review_notes": "Independent expected policy registry for SDA Review 06; not generated during pipeline execution.",
-        "review_status": "reviewed-route-policy-r06",
+        "path": "/api/v1/publication/packs/{pack_id}/publish",
+        "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+        "review_status": "reviewed-route-policy-r07",
         "roles": [
           "admin"
         ],
@@ -8651,9 +8829,13 @@
         },
         "operation_id": "reporting_summary_endpoint_api_v1_reporting_summary_get",
         "optional_auth": false,
-        "review_notes": "Independent expected policy registry for SDA Review 06; not generated during pipeline execution.",
-        "review_status": "reviewed-route-policy-r06",
+        "path": "/api/v1/reporting/summary",
+        "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+        "review_status": "reviewed-route-policy-r07",
         "roles": [
+          "admin",
+          "agency_viewer",
+          "editor",
           "viewer"
         ],
         "route": "/api/v1/reporting/summary",
@@ -8745,9 +8927,9 @@
         "auth": "role-required",
         "delegated_policy_helpers": [],
         "expected_key": "GET /api/v1/roads",
-        "function": "create_road_endpoint",
-        "handler": "create_road_endpoint",
-        "method": "POST",
+        "function": "list_roads",
+        "handler": "list_roads",
+        "method": "GET",
         "observed": {
           "analysis": "function-ast-boundary",
           "auth": "role-required",
@@ -8766,14 +8948,17 @@
         },
         "operation_id": "list_roads_api_v1_roads_get",
         "optional_auth": false,
-        "review_notes": "Independent expected policy registry for SDA Review 06; not generated during pipeline execution.",
-        "review_status": "reviewed-route-policy-r06",
+        "path": "/api/v1/roads",
+        "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+        "review_status": "reviewed-route-policy-r07",
         "roles": [
-          "editor"
+          "admin",
+          "editor",
+          "viewer"
         ],
         "route": "/api/v1/roads",
         "session_required": true,
-        "source": "services/api/app/main.py:1376-1384"
+        "source": "services/api/app/main.py:1359-1362"
       },
       "request_fields": [
         {
@@ -8880,9 +9065,11 @@
         },
         "operation_id": "create_road_endpoint_api_v1_roads_post",
         "optional_auth": false,
-        "review_notes": "Independent expected policy registry for SDA Review 06; not generated during pipeline execution.",
-        "review_status": "reviewed-route-policy-r06",
+        "path": "/api/v1/roads",
+        "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+        "review_status": "reviewed-route-policy-r07",
         "roles": [
+          "admin",
           "editor"
         ],
         "route": "/api/v1/roads",
@@ -8987,8 +9174,9 @@
         },
         "operation_id": "archive_road_endpoint_api_v1_roads__road_id__delete",
         "optional_auth": false,
-        "review_notes": "Independent expected policy registry for SDA Review 06; not generated during pipeline execution.",
-        "review_status": "reviewed-route-policy-r06",
+        "path": "/api/v1/roads/{road_id}",
+        "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+        "review_status": "reviewed-route-policy-r07",
         "roles": [
           "admin"
         ],
@@ -9057,9 +9245,9 @@
         "auth": "role-required",
         "delegated_policy_helpers": [],
         "expected_key": "GET /api/v1/roads/{road_id}",
-        "function": "archive_road_endpoint",
-        "handler": "archive_road_endpoint",
-        "method": "DELETE",
+        "function": "road_detail",
+        "handler": "road_detail",
+        "method": "GET",
         "observed": {
           "analysis": "function-ast-boundary",
           "auth": "role-required",
@@ -9078,14 +9266,17 @@
         },
         "operation_id": "road_detail_api_v1_roads__road_id__get",
         "optional_auth": false,
-        "review_notes": "Independent expected policy registry for SDA Review 06; not generated during pipeline execution.",
-        "review_status": "reviewed-route-policy-r06",
+        "path": "/api/v1/roads/{road_id}",
+        "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+        "review_status": "reviewed-route-policy-r07",
         "roles": [
-          "admin"
+          "admin",
+          "editor",
+          "viewer"
         ],
         "route": "/api/v1/roads/{road_id}",
         "session_required": true,
-        "source": "services/api/app/main.py:1401-1407"
+        "source": "services/api/app/main.py:1366-1372"
       },
       "request_fields": [
         {
@@ -9148,9 +9339,9 @@
         "auth": "role-required",
         "delegated_policy_helpers": [],
         "expected_key": "PATCH /api/v1/roads/{road_id}",
-        "function": "archive_road_endpoint",
-        "handler": "archive_road_endpoint",
-        "method": "DELETE",
+        "function": "update_road_endpoint",
+        "handler": "update_road_endpoint",
+        "method": "PATCH",
         "observed": {
           "analysis": "function-ast-boundary",
           "auth": "role-required",
@@ -9168,14 +9359,16 @@
         },
         "operation_id": "update_road_endpoint_api_v1_roads__road_id__patch",
         "optional_auth": false,
-        "review_notes": "Independent expected policy registry for SDA Review 06; not generated during pipeline execution.",
-        "review_status": "reviewed-route-policy-r06",
+        "path": "/api/v1/roads/{road_id}",
+        "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+        "review_status": "reviewed-route-policy-r07",
         "roles": [
-          "admin"
+          "admin",
+          "editor"
         ],
         "route": "/api/v1/roads/{road_id}",
         "session_required": true,
-        "source": "services/api/app/main.py:1401-1407"
+        "source": "services/api/app/main.py:1388-1397"
       },
       "request_fields": [
         {
@@ -9284,9 +9477,13 @@
         },
         "operation_id": "signage_export_endpoint_api_v1_signage_export_get",
         "optional_auth": false,
-        "review_notes": "Independent expected policy registry for SDA Review 06; not generated during pipeline execution.",
-        "review_status": "reviewed-route-policy-r06",
+        "path": "/api/v1/signage/export",
+        "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+        "review_status": "reviewed-route-policy-r07",
         "roles": [
+          "admin",
+          "agency_viewer",
+          "editor",
           "viewer"
         ],
         "route": "/api/v1/signage/export",
@@ -9375,9 +9572,12 @@
         },
         "operation_id": "signage_pack_endpoint_api_v1_signage_pack_get",
         "optional_auth": false,
-        "review_notes": "Independent expected policy registry for SDA Review 06; not generated during pipeline execution.",
-        "review_status": "reviewed-route-policy-r06",
+        "path": "/api/v1/signage/pack",
+        "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+        "review_status": "reviewed-route-policy-r07",
         "roles": [
+          "admin",
+          "editor",
           "viewer"
         ],
         "route": "/api/v1/signage/pack",
@@ -9445,9 +9645,9 @@
         "auth": "role-required",
         "delegated_policy_helpers": [],
         "expected_key": "GET /api/v1/territories",
-        "function": "create_territory_endpoint",
-        "handler": "create_territory_endpoint",
-        "method": "POST",
+        "function": "list_territories",
+        "handler": "list_territories",
+        "method": "GET",
         "observed": {
           "analysis": "function-ast-boundary",
           "auth": "role-required",
@@ -9466,14 +9666,17 @@
         },
         "operation_id": "list_territories_api_v1_territories_get",
         "optional_auth": false,
-        "review_notes": "Independent expected policy registry for SDA Review 06; not generated during pipeline execution.",
-        "review_status": "reviewed-route-policy-r06",
+        "path": "/api/v1/territories",
+        "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+        "review_status": "reviewed-route-policy-r07",
         "roles": [
-          "editor"
+          "admin",
+          "editor",
+          "viewer"
         ],
         "route": "/api/v1/territories",
         "session_required": true,
-        "source": "services/api/app/main.py:1316-1324"
+        "source": "services/api/app/main.py:1291-1302"
       },
       "request_fields": [
         {
@@ -9586,9 +9789,11 @@
         },
         "operation_id": "create_territory_endpoint_api_v1_territories_post",
         "optional_auth": false,
-        "review_notes": "Independent expected policy registry for SDA Review 06; not generated during pipeline execution.",
-        "review_status": "reviewed-route-policy-r06",
+        "path": "/api/v1/territories",
+        "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+        "review_status": "reviewed-route-policy-r07",
         "roles": [
+          "admin",
           "editor"
         ],
         "route": "/api/v1/territories",
@@ -9697,8 +9902,9 @@
         },
         "operation_id": "list_provinces_api_v1_territories_provinces_get",
         "optional_auth": false,
-        "review_notes": "Independent expected policy registry for SDA Review 06; not generated during pipeline execution.",
-        "review_status": "reviewed-route-policy-r06",
+        "path": "/api/v1/territories/provinces",
+        "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+        "review_status": "reviewed-route-policy-r07",
         "roles": [],
         "route": "/api/v1/territories/provinces",
         "session_required": false,
@@ -9741,8 +9947,9 @@
         },
         "operation_id": "archive_territory_endpoint_api_v1_territories__territory_id__delete",
         "optional_auth": false,
-        "review_notes": "Independent expected policy registry for SDA Review 06; not generated during pipeline execution.",
-        "review_status": "reviewed-route-policy-r06",
+        "path": "/api/v1/territories/{territory_id}",
+        "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+        "review_status": "reviewed-route-policy-r07",
         "roles": [
           "admin"
         ],
@@ -9811,9 +10018,9 @@
         "auth": "role-required",
         "delegated_policy_helpers": [],
         "expected_key": "GET /api/v1/territories/{territory_id}",
-        "function": "archive_territory_endpoint",
-        "handler": "archive_territory_endpoint",
-        "method": "DELETE",
+        "function": "territory_detail",
+        "handler": "territory_detail",
+        "method": "GET",
         "observed": {
           "analysis": "function-ast-boundary",
           "auth": "role-required",
@@ -9832,14 +10039,17 @@
         },
         "operation_id": "territory_detail_api_v1_territories__territory_id__get",
         "optional_auth": false,
-        "review_notes": "Independent expected policy registry for SDA Review 06; not generated during pipeline execution.",
-        "review_status": "reviewed-route-policy-r06",
+        "path": "/api/v1/territories/{territory_id}",
+        "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+        "review_status": "reviewed-route-policy-r07",
         "roles": [
-          "admin"
+          "admin",
+          "editor",
+          "viewer"
         ],
         "route": "/api/v1/territories/{territory_id}",
         "session_required": true,
-        "source": "services/api/app/main.py:1342-1348"
+        "source": "services/api/app/main.py:1306-1312"
       },
       "request_fields": [
         {
@@ -9902,9 +10112,9 @@
         "auth": "role-required",
         "delegated_policy_helpers": [],
         "expected_key": "PATCH /api/v1/territories/{territory_id}",
-        "function": "archive_territory_endpoint",
-        "handler": "archive_territory_endpoint",
-        "method": "DELETE",
+        "function": "update_territory_endpoint",
+        "handler": "update_territory_endpoint",
+        "method": "PATCH",
         "observed": {
           "analysis": "function-ast-boundary",
           "auth": "role-required",
@@ -9922,14 +10132,16 @@
         },
         "operation_id": "update_territory_endpoint_api_v1_territories__territory_id__patch",
         "optional_auth": false,
-        "review_notes": "Independent expected policy registry for SDA Review 06; not generated during pipeline execution.",
-        "review_status": "reviewed-route-policy-r06",
+        "path": "/api/v1/territories/{territory_id}",
+        "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+        "review_status": "reviewed-route-policy-r07",
         "roles": [
-          "admin"
+          "admin",
+          "editor"
         ],
         "route": "/api/v1/territories/{territory_id}",
         "session_required": true,
-        "source": "services/api/app/main.py:1342-1348"
+        "source": "services/api/app/main.py:1328-1338"
       },
       "request_fields": [
         {
@@ -10039,8 +10251,9 @@
         },
         "operation_id": "verification_lookup_api_v1_verification_lookup_get",
         "optional_auth": false,
-        "review_notes": "Independent expected policy registry for SDA Review 06; not generated during pipeline execution.",
-        "review_status": "reviewed-route-policy-r06",
+        "path": "/api/v1/verification/lookup",
+        "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+        "review_status": "reviewed-route-policy-r07",
         "roles": [],
         "route": "/api/v1/verification/lookup",
         "session_required": false,

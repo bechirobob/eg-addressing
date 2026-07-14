@@ -55,7 +55,7 @@ target_catalog = load_json("docs/sda/data-model/target-schema-catalog.json")
 fixtures = load_json("docs/sda/data-model/representative-records/machine-readable-fixtures.json")
 lifecycle_transitions = load_json("docs/sda/data-model/lifecycle-transitions.json")
 report_text = read("docs/sda/data-model/review04-semantic-design-report.md")
-review_text = read("docs/sda/reviews/NLI-WO-002-review-05.md")
+review_text = read("docs/sda/reviews/NLI-WO-002-review-06.md")
 erd_text = read("docs/sda/data-model/canonical-logical-erd.mmd")
 api_map_text = read("docs/sda/data-model/api-projection-map.md")
 
@@ -106,12 +106,12 @@ allowed_dispositions = {"typed-transform", "structured-transform", "controlled-t
 review_required_keys = {"source_row_key", "source_value_semantics", "target_rows_fields", "target_id_generation", "archive_object", "authority_prerequisite", "exception_type_owner", "no_loss_proof", "review_status", "review_owner", "review_decision_id"}
 for row in reviewed_registry if isinstance(reviewed_registry, list) else []:
     current = row.get("current")
-    if row.get("review_status") not in {"approved-review06-reviewed-source", "approved-review04-remediation", "approved-manual-exception"}:
+    if row.get("review_status") not in {"approved-review07-reviewed-source", "approved-review06-reviewed-source", "approved-review04-remediation", "approved-manual-exception"}:
         err(f"{current} is not consciously approved in reviewed transformation source")
     missing_review = sorted(k for k in review_required_keys if not row.get(k))
     if missing_review:
         err(f"{current} missing reviewed transformation keys {missing_review}")
-    if not row.get("transform_group_id") or not str(row.get("transform_group_id")).startswith("WO002-R06-"):
+    if not row.get("transform_group_id") or not str(row.get("transform_group_id")).startswith(("WO002-R06-", "WO002-R07-")):
         err(f"{current} missing Review 06 transform group id")
     if row.get("source_row_key") == current and not (current.endswith((".id", "_id")) or current.endswith(".code") or current.endswith(".public_code")):
         err(f"{current} source_row_key is the transformed field, not stable source row key")
@@ -121,6 +121,21 @@ for row in reviewed_registry if isinstance(reviewed_registry, list) else []:
         err(f"{current} missing executable no-loss assertion")
     if row.get("disposition") in {"governed-archive", "formal-exception"} and not str(row.get("archive_value_reference", "")).startswith("source_payload_archive"):
         err(f"{current} archive/exception row missing governed original value reference")
+    if "ASSERT " in str(row.get("executable_no_loss_assertion", "")) or not str(row.get("executable_no_loss_assertion", "")).lstrip().upper().startswith("SELECT"):
+        err(f"{current} executable_no_loss_assertion must be executable SELECT, not pseudo assertion")
+    if row.get("disposition") == "controlled-translation":
+        target_vocab = fields.get(row.get("target"), {}).get("vocabulary")
+        allowed = set(vocabs.get(target_vocab, {}).get("values", {})) if target_vocab else set()
+        for src, dst in (row.get("controlled_value_map") or {}).items():
+            if allowed and dst not in allowed:
+                err(f"{current} controlled map output {dst!r} is outside target vocabulary {target_vocab}")
+        ex = row.get("example_input_output") or {}
+        if ex and allowed and ex.get("output") not in allowed:
+            err(f"{current} example output {ex.get('output')!r} is outside target vocabulary {target_vocab}")
+    if (current.endswith('_id') or current.split('.',1)[1].endswith('_id')) and current != 'schema_migrations.version':
+        if not row.get("reference_crosswalk_join") and row.get("target") != "schema_migrations.version":
+            err(f"{current} reference transform missing exact reference_crosswalk_join")
+
 for row in registry if isinstance(registry, list) else []:
     current = row.get("current")
     target = row.get("target")
@@ -142,6 +157,8 @@ if not any(row.get("target") == "source_payload_archive.payload_uri" for row in 
 by_current = {r.get("current"): r for r in reviewed_registry if isinstance(reviewed_registry, list)}
 if by_current.get("address_corrections.correction_type", {}).get("target") != "correction_case.correction_type":
     err("address_corrections.correction_type must map to correction_case.correction_type, not generic archive")
+if by_current.get("address_corrections.correction_type", {}).get("controlled_value_map", {}).get("record-update") != "label":
+    err("address_corrections.correction_type must map observed record-update to valid target correction_type label")
 for note_field in ["address_corrections.note", "address_corrections.reviewer_note", "address_corrections.reporter_name"]:
     row = by_current.get(note_field, {})
     if row.get("target") != "source_payload_archive.payload_uri" or not str(row.get("archive_value_reference", "")).startswith("source_payload_archive"):
@@ -167,12 +184,25 @@ for op in ops:
     route_key = f"{op.get('method')} {op.get('path')}"
     if route_key not in route_policies:
         err(f"OpenAPI operation {route_key} missing expected policy row")
+
+    expected = route_policies.get(route_key, {})
+    if expected.get("method") != op.get("method") or expected.get("path") != op.get("path") or expected.get("operation_id") != op.get("operation_id"):
+        err(f"route policy identity mismatch for {route_key}")
+    observed = expected.get("observed") or op.get("policy", {}).get("observed") or {}
+    if observed and (expected.get("handler") != observed.get("handler") or expected.get("method") != observed.get("method")):
+        err(f"route policy reviewed row disagrees with observed AST handler/method for {route_key}")
+
     contract = projection_contracts.get(op.get("operation_id"), {}) if isinstance(projection_contracts, dict) else {}
-    if contract.get("review_status") != "reviewed-api-projection-r06":
+    if contract.get("review_status") not in {"reviewed-api-projection-r07", "reviewed-api-projection-r06"}:
         err(f"OpenAPI operation {op.get('operation_id')} missing reviewed projection contract")
     contract_fields = contract.get("fields", []) if isinstance(contract, dict) else []
     if not contract_fields:
         err(f"OpenAPI operation {op.get('operation_id')} projection contract has no fields")
+    for resp in op.get("responses", []):
+        if str(resp.get("status", "")).startswith("2") and not resp.get("fields"):
+            bad = [cf for cf in contract_fields if cf.get("direction") == f"response:{resp.get('status')}" and cf.get("field") == "<empty/error envelope>"]
+            if bad:
+                err(f"OpenAPI operation {op.get('operation_id')} has generic empty 2xx projection contract")
     for cf in contract_fields:
         for req_key in ["classification", "target_projection", "release_prerequisite", "compatibility_impact", "adapter", "deprecation_rule", "test"]:
             if not cf.get(req_key):
@@ -297,6 +327,27 @@ for forbidden in [("approved", "rejected"), ("approved", "draft"), ("closed", "d
         if any((e.get("from"), e.get("to")) == forbidden for e in edges):
             err(f"forbidden lifecycle transition {forbidden[0]}->{forbidden[1]} present in {vocab}")
 
+
+# Review 06 exact model semantic gates.
+record_types = set(vocabs.get("record_type", {}).get("values", {}))
+cardinality = model.get("record_object_cardinality", {}) if isinstance(model, dict) else {}
+if "standard-address" in cardinality:
+    err("record_object_cardinality must not use non-vocabulary standard-address")
+missing_record_types = record_types - set(cardinality)
+if missing_record_types:
+    err(f"record_object_cardinality missing canonical record types {sorted(missing_record_types)}")
+for rt, roles in cardinality.items():
+    if rt not in record_types:
+        err(f"record_object_cardinality key {rt} not in record_type vocabulary")
+    if not any(v.get("required") and v.get("min") == 1 and v.get("max") >= 1 for v in roles.values() if isinstance(v, dict)):
+        err(f"record_object_cardinality {rt} has no required role with min/max")
+for fq in ["geometry_version.promotion_decision_event_id", "geometry_version.promotion_evidence_object_id", "geometry_version.promotion_authority_scope"]:
+    if fq not in fields:
+        err(f"geometry promotion authority field missing: {fq}")
+catalog_tables_seen = {c.get("table_name") for c in (target_catalog.get("columns", []) if isinstance(target_catalog, dict) else [])}
+if "lifecycle_transition_policy" not in catalog_tables_seen:
+    err("target schema does not include executable lifecycle_transition_policy table")
+
 # ADRs and ERD coverage.
 if 'write(f"docs/sda/adrs/' in pipeline_text or 'write("docs/sda/adrs/' in pipeline_text:
     err("ADRs 005-009 must not be generated output from pipeline")
@@ -314,14 +365,14 @@ for entity in ["administrative_code_history", "registry_subject", "source_payloa
         err(f"Mermaid ERD missing entity {entity}")
 
 # Review 05 finding rows.
-for i in range(2, 13):
-    if not re.search(rf"\| F{i:02d} \| Resolved for SDA Review 06:", review_text):
-        err(f"Review 05 resolution row F{i:02d} not updated")
+for i in [2,4,5,6,7,8,9,10,11,12,13]:
+    if not re.search(rf"\| F{i:02d} \| Resolved for SDA Review 07:", review_text):
+        err(f"Review 06 resolution row F{i:02d} not updated for Review 07")
 
 report_lines = [
     "# Design Consistency Report",
     "",
-    "Generated checks: 24",
+    "Generated checks: 41",
     f"Errors: {len(errors)}",
     f"Warnings: {len(warnings)}",
 ]

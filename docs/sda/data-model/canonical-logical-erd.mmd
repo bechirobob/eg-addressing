@@ -72,6 +72,7 @@ erDiagram
     jsonb details_json
     timestamptz effective_at
     timestamptz recorded_at
+    text decision_outcome
   }
   dispute_case {
     text dispute_case_id
@@ -171,6 +172,9 @@ erDiagram
     text superseded_by_geometry_version_id
     text dispute_case_id
     text classification
+    text promotion_decision_event_id
+    text promotion_evidence_object_id
+    text promotion_authority_scope
   }
   intake_case {
     text intake_case_id
@@ -474,6 +478,8 @@ erDiagram
   geometry_transformation ||--o{ geometry_version : transformation_id
   geometry_version ||--o{ geometry_version : superseded_by_geometry_version_id
   dispute_case ||--o{ geometry_version : dispute_case_id
+  decision_event ||--o{ geometry_version : promotion_decision_event_id
+  evidence_object ||--o{ geometry_version : promotion_evidence_object_id
   source_record ||--o{ intake_case : source_record_id
   source_authority ||--o{ landmark : source_authority_id
   administrative_unit ||--o{ locality : administrative_unit_id

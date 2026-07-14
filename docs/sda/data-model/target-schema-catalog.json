@@ -2,6 +2,70 @@
   "columns": [
     {
       "column_default": null,
+      "column_name": "vocab",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "lifecycle_transition_policy",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "from_state",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "lifecycle_transition_policy",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "to_state",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "lifecycle_transition_policy",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "permission_key",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "lifecycle_transition_policy",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "evidence",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "lifecycle_transition_policy",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "audit_event",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "lifecycle_transition_policy",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "public_effect",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "lifecycle_transition_policy",
+      "udt_name": "text"
+    },
+    {
+      "column_default": "false",
+      "column_name": "terminal",
+      "data_type": "boolean",
+      "is_nullable": "NO",
+      "table_name": "lifecycle_transition_policy",
+      "udt_name": "bool"
+    },
+    {
+      "column_default": null,
       "column_name": "admin_code_history_id",
       "data_type": "text",
       "is_nullable": "NO",
@@ -463,6 +527,14 @@
       "is_nullable": "NO",
       "table_name": "proposed_decision_event",
       "udt_name": "timestamptz"
+    },
+    {
+      "column_default": null,
+      "column_name": "decision_outcome",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_decision_event",
+      "udt_name": "text"
     },
     {
       "column_default": null,
@@ -1107,6 +1179,30 @@
     {
       "column_default": "'restricted'::text",
       "column_name": "classification",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_geometry_version",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "promotion_decision_event_id",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_geometry_version",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "promotion_evidence_object_id",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_geometry_version",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "promotion_authority_scope",
       "data_type": "text",
       "is_nullable": "NO",
       "table_name": "proposed_geometry_version",
@@ -2832,6 +2928,11 @@
       "table_name": "geometry_role_matrix"
     },
     {
+      "constraint_name": "lifecycle_transition_policy_pkey",
+      "constraint_type": "PRIMARY KEY",
+      "table_name": "lifecycle_transition_policy"
+    },
+    {
       "constraint_name": "proposed_administrative_code_history_administrative_unit_id_fk",
       "constraint_type": "FOREIGN KEY",
       "table_name": "proposed_administrative_code_history"
@@ -3214,6 +3315,16 @@
     {
       "constraint_name": "proposed_geometry_version_pk",
       "constraint_type": "PRIMARY KEY",
+      "table_name": "proposed_geometry_version"
+    },
+    {
+      "constraint_name": "proposed_geometry_version_promotion_decision_event_id_fk",
+      "constraint_type": "FOREIGN KEY",
+      "table_name": "proposed_geometry_version"
+    },
+    {
+      "constraint_name": "proposed_geometry_version_promotion_evidence_object_id_fk",
+      "constraint_type": "FOREIGN KEY",
       "table_name": "proposed_geometry_version"
     },
     {
@@ -4134,6 +4245,11 @@
       "tablename": "geometry_role_matrix"
     },
     {
+      "indexdef": "CREATE UNIQUE INDEX lifecycle_transition_policy_pkey ON nli_wo002_target.lifecycle_transition_policy USING btree (vocab, from_state, to_state)",
+      "indexname": "lifecycle_transition_policy_pkey",
+      "tablename": "lifecycle_transition_policy"
+    },
+    {
       "indexdef": "CREATE INDEX proposed_admin_code_history_effective_excl ON nli_wo002_target.proposed_administrative_code_history USING gist (administrative_unit_id, code_scheme, tstzrange(effective_from, COALESCE(effective_to, 'infinity'::timestamp with time zone), '[)'::text))",
       "indexname": "proposed_admin_code_history_effective_excl",
       "tablename": "proposed_administrative_code_history"
@@ -4680,11 +4796,11 @@
     }
   ],
   "report": {
-    "constraint_count": 260,
+    "constraint_count": 263,
     "extra_fields": [],
     "field_parity_errors": [],
-    "index_count": 110,
-    "inserted_fixture_rows": 322,
+    "index_count": 111,
+    "inserted_fixture_rows": 324,
     "missing_fields": [],
     "missing_required_triggers": [],
     "negative_results": {
@@ -4696,7 +4812,7 @@
       "invalid-subject-reference": "rejected-by-real-execution",
       "invalid-temporal-overlap": "rejected-by-real-execution"
     },
-    "physical_columns": 353,
+    "physical_columns": 357,
     "scenario_results": {
       "administrative-boundary-change": {
         "inserted_rows": 46,
@@ -4711,7 +4827,7 @@
         "status": "passed"
       },
       "multi-unit-building": {
-        "inserted_rows": 47,
+        "inserted_rows": 49,
         "status": "passed"
       },
       "no-formal-road-location": {
@@ -4727,7 +4843,7 @@
         "status": "passed"
       }
     },
-    "target_fields": 353,
+    "target_fields": 357,
     "trigger_count": 29
   },
   "triggers": [

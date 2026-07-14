@@ -62,6 +62,7 @@ Generated from the authoritative target registry; no field-name suffix inference
 | `decision_event.details_json` | Supplemental non-authoritative details. | jsonb | no | '{}'::jsonb | Registry Authority | government-internal | "operator" | current fact | — |
 | `decision_event.effective_at` | Decision effective time. | timestamptz | no | — | Registry Authority | government-internal | "operator" | effective time | — |
 | `decision_event.recorded_at` | Decision recorded time. | timestamptz | no | — | Registry Authority | government-internal | "operator" | recorded time | — |
+| `decision_event.decision_outcome` | Authority decision outcome used by executable promotion/lifecycle validators. | text | no | — | SDA/Registry Authority | government-internal | {"operator": "allowed by role", "public": "never unless released"} | recorded-time governed | — |
 | `dispute_case.dispute_case_id` | Dispute identity. | text | no | — | Registry Authority | government-internal | "operator" | current fact | — |
 | `dispute_case.dispute_type` | Dispute type. | text | no | — | Registry Authority | government-internal | "operator" | current fact | — |
 | `dispute_case.case_state` | Dispute state. | text | no | — | Registry Authority | government-internal | "operator" | current fact | — |
@@ -143,6 +144,9 @@ Generated from the authoritative target registry; no field-name suffix inference
 | `geometry_version.superseded_by_geometry_version_id` | Later geometry version that supersedes this one. | text | yes | — | Registry Authority | government-internal | "operator" | current fact | — |
 | `geometry_version.dispute_case_id` | Active/resolved dispute case if applicable. | text | yes | — | Registry Authority | government-internal | "operator" | current fact | — |
 | `geometry_version.classification` | Geometry classification. | text | no | 'restricted' | Registry Authority | government-internal | "operator" | current fact | — |
+| `geometry_version.promotion_decision_event_id` | Authorized geometry-promotion decision event. | text | no | — | SDA/Registry Authority | government-internal | {"operator": "allowed by role", "public": "never unless released"} | recorded-time governed | — |
+| `geometry_version.promotion_evidence_object_id` | Evidence object supporting geometry promotion. | text | no | — | SDA/Registry Authority | government-internal | {"operator": "allowed by role", "public": "never unless released"} | recorded-time governed | — |
+| `geometry_version.promotion_authority_scope` | Institutional/territorial authority scope for geometry promotion. | text | no | — | SDA/Registry Authority | government-internal | {"operator": "allowed by role", "public": "never unless released"} | recorded-time governed | — |
 | `intake_case.intake_case_id` | Intake case identity. | text | no | — | Registry Authority | government-internal | "operator" | current fact | — |
 | `intake_case.source_record_id` | Source submission/import record. | text | no | — | Registry Authority | government-internal | "operator" | current fact | — |
 | `intake_case.submitted_label` | Submitted address/location label. | text | no | — | Registry Authority | government-internal | "operator" | current fact | — |

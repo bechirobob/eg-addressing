@@ -110,6 +110,7 @@
           "actor_id": "decision_event-actor_id-001",
           "authority_id": "administrative-boundary-change-source_authority-07",
           "decision_event_id": "administrative-boundary-change-decision_event-07",
+          "decision_outcome": "approved",
           "decision_type": "approve-geometry",
           "details_json": {
             "entity": "decision_event",
@@ -229,6 +230,9 @@
           "geom": "SRID=4326;POLYGON((8.78 3.75,8.79 3.75,8.79 3.76,8.78 3.76,8.78 3.75))",
           "geometry_role": "admin-boundary",
           "geometry_version_id": "administrative-boundary-change-geometry_version-07",
+          "promotion_authority_scope": "national-gis-authority",
+          "promotion_decision_event_id": "administrative-boundary-change-decision_event-07",
+          "promotion_evidence_object_id": "administrative-boundary-change-evidence_object-07",
           "quality_state": "accepted-canonical",
           "recorded_at": "2026-07-14T00:00:00Z",
           "source_observation_id": "administrative-boundary-change-geometry_observation-07",
@@ -290,7 +294,7 @@
           "classification": "government-internal",
           "created_at": "2026-07-14T00:00:00Z",
           "location_record_id": "administrative-boundary-change-location_record-07",
-          "record_type": "address"
+          "record_type": "service-location"
         }
       ],
       "location_record_assertion": [
@@ -622,6 +626,7 @@
           "actor_id": "decision_event-actor_id-001",
           "authority_id": "corrected-superseded-address-source_authority-05",
           "decision_event_id": "corrected-superseded-address-decision_event-05",
+          "decision_outcome": "approved",
           "decision_type": "approve-geometry",
           "details_json": {
             "entity": "decision_event",
@@ -741,6 +746,9 @@
           "geom": "SRID=4326;POINT(8.78 3.75)",
           "geometry_role": "location-point",
           "geometry_version_id": "corrected-superseded-address-geometry_version-05",
+          "promotion_authority_scope": "national-gis-authority",
+          "promotion_decision_event_id": "corrected-superseded-address-decision_event-05",
+          "promotion_evidence_object_id": "corrected-superseded-address-evidence_object-05",
           "quality_state": "accepted-canonical",
           "recorded_at": "2026-07-14T00:00:00Z",
           "source_observation_id": "corrected-superseded-address-geometry_observation-05",
@@ -1189,6 +1197,7 @@
           "actor_id": "decision_event-actor_id-001",
           "authority_id": "disputed-geometry-source_authority-06",
           "decision_event_id": "disputed-geometry-decision_event-06",
+          "decision_outcome": "approved",
           "decision_type": "approve-geometry",
           "details_json": {
             "entity": "decision_event",
@@ -1308,6 +1317,9 @@
           "geom": "SRID=4326;POINT(8.78 3.75)",
           "geometry_role": "location-point",
           "geometry_version_id": "disputed-geometry-geometry_version-06",
+          "promotion_authority_scope": "national-gis-authority",
+          "promotion_decision_event_id": "disputed-geometry-decision_event-06",
+          "promotion_evidence_object_id": "disputed-geometry-evidence_object-06",
           "quality_state": "accepted-canonical",
           "recorded_at": "2026-07-14T00:00:00Z",
           "source_observation_id": "disputed-geometry-geometry_observation-06",
@@ -1701,6 +1713,7 @@
           "actor_id": "decision_event-actor_id-001",
           "authority_id": "multi-unit-building-source_authority-03",
           "decision_event_id": "multi-unit-building-decision_event-03",
+          "decision_outcome": "approved",
           "decision_type": "approve-geometry",
           "details_json": {
             "entity": "decision_event",
@@ -1820,6 +1833,9 @@
           "geom": "SRID=4326;POINT(8.78 3.75)",
           "geometry_role": "entrance-point",
           "geometry_version_id": "multi-unit-building-geometry_version-03",
+          "promotion_authority_scope": "national-gis-authority",
+          "promotion_decision_event_id": "multi-unit-building-decision_event-03",
+          "promotion_evidence_object_id": "multi-unit-building-evidence_object-03",
           "quality_state": "accepted-canonical",
           "recorded_at": "2026-07-14T00:00:00Z",
           "source_observation_id": "multi-unit-building-geometry_observation-03",
@@ -1881,7 +1897,7 @@
           "classification": "government-internal",
           "created_at": "2026-07-14T00:00:00Z",
           "location_record_id": "multi-unit-building-location_record-03",
-          "record_type": "address"
+          "record_type": "unit"
         }
       ],
       "location_record_assertion": [
@@ -1908,6 +1924,14 @@
           "location_record_version_id": "multi-unit-building-location_record_version-03",
           "object_role": "primary-subject",
           "subject_id": "multi-unit-building-registry_subject-03"
+        },
+        {
+          "cardinality_rank": 1,
+          "effective_from": "2026-07-14T00:00:00Z",
+          "link_id": "multi-unit-building-object-link-parent-building",
+          "location_record_version_id": "multi-unit-building-location_record_version-03",
+          "object_role": "parent-building",
+          "subject_id": "multi-unit-building-registry-subject-parent-building"
         }
       ],
       "location_record_relationship": [
@@ -2072,6 +2096,14 @@
           "subject_entity": "unit",
           "subject_id": "multi-unit-building-registry-subject-unit-02",
           "subject_state": "active"
+        },
+        {
+          "created_at": "2026-07-14T00:00:00Z",
+          "delete_policy": "retire-only",
+          "native_id": "multi-unit-building-building-03",
+          "subject_entity": "building",
+          "subject_id": "multi-unit-building-registry-subject-parent-building",
+          "subject_state": "active"
         }
       ],
       "road": [
@@ -2231,6 +2263,7 @@
           "actor_id": "decision_event-actor_id-001",
           "authority_id": "no-formal-road-location-source_authority-04",
           "decision_event_id": "no-formal-road-location-decision_event-04",
+          "decision_outcome": "approved",
           "decision_type": "approve-geometry",
           "details_json": {
             "entity": "decision_event",
@@ -2350,6 +2383,9 @@
           "geom": "SRID=4326;POINT(8.78 3.75)",
           "geometry_role": "location-point",
           "geometry_version_id": "no-formal-road-location-geometry_version-04",
+          "promotion_authority_scope": "national-gis-authority",
+          "promotion_decision_event_id": "no-formal-road-location-decision_event-04",
+          "promotion_evidence_object_id": "no-formal-road-location-evidence_object-04",
           "quality_state": "accepted-canonical",
           "recorded_at": "2026-07-14T00:00:00Z",
           "source_observation_id": "no-formal-road-location-geometry_observation-04",
@@ -2411,7 +2447,7 @@
           "classification": "government-internal",
           "created_at": "2026-07-14T00:00:00Z",
           "location_record_id": "no-formal-road-location-location_record-04",
-          "record_type": "address"
+          "record_type": "service-location"
         }
       ],
       "location_record_assertion": [
@@ -2743,6 +2779,7 @@
           "actor_id": "decision_event-actor_id-001",
           "authority_id": "rural-landmark-location-source_authority-02",
           "decision_event_id": "rural-landmark-location-decision_event-02",
+          "decision_outcome": "approved",
           "decision_type": "approve-geometry",
           "details_json": {
             "entity": "decision_event",
@@ -2862,6 +2899,9 @@
           "geom": "SRID=4326;POINT(8.78 3.75)",
           "geometry_role": "landmark-point",
           "geometry_version_id": "rural-landmark-location-geometry_version-02",
+          "promotion_authority_scope": "national-gis-authority",
+          "promotion_decision_event_id": "rural-landmark-location-decision_event-02",
+          "promotion_evidence_object_id": "rural-landmark-location-evidence_object-02",
           "quality_state": "accepted-canonical",
           "recorded_at": "2026-07-14T00:00:00Z",
           "source_observation_id": "rural-landmark-location-geometry_observation-02",
@@ -2923,7 +2963,7 @@
           "classification": "government-internal",
           "created_at": "2026-07-14T00:00:00Z",
           "location_record_id": "rural-landmark-location-location_record-02",
-          "record_type": "address"
+          "record_type": "landmark"
         }
       ],
       "location_record_assertion": [
@@ -3255,6 +3295,7 @@
           "actor_id": "decision_event-actor_id-001",
           "authority_id": "urban-street-address-source_authority-01",
           "decision_event_id": "urban-street-address-decision_event-01",
+          "decision_outcome": "approved",
           "decision_type": "approve-geometry",
           "details_json": {
             "entity": "decision_event",
@@ -3374,6 +3415,9 @@
           "geom": "SRID=4326;POINT(8.78 3.75)",
           "geometry_role": "building-point",
           "geometry_version_id": "urban-street-address-geometry_version-01",
+          "promotion_authority_scope": "national-gis-authority",
+          "promotion_decision_event_id": "urban-street-address-decision_event-01",
+          "promotion_evidence_object_id": "urban-street-address-evidence_object-01",
           "quality_state": "accepted-canonical",
           "recorded_at": "2026-07-14T00:00:00Z",
           "source_observation_id": "urban-street-address-geometry_observation-01",

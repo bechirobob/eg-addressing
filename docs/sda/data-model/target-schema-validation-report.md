@@ -4,11 +4,11 @@
 |---|---|
 | Target schema executed in disposable PostGIS schema | PASS |
 | Independent positive scenarios | 7 |
-| Positive fixture rows inserted | 322 |
+| Positive fixture rows inserted | 324 |
 | Negative fixtures rejected | 7 |
-| Physical columns | 353 |
-| Target fields | 353 |
+| Physical columns | 357 |
+| Target fields | 357 |
 | Missing fields | none |
 | Extra fields | none |
-| Constraints | 260 |
-| Indexes | 110 |
+| Constraints | 263 |
+| Indexes | 111 |

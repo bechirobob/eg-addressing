@@ -924,6 +924,23 @@
           "projection": "operator",
           "temporal_behavior": "recorded time",
           "vocabulary": null
+        },
+        {
+          "authority_owner": "SDA/Registry Authority",
+          "classification": "government-internal",
+          "constraints": [],
+          "default": null,
+          "definition": "Authority decision outcome used by executable promotion/lifecycle validators.",
+          "fk": null,
+          "name": "decision_outcome",
+          "nullable": false,
+          "pg_type": "text",
+          "projection": {
+            "operator": "allowed by role",
+            "public": "never unless released"
+          },
+          "temporal_behavior": "recorded-time governed",
+          "vocabulary": null
         }
       ],
       "owner": "SDA/Registry Authority"
@@ -2148,6 +2165,57 @@
           "projection": "operator",
           "temporal_behavior": "current fact",
           "vocabulary": "classification"
+        },
+        {
+          "authority_owner": "SDA/Registry Authority",
+          "classification": "government-internal",
+          "constraints": [],
+          "default": null,
+          "definition": "Authorized geometry-promotion decision event.",
+          "fk": "decision_event.decision_event_id",
+          "name": "promotion_decision_event_id",
+          "nullable": false,
+          "pg_type": "text",
+          "projection": {
+            "operator": "allowed by role",
+            "public": "never unless released"
+          },
+          "temporal_behavior": "recorded-time governed",
+          "vocabulary": null
+        },
+        {
+          "authority_owner": "SDA/Registry Authority",
+          "classification": "government-internal",
+          "constraints": [],
+          "default": null,
+          "definition": "Evidence object supporting geometry promotion.",
+          "fk": "evidence_object.evidence_object_id",
+          "name": "promotion_evidence_object_id",
+          "nullable": false,
+          "pg_type": "text",
+          "projection": {
+            "operator": "allowed by role",
+            "public": "never unless released"
+          },
+          "temporal_behavior": "recorded-time governed",
+          "vocabulary": null
+        },
+        {
+          "authority_owner": "SDA/Registry Authority",
+          "classification": "government-internal",
+          "constraints": [],
+          "default": null,
+          "definition": "Institutional/territorial authority scope for geometry promotion.",
+          "fk": null,
+          "name": "promotion_authority_scope",
+          "nullable": false,
+          "pg_type": "text",
+          "projection": {
+            "operator": "allowed by role",
+            "public": "never unless released"
+          },
+          "temporal_behavior": "recorded-time governed",
+          "vocabulary": null
         }
       ],
       "integrity_assertions": [
@@ -5496,7 +5564,7 @@
     "unit.lifecycle_state": "unit_lifecycle"
   },
   "record_object_cardinality": {
-    "standard-address": {
+    "address": {
       "access-point": {
         "allowed_subject_entities": [
           "entrance"
@@ -5546,6 +5614,110 @@
           "non_building_object",
           "landmark",
           "location_record"
+        ],
+        "max": 1,
+        "merge_behavior": "repoint-through-successor-subject",
+        "min": 1,
+        "required": true,
+        "retirement_behavior": "retire-link-with-record-version"
+      }
+    },
+    "building": {
+      "access-point": {
+        "allowed_subject_entities": [
+          "entrance"
+        ],
+        "max": 12,
+        "merge_behavior": "repoint-on-approved-merge",
+        "min": 0,
+        "required": false,
+        "retirement_behavior": "retire-link"
+      },
+      "primary-subject": {
+        "allowed_subject_entities": [
+          "building"
+        ],
+        "max": 1,
+        "merge_behavior": "repoint-through-successor-subject",
+        "min": 1,
+        "required": true,
+        "retirement_behavior": "retire-link-with-record-version"
+      }
+    },
+    "entrance": {
+      "primary-subject": {
+        "allowed_subject_entities": [
+          "entrance"
+        ],
+        "max": 1,
+        "merge_behavior": "repoint-through-successor-subject",
+        "min": 1,
+        "required": true,
+        "retirement_behavior": "retire-link-with-record-version"
+      }
+    },
+    "landmark": {
+      "primary-subject": {
+        "allowed_subject_entities": [
+          "landmark"
+        ],
+        "max": 1,
+        "merge_behavior": "repoint-through-successor-subject",
+        "min": 1,
+        "required": true,
+        "retirement_behavior": "retire-link-with-record-version"
+      }
+    },
+    "non-building-object": {
+      "primary-subject": {
+        "allowed_subject_entities": [
+          "non_building_object"
+        ],
+        "max": 1,
+        "merge_behavior": "repoint-through-successor-subject",
+        "min": 1,
+        "required": true,
+        "retirement_behavior": "retire-link-with-record-version"
+      }
+    },
+    "service-location": {
+      "external-parcel-reference": {
+        "allowed_subject_entities": [
+          "location_record"
+        ],
+        "max": 1,
+        "merge_behavior": "repoint-on-approved-merge",
+        "min": 0,
+        "required": false,
+        "retirement_behavior": "retain-context"
+      },
+      "primary-subject": {
+        "allowed_subject_entities": [
+          "location_record",
+          "non_building_object",
+          "administrative_unit"
+        ],
+        "max": 1,
+        "merge_behavior": "repoint-through-successor-subject",
+        "min": 1,
+        "required": true,
+        "retirement_behavior": "retire-link-with-record-version"
+      }
+    },
+    "unit": {
+      "parent-building": {
+        "allowed_subject_entities": [
+          "building"
+        ],
+        "max": 1,
+        "merge_behavior": "repoint-on-approved-merge",
+        "min": 1,
+        "required": true,
+        "retirement_behavior": "retain-history-disable-current"
+      },
+      "primary-subject": {
+        "allowed_subject_entities": [
+          "unit"
         ],
         "max": 1,
         "merge_behavior": "repoint-through-successor-subject",
