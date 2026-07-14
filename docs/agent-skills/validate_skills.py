@@ -22,6 +22,7 @@ COVERAGE_PATH = SKILLS_ROOT / "PROJECT-COVERAGE-MATRIX.md"
 BOOTSTRAP_PATH = SKILLS_ROOT / "AGENT-BOOTSTRAP.md"
 FAILURE_PATH = SKILLS_ROOT / "FAILURE-PREVENTION.md"
 AGENTS_PATH = ROOT / "AGENTS.md"
+WORKFLOW_PATH = ROOT / ".github" / "workflows" / "agent-skills-ci.yml"
 
 
 def load_text(path: Path, errors: list[str]) -> str:
@@ -59,8 +60,17 @@ def main() -> int:
     bootstrap = load_text(BOOTSTRAP_PATH, errors)
     failure = load_text(FAILURE_PATH, errors)
     agents = load_text(AGENTS_PATH, errors)
+    workflow = load_text(WORKFLOW_PATH, errors)
 
-    required_top_level = [README_PATH, COVERAGE_PATH, BOOTSTRAP_PATH, FAILURE_PATH, MANIFEST_PATH]
+    required_top_level = [
+        README_PATH,
+        COVERAGE_PATH,
+        BOOTSTRAP_PATH,
+        FAILURE_PATH,
+        MANIFEST_PATH,
+        Path(__file__),
+        WORKFLOW_PATH,
+    ]
     for path in required_top_level:
         if not path.exists():
             errors.append(f"missing required file {path.relative_to(ROOT)}")
@@ -112,9 +122,22 @@ def main() -> int:
             errors.append(
                 f"{skill_file.relative_to(ROOT)} missing exact heading {expected_heading!r}"
             )
-        for required_heading in ["## Use when", "## Objective", "## Procedure", "## Required evidence", "## Stop and escalate when", "## Anti-patterns"]:
+        for required_heading in [
+            "## Use when",
+            "## Objective",
+            "## Procedure",
+            "## Stop and escalate when",
+            "## Anti-patterns",
+        ]:
             if required_heading not in text:
                 errors.append(f"{skill_file.relative_to(ROOT)} missing {required_heading}")
+        if not any(
+            heading in text
+            for heading in ["## Required evidence", "## Required output", "## Required artifacts"]
+        ):
+            errors.append(
+                f"{skill_file.relative_to(ROOT)} must contain Required evidence, output, or artifacts"
+            )
 
         if f"`{skill_id}-{slug}`" not in readme and f"{skill_id}-{slug}/SKILL.md" not in readme:
             errors.append(f"README routing/file list does not reference {skill_id}-{slug}")
@@ -136,7 +159,6 @@ def main() -> int:
         "Cross-cutting delivery and governance skills (`01–15`)",
         "Whole-project product and platform skills (`16–30`)",
         "PROJECT-COVERAGE-MATRIX.md",
-        "skills-manifest.json",
     ]:
         if marker not in readme:
             errors.append(f"README missing whole-project routing marker: {marker}")
@@ -156,6 +178,7 @@ def main() -> int:
         "Cross-cutting delivery skills `01–15`",
         "Whole-project domain skills `16–30`",
         "PROJECT-COVERAGE-MATRIX.md",
+        "skills-manifest.json",
     ]:
         if marker not in bootstrap:
             errors.append(f"bootstrap missing routing marker: {marker}")
@@ -164,9 +187,17 @@ def main() -> int:
         "Cross-cutting delivery and governance skills `01–15`",
         "Whole-project product and platform skills `16–30`",
         "PROJECT-COVERAGE-MATRIX.md",
+        "skills-manifest.json",
     ]:
         if marker not in agents:
             errors.append(f"AGENTS.md missing whole-project routing marker: {marker}")
+
+    for marker in [
+        "Validate all 30 skills and whole-project coverage",
+        "python docs/agent-skills/validate_skills.py",
+    ]:
+        if marker not in workflow:
+            errors.append(f"agent skills workflow missing marker: {marker}")
 
     if len(failure.splitlines()) < 100:
         warnings.append("failure-prevention handbook is unexpectedly short")
