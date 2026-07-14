@@ -72,6 +72,7 @@ reviewed_convergence_units = load_json("docs/sda/data-model/schema-convergence-u
 convergence_units = load_json("docs/sda/data-model/schema-convergence-units.json")
 lifecycle_transitions = load_json("docs/sda/data-model/lifecycle-transitions.json")
 report_text = read("docs/sda/data-model/review04-semantic-design-report.md")
+physical_sql = read("docs/sda/data-model/draft-physical-schema.sql")
 review_text = read("docs/sda/reviews/NLI-WO-002-review-06.md")
 erd_text = read("docs/sda/data-model/canonical-logical-erd.mmd")
 api_map_text = read("docs/sda/data-model/api-projection-map.md")
@@ -313,8 +314,8 @@ if len(target_catalog.get("indexes", [])) < physical_report.get("index_count", 0
     err("target catalog missing index detail rows")
 if len(physical_report.get("scenario_results", {})) != 7:
     err("target report does not show seven independently executed positive scenarios")
-if len(physical_report.get("negative_results", {})) != 7:
-    err("target report does not show seven negative fixture assertions")
+if len(physical_report.get("negative_results", {})) < 11:
+    err("target report does not show required negative fixture assertions, including Review 07 F06 authority negatives")
 lifecycle_assertions = physical_report.get("lifecycle_transition_assertions", {}) if isinstance(physical_report, dict) else {}
 expected_lifecycle_edges = sum(len(edges) for edges in lifecycle_transitions.values()) if isinstance(lifecycle_transitions, dict) else 0
 gate("F07-lifecycle-positive-graph-executed", "F07", expected_lifecycle_edges > 0 and len(lifecycle_assertions) == expected_lifecycle_edges and all(v.get("status") == "passed" for v in lifecycle_assertions.values()), "every authored lifecycle transition must be loaded into lifecycle_transition_policy and pass validate_lifecycle_transition", "docs/sda/data-model/target-schema-catalog.json")
@@ -335,6 +336,20 @@ for neg_name, neg_result in (physical_report.get("negative_results", {}) or {}).
         err(f"negative fixture {neg_name} was not produced by real SQL/policy execution: {neg_result}")
     if not neg_result.get("expected_message") or not neg_result.get("error_class"):
         err(f"negative fixture {neg_name} missing expected error message/class metadata")
+required_f06_negatives = {"invalid-geometry-decision-type", "invalid-geometry-permission", "invalid-geometry-territorial-scope", "invalid-geometry-evidence-link"}
+negative_results = physical_report.get("negative_results", {}) or {}
+gate("F06-geometry-authority-negative-suite", "F06", required_f06_negatives <= set(negative_results), "geometry promotion must reject wrong decision type, permission, territorial scope, and evidence link", "docs/sda/data-model/target-schema-catalog.json")
+for neg_name in sorted(required_f06_negatives):
+    result = negative_results.get(neg_name, {}) if isinstance(negative_results, dict) else {}
+    gate(f"F06-{neg_name}", "F06", bool(isinstance(result, dict) and result.get("status") == "rejected-by-real-execution" and result.get("error_class")), "F06 negative authority fixture must be rejected by real SQL trigger execution", "docs/sda/data-model/target-schema-catalog.json")
+if "decision_row.details_json->>'permission_key' IS DISTINCT FROM rule.promotion_permission" not in physical_sql:
+    err("geometry promotion trigger does not bind actor permission to geometry_role_matrix promotion_permission")
+if "decision_row.decision_type <> 'approve-geometry'" not in physical_sql or "geometry promotion institution or territorial scope mismatch" not in physical_sql:
+    err("geometry promotion trigger does not bind approve-geometry decision type and territorial scope")
+if "geometry decision evidence link mismatch" not in physical_sql or "geometry decision observation link mismatch" not in physical_sql:
+    err("geometry promotion trigger does not bind evidence and observation links")
+if "geometry quality authority actor mismatch" not in physical_sql:
+    err("geometry promotion trigger does not bind quality authority actor")
 if "Errors: 0" not in report_text:
     err("Review 06 semantic report does not show Errors: 0")
 if "Current migrations applied to disposable PostgreSQL/PostGIS" not in report_text:
@@ -500,6 +515,7 @@ else:
         f"- Multi-unit canonical records: {len(mu_records)}",
         f"- F07 lifecycle transitions executed: {len(lifecycle_assertions) if isinstance(lifecycle_assertions, dict) else 0}",
         f"- F04/F05/F10 scenario assertions: {len(review07_scenario_assertions) if isinstance(review07_scenario_assertions, dict) else 0}",
+        f"- F06 geometry authority negatives: {len(required_f06_negatives & set(negative_results)) if isinstance(negative_results, dict) else 0}",
     ])
 report = "\n".join(report_lines) + "\n"
 (DM / "design-consistency-report.md").write_text(report, encoding="utf-8")

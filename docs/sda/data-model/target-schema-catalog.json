@@ -5776,9 +5776,29 @@
         "expected_message": "exceeds max count",
         "status": "rejected-by-real-execution"
       },
+      "invalid-geometry-decision-type": {
+        "error_class": "RaiseException",
+        "expected_message": "geometry promotion decision is not authorized",
+        "status": "rejected-by-real-execution"
+      },
+      "invalid-geometry-evidence-link": {
+        "error_class": "RaiseException",
+        "expected_message": "geometry decision evidence link mismatch",
+        "status": "rejected-by-real-execution"
+      },
+      "invalid-geometry-permission": {
+        "error_class": "RaiseException",
+        "expected_message": "geometry promotion actor lacks required permission",
+        "status": "rejected-by-real-execution"
+      },
       "invalid-geometry-role-type": {
         "error_class": "RaiseException",
         "expected_message": "invalid geometry type",
+        "status": "rejected-by-real-execution"
+      },
+      "invalid-geometry-territorial-scope": {
+        "error_class": "RaiseException",
+        "expected_message": "geometry promotion institution or territorial scope mismatch",
         "status": "rejected-by-real-execution"
       },
       "invalid-publication-prerequisite": {
