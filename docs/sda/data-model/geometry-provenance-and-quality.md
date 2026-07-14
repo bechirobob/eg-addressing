@@ -1,12 +1,22 @@
 # Geometry, Provenance, and Quality Model
 
-## Decisions
+Observation and approval are separate. `geometry_observation` stores raw/candidate evidence; `geometry_version` stores approved canonical geometry with role-to-subject/type validation, source observation, optional transformation, licence, quality, dispute, supersession, and bitemporal recorded/effective intervals.
 
-- Raw/candidate geometry is stored in `geometry_observation` with `observed_geom geometry(Geometry,4326)`, source/evidence/license links, capture method, observed_at, recorded_at, and classification.
-- Approved geometry is stored in `geometry_version` with `geom geometry(Geometry,4326)`, `subject_table`, `subject_id`, `geometry_role`, source observation, validation method, quality state, effective/recorded time, supersession link, dispute behavior, and one-current constraint.
-- Subject integrity uses constrained `subject_table` values plus future WO-002B validation triggers because PostgreSQL cannot FK to multiple tables from one column. This decision is explicit and must be implemented before deployment.
-- Administrative and operational boundaries use the same observation/version quality process; public release can use generalized geometry.
+## Role-to-subject/type rules
 
-## Validation and licensing
+| Geometry role | Allowed subjects | Allowed PostGIS geometry types | Integrity strategy | Current rule |
+|---|---|---|---|---|
+| `admin-boundary` | `administrative_unit_version` | Polygon, MultiPolygon | validated by checker and WO-002B trigger/check | one open recorded interval per subject/role |
+| `operational-boundary` | `operational_area` | Polygon, MultiPolygon | validated by checker and WO-002B trigger/check | one open recorded interval per subject/role |
+| `road-centerline` | `road_segment` | LineString, MultiLineString | validated by checker and WO-002B trigger/check | one open recorded interval per subject/role |
+| `building-footprint` | `building` | Polygon, MultiPolygon | validated by checker and WO-002B trigger/check | one open recorded interval per subject/role |
+| `building-point` | `building` | Point | validated by checker and WO-002B trigger/check | one open recorded interval per subject/role |
+| `entrance-point` | `entrance` | Point | validated by checker and WO-002B trigger/check | one open recorded interval per subject/role |
+| `location-point` | `location_record_version` | Point | validated by checker and WO-002B trigger/check | one open recorded interval per subject/role |
+| `landmark-point` | `landmark` | Point | validated by checker and WO-002B trigger/check | one open recorded interval per subject/role |
+| `landmark-area` | `landmark` | Polygon, MultiPolygon | validated by checker and WO-002B trigger/check | one open recorded interval per subject/role |
+| `parcel-boundary` | `parcel_reference` | Polygon, MultiPolygon | validated by checker and WO-002B trigger/check | one open recorded interval per subject/role |
 
-Every approved geometry requires source license, transformation history where applicable, SRID check, geometry validity, role/type check, expected administrative containment or exception, and quality assessment rows. Disputed geometry cannot be published as precise public geometry until resolved or released with explicit warning policy.
+## Boundary handling
+
+Administrative boundaries are approved `geometry_version` rows with role `admin-boundary` against `administrative_unit_version`. Operational boundaries are approved `geometry_version` rows with role `operational-boundary` against `operational_area`. Both retain observations, transformations, licence lineage, quality assessments, disputes, and supersession.

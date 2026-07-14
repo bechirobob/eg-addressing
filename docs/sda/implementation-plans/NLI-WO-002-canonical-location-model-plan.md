@@ -1,26 +1,22 @@
-# Implementation Plan — NLI-WO-002 Review 01 Remediation
+# Implementation Plan — NLI-WO-002 Review 02 Remediation
 
-## Scope
+**Work order:** `NLI-WO-002`  
+**Implementation branch:** `nli/wo-002-canonical-location-model`  
+**Planning commit:** `cdd50293a301048ce820b2b1841687afd1d3eb0d`  
+**Prepared by:** `Implementation Agent`  
+**Status:** `REVISED`
 
-Resolve findings F01-F12 on PR #7 while keeping the branch documentation-only and draft. NLI-WO-002B remains unauthorized.
+## Objective understood
 
-## Finding map
+Resolve SDA Review 02 findings F01-F12 by replacing heuristic generation with typed authoritative metadata and semantic validation. Runtime code and executable migrations remain unchanged.
 
-| Finding | Resolution artifact |
-|---|---|
-| F01 | Rebuilt AC/evidence matrix in `README.md`, PR evidence, review log. |
-| F02 | Catalog-derived `current-state-inventory.md` and one-row-per-field `current-to-target-mapping.md`. |
-| F03 | `target-model.json`, target registry, reconciled ERD/dictionary/SQL. |
-| F04 | Rewritten ADR-006/007 and target object link model. |
-| F05 | Rewritten ADR-008, lifecycle, publication snapshot model, SQL fields. |
-| F06 | Rewritten geometry model and ADR-009 with observation/version split. |
-| F07 | Authoritative `controlled-vocabularies.md`. |
-| F08 | Complete target dictionary and API projection map. |
-| F09 | Expanded convergence plan. |
-| F10 | Worked representative records. |
-| F11 | Rewritten ADRs/RFIs; RFI-001 withdrawn; added RFI-006. |
-| F12 | `design_consistency_check.py` and generated report. |
+## Acceptance-criterion map
 
-## No-change confirmation
+See `docs/sda/data-model/README.md` for the AC-01 through AC-22 matrix.
 
-No runtime code, executable migration, API contract, infrastructure, or production data will be changed.
+## Test plan
+
+1. Regenerate design pack with `python3 docs/sda/data-model/scripts/generate_design_catalog.py`.
+2. Run semantic checker with `python3 docs/sda/data-model/scripts/design_consistency_check.py`.
+3. Verify regeneration leaves no unexplained diff.
+4. Verify PR #7 final-head API/frontend workflows are green and PR remains draft.

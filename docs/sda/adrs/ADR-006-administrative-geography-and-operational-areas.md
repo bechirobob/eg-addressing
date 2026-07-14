@@ -1,25 +1,56 @@
-# Administrative hierarchy, localities, and operational areas
+# Administrative geography, localities, and operational areas
 
 **Status:** Proposed  
-**Date:** 2026-07-13  
-**Related work order:** `NLI-WO-002`  
+**Date:** 2026-07-14  
+**Decision authority:** System Design Authority  
+**Related work order:** `NLI-WO-002`
 
-## Context and drivers
+## Context
 
-Review 01 requires the design pack to decide real architecture questions before executable WO-002B work. Drivers: single canonical authority, no silent data loss, reconstructable time/publication state, PostGIS integrity, and compatibility with current pilot data.
+SDA Review 02 requires actual architecture decisions rather than generated or heuristic metadata. The design phase must decide implementation-shaping questions while leaving institutional policy decisions as RFIs.
+
+## Decision drivers
+
+- one canonical registry authority;
+- no silent data loss in convergence;
+- insertable roots and first versions;
+- no circular creation dependencies;
+- reconstructable effective, recorded, and public release state;
+- PostgreSQL/PostGIS integrity;
+- no runtime or executable migration authorization in this phase.
 
 ## Decision
 
-Use generic `administrative_unit` with controlled `admin_level`, separate `locality`, boundary versions, and separate `operational_area`/coverage.
+Use stable `administrative_unit` identity plus effective-dated `administrative_unit_version`; parent is nullable for roots. Locality is separate named reference context. Operational areas are separate from legal hierarchy.
 
 ## Alternatives considered
 
-Alternatives: level-specific tables; treating territories as admin geography; treating locality as operational area. Rejected due to hierarchy changes and legal ambiguity.
+### Alternative — Level-specific tables
 
-## Consequences and implementation constraints
+- Benefit: simpler initial implementation.
+- Cost/risk: fails one or more WO-002 authority, reconstruction, or no-loss requirements.
+- Rejection reason: Keeps hierarchy history, operational routing, and local naming distinct.
 
-Migration: provinces/admin_units map to admin units; territories map to operational areas; localities require authority review. No runtime behavior or executable migration is authorized by this ADR.
+### Alternative — Reuse territories as legal geography
 
-## Validation
+- Benefit: simpler initial implementation.
+- Cost/risk: fails one or more WO-002 authority, reconstruction, or no-loss requirements.
+- Rejection reason: Keeps hierarchy history, operational routing, and local naming distinct.
 
-The decision is reflected in `target-model.json`, ERD, data dictionary, draft SQL, current-to-target mapping, representative records, and consistency checker.
+### Alternative — Make locality an operational area
+
+- Benefit: simpler initial implementation.
+- Cost/risk: fails one or more WO-002 authority, reconstruction, or no-loss requirements.
+- Rejection reason: Keeps hierarchy history, operational routing, and local naming distinct.
+
+## Consequences
+
+- Positive: Keeps hierarchy history, operational routing, and local naming distinct.
+- Constraint: WO-002B must implement database and service checks matching `target-model.json`.
+- Migration effect: current fields map through `current-to-target-mapping.md`; conflicts become `migration_exception` records.
+- Failure mode if ignored: future implementers create incompatible authorities while claiming WO-002 compliance.
+
+## Acceptance checks
+
+- `python3 docs/sda/data-model/scripts/generate_design_catalog.py` leaves deterministic artifacts.
+- `python3 docs/sda/data-model/scripts/design_consistency_check.py` validates typed field metadata, mappings, vocabularies, representative records, ADR/RFI coverage, SQL, and Mermaid.

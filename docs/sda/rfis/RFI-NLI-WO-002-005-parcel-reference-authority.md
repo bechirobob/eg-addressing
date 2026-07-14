@@ -2,7 +2,7 @@
 
 **Related work order:** `NLI-WO-002`  
 **Raised by:** `Implementation Agent`  
-**Date:** `2026-07-13`  
+**Date:** `2026-07-14`  
 **Required by:** `Before executable NLI-WO-002B implementation for affected area`  
 **Status:** `OPEN`
 
@@ -10,18 +10,63 @@
 
 Parcel/cadastre reference authority
 
-## 2. Concrete options and consequences
+## 2. Why this decision is required
 
-Options: A) no parcels; B) external parcel references restricted; C) official cadastre integration. Recommendation: allow restricted external references only, no title/cadastre claims until authority named.
+Parcel references must not imply ownership or title.
 
-## 3. Agent recommendation
+## 3. Current evidence
 
-Use the recommendation above for design constraints, but do not implement runtime behavior until the named authority decides.
+- NLI-WO-002 work order.
+- SDA Review 02 findings.
+- `target-model.json`, ADRs 005-009, and current-to-target map.
 
-## 4. Consequence of no decision
+## 4. Options considered
 
-WO-002 design can preserve the placeholder and safety boundary. WO-002B executable migration/API/publication work must stop for this decision area.
+### Option A — No parcels
 
-## 5. Requested decision authority
+- Behavior: Exclude parcels
+- Benefits: Lowest legal risk
+- Risks/costs: Less integration value
+- Migration/compatibility effect: No migration needed
+- Security/authority/operations effect: explicit owner required before implementation.
+### Option B — Restricted external references
 
-`SDA | Programme Owner | Registry Authority | GIS/Data Authority | Legal/Privacy Authority | Publication Authority`
+- Behavior: Store external ID/source only
+- Benefits: Supports future linkage
+- Risks/costs: Needs strict projection
+- Migration/compatibility effect: Model already supports
+- Security/authority/operations effect: explicit owner required before implementation.
+### Option C — Official cadastre integration
+
+- Behavior: Treat as authoritative
+- Benefits: High value
+- Risks/costs: Requires legal authority
+- Migration/compatibility effect: Separate work order
+- Security/authority/operations effect: explicit owner required before implementation.
+
+## 5. Agent recommendation
+
+Use restricted external references only until official authority exists.
+
+## 6. Consequence of no decision
+
+Design placeholders and safety boundaries can remain. Executable WO-002B work must stop for this decision area rather than guessing.
+
+## 7. Requested decision authority
+
+`Legal/Privacy Authority / GIS Authority`
+
+## 8. Decision
+
+**Decision:** `<completed by authority>`  
+**Rationale:**  
+**Conditions:**  
+**Affected standards/ADR/work order:**  
+**Decision date and authority:**
+
+## 9. Implementation acknowledgment
+
+- [ ] Plan updated.
+- [ ] Acceptance-criterion map updated.
+- [ ] New risks/conditions recorded.
+- [ ] ADR or standard update created where the decision is durable.

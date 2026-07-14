@@ -25,6 +25,24 @@ on:
       - '.github/workflows/api-ci.yml'
 
 jobs:
+  sda-design-model:
+    name: sda-design-model
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Regenerate and validate NLI-WO-002 design pack
+        run: |
+          python3 docs/sda/data-model/scripts/generate_design_catalog.py
+          python3 docs/sda/data-model/scripts/design_consistency_check.py
+          git diff --exit-code docs/sda/data-model docs/sda/adrs docs/sda/rfis docs/sda/evidence docs/sda/implementation-plans docs/sda/reviews
+
   api-tests:
     name: api-tests
     runs-on: ubuntu-latest

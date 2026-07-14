@@ -1,25 +1,56 @@
-# Geometry observation, approval, and subject integrity
+# Geometry observation, approval, and provenance
 
 **Status:** Proposed  
-**Date:** 2026-07-13  
-**Related work order:** `NLI-WO-002`  
+**Date:** 2026-07-14  
+**Decision authority:** System Design Authority  
+**Related work order:** `NLI-WO-002`
 
-## Context and drivers
+## Context
 
-Review 01 requires the design pack to decide real architecture questions before executable WO-002B work. Drivers: single canonical authority, no silent data loss, reconstructable time/publication state, PostGIS integrity, and compatibility with current pilot data.
+SDA Review 02 requires actual architecture decisions rather than generated or heuristic metadata. The design phase must decide implementation-shaping questions while leaving institutional policy decisions as RFIs.
+
+## Decision drivers
+
+- one canonical registry authority;
+- no silent data loss in convergence;
+- insertable roots and first versions;
+- no circular creation dependencies;
+- reconstructable effective, recorded, and public release state;
+- PostgreSQL/PostGIS integrity;
+- no runtime or executable migration authorization in this phase.
 
 ## Decision
 
-Separate `geometry_observation` from approved `geometry_version`; use PostGIS Geometry(Geometry,4326); constrain subject_table values and add WO-002B triggers for subject integrity; enforce one-current per subject/role.
+Separate `geometry_observation` from approved `geometry_version`. Use EPSG:4326 PostGIS geometry with role-to-subject/type rules, source/evidence/licence/transformation lineage, quality assessment, dispute, supersession, and one-current recorded interval.
 
 ## Alternatives considered
 
-Alternatives: one polymorphic geometry row; raw citizen GPS as approved geometry; one geometry column per entity. Rejected due to provenance/integrity gaps.
+### Alternative — Raw GPS becomes approved geometry
 
-## Consequences and implementation constraints
+- Benefit: simpler initial implementation.
+- Cost/risk: fails one or more WO-002 authority, reconstruction, or no-loss requirements.
+- Rejection reason: Protects against orphaned, unlicensed, invalid, or multiply current geometry.
 
-Migration: backfill observations from geotags/field/legacy points and approved versions from address_records.geom where valid. No runtime behavior or executable migration is authorized by this ADR.
+### Alternative — One generic geometry table with no role rules
 
-## Validation
+- Benefit: simpler initial implementation.
+- Cost/risk: fails one or more WO-002 authority, reconstruction, or no-loss requirements.
+- Rejection reason: Protects against orphaned, unlicensed, invalid, or multiply current geometry.
 
-The decision is reflected in `target-model.json`, ERD, data dictionary, draft SQL, current-to-target mapping, representative records, and consistency checker.
+### Alternative — Entity-specific geometry columns only
+
+- Benefit: simpler initial implementation.
+- Cost/risk: fails one or more WO-002 authority, reconstruction, or no-loss requirements.
+- Rejection reason: Protects against orphaned, unlicensed, invalid, or multiply current geometry.
+
+## Consequences
+
+- Positive: Protects against orphaned, unlicensed, invalid, or multiply current geometry.
+- Constraint: WO-002B must implement database and service checks matching `target-model.json`.
+- Migration effect: current fields map through `current-to-target-mapping.md`; conflicts become `migration_exception` records.
+- Failure mode if ignored: future implementers create incompatible authorities while claiming WO-002 compliance.
+
+## Acceptance checks
+
+- `python3 docs/sda/data-model/scripts/generate_design_catalog.py` leaves deterministic artifacts.
+- `python3 docs/sda/data-model/scripts/design_consistency_check.py` validates typed field metadata, mappings, vocabularies, representative records, ADR/RFI coverage, SQL, and Mermaid.

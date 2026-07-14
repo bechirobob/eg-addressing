@@ -1,14 +1,5 @@
-# Source, Evidence, Lineage, and Classification Model
+# Source, Evidence, Lineage, and Classification
 
-## Lineage levels
+Lineage chain: `source_authority -> source_package -> source_record -> evidence_object/geometry_observation -> decision_event -> location_record_version/location_record_assertion/publication_release_item`. Every field with source significance has field-level assertion support through `location_record_assertion`. Sensitive identity/contact values from current fields are retained as restricted source payload hashes or evidence, not projected publicly.
 
-- `source_authority`: institution/system/person class responsible for source legitimacy.
-- `source_package`: imported or submitted package with checksum/license/load context.
-- `source_record`: immutable source row/submission key and raw payload hash.
-- `evidence_object`: files/media/field proof with content hash and retention state.
-- `decision_event`: actor/authority/reason/effective/recorded time for promotion, correction, publication, dispute, or retirement.
-- `location_record_assertion`: field-level assertion linking a target field to source/evidence/decision.
-
-## Classification
-
-Values are defined in `controlled-vocabularies.md`. Public projection is allowlisted by `publication_release_item`; database presence never implies publication.
+Projection is allowlisted: public release requires `publication_release_item`; operator case files may include evidence/source/quality according to role; partner projections are scoped by `partner_projection.response_field_set`.

@@ -214,15 +214,15 @@ Keep PR #7 in draft. NLI-WO-002B remains unauthorized.
 
 | Finding | Agent response | Commit/evidence | SDA disposition | Date |
 |---|---|---|---|---|
-| F01 | Pending | — | OPEN | 2026-07-14 |
-| F02 | Pending | — | OPEN | 2026-07-14 |
-| F03 | Pending | — | OPEN | 2026-07-14 |
-| F04 | Pending | — | OPEN | 2026-07-14 |
-| F05 | Pending | — | OPEN | 2026-07-14 |
-| F06 | Pending | — | OPEN | 2026-07-14 |
-| F07 | Pending | — | OPEN | 2026-07-14 |
-| F08 | Pending | — | OPEN | 2026-07-14 |
-| F09 | Pending | — | OPEN | 2026-07-14 |
-| F10 | Pending | — | OPEN | 2026-07-14 |
-| F11 | Pending | — | OPEN | 2026-07-14 |
-| F12 | Pending | — | OPEN | 2026-07-14 |
+| F01 | Resolved for SDA Review 03: AC matrix and PR evidence rebuilt with exact artifacts; final head recorded post-push. | Fixing commit recorded after push; `design-consistency-report.md`; final workflow IDs in PR comment. | READY FOR SDA REVIEW | 2026-07-14 |
+| F02 | Resolved for SDA Review 03: Validated current-to-target mapping registry; no invalid target references. | Fixing commit recorded after push; `design-consistency-report.md`; final workflow IDs in PR comment. | READY FOR SDA REVIEW | 2026-07-14 |
+| F03 | Resolved for SDA Review 03: Typed target metadata replaces suffix inference; dictionary/schema generated from explicit metadata. | Fixing commit recorded after push; `design-consistency-report.md`; final workflow IDs in PR comment. | READY FOR SDA REVIEW | 2026-07-14 |
+| F04 | Resolved for SDA Review 03: ADR-006/007 plus cardinality/name/admin/object models corrected. | Fixing commit recorded after push; `design-consistency-report.md`; final workflow IDs in PR comment. | READY FOR SDA REVIEW | 2026-07-14 |
+| F05 | Resolved for SDA Review 03: Single current mechanism, optional links, exact publication snapshots corrected. | Fixing commit recorded after push; `design-consistency-report.md`; final workflow IDs in PR comment. | READY FOR SDA REVIEW | 2026-07-14 |
+| F06 | Resolved for SDA Review 03: Geometry role/type/source/licence/transformation/quality/dispute model corrected. | Fixing commit recorded after push; `design-consistency-report.md`; final workflow IDs in PR comment. | READY FOR SDA REVIEW | 2026-07-14 |
+| F07 | Resolved for SDA Review 03: Field-to-vocabulary registry and transition tables completed. | Fixing commit recorded after push; `design-consistency-report.md`; final workflow IDs in PR comment. | READY FOR SDA REVIEW | 2026-07-14 |
+| F08 | Resolved for SDA Review 03: Semantic dictionary and route projection matrix generated. | Fixing commit recorded after push; `design-consistency-report.md`; final workflow IDs in PR comment. | READY FOR SDA REVIEW | 2026-07-14 |
+| F09 | Resolved for SDA Review 03: Convergence plan rebuilt from validated field map with owners/gates/scale. | Fixing commit recorded after push; `design-consistency-report.md`; final workflow IDs in PR comment. | READY FOR SDA REVIEW | 2026-07-14 |
+| F10 | Resolved for SDA Review 03: Representative records replaced with distinct scenario-specific records. | Fixing commit recorded after push; `design-consistency-report.md`; final workflow IDs in PR comment. | READY FOR SDA REVIEW | 2026-07-14 |
+| F11 | Resolved for SDA Review 03: ADRs/RFIs rewritten to templates and 12-question matrix added. | Fixing commit recorded after push; `design-consistency-report.md`; final workflow IDs in PR comment. | READY FOR SDA REVIEW | 2026-07-14 |
+| F12 | Resolved for SDA Review 03: Portable generator and semantic checker added to CI with regeneration diff check. | Fixing commit recorded after push; `design-consistency-report.md`; final workflow IDs in PR comment. | READY FOR SDA REVIEW | 2026-07-14 |

@@ -1,25 +1,56 @@
-# Temporal mechanics, correction, supersession, and immutable publication
+# Temporal, supersession, correction, and publication snapshots
 
 **Status:** Proposed  
-**Date:** 2026-07-13  
-**Related work order:** `NLI-WO-002`  
+**Date:** 2026-07-14  
+**Decision authority:** System Design Authority  
+**Related work order:** `NLI-WO-002`
 
-## Context and drivers
+## Context
 
-Review 01 requires the design pack to decide real architecture questions before executable WO-002B work. Drivers: single canonical authority, no silent data loss, reconstructable time/publication state, PostGIS integrity, and compatibility with current pilot data.
+SDA Review 02 requires actual architecture decisions rather than generated or heuristic metadata. The design phase must decide implementation-shaping questions while leaving institutional policy decisions as RFIs.
+
+## Decision drivers
+
+- one canonical registry authority;
+- no silent data loss in convergence;
+- insertable roots and first versions;
+- no circular creation dependencies;
+- reconstructable effective, recorded, and public release state;
+- PostgreSQL/PostGIS integrity;
+- no runtime or executable migration authorization in this phase.
 
 ## Decision
 
-Use bitemporal effective/recorded intervals, immutable versions, explicit predecessor/successor/correction links, one-current enforcement, backdated decision rules, dispute states, and publication snapshots targeting exact version+alias.
+Use immutable versions with effective intervals and recorded intervals. `recorded_to IS NULL` is the one current mechanism. Publication release items snapshot exact version, exact alias, full payload, hash, and manifest URI.
 
 ## Alternatives considered
 
-Alternatives: mutable current row only; release item points to current record; overwrite corrections. Rejected because reconstruction fails.
+### Alternative — Mutable current row
 
-## Consequences and implementation constraints
+- Benefit: simpler initial implementation.
+- Cost/risk: fails one or more WO-002 authority, reconstruction, or no-loss requirements.
+- Rejection reason: Allows reconstruction of registry belief, effective state, and released public view.
 
-Migration: create versions/events, snapshot current state, future corrections create new versions and releases. No runtime behavior or executable migration is authorized by this ADR.
+### Alternative — Boolean is_current plus pointer
 
-## Validation
+- Benefit: simpler initial implementation.
+- Cost/risk: fails one or more WO-002 authority, reconstruction, or no-loss requirements.
+- Rejection reason: Allows reconstruction of registry belief, effective state, and released public view.
 
-The decision is reflected in `target-model.json`, ERD, data dictionary, draft SQL, current-to-target mapping, representative records, and consistency checker.
+### Alternative — Release points to current record only
+
+- Benefit: simpler initial implementation.
+- Cost/risk: fails one or more WO-002 authority, reconstruction, or no-loss requirements.
+- Rejection reason: Allows reconstruction of registry belief, effective state, and released public view.
+
+## Consequences
+
+- Positive: Allows reconstruction of registry belief, effective state, and released public view.
+- Constraint: WO-002B must implement database and service checks matching `target-model.json`.
+- Migration effect: current fields map through `current-to-target-mapping.md`; conflicts become `migration_exception` records.
+- Failure mode if ignored: future implementers create incompatible authorities while claiming WO-002 compliance.
+
+## Acceptance checks
+
+- `python3 docs/sda/data-model/scripts/generate_design_catalog.py` leaves deterministic artifacts.
+- `python3 docs/sda/data-model/scripts/design_consistency_check.py` validates typed field metadata, mappings, vocabularies, representative records, ADR/RFI coverage, SQL, and Mermaid.

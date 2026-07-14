@@ -1,0 +1,4250 @@
+[
+  {
+    "authority": "Registry Authority",
+    "classification": "government-internal",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "address_corrections.address_id",
+    "current_type": "TEXT",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "low",
+    "target": "correction_case.target_location_record_id",
+    "transformation": [
+      {
+        "rule": "correction request becomes correction_case with restricted reporter payload retained as source evidence",
+        "target": "correction_case.target_location_record_id"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM address_corrections WHERE address_id IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "government-internal",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "address_corrections.correction_type",
+    "current_type": "TEXT",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "low",
+    "target": "correction_case.correction_type",
+    "transformation": [
+      {
+        "rule": "correction request becomes correction_case with restricted reporter payload retained as source evidence",
+        "target": "correction_case.correction_type"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM address_corrections WHERE correction_type IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "government-internal",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "address_corrections.created_at",
+    "current_type": "TIMESTAMPTZ",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "low",
+    "target": "correction_case.submitted_at",
+    "transformation": [
+      {
+        "rule": "correction request becomes correction_case with restricted reporter payload retained as source evidence",
+        "target": "correction_case.submitted_at"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM address_corrections WHERE created_at IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "government-internal",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "address_corrections.id",
+    "current_type": "TEXT",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "low",
+    "target": "correction_case.correction_case_id",
+    "transformation": [
+      {
+        "rule": "correction request becomes correction_case with restricted reporter payload retained as source evidence",
+        "target": "correction_case.correction_case_id"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM address_corrections WHERE id IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "government-internal",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "address_corrections.note",
+    "current_type": "TEXT",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "low",
+    "target": "decision_event.details_json",
+    "transformation": [
+      {
+        "rule": "correction request becomes correction_case with restricted reporter payload retained as source evidence",
+        "target": "decision_event.details_json"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM address_corrections WHERE note IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "public-after-release",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "address_corrections.public_code",
+    "current_type": "TEXT",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "low",
+    "target": "correction_case.target_public_code",
+    "transformation": [
+      {
+        "rule": "correction request becomes correction_case with restricted reporter payload retained as source evidence",
+        "target": "correction_case.target_public_code"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM address_corrections WHERE public_code IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "government-internal",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "address_corrections.query",
+    "current_type": "TEXT",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "low",
+    "target": "source_record.source_key",
+    "transformation": [
+      {
+        "rule": "correction request becomes correction_case with restricted reporter payload retained as source evidence",
+        "target": "source_record.source_key"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM address_corrections WHERE query IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "government-internal",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "address_corrections.reason",
+    "current_type": "TEXT",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "low",
+    "target": "decision_event.reason_code",
+    "transformation": [
+      {
+        "rule": "correction request becomes correction_case with restricted reporter payload retained as source evidence",
+        "target": "decision_event.reason_code"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM address_corrections WHERE reason IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "restricted",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "address_corrections.reporter_contact",
+    "current_type": "TEXT",
+    "disposition": "archive/compatibility",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "medium",
+    "target": "source_record.raw_payload_hash",
+    "transformation": [
+      {
+        "rule": "correction request becomes correction_case with restricted reporter payload retained as source evidence",
+        "target": "source_record.raw_payload_hash"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM address_corrections WHERE reporter_contact IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "restricted",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "address_corrections.reporter_name",
+    "current_type": "TEXT",
+    "disposition": "archive/compatibility",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "medium",
+    "target": "source_record.raw_payload_hash",
+    "transformation": [
+      {
+        "rule": "correction request becomes correction_case with restricted reporter payload retained as source evidence",
+        "target": "source_record.raw_payload_hash"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM address_corrections WHERE reporter_name IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "government-internal",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "address_corrections.reviewer_note",
+    "current_type": "TEXT",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "low",
+    "target": "correction_case.correction_case_id",
+    "transformation": [
+      {
+        "rule": "correction request becomes correction_case with restricted reporter payload retained as source evidence",
+        "target": "correction_case.correction_case_id"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM address_corrections WHERE reviewer_note IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "government-internal",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "address_corrections.status",
+    "current_type": "TEXT",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "low",
+    "target": "correction_case.case_state",
+    "transformation": [
+      {
+        "rule": "correction request becomes correction_case with restricted reporter payload retained as source evidence",
+        "target": "correction_case.case_state"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM address_corrections WHERE status IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "government-internal",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "address_corrections.updated_at",
+    "current_type": "TIMESTAMPTZ",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "low",
+    "target": "correction_case.resolved_at",
+    "transformation": [
+      {
+        "rule": "correction request becomes correction_case with restricted reporter payload retained as source evidence",
+        "target": "correction_case.resolved_at"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM address_corrections WHERE updated_at IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "government-internal",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "address_points.accuracy_meters",
+    "current_type": "DOUBLE PRECISION",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "low",
+    "target": "geometry_observation.horizontal_accuracy_m",
+    "transformation": [
+      {
+        "rule": "combine lat/lon into EPSG:4326 point observation; approved geometry only after validation",
+        "target": "geometry_observation.horizontal_accuracy_m"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM address_points WHERE accuracy_meters IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "government-internal",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "address_points.address_id",
+    "current_type": "TEXT",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "low",
+    "target": "source_record.source_key",
+    "transformation": [
+      {
+        "rule": "combine lat/lon into EPSG:4326 point observation; approved geometry only after validation",
+        "target": "source_record.source_key"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM address_points WHERE address_id IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "government-internal",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "address_points.created_at",
+    "current_type": "TIMESTAMPTZ",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "low",
+    "target": "geometry_observation.recorded_at",
+    "transformation": [
+      {
+        "rule": "combine lat/lon into EPSG:4326 point observation; approved geometry only after validation",
+        "target": "geometry_observation.recorded_at"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM address_points WHERE created_at IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "government-internal",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "address_points.id",
+    "current_type": "TEXT",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "low",
+    "target": "geometry_observation.geometry_observation_id",
+    "transformation": [
+      {
+        "rule": "combine lat/lon into EPSG:4326 point observation; approved geometry only after validation",
+        "target": "geometry_observation.geometry_observation_id"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM address_points WHERE id IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "government-internal",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "address_points.is_active",
+    "current_type": "BOOLEAN",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "low",
+    "target": "geometry_version.recorded_to",
+    "transformation": [
+      {
+        "rule": "combine lat/lon into EPSG:4326 point observation; approved geometry only after validation",
+        "target": "geometry_version.recorded_to"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM address_points WHERE is_active IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "restricted",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "address_points.latitude",
+    "current_type": "DOUBLE PRECISION",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "medium",
+    "target": "geometry_observation.observed_geom",
+    "transformation": [
+      {
+        "rule": "combine lat/lon into EPSG:4326 point observation; approved geometry only after validation",
+        "target": "geometry_observation.observed_geom"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM address_points WHERE latitude IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "restricted",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "address_points.longitude",
+    "current_type": "DOUBLE PRECISION",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "medium",
+    "target": "geometry_observation.observed_geom",
+    "transformation": [
+      {
+        "rule": "combine lat/lon into EPSG:4326 point observation; approved geometry only after validation",
+        "target": "geometry_observation.observed_geom"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM address_points WHERE longitude IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "government-internal",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "address_points.source_method",
+    "current_type": "TEXT",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "low",
+    "target": "geometry_observation.capture_method",
+    "transformation": [
+      {
+        "rule": "combine lat/lon into EPSG:4326 point observation; approved geometry only after validation",
+        "target": "geometry_observation.capture_method"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM address_points WHERE source_method IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "government-internal",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "address_points.updated_at",
+    "current_type": "TIMESTAMPTZ",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "low",
+    "target": "geometry_version.recorded_at",
+    "transformation": [
+      {
+        "rule": "combine lat/lon into EPSG:4326 point observation; approved geometry only after validation",
+        "target": "geometry_version.recorded_at"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM address_points WHERE updated_at IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "government-internal",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "address_record_events.actor_id",
+    "current_type": "TEXT",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "low",
+    "target": "decision_event.actor_id",
+    "transformation": [
+      {
+        "rule": "registry event becomes decision_event/audit lineage",
+        "target": "decision_event.actor_id"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM address_record_events WHERE actor_id IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "government-internal",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "address_record_events.actor_role",
+    "current_type": "TEXT",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "low",
+    "target": "decision_event.details_json",
+    "transformation": [
+      {
+        "rule": "registry event becomes decision_event/audit lineage",
+        "target": "decision_event.details_json"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM address_record_events WHERE actor_role IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "government-internal",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "address_record_events.actor_username",
+    "current_type": "TEXT",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "low",
+    "target": "decision_event.details_json",
+    "transformation": [
+      {
+        "rule": "registry event becomes decision_event/audit lineage",
+        "target": "decision_event.details_json"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM address_record_events WHERE actor_username IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "government-internal",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "address_record_events.address_record_id",
+    "current_type": "TEXT",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "low",
+    "target": "location_record.location_record_id",
+    "transformation": [
+      {
+        "rule": "registry event becomes decision_event/audit lineage",
+        "target": "location_record.location_record_id"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM address_record_events WHERE address_record_id IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "government-internal",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "address_record_events.created_at",
+    "current_type": "TIMESTAMPTZ",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "low",
+    "target": "decision_event.recorded_at",
+    "transformation": [
+      {
+        "rule": "registry event becomes decision_event/audit lineage",
+        "target": "decision_event.recorded_at"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM address_record_events WHERE created_at IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "government-internal",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "address_record_events.details",
+    "current_type": "JSONB",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "low",
+    "target": "decision_event.details_json",
+    "transformation": [
+      {
+        "rule": "registry event becomes decision_event/audit lineage",
+        "target": "decision_event.details_json"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM address_record_events WHERE details IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "government-internal",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "address_record_events.event_type",
+    "current_type": "TEXT",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "low",
+    "target": "decision_event.decision_type",
+    "transformation": [
+      {
+        "rule": "registry event becomes decision_event/audit lineage",
+        "target": "decision_event.decision_type"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM address_record_events WHERE event_type IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "government-internal",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "address_record_events.id",
+    "current_type": "TEXT",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "low",
+    "target": "decision_event.decision_event_id",
+    "transformation": [
+      {
+        "rule": "registry event becomes decision_event/audit lineage",
+        "target": "decision_event.decision_event_id"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM address_record_events WHERE id IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "government-internal",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "address_records.accuracy_meters",
+    "current_type": "DOUBLE PRECISION",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "low",
+    "target": "geometry_observation.horizontal_accuracy_m",
+    "transformation": [
+      {
+        "rule": "address_records is primary current canonical source for future location_record backfill",
+        "target": "geometry_observation.horizontal_accuracy_m"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM address_records WHERE accuracy_meters IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "public-after-release",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "address_records.address_code",
+    "current_type": "TEXT",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "low",
+    "target": "public_code_alias.public_code",
+    "transformation": [
+      {
+        "rule": "address_records is primary current canonical source for future location_record backfill",
+        "target": "public_code_alias.public_code"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM address_records WHERE address_code IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "government-internal",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "address_records.address_label",
+    "current_type": "TEXT",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "low",
+    "target": "location_record_version.display_label_es",
+    "transformation": [
+      {
+        "rule": "address_records is primary current canonical source for future location_record backfill",
+        "target": "location_record_version.display_label_es"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM address_records WHERE address_label IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "government-internal",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "address_records.created_at",
+    "current_type": "TIMESTAMPTZ",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "low",
+    "target": "location_record.created_at",
+    "transformation": [
+      {
+        "rule": "address_records is primary current canonical source for future location_record backfill",
+        "target": "location_record.created_at"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM address_records WHERE created_at IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "restricted",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "address_records.geom",
+    "current_type": "geography(Point, 4326)",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "medium",
+    "target": "geometry_version.geom",
+    "transformation": [
+      {
+        "rule": "address_records is primary current canonical source for future location_record backfill",
+        "target": "geometry_version.geom"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM address_records WHERE geom IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "government-internal",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "address_records.id",
+    "current_type": "TEXT",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "low",
+    "target": "location_record.location_record_id",
+    "transformation": [
+      {
+        "rule": "address_records is primary current canonical source for future location_record backfill",
+        "target": "location_record.location_record_id"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM address_records WHERE id IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "government-internal",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "address_records.is_archived",
+    "current_type": "BOOLEAN",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "low",
+    "target": "location_record.retired_at",
+    "transformation": [
+      {
+        "rule": "address_records is primary current canonical source for future location_record backfill",
+        "target": "location_record.retired_at"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM address_records WHERE is_archived IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "restricted",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "address_records.latitude",
+    "current_type": "DOUBLE PRECISION",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "medium",
+    "target": "geometry_version.geom",
+    "transformation": [
+      {
+        "rule": "address_records is primary current canonical source for future location_record backfill",
+        "target": "geometry_version.geom"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM address_records WHERE latitude IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "restricted",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "address_records.longitude",
+    "current_type": "DOUBLE PRECISION",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "medium",
+    "target": "geometry_version.geom",
+    "transformation": [
+      {
+        "rule": "address_records is primary current canonical source for future location_record backfill",
+        "target": "geometry_version.geom"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM address_records WHERE longitude IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "government-internal",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "address_records.province_code",
+    "current_type": "TEXT",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "low",
+    "target": "administrative_unit.stable_code",
+    "transformation": [
+      {
+        "rule": "address_records is primary current canonical source for future location_record backfill",
+        "target": "administrative_unit.stable_code"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM address_records WHERE province_code IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "government-internal",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "address_records.publication_state",
+    "current_type": "TEXT",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "low",
+    "target": "publication_release.release_state",
+    "transformation": [
+      {
+        "rule": "address_records is primary current canonical source for future location_record backfill",
+        "target": "publication_release.release_state"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM address_records WHERE publication_state IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "restricted",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "address_records.record_bundle",
+    "current_type": "JSONB",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "medium",
+    "target": "location_record_assertion.value_json",
+    "transformation": [
+      {
+        "rule": "address_records is primary current canonical source for future location_record backfill",
+        "target": "location_record_assertion.value_json"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM address_records WHERE record_bundle IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "government-internal",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "address_records.search_text",
+    "current_type": "TEXT",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "low",
+    "target": "name_record.normalized_text",
+    "transformation": [
+      {
+        "rule": "address_records is primary current canonical source for future location_record backfill",
+        "target": "name_record.normalized_text"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM address_records WHERE search_text IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "government-internal",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "address_records.source_submission_id",
+    "current_type": "TEXT",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "low",
+    "target": "intake_case.intake_case_id",
+    "transformation": [
+      {
+        "rule": "address_records is primary current canonical source for future location_record backfill",
+        "target": "intake_case.intake_case_id"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM address_records WHERE source_submission_id IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "government-internal",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "address_records.status",
+    "current_type": "TEXT",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "low",
+    "target": "location_record_version.lifecycle_state",
+    "transformation": [
+      {
+        "rule": "address_records is primary current canonical source for future location_record backfill",
+        "target": "location_record_version.lifecycle_state"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM address_records WHERE status IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "government-internal",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "address_records.territory_id",
+    "current_type": "TEXT",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "low",
+    "target": "operational_area_coverage.operational_area_id",
+    "transformation": [
+      {
+        "rule": "address_records is primary current canonical source for future location_record backfill",
+        "target": "operational_area_coverage.operational_area_id"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM address_records WHERE territory_id IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "government-internal",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "address_records.updated_at",
+    "current_type": "TIMESTAMPTZ",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "low",
+    "target": "location_record_version.recorded_at",
+    "transformation": [
+      {
+        "rule": "address_records is primary current canonical source for future location_record backfill",
+        "target": "location_record_version.recorded_at"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM address_records WHERE updated_at IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "government-internal",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "addresses.building_id",
+    "current_type": "TEXT",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "low",
+    "target": "location_record_object_link.object_id",
+    "transformation": [
+      {
+        "rule": "legacy address is compatibility source; canonical authority converges through location_record/version/object links/alias/release",
+        "target": "location_record_object_link.object_id"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM addresses WHERE building_id IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "government-internal",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "addresses.created_at",
+    "current_type": "TIMESTAMPTZ",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "low",
+    "target": "location_record.created_at",
+    "transformation": [
+      {
+        "rule": "legacy address is compatibility source; canonical authority converges through location_record/version/object links/alias/release",
+        "target": "location_record.created_at"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM addresses WHERE created_at IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "government-internal",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "addresses.formatted",
+    "current_type": "TEXT",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "low",
+    "target": "location_record_version.display_label_es",
+    "transformation": [
+      {
+        "rule": "legacy address is compatibility source; canonical authority converges through location_record/version/object links/alias/release",
+        "target": "location_record_version.display_label_es"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM addresses WHERE formatted IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "government-internal",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "addresses.id",
+    "current_type": "TEXT",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "low",
+    "target": "source_record.source_key",
+    "transformation": [
+      {
+        "rule": "legacy address is compatibility source; canonical authority converges through location_record/version/object links/alias/release",
+        "target": "source_record.source_key"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM addresses WHERE id IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "government-internal",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "addresses.is_archived",
+    "current_type": "BOOLEAN",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "low",
+    "target": "location_record.retired_at",
+    "transformation": [
+      {
+        "rule": "legacy address is compatibility source; canonical authority converges through location_record/version/object links/alias/release",
+        "target": "location_record.retired_at"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM addresses WHERE is_archived IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "government-internal",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "addresses.issuance_method",
+    "current_type": "TEXT",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "low",
+    "target": "decision_event.details_json",
+    "transformation": [
+      {
+        "rule": "legacy address is compatibility source; canonical authority converges through location_record/version/object links/alias/release",
+        "target": "decision_event.details_json"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM addresses WHERE issuance_method IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "government-internal",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "addresses.province_code",
+    "current_type": "TEXT",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "low",
+    "target": "administrative_unit.stable_code",
+    "transformation": [
+      {
+        "rule": "legacy address is compatibility source; canonical authority converges through location_record/version/object links/alias/release",
+        "target": "administrative_unit.stable_code"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM addresses WHERE province_code IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "public-after-release",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "addresses.public_code",
+    "current_type": "TEXT",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "low",
+    "target": "public_code_alias.public_code",
+    "transformation": [
+      {
+        "rule": "legacy address is compatibility source; canonical authority converges through location_record/version/object links/alias/release",
+        "target": "public_code_alias.public_code"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM addresses WHERE public_code IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "government-internal",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "addresses.publication_state",
+    "current_type": "TEXT",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "low",
+    "target": "publication_release.release_state",
+    "transformation": [
+      {
+        "rule": "legacy address is compatibility source; canonical authority converges through location_record/version/object links/alias/release",
+        "target": "publication_release.release_state"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM addresses WHERE publication_state IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "government-internal",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "addresses.road_id",
+    "current_type": "TEXT",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "low",
+    "target": "location_record_object_link.object_id",
+    "transformation": [
+      {
+        "rule": "legacy address is compatibility source; canonical authority converges through location_record/version/object links/alias/release",
+        "target": "location_record_object_link.object_id"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM addresses WHERE road_id IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "government-internal",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "addresses.source",
+    "current_type": "TEXT",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "low",
+    "target": "source_authority.authority_class",
+    "transformation": [
+      {
+        "rule": "legacy address is compatibility source; canonical authority converges through location_record/version/object links/alias/release",
+        "target": "source_authority.authority_class"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM addresses WHERE source IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "government-internal",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "addresses.status",
+    "current_type": "TEXT",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "low",
+    "target": "location_record_version.lifecycle_state",
+    "transformation": [
+      {
+        "rule": "legacy address is compatibility source; canonical authority converges through location_record/version/object links/alias/release",
+        "target": "location_record_version.lifecycle_state"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM addresses WHERE status IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "government-internal",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "addresses.superseded_by_address_id",
+    "current_type": "TEXT",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "low",
+    "target": "location_record_relationship.to_location_record_id",
+    "transformation": [
+      {
+        "rule": "legacy address is compatibility source; canonical authority converges through location_record/version/object links/alias/release",
+        "target": "location_record_relationship.to_location_record_id"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM addresses WHERE superseded_by_address_id IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "government-internal",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "addresses.territory_id",
+    "current_type": "TEXT",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "low",
+    "target": "operational_area_coverage.operational_area_id",
+    "transformation": [
+      {
+        "rule": "legacy address is compatibility source; canonical authority converges through location_record/version/object links/alias/release",
+        "target": "operational_area_coverage.operational_area_id"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM addresses WHERE territory_id IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "government-internal",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "addresses.updated_at",
+    "current_type": "TIMESTAMPTZ",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "low",
+    "target": "location_record_version.recorded_at",
+    "transformation": [
+      {
+        "rule": "legacy address is compatibility source; canonical authority converges through location_record/version/object links/alias/release",
+        "target": "location_record_version.recorded_at"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM addresses WHERE updated_at IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "government-internal",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "addresses.verification_status",
+    "current_type": "TEXT",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "low",
+    "target": "location_record_version.lifecycle_state",
+    "transformation": [
+      {
+        "rule": "legacy address is compatibility source; canonical authority converges through location_record/version/object links/alias/release",
+        "target": "location_record_version.lifecycle_state"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM addresses WHERE verification_status IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "public-after-release",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "admin_units.code",
+    "current_type": "TEXT",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "low",
+    "target": "administrative_unit.stable_code",
+    "transformation": [
+      {
+        "rule": "map current admin unit into administrative_unit + administrative_unit_version + name_record; province_code resolves through stable_code",
+        "target": "administrative_unit.stable_code"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM admin_units WHERE code IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "public-after-release",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "admin_units.created_at",
+    "current_type": "TIMESTAMPTZ",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "low",
+    "target": "administrative_unit.created_at",
+    "transformation": [
+      {
+        "rule": "map current admin unit into administrative_unit + administrative_unit_version + name_record; province_code resolves through stable_code",
+        "target": "administrative_unit.created_at"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM admin_units WHERE created_at IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "public-after-release",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "admin_units.id",
+    "current_type": "TEXT",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "low",
+    "target": "administrative_unit.administrative_unit_id",
+    "transformation": [
+      {
+        "rule": "map current admin unit into administrative_unit + administrative_unit_version + name_record; province_code resolves through stable_code",
+        "target": "administrative_unit.administrative_unit_id"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM admin_units WHERE id IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "public-after-release",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "admin_units.level",
+    "current_type": "TEXT",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "low",
+    "target": "administrative_unit_version.admin_level",
+    "transformation": [
+      {
+        "rule": "map current admin unit into administrative_unit + administrative_unit_version + name_record; province_code resolves through stable_code",
+        "target": "administrative_unit_version.admin_level"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM admin_units WHERE level IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "public-after-release",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "admin_units.name_en",
+    "current_type": "TEXT",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "low",
+    "target": "name_record.name_text",
+    "transformation": [
+      {
+        "rule": "map current admin unit into administrative_unit + administrative_unit_version + name_record; province_code resolves through stable_code",
+        "target": "name_record.name_text"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM admin_units WHERE name_en IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "public-after-release",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "admin_units.name_es",
+    "current_type": "TEXT",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "low",
+    "target": "name_record.name_text",
+    "transformation": [
+      {
+        "rule": "map current admin unit into administrative_unit + administrative_unit_version + name_record; province_code resolves through stable_code",
+        "target": "name_record.name_text"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM admin_units WHERE name_es IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "public-after-release",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "admin_units.parent_id",
+    "current_type": "TEXT",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "low",
+    "target": "administrative_unit_version.parent_administrative_unit_id",
+    "transformation": [
+      {
+        "rule": "map current admin unit into administrative_unit + administrative_unit_version + name_record; province_code resolves through stable_code",
+        "target": "administrative_unit_version.parent_administrative_unit_id"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM admin_units WHERE parent_id IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "public-after-release",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "admin_units.province_code",
+    "current_type": "TEXT",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "low",
+    "target": "source_record.source_key",
+    "transformation": [
+      {
+        "rule": "map current admin unit into administrative_unit + administrative_unit_version + name_record; province_code resolves through stable_code",
+        "target": "source_record.source_key"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM admin_units WHERE province_code IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "public-after-release",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "admin_units.sort_order",
+    "current_type": "INTEGER",
+    "disposition": "archive/compatibility",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "low",
+    "target": "source_record.raw_payload_hash",
+    "transformation": [
+      {
+        "rule": "map current admin unit into administrative_unit + administrative_unit_version + name_record; province_code resolves through stable_code",
+        "target": "source_record.raw_payload_hash"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM admin_units WHERE sort_order IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "public-after-release",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "admin_units.status",
+    "current_type": "TEXT",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "low",
+    "target": "administrative_unit_version.lifecycle_state",
+    "transformation": [
+      {
+        "rule": "map current admin unit into administrative_unit + administrative_unit_version + name_record; province_code resolves through stable_code",
+        "target": "administrative_unit_version.lifecycle_state"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM admin_units WHERE status IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "public-after-release",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "admin_units.updated_at",
+    "current_type": "TIMESTAMPTZ",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "low",
+    "target": "administrative_unit_version.recorded_at",
+    "transformation": [
+      {
+        "rule": "map current admin unit into administrative_unit + administrative_unit_version + name_record; province_code resolves through stable_code",
+        "target": "administrative_unit_version.recorded_at"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM admin_units WHERE updated_at IS NULL;"
+  },
+  {
+    "authority": "Security/Operations Authority",
+    "classification": "government-internal",
+    "compatibility": "retained by existing subsystem",
+    "current": "audit_logs.action",
+    "current_type": "TEXT",
+    "disposition": "compatibility/archive",
+    "retirement": "not retired by NLI-WO-002",
+    "risk": "low: outside NLI location model but retained in audit/source evidence",
+    "target": "source_record.raw_payload_hash",
+    "transformation": [
+      {
+        "rule": "archive audit_logs.action in governed source/audit payload; not part of canonical location registry",
+        "target": "source_record.raw_payload_hash"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM audit_logs;"
+  },
+  {
+    "authority": "Security/Operations Authority",
+    "classification": "government-internal",
+    "compatibility": "retained by existing subsystem",
+    "current": "audit_logs.actor_role",
+    "current_type": "TEXT",
+    "disposition": "compatibility/archive",
+    "retirement": "not retired by NLI-WO-002",
+    "risk": "low: outside NLI location model but retained in audit/source evidence",
+    "target": "source_record.raw_payload_hash",
+    "transformation": [
+      {
+        "rule": "archive audit_logs.actor_role in governed source/audit payload; not part of canonical location registry",
+        "target": "source_record.raw_payload_hash"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM audit_logs;"
+  },
+  {
+    "authority": "Security/Operations Authority",
+    "classification": "government-internal",
+    "compatibility": "retained by existing subsystem",
+    "current": "audit_logs.actor_user_id",
+    "current_type": "TEXT",
+    "disposition": "compatibility/archive",
+    "retirement": "not retired by NLI-WO-002",
+    "risk": "low: outside NLI location model but retained in audit/source evidence",
+    "target": "source_record.raw_payload_hash",
+    "transformation": [
+      {
+        "rule": "archive audit_logs.actor_user_id in governed source/audit payload; not part of canonical location registry",
+        "target": "source_record.raw_payload_hash"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM audit_logs;"
+  },
+  {
+    "authority": "Security/Operations Authority",
+    "classification": "government-internal",
+    "compatibility": "retained by existing subsystem",
+    "current": "audit_logs.actor_username",
+    "current_type": "TEXT",
+    "disposition": "compatibility/archive",
+    "retirement": "not retired by NLI-WO-002",
+    "risk": "low: outside NLI location model but retained in audit/source evidence",
+    "target": "source_record.raw_payload_hash",
+    "transformation": [
+      {
+        "rule": "archive audit_logs.actor_username in governed source/audit payload; not part of canonical location registry",
+        "target": "source_record.raw_payload_hash"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM audit_logs;"
+  },
+  {
+    "authority": "Security/Operations Authority",
+    "classification": "government-internal",
+    "compatibility": "retained by existing subsystem",
+    "current": "audit_logs.created_at",
+    "current_type": "TIMESTAMPTZ",
+    "disposition": "compatibility/archive",
+    "retirement": "not retired by NLI-WO-002",
+    "risk": "low: outside NLI location model but retained in audit/source evidence",
+    "target": "source_record.raw_payload_hash",
+    "transformation": [
+      {
+        "rule": "archive audit_logs.created_at in governed source/audit payload; not part of canonical location registry",
+        "target": "source_record.raw_payload_hash"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM audit_logs;"
+  },
+  {
+    "authority": "Security/Operations Authority",
+    "classification": "government-internal",
+    "compatibility": "retained by existing subsystem",
+    "current": "audit_logs.details",
+    "current_type": "TEXT",
+    "disposition": "compatibility/archive",
+    "retirement": "not retired by NLI-WO-002",
+    "risk": "low: outside NLI location model but retained in audit/source evidence",
+    "target": "source_record.raw_payload_hash",
+    "transformation": [
+      {
+        "rule": "archive audit_logs.details in governed source/audit payload; not part of canonical location registry",
+        "target": "source_record.raw_payload_hash"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM audit_logs;"
+  },
+  {
+    "authority": "Security/Operations Authority",
+    "classification": "government-internal",
+    "compatibility": "retained by existing subsystem",
+    "current": "audit_logs.entity_id",
+    "current_type": "TEXT",
+    "disposition": "compatibility/archive",
+    "retirement": "not retired by NLI-WO-002",
+    "risk": "low: outside NLI location model but retained in audit/source evidence",
+    "target": "source_record.raw_payload_hash",
+    "transformation": [
+      {
+        "rule": "archive audit_logs.entity_id in governed source/audit payload; not part of canonical location registry",
+        "target": "source_record.raw_payload_hash"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM audit_logs;"
+  },
+  {
+    "authority": "Security/Operations Authority",
+    "classification": "government-internal",
+    "compatibility": "retained by existing subsystem",
+    "current": "audit_logs.entity_type",
+    "current_type": "TEXT",
+    "disposition": "compatibility/archive",
+    "retirement": "not retired by NLI-WO-002",
+    "risk": "low: outside NLI location model but retained in audit/source evidence",
+    "target": "source_record.raw_payload_hash",
+    "transformation": [
+      {
+        "rule": "archive audit_logs.entity_type in governed source/audit payload; not part of canonical location registry",
+        "target": "source_record.raw_payload_hash"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM audit_logs;"
+  },
+  {
+    "authority": "Security/Operations Authority",
+    "classification": "government-internal",
+    "compatibility": "retained by existing subsystem",
+    "current": "audit_logs.id",
+    "current_type": "BIGSERIAL",
+    "disposition": "compatibility/archive",
+    "retirement": "not retired by NLI-WO-002",
+    "risk": "low: outside NLI location model but retained in audit/source evidence",
+    "target": "source_record.raw_payload_hash",
+    "transformation": [
+      {
+        "rule": "archive audit_logs.id in governed source/audit payload; not part of canonical location registry",
+        "target": "source_record.raw_payload_hash"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM audit_logs;"
+  },
+  {
+    "authority": "Security/Operations Authority",
+    "classification": "security-internal",
+    "compatibility": "retained by existing subsystem",
+    "current": "auth_tokens.created_at",
+    "current_type": "TIMESTAMPTZ",
+    "disposition": "outside-location-model/security",
+    "retirement": "not retired by NLI-WO-002",
+    "risk": "low: outside NLI location model but retained in audit/source evidence",
+    "target": "source_record.raw_payload_hash",
+    "transformation": [
+      {
+        "rule": "archive auth_tokens.created_at in governed source/audit payload; not part of canonical location registry",
+        "target": "source_record.raw_payload_hash"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM auth_tokens;"
+  },
+  {
+    "authority": "Security/Operations Authority",
+    "classification": "security-internal",
+    "compatibility": "retained by existing subsystem",
+    "current": "auth_tokens.expires_at",
+    "current_type": "TIMESTAMPTZ",
+    "disposition": "outside-location-model/security",
+    "retirement": "not retired by NLI-WO-002",
+    "risk": "low: outside NLI location model but retained in audit/source evidence",
+    "target": "source_record.raw_payload_hash",
+    "transformation": [
+      {
+        "rule": "archive auth_tokens.expires_at in governed source/audit payload; not part of canonical location registry",
+        "target": "source_record.raw_payload_hash"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM auth_tokens;"
+  },
+  {
+    "authority": "Security/Operations Authority",
+    "classification": "security-internal",
+    "compatibility": "retained by existing subsystem",
+    "current": "auth_tokens.last_seen_at",
+    "current_type": "TIMESTAMPTZ",
+    "disposition": "outside-location-model/security",
+    "retirement": "not retired by NLI-WO-002",
+    "risk": "low: outside NLI location model but retained in audit/source evidence",
+    "target": "source_record.raw_payload_hash",
+    "transformation": [
+      {
+        "rule": "archive auth_tokens.last_seen_at in governed source/audit payload; not part of canonical location registry",
+        "target": "source_record.raw_payload_hash"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM auth_tokens;"
+  },
+  {
+    "authority": "Security/Operations Authority",
+    "classification": "security-internal",
+    "compatibility": "retained by existing subsystem",
+    "current": "auth_tokens.revoked_at",
+    "current_type": "TIMESTAMPTZ",
+    "disposition": "outside-location-model/security",
+    "retirement": "not retired by NLI-WO-002",
+    "risk": "low: outside NLI location model but retained in audit/source evidence",
+    "target": "source_record.raw_payload_hash",
+    "transformation": [
+      {
+        "rule": "archive auth_tokens.revoked_at in governed source/audit payload; not part of canonical location registry",
+        "target": "source_record.raw_payload_hash"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM auth_tokens;"
+  },
+  {
+    "authority": "Security/Operations Authority",
+    "classification": "security-internal",
+    "compatibility": "retained by existing subsystem",
+    "current": "auth_tokens.token",
+    "current_type": "TEXT",
+    "disposition": "outside-location-model/security",
+    "retirement": "not retired by NLI-WO-002",
+    "risk": "low: outside NLI location model but retained in audit/source evidence",
+    "target": "source_record.raw_payload_hash",
+    "transformation": [
+      {
+        "rule": "archive auth_tokens.token in governed source/audit payload; not part of canonical location registry",
+        "target": "source_record.raw_payload_hash"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM auth_tokens;"
+  },
+  {
+    "authority": "Security/Operations Authority",
+    "classification": "security-internal",
+    "compatibility": "retained by existing subsystem",
+    "current": "auth_tokens.user_id",
+    "current_type": "TEXT",
+    "disposition": "outside-location-model/security",
+    "retirement": "not retired by NLI-WO-002",
+    "risk": "low: outside NLI location model but retained in audit/source evidence",
+    "target": "source_record.raw_payload_hash",
+    "transformation": [
+      {
+        "rule": "archive auth_tokens.user_id in governed source/audit payload; not part of canonical location registry",
+        "target": "source_record.raw_payload_hash"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM auth_tokens;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "government-internal",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "buildings.created_at",
+    "current_type": "TIMESTAMPTZ",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "low",
+    "target": "building.effective_from",
+    "transformation": [
+      {
+        "rule": "building object with optional road context and evidence geometry",
+        "target": "building.effective_from"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM buildings WHERE created_at IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "government-internal",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "buildings.id",
+    "current_type": "TEXT",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "low",
+    "target": "building.building_id",
+    "transformation": [
+      {
+        "rule": "building object with optional road context and evidence geometry",
+        "target": "building.building_id"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM buildings WHERE id IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "government-internal",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "buildings.is_archived",
+    "current_type": "BOOLEAN",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "low",
+    "target": "building.lifecycle_state",
+    "transformation": [
+      {
+        "rule": "building object with optional road context and evidence geometry",
+        "target": "building.lifecycle_state"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM buildings WHERE is_archived IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "government-internal",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "buildings.label",
+    "current_type": "TEXT",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "low",
+    "target": "name_record.name_text",
+    "transformation": [
+      {
+        "rule": "building object with optional road context and evidence geometry",
+        "target": "name_record.name_text"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM buildings WHERE label IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "government-internal",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "buildings.road_id",
+    "current_type": "TEXT",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "low",
+    "target": "location_record_object_link.object_id",
+    "transformation": [
+      {
+        "rule": "building object with optional road context and evidence geometry",
+        "target": "location_record_object_link.object_id"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM buildings WHERE road_id IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "restricted",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "buildings.spatial_evidence",
+    "current_type": "JSONB",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "medium",
+    "target": "geometry_observation.observed_geom",
+    "transformation": [
+      {
+        "rule": "building object with optional road context and evidence geometry",
+        "target": "geometry_observation.observed_geom"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM buildings WHERE spatial_evidence IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "government-internal",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "buildings.status",
+    "current_type": "TEXT",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "low",
+    "target": "building.lifecycle_state",
+    "transformation": [
+      {
+        "rule": "building object with optional road context and evidence geometry",
+        "target": "building.lifecycle_state"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM buildings WHERE status IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "government-internal",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "buildings.territory_id",
+    "current_type": "TEXT",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "low",
+    "target": "operational_area_coverage.operational_area_id",
+    "transformation": [
+      {
+        "rule": "building object with optional road context and evidence geometry",
+        "target": "operational_area_coverage.operational_area_id"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM buildings WHERE territory_id IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "government-internal",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "buildings.updated_at",
+    "current_type": "TIMESTAMPTZ",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "low",
+    "target": "building.effective_to",
+    "transformation": [
+      {
+        "rule": "building object with optional road context and evidence geometry",
+        "target": "building.effective_to"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM buildings WHERE updated_at IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "government-internal",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "buildings.usage",
+    "current_type": "TEXT",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "low",
+    "target": "building.usage_class",
+    "transformation": [
+      {
+        "rule": "building object with optional road context and evidence geometry",
+        "target": "building.usage_class"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM buildings WHERE usage IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "restricted",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "citizen_geotag_submissions.accuracy_meters",
+    "current_type": "DOUBLE PRECISION",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "medium",
+    "target": "geometry_observation.horizontal_accuracy_m",
+    "transformation": [
+      {
+        "rule": "citizen submission remains intake/source/evidence until registry decision promotes it",
+        "target": "geometry_observation.horizontal_accuracy_m"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM citizen_geotag_submissions WHERE accuracy_meters IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "restricted",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "citizen_geotag_submissions.address_label",
+    "current_type": "TEXT",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "medium",
+    "target": "intake_case.submitted_label",
+    "transformation": [
+      {
+        "rule": "citizen submission remains intake/source/evidence until registry decision promotes it",
+        "target": "intake_case.submitted_label"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM citizen_geotag_submissions WHERE address_label IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "restricted",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "citizen_geotag_submissions.capture_method",
+    "current_type": "TEXT",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "medium",
+    "target": "geometry_observation.capture_method",
+    "transformation": [
+      {
+        "rule": "citizen submission remains intake/source/evidence until registry decision promotes it",
+        "target": "geometry_observation.capture_method"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM citizen_geotag_submissions WHERE capture_method IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "restricted",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "citizen_geotag_submissions.citizen_contact",
+    "current_type": "TEXT",
+    "disposition": "archive/compatibility",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "medium",
+    "target": "source_record.raw_payload_hash",
+    "transformation": [
+      {
+        "rule": "citizen submission remains intake/source/evidence until registry decision promotes it",
+        "target": "source_record.raw_payload_hash"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM citizen_geotag_submissions WHERE citizen_contact IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "restricted",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "citizen_geotag_submissions.citizen_name",
+    "current_type": "TEXT",
+    "disposition": "archive/compatibility",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "medium",
+    "target": "source_record.raw_payload_hash",
+    "transformation": [
+      {
+        "rule": "citizen submission remains intake/source/evidence until registry decision promotes it",
+        "target": "source_record.raw_payload_hash"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM citizen_geotag_submissions WHERE citizen_name IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "restricted",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "citizen_geotag_submissions.created_at",
+    "current_type": "TIMESTAMPTZ",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "medium",
+    "target": "intake_case.created_at",
+    "transformation": [
+      {
+        "rule": "citizen submission remains intake/source/evidence until registry decision promotes it",
+        "target": "intake_case.created_at"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM citizen_geotag_submissions WHERE created_at IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "highly-restricted",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "citizen_geotag_submissions.dip_last4",
+    "current_type": "TEXT",
+    "disposition": "archive/compatibility",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "medium",
+    "target": "source_record.raw_payload_hash",
+    "transformation": [
+      {
+        "rule": "citizen submission remains intake/source/evidence until registry decision promotes it",
+        "target": "source_record.raw_payload_hash"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM citizen_geotag_submissions WHERE dip_last4 IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "restricted",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "citizen_geotag_submissions.duplicate_hint",
+    "current_type": "TEXT",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "medium",
+    "target": "location_record_relationship.relationship_type",
+    "transformation": [
+      {
+        "rule": "citizen submission remains intake/source/evidence until registry decision promotes it",
+        "target": "location_record_relationship.relationship_type"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM citizen_geotag_submissions WHERE duplicate_hint IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "restricted",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "citizen_geotag_submissions.field_note",
+    "current_type": "TEXT",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "medium",
+    "target": "field_observation.notes_classification",
+    "transformation": [
+      {
+        "rule": "citizen submission remains intake/source/evidence until registry decision promotes it",
+        "target": "field_observation.notes_classification"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM citizen_geotag_submissions WHERE field_note IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "restricted",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "citizen_geotag_submissions.field_status",
+    "current_type": "TEXT",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "medium",
+    "target": "field_observation.verification_state",
+    "transformation": [
+      {
+        "rule": "citizen submission remains intake/source/evidence until registry decision promotes it",
+        "target": "field_observation.verification_state"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM citizen_geotag_submissions WHERE field_status IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "restricted",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "citizen_geotag_submissions.field_submission_id",
+    "current_type": "TEXT",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "medium",
+    "target": "field_observation.field_observation_id",
+    "transformation": [
+      {
+        "rule": "citizen submission remains intake/source/evidence until registry decision promotes it",
+        "target": "field_observation.field_observation_id"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM citizen_geotag_submissions WHERE field_submission_id IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "restricted",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "citizen_geotag_submissions.field_verified_at",
+    "current_type": "TIMESTAMPTZ",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "medium",
+    "target": "field_observation.recorded_at",
+    "transformation": [
+      {
+        "rule": "citizen submission remains intake/source/evidence until registry decision promotes it",
+        "target": "field_observation.recorded_at"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM citizen_geotag_submissions WHERE field_verified_at IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "restricted",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "citizen_geotag_submissions.grid_code",
+    "current_type": "TEXT",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "medium",
+    "target": "intake_case.provisional_code",
+    "transformation": [
+      {
+        "rule": "citizen submission remains intake/source/evidence until registry decision promotes it",
+        "target": "intake_case.provisional_code"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM citizen_geotag_submissions WHERE grid_code IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "restricted",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "citizen_geotag_submissions.id",
+    "current_type": "TEXT",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "medium",
+    "target": "intake_case.intake_case_id",
+    "transformation": [
+      {
+        "rule": "citizen submission remains intake/source/evidence until registry decision promotes it",
+        "target": "intake_case.intake_case_id"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM citizen_geotag_submissions WHERE id IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "highly-restricted",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "citizen_geotag_submissions.identity_document_verified",
+    "current_type": "BOOLEAN",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "medium",
+    "target": "location_record_assertion.value_json",
+    "transformation": [
+      {
+        "rule": "citizen submission remains intake/source/evidence until registry decision promotes it",
+        "target": "location_record_assertion.value_json"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM citizen_geotag_submissions WHERE identity_document_verified IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "highly-restricted",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "citizen_geotag_submissions.identity_verification_status",
+    "current_type": "TEXT",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "medium",
+    "target": "location_record_assertion.value_json",
+    "transformation": [
+      {
+        "rule": "citizen submission remains intake/source/evidence until registry decision promotes it",
+        "target": "location_record_assertion.value_json"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM citizen_geotag_submissions WHERE identity_verification_status IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "highly-restricted",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "citizen_geotag_submissions.identity_verified_at",
+    "current_type": "TIMESTAMPTZ",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "medium",
+    "target": "decision_event.recorded_at",
+    "transformation": [
+      {
+        "rule": "citizen submission remains intake/source/evidence until registry decision promotes it",
+        "target": "decision_event.recorded_at"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM citizen_geotag_submissions WHERE identity_verified_at IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "restricted",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "citizen_geotag_submissions.landmark",
+    "current_type": "TEXT",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "medium",
+    "target": "name_record.name_text",
+    "transformation": [
+      {
+        "rule": "citizen submission remains intake/source/evidence until registry decision promotes it",
+        "target": "name_record.name_text"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM citizen_geotag_submissions WHERE landmark IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "restricted",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "citizen_geotag_submissions.latitude",
+    "current_type": "DOUBLE PRECISION",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "medium",
+    "target": "geometry_observation.observed_geom",
+    "transformation": [
+      {
+        "rule": "citizen submission remains intake/source/evidence until registry decision promotes it",
+        "target": "geometry_observation.observed_geom"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM citizen_geotag_submissions WHERE latitude IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "restricted",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "citizen_geotag_submissions.longitude",
+    "current_type": "DOUBLE PRECISION",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "medium",
+    "target": "geometry_observation.observed_geom",
+    "transformation": [
+      {
+        "rule": "citizen submission remains intake/source/evidence until registry decision promotes it",
+        "target": "geometry_observation.observed_geom"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM citizen_geotag_submissions WHERE longitude IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "restricted",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "citizen_geotag_submissions.map_display_name",
+    "current_type": "TEXT",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "medium",
+    "target": "name_record.name_text",
+    "transformation": [
+      {
+        "rule": "citizen submission remains intake/source/evidence until registry decision promotes it",
+        "target": "name_record.name_text"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM citizen_geotag_submissions WHERE map_display_name IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "restricted",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "citizen_geotag_submissions.reviewed_road_name",
+    "current_type": "TEXT",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "medium",
+    "target": "name_record.name_text",
+    "transformation": [
+      {
+        "rule": "citizen submission remains intake/source/evidence until registry decision promotes it",
+        "target": "name_record.name_text"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM citizen_geotag_submissions WHERE reviewed_road_name IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "restricted",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "citizen_geotag_submissions.reviewer_note",
+    "current_type": "TEXT",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "medium",
+    "target": "decision_event.details_json",
+    "transformation": [
+      {
+        "rule": "citizen submission remains intake/source/evidence until registry decision promotes it",
+        "target": "decision_event.details_json"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM citizen_geotag_submissions WHERE reviewer_note IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "restricted",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "citizen_geotag_submissions.road_suggestion_attribution",
+    "current_type": "TEXT",
+    "disposition": "archive/compatibility",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "medium",
+    "target": "source_record.raw_payload_hash",
+    "transformation": [
+      {
+        "rule": "citizen submission remains intake/source/evidence until registry decision promotes it",
+        "target": "source_record.raw_payload_hash"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM citizen_geotag_submissions WHERE road_suggestion_attribution IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "restricted",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "citizen_geotag_submissions.road_suggestion_source",
+    "current_type": "TEXT",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "medium",
+    "target": "source_authority.authority_class",
+    "transformation": [
+      {
+        "rule": "citizen submission remains intake/source/evidence until registry decision promotes it",
+        "target": "source_authority.authority_class"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM citizen_geotag_submissions WHERE road_suggestion_source IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "restricted",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "citizen_geotag_submissions.road_suggestion_status",
+    "current_type": "TEXT",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "medium",
+    "target": "name_record.name_status",
+    "transformation": [
+      {
+        "rule": "citizen submission remains intake/source/evidence until registry decision promotes it",
+        "target": "name_record.name_status"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM citizen_geotag_submissions WHERE road_suggestion_status IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "restricted",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "citizen_geotag_submissions.signage_batch",
+    "current_type": "TEXT",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "medium",
+    "target": "publication_release_item.projection_payload_json",
+    "transformation": [
+      {
+        "rule": "citizen submission remains intake/source/evidence until registry decision promotes it",
+        "target": "publication_release_item.projection_payload_json"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM citizen_geotag_submissions WHERE signage_batch IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "restricted",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "citizen_geotag_submissions.status",
+    "current_type": "TEXT",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "medium",
+    "target": "intake_case.intake_state",
+    "transformation": [
+      {
+        "rule": "citizen submission remains intake/source/evidence until registry decision promotes it",
+        "target": "intake_case.intake_state"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM citizen_geotag_submissions WHERE status IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "restricted",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "citizen_geotag_submissions.suggested_local_area",
+    "current_type": "TEXT",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "medium",
+    "target": "locality.locality_id",
+    "transformation": [
+      {
+        "rule": "citizen submission remains intake/source/evidence until registry decision promotes it",
+        "target": "locality.locality_id"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM citizen_geotag_submissions WHERE suggested_local_area IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "restricted",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "citizen_geotag_submissions.suggested_place_name",
+    "current_type": "TEXT",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "medium",
+    "target": "name_record.name_text",
+    "transformation": [
+      {
+        "rule": "citizen submission remains intake/source/evidence until registry decision promotes it",
+        "target": "name_record.name_text"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM citizen_geotag_submissions WHERE suggested_place_name IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "restricted",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "citizen_geotag_submissions.suggested_road_name",
+    "current_type": "TEXT",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "medium",
+    "target": "name_record.name_text",
+    "transformation": [
+      {
+        "rule": "citizen submission remains intake/source/evidence until registry decision promotes it",
+        "target": "name_record.name_text"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM citizen_geotag_submissions WHERE suggested_road_name IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "restricted",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "citizen_geotag_submissions.territory_id",
+    "current_type": "TEXT",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "medium",
+    "target": "operational_area_coverage.operational_area_id",
+    "transformation": [
+      {
+        "rule": "citizen submission remains intake/source/evidence until registry decision promotes it",
+        "target": "operational_area_coverage.operational_area_id"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM citizen_geotag_submissions WHERE territory_id IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "restricted",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "citizen_geotag_submissions.updated_at",
+    "current_type": "TIMESTAMPTZ",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "medium",
+    "target": "decision_event.recorded_at",
+    "transformation": [
+      {
+        "rule": "citizen submission remains intake/source/evidence until registry decision promotes it",
+        "target": "decision_event.recorded_at"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM citizen_geotag_submissions WHERE updated_at IS NULL;"
+  },
+  {
+    "authority": "Security/Operations Authority",
+    "classification": "government-internal",
+    "compatibility": "retained by existing subsystem",
+    "current": "development_fixture_batches.batch_id",
+    "current_type": "TEXT",
+    "disposition": "fixture-only/archive",
+    "retirement": "not retired by NLI-WO-002",
+    "risk": "low: outside NLI location model but retained in audit/source evidence",
+    "target": "source_record.raw_payload_hash",
+    "transformation": [
+      {
+        "rule": "archive development_fixture_batches.batch_id in governed source/audit payload; not part of canonical location registry",
+        "target": "source_record.raw_payload_hash"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM development_fixture_batches;"
+  },
+  {
+    "authority": "Security/Operations Authority",
+    "classification": "government-internal",
+    "compatibility": "retained by existing subsystem",
+    "current": "development_fixture_batches.cleaned_at",
+    "current_type": "TIMESTAMPTZ",
+    "disposition": "fixture-only/archive",
+    "retirement": "not retired by NLI-WO-002",
+    "risk": "low: outside NLI location model but retained in audit/source evidence",
+    "target": "source_record.raw_payload_hash",
+    "transformation": [
+      {
+        "rule": "archive development_fixture_batches.cleaned_at in governed source/audit payload; not part of canonical location registry",
+        "target": "source_record.raw_payload_hash"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM development_fixture_batches;"
+  },
+  {
+    "authority": "Security/Operations Authority",
+    "classification": "government-internal",
+    "compatibility": "retained by existing subsystem",
+    "current": "development_fixture_batches.environment",
+    "current_type": "TEXT",
+    "disposition": "fixture-only/archive",
+    "retirement": "not retired by NLI-WO-002",
+    "risk": "low: outside NLI location model but retained in audit/source evidence",
+    "target": "source_record.raw_payload_hash",
+    "transformation": [
+      {
+        "rule": "archive development_fixture_batches.environment in governed source/audit payload; not part of canonical location registry",
+        "target": "source_record.raw_payload_hash"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM development_fixture_batches;"
+  },
+  {
+    "authority": "Security/Operations Authority",
+    "classification": "government-internal",
+    "compatibility": "retained by existing subsystem",
+    "current": "development_fixture_batches.execution_context",
+    "current_type": "TEXT",
+    "disposition": "fixture-only/archive",
+    "retirement": "not retired by NLI-WO-002",
+    "risk": "low: outside NLI location model but retained in audit/source evidence",
+    "target": "source_record.raw_payload_hash",
+    "transformation": [
+      {
+        "rule": "archive development_fixture_batches.execution_context in governed source/audit payload; not part of canonical location registry",
+        "target": "source_record.raw_payload_hash"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM development_fixture_batches;"
+  },
+  {
+    "authority": "Security/Operations Authority",
+    "classification": "government-internal",
+    "compatibility": "retained by existing subsystem",
+    "current": "development_fixture_batches.fixture_version",
+    "current_type": "TEXT",
+    "disposition": "fixture-only/archive",
+    "retirement": "not retired by NLI-WO-002",
+    "risk": "low: outside NLI location model but retained in audit/source evidence",
+    "target": "source_record.raw_payload_hash",
+    "transformation": [
+      {
+        "rule": "archive development_fixture_batches.fixture_version in governed source/audit payload; not part of canonical location registry",
+        "target": "source_record.raw_payload_hash"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM development_fixture_batches;"
+  },
+  {
+    "authority": "Security/Operations Authority",
+    "classification": "government-internal",
+    "compatibility": "retained by existing subsystem",
+    "current": "development_fixture_batches.loaded_at",
+    "current_type": "TIMESTAMPTZ",
+    "disposition": "fixture-only/archive",
+    "retirement": "not retired by NLI-WO-002",
+    "risk": "low: outside NLI location model but retained in audit/source evidence",
+    "target": "source_record.raw_payload_hash",
+    "transformation": [
+      {
+        "rule": "archive development_fixture_batches.loaded_at in governed source/audit payload; not part of canonical location registry",
+        "target": "source_record.raw_payload_hash"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM development_fixture_batches;"
+  },
+  {
+    "authority": "Security/Operations Authority",
+    "classification": "government-internal",
+    "compatibility": "retained by existing subsystem",
+    "current": "development_fixture_records.batch_id",
+    "current_type": "TEXT",
+    "disposition": "fixture-only/archive",
+    "retirement": "not retired by NLI-WO-002",
+    "risk": "low: outside NLI location model but retained in audit/source evidence",
+    "target": "source_record.raw_payload_hash",
+    "transformation": [
+      {
+        "rule": "archive development_fixture_records.batch_id in governed source/audit payload; not part of canonical location registry",
+        "target": "source_record.raw_payload_hash"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM development_fixture_records;"
+  },
+  {
+    "authority": "Security/Operations Authority",
+    "classification": "government-internal",
+    "compatibility": "retained by existing subsystem",
+    "current": "development_fixture_records.created_by_batch",
+    "current_type": "BOOLEAN",
+    "disposition": "fixture-only/archive",
+    "retirement": "not retired by NLI-WO-002",
+    "risk": "low: outside NLI location model but retained in audit/source evidence",
+    "target": "source_record.raw_payload_hash",
+    "transformation": [
+      {
+        "rule": "archive development_fixture_records.created_by_batch in governed source/audit payload; not part of canonical location registry",
+        "target": "source_record.raw_payload_hash"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM development_fixture_records;"
+  },
+  {
+    "authority": "Security/Operations Authority",
+    "classification": "government-internal",
+    "compatibility": "retained by existing subsystem",
+    "current": "development_fixture_records.record_id",
+    "current_type": "TEXT",
+    "disposition": "fixture-only/archive",
+    "retirement": "not retired by NLI-WO-002",
+    "risk": "low: outside NLI location model but retained in audit/source evidence",
+    "target": "source_record.raw_payload_hash",
+    "transformation": [
+      {
+        "rule": "archive development_fixture_records.record_id in governed source/audit payload; not part of canonical location registry",
+        "target": "source_record.raw_payload_hash"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM development_fixture_records;"
+  },
+  {
+    "authority": "Security/Operations Authority",
+    "classification": "government-internal",
+    "compatibility": "retained by existing subsystem",
+    "current": "development_fixture_records.recorded_at",
+    "current_type": "TIMESTAMPTZ",
+    "disposition": "fixture-only/archive",
+    "retirement": "not retired by NLI-WO-002",
+    "risk": "low: outside NLI location model but retained in audit/source evidence",
+    "target": "source_record.raw_payload_hash",
+    "transformation": [
+      {
+        "rule": "archive development_fixture_records.recorded_at in governed source/audit payload; not part of canonical location registry",
+        "target": "source_record.raw_payload_hash"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM development_fixture_records;"
+  },
+  {
+    "authority": "Security/Operations Authority",
+    "classification": "government-internal",
+    "compatibility": "retained by existing subsystem",
+    "current": "development_fixture_records.table_name",
+    "current_type": "TEXT",
+    "disposition": "fixture-only/archive",
+    "retirement": "not retired by NLI-WO-002",
+    "risk": "low: outside NLI location model but retained in audit/source evidence",
+    "target": "source_record.raw_payload_hash",
+    "transformation": [
+      {
+        "rule": "archive development_fixture_records.table_name in governed source/audit payload; not part of canonical location registry",
+        "target": "source_record.raw_payload_hash"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM development_fixture_records;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "government-internal",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "field_assignments.assignment_id",
+    "current_type": "TEXT",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "low",
+    "target": "field_assignment.assignment_id",
+    "transformation": [
+      {
+        "rule": "field assignment maps directly to target field assignment",
+        "target": "field_assignment.assignment_id"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM field_assignments WHERE assignment_id IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "government-internal",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "field_assignments.created_at",
+    "current_type": "TIMESTAMPTZ",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "low",
+    "target": "field_assignment.created_at",
+    "transformation": [
+      {
+        "rule": "field assignment maps directly to target field assignment",
+        "target": "field_assignment.created_at"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM field_assignments WHERE created_at IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "government-internal",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "field_assignments.priority",
+    "current_type": "TEXT",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "low",
+    "target": "field_assignment.priority",
+    "transformation": [
+      {
+        "rule": "field assignment maps directly to target field assignment",
+        "target": "field_assignment.priority"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM field_assignments WHERE priority IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "government-internal",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "field_assignments.task",
+    "current_type": "TEXT",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "low",
+    "target": "field_assignment.task_type",
+    "transformation": [
+      {
+        "rule": "field assignment maps directly to target field assignment",
+        "target": "field_assignment.task_type"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM field_assignments WHERE task IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "government-internal",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "field_assignments.team",
+    "current_type": "TEXT",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "low",
+    "target": "field_assignment.team",
+    "transformation": [
+      {
+        "rule": "field assignment maps directly to target field assignment",
+        "target": "field_assignment.team"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM field_assignments WHERE team IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "government-internal",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "field_assignments.territory",
+    "current_type": "TEXT",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "low",
+    "target": "name_record.name_text",
+    "transformation": [
+      {
+        "rule": "field assignment maps directly to target field assignment",
+        "target": "name_record.name_text"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM field_assignments WHERE territory IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "government-internal",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "field_assignments.territory_id",
+    "current_type": "TEXT",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "low",
+    "target": "field_assignment.operational_area_id",
+    "transformation": [
+      {
+        "rule": "field assignment maps directly to target field assignment",
+        "target": "field_assignment.operational_area_id"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM field_assignments WHERE territory_id IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "government-internal",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "field_submissions.assignment_id",
+    "current_type": "TEXT",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "low",
+    "target": "field_observation.assignment_id",
+    "transformation": [
+      {
+        "rule": "field submission becomes observation/evidence; registry_entity_id links only after promotion",
+        "target": "field_observation.assignment_id"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM field_submissions WHERE assignment_id IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "government-internal",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "field_submissions.candidate_name",
+    "current_type": "TEXT",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "low",
+    "target": "name_record.name_text",
+    "transformation": [
+      {
+        "rule": "field submission becomes observation/evidence; registry_entity_id links only after promotion",
+        "target": "name_record.name_text"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM field_submissions WHERE candidate_name IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "government-internal",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "field_submissions.candidate_status",
+    "current_type": "TEXT",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "low",
+    "target": "field_observation.verification_state",
+    "transformation": [
+      {
+        "rule": "field submission becomes observation/evidence; registry_entity_id links only after promotion",
+        "target": "field_observation.verification_state"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM field_submissions WHERE candidate_status IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "government-internal",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "field_submissions.created_at",
+    "current_type": "TIMESTAMPTZ",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "low",
+    "target": "field_observation.recorded_at",
+    "transformation": [
+      {
+        "rule": "field submission becomes observation/evidence; registry_entity_id links only after promotion",
+        "target": "field_observation.recorded_at"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM field_submissions WHERE created_at IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "government-internal",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "field_submissions.id",
+    "current_type": "TEXT",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "low",
+    "target": "field_observation.field_observation_id",
+    "transformation": [
+      {
+        "rule": "field submission becomes observation/evidence; registry_entity_id links only after promotion",
+        "target": "field_observation.field_observation_id"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM field_submissions WHERE id IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "government-internal",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "field_submissions.notes",
+    "current_type": "TEXT",
+    "disposition": "archive/compatibility",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "low",
+    "target": "source_record.raw_payload_hash",
+    "transformation": [
+      {
+        "rule": "field submission becomes observation/evidence; registry_entity_id links only after promotion",
+        "target": "source_record.raw_payload_hash"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM field_submissions WHERE notes IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "government-internal",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "field_submissions.registry_entity_id",
+    "current_type": "TEXT",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "low",
+    "target": "location_record.location_record_id",
+    "transformation": [
+      {
+        "rule": "field submission becomes observation/evidence; registry_entity_id links only after promotion",
+        "target": "location_record.location_record_id"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM field_submissions WHERE registry_entity_id IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "government-internal",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "field_submissions.review_status",
+    "current_type": "TEXT",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "low",
+    "target": "field_observation.verification_state",
+    "transformation": [
+      {
+        "rule": "field submission becomes observation/evidence; registry_entity_id links only after promotion",
+        "target": "field_observation.verification_state"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM field_submissions WHERE review_status IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "government-internal",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "field_submissions.reviewer_note",
+    "current_type": "TEXT",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "low",
+    "target": "decision_event.details_json",
+    "transformation": [
+      {
+        "rule": "field submission becomes observation/evidence; registry_entity_id links only after promotion",
+        "target": "decision_event.details_json"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM field_submissions WHERE reviewer_note IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "restricted",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "field_submissions.spatial_evidence",
+    "current_type": "JSONB",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "medium",
+    "target": "geometry_observation.observed_geom",
+    "transformation": [
+      {
+        "rule": "field submission becomes observation/evidence; registry_entity_id links only after promotion",
+        "target": "geometry_observation.observed_geom"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM field_submissions WHERE spatial_evidence IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "government-internal",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "field_submissions.submission_type",
+    "current_type": "TEXT",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "low",
+    "target": "field_observation.observation_type",
+    "transformation": [
+      {
+        "rule": "field submission becomes observation/evidence; registry_entity_id links only after promotion",
+        "target": "field_observation.observation_type"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM field_submissions WHERE submission_type IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "government-internal",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "field_submissions.submitted_by",
+    "current_type": "TEXT",
+    "disposition": "archive/compatibility",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "low",
+    "target": "source_record.raw_payload_hash",
+    "transformation": [
+      {
+        "rule": "field submission becomes observation/evidence; registry_entity_id links only after promotion",
+        "target": "source_record.raw_payload_hash"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM field_submissions WHERE submitted_by IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "government-internal",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "field_submissions.territory_id",
+    "current_type": "TEXT",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "low",
+    "target": "field_assignment.operational_area_id",
+    "transformation": [
+      {
+        "rule": "field submission becomes observation/evidence; registry_entity_id links only after promotion",
+        "target": "field_assignment.operational_area_id"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM field_submissions WHERE territory_id IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "government-internal",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "field_submissions.updated_at",
+    "current_type": "TIMESTAMPTZ",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "low",
+    "target": "decision_event.recorded_at",
+    "transformation": [
+      {
+        "rule": "field submission becomes observation/evidence; registry_entity_id links only after promotion",
+        "target": "decision_event.recorded_at"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM field_submissions WHERE updated_at IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "government-internal",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "import_jobs.created_at",
+    "current_type": "TIMESTAMPTZ",
+    "disposition": "archive/compatibility",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "low",
+    "target": "source_record.raw_payload_hash",
+    "transformation": [
+      {
+        "rule": "import/reference lifecycle becomes source package/record plus migration exceptions",
+        "target": "source_record.raw_payload_hash"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM import_jobs WHERE created_at IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "government-internal",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "import_jobs.id",
+    "current_type": "TEXT",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "low",
+    "target": "source_package.source_package_id",
+    "transformation": [
+      {
+        "rule": "import/reference lifecycle becomes source package/record plus migration exceptions",
+        "target": "source_package.source_package_id"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM import_jobs WHERE id IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "government-internal",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "import_jobs.imported_count",
+    "current_type": "INTEGER",
+    "disposition": "archive/compatibility",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "low",
+    "target": "source_record.raw_payload_hash",
+    "transformation": [
+      {
+        "rule": "import/reference lifecycle becomes source package/record plus migration exceptions",
+        "target": "source_record.raw_payload_hash"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM import_jobs WHERE imported_count IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "government-internal",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "import_jobs.name",
+    "current_type": "TEXT",
+    "disposition": "archive/compatibility",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "low",
+    "target": "source_record.raw_payload_hash",
+    "transformation": [
+      {
+        "rule": "import/reference lifecycle becomes source package/record plus migration exceptions",
+        "target": "source_record.raw_payload_hash"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM import_jobs WHERE name IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "government-internal",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "import_jobs.source_name",
+    "current_type": "TEXT",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "low",
+    "target": "source_authority.authority_name",
+    "transformation": [
+      {
+        "rule": "import/reference lifecycle becomes source package/record plus migration exceptions",
+        "target": "source_authority.authority_name"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM import_jobs WHERE source_name IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "government-internal",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "import_jobs.status",
+    "current_type": "TEXT",
+    "disposition": "archive/compatibility",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "low",
+    "target": "source_record.raw_payload_hash",
+    "transformation": [
+      {
+        "rule": "import/reference lifecycle becomes source package/record plus migration exceptions",
+        "target": "source_record.raw_payload_hash"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM import_jobs WHERE status IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "government-internal",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "import_jobs.updated_at",
+    "current_type": "TIMESTAMPTZ",
+    "disposition": "archive/compatibility",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "low",
+    "target": "source_record.raw_payload_hash",
+    "transformation": [
+      {
+        "rule": "import/reference lifecycle becomes source package/record plus migration exceptions",
+        "target": "source_record.raw_payload_hash"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM import_jobs WHERE updated_at IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "government-internal",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "import_rows.candidate_name",
+    "current_type": "TEXT",
+    "disposition": "archive/compatibility",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "low",
+    "target": "source_record.raw_payload_hash",
+    "transformation": [
+      {
+        "rule": "import/reference lifecycle becomes source package/record plus migration exceptions",
+        "target": "source_record.raw_payload_hash"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM import_rows WHERE candidate_name IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "government-internal",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "import_rows.candidate_status",
+    "current_type": "TEXT",
+    "disposition": "archive/compatibility",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "low",
+    "target": "source_record.raw_payload_hash",
+    "transformation": [
+      {
+        "rule": "import/reference lifecycle becomes source package/record plus migration exceptions",
+        "target": "source_record.raw_payload_hash"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM import_rows WHERE candidate_status IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "government-internal",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "import_rows.committed_submission_id",
+    "current_type": "TEXT",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "low",
+    "target": "field_observation.field_observation_id",
+    "transformation": [
+      {
+        "rule": "import/reference lifecycle becomes source package/record plus migration exceptions",
+        "target": "field_observation.field_observation_id"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM import_rows WHERE committed_submission_id IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "government-internal",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "import_rows.job_id",
+    "current_type": "TEXT",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "low",
+    "target": "source_package.source_package_id",
+    "transformation": [
+      {
+        "rule": "import/reference lifecycle becomes source package/record plus migration exceptions",
+        "target": "source_package.source_package_id"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM import_rows WHERE job_id IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "government-internal",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "import_rows.notes",
+    "current_type": "TEXT",
+    "disposition": "archive/compatibility",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "low",
+    "target": "source_record.raw_payload_hash",
+    "transformation": [
+      {
+        "rule": "import/reference lifecycle becomes source package/record plus migration exceptions",
+        "target": "source_record.raw_payload_hash"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM import_rows WHERE notes IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "government-internal",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "import_rows.row_number",
+    "current_type": "INTEGER",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "low",
+    "target": "source_record.source_key",
+    "transformation": [
+      {
+        "rule": "import/reference lifecycle becomes source package/record plus migration exceptions",
+        "target": "source_record.source_key"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM import_rows WHERE row_number IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "government-internal",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "import_rows.submission_type",
+    "current_type": "TEXT",
+    "disposition": "archive/compatibility",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "low",
+    "target": "source_record.raw_payload_hash",
+    "transformation": [
+      {
+        "rule": "import/reference lifecycle becomes source package/record plus migration exceptions",
+        "target": "source_record.raw_payload_hash"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM import_rows WHERE submission_type IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "government-internal",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "import_rows.territory_id",
+    "current_type": "TEXT",
+    "disposition": "archive/compatibility",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "low",
+    "target": "source_record.raw_payload_hash",
+    "transformation": [
+      {
+        "rule": "import/reference lifecycle becomes source package/record plus migration exceptions",
+        "target": "source_record.raw_payload_hash"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM import_rows WHERE territory_id IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "government-internal",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "import_rows.validation_message",
+    "current_type": "TEXT",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "low",
+    "target": "migration_exception.details_json",
+    "transformation": [
+      {
+        "rule": "import/reference lifecycle becomes source package/record plus migration exceptions",
+        "target": "migration_exception.details_json"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM import_rows WHERE validation_message IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "government-internal",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "import_rows.validation_status",
+    "current_type": "TEXT",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "low",
+    "target": "migration_exception.exception_type",
+    "transformation": [
+      {
+        "rule": "import/reference lifecycle becomes source package/record plus migration exceptions",
+        "target": "migration_exception.exception_type"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM import_rows WHERE validation_status IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "public-after-release",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "provinces.code",
+    "current_type": "TEXT",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "low",
+    "target": "administrative_unit.stable_code",
+    "transformation": [
+      {
+        "rule": "map province reference into administrative identity/version/name source package",
+        "target": "administrative_unit.stable_code"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM provinces WHERE code IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "public-after-release",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "provinces.created_at",
+    "current_type": "TIMESTAMPTZ",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "low",
+    "target": "administrative_unit.created_at",
+    "transformation": [
+      {
+        "rule": "map province reference into administrative identity/version/name source package",
+        "target": "administrative_unit.created_at"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM provinces WHERE created_at IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "public-after-release",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "provinces.name",
+    "current_type": "TEXT",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "low",
+    "target": "name_record.name_text",
+    "transformation": [
+      {
+        "rule": "map province reference into administrative identity/version/name source package",
+        "target": "name_record.name_text"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM provinces WHERE name IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "government-internal",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "publication_pack_addresses.address_id",
+    "current_type": "TEXT",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "low",
+    "target": "publication_release_item.location_record_id",
+    "transformation": [
+      {
+        "rule": "legacy publication packs become immutable release/release_item snapshots",
+        "target": "publication_release_item.location_record_id"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM publication_pack_addresses WHERE address_id IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "government-internal",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "publication_pack_addresses.publication_pack_id",
+    "current_type": "TEXT",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "low",
+    "target": "publication_release.publication_release_id",
+    "transformation": [
+      {
+        "rule": "legacy publication packs become immutable release/release_item snapshots",
+        "target": "publication_release.publication_release_id"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM publication_pack_addresses WHERE publication_pack_id IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "government-internal",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "publication_packs.audience",
+    "current_type": "TEXT",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "low",
+    "target": "publication_release.projection_type",
+    "transformation": [
+      {
+        "rule": "legacy publication packs become immutable release/release_item snapshots",
+        "target": "publication_release.projection_type"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM publication_packs WHERE audience IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "government-internal",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "publication_packs.created_at",
+    "current_type": "TIMESTAMPTZ",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "low",
+    "target": "publication_release.recorded_at",
+    "transformation": [
+      {
+        "rule": "legacy publication packs become immutable release/release_item snapshots",
+        "target": "publication_release.recorded_at"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM publication_packs WHERE created_at IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "government-internal",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "publication_packs.id",
+    "current_type": "TEXT",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "low",
+    "target": "publication_release.publication_release_id",
+    "transformation": [
+      {
+        "rule": "legacy publication packs become immutable release/release_item snapshots",
+        "target": "publication_release.publication_release_id"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM publication_packs WHERE id IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "government-internal",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "publication_packs.name",
+    "current_type": "TEXT",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "low",
+    "target": "publication_release.authority_reference",
+    "transformation": [
+      {
+        "rule": "legacy publication packs become immutable release/release_item snapshots",
+        "target": "publication_release.authority_reference"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM publication_packs WHERE name IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "government-internal",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "publication_packs.status",
+    "current_type": "TEXT",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "low",
+    "target": "publication_release.release_state",
+    "transformation": [
+      {
+        "rule": "legacy publication packs become immutable release/release_item snapshots",
+        "target": "publication_release.release_state"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM publication_packs WHERE status IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "government-internal",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "publication_packs.updated_at",
+    "current_type": "TIMESTAMPTZ",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "low",
+    "target": "publication_release.recorded_at",
+    "transformation": [
+      {
+        "rule": "legacy publication packs become immutable release/release_item snapshots",
+        "target": "publication_release.recorded_at"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM publication_packs WHERE updated_at IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "government-internal",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "reference_data_load_history.authority_status",
+    "current_type": "TEXT",
+    "disposition": "archive/compatibility",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "low",
+    "target": "source_record.raw_payload_hash",
+    "transformation": [
+      {
+        "rule": "import/reference lifecycle becomes source package/record plus migration exceptions",
+        "target": "source_record.raw_payload_hash"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM reference_data_load_history WHERE authority_status IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "government-internal",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "reference_data_load_history.execution_context",
+    "current_type": "TEXT",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "low",
+    "target": "source_package.load_context",
+    "transformation": [
+      {
+        "rule": "import/reference lifecycle becomes source package/record plus migration exceptions",
+        "target": "source_package.load_context"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM reference_data_load_history WHERE execution_context IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "government-internal",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "reference_data_load_history.id",
+    "current_type": "BIGSERIAL",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "low",
+    "target": "source_package.source_package_id",
+    "transformation": [
+      {
+        "rule": "import/reference lifecycle becomes source package/record plus migration exceptions",
+        "target": "source_package.source_package_id"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM reference_data_load_history WHERE id IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "government-internal",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "reference_data_load_history.loaded_at",
+    "current_type": "TIMESTAMPTZ",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "low",
+    "target": "source_package.loaded_at",
+    "transformation": [
+      {
+        "rule": "import/reference lifecycle becomes source package/record plus migration exceptions",
+        "target": "source_package.loaded_at"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM reference_data_load_history WHERE loaded_at IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "government-internal",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "reference_data_load_history.package_checksum",
+    "current_type": "TEXT",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "low",
+    "target": "source_package.package_checksum",
+    "transformation": [
+      {
+        "rule": "import/reference lifecycle becomes source package/record plus migration exceptions",
+        "target": "source_package.package_checksum"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM reference_data_load_history WHERE package_checksum IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "government-internal",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "reference_data_load_history.package_id",
+    "current_type": "TEXT",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "low",
+    "target": "source_package.source_package_id",
+    "transformation": [
+      {
+        "rule": "import/reference lifecycle becomes source package/record plus migration exceptions",
+        "target": "source_package.source_package_id"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM reference_data_load_history WHERE package_id IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "government-internal",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "reference_data_load_history.package_version",
+    "current_type": "TEXT",
+    "disposition": "archive/compatibility",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "low",
+    "target": "source_record.raw_payload_hash",
+    "transformation": [
+      {
+        "rule": "import/reference lifecycle becomes source package/record plus migration exceptions",
+        "target": "source_record.raw_payload_hash"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM reference_data_load_history WHERE package_version IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "government-internal",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "reference_data_load_history.source",
+    "current_type": "TEXT",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "low",
+    "target": "source_authority.authority_name",
+    "transformation": [
+      {
+        "rule": "import/reference lifecycle becomes source package/record plus migration exceptions",
+        "target": "source_authority.authority_name"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM reference_data_load_history WHERE source IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "government-internal",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "reference_data_loads.authority_status",
+    "current_type": "TEXT",
+    "disposition": "archive/compatibility",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "low",
+    "target": "source_record.raw_payload_hash",
+    "transformation": [
+      {
+        "rule": "import/reference lifecycle becomes source package/record plus migration exceptions",
+        "target": "source_record.raw_payload_hash"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM reference_data_loads WHERE authority_status IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "government-internal",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "reference_data_loads.execution_context",
+    "current_type": "TEXT",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "low",
+    "target": "source_package.load_context",
+    "transformation": [
+      {
+        "rule": "import/reference lifecycle becomes source package/record plus migration exceptions",
+        "target": "source_package.load_context"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM reference_data_loads WHERE execution_context IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "government-internal",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "reference_data_loads.loaded_at",
+    "current_type": "TIMESTAMPTZ",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "low",
+    "target": "source_package.loaded_at",
+    "transformation": [
+      {
+        "rule": "import/reference lifecycle becomes source package/record plus migration exceptions",
+        "target": "source_package.loaded_at"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM reference_data_loads WHERE loaded_at IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "government-internal",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "reference_data_loads.package_checksum",
+    "current_type": "TEXT",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "low",
+    "target": "source_package.package_checksum",
+    "transformation": [
+      {
+        "rule": "import/reference lifecycle becomes source package/record plus migration exceptions",
+        "target": "source_package.package_checksum"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM reference_data_loads WHERE package_checksum IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "government-internal",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "reference_data_loads.package_id",
+    "current_type": "TEXT",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "low",
+    "target": "source_package.source_package_id",
+    "transformation": [
+      {
+        "rule": "import/reference lifecycle becomes source package/record plus migration exceptions",
+        "target": "source_package.source_package_id"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM reference_data_loads WHERE package_id IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "government-internal",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "reference_data_loads.package_version",
+    "current_type": "TEXT",
+    "disposition": "archive/compatibility",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "low",
+    "target": "source_record.raw_payload_hash",
+    "transformation": [
+      {
+        "rule": "import/reference lifecycle becomes source package/record plus migration exceptions",
+        "target": "source_record.raw_payload_hash"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM reference_data_loads WHERE package_version IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "government-internal",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "reference_data_loads.source",
+    "current_type": "TEXT",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "low",
+    "target": "source_authority.authority_name",
+    "transformation": [
+      {
+        "rule": "import/reference lifecycle becomes source package/record plus migration exceptions",
+        "target": "source_authority.authority_name"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM reference_data_loads WHERE source IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "government-internal",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "roads.created_at",
+    "current_type": "TIMESTAMPTZ",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "low",
+    "target": "road.created_at",
+    "transformation": [
+      {
+        "rule": "split road identity, segment/length, operational context, and evidence geometry",
+        "target": "road.created_at"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM roads WHERE created_at IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "government-internal",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "roads.id",
+    "current_type": "TEXT",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "low",
+    "target": "road.road_id",
+    "transformation": [
+      {
+        "rule": "split road identity, segment/length, operational context, and evidence geometry",
+        "target": "road.road_id"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM roads WHERE id IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "government-internal",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "roads.is_archived",
+    "current_type": "BOOLEAN",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "low",
+    "target": "road.lifecycle_state",
+    "transformation": [
+      {
+        "rule": "split road identity, segment/length, operational context, and evidence geometry",
+        "target": "road.lifecycle_state"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM roads WHERE is_archived IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "government-internal",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "roads.length_km",
+    "current_type": "TEXT",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "low",
+    "target": "road_segment.measured_length_m",
+    "transformation": [
+      {
+        "rule": "split road identity, segment/length, operational context, and evidence geometry",
+        "target": "road_segment.measured_length_m"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM roads WHERE length_km IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "government-internal",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "roads.name",
+    "current_type": "TEXT",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "low",
+    "target": "name_record.name_text",
+    "transformation": [
+      {
+        "rule": "split road identity, segment/length, operational context, and evidence geometry",
+        "target": "name_record.name_text"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM roads WHERE name IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "restricted",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "roads.spatial_evidence",
+    "current_type": "JSONB",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "medium",
+    "target": "geometry_observation.observed_geom",
+    "transformation": [
+      {
+        "rule": "split road identity, segment/length, operational context, and evidence geometry",
+        "target": "geometry_observation.observed_geom"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM roads WHERE spatial_evidence IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "government-internal",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "roads.status",
+    "current_type": "TEXT",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "low",
+    "target": "road.lifecycle_state",
+    "transformation": [
+      {
+        "rule": "split road identity, segment/length, operational context, and evidence geometry",
+        "target": "road.lifecycle_state"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM roads WHERE status IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "government-internal",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "roads.territory_id",
+    "current_type": "TEXT",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "low",
+    "target": "operational_area_coverage.operational_area_id",
+    "transformation": [
+      {
+        "rule": "split road identity, segment/length, operational context, and evidence geometry",
+        "target": "operational_area_coverage.operational_area_id"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM roads WHERE territory_id IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "government-internal",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "roads.updated_at",
+    "current_type": "TIMESTAMPTZ",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "low",
+    "target": "road_segment.effective_to",
+    "transformation": [
+      {
+        "rule": "split road identity, segment/length, operational context, and evidence geometry",
+        "target": "road_segment.effective_to"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM roads WHERE updated_at IS NULL;"
+  },
+  {
+    "authority": "Operations Authority",
+    "classification": "government-internal",
+    "compatibility": "permanent lifecycle control",
+    "current": "schema_migrations.applied_at",
+    "current_type": "TIMESTAMPTZ",
+    "disposition": "compatibility/archive",
+    "retirement": "not retired",
+    "risk": "low",
+    "target": "source_record.recorded_at",
+    "transformation": [
+      {
+        "rule": "copy applied timestamp",
+        "target": "source_record.recorded_at"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM schema_migrations WHERE applied_at IS NULL;"
+  },
+  {
+    "authority": "Operations Authority",
+    "classification": "government-internal",
+    "compatibility": "permanent lifecycle control",
+    "current": "schema_migrations.checksum",
+    "current_type": "TEXT",
+    "disposition": "compatibility/archive",
+    "retirement": "not retired",
+    "risk": "low",
+    "target": "source_record.raw_payload_hash",
+    "transformation": [
+      {
+        "rule": "preserve checksum exactly",
+        "target": "source_record.raw_payload_hash"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM schema_migrations WHERE checksum = '';"
+  },
+  {
+    "authority": "Operations Authority",
+    "classification": "government-internal",
+    "compatibility": "permanent lifecycle control",
+    "current": "schema_migrations.filename",
+    "current_type": "TEXT",
+    "disposition": "compatibility/archive",
+    "retirement": "not part of location registry convergence",
+    "risk": "low",
+    "target": "source_record.raw_payload_hash",
+    "transformation": [
+      {
+        "rule": "store migration filename in migration evidence payload",
+        "target": "source_record.source_key"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM schema_migrations WHERE filename IS NULL;"
+  },
+  {
+    "authority": "Operations Authority",
+    "classification": "government-internal",
+    "compatibility": "permanent lifecycle control",
+    "current": "schema_migrations.version",
+    "current_type": "TEXT",
+    "disposition": "compatibility/archive",
+    "retirement": "never retired from migration lifecycle evidence",
+    "risk": "low",
+    "target": "source_record.raw_payload_hash",
+    "transformation": [
+      {
+        "rule": "store migration version as lifecycle-control source key",
+        "target": "source_record.source_key"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM schema_migrations WHERE version IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "government-internal",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "territories.admin_unit_id",
+    "current_type": "TEXT",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "low",
+    "target": "operational_area_coverage.administrative_unit_id",
+    "transformation": [
+      {
+        "rule": "current territory becomes operational_area; admin/province fields become coverage context, not legal hierarchy authority",
+        "target": "operational_area_coverage.administrative_unit_id"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM territories WHERE admin_unit_id IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "government-internal",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "territories.created_at",
+    "current_type": "TIMESTAMPTZ",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "low",
+    "target": "operational_area.effective_from",
+    "transformation": [
+      {
+        "rule": "current territory becomes operational_area; admin/province fields become coverage context, not legal hierarchy authority",
+        "target": "operational_area.effective_from"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM territories WHERE created_at IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "government-internal",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "territories.id",
+    "current_type": "TEXT",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "low",
+    "target": "operational_area.operational_area_id",
+    "transformation": [
+      {
+        "rule": "current territory becomes operational_area; admin/province fields become coverage context, not legal hierarchy authority",
+        "target": "operational_area.operational_area_id"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM territories WHERE id IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "government-internal",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "territories.is_archived",
+    "current_type": "BOOLEAN",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "low",
+    "target": "operational_area.lifecycle_state",
+    "transformation": [
+      {
+        "rule": "current territory becomes operational_area; admin/province fields become coverage context, not legal hierarchy authority",
+        "target": "operational_area.lifecycle_state"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM territories WHERE is_archived IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "government-internal",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "territories.name",
+    "current_type": "TEXT",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "low",
+    "target": "name_record.name_text",
+    "transformation": [
+      {
+        "rule": "current territory becomes operational_area; admin/province fields become coverage context, not legal hierarchy authority",
+        "target": "name_record.name_text"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM territories WHERE name IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "government-internal",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "territories.province_code",
+    "current_type": "TEXT",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "low",
+    "target": "operational_area_coverage.administrative_unit_id",
+    "transformation": [
+      {
+        "rule": "current territory becomes operational_area; admin/province fields become coverage context, not legal hierarchy authority",
+        "target": "operational_area_coverage.administrative_unit_id"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM territories WHERE province_code IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "government-internal",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "territories.readiness",
+    "current_type": "TEXT",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "low",
+    "target": "operational_area.lifecycle_state",
+    "transformation": [
+      {
+        "rule": "current territory becomes operational_area; admin/province fields become coverage context, not legal hierarchy authority",
+        "target": "operational_area.lifecycle_state"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM territories WHERE readiness IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "government-internal",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "territories.type",
+    "current_type": "TEXT",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "low",
+    "target": "operational_area.area_type",
+    "transformation": [
+      {
+        "rule": "current territory becomes operational_area; admin/province fields become coverage context, not legal hierarchy authority",
+        "target": "operational_area.area_type"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM territories WHERE type IS NULL;"
+  },
+  {
+    "authority": "Registry Authority",
+    "classification": "government-internal",
+    "compatibility": "expand and dual-read until WO-002B parity gate passes",
+    "current": "territories.updated_at",
+    "current_type": "TIMESTAMPTZ",
+    "disposition": "mapped",
+    "retirement": "retire legacy read only after validation, release parity, and SDA approval",
+    "risk": "low",
+    "target": "operational_area.effective_to",
+    "transformation": [
+      {
+        "rule": "current territory becomes operational_area; admin/province fields become coverage context, not legal hierarchy authority",
+        "target": "operational_area.effective_to"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM territories WHERE updated_at IS NULL;"
+  },
+  {
+    "authority": "Security/Operations Authority",
+    "classification": "security-internal",
+    "compatibility": "retained by existing subsystem",
+    "current": "users.created_at",
+    "current_type": "TIMESTAMPTZ",
+    "disposition": "outside-location-model/security",
+    "retirement": "not retired by NLI-WO-002",
+    "risk": "low: outside NLI location model but retained in audit/source evidence",
+    "target": "source_record.raw_payload_hash",
+    "transformation": [
+      {
+        "rule": "archive users.created_at in governed source/audit payload; not part of canonical location registry",
+        "target": "source_record.raw_payload_hash"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM users;"
+  },
+  {
+    "authority": "Security/Operations Authority",
+    "classification": "security-internal",
+    "compatibility": "retained by existing subsystem",
+    "current": "users.full_name",
+    "current_type": "TEXT",
+    "disposition": "outside-location-model/security",
+    "retirement": "not retired by NLI-WO-002",
+    "risk": "low: outside NLI location model but retained in audit/source evidence",
+    "target": "source_record.raw_payload_hash",
+    "transformation": [
+      {
+        "rule": "archive users.full_name in governed source/audit payload; not part of canonical location registry",
+        "target": "source_record.raw_payload_hash"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM users;"
+  },
+  {
+    "authority": "Security/Operations Authority",
+    "classification": "security-internal",
+    "compatibility": "retained by existing subsystem",
+    "current": "users.id",
+    "current_type": "TEXT",
+    "disposition": "outside-location-model/security",
+    "retirement": "not retired by NLI-WO-002",
+    "risk": "low: outside NLI location model but retained in audit/source evidence",
+    "target": "source_record.raw_payload_hash",
+    "transformation": [
+      {
+        "rule": "archive users.id in governed source/audit payload; not part of canonical location registry",
+        "target": "source_record.raw_payload_hash"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM users;"
+  },
+  {
+    "authority": "Security/Operations Authority",
+    "classification": "security-internal",
+    "compatibility": "retained by existing subsystem",
+    "current": "users.is_active",
+    "current_type": "BOOLEAN",
+    "disposition": "outside-location-model/security",
+    "retirement": "not retired by NLI-WO-002",
+    "risk": "low: outside NLI location model but retained in audit/source evidence",
+    "target": "source_record.raw_payload_hash",
+    "transformation": [
+      {
+        "rule": "archive users.is_active in governed source/audit payload; not part of canonical location registry",
+        "target": "source_record.raw_payload_hash"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM users;"
+  },
+  {
+    "authority": "Security/Operations Authority",
+    "classification": "security-internal",
+    "compatibility": "retained by existing subsystem",
+    "current": "users.password_hash",
+    "current_type": "TEXT",
+    "disposition": "outside-location-model/security",
+    "retirement": "not retired by NLI-WO-002",
+    "risk": "low: outside NLI location model but retained in audit/source evidence",
+    "target": "source_record.raw_payload_hash",
+    "transformation": [
+      {
+        "rule": "archive users.password_hash in governed source/audit payload; not part of canonical location registry",
+        "target": "source_record.raw_payload_hash"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM users;"
+  },
+  {
+    "authority": "Security/Operations Authority",
+    "classification": "security-internal",
+    "compatibility": "retained by existing subsystem",
+    "current": "users.role",
+    "current_type": "TEXT",
+    "disposition": "outside-location-model/security",
+    "retirement": "not retired by NLI-WO-002",
+    "risk": "low: outside NLI location model but retained in audit/source evidence",
+    "target": "source_record.raw_payload_hash",
+    "transformation": [
+      {
+        "rule": "archive users.role in governed source/audit payload; not part of canonical location registry",
+        "target": "source_record.raw_payload_hash"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM users;"
+  },
+  {
+    "authority": "Security/Operations Authority",
+    "classification": "security-internal",
+    "compatibility": "retained by existing subsystem",
+    "current": "users.username",
+    "current_type": "TEXT",
+    "disposition": "outside-location-model/security",
+    "retirement": "not retired by NLI-WO-002",
+    "risk": "low: outside NLI location model but retained in audit/source evidence",
+    "target": "source_record.raw_payload_hash",
+    "transformation": [
+      {
+        "rule": "archive users.username in governed source/audit payload; not part of canonical location registry",
+        "target": "source_record.raw_payload_hash"
+      }
+    ],
+    "validation": "SELECT COUNT(*) FROM users;"
+  }
+]

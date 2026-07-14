@@ -2,26 +2,71 @@
 
 **Related work order:** `NLI-WO-002`  
 **Raised by:** `Implementation Agent`  
-**Date:** `2026-07-13`  
+**Date:** `2026-07-14`  
 **Required by:** `Before executable NLI-WO-002B implementation for affected area`  
 **Status:** `OPEN`
 
 ## 1. Decision question
 
-Publication authority and effective date
+Publication approval authority and effective-date policy
 
-## 2. Concrete options and consequences
+## 2. Why this decision is required
 
-Options: A) SDA approves internal release only; B) named ministry/registry authority approves public release; C) Programme Owner emergency release. Recommendation: no public/signage release without named authority, effective date, scope, and manifest.
+Registry-ready remains separate from public release; authority must be named.
 
-## 3. Agent recommendation
+## 3. Current evidence
 
-Use the recommendation above for design constraints, but do not implement runtime behavior until the named authority decides.
+- NLI-WO-002 work order.
+- SDA Review 02 findings.
+- `target-model.json`, ADRs 005-009, and current-to-target map.
 
-## 4. Consequence of no decision
+## 4. Options considered
 
-WO-002 design can preserve the placeholder and safety boundary. WO-002B executable migration/API/publication work must stop for this decision area.
+### Option A — SDA internal only
 
-## 5. Requested decision authority
+- Behavior: Internal registry releases only
+- Benefits: Safe for pilot
+- Risks/costs: No public authority
+- Migration/compatibility effect: No public release
+- Security/authority/operations effect: explicit owner required before implementation.
+### Option B — Named ministry/registry authority
 
-`SDA | Programme Owner | Registry Authority | GIS/Data Authority | Legal/Privacy Authority | Publication Authority`
+- Behavior: Public release approval
+- Benefits: Clear accountability
+- Risks/costs: Requires institutional process
+- Migration/compatibility effect: Enables release manifests
+- Security/authority/operations effect: explicit owner required before implementation.
+### Option C — Emergency owner
+
+- Behavior: Temporary release
+- Benefits: Fast response
+- Risks/costs: High trust risk
+- Migration/compatibility effect: Needs break-glass controls
+- Security/authority/operations effect: explicit owner required before implementation.
+
+## 5. Agent recommendation
+
+No public/signage release without named authority and release manifest approval.
+
+## 6. Consequence of no decision
+
+Design placeholders and safety boundaries can remain. Executable WO-002B work must stop for this decision area rather than guessing.
+
+## 7. Requested decision authority
+
+`Publication Authority / Programme Owner`
+
+## 8. Decision
+
+**Decision:** `<completed by authority>`  
+**Rationale:**  
+**Conditions:**  
+**Affected standards/ADR/work order:**  
+**Decision date and authority:**
+
+## 9. Implementation acknowledgment
+
+- [ ] Plan updated.
+- [ ] Acceptance-criterion map updated.
+- [ ] New risks/conditions recorded.
+- [ ] ADR or standard update created where the decision is durable.
