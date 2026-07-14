@@ -158,6 +158,16 @@ Use these templates:
 
 Existing SDA templates remain authoritative for work-order plans, RFIs, PR evidence, and SDA reviews.
 
+## Validation
+
+Validate the pack after changes with:
+
+```bash
+python docs/agent/scripts/validate_skill_pack.py
+```
+
+The validator checks manifest IDs and file references, mandatory skill-card sections, core pack files, local Markdown links, and the `AGENTS.md` integration. A successful validator run does not replace SDA review of the operating rules themselves.
+
 ## Activation
 
 A concise activation prompt is provided at [`BOOTSTRAP-PROMPT.md`](BOOTSTRAP-PROMPT.md). It should be given to the agent once the skill-pack PR is merged. The repository remains the continuing source of truth; the prompt only directs the agent to it.
