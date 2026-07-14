@@ -2,8 +2,7 @@
 
 | Metric | Value |
 | --- | --- |
-| execution_mode | review09-executed-typed-geometry-authority-matrix |
-| typed_relationships | 10 |
-| cases | 19 |
+| execution_mode | review10-postgresql-typed-geometry-authority-execution |
+| cases | 11 |
 | status | passed |
 | errors | [] |

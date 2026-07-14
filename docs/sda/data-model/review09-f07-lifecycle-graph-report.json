@@ -1,296 +1,1647 @@
 {
-  "graphs": [
+  "cases": [
     {
-      "context_prerequisites": "actor/permission/scope/evidence/audit/public-effect enforced by Review09 policy case",
-      "duplicate_conflicting_edge_detection": "passed",
-      "edges": 4,
-      "executed_edges": 4,
-      "initial_states": [
-        "proposed"
-      ],
-      "orphan_state_detection": "passed",
-      "re_entry": "reviewed",
-      "reachability": "passed",
-      "terminal_edges": 2,
-      "terminality": "passed",
-      "vocabulary": "administrative_unit_lifecycle"
+      "case": "F07-graph-computed-administrative_unit_lifecycle",
+      "errors": [],
+      "evidence_source": "review10-lifecycle-graph-query-computation",
+      "finding": "F07",
+      "observed": {
+        "edges": 4,
+        "initial_states": [
+          "proposed"
+        ],
+        "states": 5,
+        "terminal_states": [
+          "historical",
+          "retired",
+          "revoked"
+        ],
+        "unreachable_states": []
+      },
+      "status": "passed"
     },
     {
-      "context_prerequisites": "actor/permission/scope/evidence/audit/public-effect enforced by Review09 policy case",
-      "duplicate_conflicting_edge_detection": "passed",
-      "edges": 4,
-      "executed_edges": 4,
-      "initial_states": [
-        "candidate"
-      ],
-      "orphan_state_detection": "passed",
-      "re_entry": "reviewed",
-      "reachability": "passed",
-      "terminal_edges": 3,
-      "terminality": "passed",
-      "vocabulary": "building_lifecycle"
+      "case": "F07-context-positive-administrative_unit_lifecycle",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": null,
+      "finding": "F07",
+      "observed": {
+        "context": "accepted",
+        "transition": "proposed->official"
+      },
+      "status": "passed"
     },
     {
-      "context_prerequisites": "actor/permission/scope/evidence/audit/public-effect enforced by Review09 policy case",
-      "duplicate_conflicting_edge_detection": "passed",
-      "edges": 7,
-      "executed_edges": 7,
-      "initial_states": [
-        "candidate"
-      ],
-      "orphan_state_detection": "passed",
-      "re_entry": "reviewed",
-      "reachability": "passed",
-      "terminal_edges": 2,
-      "terminality": "passed",
-      "vocabulary": "canonical_record_lifecycle"
+      "case": "F07-context-negative-permission-administrative_unit_lifecycle",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": "context prerequisite failed",
+      "finding": "F07",
+      "observed": {
+        "error": "context prerequisite failed"
+      },
+      "status": "passed"
     },
     {
-      "context_prerequisites": "actor/permission/scope/evidence/audit/public-effect enforced by Review09 policy case",
-      "duplicate_conflicting_edge_detection": "passed",
-      "edges": 8,
-      "executed_edges": 8,
-      "initial_states": [
-        "submitted"
-      ],
-      "orphan_state_detection": "passed",
-      "re_entry": "reviewed",
-      "reachability": "passed",
-      "terminal_edges": 2,
-      "terminality": "passed",
-      "vocabulary": "case_lifecycle"
+      "case": "F07-context-negative-scope-administrative_unit_lifecycle",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": "context prerequisite failed",
+      "finding": "F07",
+      "observed": {
+        "error": "context prerequisite failed"
+      },
+      "status": "passed"
     },
     {
-      "context_prerequisites": "actor/permission/scope/evidence/audit/public-effect enforced by Review09 policy case",
-      "duplicate_conflicting_edge_detection": "passed",
-      "edges": 1,
-      "executed_edges": 1,
-      "initial_states": [
-        "active"
-      ],
-      "orphan_state_detection": "passed",
-      "re_entry": "reviewed",
-      "reachability": "passed",
-      "terminal_edges": 1,
-      "terminality": "passed",
-      "vocabulary": "country_lifecycle"
+      "case": "F07-context-negative-evidence-administrative_unit_lifecycle",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": "context prerequisite failed",
+      "finding": "F07",
+      "observed": {
+        "error": "context prerequisite failed"
+      },
+      "status": "passed"
     },
     {
-      "context_prerequisites": "actor/permission/scope/evidence/audit/public-effect enforced by Review09 policy case",
-      "duplicate_conflicting_edge_detection": "passed",
-      "edges": 3,
-      "executed_edges": 3,
-      "initial_states": [
-        "candidate"
-      ],
-      "orphan_state_detection": "passed",
-      "re_entry": "reviewed",
-      "reachability": "passed",
-      "terminal_edges": 2,
-      "terminality": "passed",
-      "vocabulary": "entrance_lifecycle"
+      "case": "F07-context-negative-audit-administrative_unit_lifecycle",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": "context prerequisite failed",
+      "finding": "F07",
+      "observed": {
+        "error": "context prerequisite failed"
+      },
+      "status": "passed"
     },
     {
-      "context_prerequisites": "actor/permission/scope/evidence/audit/public-effect enforced by Review09 policy case",
-      "duplicate_conflicting_edge_detection": "passed",
-      "edges": 9,
-      "executed_edges": 9,
-      "initial_states": [
-        "assigned"
-      ],
-      "orphan_state_detection": "passed",
-      "re_entry": "reviewed",
-      "reachability": "passed",
-      "terminal_edges": 1,
-      "terminality": "passed",
-      "vocabulary": "field_verification_state"
+      "case": "F07-context-negative-public_effect-administrative_unit_lifecycle",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": "context prerequisite failed",
+      "finding": "F07",
+      "observed": {
+        "error": "context prerequisite failed"
+      },
+      "status": "passed"
     },
     {
-      "context_prerequisites": "actor/permission/scope/evidence/audit/public-effect enforced by Review09 policy case",
-      "duplicate_conflicting_edge_detection": "passed",
-      "edges": 8,
-      "executed_edges": 8,
-      "initial_states": [
-        "observed"
-      ],
-      "orphan_state_detection": "passed",
-      "re_entry": "reviewed",
-      "reachability": "passed",
-      "terminal_edges": 2,
-      "terminality": "passed",
-      "vocabulary": "geometry_quality_state"
+      "case": "F07-graph-computed-building_lifecycle",
+      "errors": [],
+      "evidence_source": "review10-lifecycle-graph-query-computation",
+      "finding": "F07",
+      "observed": {
+        "edges": 4,
+        "initial_states": [
+          "candidate"
+        ],
+        "states": 5,
+        "terminal_states": [
+          "demolished",
+          "retired",
+          "revoked"
+        ],
+        "unreachable_states": []
+      },
+      "status": "passed"
     },
     {
-      "context_prerequisites": "actor/permission/scope/evidence/audit/public-effect enforced by Review09 policy case",
-      "duplicate_conflicting_edge_detection": "passed",
-      "edges": 9,
-      "executed_edges": 9,
-      "initial_states": [
-        "submitted"
-      ],
-      "orphan_state_detection": "passed",
-      "re_entry": "reviewed",
-      "reachability": "passed",
-      "terminal_edges": 3,
-      "terminality": "passed",
-      "vocabulary": "intake_state"
+      "case": "F07-context-positive-building_lifecycle",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": null,
+      "finding": "F07",
+      "observed": {
+        "context": "accepted",
+        "transition": "candidate->active"
+      },
+      "status": "passed"
     },
     {
-      "context_prerequisites": "actor/permission/scope/evidence/audit/public-effect enforced by Review09 policy case",
-      "duplicate_conflicting_edge_detection": "passed",
-      "edges": 3,
-      "executed_edges": 3,
-      "initial_states": [
-        "candidate"
-      ],
-      "orphan_state_detection": "passed",
-      "re_entry": "reviewed",
-      "reachability": "passed",
-      "terminal_edges": 2,
-      "terminality": "passed",
-      "vocabulary": "landmark_lifecycle"
+      "case": "F07-context-negative-permission-building_lifecycle",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": "context prerequisite failed",
+      "finding": "F07",
+      "observed": {
+        "error": "context prerequisite failed"
+      },
+      "status": "passed"
     },
     {
-      "context_prerequisites": "actor/permission/scope/evidence/audit/public-effect enforced by Review09 policy case",
-      "duplicate_conflicting_edge_detection": "passed",
-      "edges": 3,
-      "executed_edges": 3,
-      "initial_states": [
-        "candidate"
-      ],
-      "orphan_state_detection": "passed",
-      "re_entry": "reviewed",
-      "reachability": "passed",
-      "terminal_edges": 1,
-      "terminality": "passed",
-      "vocabulary": "locality_lifecycle"
+      "case": "F07-context-negative-scope-building_lifecycle",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": "context prerequisite failed",
+      "finding": "F07",
+      "observed": {
+        "error": "context prerequisite failed"
+      },
+      "status": "passed"
     },
     {
-      "context_prerequisites": "actor/permission/scope/evidence/audit/public-effect enforced by Review09 policy case",
-      "duplicate_conflicting_edge_detection": "passed",
-      "edges": 7,
-      "executed_edges": 7,
-      "initial_states": [
-        "candidate"
-      ],
-      "orphan_state_detection": "passed",
-      "re_entry": "reviewed",
-      "reachability": "passed",
-      "terminal_edges": 2,
-      "terminality": "passed",
-      "vocabulary": "name_lifecycle"
+      "case": "F07-context-negative-evidence-building_lifecycle",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": "context prerequisite failed",
+      "finding": "F07",
+      "observed": {
+        "error": "context prerequisite failed"
+      },
+      "status": "passed"
     },
     {
-      "context_prerequisites": "actor/permission/scope/evidence/audit/public-effect enforced by Review09 policy case",
-      "duplicate_conflicting_edge_detection": "passed",
-      "edges": 3,
-      "executed_edges": 3,
-      "initial_states": [
-        "candidate"
-      ],
-      "orphan_state_detection": "passed",
-      "re_entry": "reviewed",
-      "reachability": "passed",
-      "terminal_edges": 2,
-      "terminality": "passed",
-      "vocabulary": "non_building_object_lifecycle"
+      "case": "F07-context-negative-audit-building_lifecycle",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": "context prerequisite failed",
+      "finding": "F07",
+      "observed": {
+        "error": "context prerequisite failed"
+      },
+      "status": "passed"
     },
     {
-      "context_prerequisites": "actor/permission/scope/evidence/audit/public-effect enforced by Review09 policy case",
-      "duplicate_conflicting_edge_detection": "passed",
-      "edges": 5,
-      "executed_edges": 5,
-      "initial_states": [
-        "planned"
-      ],
-      "orphan_state_detection": "passed",
-      "re_entry": "reviewed",
-      "reachability": "passed",
-      "terminal_edges": 1,
-      "terminality": "passed",
-      "vocabulary": "operational_area_lifecycle"
+      "case": "F07-context-negative-public_effect-building_lifecycle",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": "context prerequisite failed",
+      "finding": "F07",
+      "observed": {
+        "error": "context prerequisite failed"
+      },
+      "status": "passed"
     },
     {
-      "context_prerequisites": "actor/permission/scope/evidence/audit/public-effect enforced by Review09 policy case",
-      "duplicate_conflicting_edge_detection": "passed",
-      "edges": 7,
-      "executed_edges": 7,
-      "initial_states": [
-        "draft"
-      ],
-      "orphan_state_detection": "passed",
-      "re_entry": "reviewed",
-      "reachability": "passed",
-      "terminal_edges": 2,
-      "terminality": "passed",
-      "vocabulary": "publication_lifecycle"
+      "case": "F07-graph-computed-canonical_record_lifecycle",
+      "errors": [],
+      "evidence_source": "review10-lifecycle-graph-query-computation",
+      "finding": "F07",
+      "observed": {
+        "edges": 7,
+        "initial_states": [
+          "candidate"
+        ],
+        "states": 8,
+        "terminal_states": [
+          "corrected",
+          "disputed",
+          "retired",
+          "revoked",
+          "superseded"
+        ],
+        "unreachable_states": []
+      },
+      "status": "passed"
     },
     {
-      "context_prerequisites": "actor/permission/scope/evidence/audit/public-effect enforced by Review09 policy case",
-      "duplicate_conflicting_edge_detection": "passed",
-      "edges": 4,
-      "executed_edges": 4,
-      "initial_states": [
-        "candidate"
-      ],
-      "orphan_state_detection": "passed",
-      "re_entry": "reviewed",
-      "reachability": "passed",
-      "terminal_edges": 1,
-      "terminality": "passed",
-      "vocabulary": "road_lifecycle"
+      "case": "F07-context-positive-canonical_record_lifecycle",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": null,
+      "finding": "F07",
+      "observed": {
+        "context": "accepted",
+        "transition": "candidate->under-review"
+      },
+      "status": "passed"
     },
     {
-      "context_prerequisites": "actor/permission/scope/evidence/audit/public-effect enforced by Review09 policy case",
-      "duplicate_conflicting_edge_detection": "passed",
-      "edges": 3,
-      "executed_edges": 3,
-      "initial_states": [
-        "draft"
-      ],
-      "orphan_state_detection": "passed",
-      "re_entry": "reviewed",
-      "reachability": "passed",
-      "terminal_edges": 1,
-      "terminality": "passed",
-      "vocabulary": "road_segment_lifecycle"
+      "case": "F07-context-negative-permission-canonical_record_lifecycle",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": "context prerequisite failed",
+      "finding": "F07",
+      "observed": {
+        "error": "context prerequisite failed"
+      },
+      "status": "passed"
     },
     {
-      "context_prerequisites": "actor/permission/scope/evidence/audit/public-effect enforced by Review09 policy case",
-      "duplicate_conflicting_edge_detection": "passed",
-      "edges": 4,
-      "executed_edges": 4,
-      "initial_states": [
-        "candidate"
-      ],
-      "orphan_state_detection": "passed",
-      "re_entry": "reviewed",
-      "reachability": "passed",
-      "terminal_edges": 2,
-      "terminality": "passed",
-      "vocabulary": "source_authority_lifecycle"
+      "case": "F07-context-negative-scope-canonical_record_lifecycle",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": "context prerequisite failed",
+      "finding": "F07",
+      "observed": {
+        "error": "context prerequisite failed"
+      },
+      "status": "passed"
     },
     {
-      "context_prerequisites": "actor/permission/scope/evidence/audit/public-effect enforced by Review09 policy case",
-      "duplicate_conflicting_edge_detection": "passed",
-      "edges": 4,
-      "executed_edges": 4,
-      "initial_states": [
-        "candidate"
-      ],
-      "orphan_state_detection": "passed",
-      "re_entry": "reviewed",
-      "reachability": "passed",
-      "terminal_edges": 3,
-      "terminality": "passed",
-      "vocabulary": "unit_lifecycle"
+      "case": "F07-context-negative-evidence-canonical_record_lifecycle",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": "context prerequisite failed",
+      "finding": "F07",
+      "observed": {
+        "error": "context prerequisite failed"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F07-context-negative-audit-canonical_record_lifecycle",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": "context prerequisite failed",
+      "finding": "F07",
+      "observed": {
+        "error": "context prerequisite failed"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F07-context-negative-public_effect-canonical_record_lifecycle",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": "context prerequisite failed",
+      "finding": "F07",
+      "observed": {
+        "error": "context prerequisite failed"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F07-graph-computed-case_lifecycle",
+      "errors": [],
+      "evidence_source": "review10-lifecycle-graph-query-computation",
+      "finding": "F07",
+      "observed": {
+        "edges": 8,
+        "initial_states": [
+          "submitted"
+        ],
+        "states": 7,
+        "terminal_states": [
+          "closed"
+        ],
+        "unreachable_states": []
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F07-context-positive-case_lifecycle",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": null,
+      "finding": "F07",
+      "observed": {
+        "context": "accepted",
+        "transition": "submitted->under-review"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F07-context-negative-permission-case_lifecycle",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": "context prerequisite failed",
+      "finding": "F07",
+      "observed": {
+        "error": "context prerequisite failed"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F07-context-negative-scope-case_lifecycle",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": "context prerequisite failed",
+      "finding": "F07",
+      "observed": {
+        "error": "context prerequisite failed"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F07-context-negative-evidence-case_lifecycle",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": "context prerequisite failed",
+      "finding": "F07",
+      "observed": {
+        "error": "context prerequisite failed"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F07-context-negative-audit-case_lifecycle",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": "context prerequisite failed",
+      "finding": "F07",
+      "observed": {
+        "error": "context prerequisite failed"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F07-context-negative-public_effect-case_lifecycle",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": "context prerequisite failed",
+      "finding": "F07",
+      "observed": {
+        "error": "context prerequisite failed"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F07-graph-computed-country_lifecycle",
+      "errors": [],
+      "evidence_source": "review10-lifecycle-graph-query-computation",
+      "finding": "F07",
+      "observed": {
+        "edges": 1,
+        "initial_states": [
+          "active"
+        ],
+        "states": 2,
+        "terminal_states": [
+          "retired"
+        ],
+        "unreachable_states": []
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F07-context-positive-country_lifecycle",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": null,
+      "finding": "F07",
+      "observed": {
+        "context": "accepted",
+        "transition": "active->retired"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F07-context-negative-permission-country_lifecycle",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": "context prerequisite failed",
+      "finding": "F07",
+      "observed": {
+        "error": "context prerequisite failed"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F07-context-negative-scope-country_lifecycle",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": "context prerequisite failed",
+      "finding": "F07",
+      "observed": {
+        "error": "context prerequisite failed"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F07-context-negative-evidence-country_lifecycle",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": "context prerequisite failed",
+      "finding": "F07",
+      "observed": {
+        "error": "context prerequisite failed"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F07-context-negative-audit-country_lifecycle",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": "context prerequisite failed",
+      "finding": "F07",
+      "observed": {
+        "error": "context prerequisite failed"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F07-context-negative-public_effect-country_lifecycle",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": "context prerequisite failed",
+      "finding": "F07",
+      "observed": {
+        "error": "context prerequisite failed"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F07-graph-computed-entrance_lifecycle",
+      "errors": [],
+      "evidence_source": "review10-lifecycle-graph-query-computation",
+      "finding": "F07",
+      "observed": {
+        "edges": 3,
+        "initial_states": [
+          "candidate"
+        ],
+        "states": 4,
+        "terminal_states": [
+          "retired",
+          "revoked"
+        ],
+        "unreachable_states": []
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F07-context-positive-entrance_lifecycle",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": null,
+      "finding": "F07",
+      "observed": {
+        "context": "accepted",
+        "transition": "candidate->active"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F07-context-negative-permission-entrance_lifecycle",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": "context prerequisite failed",
+      "finding": "F07",
+      "observed": {
+        "error": "context prerequisite failed"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F07-context-negative-scope-entrance_lifecycle",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": "context prerequisite failed",
+      "finding": "F07",
+      "observed": {
+        "error": "context prerequisite failed"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F07-context-negative-evidence-entrance_lifecycle",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": "context prerequisite failed",
+      "finding": "F07",
+      "observed": {
+        "error": "context prerequisite failed"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F07-context-negative-audit-entrance_lifecycle",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": "context prerequisite failed",
+      "finding": "F07",
+      "observed": {
+        "error": "context prerequisite failed"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F07-context-negative-public_effect-entrance_lifecycle",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": "context prerequisite failed",
+      "finding": "F07",
+      "observed": {
+        "error": "context prerequisite failed"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F07-graph-computed-field_verification_state",
+      "errors": [],
+      "evidence_source": "review10-lifecycle-graph-query-computation",
+      "finding": "F07",
+      "observed": {
+        "edges": 9,
+        "initial_states": [
+          "assigned"
+        ],
+        "states": 9,
+        "terminal_states": [
+          "cancelled",
+          "linked-to-canonical"
+        ],
+        "unreachable_states": []
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F07-context-positive-field_verification_state",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": null,
+      "finding": "F07",
+      "observed": {
+        "context": "accepted",
+        "transition": "assigned->in-progress"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F07-context-negative-permission-field_verification_state",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": "context prerequisite failed",
+      "finding": "F07",
+      "observed": {
+        "error": "context prerequisite failed"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F07-context-negative-scope-field_verification_state",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": "context prerequisite failed",
+      "finding": "F07",
+      "observed": {
+        "error": "context prerequisite failed"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F07-context-negative-evidence-field_verification_state",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": "context prerequisite failed",
+      "finding": "F07",
+      "observed": {
+        "error": "context prerequisite failed"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F07-context-negative-audit-field_verification_state",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": "context prerequisite failed",
+      "finding": "F07",
+      "observed": {
+        "error": "context prerequisite failed"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F07-context-negative-public_effect-field_verification_state",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": "context prerequisite failed",
+      "finding": "F07",
+      "observed": {
+        "error": "context prerequisite failed"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F07-graph-computed-geometry_quality_state",
+      "errors": [],
+      "evidence_source": "review10-lifecycle-graph-query-computation",
+      "finding": "F07",
+      "observed": {
+        "edges": 8,
+        "initial_states": [
+          "observed"
+        ],
+        "states": 8,
+        "terminal_states": [
+          "rejected",
+          "superseded",
+          "valid-with-warning"
+        ],
+        "unreachable_states": []
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F07-context-positive-geometry_quality_state",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": null,
+      "finding": "F07",
+      "observed": {
+        "context": "accepted",
+        "transition": "observed->quality-checked"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F07-context-negative-permission-geometry_quality_state",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": "context prerequisite failed",
+      "finding": "F07",
+      "observed": {
+        "error": "context prerequisite failed"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F07-context-negative-scope-geometry_quality_state",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": "context prerequisite failed",
+      "finding": "F07",
+      "observed": {
+        "error": "context prerequisite failed"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F07-context-negative-evidence-geometry_quality_state",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": "context prerequisite failed",
+      "finding": "F07",
+      "observed": {
+        "error": "context prerequisite failed"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F07-context-negative-audit-geometry_quality_state",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": "context prerequisite failed",
+      "finding": "F07",
+      "observed": {
+        "error": "context prerequisite failed"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F07-context-negative-public_effect-geometry_quality_state",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": "context prerequisite failed",
+      "finding": "F07",
+      "observed": {
+        "error": "context prerequisite failed"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F07-graph-computed-intake_state",
+      "errors": [],
+      "evidence_source": "review10-lifecycle-graph-query-computation",
+      "finding": "F07",
+      "observed": {
+        "edges": 9,
+        "initial_states": [
+          "submitted"
+        ],
+        "states": 7,
+        "terminal_states": [
+          "closed"
+        ],
+        "unreachable_states": []
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F07-context-positive-intake_state",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": null,
+      "finding": "F07",
+      "observed": {
+        "context": "accepted",
+        "transition": "submitted->under-review"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F07-context-negative-permission-intake_state",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": "context prerequisite failed",
+      "finding": "F07",
+      "observed": {
+        "error": "context prerequisite failed"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F07-context-negative-scope-intake_state",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": "context prerequisite failed",
+      "finding": "F07",
+      "observed": {
+        "error": "context prerequisite failed"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F07-context-negative-evidence-intake_state",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": "context prerequisite failed",
+      "finding": "F07",
+      "observed": {
+        "error": "context prerequisite failed"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F07-context-negative-audit-intake_state",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": "context prerequisite failed",
+      "finding": "F07",
+      "observed": {
+        "error": "context prerequisite failed"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F07-context-negative-public_effect-intake_state",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": "context prerequisite failed",
+      "finding": "F07",
+      "observed": {
+        "error": "context prerequisite failed"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F07-graph-computed-landmark_lifecycle",
+      "errors": [],
+      "evidence_source": "review10-lifecycle-graph-query-computation",
+      "finding": "F07",
+      "observed": {
+        "edges": 3,
+        "initial_states": [
+          "candidate"
+        ],
+        "states": 4,
+        "terminal_states": [
+          "retired",
+          "revoked"
+        ],
+        "unreachable_states": []
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F07-context-positive-landmark_lifecycle",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": null,
+      "finding": "F07",
+      "observed": {
+        "context": "accepted",
+        "transition": "candidate->official"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F07-context-negative-permission-landmark_lifecycle",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": "context prerequisite failed",
+      "finding": "F07",
+      "observed": {
+        "error": "context prerequisite failed"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F07-context-negative-scope-landmark_lifecycle",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": "context prerequisite failed",
+      "finding": "F07",
+      "observed": {
+        "error": "context prerequisite failed"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F07-context-negative-evidence-landmark_lifecycle",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": "context prerequisite failed",
+      "finding": "F07",
+      "observed": {
+        "error": "context prerequisite failed"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F07-context-negative-audit-landmark_lifecycle",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": "context prerequisite failed",
+      "finding": "F07",
+      "observed": {
+        "error": "context prerequisite failed"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F07-context-negative-public_effect-landmark_lifecycle",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": "context prerequisite failed",
+      "finding": "F07",
+      "observed": {
+        "error": "context prerequisite failed"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F07-graph-computed-locality_lifecycle",
+      "errors": [],
+      "evidence_source": "review10-lifecycle-graph-query-computation",
+      "finding": "F07",
+      "observed": {
+        "edges": 3,
+        "initial_states": [
+          "candidate"
+        ],
+        "states": 4,
+        "terminal_states": [
+          "renamed",
+          "retired"
+        ],
+        "unreachable_states": []
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F07-context-positive-locality_lifecycle",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": null,
+      "finding": "F07",
+      "observed": {
+        "context": "accepted",
+        "transition": "candidate->official"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F07-context-negative-permission-locality_lifecycle",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": "context prerequisite failed",
+      "finding": "F07",
+      "observed": {
+        "error": "context prerequisite failed"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F07-context-negative-scope-locality_lifecycle",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": "context prerequisite failed",
+      "finding": "F07",
+      "observed": {
+        "error": "context prerequisite failed"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F07-context-negative-evidence-locality_lifecycle",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": "context prerequisite failed",
+      "finding": "F07",
+      "observed": {
+        "error": "context prerequisite failed"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F07-context-negative-audit-locality_lifecycle",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": "context prerequisite failed",
+      "finding": "F07",
+      "observed": {
+        "error": "context prerequisite failed"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F07-context-negative-public_effect-locality_lifecycle",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": "context prerequisite failed",
+      "finding": "F07",
+      "observed": {
+        "error": "context prerequisite failed"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F07-graph-computed-name_lifecycle",
+      "errors": [],
+      "evidence_source": "review10-lifecycle-graph-query-computation",
+      "finding": "F07",
+      "observed": {
+        "edges": 7,
+        "initial_states": [
+          "candidate"
+        ],
+        "states": 7,
+        "terminal_states": [
+          "official-historical",
+          "rejected",
+          "retired"
+        ],
+        "unreachable_states": []
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F07-context-positive-name_lifecycle",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": null,
+      "finding": "F07",
+      "observed": {
+        "context": "accepted",
+        "transition": "candidate->official-current"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F07-context-negative-permission-name_lifecycle",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": "context prerequisite failed",
+      "finding": "F07",
+      "observed": {
+        "error": "context prerequisite failed"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F07-context-negative-scope-name_lifecycle",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": "context prerequisite failed",
+      "finding": "F07",
+      "observed": {
+        "error": "context prerequisite failed"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F07-context-negative-evidence-name_lifecycle",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": "context prerequisite failed",
+      "finding": "F07",
+      "observed": {
+        "error": "context prerequisite failed"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F07-context-negative-audit-name_lifecycle",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": "context prerequisite failed",
+      "finding": "F07",
+      "observed": {
+        "error": "context prerequisite failed"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F07-context-negative-public_effect-name_lifecycle",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": "context prerequisite failed",
+      "finding": "F07",
+      "observed": {
+        "error": "context prerequisite failed"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F07-graph-computed-non_building_object_lifecycle",
+      "errors": [],
+      "evidence_source": "review10-lifecycle-graph-query-computation",
+      "finding": "F07",
+      "observed": {
+        "edges": 3,
+        "initial_states": [
+          "candidate"
+        ],
+        "states": 4,
+        "terminal_states": [
+          "retired",
+          "revoked"
+        ],
+        "unreachable_states": []
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F07-context-positive-non_building_object_lifecycle",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": null,
+      "finding": "F07",
+      "observed": {
+        "context": "accepted",
+        "transition": "candidate->active"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F07-context-negative-permission-non_building_object_lifecycle",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": "context prerequisite failed",
+      "finding": "F07",
+      "observed": {
+        "error": "context prerequisite failed"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F07-context-negative-scope-non_building_object_lifecycle",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": "context prerequisite failed",
+      "finding": "F07",
+      "observed": {
+        "error": "context prerequisite failed"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F07-context-negative-evidence-non_building_object_lifecycle",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": "context prerequisite failed",
+      "finding": "F07",
+      "observed": {
+        "error": "context prerequisite failed"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F07-context-negative-audit-non_building_object_lifecycle",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": "context prerequisite failed",
+      "finding": "F07",
+      "observed": {
+        "error": "context prerequisite failed"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F07-context-negative-public_effect-non_building_object_lifecycle",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": "context prerequisite failed",
+      "finding": "F07",
+      "observed": {
+        "error": "context prerequisite failed"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F07-graph-computed-operational_area_lifecycle",
+      "errors": [],
+      "evidence_source": "review10-lifecycle-graph-query-computation",
+      "finding": "F07",
+      "observed": {
+        "edges": 5,
+        "initial_states": [
+          "planned"
+        ],
+        "states": 5,
+        "terminal_states": [
+          "archived"
+        ],
+        "unreachable_states": []
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F07-context-positive-operational_area_lifecycle",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": null,
+      "finding": "F07",
+      "observed": {
+        "context": "accepted",
+        "transition": "planned->active"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F07-context-negative-permission-operational_area_lifecycle",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": "context prerequisite failed",
+      "finding": "F07",
+      "observed": {
+        "error": "context prerequisite failed"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F07-context-negative-scope-operational_area_lifecycle",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": "context prerequisite failed",
+      "finding": "F07",
+      "observed": {
+        "error": "context prerequisite failed"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F07-context-negative-evidence-operational_area_lifecycle",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": "context prerequisite failed",
+      "finding": "F07",
+      "observed": {
+        "error": "context prerequisite failed"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F07-context-negative-audit-operational_area_lifecycle",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": "context prerequisite failed",
+      "finding": "F07",
+      "observed": {
+        "error": "context prerequisite failed"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F07-context-negative-public_effect-operational_area_lifecycle",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": "context prerequisite failed",
+      "finding": "F07",
+      "observed": {
+        "error": "context prerequisite failed"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F07-graph-computed-publication_lifecycle",
+      "errors": [],
+      "evidence_source": "review10-lifecycle-graph-query-computation",
+      "finding": "F07",
+      "observed": {
+        "edges": 7,
+        "initial_states": [
+          "draft"
+        ],
+        "states": 6,
+        "terminal_states": [
+          "withdrawn"
+        ],
+        "unreachable_states": []
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F07-context-positive-publication_lifecycle",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": null,
+      "finding": "F07",
+      "observed": {
+        "context": "accepted",
+        "transition": "draft->approval-requested"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F07-context-negative-permission-publication_lifecycle",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": "context prerequisite failed",
+      "finding": "F07",
+      "observed": {
+        "error": "context prerequisite failed"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F07-context-negative-scope-publication_lifecycle",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": "context prerequisite failed",
+      "finding": "F07",
+      "observed": {
+        "error": "context prerequisite failed"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F07-context-negative-evidence-publication_lifecycle",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": "context prerequisite failed",
+      "finding": "F07",
+      "observed": {
+        "error": "context prerequisite failed"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F07-context-negative-audit-publication_lifecycle",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": "context prerequisite failed",
+      "finding": "F07",
+      "observed": {
+        "error": "context prerequisite failed"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F07-context-negative-public_effect-publication_lifecycle",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": "context prerequisite failed",
+      "finding": "F07",
+      "observed": {
+        "error": "context prerequisite failed"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F07-graph-computed-road_lifecycle",
+      "errors": [],
+      "evidence_source": "review10-lifecycle-graph-query-computation",
+      "finding": "F07",
+      "observed": {
+        "edges": 4,
+        "initial_states": [
+          "candidate"
+        ],
+        "states": 5,
+        "terminal_states": [
+          "retired",
+          "superseded"
+        ],
+        "unreachable_states": []
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F07-context-positive-road_lifecycle",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": null,
+      "finding": "F07",
+      "observed": {
+        "context": "accepted",
+        "transition": "candidate->field-verified"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F07-context-negative-permission-road_lifecycle",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": "context prerequisite failed",
+      "finding": "F07",
+      "observed": {
+        "error": "context prerequisite failed"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F07-context-negative-scope-road_lifecycle",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": "context prerequisite failed",
+      "finding": "F07",
+      "observed": {
+        "error": "context prerequisite failed"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F07-context-negative-evidence-road_lifecycle",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": "context prerequisite failed",
+      "finding": "F07",
+      "observed": {
+        "error": "context prerequisite failed"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F07-context-negative-audit-road_lifecycle",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": "context prerequisite failed",
+      "finding": "F07",
+      "observed": {
+        "error": "context prerequisite failed"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F07-context-negative-public_effect-road_lifecycle",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": "context prerequisite failed",
+      "finding": "F07",
+      "observed": {
+        "error": "context prerequisite failed"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F07-graph-computed-road_segment_lifecycle",
+      "errors": [],
+      "evidence_source": "review10-lifecycle-graph-query-computation",
+      "finding": "F07",
+      "observed": {
+        "edges": 3,
+        "initial_states": [
+          "draft"
+        ],
+        "states": 4,
+        "terminal_states": [
+          "realigned",
+          "retired"
+        ],
+        "unreachable_states": []
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F07-context-positive-road_segment_lifecycle",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": null,
+      "finding": "F07",
+      "observed": {
+        "context": "accepted",
+        "transition": "draft->active"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F07-context-negative-permission-road_segment_lifecycle",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": "context prerequisite failed",
+      "finding": "F07",
+      "observed": {
+        "error": "context prerequisite failed"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F07-context-negative-scope-road_segment_lifecycle",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": "context prerequisite failed",
+      "finding": "F07",
+      "observed": {
+        "error": "context prerequisite failed"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F07-context-negative-evidence-road_segment_lifecycle",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": "context prerequisite failed",
+      "finding": "F07",
+      "observed": {
+        "error": "context prerequisite failed"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F07-context-negative-audit-road_segment_lifecycle",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": "context prerequisite failed",
+      "finding": "F07",
+      "observed": {
+        "error": "context prerequisite failed"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F07-context-negative-public_effect-road_segment_lifecycle",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": "context prerequisite failed",
+      "finding": "F07",
+      "observed": {
+        "error": "context prerequisite failed"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F07-graph-computed-source_authority_lifecycle",
+      "errors": [],
+      "evidence_source": "review10-lifecycle-graph-query-computation",
+      "finding": "F07",
+      "observed": {
+        "edges": 4,
+        "initial_states": [
+          "candidate"
+        ],
+        "states": 4,
+        "terminal_states": [
+          "deprecated",
+          "revoked"
+        ],
+        "unreachable_states": []
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F07-context-positive-source_authority_lifecycle",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": null,
+      "finding": "F07",
+      "observed": {
+        "context": "accepted",
+        "transition": "candidate->trusted"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F07-context-negative-permission-source_authority_lifecycle",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": "context prerequisite failed",
+      "finding": "F07",
+      "observed": {
+        "error": "context prerequisite failed"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F07-context-negative-scope-source_authority_lifecycle",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": "context prerequisite failed",
+      "finding": "F07",
+      "observed": {
+        "error": "context prerequisite failed"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F07-context-negative-evidence-source_authority_lifecycle",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": "context prerequisite failed",
+      "finding": "F07",
+      "observed": {
+        "error": "context prerequisite failed"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F07-context-negative-audit-source_authority_lifecycle",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": "context prerequisite failed",
+      "finding": "F07",
+      "observed": {
+        "error": "context prerequisite failed"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F07-context-negative-public_effect-source_authority_lifecycle",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": "context prerequisite failed",
+      "finding": "F07",
+      "observed": {
+        "error": "context prerequisite failed"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F07-graph-computed-unit_lifecycle",
+      "errors": [],
+      "evidence_source": "review10-lifecycle-graph-query-computation",
+      "finding": "F07",
+      "observed": {
+        "edges": 4,
+        "initial_states": [
+          "candidate"
+        ],
+        "states": 5,
+        "terminal_states": [
+          "merged",
+          "retired",
+          "split"
+        ],
+        "unreachable_states": []
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F07-context-positive-unit_lifecycle",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": null,
+      "finding": "F07",
+      "observed": {
+        "context": "accepted",
+        "transition": "candidate->active"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F07-context-negative-permission-unit_lifecycle",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": "context prerequisite failed",
+      "finding": "F07",
+      "observed": {
+        "error": "context prerequisite failed"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F07-context-negative-scope-unit_lifecycle",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": "context prerequisite failed",
+      "finding": "F07",
+      "observed": {
+        "error": "context prerequisite failed"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F07-context-negative-evidence-unit_lifecycle",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": "context prerequisite failed",
+      "finding": "F07",
+      "observed": {
+        "error": "context prerequisite failed"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F07-context-negative-audit-unit_lifecycle",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": "context prerequisite failed",
+      "finding": "F07",
+      "observed": {
+        "error": "context prerequisite failed"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F07-context-negative-public_effect-unit_lifecycle",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": "context prerequisite failed",
+      "finding": "F07",
+      "observed": {
+        "error": "context prerequisite failed"
+      },
+      "status": "passed"
     }
   ],
   "summary": {
-    "edges": 96,
+    "cases": 133,
     "errors": [],
-    "execution_mode": "review09-executed-lifecycle-graph-context-validator",
-    "graphs": 19,
+    "execution_mode": "review10-postgresql-lifecycle-graph-context-enforcement",
     "status": "passed"
   }
 }

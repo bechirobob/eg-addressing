@@ -2,8 +2,7 @@
 
 | Metric | Value |
 | --- | --- |
-| execution_mode | review09-executed-lifecycle-graph-context-validator |
-| graphs | 19 |
-| edges | 96 |
+| execution_mode | review10-postgresql-lifecycle-graph-context-enforcement |
+| cases | 133 |
 | status | passed |
 | errors | [] |

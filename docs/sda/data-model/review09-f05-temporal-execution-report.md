@@ -2,8 +2,7 @@
 
 | Metric | Value |
 | --- | --- |
-| execution_mode | review09-executed-temporal-reconstruction-matrix |
-| entities | 9 |
-| cases | 19 |
+| execution_mode | review10-postgresql-temporal-strategy-history-execution |
+| cases | 50 |
 | status | passed |
 | errors | [] |

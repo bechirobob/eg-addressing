@@ -1,106 +1,131 @@
 {
   "cases": [
     {
-      "case": "typed-actor_identity",
-      "evidence": "review09 typed authority design relationship",
+      "case": "F06-positive-human-typed-authority-promotion",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": null,
+      "finding": "F06",
+      "observed": {
+        "promotion": "inserted"
+      },
       "status": "passed"
     },
     {
-      "case": "typed-service_identity",
-      "evidence": "review09 typed authority design relationship",
+      "case": "F06-positive-service-identity-model-present",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": null,
+      "finding": "F06",
+      "observed": {
+        "service_identity": "service-geom"
+      },
       "status": "passed"
     },
     {
-      "case": "typed-institution_membership",
-      "evidence": "review09 typed authority design relationship",
+      "case": "F06-wrong-actor-membership",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": "actor institution membership invalid",
+      "finding": "F06",
+      "observed": {
+        "error": "actor institution membership invalid"
+      },
       "status": "passed"
     },
     {
-      "case": "typed-permission",
-      "evidence": "review09 typed authority design relationship",
+      "case": "F06-wrong-permission",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": "permission denied",
+      "finding": "F06",
+      "observed": {
+        "error": "permission denied"
+      },
       "status": "passed"
     },
     {
-      "case": "typed-territorial_scope",
-      "evidence": "review09 typed authority design relationship",
+      "case": "F06-wrong-territorial-scope",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": "scope mismatch",
+      "finding": "F06",
+      "observed": {
+        "error": "scope mismatch"
+      },
       "status": "passed"
     },
     {
-      "case": "typed-data_scope",
-      "evidence": "review09 typed authority design relationship",
+      "case": "F06-wrong-data-scope",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": "scope mismatch",
+      "finding": "F06",
+      "observed": {
+        "error": "scope mismatch"
+      },
       "status": "passed"
     },
     {
-      "case": "typed-decision_authority",
-      "evidence": "review09 typed authority design relationship",
+      "case": "F06-decision-not-approved",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": "decision not approved",
+      "finding": "F06",
+      "observed": {
+        "error": "decision not approved"
+      },
       "status": "passed"
     },
     {
-      "case": "typed-observation",
-      "evidence": "review09 typed authority design relationship",
+      "case": "F06-unrelated-observation",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": "evidence mismatch",
+      "finding": "F06",
+      "observed": {
+        "error": "evidence mismatch"
+      },
       "status": "passed"
     },
     {
-      "case": "typed-evidence",
-      "evidence": "review09 typed authority design relationship",
+      "case": "F06-unrelated-evidence",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": "evidence mismatch",
+      "finding": "F06",
+      "observed": {
+        "error": "evidence mismatch"
+      },
       "status": "passed"
     },
     {
-      "case": "typed-quality_assessment",
-      "evidence": "review09 typed authority design relationship",
+      "case": "F06-unrelated-quality-assessment",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": "assessment mismatch",
+      "finding": "F06",
+      "observed": {
+        "error": "assessment mismatch"
+      },
       "status": "passed"
     },
     {
-      "case": "wrong-actor-membership",
-      "evidence": "executed geometry authority matrix / mutation",
-      "status": "passed"
-    },
-    {
-      "case": "wrong-institution",
-      "evidence": "executed geometry authority matrix / mutation",
-      "status": "passed"
-    },
-    {
-      "case": "wrong-scope",
-      "evidence": "executed geometry authority matrix / mutation",
-      "status": "passed"
-    },
-    {
-      "case": "unrelated-quality-assessment",
-      "evidence": "executed geometry authority matrix / mutation",
-      "status": "passed"
-    },
-    {
-      "case": "unrelated-observation",
-      "evidence": "executed geometry authority matrix / mutation",
-      "status": "passed"
-    },
-    {
-      "case": "unrelated-evidence",
-      "evidence": "executed geometry authority matrix / mutation",
-      "status": "passed"
-    },
-    {
-      "case": "cross-subject-successor",
-      "evidence": "executed geometry authority matrix / mutation",
-      "status": "passed"
-    },
-    {
-      "case": "cross-role-successor",
-      "evidence": "executed geometry authority matrix / mutation",
-      "status": "passed"
-    },
-    {
-      "case": "multi-node-cycle",
-      "evidence": "executed geometry authority matrix / mutation",
+      "case": "F06-cross-subject-successor-cycle",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": "successor cycle",
+      "finding": "F06",
+      "observed": {
+        "error": "successor cycle"
+      },
       "status": "passed"
     }
   ],
   "summary": {
-    "cases": 19,
+    "cases": 11,
     "errors": [],
-    "execution_mode": "review09-executed-typed-geometry-authority-matrix",
-    "status": "passed",
-    "typed_relationships": 10
+    "execution_mode": "review10-postgresql-typed-geometry-authority-execution",
+    "status": "passed"
   }
 }
