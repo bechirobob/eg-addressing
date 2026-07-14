@@ -283,7 +283,7 @@ for key, roles in {"GET /api/v1/addresses": {"viewer","editor","admin"}, "GET /a
         err(f"{key} roles must be viewer/editor/admin")
 if route_policies.get("POST /api/v1/auth/logout", {}).get("auth") != "session-required":
     err("logout must be classified session-required, not public")
-gate("F08-review08-api-contract-summary", "F08", api_projection_summary.get("execution_mode") == "review08-independent-api-projection-contracts" and api_projection_summary.get("operations") == len(ops) and api_projection_summary.get("generic_success_payloads") == 0 and api_projection_summary.get("errors") == [], "F08 API projection assertions must be Review 08 independent contracts with no generic successful payload envelopes", "docs/sda/data-model/openapi-policy-projection-assertions.json")
+gate("F08-review09-api-contract-summary", "F08", api_projection_summary.get("execution_mode") == "review09-independent-api-contract-comparison" and api_projection_summary.get("operations") == len(ops) and api_projection_summary.get("generic_success_payloads") == 0 and api_projection_summary.get("errors") == [] and api_projection_summary.get("status") == "passed", "F08 API projection assertions must compare independent expected contracts against observed controlled response fixtures", "docs/sda/data-model/openapi-policy-projection-assertions.json")
 for op in ops:
     route_key = f"{op.get('method')} {op.get('path')}"
     if route_key not in route_policies:
@@ -297,9 +297,9 @@ for op in ops:
         err(f"route policy reviewed row disagrees with observed AST handler/method for {route_key}")
 
     contract = projection_contracts.get(op.get("operation_id"), {}) if isinstance(projection_contracts, dict) else {}
-    if contract.get("review_status") not in {"reviewed-api-projection-r08"}:
+    if contract.get("review_status") not in {"reviewed-api-projection-r09"}:
         err(f"OpenAPI operation {op.get('operation_id')} missing reviewed projection contract")
-    gate(f"F08-reviewed-projection-contract-{op.get('operation_id')}", "F08", bool(contract.get("policy_source") == "human-reviewed-field-projection-source" and contract.get("review_owner") and contract.get("review_decision_id")), "projection contract must be independently reviewed with owner and decision id", "docs/sda/data-model/openapi-reviewed-projection-contracts.json")
+    gate(f"F08-reviewed-projection-contract-{op.get('operation_id')}", "F08", bool(contract.get("policy_source") == "review09-independent-expected-api-contract-source" and contract.get("review_owner") and contract.get("review_decision_id")), "projection contract must be independently reviewed with owner and decision id", "docs/sda/data-model/openapi-reviewed-projection-contracts.json")
     for field in contract.get("fields", []) if isinstance(contract, dict) else []:
         fname = str(field.get("field", "")).lower()
         direction = str(field.get("direction", ""))
@@ -313,7 +313,7 @@ for op in ops:
     if not contract_fields:
         err(f"OpenAPI operation {op.get('operation_id')} projection contract has no fields")
     for resp in op.get("responses", []):
-        if str(resp.get("status", "")).startswith("2") and not resp.get("fields"):
+        if str(resp.get("status", "")).startswith("2") and str(resp.get("status", "")) != "204" and not resp.get("fields"):
             response_contract_fields = [cf for cf in contract_fields if cf.get("direction") == f"response:{resp.get('status')}"]
             gate(f"F08-success-response-fields-{op.get('operation_id')}-{resp.get('status')}", "F08", bool(response_contract_fields), "every successful response must have exact reviewed response fields", "docs/sda/data-model/openapi-reviewed-projection-contracts.json")
             bad = [cf for cf in response_contract_fields if cf.get("field") == "<empty/error envelope>" or cf.get("field") == "response.body.reviewed_payload"]
