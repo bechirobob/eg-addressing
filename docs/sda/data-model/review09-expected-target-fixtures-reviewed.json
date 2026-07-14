@@ -42,8 +42,8 @@
           "target_output_id": "r09txout-7ec6ca7c5c72f7934806"
         }
       ],
-      "review_decision_id": "R09-EXPECTED-dee6579159",
-      "review_status": "approved-review09-expected-target-fixture",
+      "review_decision_id": "R10-EXPECTED-dee6579159",
+      "review_status": "approved-review10-expected-target-fixture",
       "target_identities": [
         {
           "current_field": "address_corrections.correction_type",
@@ -181,8 +181,8 @@
           "target_output_id": "r09txout-77182722a91e3ea8ec4b"
         }
       ],
-      "review_decision_id": "R09-EXPECTED-39a98e7f10",
-      "review_status": "approved-review09-expected-target-fixture",
+      "review_decision_id": "R10-EXPECTED-39a98e7f10",
+      "review_status": "approved-review10-expected-target-fixture",
       "target_identities": [
         {
           "current_field": "address_corrections.note",
@@ -306,8 +306,8 @@
           "target_output_id": "r09txout-bfaa5d2e49df6ec35d60"
         }
       ],
-      "review_decision_id": "R09-EXPECTED-7b9de0ef80",
-      "review_status": "approved-review09-expected-target-fixture",
+      "review_decision_id": "R10-EXPECTED-7b9de0ef80",
+      "review_status": "approved-review10-expected-target-fixture",
       "target_identities": [
         {
           "current_field": "address_points.accuracy_meters",
@@ -395,8 +395,8 @@
           "target_output_id": "r09txout-5c05b64831a8cea6fd36"
         }
       ],
-      "review_decision_id": "R09-EXPECTED-14be17ca76",
-      "review_status": "approved-review09-expected-target-fixture",
+      "review_decision_id": "R10-EXPECTED-14be17ca76",
+      "review_status": "approved-review10-expected-target-fixture",
       "target_identities": [
         {
           "current_field": "address_records.accuracy_meters",
@@ -484,8 +484,8 @@
           "target_output_id": "r09txout-902c11485e4ec52b4422"
         }
       ],
-      "review_decision_id": "R09-EXPECTED-f890ead7a6",
-      "review_status": "approved-review09-expected-target-fixture",
+      "review_decision_id": "R10-EXPECTED-f890ead7a6",
+      "review_status": "approved-review10-expected-target-fixture",
       "target_identities": [
         {
           "current_field": "citizen_geotag_submissions.accuracy_meters",
@@ -576,8 +576,8 @@
           "target_output_id": "r09txout-1005909037870ccd07cd"
         }
       ],
-      "review_decision_id": "R09-EXPECTED-0a74912528",
-      "review_status": "approved-review09-expected-target-fixture",
+      "review_decision_id": "R10-EXPECTED-0a74912528",
+      "review_status": "approved-review10-expected-target-fixture",
       "target_identities": [
         {
           "current_field": "address_corrections.address_id",
@@ -650,8 +650,8 @@
           "target_output_id": "r09txout-3682fdff24f0e4608ccc"
         }
       ],
-      "review_decision_id": "R09-EXPECTED-70ee7b65f2",
-      "review_status": "approved-review09-expected-target-fixture",
+      "review_decision_id": "R10-EXPECTED-70ee7b65f2",
+      "review_status": "approved-review10-expected-target-fixture",
       "target_identities": [
         {
           "current_field": "address_points.address_id",
@@ -770,8 +770,8 @@
           "target_output_id": "r09txout-fa0eb04f40f9c1094786"
         }
       ],
-      "review_decision_id": "R09-EXPECTED-6f718a9d78",
-      "review_status": "approved-review09-expected-target-fixture",
+      "review_decision_id": "R10-EXPECTED-6f718a9d78",
+      "review_status": "approved-review10-expected-target-fixture",
       "target_identities": [
         {
           "current_field": "address_record_events.actor_id",
@@ -894,8 +894,8 @@
           "target_output_id": "r09txout-9e97610faddf222360bf"
         }
       ],
-      "review_decision_id": "R09-EXPECTED-47b5eb2ac1",
-      "review_status": "approved-review09-expected-target-fixture",
+      "review_decision_id": "R10-EXPECTED-47b5eb2ac1",
+      "review_status": "approved-review10-expected-target-fixture",
       "target_identities": [
         {
           "current_field": "address_records.id",
@@ -1050,8 +1050,8 @@
           "target_output_id": "r09txout-7a2b0cd59d21ea0ca2b0"
         }
       ],
-      "review_decision_id": "R09-EXPECTED-05e0c4b77a",
-      "review_status": "approved-review09-expected-target-fixture",
+      "review_decision_id": "R10-EXPECTED-05e0c4b77a",
+      "review_status": "approved-review10-expected-target-fixture",
       "target_identities": [
         {
           "current_field": "addresses.building_id",
@@ -1194,8 +1194,8 @@
           "target_output_id": "r09txout-45169bd84234c4454772"
         }
       ],
-      "review_decision_id": "R09-EXPECTED-99a6f75fdd",
-      "review_status": "approved-review09-expected-target-fixture",
+      "review_decision_id": "R10-EXPECTED-99a6f75fdd",
+      "review_status": "approved-review10-expected-target-fixture",
       "target_identities": [
         {
           "current_field": "admin_units.id",
@@ -1314,8 +1314,8 @@
           "target_output_id": "r09txout-72af76670006b99ac207"
         }
       ],
-      "review_decision_id": "R09-EXPECTED-a3f1ee1083",
-      "review_status": "approved-review09-expected-target-fixture",
+      "review_decision_id": "R10-EXPECTED-a3f1ee1083",
+      "review_status": "approved-review10-expected-target-fixture",
       "target_identities": [
         {
           "current_field": "audit_logs.actor_user_id",
@@ -1399,8 +1399,8 @@
           "target_output_id": "r09txout-3a0973b8e7b57df2bd03"
         }
       ],
-      "review_decision_id": "R09-EXPECTED-448191430b",
-      "review_status": "approved-review09-expected-target-fixture",
+      "review_decision_id": "R10-EXPECTED-448191430b",
+      "review_status": "approved-review10-expected-target-fixture",
       "target_identities": [
         {
           "current_field": "auth_tokens.user_id",
@@ -1471,8 +1471,8 @@
           "target_output_id": "r09txout-cfb9371a9f4cbd702a78"
         }
       ],
-      "review_decision_id": "R09-EXPECTED-69304e2a8a",
-      "review_status": "approved-review09-expected-target-fixture",
+      "review_decision_id": "R10-EXPECTED-69304e2a8a",
+      "review_status": "approved-review10-expected-target-fixture",
       "target_identities": [
         {
           "current_field": "buildings.id",
@@ -1595,8 +1595,8 @@
           "target_output_id": "r09txout-abd71c5beeded3a6b92d"
         }
       ],
-      "review_decision_id": "R09-EXPECTED-968a8e12ee",
-      "review_status": "approved-review09-expected-target-fixture",
+      "review_decision_id": "R10-EXPECTED-968a8e12ee",
+      "review_status": "approved-review10-expected-target-fixture",
       "target_identities": [
         {
           "current_field": "citizen_geotag_submissions.field_submission_id",
@@ -1696,8 +1696,8 @@
           "target_output_id": "r09txout-d940c7f5211d3b5acf68"
         }
       ],
-      "review_decision_id": "R09-EXPECTED-e8e2faa1fc",
-      "review_status": "approved-review09-expected-target-fixture",
+      "review_decision_id": "R10-EXPECTED-e8e2faa1fc",
+      "review_status": "approved-review10-expected-target-fixture",
       "target_identities": [
         {
           "current_field": "development_fixture_batches.batch_id",
@@ -1791,8 +1791,8 @@
           "target_output_id": "r09txout-fc31a684e719b94c0ce1"
         }
       ],
-      "review_decision_id": "R09-EXPECTED-4c01ebf3e7",
-      "review_status": "approved-review09-expected-target-fixture",
+      "review_decision_id": "R10-EXPECTED-4c01ebf3e7",
+      "review_status": "approved-review10-expected-target-fixture",
       "target_identities": [
         {
           "current_field": "development_fixture_records.batch_id",
@@ -1890,8 +1890,8 @@
           "target_output_id": "r09txout-115f75ee1ca334bd53be"
         }
       ],
-      "review_decision_id": "R09-EXPECTED-88d6cf190e",
-      "review_status": "approved-review09-expected-target-fixture",
+      "review_decision_id": "R10-EXPECTED-88d6cf190e",
+      "review_status": "approved-review10-expected-target-fixture",
       "target_identities": [
         {
           "current_field": "field_assignments.assignment_id",
@@ -2026,8 +2026,8 @@
           "target_output_id": "r09txout-827b6542ab750691b2cf"
         }
       ],
-      "review_decision_id": "R09-EXPECTED-9aa826c8f7",
-      "review_status": "approved-review09-expected-target-fixture",
+      "review_decision_id": "R10-EXPECTED-9aa826c8f7",
+      "review_status": "approved-review10-expected-target-fixture",
       "target_identities": [
         {
           "current_field": "field_submissions.assignment_id",
@@ -2119,8 +2119,8 @@
           "target_output_id": "r09txout-9545b27033832fe5b3d5"
         }
       ],
-      "review_decision_id": "R09-EXPECTED-6746607e17",
-      "review_status": "approved-review09-expected-target-fixture",
+      "review_decision_id": "R10-EXPECTED-6746607e17",
+      "review_status": "approved-review10-expected-target-fixture",
       "target_identities": [
         {
           "current_field": "import_jobs.id",
@@ -2230,8 +2230,8 @@
           "target_output_id": "r09txout-ee0fc6df149954200e8b"
         }
       ],
-      "review_decision_id": "R09-EXPECTED-75c2803502",
-      "review_status": "approved-review09-expected-target-fixture",
+      "review_decision_id": "R10-EXPECTED-75c2803502",
+      "review_status": "approved-review10-expected-target-fixture",
       "target_identities": [
         {
           "current_field": "import_rows.committed_submission_id",
@@ -2347,8 +2347,8 @@
           "target_output_id": "r09txout-dc97a3646b644f354f0f"
         }
       ],
-      "review_decision_id": "R09-EXPECTED-d0093dd763",
-      "review_status": "approved-review09-expected-target-fixture",
+      "review_decision_id": "R10-EXPECTED-d0093dd763",
+      "review_status": "approved-review10-expected-target-fixture",
       "target_identities": [
         {
           "current_field": "publication_pack_addresses.address_id",
@@ -2404,8 +2404,8 @@
           "target_output_id": "r09txout-e9cdca9beeb1f4b95bab"
         }
       ],
-      "review_decision_id": "R09-EXPECTED-6f0b0a8b11",
-      "review_status": "approved-review09-expected-target-fixture",
+      "review_decision_id": "R10-EXPECTED-6f0b0a8b11",
+      "review_status": "approved-review10-expected-target-fixture",
       "target_identities": [
         {
           "current_field": "publication_packs.id",
@@ -2476,8 +2476,8 @@
           "target_output_id": "r09txout-deb356137d881b0dcaed"
         }
       ],
-      "review_decision_id": "R09-EXPECTED-ec46e6c2b7",
-      "review_status": "approved-review09-expected-target-fixture",
+      "review_decision_id": "R10-EXPECTED-ec46e6c2b7",
+      "review_status": "approved-review10-expected-target-fixture",
       "target_identities": [
         {
           "current_field": "reference_data_load_history.id",
@@ -2559,8 +2559,8 @@
           "target_output_id": "r09txout-a7fe2271ffc8504a571f"
         }
       ],
-      "review_decision_id": "R09-EXPECTED-11d25d271f",
-      "review_status": "approved-review09-expected-target-fixture",
+      "review_decision_id": "R10-EXPECTED-11d25d271f",
+      "review_status": "approved-review10-expected-target-fixture",
       "target_identities": [
         {
           "current_field": "reference_data_loads.package_id",
@@ -2615,8 +2615,8 @@
           "target_output_id": "r09txout-ee2af926d2b923d891ec"
         }
       ],
-      "review_decision_id": "R09-EXPECTED-d4c181b9f3",
-      "review_status": "approved-review09-expected-target-fixture",
+      "review_decision_id": "R10-EXPECTED-d4c181b9f3",
+      "review_status": "approved-review10-expected-target-fixture",
       "target_identities": [
         {
           "current_field": "roads.id",
@@ -2689,8 +2689,8 @@
           "target_output_id": "r09txout-46f2d766d686159520be"
         }
       ],
-      "review_decision_id": "R09-EXPECTED-aebcc19ab5",
-      "review_status": "approved-review09-expected-target-fixture",
+      "review_decision_id": "R10-EXPECTED-aebcc19ab5",
+      "review_status": "approved-review10-expected-target-fixture",
       "target_identities": [
         {
           "current_field": "territories.admin_unit_id",
@@ -2746,8 +2746,8 @@
           "target_output_id": "r09txout-9b17a4a190681a95f7ba"
         }
       ],
-      "review_decision_id": "R09-EXPECTED-530fd9fc9d",
-      "review_status": "approved-review09-expected-target-fixture",
+      "review_decision_id": "R10-EXPECTED-530fd9fc9d",
+      "review_status": "approved-review10-expected-target-fixture",
       "target_identities": [
         {
           "current_field": "users.id",
@@ -2785,8 +2785,8 @@
           "target_output_id": "r09txout-92261764918418aef046"
         }
       ],
-      "review_decision_id": "R09-EXPECTED-cf8a7312a9",
-      "review_status": "approved-review09-expected-target-fixture",
+      "review_decision_id": "R10-EXPECTED-cf8a7312a9",
+      "review_status": "approved-review10-expected-target-fixture",
       "target_identities": [
         {
           "current_field": "address_record_events.actor_username",
@@ -2824,8 +2824,8 @@
           "target_output_id": "r09txout-28c724abb9a15381f459"
         }
       ],
-      "review_decision_id": "R09-EXPECTED-4b6e4b4444",
-      "review_status": "approved-review09-expected-target-fixture",
+      "review_decision_id": "R10-EXPECTED-4b6e4b4444",
+      "review_status": "approved-review10-expected-target-fixture",
       "target_identities": [
         {
           "current_field": "address_records.address_label",
@@ -2870,8 +2870,8 @@
           "target_output_id": "r09txout-291fe97a9b3a4418e9e0"
         }
       ],
-      "review_decision_id": "R09-EXPECTED-f36876f997",
-      "review_status": "approved-review09-expected-target-fixture",
+      "review_decision_id": "R10-EXPECTED-f36876f997",
+      "review_status": "approved-review10-expected-target-fixture",
       "target_identities": [
         {
           "current_field": "admin_units.name_en",
@@ -2927,8 +2927,8 @@
           "target_output_id": "r09txout-3913f030b5851a7b76cd"
         }
       ],
-      "review_decision_id": "R09-EXPECTED-417981ff82",
-      "review_status": "approved-review09-expected-target-fixture",
+      "review_decision_id": "R10-EXPECTED-417981ff82",
+      "review_status": "approved-review10-expected-target-fixture",
       "target_identities": [
         {
           "current_field": "audit_logs.actor_username",
@@ -2966,8 +2966,8 @@
           "target_output_id": "r09txout-842dc57f7d71b5d9dbb1"
         }
       ],
-      "review_decision_id": "R09-EXPECTED-b033e77c81",
-      "review_status": "approved-review09-expected-target-fixture",
+      "review_decision_id": "R10-EXPECTED-b033e77c81",
+      "review_status": "approved-review10-expected-target-fixture",
       "target_identities": [
         {
           "current_field": "buildings.label",
@@ -3040,8 +3040,8 @@
           "target_output_id": "r09txout-a22f460a8bcd9060f0a5"
         }
       ],
-      "review_decision_id": "R09-EXPECTED-5cfbddf0ae",
-      "review_status": "approved-review09-expected-target-fixture",
+      "review_decision_id": "R10-EXPECTED-5cfbddf0ae",
+      "review_status": "approved-review10-expected-target-fixture",
       "target_identities": [
         {
           "current_field": "citizen_geotag_submissions.address_label",
@@ -3169,8 +3169,8 @@
           "target_output_id": "r09txout-02c61e97052f8a97b8ef"
         }
       ],
-      "review_decision_id": "R09-EXPECTED-7ed9593431",
-      "review_status": "approved-review09-expected-target-fixture",
+      "review_decision_id": "R10-EXPECTED-7ed9593431",
+      "review_status": "approved-review10-expected-target-fixture",
       "target_identities": [
         {
           "current_field": "development_fixture_records.table_name",
@@ -3208,8 +3208,8 @@
           "target_output_id": "r09txout-548168b7ede8e9f62c42"
         }
       ],
-      "review_decision_id": "R09-EXPECTED-5c8a1a438a",
-      "review_status": "approved-review09-expected-target-fixture",
+      "review_decision_id": "R10-EXPECTED-5c8a1a438a",
+      "review_status": "approved-review10-expected-target-fixture",
       "target_identities": [
         {
           "current_field": "field_submissions.candidate_name",
@@ -3254,8 +3254,8 @@
           "target_output_id": "r09txout-e3fb63a9f8acc71411db"
         }
       ],
-      "review_decision_id": "R09-EXPECTED-fe9abc42e0",
-      "review_status": "approved-review09-expected-target-fixture",
+      "review_decision_id": "R10-EXPECTED-fe9abc42e0",
+      "review_status": "approved-review10-expected-target-fixture",
       "target_identities": [
         {
           "current_field": "import_jobs.name",
@@ -3311,8 +3311,8 @@
           "target_output_id": "r09txout-ddfc2c2dee9ba05411f9"
         }
       ],
-      "review_decision_id": "R09-EXPECTED-fdb7c14ab3",
-      "review_status": "approved-review09-expected-target-fixture",
+      "review_decision_id": "R10-EXPECTED-fdb7c14ab3",
+      "review_status": "approved-review10-expected-target-fixture",
       "target_identities": [
         {
           "current_field": "import_rows.candidate_name",
@@ -3350,8 +3350,8 @@
           "target_output_id": "r09txout-4ba149e7edff2bc3aaba"
         }
       ],
-      "review_decision_id": "R09-EXPECTED-adc7938e1c",
-      "review_status": "approved-review09-expected-target-fixture",
+      "review_decision_id": "R10-EXPECTED-adc7938e1c",
+      "review_status": "approved-review10-expected-target-fixture",
       "target_identities": [
         {
           "current_field": "provinces.name",
@@ -3389,8 +3389,8 @@
           "target_output_id": "r09txout-4ee2891187f22e42d877"
         }
       ],
-      "review_decision_id": "R09-EXPECTED-ae44fb7856",
-      "review_status": "approved-review09-expected-target-fixture",
+      "review_decision_id": "R10-EXPECTED-ae44fb7856",
+      "review_status": "approved-review10-expected-target-fixture",
       "target_identities": [
         {
           "current_field": "publication_packs.name",
@@ -3428,8 +3428,8 @@
           "target_output_id": "r09txout-db7eda79b3386db1b253"
         }
       ],
-      "review_decision_id": "R09-EXPECTED-12b4cdb9b0",
-      "review_status": "approved-review09-expected-target-fixture",
+      "review_decision_id": "R10-EXPECTED-12b4cdb9b0",
+      "review_status": "approved-review10-expected-target-fixture",
       "target_identities": [
         {
           "current_field": "roads.name",
@@ -3467,8 +3467,8 @@
           "target_output_id": "r09txout-112beadd07495b97a9cf"
         }
       ],
-      "review_decision_id": "R09-EXPECTED-e33c5b6218",
-      "review_status": "approved-review09-expected-target-fixture",
+      "review_decision_id": "R10-EXPECTED-e33c5b6218",
+      "review_status": "approved-review10-expected-target-fixture",
       "target_identities": [
         {
           "current_field": "territories.name",
@@ -3513,8 +3513,8 @@
           "target_output_id": "r09txout-41630fd684953f5a4bbc"
         }
       ],
-      "review_decision_id": "R09-EXPECTED-325c0df9fb",
-      "review_status": "approved-review09-expected-target-fixture",
+      "review_decision_id": "R10-EXPECTED-325c0df9fb",
+      "review_status": "approved-review10-expected-target-fixture",
       "target_identities": [
         {
           "current_field": "users.full_name",
@@ -3570,8 +3570,8 @@
           "target_output_id": "r09txout-949fd9c164bb53be90dd"
         }
       ],
-      "review_decision_id": "R09-EXPECTED-f449479c12",
-      "review_status": "approved-review09-expected-target-fixture",
+      "review_decision_id": "R10-EXPECTED-f449479c12",
+      "review_status": "approved-review10-expected-target-fixture",
       "target_identities": [
         {
           "current_field": "addresses.public_code",
@@ -3609,8 +3609,8 @@
           "target_output_id": "r09txout-9c50e4ac8f38de0f69c0"
         }
       ],
-      "review_decision_id": "R09-EXPECTED-3209c8d1be",
-      "review_status": "approved-review09-expected-target-fixture",
+      "review_decision_id": "R10-EXPECTED-3209c8d1be",
+      "review_status": "approved-review10-expected-target-fixture",
       "target_identities": [
         {
           "current_field": "admin_units.code",
@@ -3648,8 +3648,8 @@
           "target_output_id": "r09txout-1723cb1f6b1eb0a82789"
         }
       ],
-      "review_decision_id": "R09-EXPECTED-d9a7c1a0fd",
-      "review_status": "approved-review09-expected-target-fixture",
+      "review_decision_id": "R10-EXPECTED-d9a7c1a0fd",
+      "review_status": "approved-review10-expected-target-fixture",
       "target_identities": [
         {
           "current_field": "provinces.code",
@@ -3694,8 +3694,8 @@
           "target_output_id": "r09txout-5175bd253d22ea63ced8"
         }
       ],
-      "review_decision_id": "R09-EXPECTED-d5fdb230e9",
-      "review_status": "approved-review09-expected-target-fixture",
+      "review_decision_id": "R10-EXPECTED-d5fdb230e9",
+      "review_status": "approved-review10-expected-target-fixture",
       "target_identities": [
         {
           "current_field": "address_corrections.created_at",
@@ -3758,8 +3758,8 @@
           "target_output_id": "r09txout-ef3cdad368bef997f333"
         }
       ],
-      "review_decision_id": "R09-EXPECTED-dc1cc40a49",
-      "review_status": "approved-review09-expected-target-fixture",
+      "review_decision_id": "R10-EXPECTED-dc1cc40a49",
+      "review_status": "approved-review10-expected-target-fixture",
       "target_identities": [
         {
           "current_field": "address_points.created_at",
@@ -3815,8 +3815,8 @@
           "target_output_id": "r09txout-f47e0af0aa11d3679d60"
         }
       ],
-      "review_decision_id": "R09-EXPECTED-9337abdb53",
-      "review_status": "approved-review09-expected-target-fixture",
+      "review_decision_id": "R10-EXPECTED-9337abdb53",
+      "review_status": "approved-review10-expected-target-fixture",
       "target_identities": [
         {
           "current_field": "address_record_events.created_at",
@@ -3861,8 +3861,8 @@
           "target_output_id": "r09txout-5a30b277279bf9357f5c"
         }
       ],
-      "review_decision_id": "R09-EXPECTED-fc8a2b77b2",
-      "review_status": "approved-review09-expected-target-fixture",
+      "review_decision_id": "R10-EXPECTED-fc8a2b77b2",
+      "review_status": "approved-review10-expected-target-fixture",
       "target_identities": [
         {
           "current_field": "address_records.created_at",
@@ -3925,8 +3925,8 @@
           "target_output_id": "r09txout-0a5bbe6d843a6d1ac57e"
         }
       ],
-      "review_decision_id": "R09-EXPECTED-2836eb7642",
-      "review_status": "approved-review09-expected-target-fixture",
+      "review_decision_id": "R10-EXPECTED-2836eb7642",
+      "review_status": "approved-review10-expected-target-fixture",
       "target_identities": [
         {
           "current_field": "addresses.created_at",
@@ -3989,8 +3989,8 @@
           "target_output_id": "r09txout-f35321d8556871529325"
         }
       ],
-      "review_decision_id": "R09-EXPECTED-376acdaf4c",
-      "review_status": "approved-review09-expected-target-fixture",
+      "review_decision_id": "R10-EXPECTED-376acdaf4c",
+      "review_status": "approved-review10-expected-target-fixture",
       "target_identities": [
         {
           "current_field": "admin_units.created_at",
@@ -4046,8 +4046,8 @@
           "target_output_id": "r09txout-4a423291face528a3753"
         }
       ],
-      "review_decision_id": "R09-EXPECTED-9b3e8ec98b",
-      "review_status": "approved-review09-expected-target-fixture",
+      "review_decision_id": "R10-EXPECTED-9b3e8ec98b",
+      "review_status": "approved-review10-expected-target-fixture",
       "target_identities": [
         {
           "current_field": "audit_logs.created_at",
@@ -4106,8 +4106,8 @@
           "target_output_id": "r09txout-21e0c9faef4257602e78"
         }
       ],
-      "review_decision_id": "R09-EXPECTED-0cbb92d27f",
-      "review_status": "approved-review09-expected-target-fixture",
+      "review_decision_id": "R10-EXPECTED-0cbb92d27f",
+      "review_status": "approved-review10-expected-target-fixture",
       "target_identities": [
         {
           "current_field": "auth_tokens.created_at",
@@ -4206,8 +4206,8 @@
           "target_output_id": "r09txout-c851b3a21fcc6e637314"
         }
       ],
-      "review_decision_id": "R09-EXPECTED-6a2e5f0ddc",
-      "review_status": "approved-review09-expected-target-fixture",
+      "review_decision_id": "R10-EXPECTED-6a2e5f0ddc",
+      "review_status": "approved-review10-expected-target-fixture",
       "target_identities": [
         {
           "current_field": "buildings.created_at",
@@ -4284,8 +4284,8 @@
           "target_output_id": "r09txout-62d9d00e9bb164f6ae0d"
         }
       ],
-      "review_decision_id": "R09-EXPECTED-13465d3b5c",
-      "review_status": "approved-review09-expected-target-fixture",
+      "review_decision_id": "R10-EXPECTED-13465d3b5c",
+      "review_status": "approved-review10-expected-target-fixture",
       "target_identities": [
         {
           "current_field": "citizen_geotag_submissions.created_at",
@@ -4384,8 +4384,8 @@
           "target_output_id": "r09txout-167be983c69f4da663fb"
         }
       ],
-      "review_decision_id": "R09-EXPECTED-eb24e0785e",
-      "review_status": "approved-review09-expected-target-fixture",
+      "review_decision_id": "R10-EXPECTED-eb24e0785e",
+      "review_status": "approved-review10-expected-target-fixture",
       "target_identities": [
         {
           "current_field": "development_fixture_batches.cleaned_at",
@@ -4448,8 +4448,8 @@
           "target_output_id": "r09txout-0458b9a3daeca45887a8"
         }
       ],
-      "review_decision_id": "R09-EXPECTED-21708d0258",
-      "review_status": "approved-review09-expected-target-fixture",
+      "review_decision_id": "R10-EXPECTED-21708d0258",
+      "review_status": "approved-review10-expected-target-fixture",
       "target_identities": [
         {
           "current_field": "development_fixture_records.created_by_batch",
@@ -4505,8 +4505,8 @@
           "target_output_id": "r09txout-bab631bef144ec00ceda"
         }
       ],
-      "review_decision_id": "R09-EXPECTED-1c937f2a11",
-      "review_status": "approved-review09-expected-target-fixture",
+      "review_decision_id": "R10-EXPECTED-1c937f2a11",
+      "review_status": "approved-review10-expected-target-fixture",
       "target_identities": [
         {
           "current_field": "field_assignments.created_at",
@@ -4558,8 +4558,8 @@
           "target_output_id": "r09txout-e2ace80293f878ba527f"
         }
       ],
-      "review_decision_id": "R09-EXPECTED-e9b4529710",
-      "review_status": "approved-review09-expected-target-fixture",
+      "review_decision_id": "R10-EXPECTED-e9b4529710",
+      "review_status": "approved-review10-expected-target-fixture",
       "target_identities": [
         {
           "current_field": "field_submissions.created_at",
@@ -4640,8 +4640,8 @@
           "target_output_id": "r09txout-1b6642d5cdc2035b8d65"
         }
       ],
-      "review_decision_id": "R09-EXPECTED-284f464477",
-      "review_status": "approved-review09-expected-target-fixture",
+      "review_decision_id": "R10-EXPECTED-284f464477",
+      "review_status": "approved-review10-expected-target-fixture",
       "target_identities": [
         {
           "current_field": "import_jobs.created_at",
@@ -4697,8 +4697,8 @@
           "target_output_id": "r09txout-7f5160bc7a00238de392"
         }
       ],
-      "review_decision_id": "R09-EXPECTED-8f5407bfe1",
-      "review_status": "approved-review09-expected-target-fixture",
+      "review_decision_id": "R10-EXPECTED-8f5407bfe1",
+      "review_status": "approved-review10-expected-target-fixture",
       "target_identities": [
         {
           "current_field": "provinces.created_at",
@@ -4743,8 +4743,8 @@
           "target_output_id": "r09txout-7db59f04183cf14ad86d"
         }
       ],
-      "review_decision_id": "R09-EXPECTED-99d65a7fd7",
-      "review_status": "approved-review09-expected-target-fixture",
+      "review_decision_id": "R10-EXPECTED-99d65a7fd7",
+      "review_status": "approved-review10-expected-target-fixture",
       "target_identities": [
         {
           "current_field": "publication_packs.created_at",
@@ -4800,8 +4800,8 @@
           "target_output_id": "r09txout-43b0d76f3556a3cb60bf"
         }
       ],
-      "review_decision_id": "R09-EXPECTED-8a334d77b3",
-      "review_status": "approved-review09-expected-target-fixture",
+      "review_decision_id": "R10-EXPECTED-8a334d77b3",
+      "review_status": "approved-review10-expected-target-fixture",
       "target_identities": [
         {
           "current_field": "reference_data_load_history.loaded_at",
@@ -4839,8 +4839,8 @@
           "target_output_id": "r09txout-be5f0e48ef6ccd13f997"
         }
       ],
-      "review_decision_id": "R09-EXPECTED-f5ba35d9b2",
-      "review_status": "approved-review09-expected-target-fixture",
+      "review_decision_id": "R10-EXPECTED-f5ba35d9b2",
+      "review_status": "approved-review10-expected-target-fixture",
       "target_identities": [
         {
           "current_field": "reference_data_loads.loaded_at",
@@ -4885,8 +4885,8 @@
           "target_output_id": "r09txout-55361e123d032017f6f4"
         }
       ],
-      "review_decision_id": "R09-EXPECTED-bcf8101638",
-      "review_status": "approved-review09-expected-target-fixture",
+      "review_decision_id": "R10-EXPECTED-bcf8101638",
+      "review_status": "approved-review10-expected-target-fixture",
       "target_identities": [
         {
           "current_field": "roads.created_at",
@@ -4949,8 +4949,8 @@
           "target_output_id": "r09txout-4c93a8fdb2bba021e360"
         }
       ],
-      "review_decision_id": "R09-EXPECTED-5fe232dc84",
-      "review_status": "approved-review09-expected-target-fixture",
+      "review_decision_id": "R10-EXPECTED-5fe232dc84",
+      "review_status": "approved-review10-expected-target-fixture",
       "target_identities": [
         {
           "current_field": "territories.created_at",
@@ -5006,8 +5006,8 @@
           "target_output_id": "r09txout-047d67c581ea91ce4849"
         }
       ],
-      "review_decision_id": "R09-EXPECTED-b6a017229a",
-      "review_status": "approved-review09-expected-target-fixture",
+      "review_decision_id": "R10-EXPECTED-b6a017229a",
+      "review_status": "approved-review10-expected-target-fixture",
       "target_identities": [
         {
           "current_field": "users.created_at",
@@ -5053,8 +5053,8 @@
           "target_output_id": "r09txout-257ab19a710bc6455340"
         }
       ],
-      "review_decision_id": "R09-EXPECTED-83ddbd96fc",
-      "review_status": "approved-review09-expected-target-fixture",
+      "review_decision_id": "R10-EXPECTED-83ddbd96fc",
+      "review_status": "approved-review10-expected-target-fixture",
       "target_identities": [
         {
           "current_field": "address_corrections.reporter_contact",
@@ -5114,8 +5114,8 @@
           "target_output_id": "r09txout-3b26b758ec9745a65d0c"
         }
       ],
-      "review_decision_id": "R09-EXPECTED-d9635e651f",
-      "review_status": "approved-review09-expected-target-fixture",
+      "review_decision_id": "R10-EXPECTED-d9635e651f",
+      "review_status": "approved-review10-expected-target-fixture",
       "target_identities": [
         {
           "current_field": "address_points.is_active",
@@ -5207,8 +5207,8 @@
           "target_output_id": "r09txout-9315656b819886d66910"
         }
       ],
-      "review_decision_id": "R09-EXPECTED-b8737a7d2c",
-      "review_status": "approved-review09-expected-target-fixture",
+      "review_decision_id": "R10-EXPECTED-b8737a7d2c",
+      "review_status": "approved-review10-expected-target-fixture",
       "target_identities": [
         {
           "current_field": "address_record_events.actor_role",
@@ -5398,8 +5398,8 @@
           "target_output_id": "r09txout-c20de156744c3a056201"
         }
       ],
-      "review_decision_id": "R09-EXPECTED-3a39f129cc",
-      "review_status": "approved-review09-expected-target-fixture",
+      "review_decision_id": "R10-EXPECTED-3a39f129cc",
+      "review_status": "approved-review10-expected-target-fixture",
       "target_identities": [
         {
           "current_field": "address_records.address_code",
@@ -5679,8 +5679,8 @@
           "target_output_id": "r09txout-d1919d1be14f22beaa4c"
         }
       ],
-      "review_decision_id": "R09-EXPECTED-9c38d8e860",
-      "review_status": "approved-review09-expected-target-fixture",
+      "review_decision_id": "R10-EXPECTED-9c38d8e860",
+      "review_status": "approved-review10-expected-target-fixture",
       "target_identities": [
         {
           "current_field": "addresses.formatted",
@@ -5904,8 +5904,8 @@
           "target_output_id": "r09txout-8d312fdd772fccfe3f0f"
         }
       ],
-      "review_decision_id": "R09-EXPECTED-2b15005023",
-      "review_status": "approved-review09-expected-target-fixture",
+      "review_decision_id": "R10-EXPECTED-2b15005023",
+      "review_status": "approved-review10-expected-target-fixture",
       "target_identities": [
         {
           "current_field": "admin_units.level",
@@ -6047,8 +6047,8 @@
           "target_output_id": "r09txout-c572d09e178da561ee3b"
         }
       ],
-      "review_decision_id": "R09-EXPECTED-1f2a4b11a4",
-      "review_status": "approved-review09-expected-target-fixture",
+      "review_decision_id": "R10-EXPECTED-1f2a4b11a4",
+      "review_status": "approved-review10-expected-target-fixture",
       "target_identities": [
         {
           "current_field": "audit_logs.action",
@@ -6148,8 +6148,8 @@
           "target_output_id": "r09txout-3708da602dc14e69c923"
         }
       ],
-      "review_decision_id": "R09-EXPECTED-935e60b1da",
-      "review_status": "approved-review09-expected-target-fixture",
+      "review_decision_id": "R10-EXPECTED-935e60b1da",
+      "review_status": "approved-review10-expected-target-fixture",
       "target_identities": [
         {
           "current_field": "auth_tokens.token",
@@ -6237,8 +6237,8 @@
           "target_output_id": "r09txout-d7e96176526cd247b151"
         }
       ],
-      "review_decision_id": "R09-EXPECTED-e1324596fa",
-      "review_status": "approved-review09-expected-target-fixture",
+      "review_decision_id": "R10-EXPECTED-e1324596fa",
+      "review_status": "approved-review10-expected-target-fixture",
       "target_identities": [
         {
           "current_field": "buildings.is_archived",
@@ -6562,8 +6562,8 @@
           "target_output_id": "r09txout-961aab60947ac51a3533"
         }
       ],
-      "review_decision_id": "R09-EXPECTED-c1ca15f257",
-      "review_status": "approved-review09-expected-target-fixture",
+      "review_decision_id": "R10-EXPECTED-c1ca15f257",
+      "review_status": "approved-review10-expected-target-fixture",
       "target_identities": [
         {
           "current_field": "citizen_geotag_submissions.capture_method",
@@ -6925,8 +6925,8 @@
           "target_output_id": "r09txout-273756bfec998e90d6c7"
         }
       ],
-      "review_decision_id": "R09-EXPECTED-3fd4ff4b31",
-      "review_status": "approved-review09-expected-target-fixture",
+      "review_decision_id": "R10-EXPECTED-3fd4ff4b31",
+      "review_status": "approved-review10-expected-target-fixture",
       "target_identities": [
         {
           "current_field": "development_fixture_batches.environment",
@@ -7050,8 +7050,8 @@
           "target_output_id": "r09txout-12c82b1a3fe4f1fc0847"
         }
       ],
-      "review_decision_id": "R09-EXPECTED-165af1b137",
-      "review_status": "approved-review09-expected-target-fixture",
+      "review_decision_id": "R10-EXPECTED-165af1b137",
+      "review_status": "approved-review10-expected-target-fixture",
       "target_identities": [
         {
           "current_field": "field_assignments.priority",
@@ -7221,8 +7221,8 @@
           "target_output_id": "r09txout-18706da859cfa97bf4ce"
         }
       ],
-      "review_decision_id": "R09-EXPECTED-20312919cd",
-      "review_status": "approved-review09-expected-target-fixture",
+      "review_decision_id": "R10-EXPECTED-20312919cd",
+      "review_status": "approved-review10-expected-target-fixture",
       "target_identities": [
         {
           "current_field": "field_submissions.candidate_status",
@@ -7372,8 +7372,8 @@
           "target_output_id": "r09txout-74931335839773bdce27"
         }
       ],
-      "review_decision_id": "R09-EXPECTED-ef451c475f",
-      "review_status": "approved-review09-expected-target-fixture",
+      "review_decision_id": "R10-EXPECTED-ef451c475f",
+      "review_status": "approved-review10-expected-target-fixture",
       "target_identities": [
         {
           "current_field": "import_jobs.imported_count",
@@ -7507,8 +7507,8 @@
           "target_output_id": "r09txout-03cdfb3243e60b4ea70b"
         }
       ],
-      "review_decision_id": "R09-EXPECTED-fe886c004d",
-      "review_status": "approved-review09-expected-target-fixture",
+      "review_decision_id": "R10-EXPECTED-fe886c004d",
+      "review_status": "approved-review10-expected-target-fixture",
       "target_identities": [
         {
           "current_field": "import_rows.candidate_status",
@@ -7658,8 +7658,8 @@
           "target_output_id": "r09txout-b49f2dfc3b3f71deb007"
         }
       ],
-      "review_decision_id": "R09-EXPECTED-ebbe137b56",
-      "review_status": "approved-review09-expected-target-fixture",
+      "review_decision_id": "R10-EXPECTED-ebbe137b56",
+      "review_status": "approved-review10-expected-target-fixture",
       "target_identities": [
         {
           "current_field": "publication_packs.audience",
@@ -7779,8 +7779,8 @@
           "target_output_id": "r09txout-6fb8fa93c8e16ab425b6"
         }
       ],
-      "review_decision_id": "R09-EXPECTED-cc2a05383f",
-      "review_status": "approved-review09-expected-target-fixture",
+      "review_decision_id": "R10-EXPECTED-cc2a05383f",
+      "review_status": "approved-review10-expected-target-fixture",
       "target_identities": [
         {
           "current_field": "reference_data_load_history.authority_status",
@@ -7954,8 +7954,8 @@
           "target_output_id": "r09txout-197c050e32d978bfd852"
         }
       ],
-      "review_decision_id": "R09-EXPECTED-73628449ab",
-      "review_status": "approved-review09-expected-target-fixture",
+      "review_decision_id": "R10-EXPECTED-73628449ab",
+      "review_status": "approved-review10-expected-target-fixture",
       "target_identities": [
         {
           "current_field": "reference_data_loads.authority_status",
@@ -8115,8 +8115,8 @@
           "target_output_id": "r09txout-fec376423641014b0ab1"
         }
       ],
-      "review_decision_id": "R09-EXPECTED-4781ebe106",
-      "review_status": "approved-review09-expected-target-fixture",
+      "review_decision_id": "R10-EXPECTED-4781ebe106",
+      "review_status": "approved-review10-expected-target-fixture",
       "target_identities": [
         {
           "current_field": "roads.is_archived",
@@ -8272,8 +8272,8 @@
           "target_output_id": "r09txout-b159e5d9b65eec253b5c"
         }
       ],
-      "review_decision_id": "R09-EXPECTED-dd44d42997",
-      "review_status": "approved-review09-expected-target-fixture",
+      "review_decision_id": "R10-EXPECTED-dd44d42997",
+      "review_status": "approved-review10-expected-target-fixture",
       "target_identities": [
         {
           "current_field": "schema_migrations.applied_at",
@@ -8443,8 +8443,8 @@
           "target_output_id": "r09txout-9ab1cdc46d3b5aea1926"
         }
       ],
-      "review_decision_id": "R09-EXPECTED-d97ba744cf",
-      "review_status": "approved-review09-expected-target-fixture",
+      "review_decision_id": "R10-EXPECTED-d97ba744cf",
+      "review_status": "approved-review10-expected-target-fixture",
       "target_identities": [
         {
           "current_field": "territories.is_archived",
@@ -8572,8 +8572,8 @@
           "target_output_id": "r09txout-e034d624b16ded620158"
         }
       ],
-      "review_decision_id": "R09-EXPECTED-1822be7658",
-      "review_status": "approved-review09-expected-target-fixture",
+      "review_decision_id": "R10-EXPECTED-1822be7658",
+      "review_status": "approved-review10-expected-target-fixture",
       "target_identities": [
         {
           "current_field": "users.is_active",
@@ -8635,5 +8635,5 @@
       "transform_group_id": "WO002-R06-source-archive-users"
     }
   ],
-  "version": "review09"
+  "version": "review10"
 }

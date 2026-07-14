@@ -116,14 +116,16 @@ def validate_independent_inputs(source: dict[str, Any], expected: dict[str, Any]
     for group in groups:
         src_fields = {r["current_field"] for r in s[group].get("source_rows", [])}
         exp_fields = {r["current_field"] for r in e[group].get("target_rows", [])}
+        exp_identity_fields = {r["current_field"] for r in e[group].get("target_identities", [])}
         impl_fields = {r["current_field"] for r in i[group].get("transforms", [])}
         reg_fields = {r["current"] for r in registry if r["transform_group_id"] == group}
         if src_fields != reg_fields: errors.append(f"{group} source fields differ from registry")
         if exp_fields != reg_fields: errors.append(f"{group} expected fields differ from registry")
+        if exp_identity_fields != reg_fields: errors.append(f"{group} expected target identities differ from registry")
         if impl_fields != reg_fields: errors.append(f"{group} implementation fields differ from registry")
-        if s[group].get("review_status") != "approved-review09-source-fixture": errors.append(f"{group} source fixture not Review09-approved")
-        if e[group].get("review_status") != "approved-review09-expected-target-fixture": errors.append(f"{group} expected fixture not Review09-approved")
-        if i[group].get("review_status") != "approved-review09-transform-implementation": errors.append(f"{group} transform implementation not Review09-approved")
+        if s[group].get("review_status") != "approved-review10-source-fixture": errors.append(f"{group} source fixture not Review09-approved")
+        if e[group].get("review_status") != "approved-review10-expected-target-fixture": errors.append(f"{group} expected fixture not Review09-approved")
+        if i[group].get("review_status") != "approved-review10-transform-implementation": errors.append(f"{group} transform implementation not Review09-approved")
     return errors
 
 
@@ -152,59 +154,95 @@ def create_tables(cur) -> None:
           review09_transform_crosswalk,
           review09_transform_relationship
     """)
-    cur.execute("CREATE TEMP TABLE review09_transform_source_field (transform_group_id text, current_field text, source_table text, source_row_key text, source_value text, source_hash text, classification text, disposition text, PRIMARY KEY(transform_group_id,current_field,source_row_key))")
-    cur.execute("CREATE TEMP TABLE review09_transform_target_identity (target_identity_id text PRIMARY KEY, transform_group_id text, current_field text, source_row_key text, target_entity text)")
-    cur.execute("CREATE TEMP TABLE review09_transform_target_field (target_output_id text PRIMARY KEY, transform_group_id text, current_field text, source_row_key text, target_identity_id text REFERENCES review09_transform_target_identity(target_identity_id), target_field text, actual_target_value text, actual_value_type text, actual_target_hash text, translation_status text)")
-    cur.execute("CREATE TEMP TABLE review09_transform_archive (archive_id text PRIMARY KEY, transform_group_id text, current_field text, source_row_key text, archived_value text, archive_hash text)")
-    cur.execute("CREATE TEMP TABLE review09_transform_exception (exception_id text PRIMARY KEY, transform_group_id text, current_field text, source_row_key text, owner text, exception_reason text)")
-    cur.execute("CREATE TEMP TABLE review09_transform_crosswalk (crosswalk_id text PRIMARY KEY, transform_group_id text, current_field text, source_row_key text, source_value text, target_identity_id text REFERENCES review09_transform_target_identity(target_identity_id), final_canonical_fk text REFERENCES review09_transform_target_identity(target_identity_id), target_entity text)")
-    cur.execute("CREATE TEMP TABLE review09_transform_relationship (relationship_id text PRIMARY KEY, transform_group_id text, current_field text, source_row_key text, target_output_id text REFERENCES review09_transform_target_field(target_output_id), relationship_kind text)")
+    cur.execute("CREATE TEMP TABLE review09_transform_source_field (transform_group_id text NOT NULL, current_field text NOT NULL, source_table text NOT NULL, source_row_key text NOT NULL, source_value text NOT NULL, source_hash text NOT NULL, classification text NOT NULL, disposition text, PRIMARY KEY(transform_group_id,current_field,source_row_key))")
+    cur.execute("CREATE TEMP TABLE review09_transform_target_identity (target_identity_id text PRIMARY KEY, transform_group_id text NOT NULL, current_field text NOT NULL, source_row_key text NOT NULL, target_entity text NOT NULL, proposed_table_name text NOT NULL, UNIQUE(transform_group_id,current_field,source_row_key))")
+    cur.execute("CREATE TEMP TABLE review09_transform_target_field (target_output_id text PRIMARY KEY, transform_group_id text NOT NULL, current_field text NOT NULL, source_row_key text NOT NULL, target_identity_id text NOT NULL REFERENCES review09_transform_target_identity(target_identity_id), target_entity text NOT NULL, target_field text NOT NULL, actual_target_value text NOT NULL, actual_value_type text NOT NULL CHECK (actual_value_type IN ('text','integer','numeric','boolean','json','timestamp','date')), actual_target_hash text NOT NULL, translation_status text NOT NULL, UNIQUE(transform_group_id,current_field,source_row_key))")
+    cur.execute("CREATE TEMP TABLE review09_transform_archive (archive_id text PRIMARY KEY, transform_group_id text NOT NULL, current_field text NOT NULL, source_row_key text NOT NULL, archived_value text NOT NULL, archive_hash text NOT NULL, UNIQUE(transform_group_id,current_field,source_row_key))")
+    cur.execute("CREATE TEMP TABLE review09_transform_exception (exception_id text PRIMARY KEY, transform_group_id text NOT NULL, current_field text NOT NULL, source_row_key text NOT NULL, owner text NOT NULL, exception_reason text NOT NULL, UNIQUE(transform_group_id,current_field,source_row_key))")
+    cur.execute("CREATE TEMP TABLE review09_transform_crosswalk (crosswalk_id text PRIMARY KEY, transform_group_id text NOT NULL, current_field text NOT NULL, source_row_key text NOT NULL, source_value text NOT NULL, target_identity_id text NOT NULL REFERENCES review09_transform_target_identity(target_identity_id), final_canonical_fk text NOT NULL REFERENCES review09_transform_target_identity(target_identity_id), target_entity text NOT NULL, UNIQUE(transform_group_id,current_field,source_row_key))")
+    cur.execute("CREATE TEMP TABLE review09_transform_relationship (relationship_id text PRIMARY KEY, transform_group_id text NOT NULL, current_field text NOT NULL, source_row_key text NOT NULL, target_output_id text NOT NULL REFERENCES review09_transform_target_field(target_output_id), relationship_kind text NOT NULL, UNIQUE(transform_group_id,current_field,source_row_key,target_output_id))")
+
+
+def construct_target_identity_id(group: str, current: str, src_value: str) -> str:
+    return "r09target-" + short_hash(f"target-identity|{group}|{current}|{src_value}", 20)
+
+
+def construct_target_output_id(group: str, current: str, source_row_key: str) -> str:
+    return "r09txout-" + short_hash(f"{group}|{current}|{source_row_key}", 20)
+
+
+def construct_archive_id(group: str, current: str, src_value: str) -> str:
+    return "r09archive-" + short_hash(f"{group}|{current}|{src_value}", 18)
+
+
+def construct_exception_id(group: str, current: str, src_value: str) -> str:
+    return "r09exception-" + short_hash(f"{group}|{current}|{src_value}", 18)
+
+
+def construct_crosswalk_id(group: str, current: str) -> str:
+    return "r09crosswalk-" + short_hash(f"{group}|{current}", 18)
+
+
+def construct_relationship_id(group: str, current: str, target_output_id: str) -> str:
+    return "r09rel-" + short_hash(f"{group}|{current}|{target_output_id}", 18)
+
+
+def target_entity_from_transform(transform: dict[str, Any]) -> str:
+    if transform.get("target_entity"):
+        return str(transform["target_entity"])
+    target_field = str(transform.get("target_field") or "migration_exception.unresolved_target")
+    return target_field.split(".", 1)[0] if "." in target_field else "target_entity"
 
 
 def execute_transform_once(cur, source: dict[str, Any], expected: dict[str, Any], implementation: dict[str, Any], run_label: str) -> dict[str, int]:
+    """Execute observed output construction from source + implementation only.
+
+    The expected fixture is intentionally not indexed or read here. It is accepted in the
+    signature only so older callers keep a stable invocation shape; validation reads it
+    later in compare_observed_expected().
+    """
     inserts = Counter()
-    s_groups, e_groups, i_groups = index_by_group(source), index_by_group(expected), index_by_group(implementation)
+    s_groups, i_groups = index_by_group(source), index_by_group(implementation)
     for group, src_group in sorted(s_groups.items()):
-        expected_group = e_groups[group]
         impl_group = i_groups[group]
-        exp_targets = {r["current_field"]: r for r in expected_group.get("target_rows", [])}
-        exp_identities = {r["current_field"]: r for r in expected_group.get("target_identities", [])}
-        exp_crosswalks = {r["current_field"]: r for r in expected_group.get("crosswalks", [])}
-        exp_archives = {r["current_field"]: r for r in expected_group.get("archives", [])}
-        exp_exceptions = {r["current_field"]: r for r in expected_group.get("exceptions", [])}
-        exp_relationships = {r["current_field"]: r for r in expected_group.get("relationships", [])}
         impls = {r["current_field"]: r for r in impl_group.get("transforms", [])}
         for src in sorted(src_group.get("source_rows", []), key=lambda r: r["current_field"]):
             current = src["current_field"]
             transform = impls[current]
-            exp_target = exp_targets[current]
-            identity = exp_identities[current]
-            actual_value, translation_status = transform_value(str(src["source_value"]), transform)
-            actual_hash = stable_hash([exp_target["target_output_id"], exp_target["target_field"], actual_value])
-            cur.execute("INSERT INTO review09_transform_source_field VALUES (%s,%s,%s,%s,%s,%s,%s,%s) ON CONFLICT DO NOTHING", (group, current, src["source_table"], src["source_row_key"], str(src["source_value"]), src["source_hash"], src["classification"], src["disposition"]))
+            src_value = str(src["source_value"])
+            target_field = transform.get("target_field") or "migration_exception.unresolved_target"
+            target_entity = target_entity_from_transform(transform)
+            proposed_table_name = f"proposed_{target_entity}"
+            target_identity_id = construct_target_identity_id(group, current, src_value)
+            target_output_id = construct_target_output_id(group, current, src["source_row_key"])
+            actual_value, translation_status = transform_value(src_value, transform)
+            actual_value_type = transform.get("value_type") or "text"
+            actual_hash = stable_hash([target_output_id, target_field, actual_value])
+            cur.execute("INSERT INTO review09_transform_source_field VALUES (%s,%s,%s,%s,%s,%s,%s,%s) ON CONFLICT DO NOTHING", (group, current, src["source_table"], src["source_row_key"], src_value, src["source_hash"], src["classification"], src["disposition"]))
             inserts["source"] += cur.rowcount
-            cur.execute("INSERT INTO review09_transform_target_identity VALUES (%s,%s,%s,%s,%s) ON CONFLICT DO NOTHING", (identity["target_identity_id"], group, current, src["source_row_key"], identity["target_entity"]))
+            cur.execute("INSERT INTO review09_transform_target_identity VALUES (%s,%s,%s,%s,%s,%s) ON CONFLICT DO NOTHING", (target_identity_id, group, current, src["source_row_key"], target_entity, proposed_table_name))
             inserts["target_identity"] += cur.rowcount
-            cur.execute("INSERT INTO review09_transform_target_field VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) ON CONFLICT DO NOTHING", (exp_target["target_output_id"], group, current, src["source_row_key"], identity["target_identity_id"], exp_target["target_field"], actual_value, "text", actual_hash, translation_status))
+            cur.execute("INSERT INTO review09_transform_target_field VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) ON CONFLICT DO NOTHING", (target_output_id, group, current, src["source_row_key"], target_identity_id, target_entity, target_field, actual_value, actual_value_type, actual_hash, translation_status))
             inserts["target"] += cur.rowcount
             if transform.get("requires_archive"):
-                arc = exp_archives.get(current)
-                if arc:
-                    cur.execute("INSERT INTO review09_transform_archive VALUES (%s,%s,%s,%s,%s,%s) ON CONFLICT DO NOTHING", (arc["archive_id"], group, current, src["source_row_key"], str(src["source_value"]), stable_hash([src["source_row_key"], current, str(src["source_value"])])))
-                    inserts["archive"] += cur.rowcount
+                archive_id = construct_archive_id(group, current, src_value)
+                cur.execute("INSERT INTO review09_transform_archive VALUES (%s,%s,%s,%s,%s,%s) ON CONFLICT DO NOTHING", (archive_id, group, current, src["source_row_key"], src_value, stable_hash([src["source_row_key"], current, src_value])))
+                inserts["archive"] += cur.rowcount
             if transform.get("requires_exception"):
-                exc = exp_exceptions.get(current)
-                if exc:
-                    cur.execute("INSERT INTO review09_transform_exception VALUES (%s,%s,%s,%s,%s,%s) ON CONFLICT DO NOTHING", (exc["exception_id"], group, current, src["source_row_key"], exc["owner"], exc["exception_reason"]))
-                    inserts["exception"] += cur.rowcount
+                exception_id = construct_exception_id(group, current, src_value)
+                owner = transform.get("exception_owner") or "SDA migration-exception owner for unresolved/institutional decisions"
+                reason = transform.get("exception_reason") or "controlled translation or formal exception path exercised"
+                cur.execute("INSERT INTO review09_transform_exception VALUES (%s,%s,%s,%s,%s,%s) ON CONFLICT DO NOTHING", (exception_id, group, current, src["source_row_key"], owner, reason))
+                inserts["exception"] += cur.rowcount
             if transform.get("requires_final_fk"):
-                cw = exp_crosswalks.get(current)
-                if cw:
-                    cur.execute("INSERT INTO review09_transform_crosswalk VALUES (%s,%s,%s,%s,%s,%s,%s,%s) ON CONFLICT DO NOTHING", (cw["crosswalk_id"], group, current, src["source_row_key"], str(src["source_value"]), cw["target_identity_id"], cw["final_canonical_fk"], cw["target_entity"]))
-                    inserts["crosswalk"] += cur.rowcount
-            rel = exp_relationships.get(current)
-            if rel and transform.get("relationship_kind") != "__omit__":
-                cur.execute("INSERT INTO review09_transform_relationship VALUES (%s,%s,%s,%s,%s,%s) ON CONFLICT DO NOTHING", (rel["relationship_id"], group, current, src["source_row_key"], rel["target_output_id"], rel["relationship_kind"]))
+                crosswalk_id = construct_crosswalk_id(group, current)
+                final_canonical_fk = target_identity_id
+                cur.execute("INSERT INTO review09_transform_crosswalk VALUES (%s,%s,%s,%s,%s,%s,%s,%s) ON CONFLICT DO NOTHING", (crosswalk_id, group, current, src["source_row_key"], src_value, target_identity_id, final_canonical_fk, target_entity))
+                inserts["crosswalk"] += cur.rowcount
+            if transform.get("relationship_kind") != "__omit__":
+                relationship_id = construct_relationship_id(group, current, target_output_id)
+                relationship_kind = transform.get("relationship_kind") or "source-to-target-field-output"
+                cur.execute("INSERT INTO review09_transform_relationship VALUES (%s,%s,%s,%s,%s,%s) ON CONFLICT DO NOTHING", (relationship_id, group, current, src["source_row_key"], target_output_id, relationship_kind))
                 inserts["relationship"] += cur.rowcount
     return dict(inserts)
 
@@ -213,7 +251,7 @@ def observed_rows(cur) -> list[dict[str, Any]]:
     cur.execute("""
         SELECT s.transform_group_id, s.current_field, s.source_table, s.source_row_key, s.source_value,
                s.source_hash, s.classification, s.disposition,
-               i.target_identity_id,
+               i.target_identity_id, i.target_entity,
                t.target_output_id, t.target_field, t.actual_target_value, t.actual_value_type, t.actual_target_hash, t.translation_status,
                a.archive_id, e.exception_id, x.crosswalk_id, x.final_canonical_fk,
                COUNT(r.relationship_id)::int AS relationship_count
@@ -225,7 +263,7 @@ def observed_rows(cur) -> list[dict[str, Any]]:
         LEFT JOIN review09_transform_crosswalk x USING (transform_group_id, current_field, source_row_key, target_identity_id)
         LEFT JOIN review09_transform_relationship r USING (transform_group_id, current_field, source_row_key, target_output_id)
         GROUP BY s.transform_group_id, s.current_field, s.source_table, s.source_row_key, s.source_value,
-                 s.source_hash, s.classification, s.disposition, i.target_identity_id,
+                 s.source_hash, s.classification, s.disposition, i.target_identity_id, i.target_entity,
                  t.target_output_id, t.target_field, t.actual_target_value, t.actual_value_type, t.actual_target_hash,
                  t.translation_status, a.archive_id, e.exception_id, x.crosswalk_id, x.final_canonical_fk
         ORDER BY s.current_field
@@ -270,6 +308,7 @@ def compare_observed_expected(rows: list[dict[str, Any]], expected: dict[str, An
             continue
         checks = {
             "source-row-identity": row["source_row_key"] == e["source_row_key"],
+            "target-structure": bool(e.get("target_identity")) and row.get("target_identity_id") == e["target_identity"]["target_identity_id"] and row.get("target_output_id") == e["target_output_id"] and row.get("target_field") == e["target_field"],
             "target-value": row["actual_target_value"] == e["expected_target_value"] and row["actual_value_type"] == e["expected_value_type"],
             "no-loss-count": True,
             "no-loss-value-hash": row["actual_target_hash"] == e["expected_target_hash"],
@@ -295,6 +334,7 @@ def compare_observed_expected(rows: list[dict[str, Any]], expected: dict[str, An
                 "source_value_hash": row["source_hash"],
                 "target_output_id": row.get("target_output_id"),
                 "target_identity_id": row.get("target_identity_id"),
+                "target_entity": row.get("target_entity"),
                 "target_field": row.get("target_field"),
                 "target_value_hash": row.get("actual_target_hash"),
                 "final_canonical_fk": row.get("final_canonical_fk"),
@@ -310,6 +350,8 @@ def compare_observed_expected(rows: list[dict[str, Any]], expected: dict[str, An
                     errors.append(f"owned-exception failed for {row['current_field']}: missing exception or exception mismatch")
                 elif cls == "reference-final-fk":
                     errors.append(f"reference-final-fk failed for {row['current_field']}: unresolved or mismatched real FK")
+                elif cls == "target-structure":
+                    errors.append(f"target-structure failed for {row['current_field']}: target identity/output/field mismatch")
                 elif cls == "target-value":
                     errors.append(f"target-value failed for {row['current_field']}: expected {e['expected_target_value']} got {row.get('actual_target_value')}")
                 elif cls == "no-loss-value-hash":
@@ -387,14 +429,14 @@ def failure_tests(source: dict[str, Any], expected: dict[str, Any], implementati
     tests = []
     cases = []
     # Pick stable rows for mutations.
-    cases.append(("wrong-transform-implementation", "implementation", "wrong transformed value", lambda s,e,i: (s, e, _mutate_impl_value(i))))
+    cases.append(("wrong-transform-implementation", "implementation", "target-structure", lambda s,e,i: (s, e, _mutate_impl_target_field(i))))
     cases.append(("wrong-independently-expected-target-value", "expected", "target-value", lambda s,e,i: (s, _mutate_expected_value(e), i)))
     cases.append(("invalid-controlled-translation", "implementation", "target-value", lambda s,e,i: (s, e, _mutate_controlled_translation(i))))
     cases.append(("unresolved-real-fk", "expected", "reference-final-fk", lambda s,e,i: (s, _mutate_crosswalk_fk(e), i)))
-    cases.append(("missing-target-identity", "expected", "missing expected", lambda s,e,i: (s, _mutate_remove_identity(e), i)))
+    cases.append(("missing-target-identity", "expected", "target-structure", lambda s,e,i: (s, _mutate_remove_identity(e), i)))
     cases.append(("missing-archive", "implementation", "archive-created", lambda s,e,i: (s, e, _mutate_impl_skip_archive(i, e))))
     cases.append(("missing-exception", "implementation", "owned-exception", lambda s,e,i: (s, e, _mutate_impl_skip_exception(i, e))))
-    cases.append(("duplicate-output", "source", "unexpected observed", lambda s,e,i: (_mutate_duplicate_source(s), e, i)))
+    cases.append(("duplicate-output", "source", "duplicate output", lambda s,e,i: (_mutate_duplicate_source(s), e, i)))
     cases.append(("lost-relationship", "implementation", "target-value", lambda s,e,i: (s, e, _mutate_impl_lost_relationship(i))))
     cases.append(("mismatched-hash", "expected", "no-loss-value-hash", lambda s,e,i: (s, _mutate_expected_hash(e), i)))
     for name, surface, expected_reason, mutator in cases:
@@ -402,10 +444,12 @@ def failure_tests(source: dict[str, Any], expected: dict[str, Any], implementati
             ms, me, mi = mutator(source, expected, implementation)
             result = run_suite(ms, me, mi)
             errors = result["comparison_errors"] + result["idempotency"]["errors"]
-            matched = any(expected_reason in err or expected_reason in str(result.get("assertions", [])[:20]) for err in errors)
-            tests.append({"mutation": name, "mutated_surface": surface, "expected_reason": expected_reason, "status": "caught" if matched or errors else "missed", "observed_errors": errors[:8]})
-        except Exception as exc:
-            tests.append({"mutation": name, "mutated_surface": surface, "expected_reason": expected_reason, "status": "caught", "observed_errors": [type(exc).__name__ + ": " + str(exc)[:300]]})
+            assertion_text = json.dumps(result.get("assertions", [])[:50], sort_keys=True)
+            matched = any(expected_reason in err for err in errors) or expected_reason in assertion_text
+            tests.append({"mutation": name, "mutated_surface": surface, "expected_reason": expected_reason, "status": "caught" if matched else "missed", "observed_errors": errors[:8]})
+        except (KeyError, ValueError, psycopg.Error) as exc:
+            msg = type(exc).__name__ + ": " + str(exc)[:300]
+            tests.append({"mutation": name, "mutated_surface": surface, "expected_reason": expected_reason, "status": "caught" if expected_reason in msg else "unrelated-error", "observed_errors": [msg]})
     return tests
 
 
@@ -492,6 +536,13 @@ def _mutate_controlled_translation(i):
                 t["controlled_value_map"] = {k: "__invalid_translation__" for k in (t.get("controlled_value_map") or {"x":"y"})}
                 return i
     i["fixtures"][0]["transforms"][0]["operation"] = "controlled-map"; i["fixtures"][0]["transforms"][0]["controlled_value_map"] = {"123":"__invalid_translation__"}; return i
+
+
+def _mutate_impl_target_field(i):
+    i = copy.deepcopy(i)
+    i["fixtures"][0]["transforms"][0]["target_field"] = "wrong_entity.wrong_field"
+    i["fixtures"][0]["transforms"][0]["target_entity"] = "wrong_entity"
+    return i
 
 
 def md_report(report: dict[str, Any]) -> str:
