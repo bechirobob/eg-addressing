@@ -13,7 +13,7 @@ Draft PR #7 remains draft and unmerged. NLI-WO-002B remains unauthorized.
 - Frontend CI run `29337375180`: **success**
   - `frontend` job `87099934523`: success
 
-Final PR-head CI after this evidence-only closeout commit is recorded in the SDA Review 07 request comment.
+Final PR-head CI after this evidence closeout is recorded in the SDA Review 07 request comment.
 
 ## Review 06 remediation commits
 
@@ -27,11 +27,11 @@ Final PR-head CI after this evidence-only closeout commit is recorded in the SDA
 
 | Criterion | Status | Assertion | Evidence | Remaining condition |
 |---|---|---|---|---|
-| AC-01 | READY FOR SDA REVIEW | pg_catalog inventory generated from disposable migrated PostGIS DB: 25 tables, 237 fields, ledger included. | Review 07 semantic-design CI exact-head run; design report `Generated checks: 41`, `Errors: 0`. | SDA acceptance pending |
-| AC-02 | READY FOR SDA REVIEW | `location_record` remains sole canonical anchor; subject registry/crosswalks prevent second address authority. | Target model, subject registry checks, reviewed transformation registry. | SDA acceptance pending |
+| AC-01 | READY FOR SDA REVIEW | pg_catalog inventory generated from disposable migrated PostGIS DB: 25 tables, 237 fields, ledger included. | Review 07 semantic-design CI exact-head run; design report Generated checks: 41, Errors: 0. | SDA acceptance pending |
+| AC-02 | READY FOR SDA REVIEW | location_record remains sole canonical anchor; subject registry/crosswalks prevent second address authority. | Target model, subject registry checks, reviewed transformation registry. | SDA acceptance pending |
 | AC-03 | READY FOR SDA REVIEW | administrative code history and name history are separated from identity. | Target registry and target schema validation. | SDA acceptance pending |
 | AC-04 | READY FOR SDA REVIEW | operational area lifecycle remains separate from administrative units. | Controlled vocabulary/lifecycle registry. | SDA acceptance pending |
-| AC-05 | READY FOR SDA REVIEW | record/object matrix is keyed by actual canonical `record_type` values, not `standard-address`. | Executed target schema and semantic checker. | SDA acceptance pending |
+| AC-05 | READY FOR SDA REVIEW | record/object matrix is keyed by actual canonical record_type values, not standard-address. | Executed target schema and semantic checker. | SDA acceptance pending |
 | AC-06 | READY FOR SDA REVIEW | internal IDs, public aliases and legacy crosswalks are separated with exact reference-crosswalk joins. | Reviewed transformation rows and ADR-005. | SDA acceptance pending |
 | AC-07 | READY FOR SDA REVIEW | lifecycle graphs load into executable transition policy and are checked for field bindings/edge metadata. | Lifecycle registry and target helper table catalog. | SDA acceptance pending |
 | AC-08 | READY FOR SDA REVIEW | version, alias and geometry supersession rules include no-self/reciprocal/same-owner/acyclic checks. | Target SQL triggers and negative execution. | SDA acceptance pending |
@@ -46,8 +46,8 @@ Final PR-head CI after this evidence-only closeout commit is recorded in the SDA
 | AC-17 | READY FOR SDA REVIEW | convergence plan is rebuilt after accepted transformation rows and no longer uses pseudo-ASSERT validation. | Schema convergence plan. | SDA acceptance pending |
 | AC-18 | READY FOR SDA REVIEW | seven scenario builders insert 324 target rows and execute seven negative cases. | Machine-readable fixtures and target report. | SDA acceptance pending |
 | AC-19 | READY FOR SDA REVIEW | scale assumptions remain explicitly review inputs, not implementation authorization. | Convergence plan and Review 06 resolution log. | SDA acceptance pending |
-| AC-20 | READY FOR SDA REVIEW | dependency-safe target SQL executes in disposable PostGIS and catalog parity is checked. | `sda-design-model` job `87099934876`. | SDA acceptance pending |
-| AC-21 | READY FOR SDA REVIEW | ADRs 005–009 are hand-maintained source docs with Review 07 assertion reconciliation. | ADRs 005–009. | SDA acceptance pending |
+| AC-20 | READY FOR SDA REVIEW | dependency-safe target SQL executes in disposable PostGIS and catalog parity is checked. | sda-design-model job evidence; final PR-head job IDs are in the Review 07 request comment. | SDA acceptance pending |
+| AC-21 | READY FOR SDA REVIEW | ADRs 005-009 are hand-maintained source docs with Review 07 assertion reconciliation. | ADRs 005-009. | SDA acceptance pending |
 | AC-22 | READY FOR SDA REVIEW | PR #7 excludes runtime code, executable migrations, app code, production data and env files; migration-ledger fix is split to PR #8. | Changed-path proof and PR state. | SDA acceptance pending |
 
 ## Changed-path proof

@@ -1491,33 +1491,97 @@ def render_adrs() -> None:
 def render_evidence(cat: dict[str, Any], ops: dict[str, Any], registry: list[dict[str, Any]], target_report: dict[str, Any]) -> None:
     ac_rows = []
     assertions = {
-        "AC-01": f"pg_catalog inventory generated from disposable migrated PostGIS DB: {len(cat['tables'])} tables, {sum(len(t['columns']) for t in cat['tables'].values())} fields, ledger included.",
-        "AC-02": "location_record remains sole canonical anchor; subject registry/crosswalks prevent second address authority.",
-        "AC-03": "administrative_code_history and name history added for mutable official codes/names.",
-        "AC-04": "operational_area lifecycle separated from administrative units.",
-        "AC-05": "object vocabularies/cardinality and fixture validation included.",
-        "AC-06": "ULID-compatible canonical ids plus legacy_crosswalk; public aliases release-gated.",
-        "AC-07": "separate lifecycle vocabularies and transition matrices generated.",
-        "AC-08": "effective/recorded intervals and current/exclusion/chain rules in target SQL/design.",
-        "AC-09": "geometry observation/version model physically validates SRID/type/current role and lineage.",
-        "AC-10": "name_record plus current official Spanish unique rule and history model.",
-        "AC-11": "source_payload_archive preserves restricted raw values beyond hashes.",
-        "AC-12": "current and target classifications included in catalog/mapping/OpenAPI fields.",
-        "AC-13": "field-to-vocabulary registry and transition graph validated.",
-        "AC-14": f"target schema executed; {target_report['constraint_count']} constraints and {target_report['index_count']} indexes cataloged.",
-        "AC-15": f"OpenAPI inventory generated for {len(ops['operations'])} operations with auth, request, response and status fields.",
-        "AC-16": f"transformation registry covers {len(registry)} current fields with preservation/exception/validation.",
-        "AC-17": "convergence plan rebuilt by target owner/field groups with crosswalk/exception/idempotency/cutover gates.",
-        "AC-18": f"machine-readable fixtures inserted: {target_report['inserted_fixture_rows']} rows into target schema.",
-        "AC-19": "scale plan includes workload, storage, retention, concurrency and query assumptions.",
-        "AC-20": "dependency-safe target SQL executed in disposable PostGIS schema and catalog compared to typed model.",
-        "AC-21": "ADRs 005-009 hand-authored with alternatives, security/privacy, operations, migration, failures and tests.",
-        "AC-22": "changed-path proof excludes runtime code, executable migrations, app code and production data; PR remains draft.",
+        1: f"pg_catalog inventory generated from disposable migrated PostGIS DB: {len(cat['tables'])} tables, {sum(len(t['columns']) for t in cat['tables'].values())} fields, ledger included.",
+        2: "location_record remains sole canonical anchor; subject registry/crosswalks prevent second address authority.",
+        3: "administrative code history and name history are separated from identity.",
+        4: "operational area lifecycle remains separate from administrative units.",
+        5: "record/object matrix is keyed by actual canonical record_type values, not standard-address.",
+        6: "internal IDs, public aliases and legacy crosswalks are separated with exact reference-crosswalk joins.",
+        7: "lifecycle graphs load into executable transition policy and are checked for field bindings/edge metadata.",
+        8: "version, alias and geometry supersession rules include no-self/reciprocal/same-owner/acyclic checks.",
+        9: "geometry promotion requires authorized decision, evidence object, authority scope, accepted quality and same-subject/role supersession.",
+        10: "name records and subject integrity are enforced through registry-subject FK and current-name rule.",
+        11: "governed archive and source/crosswalk joins preserve original facts and exception paths.",
+        12: "classifications are explicit in current/target mapping and API contracts.",
+        13: "field-to-vocabulary registry and transition graphs are validated.",
+        14: f"target schema executed; constraints, indexes, triggers and helper policy tables cataloged.",
+        15: f"{len(ops['operations'])} OpenAPI operations have exact method/path/handler/auth/roles and concrete projection contracts.",
+        16: f"transformation registry covers {len(registry)} current fields with executable SELECT no-loss assertions and reference joins.",
+        17: "convergence plan is rebuilt after accepted transformation rows and no longer uses pseudo-ASSERT validation.",
+        18: f"seven scenario builders insert {target_report['inserted_fixture_rows']} target rows and execute seven negative cases.",
+        19: "scale assumptions remain explicitly review inputs, not implementation authorization.",
+        20: "dependency-safe target SQL executes in disposable PostGIS and catalog parity is checked.",
+        21: "ADRs 005-009 are hand-maintained source docs with Review 07 assertion reconciliation.",
+        22: "PR #7 excludes runtime code, executable migrations, app code, production data and env files; migration-ledger fix is split to PR #8.",
+    }
+    evidence = {
+        1: "Review 07 semantic-design CI exact-head run; design report Generated checks: 41, Errors: 0.",
+        2: "Target model, subject registry checks, reviewed transformation registry.",
+        3: "Target registry and target schema validation.",
+        4: "Controlled vocabulary/lifecycle registry.",
+        5: "Executed target schema and semantic checker.",
+        6: "Reviewed transformation rows and ADR-005.",
+        7: "Lifecycle registry and target helper table catalog.",
+        8: "Target SQL triggers and negative execution.",
+        9: "Target model, target SQL trigger and scenario fixtures.",
+        10: "Target schema validation.",
+        11: "Reviewed transformation registry.",
+        12: "API projection contracts and field registry.",
+        13: "Controlled vocabularies and lifecycle transitions.",
+        14: "Target schema validation report.",
+        15: "Route policy and projection contract registries.",
+        16: "Transformation registry and semantic checker.",
+        17: "Schema convergence plan.",
+        18: "Machine-readable fixtures and target report.",
+        19: "Convergence plan and Review 06 resolution log.",
+        20: "sda-design-model job evidence; final PR-head job IDs are in the Review 07 request comment.",
+        21: "ADRs 005-009.",
+        22: "Changed-path proof and PR state.",
     }
     for i in range(1, 23):
         ac = f"AC-{i:02d}"
-        ac_rows.append([ac, "READY FOR SDA REVIEW", assertions[ac], "Review 07 semantic-design CI exact-head run; final IDs stamped after green CI", "SDA acceptance pending"])
-    write("docs/sda/evidence/NLI-WO-002-pull-request-evidence.md", "# NLI-WO-002 Pull Request Evidence — Review 07\n\n" + FINAL_HEAD_NOTE + "\n\n## Criterion-specific evidence matrix\n\n" + md_table(["Criterion", "Status", "Assertion", "Evidence", "Remaining condition"], ac_rows) + "\n\n## Changed-path proof\n\nGenerated at final closeout after push; scope guard requires no `services/api/**`, `infra/migrations/**`, `apps/**`, `infra/docker/**`, `data/**`, or `.env*` changes. The only permitted non-docs change is `.github/workflows/api-ci.yml` for SDA design CI.\n")
+        ac_rows.append([ac, "READY FOR SDA REVIEW", assertions[i], evidence[i], "SDA acceptance pending"])
+    header = """# NLI-WO-002 Pull Request Evidence — Review 07
+
+Draft PR #7 remains draft and unmerged. NLI-WO-002B remains unauthorized.
+
+## Exact implementation head validated before evidence closeout
+
+- Implementation/stamp head validated by GitHub Actions: `f36cda7d68a6131ffdd1c11b86d2569860686788`
+- API CI run `29337375340`: **success**
+  - `migration-lifecycle` job `87099934845`: success
+  - `api-image-runtime` job `87099934865`: success
+  - `sda-design-model` job `87099934876`: success
+  - `api-tests` job `87099934897`: success
+- Frontend CI run `29337375180`: **success**
+  - `frontend` job `87099934523`: success
+
+Final PR-head CI after this evidence closeout is recorded in the SDA Review 07 request comment.
+
+## Review 06 remediation commits
+
+| Purpose | Commit |
+|---|---|
+| Review 06 semantic remediation | `1cf7d555a08de750c580b87de14bc2020dc7a052` |
+| Review 06 resolution evidence stamp | `f36cda7d68a6131ffdd1c11b86d2569860686788` |
+| Migration-ledger runtime fix split out | Maintenance PR #8, not PR #7 |
+"""
+    changed_path = """
+## Changed-path proof
+
+Scope guard before closeout found no changes under:
+
+- `services/api/**`
+- `infra/scripts/migrate.py`
+- `infra/migrations/**`
+- `apps/**`
+- `infra/docker/**`
+- `data/**`
+- `.env*`
+
+PR #7 remains a design/evidence PR. The migration-ledger advisory-lock fix is isolated in maintenance PR #8 under NLI-WO-001 database-lifecycle controls.
+"""
+    write("docs/sda/evidence/NLI-WO-002-pull-request-evidence.md", header + "\n## Criterion-specific evidence matrix\n\n" + md_table(["Criterion", "Status", "Assertion", "Evidence", "Remaining condition"], ac_rows) + "\n" + changed_path)
 
 
 def update_review_log(fixing: str = FIXING_COMMIT_PLACEHOLDER) -> None:
