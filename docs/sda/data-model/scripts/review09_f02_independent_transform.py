@@ -93,151 +93,11 @@ def reviewed_artifact_rows() -> tuple[list[dict[str, Any]], dict[str, dict[str, 
     return registry, semantics
 
 
-def author_artifacts_if_missing() -> None:
-    registry, semantics = reviewed_artifact_rows()
-    by_group: dict[str, list[dict[str, Any]]] = defaultdict(list)
-    for row in registry:
-        by_group[row["transform_group_id"]].append(row)
 
-    if not SOURCE_PATH.exists():
-        groups = []
-        for group, rows in sorted(by_group.items()):
-            source_rows = []
-            for row in sorted(rows, key=lambda r: r["current"]):
-                current = row["current"]
-                table = current.split(".", 1)[0]
-                src_row_key = f"{table}:review09:{short_hash(current, 12)}"
-                val = source_value(row)
-                source_rows.append({
-                    "current_field": current,
-                    "source_table": table,
-                    "source_row_key": src_row_key,
-                    "source_value": str(val),
-                    "source_hash": stable_hash([src_row_key, current, str(val)]),
-                    "classification": semantics[current]["classification"],
-                    "disposition": row.get("disposition"),
-                    "review_owner": "System Design Authority / domain owner pending SDA acceptance",
-                    "review_status": "approved-review09-source-fixture",
-                })
-            groups.append({
-                "transform_group_id": group,
-                "source_rows": source_rows,
-                "review_status": "approved-review09-source-fixture",
-                "review_decision_id": f"R09-SOURCE-{short_hash(group, 10)}",
-            })
-        write_json(SOURCE_PATH, {"version": "review09", "fixtures": groups})
-
-    if not EXPECTED_PATH.exists():
-        source_payload = load_json(SOURCE_PATH)
-        source_by_field = {r["current_field"]: r for g in source_payload["fixtures"] for r in g["source_rows"]}
-        groups = []
-        for group, rows in sorted(by_group.items()):
-            target_rows = []
-            target_identities = []
-            crosswalks = []
-            archives = []
-            exceptions = []
-            relationships = []
-            for row in sorted(rows, key=lambda r: r["current"]):
-                current = row["current"]
-                src = source_by_field[current]
-                val = src["source_value"]
-                target_field = row.get("target") or semantics[current].get("target_projection_boundary") or "migration_exception.unresolved_target"
-                expected = expected_value_from_registry(row, val)
-                target_output_id = "r09txout-" + short_hash(f"{group}|{current}|{src['source_row_key']}", 20)
-                target_identity_id = "r09target-" + short_hash(f"target-identity|{group}|{current}|{val}", 20)
-                target_identities.append({
-                    "target_identity_id": target_identity_id,
-                    "target_entity": (target_field.split(".", 1)[0] if "." in target_field else "target_entity"),
-                    "source_row_key": src["source_row_key"],
-                    "current_field": current,
-                })
-                target_rows.append({
-                    "target_output_id": target_output_id,
-                    "target_identity_id": target_identity_id,
-                    "current_field": current,
-                    "source_row_key": src["source_row_key"],
-                    "target_field": target_field,
-                    "expected_target_value": str(expected),
-                    "expected_value_type": "text",
-                    "expected_target_hash": stable_hash([target_output_id, target_field, str(expected)]),
-                    "translation_status": "controlled-or-exception" if row.get("disposition") == "controlled-translation" else "not-controlled",
-                    "classification": semantics[current]["classification"],
-                })
-                reference = row.get("reference_crosswalk_join") if isinstance(row.get("reference_crosswalk_join"), dict) else None
-                if reference:
-                    crosswalks.append({
-                        "crosswalk_id": "r09crosswalk-" + short_hash(f"{group}|{current}", 18),
-                        "current_field": current,
-                        "source_row_key": src["source_row_key"],
-                        "source_value": str(val),
-                        "target_identity_id": target_identity_id,
-                        "final_canonical_fk": target_identity_id,
-                        "target_entity": reference.get("target_entity") or "location_record",
-                    })
-                if row.get("disposition") in {"governed-archive", "formal-exception"}:
-                    archives.append({
-                        "archive_id": "r09archive-" + short_hash(f"{group}|{current}|{val}", 18),
-                        "current_field": current,
-                        "source_row_key": src["source_row_key"],
-                        "archived_value": str(val),
-                        "archive_hash": stable_hash([src["source_row_key"], current, str(val)]),
-                    })
-                if row.get("disposition") in {"controlled-translation", "formal-exception"}:
-                    exceptions.append({
-                        "exception_id": "r09exception-" + short_hash(f"{group}|{current}|{val}", 18),
-                        "current_field": current,
-                        "source_row_key": src["source_row_key"],
-                        "owner": row.get("exception_type_owner") or "SDA migration-exception owner",
-                        "exception_reason": "controlled translation or formal exception path exercised",
-                    })
-                relationships.append({
-                    "relationship_id": "r09rel-" + short_hash(f"{group}|{current}|{target_output_id}", 18),
-                    "current_field": current,
-                    "source_row_key": src["source_row_key"],
-                    "target_output_id": target_output_id,
-                    "relationship_kind": "source-to-target-field-output",
-                })
-            groups.append({
-                "transform_group_id": group,
-                "target_identities": target_identities,
-                "target_rows": target_rows,
-                "crosswalks": crosswalks,
-                "archives": archives,
-                "exceptions": exceptions,
-                "relationships": relationships,
-                "review_status": "approved-review09-expected-target-fixture",
-                "review_decision_id": f"R09-EXPECTED-{short_hash(group, 10)}",
-            })
-        write_json(EXPECTED_PATH, {"version": "review09", "fixtures": groups})
-
-    if not IMPLEMENTATION_PATH.exists():
-        groups = []
-        for group, rows in sorted(by_group.items()):
-            transforms = []
-            for row in sorted(rows, key=lambda r: r["current"]):
-                current = row["current"]
-                controlled = row.get("controlled_value_map") if isinstance(row.get("controlled_value_map"), dict) else {}
-                op = "controlled-map" if controlled else ("formal-exception" if row.get("disposition") == "formal-exception" else "exact-copy")
-                transforms.append({
-                    "current_field": current,
-                    "operation": op,
-                    "target_field": row.get("target"),
-                    "controlled_value_map": controlled,
-                    "requires_archive": row.get("disposition") in {"governed-archive", "formal-exception"},
-                    "requires_exception": row.get("disposition") in {"controlled-translation", "formal-exception"},
-                    "requires_final_fk": isinstance(row.get("reference_crosswalk_join"), dict),
-                    "relationship_kind": "source-to-target-field-output",
-                    "implementation_owner": "Implementation Agent design transform; independent from expected fixture",
-                    "review_status": "approved-review09-transform-implementation",
-                })
-            groups.append({
-                "transform_group_id": group,
-                "transforms": transforms,
-                "review_status": "approved-review09-transform-implementation",
-                "review_decision_id": f"R09-TRANSFORM-{short_hash(group, 10)}",
-            })
-        write_json(IMPLEMENTATION_PATH, {"version": "review09", "fixtures": groups})
+def require_reviewed_inputs() -> None:
+    missing = [str(path.relative_to(ROOT)) for path in (SOURCE_PATH, EXPECTED_PATH, IMPLEMENTATION_PATH) if not path.exists()]
+    if missing:
+        raise SystemExit('Review 10 F02 validation missing required reviewed input(s): ' + ', '.join(missing))
 
 
 def index_by_group(payload: dict[str, Any]) -> dict[str, dict[str, Any]]:
@@ -426,7 +286,7 @@ def compare_observed_expected(rows: list[dict[str, Any]], expected: dict[str, An
         for cls, ok in checks.items():
             assertion_id = f"F02-{cls}-{row['current_field'].replace('.', '-').replace('_', '-')}"
             evidence = {
-                "execution_mode": "review09-independent-source-expected-transform-execution",
+                "execution_mode": "review10-independent-source-expected-transform-execution",
                 "source_fixture": str(SOURCE_PATH.relative_to(ROOT)),
                 "expected_fixture": str(EXPECTED_PATH.relative_to(ROOT)),
                 "transform_implementation": str(IMPLEMENTATION_PATH.relative_to(ROOT)),
@@ -639,7 +499,7 @@ def md_report(report: dict[str, Any]) -> str:
     return "\n".join([
         "# Transformation Fixture Report",
         "",
-        "## Review 09 independent transformation execution",
+        "## Review 10 independent transformation execution",
         "",
         f"- Execution mode: `{s['execution_mode']}`",
         f"- Transform groups: {s['transform_groups']}",
@@ -654,14 +514,14 @@ def md_report(report: dict[str, Any]) -> str:
 
 
 def main() -> None:
-    author_artifacts_if_missing()
+    require_reviewed_inputs()
     registry, semantics = reviewed_artifact_rows()
     source = load_json(SOURCE_PATH)
     expected = load_json(EXPECTED_PATH)
     implementation = load_json(IMPLEMENTATION_PATH)
     input_errors = validate_independent_inputs(source, expected, implementation, registry)
     if input_errors:
-        raise SystemExit("Review 09 F02 independent inputs failed:\n- " + "\n- ".join(input_errors[:80]))
+        raise SystemExit("Review 10 F02 independent inputs failed:\n- " + "\n- ".join(input_errors[:80]))
     suite = run_suite(source, expected, implementation)
     failures = failure_tests(source, expected, implementation)
     caught = len([f for f in failures if f["status"] == "caught"])
@@ -669,7 +529,7 @@ def main() -> None:
     assertions = suite["assertions"]
     report = {
         "summary": {
-            "execution_mode": "review09-independent-source-expected-transform-execution",
+            "execution_mode": "review10-independent-source-expected-transform-execution",
             "source_fixture": str(SOURCE_PATH.relative_to(ROOT)),
             "expected_fixture": str(EXPECTED_PATH.relative_to(ROOT)),
             "transform_implementation": str(IMPLEMENTATION_PATH.relative_to(ROOT)),
@@ -695,7 +555,7 @@ def main() -> None:
     REPORT_MD_PATH.write_text(md_report(report), encoding="utf-8")
     print(json.dumps(report["summary"], sort_keys=True))
     if errors:
-        raise SystemExit("Review 09 F02 failed")
+        raise SystemExit("Review 10 F02 failed")
 
 
 if __name__ == "__main__":
