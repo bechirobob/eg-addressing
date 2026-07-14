@@ -1980,7 +1980,7 @@ def render_adrs() -> None:
 
 
 def render_evidence(cat: dict[str, Any], ops: dict[str, Any], registry: list[dict[str, Any]], target_report: dict[str, Any]) -> None:
-    report = target_report.get("report", {}) if isinstance(target_report, dict) else {}
+    report = target_report if isinstance(target_report, dict) else {}
     mutation_summary = json.loads((DM / "semantic-mutation-test-report.json").read_text(encoding="utf-8")).get("summary", {}) if (DM / "semantic-mutation-test-report.json").exists() else {}
     api_projection_summary = json.loads((DM / "openapi-policy-projection-assertions.json").read_text(encoding="utf-8")).get("summary", {}) if (DM / "openapi-policy-projection-assertions.json").exists() else {}
     scenario_assertions = report.get("review07_scenario_assertions", {}) if isinstance(report, dict) else {}
