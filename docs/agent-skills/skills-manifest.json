@@ -1,0 +1,251 @@
+{
+  "schema_version": 1,
+  "programme": "Equatorial Guinea National Location Infrastructure",
+  "authority": "Subordinate to AGENTS.md, active SDA work orders, accepted ADRs, and mandatory standards",
+  "layers": {
+    "cross-cutting": "Delivery, governance, assurance, and evidence procedures used across every module",
+    "project-domain": "Product, bounded-domain, application, platform, operations, and programme capabilities covering the whole project"
+  },
+  "skills": [
+    {
+      "id": "01",
+      "slug": "task-intake-and-routing",
+      "title": "Task Intake and Routing",
+      "layer": "cross-cutting",
+      "triggers": ["new task", "ambiguous request", "follow-up request", "work handoff"],
+      "project_surfaces": ["all"]
+    },
+    {
+      "id": "02",
+      "slug": "repository-reconnaissance",
+      "title": "Repository Reconnaissance",
+      "layer": "cross-cutting",
+      "triggers": ["unfamiliar area", "current-state audit", "source-of-truth uncertainty", "review investigation"],
+      "project_surfaces": ["repository", "applications", "database", "infrastructure", "documentation"]
+    },
+    {
+      "id": "03",
+      "slug": "work-order-planning-and-traceability",
+      "title": "Work-Order Planning and Traceability",
+      "layer": "cross-cutting",
+      "triggers": ["active work order", "acceptance criteria", "SDA directive"],
+      "project_surfaces": ["programme governance", "all implementation"]
+    },
+    {
+      "id": "04",
+      "slug": "rfi-and-architecture-decisions",
+      "title": "RFI and Architecture Decisions",
+      "layer": "cross-cutting",
+      "triggers": ["architecture choice", "authority ambiguity", "new dependency", "data loss", "public or official decision"],
+      "project_surfaces": ["architecture", "data", "identity", "publication", "GIS", "security", "operations"]
+    },
+    {
+      "id": "05",
+      "slug": "scope-git-and-exact-head-control",
+      "title": "Scope, Git, and Exact-Head Control",
+      "layer": "cross-cutting",
+      "triggers": ["branch", "PR", "scope boundary", "exact-head evidence", "unrelated defect"],
+      "project_surfaces": ["repository", "GitHub", "release evidence"]
+    },
+    {
+      "id": "06",
+      "slug": "database-migrations-and-postgis",
+      "title": "Database Migrations and PostGIS",
+      "layer": "cross-cutting",
+      "triggers": ["schema", "migration", "reference data", "fixtures", "PostGIS", "data transition", "restore compatibility"],
+      "project_surfaces": ["PostgreSQL", "PostGIS", "infra/migrations", "infra/scripts"]
+    },
+    {
+      "id": "07",
+      "slug": "data-model-and-semantic-consistency",
+      "title": "Data Model and Semantic Consistency",
+      "layer": "cross-cutting",
+      "triggers": ["canonical model", "field mapping", "vocabulary", "temporal model", "identifier", "convergence"],
+      "project_surfaces": ["administrative geography", "location registry", "analytics", "integrations"]
+    },
+    {
+      "id": "08",
+      "slug": "api-identity-and-authorization",
+      "title": "API, Identity, and Authorization",
+      "layer": "cross-cutting",
+      "triggers": ["API", "OpenAPI", "authentication", "session", "role", "permission", "scope", "service client"],
+      "project_surfaces": ["public API", "operator API", "partner API", "identity and trust"]
+    },
+    {
+      "id": "09",
+      "slug": "security-privacy-audit-and-evidence",
+      "title": "Security, Privacy, Audit, and Evidence",
+      "layer": "cross-cutting",
+      "triggers": ["sensitive data", "evidence", "audit", "export", "retention", "secret", "privileged action"],
+      "project_surfaces": ["all trust zones", "identity", "evidence storage", "audit", "publication"]
+    },
+    {
+      "id": "10",
+      "slug": "gis-and-geometry-governance",
+      "title": "GIS and Geometry Governance",
+      "layer": "cross-cutting",
+      "triggers": ["coordinates", "geometry", "boundary", "CRS", "accuracy", "geocoding", "spatial quality"],
+      "project_surfaces": ["administrative geography", "location registry", "field operations", "public maps"]
+    },
+    {
+      "id": "11",
+      "slug": "ui-workflows-accessibility-and-localization",
+      "title": "UI Workflows, Accessibility, and Localization",
+      "layer": "cross-cutting",
+      "triggers": ["UI", "workflow", "form", "accessibility", "Spanish", "English", "screenshot"],
+      "project_surfaces": ["public portal", "operator portal", "field app", "reports", "documents"]
+    },
+    {
+      "id": "12",
+      "slug": "testing-ci-and-release-evidence",
+      "title": "Testing, CI, and Release Evidence",
+      "layer": "cross-cutting",
+      "triggers": ["test", "CI", "negative case", "release gate", "runtime proof", "deterministic generation"],
+      "project_surfaces": ["all"]
+    },
+    {
+      "id": "13",
+      "slug": "operations-backup-and-disaster-recovery",
+      "title": "Operations, Backup, and Disaster Recovery",
+      "layer": "cross-cutting",
+      "triggers": ["health", "readiness", "backup", "restore", "runbook", "incident", "DR"],
+      "project_surfaces": ["operations", "database", "object storage", "identity", "infrastructure"]
+    },
+    {
+      "id": "14",
+      "slug": "controlled-documentation-and-decisions",
+      "title": "Controlled Documentation and Decisions",
+      "layer": "cross-cutting",
+      "triggers": ["ADR", "RFI", "work order", "standard", "runbook", "review record", "training document"],
+      "project_surfaces": ["documentation", "programme governance", "all modules"]
+    },
+    {
+      "id": "15",
+      "slug": "pr-evidence-and-review-remediation",
+      "title": "Pull-Request Evidence and Review Remediation",
+      "layer": "cross-cutting",
+      "triggers": ["draft PR", "SDA finding", "review remediation", "acceptance preparation"],
+      "project_surfaces": ["GitHub", "programme governance", "all modules"]
+    },
+    {
+      "id": "16",
+      "slug": "system-architecture-and-domain-boundaries",
+      "title": "System Architecture and Domain Boundaries",
+      "layer": "project-domain",
+      "triggers": ["architecture", "bounded domain", "trust zone", "module ownership", "service extraction", "dependency direction"],
+      "project_surfaces": ["entire system", "modular monolith", "public/operator/partner/data/operations zones"]
+    },
+    {
+      "id": "17",
+      "slug": "frontend-applications-and-design-system",
+      "title": "Frontend Applications and Design System",
+      "layer": "project-domain",
+      "triggers": ["Next.js", "TypeScript", "portal", "component", "design system", "browser state"],
+      "project_surfaces": ["apps/admin-portal", "apps/field-app", "packages/ui"]
+    },
+    {
+      "id": "18",
+      "slug": "backend-services-and-domain-logic",
+      "title": "Backend Services and Domain Logic",
+      "layer": "project-domain",
+      "triggers": ["FastAPI", "application service", "domain logic", "persistence adapter", "transaction", "backend refactor"],
+      "project_surfaces": ["services/api", "packages/types", "domain modules"]
+    },
+    {
+      "id": "19",
+      "slug": "citizen-portal-and-public-services",
+      "title": "Citizen Portal and Public Services",
+      "layer": "project-domain",
+      "triggers": ["public lookup", "citizen submission", "tracking", "correction report", "public proof", "privacy notice"],
+      "project_surfaces": ["public portal", "citizen geotagging", "public API"]
+    },
+    {
+      "id": "20",
+      "slug": "registry-operations-and-case-management",
+      "title": "Registry Operations and Case Management",
+      "layer": "project-domain",
+      "triggers": ["registry", "operator case", "road", "building", "address", "hold", "bulk registry action"],
+      "project_surfaces": ["operator portal", "location registry", "administrative geography"]
+    },
+    {
+      "id": "21",
+      "slug": "field-operations-mobile-and-offline-sync",
+      "title": "Field Operations, Mobile, and Offline Synchronization",
+      "layer": "project-domain",
+      "triggers": ["enumerator", "supervisor", "field assignment", "offline", "sync", "device", "recapture"],
+      "project_surfaces": ["apps/field-app", "field workflow", "worker", "PostGIS"]
+    },
+    {
+      "id": "22",
+      "slug": "verification-quality-and-evidence-review",
+      "title": "Verification, Quality, and Evidence Review",
+      "layer": "project-domain",
+      "triggers": ["verification", "quality", "duplicate", "evidence review", "discrepancy", "recapture"],
+      "project_surfaces": ["verification module", "evidence and verification", "operator portal"]
+    },
+    {
+      "id": "23",
+      "slug": "publication-corrections-certificates-and-signage",
+      "title": "Publication, Corrections, Certificates, and Signage",
+      "layer": "project-domain",
+      "triggers": ["publication", "release", "correction", "dispute", "certificate", "QR", "signage", "revocation"],
+      "project_surfaces": ["publication module", "public proof", "signage export", "partner release"]
+    },
+    {
+      "id": "24",
+      "slug": "agency-integrations-notifications-and-interoperability",
+      "title": "Agency Integrations, Notifications, and Interoperability",
+      "layer": "project-domain",
+      "triggers": ["agency", "partner", "machine identity", "webhook", "notification", "batch exchange", "reconciliation"],
+      "project_surfaces": ["integrations module", "partner zone", "worker", "notifications"]
+    },
+    {
+      "id": "25",
+      "slug": "import-export-worker-and-batch-processing",
+      "title": "Import, Export, Worker, and Batch Processing",
+      "layer": "project-domain",
+      "triggers": ["import", "export", "worker", "queue", "retry", "batch", "artifact", "scheduled job"],
+      "project_surfaces": ["services/worker", "imports", "exports", "reports", "object storage"]
+    },
+    {
+      "id": "26",
+      "slug": "reporting-analytics-and-national-data-products",
+      "title": "Reporting, Analytics, and National Data Products",
+      "layer": "project-domain",
+      "triggers": ["report", "dashboard", "KPI", "analytics", "statistics", "data product", "governed extract"],
+      "project_surfaces": ["reporting module", "analytics plane", "national statistics", "operator dashboards"]
+    },
+    {
+      "id": "27",
+      "slug": "infrastructure-environments-and-platform-engineering",
+      "title": "Infrastructure, Environments, and Platform Engineering",
+      "layer": "project-domain",
+      "triggers": ["Docker", "environment", "ingress", "TLS", "secret", "IaC", "deployment", "platform"],
+      "project_surfaces": ["infra/docker", "infra/scripts", "env", "networks", "data services"]
+    },
+    {
+      "id": "28",
+      "slug": "performance-scalability-and-resilience",
+      "title": "Performance, Scalability, and Resilience",
+      "layer": "project-domain",
+      "triggers": ["load", "latency", "capacity", "scale", "cache", "queue", "failure tolerance", "national rollout"],
+      "project_surfaces": ["all runtime services", "database", "field sync", "partner APIs"]
+    },
+    {
+      "id": "29",
+      "slug": "support-training-and-change-adoption",
+      "title": "Support, Training, and Change Adoption",
+      "layer": "project-domain",
+      "triggers": ["helpdesk", "training", "onboarding", "release communication", "adoption", "pilot rollout", "support"],
+      "project_surfaces": ["all user roles", "operations", "training artifacts", "rollout"]
+    },
+    {
+      "id": "30",
+      "slug": "programme-planning-roadmap-and-release-management",
+      "title": "Programme Planning, Roadmap, and Release Management",
+      "layer": "project-domain",
+      "triggers": ["roadmap", "backlog", "module maturity", "dependency", "release train", "rollout wave", "progress score"],
+      "project_surfaces": ["entire programme", "SDA work orders", "risk register", "release governance"]
+    }
+  ]
+}
