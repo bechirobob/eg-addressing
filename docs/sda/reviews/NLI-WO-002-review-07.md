@@ -368,14 +368,14 @@ Keep PR #7 draft and unmerged. NLI-WO-002B remains unauthorized.
 
 | Finding | Agent response | Commit/evidence | SDA disposition | Date |
 |---|---|---|---|---|
-| F02 | Pending | — | OPEN | 2026-07-14 |
-| F04 | Pending | — | OPEN | 2026-07-14 |
-| F05 | Pending | — | OPEN | 2026-07-14 |
-| F06 | Pending | — | OPEN | 2026-07-14 |
-| F07 | Pending | — | OPEN | 2026-07-14 |
-| F08 | Pending | — | OPEN | 2026-07-14 |
-| F09 | Pending | — | OPEN | 2026-07-14 |
-| F10 | Pending | — | OPEN | 2026-07-14 |
-| F11 | Pending | — | OPEN | 2026-07-14 |
-| F12 | Pending | — | OPEN | 2026-07-14 |
-| F13 | Separate maintenance PR #8 | `5650cd219156d23f10836ab7041b34693e9250b0`; API CI `29332358470` | RESOLVED FOR PR #7 / EXTERNAL MAINTENANCE OPEN | 2026-07-14 |
+| F02 | Added reviewed current-field semantics, reviewed transform fixtures, executable source/value/reference/archive/no-loss assertion report, and fail-closed checker gates. | `4a451ae`; `docs/sda/data-model/transformation-fixture-report.json`; `docs/sda/data-model/current-field-semantics-reviewed.json` | READY FOR SDA REVIEW; SDA disposition remains pending | 2026-07-14 |
+| F04 | Added canonical positive fixture coverage for all record types, multi-unit independent canonical records, unit parent-building checks, and named F04 gates. | `80e1764`; `docs/sda/data-model/review07-scenario-temporal-assertions.md`; `docs/sda/data-model/target-schema-catalog.json` | READY FOR SDA REVIEW; SDA disposition remains pending | 2026-07-14 |
+| F05 | Added temporal/history assertions for corrected/superseded records, administrative boundary old/new versions, temporal fixture coverage, and reciprocal-chain evidence. | `80e1764`; `docs/sda/data-model/review07-scenario-temporal-assertions.md` | READY FOR SDA REVIEW; SDA disposition remains pending | 2026-07-14 |
+| F06 | Bound geometry promotion to approve-geometry decision type/outcome, actor permission, institution/territorial scope, evidence, source observation and quality authority; added negative authority fixtures. | `0294e12`; `docs/sda/data-model/draft-physical-schema.sql`; `docs/sda/data-model/target-schema-catalog.json` | READY FOR SDA REVIEW; SDA disposition remains pending | 2026-07-14 |
+| F07 | Populated executable lifecycle policy table from reviewed lifecycle transitions and positively executed all 96 allowed lifecycle edges. | `105c3e0`; `docs/sda/data-model/target-schema-catalog.json`; `docs/sda/data-model/lifecycle-transitions.json` | READY FOR SDA REVIEW; SDA disposition remains pending | 2026-07-14 |
+| F08 | Replaced AST-derived expected policy language with reviewed route-policy source and exact reviewed field-level request/response/error projection assertions; prohibited credential/header business-data migration. | `d283589`; `docs/sda/data-model/openapi-policy-projection-assertions.json`; `docs/sda/data-model/openapi-reviewed-projection-contracts.json` | READY FOR SDA REVIEW; SDA disposition remains pending | 2026-07-14 |
+| F09 | Rebuilt convergence units from reviewed unit source tied to passing F02 assertions, with version matrix, ownership, exception SLA, idempotency, validation, recovery and gates. | `6bb445c`; `docs/sda/data-model/schema-convergence-units-reviewed.json`; `docs/sda/data-model/schema-convergence-plan.md` | READY FOR SDA REVIEW; SDA disposition remains pending | 2026-07-14 |
+| F10 | Replaced broad scenario confidence with seven scenario-specific datasets and named assertions; fixed multi-unit canonical record/alias/release projection evidence. | `80e1764`; `docs/sda/data-model/review07-scenario-temporal-assertions.md`; `docs/sda/data-model/representative-records/machine-readable-fixtures.json` | READY FOR SDA REVIEW; SDA disposition remains pending | 2026-07-14 |
+| F11 | Added ADR-005 through ADR-009 evidence matrix mapping acceptance statements to named assertions and visible unresolved conditions; ADRs remain proposed. | `4918b53`; `docs/sda/data-model/adr-005-009-evidence-matrix.md`; ADR-005..ADR-009 | READY FOR SDA REVIEW; SDA disposition remains pending | 2026-07-14 |
+| F12 | Added semantic mutation probes proving gates catch incorrect transformations, missing triggers, wrong route policies, credential projection regressions, invalid scenarios, temporal chain breaks, geometry permission weakening and negative-harness false pass. | `88b0914`; `docs/sda/data-model/semantic-mutation-test-report.json`; `docs/sda/data-model/scripts/review07_semantic_mutation_tests.py` | READY FOR SDA REVIEW; SDA disposition remains pending | 2026-07-14 |
+| F13 | Separate maintenance PR #8 remains isolated; PR #7 scope guard shows no prohibited runtime paths. | PR #8 remains separate; PR #7 changed-path proof in controlled evidence | RESOLVED FOR PR #7 / EXTERNAL MAINTENANCE OPEN | 2026-07-14 |
