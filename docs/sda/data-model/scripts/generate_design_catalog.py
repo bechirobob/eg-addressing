@@ -647,7 +647,7 @@ def source_files() -> list[tuple[str, str]]:
     for base in roots:
         if not base.exists():
             continue
-        for p in base.rglob("*"):
+        for p in sorted(base.rglob("*")):
             if any(part in {"node_modules", ".next", "dist", "build", "__pycache__", ".venv"} for part in p.parts):
                 continue
             if p.suffix not in {".py", ".ts", ".tsx", ".js", ".mjs"}:
@@ -670,7 +670,7 @@ def app_source_refs(table: str, field: str | None = None) -> dict[str, list[str]
                 continue
             kind = "writers" if re.search(r"\b(INSERT|UPDATE|DELETE|CREATE|ALTER|DROP)\b", line, re.I) or re.search(r"\b(post|put|patch|delete)\b", line, re.I) else "readers"
             refs[kind].append(f"{rel}:{i}")
-    result = {k: v[:8] for k, v in refs.items()}
+    result = {k: sorted(v)[:8] for k, v in refs.items()}
     SOURCE_REF_CACHE[cache_key] = result
     return result
 
