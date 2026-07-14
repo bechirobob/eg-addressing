@@ -4733,13 +4733,13 @@
   "triggers": [
     {
       "action_timing": "BEFORE",
-      "event_manipulation": "UPDATE",
+      "event_manipulation": "INSERT",
       "table_name": "proposed_dispute_case",
       "trigger_name": "dispute_case_subject_trg"
     },
     {
       "action_timing": "BEFORE",
-      "event_manipulation": "INSERT",
+      "event_manipulation": "UPDATE",
       "table_name": "proposed_dispute_case",
       "trigger_name": "dispute_case_subject_trg"
     },
@@ -4781,13 +4781,13 @@
     },
     {
       "action_timing": "BEFORE",
-      "event_manipulation": "UPDATE",
+      "event_manipulation": "INSERT",
       "table_name": "proposed_geometry_version",
       "trigger_name": "geometry_version_subject_trg"
     },
     {
       "action_timing": "BEFORE",
-      "event_manipulation": "INSERT",
+      "event_manipulation": "UPDATE",
       "table_name": "proposed_geometry_version",
       "trigger_name": "geometry_version_subject_trg"
     },
@@ -4805,13 +4805,13 @@
     },
     {
       "action_timing": "BEFORE",
-      "event_manipulation": "UPDATE",
+      "event_manipulation": "INSERT",
       "table_name": "proposed_location_record_object_link",
       "trigger_name": "object_role_cardinality_trg"
     },
     {
       "action_timing": "BEFORE",
-      "event_manipulation": "INSERT",
+      "event_manipulation": "UPDATE",
       "table_name": "proposed_location_record_object_link",
       "trigger_name": "object_role_cardinality_trg"
     },
@@ -4829,21 +4829,15 @@
     },
     {
       "action_timing": "AFTER",
-      "event_manipulation": "INSERT",
-      "table_name": "proposed_location_record_version",
-      "trigger_name": "required_object_roles_trg"
-    },
-    {
-      "action_timing": "AFTER",
       "event_manipulation": "UPDATE",
       "table_name": "proposed_location_record_version",
       "trigger_name": "required_object_roles_trg"
     },
     {
-      "action_timing": "BEFORE",
+      "action_timing": "AFTER",
       "event_manipulation": "INSERT",
-      "table_name": "proposed_name_record",
-      "trigger_name": "current_official_name_trg"
+      "table_name": "proposed_location_record_version",
+      "trigger_name": "required_object_roles_trg"
     },
     {
       "action_timing": "BEFORE",
@@ -4855,7 +4849,7 @@
       "action_timing": "BEFORE",
       "event_manipulation": "INSERT",
       "table_name": "proposed_name_record",
-      "trigger_name": "name_record_subject_trg"
+      "trigger_name": "current_official_name_trg"
     },
     {
       "action_timing": "BEFORE",
@@ -4864,6 +4858,18 @@
       "trigger_name": "name_record_subject_trg"
     },
     {
+      "action_timing": "BEFORE",
+      "event_manipulation": "INSERT",
+      "table_name": "proposed_name_record",
+      "trigger_name": "name_record_subject_trg"
+    },
+    {
+      "action_timing": "AFTER",
+      "event_manipulation": "INSERT",
+      "table_name": "proposed_public_code_alias",
+      "trigger_name": "public_code_alias_chain_trg"
+    },
+    {
       "action_timing": "AFTER",
       "event_manipulation": "UPDATE",
       "table_name": "proposed_public_code_alias",
@@ -4871,19 +4877,13 @@
     },
     {
       "action_timing": "AFTER",
-      "event_manipulation": "INSERT",
-      "table_name": "proposed_public_code_alias",
-      "trigger_name": "public_code_alias_chain_trg"
-    },
-    {
-      "action_timing": "AFTER",
-      "event_manipulation": "INSERT",
+      "event_manipulation": "UPDATE",
       "table_name": "proposed_publication_release_item",
       "trigger_name": "publication_prerequisite_trg"
     },
     {
       "action_timing": "AFTER",
-      "event_manipulation": "UPDATE",
+      "event_manipulation": "INSERT",
       "table_name": "proposed_publication_release_item",
       "trigger_name": "publication_prerequisite_trg"
     },
