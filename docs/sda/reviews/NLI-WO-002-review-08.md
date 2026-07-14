@@ -268,14 +268,14 @@ Keep PR #7 draft and unmerged. NLI-WO-002B remains unauthorized.
 
 | Finding | Agent response | Commit/evidence | SDA disposition | Date |
 |---|---|---|---|---|
-| F02 | Pending | — | OPEN | 2026-07-14 |
-| F04 | Pending | — | OPEN | 2026-07-14 |
-| F05 | Pending | — | OPEN | 2026-07-14 |
-| F06 | Pending | — | OPEN | 2026-07-14 |
-| F07 | Pending | — | OPEN | 2026-07-14 |
-| F08 | Pending | — | OPEN | 2026-07-14 |
-| F09 | Pending | — | OPEN | 2026-07-14 |
-| F10 | Pending | — | OPEN | 2026-07-14 |
-| F11 | Pending | — | OPEN | 2026-07-14 |
-| F12 | Pending | — | OPEN | 2026-07-14 |
-| F13 | Separate maintenance PR #8 | PR #8 remains separate | RESOLVED FOR PR #7 / EXTERNAL MAINTENANCE OPEN | 2026-07-14 |
+| F02 | Replaced assertion-ID presence reporting with disposable source/target PostgreSQL execution: 237 source rows, 237 target rows, exact hashes/relationships/FKs/archive/exception checks, idempotent rerun and 8 failure probes. | `966c7a7`; `transformation-fixture-report.json` | READY FOR SDA REVIEW 09 | 2026-07-14 |
+| F04 | Added Review 08 integrity rollup covering positive canonical record types, missing/excessive/invalid role/entity evidence, retirement/merge/name-history controls, and checker gates. | `d2ba34e`; `review08-f04-f07-integrity-report.json` | READY FOR SDA REVIEW 09 | 2026-07-14 |
+| F05 | Added temporal-strategy register and reconstruction/negative evidence linked to persisted scenario query outputs and temporal trigger/negative execution. | `d2ba34e`; `review08-f04-f07-integrity-report.json`, `review08-scenario-query-report.json` | READY FOR SDA REVIEW 09 | 2026-07-14 |
+| F06 | Added typed authority evidence connecting decision, actor, institution/scope, permission, observation, evidence and quality assessment; retained executed geometry authority negatives and mutation gate. | `d2ba34e`; `review08-f04-f07-integrity-report.json`, `semantic-mutation-test-report.json` | READY FOR SDA REVIEW 09 | 2026-07-14 |
+| F07 | Added lifecycle graph validation evidence for 96 executed edges, initial/terminal/reachability metadata and denied transition evidence. | `d2ba34e`; `review08-f04-f07-integrity-report.json` | READY FOR SDA REVIEW 09 | 2026-07-14 |
+| F08 | Replaced `response.body.reviewed_payload` envelopes with 105 independent exact API projection contracts and 1,709 request/success/error field assertions; generic payload count is 0. | `fd5d4cf`; `openapi-reviewed-projection-contracts.json`, `openapi-policy-projection-assertions.json` | READY FOR SDA REVIEW 09 | 2026-07-14 |
+| F09 | Revalidated all 90 convergence units after real F02 execution; every unit references passing executable F02 assertions and preserves design-only/no-runtime authority. | `571910f`; `review08-f09-f11-reconciliation-report.json` | READY FOR SDA REVIEW 09 | 2026-07-14 |
+| F10 | Added persisted target DB query report for all seven scenarios: 342 queried fixture rows and 63 assertions covering entities, relationships, geometry/provenance, authority, lifecycle, publication, public/operator projections and history. | `c6c3403`; `review08-scenario-query-report.json` | READY FOR SDA REVIEW 09 | 2026-07-14 |
+| F11 | Refreshed ADR-005..ADR-009 evidence matrix to Review 08 executable assertions while keeping ADRs proposed and RFIs/conditions visible. | `571910f`; `adr-005-009-evidence-matrix.md` | READY FOR SDA REVIEW 09 | 2026-07-14 |
+| F12 | Replaced local predicate probes with 11 temp-workspace actual-checker mutation executions covering wrong transform, missing archive/FK, wrong classification, cardinality, temporal, geometry, lifecycle, API policy/projection, scenario output and negative-harness regression. | `1599a30`, refreshed `571910f`; `semantic-mutation-test-report.json` | READY FOR SDA REVIEW 09 | 2026-07-14 |
+| F13 | Separate maintenance PR #8 preserved; PR #7 still contains no runtime migration-runner fix. | changed-path guard | RESOLVED FOR PR #7 / EXTERNAL MAINTENANCE OPEN | 2026-07-14 |

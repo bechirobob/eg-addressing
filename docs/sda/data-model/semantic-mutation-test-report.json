@@ -5,7 +5,7 @@
       "exit_code": 1,
       "expected_reason": "named transform assertion must come from disposable DB execution",
       "mutation": "wrong-transformed-output",
-      "observed_excerpt": "# Design Consistency Report\n\nGenerated checks: 6436\nErrors: 11\nWarnings: 0\n\n## Errors\n- F02-no-loss-count-address-corrections-address-id: named transform assertion must come from disposable DB execution with source/target hashes and output IDs\n- ADR evidence matrix missing named assertion family F04-cardinality-positive\n- ADR evidence matrix missing named assertion family F05-admin-boundary\n- ADR evidence matrix missing named assertion family F07-lifecycle-positive\n- ADR evidence matrix missing named assertion family F09-reviewed\n- ADR evidence matrix missing named assertion family F10-scenario\n- missing ADR-005\n- missing ADR-006\n- missing ADR-007\n- missing ADR-008\n- missing ADR-009\n",
+      "observed_excerpt": "# Design Consistency Report\n\nGenerated checks: 6436\nErrors: 6\nWarnings: 0\n\n## Errors\n- F02-no-loss-count-address-corrections-address-id: named transform assertion must come from disposable DB execution with source/target hashes and output IDs\n- missing ADR-005\n- missing ADR-006\n- missing ADR-007\n- missing ADR-008\n- missing ADR-009\n",
       "status": "passed"
     },
     {
@@ -13,7 +13,7 @@
       "exit_code": 1,
       "expected_reason": "archive-created assertion must include governed archive row evidence",
       "mutation": "missing-archive-or-final-fk",
-      "observed_excerpt": "# Design Consistency Report\n\nGenerated checks: 6436\nErrors: 12\nWarnings: 0\n\n## Errors\n- F02-reference-final-fk-address-corrections-address-id: reference-final-fk assertion must include resolved final canonical FK evidence\n- F02-archive-created-address-corrections-note: archive-created assertion must include governed archive row evidence\n- ADR evidence matrix missing named assertion family F04-cardinality-positive\n- ADR evidence matrix missing named assertion family F05-admin-boundary\n- ADR evidence matrix missing named assertion family F07-lifecycle-positive\n- ADR evidence matrix missing named assertion family F09-reviewed\n- ADR evidence matrix missing named assertion family F10-scenario\n- missing ADR-005\n- missing ADR-006\n- missing ADR-007\n- missing ADR-008\n- missing ADR-009\n",
+      "observed_excerpt": "# Design Consistency Report\n\nGenerated checks: 6436\nErrors: 7\nWarnings: 0\n\n## Errors\n- F02-reference-final-fk-address-corrections-address-id: reference-final-fk assertion must include resolved final canonical FK evidence\n- F02-archive-created-address-corrections-note: archive-created assertion must include governed archive row evidence\n- missing ADR-005\n- missing ADR-006\n- missing ADR-007\n- missing ADR-008\n- missing ADR-009\n",
       "status": "passed"
     },
     {
@@ -21,7 +21,7 @@
       "exit_code": 1,
       "expected_reason": "missing classification",
       "mutation": "wrong-field-classification",
-      "observed_excerpt": "# Design Consistency Report\n\nGenerated checks: 6436\nErrors: 11\nWarnings: 0\n\n## Errors\n- OpenAPI contract address_corrections_api_v1_address_corrections_get field status missing classification\n- ADR evidence matrix missing named assertion family F04-cardinality-positive\n- ADR evidence matrix missing named assertion family F05-admin-boundary\n- ADR evidence matrix missing named assertion family F07-lifecycle-positive\n- ADR evidence matrix missing named assertion family F09-reviewed\n- ADR evidence matrix missing named assertion family F10-scenario\n- missing ADR-005\n- missing ADR-006\n- missing ADR-007\n- missing ADR-008\n- missing ADR-009\n",
+      "observed_excerpt": "# Design Consistency Report\n\nGenerated checks: 6436\nErrors: 6\nWarnings: 0\n\n## Errors\n- OpenAPI contract address_corrections_api_v1_address_corrections_get field status missing classification\n- missing ADR-005\n- missing ADR-006\n- missing ADR-007\n- missing ADR-008\n- missing ADR-009\n",
       "status": "passed"
     },
     {
@@ -29,7 +29,7 @@
       "exit_code": 1,
       "expected_reason": "target schema actual trigger catalog missing required semantic triggers",
       "mutation": "removed-cardinality-constraint",
-      "observed_excerpt": "# Design Consistency Report\n\nGenerated checks: 6436\nErrors: 11\nWarnings: 0\n\n## Errors\n- target schema actual trigger catalog missing required semantic triggers: ['required_object_roles_trg']\n- ADR evidence matrix missing named assertion family F04-cardinality-positive\n- ADR evidence matrix missing named assertion family F05-admin-boundary\n- ADR evidence matrix missing named assertion family F07-lifecycle-positive\n- ADR evidence matrix missing named assertion family F09-reviewed\n- ADR evidence matrix missing named assertion family F10-scenario\n- missing ADR-005\n- missing ADR-006\n- missing ADR-007\n- missing ADR-008\n- missing ADR-009\n",
+      "observed_excerpt": "# Design Consistency Report\n\nGenerated checks: 6436\nErrors: 6\nWarnings: 0\n\n## Errors\n- target schema actual trigger catalog missing required semantic triggers: ['required_object_roles_trg']\n- missing ADR-005\n- missing ADR-006\n- missing ADR-007\n- missing ADR-008\n- missing ADR-009\n",
       "status": "passed"
     },
     {
@@ -37,7 +37,7 @@
       "exit_code": 1,
       "expected_reason": "invalid-temporal-overlap was not produced by real SQL/policy execution",
       "mutation": "temporal-cycle-or-overlap",
-      "observed_excerpt": "# Design Consistency Report\n\nGenerated checks: 6436\nErrors: 11\nWarnings: 0\n\n## Errors\n- negative fixture invalid-temporal-overlap was not produced by real SQL/policy execution: {'error_class': 'ExclusionViolation', 'expected_message': 'conflicting key value violates exclusion constraint', 'status': 'passed-invalidly'}\n- ADR evidence matrix missing named assertion family F04-cardinality-positive\n- ADR evidence matrix missing named assertion family F05-admin-boundary\n- ADR evidence matrix missing named assertion family F07-lifecycle-positive\n- ADR evidence matrix missing named assertion family F09-reviewed\n- ADR evidence matrix missing named assertion family F10-scenario\n- missing ADR-005\n- missing ADR-006\n- missing ADR-007\n- missing ADR-008\n- missing ADR-009\n",
+      "observed_excerpt": "# Design Consistency Report\n\nGenerated checks: 6436\nErrors: 6\nWarnings: 0\n\n## Errors\n- negative fixture invalid-temporal-overlap was not produced by real SQL/policy execution: {'error_class': 'ExclusionViolation', 'expected_message': 'conflicting key value violates exclusion constraint', 'status': 'passed-invalidly'}\n- missing ADR-005\n- missing ADR-006\n- missing ADR-007\n- missing ADR-008\n- missing ADR-009\n",
       "status": "passed"
     },
     {
@@ -45,7 +45,7 @@
       "exit_code": 1,
       "expected_reason": "geometry promotion trigger does not bind actor permission",
       "mutation": "weakened-geometry-authority",
-      "observed_excerpt": "# Design Consistency Report\n\nGenerated checks: 6436\nErrors: 11\nWarnings: 0\n\n## Errors\n- geometry promotion trigger does not bind actor permission to geometry_role_matrix promotion_permission\n- ADR evidence matrix missing named assertion family F04-cardinality-positive\n- ADR evidence matrix missing named assertion family F05-admin-boundary\n- ADR evidence matrix missing named assertion family F07-lifecycle-positive\n- ADR evidence matrix missing named assertion family F09-reviewed\n- ADR evidence matrix missing named assertion family F10-scenario\n- missing ADR-005\n- missing ADR-006\n- missing ADR-007\n- missing ADR-008\n- missing ADR-009\n",
+      "observed_excerpt": "# Design Consistency Report\n\nGenerated checks: 6436\nErrors: 6\nWarnings: 0\n\n## Errors\n- geometry promotion trigger does not bind actor permission to geometry_role_matrix promotion_permission\n- missing ADR-005\n- missing ADR-006\n- missing ADR-007\n- missing ADR-008\n- missing ADR-009\n",
       "status": "passed"
     },
     {
@@ -53,7 +53,7 @@
       "exit_code": 1,
       "expected_reason": "every authored lifecycle transition",
       "mutation": "missing-lifecycle-transition",
-      "observed_excerpt": "# Design Consistency Report\n\nGenerated checks: 6435\nErrors: 11\nWarnings: 0\n\n## Errors\n- F07-lifecycle-positive-graph-executed: every authored lifecycle transition must be loaded into lifecycle_transition_policy and pass validate_lifecycle_transition\n- ADR evidence matrix missing named assertion family F04-cardinality-positive\n- ADR evidence matrix missing named assertion family F05-admin-boundary\n- ADR evidence matrix missing named assertion family F07-lifecycle-positive\n- ADR evidence matrix missing named assertion family F09-reviewed\n- ADR evidence matrix missing named assertion family F10-scenario\n- missing ADR-005\n- missing ADR-006\n- missing ADR-007\n- missing ADR-008\n- missing ADR-009\n",
+      "observed_excerpt": "# Design Consistency Report\n\nGenerated checks: 6435\nErrors: 6\nWarnings: 0\n\n## Errors\n- F07-lifecycle-positive-graph-executed: every authored lifecycle transition must be loaded into lifecycle_transition_policy and pass validate_lifecycle_transition\n- missing ADR-005\n- missing ADR-006\n- missing ADR-007\n- missing ADR-008\n- missing ADR-009\n",
       "status": "passed"
     },
     {
@@ -61,7 +61,7 @@
       "exit_code": 1,
       "expected_reason": "route policy must be independently reviewed",
       "mutation": "wrong-api-policy",
-      "observed_excerpt": "# Design Consistency Report\n\nGenerated checks: 6436\nErrors: 12\nWarnings: 0\n\n## Errors\n- openapi-expected-route-policies must exactly mirror independently reviewed route policy registry\n- F08-reviewed-route-policy-DELETE--api-v1-addresses-{address_id}: route policy must be independently reviewed and not claim observed AST as expected authority\n- ADR evidence matrix missing named assertion family F04-cardinality-positive\n- ADR evidence matrix missing named assertion family F05-admin-boundary\n- ADR evidence matrix missing named assertion family F07-lifecycle-positive\n- ADR evidence matrix missing named assertion family F09-reviewed\n- ADR evidence matrix missing named assertion family F10-scenario\n- missing ADR-005\n- missing ADR-006\n- missing ADR-007\n- missing ADR-008\n- missing ADR-009\n",
+      "observed_excerpt": "# Design Consistency Report\n\nGenerated checks: 6436\nErrors: 7\nWarnings: 0\n\n## Errors\n- openapi-expected-route-policies must exactly mirror independently reviewed route policy registry\n- F08-reviewed-route-policy-DELETE--api-v1-addresses-{address_id}: route policy must be independently reviewed and not claim observed AST as expected authority\n- missing ADR-005\n- missing ADR-006\n- missing ADR-007\n- missing ADR-008\n- missing ADR-009\n",
       "status": "passed"
     },
     {
@@ -69,7 +69,7 @@
       "exit_code": 1,
       "expected_reason": "every successful response must have exact reviewed response fields",
       "mutation": "missing-api-response-field-projection",
-      "observed_excerpt": "# Design Consistency Report\n\nGenerated checks: 6434\nErrors: 11\nWarnings: 0\n\n## Errors\n- F08-success-response-fields-address_corrections_api_v1_address_corrections_get-200: every successful response must have exact reviewed response fields\n- ADR evidence matrix missing named assertion family F04-cardinality-positive\n- ADR evidence matrix missing named assertion family F05-admin-boundary\n- ADR evidence matrix missing named assertion family F07-lifecycle-positive\n- ADR evidence matrix missing named assertion family F09-reviewed\n- ADR evidence matrix missing named assertion family F10-scenario\n- missing ADR-005\n- missing ADR-006\n- missing ADR-007\n- missing ADR-008\n- missing ADR-009\n",
+      "observed_excerpt": "# Design Consistency Report\n\nGenerated checks: 6434\nErrors: 6\nWarnings: 0\n\n## Errors\n- F08-success-response-fields-address_corrections_api_v1_address_corrections_get-200: every successful response must have exact reviewed response fields\n- missing ADR-005\n- missing ADR-006\n- missing ADR-007\n- missing ADR-008\n- missing ADR-009\n",
       "status": "passed"
     },
     {
@@ -77,7 +77,7 @@
       "exit_code": 1,
       "expected_reason": "F10 scenario must include persisted query evidence",
       "mutation": "broken-scenario-output",
-      "observed_excerpt": "# Design Consistency Report\n\nGenerated checks: 6436\nErrors: 11\nWarnings: 0\n\n## Errors\n- F10-review08-query-sections-multi-unit-building: F10 scenario must include persisted query evidence for entities, relationships, geometry, publication, projections and history\n- ADR evidence matrix missing named assertion family F04-cardinality-positive\n- ADR evidence matrix missing named assertion family F05-admin-boundary\n- ADR evidence matrix missing named assertion family F07-lifecycle-positive\n- ADR evidence matrix missing named assertion family F09-reviewed\n- ADR evidence matrix missing named assertion family F10-scenario\n- missing ADR-005\n- missing ADR-006\n- missing ADR-007\n- missing ADR-008\n- missing ADR-009\n",
+      "observed_excerpt": "# Design Consistency Report\n\nGenerated checks: 6436\nErrors: 6\nWarnings: 0\n\n## Errors\n- F10-review08-query-sections-multi-unit-building: F10 scenario must include persisted query evidence for entities, relationships, geometry, publication, projections and history\n- missing ADR-005\n- missing ADR-006\n- missing ADR-007\n- missing ADR-008\n- missing ADR-009\n",
       "status": "passed"
     },
     {
@@ -85,7 +85,7 @@
       "exit_code": 1,
       "expected_reason": "negative harness false-pass regression",
       "mutation": "negative-harness-false-pass-regression",
-      "observed_excerpt": "# Design Consistency Report\n\nGenerated checks: 6436\nErrors: 11\nWarnings: 0\n\n## Errors\n- negative harness false-pass regression did not prove successful invalid actions fail outside the exception handler\n- ADR evidence matrix missing named assertion family F04-cardinality-positive\n- ADR evidence matrix missing named assertion family F05-admin-boundary\n- ADR evidence matrix missing named assertion family F07-lifecycle-positive\n- ADR evidence matrix missing named assertion family F09-reviewed\n- ADR evidence matrix missing named assertion family F10-scenario\n- missing ADR-005\n- missing ADR-006\n- missing ADR-007\n- missing ADR-008\n- missing ADR-009\n",
+      "observed_excerpt": "# Design Consistency Report\n\nGenerated checks: 6436\nErrors: 6\nWarnings: 0\n\n## Errors\n- negative harness false-pass regression did not prove successful invalid actions fail outside the exception handler\n- missing ADR-005\n- missing ADR-006\n- missing ADR-007\n- missing ADR-008\n- missing ADR-009\n",
       "status": "passed"
     }
   ],

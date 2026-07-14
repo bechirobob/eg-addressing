@@ -40,7 +40,7 @@ Draft PR #7 remains draft and unmerged. NLI-WO-002B remains unauthorized.
 | AC-12 | READY FOR SDA REVIEW | current/API classifications use reviewed sources; credential/header fields are non-business migration boundaries. | current semantics and API projection contracts. | SDA acceptance pending |
 | AC-13 | READY FOR SDA REVIEW | lifecycle graphs are reviewed, loaded and positively exercised. | lifecycle assertion results. | SDA acceptance pending |
 | AC-14 | READY FOR SDA REVIEW | target schema executes; 11 negative cases reject; mutation tests catch missing trigger/constraint regressions. | target schema validation; semantic mutation report. | SDA acceptance pending |
-| AC-15 | READY FOR SDA REVIEW | 105 OpenAPI operations have independently reviewed route policies and 1164 field projection assertions. | API policy/projection assertions. | SDA acceptance pending |
+| AC-15 | READY FOR SDA REVIEW | 105 OpenAPI operations have independently reviewed route policies and 1709 field projection assertions. | API policy/projection assertions. | SDA acceptance pending |
 | AC-16 | READY FOR SDA REVIEW | transformation registry covers 237 current fields with 90 fixtures and 1,370 named assertions. | F02 fixture report. | SDA acceptance pending |
 | AC-17 | READY FOR SDA REVIEW | 90 convergence units are reviewed and tied to passing F02 assertions; no production migration authority claimed. | reviewed convergence units and plan. | SDA acceptance pending |
 | AC-18 | READY FOR SDA REVIEW | seven scenario builders insert 342 target rows, execute 11 negative cases and expose 49 F04/F05/F10 assertions. | machine-readable fixtures; target report. | SDA acceptance pending |
@@ -52,7 +52,7 @@ Draft PR #7 remains draft and unmerged. NLI-WO-002B remains unauthorized.
 ## Local verification before final push
 
 - `review04_design_pipeline.py`: PASS against disposable PostGIS.
-- `review07_semantic_mutation_tests.py`: PASS, 8/8 mutations caught.
+- `review07_semantic_mutation_tests.py`: PASS, 11/8 mutations caught.
 - `design_consistency_check.py`: PASS, `Generated checks: 5016`, `Errors: 0`, `Warnings: 0`.
 - `validate_skill_pack.py`: PASS, 31 skills, 44 Markdown files.
 - `git diff --check`: PASS.
