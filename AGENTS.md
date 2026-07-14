@@ -27,13 +27,30 @@ Do not guess when a material conflict remains. Raise an RFI using `docs/sda/temp
 
 ## Required reading before implementation
 
-Before modifying code:
+Before modifying files:
 
 1. Read `docs/sda/README.md`.
 2. Read the active work order in `docs/sda/work-orders/`.
 3. Read every standard and ADR referenced by that work order.
 4. Inspect the current implementation and tests affected by the work.
-5. Return a concise implementation plan mapped to every acceptance criterion before making changes.
+5. Read `docs/agent/README.md`, `docs/agent/master-operating-protocol.md`, and `docs/agent/skill-manifest.yaml`.
+6. Select every agent skill triggered by the task’s effects and read the corresponding cards under `docs/agent/skills/`.
+7. Create a task context pack using `docs/agent/templates/task-context-pack.md`.
+8. Return a concise implementation or modelling plan mapped to every acceptance criterion before making changes.
+
+## Agent skill routing
+
+Every task must use:
+
+- `S01` — authority, intake, and scope control;
+- `S03` — acceptance-criteria planning and decision control;
+- `S11` — testing and semantic evidence;
+- `S12` — GitHub delivery and exact-head proof;
+- `S16` — self-audit and context handoff.
+
+Add domain skills from `docs/agent/skill-manifest.yaml` based on actual effects, not the task title. A database effect invokes S07; an API/auth/sensitive-data effect invokes S08; a GIS/evidence/publication effect invokes S09; and a user-visible workflow invokes S10.
+
+An SDA review finding invokes S13 before remediation. An unrelated defect discovered during active work invokes S14 and must be isolated into a separately governed maintenance path.
 
 ## Protected architecture rules
 
@@ -58,6 +75,7 @@ For each work order:
 
 - Work on the branch named by the work order, or use `nli/<work-order-id>-<description>` when no branch is specified.
 - Keep changes inside the approved scope.
+- Classify anticipated paths as in scope, supporting evidence, separate maintenance, or prohibited before editing them.
 - Identify database, API, security, workflow, deployment, localization, accessibility, and operational effects before implementation.
 - Preserve backwards compatibility unless the work order explicitly authorizes a breaking change and supplies a transition plan.
 - Use explicit controlled vocabularies and state transitions. Do not create status strings ad hoc.
@@ -65,7 +83,18 @@ For each work order:
 - Spanish and English support must be complete for affected workflows, not limited to navigation chrome.
 - Prefer simple, supportable technology over novelty.
 - Add tests with the implementation rather than after it.
-- Never suppress a failing control merely to make CI pass.
+- Maintain independent sources for observed and expected evidence. Do not generate both with the same logic.
+- Never suppress or weaken a failing control merely to make CI pass.
+- Never mix an unrelated runtime, migration, security, or operations fix into a design-only or otherwise incompatible work-order PR.
+
+## Testing and evidence conduct
+
+- A file, heading, row count, keyword match, or green CI run is not semantic proof by itself.
+- Negative tests must execute the forbidden action and fail for the expected reason.
+- No-loss claims must compare values, relationships, authority, exceptions, and counts.
+- Generated artefacts must be portable, deterministic, non-self-modifying, and validated by parsing or real execution.
+- Expected policy, mappings, scenario outcomes, and review dispositions must be maintained independently from observed generation.
+- Evidence must identify what was executed, what was inferred, what was not tested, and what authority remains pending.
 
 ## Request for Information
 
@@ -83,6 +112,18 @@ Raise an RFI before proceeding when the work would require any of the following:
 
 An RFI must state the question, why a decision is needed, options considered, the agent's recommendation, and the consequence of no decision.
 
+## SDA review remediation
+
+When the SDA records findings:
+
+- read the complete latest review before changing files;
+- use `docs/agent/templates/finding-resolution-matrix.md`;
+- resolve each finding with a finding-specific root cause, correction, regression test, commit, and evidence;
+- preserve all previously accepted controls;
+- update only the explicitly designated resolution-log section of a review record;
+- never edit the reviewer outcome, finding text, required resolution, or reviewer disposition;
+- use agent status `READY FOR SDA REVIEW`; only the SDA may mark a finding resolved or accepted.
+
 ## Pull-request evidence contract
 
 Every implementation pull request must reference its work order and include:
@@ -99,6 +140,10 @@ Every implementation pull request must reference its work order and include:
 
 A statement such as “done” is not evidence. Point to a commit, migration, test, screenshot, trace, report, or documented review result.
 
+Before requesting review, use `docs/agent/templates/exact-head-evidence.md` and verify the remote branch, PR draft state, exact implementation SHA, workflow run IDs, job IDs, changed-path scope, and evidence limitations.
+
+A committed file cannot contain its own final commit SHA. Record the final implementation SHA and workflow/job IDs in the PR body or an immutable PR comment; the later SDA review record must identify the exact implementation SHA assessed. Never fabricate a self-referential SHA.
+
 ## Completion and claims
 
 Implementation completion is not SDA acceptance. The SDA records one of:
@@ -110,9 +155,24 @@ Implementation completion is not SDA acceptance. The SDA records one of:
 
 Use accurate readiness language:
 
-- **implemented** means code exists;
+- **implemented** means code or a model exists;
+- **verified** means named evidence exists at an exact commit;
+- **submitted** means the remote branch and reviewable PR exist;
 - **tested** means named automated or manual evidence exists;
 - **pilot-ready** means controlled pilot criteria are satisfied;
 - **agency-ready** means scoped institutional access and operational controls are satisfied;
 - **publication-ready** means authority, data, audit, and release gates are satisfied;
 - **national-production-ready** requires an explicit SDA and Programme Owner decision.
+
+Before saying “done,” requesting SDA review, or handing work to another agent, complete `docs/agent/templates/self-audit.md` and report:
+
+```text
+Implementation/model status:
+Verification status and exact SHA:
+Remote submission status:
+SDA status:
+Open findings/RFIs:
+Separate maintenance dependencies:
+Readiness boundary:
+Exact next action:
+```
