@@ -4800,7 +4800,7 @@
     "extra_fields": [],
     "field_parity_errors": [],
     "index_count": 111,
-    "inserted_fixture_rows": 324,
+    "inserted_fixture_rows": 330,
     "missing_fields": [],
     "missing_required_triggers": [],
     "negative_harness_regression": {
@@ -4860,7 +4860,7 @@
         "status": "passed"
       },
       "multi-unit-building": {
-        "inserted_rows": 49,
+        "inserted_rows": 55,
         "status": "passed"
       },
       "no-formal-road-location": {

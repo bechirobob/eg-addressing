@@ -1,6 +1,6 @@
 # Design Consistency Report
 
-Generated checks: 2583
+Generated checks: 2586
 Errors: 0
 Warnings: 0
 
@@ -10,6 +10,7 @@ Warnings: 0
 - Transformation rows: 237
 - Target fields: 357
 - Fixture scenarios: 7
-- Named assertion gates: 2583
+- Named assertion gates: 2586
 - F02 transform assertions: 1370
 - F09 convergence units: 90
+- Multi-unit canonical records: 2

@@ -1338,6 +1338,49 @@ def scenario_records(model: dict[str, Any], scenario: str, idx: int) -> dict[str
             parent_link["cardinality_rank"] = 1
             parent_link["subject_id"] = f"{scenario}-registry-subject-parent-building"
             records["location_record_object_link"].append(parent_link)
+        # Review 07 F04/F10: Unit B must be an independent canonical record, not only an extra unit row.
+        if all(name in records for name in ["location_record", "location_record_version", "public_code_alias", "publication_release_item", "location_record_object_link"]) and len(records["location_record_object_link"]) >= 2:
+            unit_b_record_id = f"{scenario}-location-record-unit-02"
+            unit_b_version_id = f"{scenario}-location-record-version-unit-02"
+            unit_b_alias_id = f"{scenario}-public-code-alias-unit-02"
+            unit_b_release_item_id = f"{scenario}-publication-release-item-unit-02"
+            lr_b = dict(records["location_record"][0])
+            lr_b[pk["location_record"]] = unit_b_record_id
+            lr_b["record_type"] = "unit"
+            records["location_record"].append(lr_b)
+            version_b = dict(records["location_record_version"][0])
+            version_b[pk["location_record_version"]] = unit_b_version_id
+            version_b["location_record_id"] = unit_b_record_id
+            version_b["version_number"] = 1
+            version_b.pop("predecessor_version_id", None)
+            version_b.pop("successor_version_id", None)
+            records["location_record_version"].append(version_b)
+            alias_b = dict(records["public_code_alias"][0])
+            alias_b[pk["public_code_alias"]] = unit_b_alias_id
+            alias_b["location_record_id"] = unit_b_record_id
+            alias_b["public_code"] = "public_code_alias-public_code-002"
+            alias_b.pop("predecessor_alias_id", None)
+            alias_b.pop("successor_alias_id", None)
+            records["public_code_alias"].append(alias_b)
+            item_b = dict(records["publication_release_item"][0])
+            item_b[pk["publication_release_item"]] = unit_b_release_item_id
+            item_b["location_record_id"] = unit_b_record_id
+            item_b["location_record_version_id"] = unit_b_version_id
+            item_b["public_code_alias_id"] = unit_b_alias_id
+            item_b["published_label"] = "Unit B"
+            item_b["projection_payload_hash"] = "multi-unit-unit-b-projection-hash"
+            item_b["projection_payload_json"] = {"scenario": "multi-unit-building", "unit": "B", "canonical_record": unit_b_record_id}
+            records["publication_release_item"].append(item_b)
+            primary_b = dict(records["location_record_object_link"][0])
+            primary_b[pk["location_record_object_link"]] = f"{scenario}-object-link-unit-02-primary"
+            primary_b["location_record_version_id"] = unit_b_version_id
+            primary_b["object_role"] = "primary-subject"
+            primary_b["subject_id"] = f"{scenario}-registry-subject-unit-02"
+            primary_b["cardinality_rank"] = 1
+            parent_b = dict(records["location_record_object_link"][1])
+            parent_b[pk["location_record_object_link"]] = f"{scenario}-object-link-unit-02-parent-building"
+            parent_b["location_record_version_id"] = unit_b_version_id
+            records["location_record_object_link"].extend([primary_b, parent_b])
     if scenario == "corrected-superseded-address" and "location_record_version" in records:
         first = records["location_record_version"][0]
         first["location_record_version_id"] = f"{scenario}-location-record-version-v1"

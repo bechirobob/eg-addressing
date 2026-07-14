@@ -357,6 +357,19 @@ if len(scenarios.get("corrected-superseded-address", {}).get("publication_releas
     err("corrected-superseded-address scenario must contain release history")
 if len(scenarios.get("administrative-boundary-change", {}).get("administrative_unit_version", [])) < 2:
     err("administrative-boundary-change scenario must contain old and new admin versions")
+# Review 07 F04/F10: multi-unit scenario must prove separate canonical unit records, aliases, release items, and parent-building links.
+multi_unit = scenarios.get("multi-unit-building", {})
+mu_records = multi_unit.get("location_record", []) if isinstance(multi_unit, dict) else []
+mu_versions = multi_unit.get("location_record_version", []) if isinstance(multi_unit, dict) else []
+mu_aliases = multi_unit.get("public_code_alias", []) if isinstance(multi_unit, dict) else []
+mu_items = multi_unit.get("publication_release_item", []) if isinstance(multi_unit, dict) else []
+mu_links = multi_unit.get("location_record_object_link", []) if isinstance(multi_unit, dict) else []
+gate("F04-multi-unit-independent-canonical-records", "F04", len(mu_records) >= 2 and len({r.get("location_record_id") for r in mu_records}) >= 2 and all(r.get("record_type") == "unit" for r in mu_records), "multi-unit-building must contain at least two independent canonical unit location_records", "docs/sda/data-model/representative-records/machine-readable-fixtures.json")
+gate("F10-multi-unit-distinct-aliases-release-items", "F10", len(mu_aliases) >= 2 and len(mu_items) >= 2 and len({a.get("location_record_id") for a in mu_aliases}) >= 2 and len({i.get("location_record_id") for i in mu_items}) >= 2, "multi-unit-building must have distinct aliases and release items per canonical unit", "docs/sda/data-model/representative-records/machine-readable-fixtures.json")
+version_ids = {v.get("location_record_version_id") for v in mu_versions}
+versions_with_primary = {l.get("location_record_version_id") for l in mu_links if l.get("object_role") == "primary-subject"}
+versions_with_parent = {l.get("location_record_version_id") for l in mu_links if l.get("object_role") == "parent-building"}
+gate("F04-multi-unit-parent-building-links", "F04", len(version_ids) >= 2 and version_ids <= versions_with_primary and version_ids <= versions_with_parent, "each multi-unit canonical unit version must have primary-subject and parent-building links", "docs/sda/data-model/representative-records/machine-readable-fixtures.json")
 negative_fixtures = fixtures.get("negative_fixtures", {}) if isinstance(fixtures, dict) else {}
 for required_negative in ["invalid-cardinality-primary-object", "invalid-temporal-overlap", "invalid-state-transition", "invalid-subject-reference", "invalid-geometry-role-type", "invalid-publication-prerequisite", "invalid-self-supersession"]:
     if required_negative not in negative_fixtures:
@@ -473,6 +486,7 @@ else:
         f"- Named assertion gates: {len(assertion_registry)}",
         f"- F02 transform assertions: {summary.get('assertions_executed', 0)}",
         f"- F09 convergence units: {len(reviewed_units) if isinstance(reviewed_units, list) else 0}",
+        f"- Multi-unit canonical records: {len(mu_records)}",
     ])
 report = "\n".join(report_lines) + "\n"
 (DM / "design-consistency-report.md").write_text(report, encoding="utf-8")

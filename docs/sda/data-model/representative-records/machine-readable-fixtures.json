@@ -1898,6 +1898,12 @@
           "created_at": "2026-07-14T00:00:00Z",
           "location_record_id": "multi-unit-building-location_record-03",
           "record_type": "unit"
+        },
+        {
+          "classification": "government-internal",
+          "created_at": "2026-07-14T00:00:00Z",
+          "location_record_id": "multi-unit-building-location-record-unit-02",
+          "record_type": "unit"
         }
       ],
       "location_record_assertion": [
@@ -1932,6 +1938,22 @@
           "location_record_version_id": "multi-unit-building-location_record_version-03",
           "object_role": "parent-building",
           "subject_id": "multi-unit-building-registry-subject-parent-building"
+        },
+        {
+          "cardinality_rank": 1,
+          "effective_from": "2026-07-14T00:00:00Z",
+          "link_id": "multi-unit-building-object-link-unit-02-primary",
+          "location_record_version_id": "multi-unit-building-location-record-version-unit-02",
+          "object_role": "primary-subject",
+          "subject_id": "multi-unit-building-registry-subject-unit-02"
+        },
+        {
+          "cardinality_rank": 1,
+          "effective_from": "2026-07-14T00:00:00Z",
+          "link_id": "multi-unit-building-object-link-unit-02-parent-building",
+          "location_record_version_id": "multi-unit-building-location-record-version-unit-02",
+          "object_role": "parent-building",
+          "subject_id": "multi-unit-building-registry-subject-parent-building"
         }
       ],
       "location_record_relationship": [
@@ -1957,6 +1979,19 @@
           "recorded_at": "2026-07-14T00:00:00Z",
           "source_decision_event_id": "multi-unit-building-decision_event-03",
           "version_number": 3
+        },
+        {
+          "administrative_unit_version_id": "multi-unit-building-administrative_unit_version-03",
+          "correction_case_id": "multi-unit-building-correction_case-03",
+          "display_label_es": "location_record_version-display_label_es-value",
+          "effective_from": "2026-07-14T00:00:00Z",
+          "lifecycle_state": "active",
+          "locality_id": "multi-unit-building-locality-03",
+          "location_record_id": "multi-unit-building-location-record-unit-02",
+          "location_record_version_id": "multi-unit-building-location-record-version-unit-02",
+          "recorded_at": "2026-07-14T00:00:00Z",
+          "source_decision_event_id": "multi-unit-building-decision_event-03",
+          "version_number": 1
         }
       ],
       "migration_exception": [
@@ -2048,6 +2083,14 @@
           "public_code": "public_code_alias-public_code-001",
           "public_code_alias_id": "multi-unit-building-public_code_alias-03",
           "reserved_at": "2026-07-14T00:00:00Z"
+        },
+        {
+          "code_scheme": "public_code_alias-code_scheme-value",
+          "code_state": "active-public",
+          "location_record_id": "multi-unit-building-location-record-unit-02",
+          "public_code": "public_code_alias-public_code-002",
+          "public_code_alias_id": "multi-unit-building-public-code-alias-unit-02",
+          "reserved_at": "2026-07-14T00:00:00Z"
         }
       ],
       "publication_release": [
@@ -2078,6 +2121,22 @@
           "publication_release_item_id": "multi-unit-building-publication_release_item-03",
           "published_geometry_policy": "publication_release_item-published_geometry_policy-value",
           "published_label": "publication_release_item-published_label-value"
+        },
+        {
+          "location_record_id": "multi-unit-building-location-record-unit-02",
+          "location_record_version_id": "multi-unit-building-location-record-version-unit-02",
+          "projection_payload_hash": "multi-unit-unit-b-projection-hash",
+          "projection_payload_json": {
+            "canonical_record": "multi-unit-building-location-record-unit-02",
+            "scenario": "multi-unit-building",
+            "unit": "B"
+          },
+          "projection_state": "included",
+          "public_code_alias_id": "multi-unit-building-public-code-alias-unit-02",
+          "publication_release_id": "multi-unit-building-publication_release-03",
+          "publication_release_item_id": "multi-unit-building-publication-release-item-unit-02",
+          "published_geometry_policy": "publication_release_item-published_geometry_policy-value",
+          "published_label": "Unit B"
         }
       ],
       "registry_subject": [
