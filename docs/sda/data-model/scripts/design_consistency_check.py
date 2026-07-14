@@ -63,6 +63,7 @@ openapi_ops = load_json("docs/sda/data-model/openapi-operation-inventory.json")
 route_policies = load_json("docs/sda/data-model/openapi-expected-route-policies.json")
 reviewed_route_policies = load_json("docs/sda/data-model/openapi-reviewed-route-policies.json")
 projection_contracts = load_json("docs/sda/data-model/openapi-reviewed-projection-contracts.json")
+api_projection_assertions = load_json("docs/sda/data-model/openapi-policy-projection-assertions.json")
 target_catalog = load_json("docs/sda/data-model/target-schema-catalog.json")
 fixtures = load_json("docs/sda/data-model/representative-records/machine-readable-fixtures.json")
 current_semantics = load_json("docs/sda/data-model/current-field-semantics-reviewed.json")
@@ -250,6 +251,8 @@ for expected_public in ["GET /", "GET /api/v1/health", "POST /api/v1/auth/login"
         err(f"{expected_public} expected public auth policy, got {route_policies.get(expected_public)}")
 if route_policies != reviewed_route_policies:
     err("openapi-expected-route-policies must exactly mirror independently reviewed route policy registry")
+for route_key, row in reviewed_route_policies.items() if isinstance(reviewed_route_policies, dict) else []:
+    gate(f"F08-reviewed-route-policy-{route_key.replace(' ', '-').replace('/', '-')}", "F08", row.get("policy_source") == "human-reviewed-route-policy-source" and row.get("review_owner") and row.get("review_decision_id") and "generated from exact FastAPI" not in str(row).lower(), "route policy must be independently reviewed and not claim observed AST as expected authority", "docs/sda/data-model/openapi-reviewed-route-policies.json")
 for key, roles in {"GET /api/v1/addresses": {"viewer","editor","admin"}, "GET /api/v1/addresses/{address_id}": {"viewer","editor","admin"}}.items():
     if set(route_policies.get(key, {}).get("roles", [])) != roles:
         err(f"{key} roles must be viewer/editor/admin")
@@ -270,6 +273,16 @@ for op in ops:
     contract = projection_contracts.get(op.get("operation_id"), {}) if isinstance(projection_contracts, dict) else {}
     if contract.get("review_status") not in {"reviewed-api-projection-r07", "reviewed-api-projection-r06"}:
         err(f"OpenAPI operation {op.get('operation_id')} missing reviewed projection contract")
+    gate(f"F08-reviewed-projection-contract-{op.get('operation_id')}", "F08", bool(contract.get("policy_source") == "human-reviewed-field-projection-source" and contract.get("review_owner") and contract.get("review_decision_id")), "projection contract must be independently reviewed with owner and decision id", "docs/sda/data-model/openapi-reviewed-projection-contracts.json")
+    for field in contract.get("fields", []) if isinstance(contract, dict) else []:
+        fname = str(field.get("field", "")).lower()
+        direction = str(field.get("direction", ""))
+        target_projection = str(field.get("target_projection", ""))
+        gate(f"F08-field-projection-{field.get('test', op.get('operation_id'))}", "F08", bool(field.get("review_status") and field.get("classification_owner") and field.get("target_projection") and field.get("adapter") and field.get("deprecation_rule")), "field projection must include reviewed status, classification owner, target projection, adapter, and deprecation rule", "docs/sda/data-model/openapi-reviewed-projection-contracts.json")
+        if any(tok in fname for tok in ["authorization", "cookie", "token", "password", "csrf", "session"]):
+            gate(f"F08-security-field-not-migrated-{field.get('test', op.get('operation_id'))}", "F08", "not-migrated" in target_projection and "business" in target_projection and field.get("classification") == "security-internal", "credential/header/session fields must not be business-data migrated or archived", "docs/sda/data-model/openapi-reviewed-projection-contracts.json")
+        if direction.startswith("response:"):
+            gate(f"F08-response-field-not-generic-{field.get('test', op.get('operation_id'))}", "F08", not (fname == "response" and field.get("type") == "object") and "source_payload_archive or typed target projection" not in target_projection, "response projections must not remain generic response:object placeholders", "docs/sda/data-model/openapi-reviewed-projection-contracts.json")
     contract_fields = contract.get("fields", []) if isinstance(contract, dict) else []
     if not contract_fields:
         err(f"OpenAPI operation {op.get('operation_id')} projection contract has no fields")
@@ -286,8 +299,9 @@ for op in ops:
         err(f"OpenAPI operation missing identity: {op}")
     if "policy" not in op or "auth" not in op.get("policy", {}):
         err(f"OpenAPI operation {op.get('operation_id')} missing authorization policy")
-    if op.get("policy", {}).get("analysis") != "function-ast-boundary":
-        err(f"OpenAPI operation {op.get('operation_id')} policy not derived from precise AST boundary")
+    observed_policy = op.get("policy", {}).get("observed", {}) if isinstance(op.get("policy"), dict) else {}
+    if observed_policy.get("analysis") != "function-ast-boundary":
+        err(f"OpenAPI operation {op.get('operation_id')} observed policy not derived from precise AST boundary")
     if "responses" not in op or not op["responses"]:
         err(f"OpenAPI operation {op.get('operation_id')} missing response/status inventory")
 if "field/geotag-tasks" in api_map_text and "Auth policy" not in api_map_text:
@@ -516,6 +530,7 @@ else:
         f"- F07 lifecycle transitions executed: {len(lifecycle_assertions) if isinstance(lifecycle_assertions, dict) else 0}",
         f"- F04/F05/F10 scenario assertions: {len(review07_scenario_assertions) if isinstance(review07_scenario_assertions, dict) else 0}",
         f"- F06 geometry authority negatives: {len(required_f06_negatives & set(negative_results)) if isinstance(negative_results, dict) else 0}",
+        f"- F08 API projection assertions: {api_projection_assertions.get('summary', {}).get('assertions', 0) if isinstance(api_projection_assertions, dict) else 0}",
     ])
 report = "\n".join(report_lines) + "\n"
 (DM / "design-consistency-report.md").write_text(report, encoding="utf-8")

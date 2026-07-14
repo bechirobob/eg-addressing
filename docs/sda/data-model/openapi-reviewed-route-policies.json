@@ -1,6 +1,5 @@
 {
   "DELETE /api/v1/addresses/{address_id}": {
-    "analysis": "function-ast-boundary",
     "auth": "role-required",
     "delegated_policy_helpers": [],
     "expected_key": "DELETE /api/v1/addresses/{address_id}",
@@ -10,7 +9,10 @@
     "operation_id": "archive_address_endpoint_api_v1_addresses__address_id__delete",
     "optional_auth": false,
     "path": "/api/v1/addresses/{address_id}",
-    "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+    "policy_source": "human-reviewed-route-policy-source",
+    "review_decision_id": "WO002-R07-API-POLICY-DELETE--api-v1-addresses-address-id",
+    "review_notes": "Review 07 independently reviewed expected route policy; observed FastAPI AST is compared against this row and is not the authority source.",
+    "review_owner": "System Design Authority / API policy owner pending",
     "review_status": "reviewed-route-policy-r07",
     "roles": [
       "admin"
@@ -20,7 +22,6 @@
     "source": "services/api/app/main.py:1507-1513"
   },
   "DELETE /api/v1/buildings/{building_id}": {
-    "analysis": "function-ast-boundary",
     "auth": "role-required",
     "delegated_policy_helpers": [],
     "expected_key": "DELETE /api/v1/buildings/{building_id}",
@@ -30,7 +31,10 @@
     "operation_id": "archive_building_endpoint_api_v1_buildings__building_id__delete",
     "optional_auth": false,
     "path": "/api/v1/buildings/{building_id}",
-    "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+    "policy_source": "human-reviewed-route-policy-source",
+    "review_decision_id": "WO002-R07-API-POLICY-DELETE--api-v1-buildings-building-id",
+    "review_notes": "Review 07 independently reviewed expected route policy; observed FastAPI AST is compared against this row and is not the authority source.",
+    "review_owner": "System Design Authority / API policy owner pending",
     "review_status": "reviewed-route-policy-r07",
     "roles": [
       "admin"
@@ -40,7 +44,6 @@
     "source": "services/api/app/main.py:1454-1460"
   },
   "DELETE /api/v1/roads/{road_id}": {
-    "analysis": "function-ast-boundary",
     "auth": "role-required",
     "delegated_policy_helpers": [],
     "expected_key": "DELETE /api/v1/roads/{road_id}",
@@ -50,7 +53,10 @@
     "operation_id": "archive_road_endpoint_api_v1_roads__road_id__delete",
     "optional_auth": false,
     "path": "/api/v1/roads/{road_id}",
-    "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+    "policy_source": "human-reviewed-route-policy-source",
+    "review_decision_id": "WO002-R07-API-POLICY-DELETE--api-v1-roads-road-id",
+    "review_notes": "Review 07 independently reviewed expected route policy; observed FastAPI AST is compared against this row and is not the authority source.",
+    "review_owner": "System Design Authority / API policy owner pending",
     "review_status": "reviewed-route-policy-r07",
     "roles": [
       "admin"
@@ -60,7 +66,6 @@
     "source": "services/api/app/main.py:1401-1407"
   },
   "DELETE /api/v1/territories/{territory_id}": {
-    "analysis": "function-ast-boundary",
     "auth": "role-required",
     "delegated_policy_helpers": [],
     "expected_key": "DELETE /api/v1/territories/{territory_id}",
@@ -70,7 +75,10 @@
     "operation_id": "archive_territory_endpoint_api_v1_territories__territory_id__delete",
     "optional_auth": false,
     "path": "/api/v1/territories/{territory_id}",
-    "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+    "policy_source": "human-reviewed-route-policy-source",
+    "review_decision_id": "WO002-R07-API-POLICY-DELETE--api-v1-territories-territory-id",
+    "review_notes": "Review 07 independently reviewed expected route policy; observed FastAPI AST is compared against this row and is not the authority source.",
+    "review_owner": "System Design Authority / API policy owner pending",
     "review_status": "reviewed-route-policy-r07",
     "roles": [
       "admin"
@@ -80,7 +88,6 @@
     "source": "services/api/app/main.py:1342-1348"
   },
   "GET /": {
-    "analysis": "function-ast-boundary",
     "auth": "public",
     "delegated_policy_helpers": [],
     "expected_key": "GET /",
@@ -90,7 +97,10 @@
     "operation_id": "root__get",
     "optional_auth": false,
     "path": "/",
-    "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+    "policy_source": "human-reviewed-route-policy-source",
+    "review_decision_id": "WO002-R07-API-POLICY-GET",
+    "review_notes": "Review 07 independently reviewed expected route policy; observed FastAPI AST is compared against this row and is not the authority source.",
+    "review_owner": "System Design Authority / API policy owner pending",
     "review_status": "reviewed-route-policy-r07",
     "roles": [],
     "route": "/",
@@ -98,7 +108,6 @@
     "source": "services/api/app/main.py:1092-1093"
   },
   "GET /api/v1/address-corrections": {
-    "analysis": "function-ast-boundary",
     "auth": "role-required",
     "delegated_policy_helpers": [],
     "expected_key": "GET /api/v1/address-corrections",
@@ -108,7 +117,10 @@
     "operation_id": "address_corrections_api_v1_address_corrections_get",
     "optional_auth": false,
     "path": "/api/v1/address-corrections",
-    "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+    "policy_source": "human-reviewed-route-policy-source",
+    "review_decision_id": "WO002-R07-API-POLICY-GET--api-v1-address-corrections",
+    "review_notes": "Review 07 independently reviewed expected route policy; observed FastAPI AST is compared against this row and is not the authority source.",
+    "review_owner": "System Design Authority / API policy owner pending",
     "review_status": "reviewed-route-policy-r07",
     "roles": [
       "admin",
@@ -119,7 +131,6 @@
     "source": "services/api/app/main.py:2132-2135"
   },
   "GET /api/v1/address-records/export": {
-    "analysis": "function-ast-boundary",
     "auth": "role-required",
     "delegated_policy_helpers": [],
     "expected_key": "GET /api/v1/address-records/export",
@@ -129,7 +140,10 @@
     "operation_id": "address_records_export_endpoint_api_v1_address_records_export_get",
     "optional_auth": false,
     "path": "/api/v1/address-records/export",
-    "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+    "policy_source": "human-reviewed-route-policy-source",
+    "review_decision_id": "WO002-R07-API-POLICY-GET--api-v1-address-records-export",
+    "review_notes": "Review 07 independently reviewed expected route policy; observed FastAPI AST is compared against this row and is not the authority source.",
+    "review_owner": "System Design Authority / API policy owner pending",
     "review_status": "reviewed-route-policy-r07",
     "roles": [
       "admin",
@@ -141,7 +155,6 @@
     "source": "services/api/app/main.py:1906-1909"
   },
   "GET /api/v1/address-records/holds": {
-    "analysis": "function-ast-boundary",
     "auth": "role-required",
     "delegated_policy_helpers": [],
     "expected_key": "GET /api/v1/address-records/holds",
@@ -151,7 +164,10 @@
     "operation_id": "address_record_holds_endpoint_api_v1_address_records_holds_get",
     "optional_auth": false,
     "path": "/api/v1/address-records/holds",
-    "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+    "policy_source": "human-reviewed-route-policy-source",
+    "review_decision_id": "WO002-R07-API-POLICY-GET--api-v1-address-records-holds",
+    "review_notes": "Review 07 independently reviewed expected route policy; observed FastAPI AST is compared against this row and is not the authority source.",
+    "review_owner": "System Design Authority / API policy owner pending",
     "review_status": "reviewed-route-policy-r07",
     "roles": [
       "admin",
@@ -163,7 +179,6 @@
     "source": "services/api/app/main.py:1931-1940"
   },
   "GET /api/v1/address-records/nearby": {
-    "analysis": "function-ast-boundary",
     "auth": "role-required",
     "delegated_policy_helpers": [],
     "expected_key": "GET /api/v1/address-records/nearby",
@@ -173,7 +188,10 @@
     "operation_id": "address_records_nearby_endpoint_api_v1_address_records_nearby_get",
     "optional_auth": false,
     "path": "/api/v1/address-records/nearby",
-    "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+    "policy_source": "human-reviewed-route-policy-source",
+    "review_decision_id": "WO002-R07-API-POLICY-GET--api-v1-address-records-nearby",
+    "review_notes": "Review 07 independently reviewed expected route policy; observed FastAPI AST is compared against this row and is not the authority source.",
+    "review_owner": "System Design Authority / API policy owner pending",
     "review_status": "reviewed-route-policy-r07",
     "roles": [
       "admin",
@@ -185,7 +203,6 @@
     "source": "services/api/app/main.py:1913-1927"
   },
   "GET /api/v1/address-records/search": {
-    "analysis": "function-ast-boundary",
     "auth": "role-required",
     "delegated_policy_helpers": [],
     "expected_key": "GET /api/v1/address-records/search",
@@ -195,7 +212,10 @@
     "operation_id": "address_record_search_api_v1_address_records_search_get",
     "optional_auth": false,
     "path": "/api/v1/address-records/search",
-    "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+    "policy_source": "human-reviewed-route-policy-source",
+    "review_decision_id": "WO002-R07-API-POLICY-GET--api-v1-address-records-search",
+    "review_notes": "Review 07 independently reviewed expected route policy; observed FastAPI AST is compared against this row and is not the authority source.",
+    "review_owner": "System Design Authority / API policy owner pending",
     "review_status": "reviewed-route-policy-r07",
     "roles": [
       "admin",
@@ -207,7 +227,6 @@
     "source": "services/api/app/main.py:1892-1901"
   },
   "GET /api/v1/address-records/{address_code}": {
-    "analysis": "function-ast-boundary",
     "auth": "role-required",
     "delegated_policy_helpers": [],
     "expected_key": "GET /api/v1/address-records/{address_code}",
@@ -217,7 +236,10 @@
     "operation_id": "address_record_case_file_api_v1_address_records__address_code__get",
     "optional_auth": false,
     "path": "/api/v1/address-records/{address_code}",
-    "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+    "policy_source": "human-reviewed-route-policy-source",
+    "review_decision_id": "WO002-R07-API-POLICY-GET--api-v1-address-records-address-code",
+    "review_notes": "Review 07 independently reviewed expected route policy; observed FastAPI AST is compared against this row and is not the authority source.",
+    "review_owner": "System Design Authority / API policy owner pending",
     "review_status": "reviewed-route-policy-r07",
     "roles": [
       "admin",
@@ -229,7 +251,6 @@
     "source": "services/api/app/main.py:1944-1950"
   },
   "GET /api/v1/address-records/{address_code}/certificate": {
-    "analysis": "function-ast-boundary",
     "auth": "role-required",
     "delegated_policy_helpers": [],
     "expected_key": "GET /api/v1/address-records/{address_code}/certificate",
@@ -239,7 +260,10 @@
     "operation_id": "address_record_certificate_endpoint_api_v1_address_records__address_code__certificate_get",
     "optional_auth": false,
     "path": "/api/v1/address-records/{address_code}/certificate",
-    "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+    "policy_source": "human-reviewed-route-policy-source",
+    "review_decision_id": "WO002-R07-API-POLICY-GET--api-v1-address-records-address-code-certificate",
+    "review_notes": "Review 07 independently reviewed expected route policy; observed FastAPI AST is compared against this row and is not the authority source.",
+    "review_owner": "System Design Authority / API policy owner pending",
     "review_status": "reviewed-route-policy-r07",
     "roles": [
       "admin",
@@ -251,7 +275,6 @@
     "source": "services/api/app/main.py:1954-1962"
   },
   "GET /api/v1/addresses": {
-    "analysis": "function-ast-boundary",
     "auth": "role-required",
     "delegated_policy_helpers": [],
     "expected_key": "GET /api/v1/addresses",
@@ -261,7 +284,10 @@
     "operation_id": "list_addresses_api_v1_addresses_get",
     "optional_auth": false,
     "path": "/api/v1/addresses",
-    "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+    "policy_source": "human-reviewed-route-policy-source",
+    "review_decision_id": "WO002-R07-API-POLICY-GET--api-v1-addresses",
+    "review_notes": "Review 07 independently reviewed expected route policy; observed FastAPI AST is compared against this row and is not the authority source.",
+    "review_owner": "System Design Authority / API policy owner pending",
     "review_status": "reviewed-route-policy-r07",
     "roles": [
       "admin",
@@ -273,7 +299,6 @@
     "source": "services/api/app/main.py:1464-1467"
   },
   "GET /api/v1/addresses/{address_id}": {
-    "analysis": "function-ast-boundary",
     "auth": "role-required",
     "delegated_policy_helpers": [],
     "expected_key": "GET /api/v1/addresses/{address_id}",
@@ -283,7 +308,10 @@
     "operation_id": "address_detail_api_v1_addresses__address_id__get",
     "optional_auth": false,
     "path": "/api/v1/addresses/{address_id}",
-    "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+    "policy_source": "human-reviewed-route-policy-source",
+    "review_decision_id": "WO002-R07-API-POLICY-GET--api-v1-addresses-address-id",
+    "review_notes": "Review 07 independently reviewed expected route policy; observed FastAPI AST is compared against this row and is not the authority source.",
+    "review_owner": "System Design Authority / API policy owner pending",
     "review_status": "reviewed-route-policy-r07",
     "roles": [
       "admin",
@@ -295,7 +323,6 @@
     "source": "services/api/app/main.py:1471-1477"
   },
   "GET /api/v1/admin-units": {
-    "analysis": "function-ast-boundary",
     "auth": "public",
     "delegated_policy_helpers": [],
     "expected_key": "GET /api/v1/admin-units",
@@ -305,7 +332,10 @@
     "operation_id": "admin_units_api_v1_admin_units_get",
     "optional_auth": false,
     "path": "/api/v1/admin-units",
-    "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+    "policy_source": "human-reviewed-route-policy-source",
+    "review_decision_id": "WO002-R07-API-POLICY-GET--api-v1-admin-units",
+    "review_notes": "Review 07 independently reviewed expected route policy; observed FastAPI AST is compared against this row and is not the authority source.",
+    "review_owner": "System Design Authority / API policy owner pending",
     "review_status": "reviewed-route-policy-r07",
     "roles": [],
     "route": "/api/v1/admin-units",
@@ -313,7 +343,6 @@
     "source": "services/api/app/main.py:1234-1239"
   },
   "GET /api/v1/admin/users": {
-    "analysis": "function-ast-boundary",
     "auth": "role-required",
     "delegated_policy_helpers": [],
     "expected_key": "GET /api/v1/admin/users",
@@ -323,7 +352,10 @@
     "operation_id": "admin_list_users_api_v1_admin_users_get",
     "optional_auth": false,
     "path": "/api/v1/admin/users",
-    "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+    "policy_source": "human-reviewed-route-policy-source",
+    "review_decision_id": "WO002-R07-API-POLICY-GET--api-v1-admin-users",
+    "review_notes": "Review 07 independently reviewed expected route policy; observed FastAPI AST is compared against this row and is not the authority source.",
+    "review_owner": "System Design Authority / API policy owner pending",
     "review_status": "reviewed-route-policy-r07",
     "roles": [
       "admin"
@@ -333,7 +365,6 @@
     "source": "services/api/app/main.py:1161-1164"
   },
   "GET /api/v1/audit-logs": {
-    "analysis": "function-ast-boundary",
     "auth": "role-required",
     "delegated_policy_helpers": [],
     "expected_key": "GET /api/v1/audit-logs",
@@ -343,7 +374,10 @@
     "operation_id": "audit_logs_api_v1_audit_logs_get",
     "optional_auth": false,
     "path": "/api/v1/audit-logs",
-    "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+    "policy_source": "human-reviewed-route-policy-source",
+    "review_decision_id": "WO002-R07-API-POLICY-GET--api-v1-audit-logs",
+    "review_notes": "Review 07 independently reviewed expected route policy; observed FastAPI AST is compared against this row and is not the authority source.",
+    "review_owner": "System Design Authority / API policy owner pending",
     "review_status": "reviewed-route-policy-r07",
     "roles": [
       "admin"
@@ -353,7 +387,6 @@
     "source": "services/api/app/main.py:1352-1355"
   },
   "GET /api/v1/auth/me": {
-    "analysis": "function-ast-boundary",
     "auth": "authenticated",
     "delegated_policy_helpers": [],
     "expected_key": "GET /api/v1/auth/me",
@@ -363,7 +396,10 @@
     "operation_id": "auth_me_api_v1_auth_me_get",
     "optional_auth": false,
     "path": "/api/v1/auth/me",
-    "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+    "policy_source": "human-reviewed-route-policy-source",
+    "review_decision_id": "WO002-R07-API-POLICY-GET--api-v1-auth-me",
+    "review_notes": "Review 07 independently reviewed expected route policy; observed FastAPI AST is compared against this row and is not the authority source.",
+    "review_owner": "System Design Authority / API policy owner pending",
     "review_status": "reviewed-route-policy-r07",
     "roles": [],
     "route": "/api/v1/auth/me",
@@ -371,7 +407,6 @@
     "source": "services/api/app/main.py:1145-1146"
   },
   "GET /api/v1/buildings": {
-    "analysis": "function-ast-boundary",
     "auth": "role-required",
     "delegated_policy_helpers": [],
     "expected_key": "GET /api/v1/buildings",
@@ -381,7 +416,10 @@
     "operation_id": "list_buildings_api_v1_buildings_get",
     "optional_auth": false,
     "path": "/api/v1/buildings",
-    "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+    "policy_source": "human-reviewed-route-policy-source",
+    "review_decision_id": "WO002-R07-API-POLICY-GET--api-v1-buildings",
+    "review_notes": "Review 07 independently reviewed expected route policy; observed FastAPI AST is compared against this row and is not the authority source.",
+    "review_owner": "System Design Authority / API policy owner pending",
     "review_status": "reviewed-route-policy-r07",
     "roles": [
       "admin",
@@ -393,7 +431,6 @@
     "source": "services/api/app/main.py:1411-1414"
   },
   "GET /api/v1/buildings/{building_id}": {
-    "analysis": "function-ast-boundary",
     "auth": "role-required",
     "delegated_policy_helpers": [],
     "expected_key": "GET /api/v1/buildings/{building_id}",
@@ -403,7 +440,10 @@
     "operation_id": "building_detail_api_v1_buildings__building_id__get",
     "optional_auth": false,
     "path": "/api/v1/buildings/{building_id}",
-    "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+    "policy_source": "human-reviewed-route-policy-source",
+    "review_decision_id": "WO002-R07-API-POLICY-GET--api-v1-buildings-building-id",
+    "review_notes": "Review 07 independently reviewed expected route policy; observed FastAPI AST is compared against this row and is not the authority source.",
+    "review_owner": "System Design Authority / API policy owner pending",
     "review_status": "reviewed-route-policy-r07",
     "roles": [
       "admin",
@@ -415,7 +455,6 @@
     "source": "services/api/app/main.py:1418-1424"
   },
   "GET /api/v1/field/assignments": {
-    "analysis": "function-ast-boundary",
     "auth": "role-required",
     "delegated_policy_helpers": [],
     "expected_key": "GET /api/v1/field/assignments",
@@ -425,7 +464,10 @@
     "operation_id": "field_assignments_api_v1_field_assignments_get",
     "optional_auth": false,
     "path": "/api/v1/field/assignments",
-    "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+    "policy_source": "human-reviewed-route-policy-source",
+    "review_decision_id": "WO002-R07-API-POLICY-GET--api-v1-field-assignments",
+    "review_notes": "Review 07 independently reviewed expected route policy; observed FastAPI AST is compared against this row and is not the authority source.",
+    "review_owner": "System Design Authority / API policy owner pending",
     "review_status": "reviewed-route-policy-r07",
     "roles": [
       "admin",
@@ -437,7 +479,6 @@
     "source": "services/api/app/main.py:1517-1520"
   },
   "GET /api/v1/field/geotag-tasks": {
-    "analysis": "function-ast-boundary",
     "auth": "role-required",
     "delegated_policy_helpers": [],
     "expected_key": "GET /api/v1/field/geotag-tasks",
@@ -447,7 +488,10 @@
     "operation_id": "field_geotag_tasks_api_v1_field_geotag_tasks_get",
     "optional_auth": false,
     "path": "/api/v1/field/geotag-tasks",
-    "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+    "policy_source": "human-reviewed-route-policy-source",
+    "review_decision_id": "WO002-R07-API-POLICY-GET--api-v1-field-geotag-tasks",
+    "review_notes": "Review 07 independently reviewed expected route policy; observed FastAPI AST is compared against this row and is not the authority source.",
+    "review_owner": "System Design Authority / API policy owner pending",
     "review_status": "reviewed-route-policy-r07",
     "roles": [
       "admin",
@@ -459,7 +503,6 @@
     "source": "services/api/app/main.py:1524-1527"
   },
   "GET /api/v1/field/submissions": {
-    "analysis": "function-ast-boundary",
     "auth": "role-required",
     "delegated_policy_helpers": [],
     "expected_key": "GET /api/v1/field/submissions",
@@ -469,7 +512,10 @@
     "operation_id": "field_submissions_api_v1_field_submissions_get",
     "optional_auth": false,
     "path": "/api/v1/field/submissions",
-    "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+    "policy_source": "human-reviewed-route-policy-source",
+    "review_decision_id": "WO002-R07-API-POLICY-GET--api-v1-field-submissions",
+    "review_notes": "Review 07 independently reviewed expected route policy; observed FastAPI AST is compared against this row and is not the authority source.",
+    "review_owner": "System Design Authority / API policy owner pending",
     "review_status": "reviewed-route-policy-r07",
     "roles": [
       "admin",
@@ -481,7 +527,6 @@
     "source": "services/api/app/main.py:1553-1556"
   },
   "GET /api/v1/field/submissions/{submission_id}/evidence-files/{file_id}": {
-    "analysis": "function-ast-boundary",
     "auth": "role-required",
     "delegated_policy_helpers": [],
     "expected_key": "GET /api/v1/field/submissions/{submission_id}/evidence-files/{file_id}",
@@ -491,7 +536,10 @@
     "operation_id": "download_field_submission_evidence_file_api_v1_field_submissions__submission_id__evidence_files__file_id__get",
     "optional_auth": false,
     "path": "/api/v1/field/submissions/{submission_id}/evidence-files/{file_id}",
-    "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+    "policy_source": "human-reviewed-route-policy-source",
+    "review_decision_id": "WO002-R07-API-POLICY-GET--api-v1-field-submissions-submission-id-evidence-files-file-id",
+    "review_notes": "Review 07 independently reviewed expected route policy; observed FastAPI AST is compared against this row and is not the authority source.",
+    "review_owner": "System Design Authority / API policy owner pending",
     "review_status": "reviewed-route-policy-r07",
     "roles": [
       "admin",
@@ -503,7 +551,6 @@
     "source": "services/api/app/main.py:1677-1690"
   },
   "GET /api/v1/field/submissions/{submission_id}/evidence-history": {
-    "analysis": "function-ast-boundary",
     "auth": "role-required",
     "delegated_policy_helpers": [],
     "expected_key": "GET /api/v1/field/submissions/{submission_id}/evidence-history",
@@ -513,7 +560,10 @@
     "operation_id": "field_submission_evidence_history_api_v1_field_submissions__submission_id__evidence_history_get",
     "optional_auth": false,
     "path": "/api/v1/field/submissions/{submission_id}/evidence-history",
-    "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+    "policy_source": "human-reviewed-route-policy-source",
+    "review_decision_id": "WO002-R07-API-POLICY-GET--api-v1-field-submissions-submission-id-evidence-history",
+    "review_notes": "Review 07 independently reviewed expected route policy; observed FastAPI AST is compared against this row and is not the authority source.",
+    "review_owner": "System Design Authority / API policy owner pending",
     "review_status": "reviewed-route-policy-r07",
     "roles": [
       "admin",
@@ -525,7 +575,6 @@
     "source": "services/api/app/main.py:1653-1659"
   },
   "GET /api/v1/geotag-submissions": {
-    "analysis": "function-ast-boundary",
     "auth": "role-required",
     "delegated_policy_helpers": [],
     "expected_key": "GET /api/v1/geotag-submissions",
@@ -535,7 +584,10 @@
     "operation_id": "geotag_submissions_api_v1_geotag_submissions_get",
     "optional_auth": false,
     "path": "/api/v1/geotag-submissions",
-    "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+    "policy_source": "human-reviewed-route-policy-source",
+    "review_decision_id": "WO002-R07-API-POLICY-GET--api-v1-geotag-submissions",
+    "review_notes": "Review 07 independently reviewed expected route policy; observed FastAPI AST is compared against this row and is not the authority source.",
+    "review_owner": "System Design Authority / API policy owner pending",
     "review_status": "reviewed-route-policy-r07",
     "roles": [
       "admin",
@@ -547,7 +599,6 @@
     "source": "services/api/app/main.py:1966-1969"
   },
   "GET /api/v1/geotag-submissions/automation/sla-drilldown": {
-    "analysis": "function-ast-boundary",
     "auth": "role-required",
     "delegated_policy_helpers": [],
     "expected_key": "GET /api/v1/geotag-submissions/automation/sla-drilldown",
@@ -557,7 +608,10 @@
     "operation_id": "geotag_sla_drilldown_api_v1_geotag_submissions_automation_sla_drilldown_get",
     "optional_auth": false,
     "path": "/api/v1/geotag-submissions/automation/sla-drilldown",
-    "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+    "policy_source": "human-reviewed-route-policy-source",
+    "review_decision_id": "WO002-R07-API-POLICY-GET--api-v1-geotag-submissions-automation-sla-drilldown",
+    "review_notes": "Review 07 independently reviewed expected route policy; observed FastAPI AST is compared against this row and is not the authority source.",
+    "review_owner": "System Design Authority / API policy owner pending",
     "review_status": "reviewed-route-policy-r07",
     "roles": [
       "admin",
@@ -569,7 +623,6 @@
     "source": "services/api/app/main.py:1981-1985"
   },
   "GET /api/v1/geotag-submissions/automation/summary": {
-    "analysis": "function-ast-boundary",
     "auth": "role-required",
     "delegated_policy_helpers": [],
     "expected_key": "GET /api/v1/geotag-submissions/automation/summary",
@@ -579,7 +632,10 @@
     "operation_id": "geotag_automation_summary_api_v1_geotag_submissions_automation_summary_get",
     "optional_auth": false,
     "path": "/api/v1/geotag-submissions/automation/summary",
-    "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+    "policy_source": "human-reviewed-route-policy-source",
+    "review_decision_id": "WO002-R07-API-POLICY-GET--api-v1-geotag-submissions-automation-summary",
+    "review_notes": "Review 07 independently reviewed expected route policy; observed FastAPI AST is compared against this row and is not the authority source.",
+    "review_owner": "System Design Authority / API policy owner pending",
     "review_status": "reviewed-route-policy-r07",
     "roles": [
       "admin",
@@ -591,7 +647,6 @@
     "source": "services/api/app/main.py:1973-1977"
   },
   "GET /api/v1/geotag-submissions/duplicates/summary": {
-    "analysis": "function-ast-boundary",
     "auth": "role-required",
     "delegated_policy_helpers": [],
     "expected_key": "GET /api/v1/geotag-submissions/duplicates/summary",
@@ -601,7 +656,10 @@
     "operation_id": "geotag_duplicates_summary_api_v1_geotag_submissions_duplicates_summary_get",
     "optional_auth": false,
     "path": "/api/v1/geotag-submissions/duplicates/summary",
-    "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+    "policy_source": "human-reviewed-route-policy-source",
+    "review_decision_id": "WO002-R07-API-POLICY-GET--api-v1-geotag-submissions-duplicates-summary",
+    "review_notes": "Review 07 independently reviewed expected route policy; observed FastAPI AST is compared against this row and is not the authority source.",
+    "review_owner": "System Design Authority / API policy owner pending",
     "review_status": "reviewed-route-policy-r07",
     "roles": [
       "admin",
@@ -613,7 +671,6 @@
     "source": "services/api/app/main.py:1989-1992"
   },
   "GET /api/v1/geotag-submissions/{submission_id}/certificate": {
-    "analysis": "function-ast-boundary",
     "auth": "role-required",
     "delegated_policy_helpers": [],
     "expected_key": "GET /api/v1/geotag-submissions/{submission_id}/certificate",
@@ -623,7 +680,10 @@
     "operation_id": "geotag_certificate_api_v1_geotag_submissions__submission_id__certificate_get",
     "optional_auth": false,
     "path": "/api/v1/geotag-submissions/{submission_id}/certificate",
-    "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+    "policy_source": "human-reviewed-route-policy-source",
+    "review_decision_id": "WO002-R07-API-POLICY-GET--api-v1-geotag-submissions-submission-id-certificate",
+    "review_notes": "Review 07 independently reviewed expected route policy; observed FastAPI AST is compared against this row and is not the authority source.",
+    "review_owner": "System Design Authority / API policy owner pending",
     "review_status": "reviewed-route-policy-r07",
     "roles": [
       "admin",
@@ -635,7 +695,6 @@
     "source": "services/api/app/main.py:1996-2004"
   },
   "GET /api/v1/geotag-submissions/{submission_id}/history": {
-    "analysis": "function-ast-boundary",
     "auth": "role-required",
     "delegated_policy_helpers": [],
     "expected_key": "GET /api/v1/geotag-submissions/{submission_id}/history",
@@ -645,7 +704,10 @@
     "operation_id": "geotag_submission_history_api_v1_geotag_submissions__submission_id__history_get",
     "optional_auth": false,
     "path": "/api/v1/geotag-submissions/{submission_id}/history",
-    "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+    "policy_source": "human-reviewed-route-policy-source",
+    "review_decision_id": "WO002-R07-API-POLICY-GET--api-v1-geotag-submissions-submission-id-history",
+    "review_notes": "Review 07 independently reviewed expected route policy; observed FastAPI AST is compared against this row and is not the authority source.",
+    "review_owner": "System Design Authority / API policy owner pending",
     "review_status": "reviewed-route-policy-r07",
     "roles": [
       "admin",
@@ -657,7 +719,6 @@
     "source": "services/api/app/main.py:2008-2011"
   },
   "GET /api/v1/health": {
-    "analysis": "function-ast-boundary",
     "auth": "public",
     "delegated_policy_helpers": [],
     "expected_key": "GET /api/v1/health",
@@ -667,7 +728,10 @@
     "operation_id": "health_api_v1_health_get",
     "optional_auth": false,
     "path": "/api/v1/health",
-    "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+    "policy_source": "human-reviewed-route-policy-source",
+    "review_decision_id": "WO002-R07-API-POLICY-GET--api-v1-health",
+    "review_notes": "Review 07 independently reviewed expected route policy; observed FastAPI AST is compared against this row and is not the authority source.",
+    "review_owner": "System Design Authority / API policy owner pending",
     "review_status": "reviewed-route-policy-r07",
     "roles": [],
     "route": "/api/v1/health",
@@ -675,7 +739,6 @@
     "source": "services/api/app/main.py:1097-1098"
   },
   "GET /api/v1/imports/jobs": {
-    "analysis": "function-ast-boundary",
     "auth": "role-required",
     "delegated_policy_helpers": [],
     "expected_key": "GET /api/v1/imports/jobs",
@@ -685,7 +748,10 @@
     "operation_id": "import_jobs_api_v1_imports_jobs_get",
     "optional_auth": false,
     "path": "/api/v1/imports/jobs",
-    "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+    "policy_source": "human-reviewed-route-policy-source",
+    "review_decision_id": "WO002-R07-API-POLICY-GET--api-v1-imports-jobs",
+    "review_notes": "Review 07 independently reviewed expected route policy; observed FastAPI AST is compared against this row and is not the authority source.",
+    "review_owner": "System Design Authority / API policy owner pending",
     "review_status": "reviewed-route-policy-r07",
     "roles": [
       "admin",
@@ -697,7 +763,6 @@
     "source": "services/api/app/main.py:2172-2175"
   },
   "GET /api/v1/imports/jobs/{job_id}/rows": {
-    "analysis": "function-ast-boundary",
     "auth": "role-required",
     "delegated_policy_helpers": [],
     "expected_key": "GET /api/v1/imports/jobs/{job_id}/rows",
@@ -707,7 +772,10 @@
     "operation_id": "import_rows_api_v1_imports_jobs__job_id__rows_get",
     "optional_auth": false,
     "path": "/api/v1/imports/jobs/{job_id}/rows",
-    "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+    "policy_source": "human-reviewed-route-policy-source",
+    "review_decision_id": "WO002-R07-API-POLICY-GET--api-v1-imports-jobs-job-id-rows",
+    "review_notes": "Review 07 independently reviewed expected route policy; observed FastAPI AST is compared against this row and is not the authority source.",
+    "review_owner": "System Design Authority / API policy owner pending",
     "review_status": "reviewed-route-policy-r07",
     "roles": [
       "admin",
@@ -719,7 +787,6 @@
     "source": "services/api/app/main.py:2179-2185"
   },
   "GET /api/v1/meta": {
-    "analysis": "function-ast-boundary",
     "auth": "public",
     "delegated_policy_helpers": [],
     "expected_key": "GET /api/v1/meta",
@@ -729,7 +796,10 @@
     "operation_id": "meta_api_v1_meta_get",
     "optional_auth": false,
     "path": "/api/v1/meta",
-    "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+    "policy_source": "human-reviewed-route-policy-source",
+    "review_decision_id": "WO002-R07-API-POLICY-GET--api-v1-meta",
+    "review_notes": "Review 07 independently reviewed expected route policy; observed FastAPI AST is compared against this row and is not the authority source.",
+    "review_owner": "System Design Authority / API policy owner pending",
     "review_status": "reviewed-route-policy-r07",
     "roles": [],
     "route": "/api/v1/meta",
@@ -737,7 +807,6 @@
     "source": "services/api/app/main.py:1102-1108"
   },
   "GET /api/v1/operator/command-center": {
-    "analysis": "function-ast-boundary",
     "auth": "role-required",
     "delegated_policy_helpers": [],
     "expected_key": "GET /api/v1/operator/command-center",
@@ -747,7 +816,10 @@
     "operation_id": "operator_command_center_api_v1_operator_command_center_get",
     "optional_auth": false,
     "path": "/api/v1/operator/command-center",
-    "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+    "policy_source": "human-reviewed-route-policy-source",
+    "review_decision_id": "WO002-R07-API-POLICY-GET--api-v1-operator-command-center",
+    "review_notes": "Review 07 independently reviewed expected route policy; observed FastAPI AST is compared against this row and is not the authority source.",
+    "review_owner": "System Design Authority / API policy owner pending",
     "review_status": "reviewed-route-policy-r07",
     "roles": [
       "admin",
@@ -759,7 +831,6 @@
     "source": "services/api/app/main.py:2298-2335"
   },
   "GET /api/v1/operator/demo-fixtures/status": {
-    "analysis": "function-ast-boundary",
     "auth": "role-required",
     "delegated_policy_helpers": [],
     "expected_key": "GET /api/v1/operator/demo-fixtures/status",
@@ -769,7 +840,10 @@
     "operation_id": "operator_demo_fixture_status_api_v1_operator_demo_fixtures_status_get",
     "optional_auth": false,
     "path": "/api/v1/operator/demo-fixtures/status",
-    "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+    "policy_source": "human-reviewed-route-policy-source",
+    "review_decision_id": "WO002-R07-API-POLICY-GET--api-v1-operator-demo-fixtures-status",
+    "review_notes": "Review 07 independently reviewed expected route policy; observed FastAPI AST is compared against this row and is not the authority source.",
+    "review_owner": "System Design Authority / API policy owner pending",
     "review_status": "reviewed-route-policy-r07",
     "roles": [
       "admin",
@@ -781,7 +855,6 @@
     "source": "services/api/app/main.py:2361-2364"
   },
   "GET /api/v1/operator/migrations/status": {
-    "analysis": "function-ast-boundary",
     "auth": "role-required",
     "delegated_policy_helpers": [],
     "expected_key": "GET /api/v1/operator/migrations/status",
@@ -791,7 +864,10 @@
     "operation_id": "operator_migration_status_api_v1_operator_migrations_status_get",
     "optional_auth": false,
     "path": "/api/v1/operator/migrations/status",
-    "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+    "policy_source": "human-reviewed-route-policy-source",
+    "review_decision_id": "WO002-R07-API-POLICY-GET--api-v1-operator-migrations-status",
+    "review_notes": "Review 07 independently reviewed expected route policy; observed FastAPI AST is compared against this row and is not the authority source.",
+    "review_owner": "System Design Authority / API policy owner pending",
     "review_status": "reviewed-route-policy-r07",
     "roles": [
       "admin",
@@ -803,7 +879,6 @@
     "source": "services/api/app/main.py:2347-2350"
   },
   "GET /api/v1/operator/postgis/readiness": {
-    "analysis": "function-ast-boundary",
     "auth": "role-required",
     "delegated_policy_helpers": [],
     "expected_key": "GET /api/v1/operator/postgis/readiness",
@@ -813,7 +888,10 @@
     "operation_id": "operator_postgis_readiness_api_v1_operator_postgis_readiness_get",
     "optional_auth": false,
     "path": "/api/v1/operator/postgis/readiness",
-    "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+    "policy_source": "human-reviewed-route-policy-source",
+    "review_decision_id": "WO002-R07-API-POLICY-GET--api-v1-operator-postgis-readiness",
+    "review_notes": "Review 07 independently reviewed expected route policy; observed FastAPI AST is compared against this row and is not the authority source.",
+    "review_owner": "System Design Authority / API policy owner pending",
     "review_status": "reviewed-route-policy-r07",
     "roles": [
       "admin",
@@ -825,7 +903,6 @@
     "source": "services/api/app/main.py:2340-2343"
   },
   "GET /api/v1/operator/production-readiness": {
-    "analysis": "function-ast-boundary",
     "auth": "role-required",
     "delegated_policy_helpers": [],
     "expected_key": "GET /api/v1/operator/production-readiness",
@@ -835,7 +912,10 @@
     "operation_id": "operator_production_readiness_api_v1_operator_production_readiness_get",
     "optional_auth": false,
     "path": "/api/v1/operator/production-readiness",
-    "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+    "policy_source": "human-reviewed-route-policy-source",
+    "review_decision_id": "WO002-R07-API-POLICY-GET--api-v1-operator-production-readiness",
+    "review_notes": "Review 07 independently reviewed expected route policy; observed FastAPI AST is compared against this row and is not the authority source.",
+    "review_owner": "System Design Authority / API policy owner pending",
     "review_status": "reviewed-route-policy-r07",
     "roles": [
       "admin",
@@ -847,7 +927,6 @@
     "source": "services/api/app/main.py:2354-2357"
   },
   "GET /api/v1/operator/restore-drill/latest": {
-    "analysis": "function-ast-boundary",
     "auth": "role-required",
     "delegated_policy_helpers": [],
     "expected_key": "GET /api/v1/operator/restore-drill/latest",
@@ -857,7 +936,10 @@
     "operation_id": "operator_restore_drill_latest_api_v1_operator_restore_drill_latest_get",
     "optional_auth": false,
     "path": "/api/v1/operator/restore-drill/latest",
-    "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+    "policy_source": "human-reviewed-route-policy-source",
+    "review_decision_id": "WO002-R07-API-POLICY-GET--api-v1-operator-restore-drill-latest",
+    "review_notes": "Review 07 independently reviewed expected route policy; observed FastAPI AST is compared against this row and is not the authority source.",
+    "review_owner": "System Design Authority / API policy owner pending",
     "review_status": "reviewed-route-policy-r07",
     "roles": [
       "admin",
@@ -869,7 +951,6 @@
     "source": "services/api/app/main.py:2375-2378"
   },
   "GET /api/v1/pilot-readiness/summary": {
-    "analysis": "function-ast-boundary",
     "auth": "role-required",
     "delegated_policy_helpers": [],
     "expected_key": "GET /api/v1/pilot-readiness/summary",
@@ -879,7 +960,10 @@
     "operation_id": "pilot_readiness_summary_endpoint_api_v1_pilot_readiness_summary_get",
     "optional_auth": false,
     "path": "/api/v1/pilot-readiness/summary",
-    "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+    "policy_source": "human-reviewed-route-policy-source",
+    "review_decision_id": "WO002-R07-API-POLICY-GET--api-v1-pilot-readiness-summary",
+    "review_notes": "Review 07 independently reviewed expected route policy; observed FastAPI AST is compared against this row and is not the authority source.",
+    "review_owner": "System Design Authority / API policy owner pending",
     "review_status": "reviewed-route-policy-r07",
     "roles": [
       "admin",
@@ -892,7 +976,6 @@
     "source": "services/api/app/main.py:2404-2407"
   },
   "GET /api/v1/provinces": {
-    "analysis": "function-ast-boundary",
     "auth": "public",
     "delegated_policy_helpers": [],
     "expected_key": "GET /api/v1/provinces",
@@ -902,7 +985,10 @@
     "operation_id": "list_public_provinces_api_v1_provinces_get",
     "optional_auth": false,
     "path": "/api/v1/provinces",
-    "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+    "policy_source": "human-reviewed-route-policy-source",
+    "review_decision_id": "WO002-R07-API-POLICY-GET--api-v1-provinces",
+    "review_notes": "Review 07 independently reviewed expected route policy; observed FastAPI AST is compared against this row and is not the authority source.",
+    "review_owner": "System Design Authority / API policy owner pending",
     "review_status": "reviewed-route-policy-r07",
     "roles": [],
     "route": "/api/v1/provinces",
@@ -910,7 +996,6 @@
     "source": "services/api/app/main.py:1229-1230"
   },
   "GET /api/v1/public/address-code/{code}": {
-    "analysis": "function-ast-boundary",
     "auth": "public",
     "delegated_policy_helpers": [],
     "expected_key": "GET /api/v1/public/address-code/{code}",
@@ -920,7 +1005,10 @@
     "operation_id": "public_address_code_lookup_api_v1_public_address_code__code__get",
     "optional_auth": false,
     "path": "/api/v1/public/address-code/{code}",
-    "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+    "policy_source": "human-reviewed-route-policy-source",
+    "review_decision_id": "WO002-R07-API-POLICY-GET--api-v1-public-address-code-code",
+    "review_notes": "Review 07 independently reviewed expected route policy; observed FastAPI AST is compared against this row and is not the authority source.",
+    "review_owner": "System Design Authority / API policy owner pending",
     "review_status": "reviewed-route-policy-r07",
     "roles": [],
     "route": "/api/v1/public/address-code/{code}",
@@ -928,7 +1016,6 @@
     "source": "services/api/app/main.py:1786-1788"
   },
   "GET /api/v1/public/address-code/{code}/record": {
-    "analysis": "function-ast-boundary",
     "auth": "public",
     "delegated_policy_helpers": [],
     "expected_key": "GET /api/v1/public/address-code/{code}/record",
@@ -938,7 +1025,10 @@
     "operation_id": "public_address_code_record_api_v1_public_address_code__code__record_get",
     "optional_auth": false,
     "path": "/api/v1/public/address-code/{code}/record",
-    "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+    "policy_source": "human-reviewed-route-policy-source",
+    "review_decision_id": "WO002-R07-API-POLICY-GET--api-v1-public-address-code-code-record",
+    "review_notes": "Review 07 independently reviewed expected route policy; observed FastAPI AST is compared against this row and is not the authority source.",
+    "review_owner": "System Design Authority / API policy owner pending",
     "review_status": "reviewed-route-policy-r07",
     "roles": [],
     "route": "/api/v1/public/address-code/{code}/record",
@@ -946,7 +1036,6 @@
     "source": "services/api/app/main.py:1811-1813"
   },
   "GET /api/v1/public/geotag-submissions/{submission_id}/tracking": {
-    "analysis": "function-ast-boundary",
     "auth": "public",
     "delegated_policy_helpers": [],
     "expected_key": "GET /api/v1/public/geotag-submissions/{submission_id}/tracking",
@@ -956,7 +1045,10 @@
     "operation_id": "public_geotag_submission_tracking_api_v1_public_geotag_submissions__submission_id__tracking_get",
     "optional_auth": false,
     "path": "/api/v1/public/geotag-submissions/{submission_id}/tracking",
-    "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+    "policy_source": "human-reviewed-route-policy-source",
+    "review_decision_id": "WO002-R07-API-POLICY-GET--api-v1-public-geotag-submissions-submission-id-tracking",
+    "review_notes": "Review 07 independently reviewed expected route policy; observed FastAPI AST is compared against this row and is not the authority source.",
+    "review_owner": "System Design Authority / API policy owner pending",
     "review_status": "reviewed-route-policy-r07",
     "roles": [],
     "route": "/api/v1/public/geotag-submissions/{submission_id}/tracking",
@@ -964,7 +1056,6 @@
     "source": "services/api/app/main.py:1856-1861"
   },
   "GET /api/v1/public/issuance/{query}": {
-    "analysis": "function-ast-boundary",
     "auth": "public",
     "delegated_policy_helpers": [],
     "expected_key": "GET /api/v1/public/issuance/{query}",
@@ -974,7 +1065,10 @@
     "operation_id": "public_issuance_lookup_api_v1_public_issuance__query__get",
     "optional_auth": false,
     "path": "/api/v1/public/issuance/{query}",
-    "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+    "policy_source": "human-reviewed-route-policy-source",
+    "review_decision_id": "WO002-R07-API-POLICY-GET--api-v1-public-issuance-query",
+    "review_notes": "Review 07 independently reviewed expected route policy; observed FastAPI AST is compared against this row and is not the authority source.",
+    "review_owner": "System Design Authority / API policy owner pending",
     "review_status": "reviewed-route-policy-r07",
     "roles": [],
     "route": "/api/v1/public/issuance/{query}",
@@ -982,7 +1076,6 @@
     "source": "services/api/app/main.py:1780-1782"
   },
   "GET /api/v1/public/territory-options": {
-    "analysis": "function-ast-boundary",
     "auth": "public",
     "delegated_policy_helpers": [],
     "expected_key": "GET /api/v1/public/territory-options",
@@ -992,7 +1085,10 @@
     "operation_id": "public_territory_options_api_v1_public_territory_options_get",
     "optional_auth": false,
     "path": "/api/v1/public/territory-options",
-    "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+    "policy_source": "human-reviewed-route-policy-source",
+    "review_decision_id": "WO002-R07-API-POLICY-GET--api-v1-public-territory-options",
+    "review_notes": "Review 07 independently reviewed expected route policy; observed FastAPI AST is compared against this row and is not the authority source.",
+    "review_owner": "System Design Authority / API policy owner pending",
     "review_status": "reviewed-route-policy-r07",
     "roles": [],
     "route": "/api/v1/public/territory-options",
@@ -1000,7 +1096,6 @@
     "source": "services/api/app/main.py:1281-1287"
   },
   "GET /api/v1/public/tracking/{lookup_code}": {
-    "analysis": "function-ast-boundary",
     "auth": "public",
     "delegated_policy_helpers": [],
     "expected_key": "GET /api/v1/public/tracking/{lookup_code}",
@@ -1010,7 +1105,10 @@
     "operation_id": "public_tracking_lookup_api_v1_public_tracking__lookup_code__get",
     "optional_auth": false,
     "path": "/api/v1/public/tracking/{lookup_code}",
-    "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+    "policy_source": "human-reviewed-route-policy-source",
+    "review_decision_id": "WO002-R07-API-POLICY-GET--api-v1-public-tracking-lookup-code",
+    "review_notes": "Review 07 independently reviewed expected route policy; observed FastAPI AST is compared against this row and is not the authority source.",
+    "review_owner": "System Design Authority / API policy owner pending",
     "review_status": "reviewed-route-policy-r07",
     "roles": [],
     "route": "/api/v1/public/tracking/{lookup_code}",
@@ -1018,7 +1116,6 @@
     "source": "services/api/app/main.py:1865-1888"
   },
   "GET /api/v1/public/verification/{query}": {
-    "analysis": "function-ast-boundary",
     "auth": "public",
     "delegated_policy_helpers": [],
     "expected_key": "GET /api/v1/public/verification/{query}",
@@ -1028,7 +1125,10 @@
     "operation_id": "public_verification_lookup_api_v1_public_verification__query__get",
     "optional_auth": false,
     "path": "/api/v1/public/verification/{query}",
-    "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+    "policy_source": "human-reviewed-route-policy-source",
+    "review_decision_id": "WO002-R07-API-POLICY-GET--api-v1-public-verification-query",
+    "review_notes": "Review 07 independently reviewed expected route policy; observed FastAPI AST is compared against this row and is not the authority source.",
+    "review_owner": "System Design Authority / API policy owner pending",
     "review_status": "reviewed-route-policy-r07",
     "roles": [],
     "route": "/api/v1/public/verification/{query}",
@@ -1036,7 +1136,6 @@
     "source": "services/api/app/main.py:1774-1776"
   },
   "GET /api/v1/publication/packs": {
-    "analysis": "function-ast-boundary",
     "auth": "role-required",
     "delegated_policy_helpers": [],
     "expected_key": "GET /api/v1/publication/packs",
@@ -1046,7 +1145,10 @@
     "operation_id": "publication_packs_api_v1_publication_packs_get",
     "optional_auth": false,
     "path": "/api/v1/publication/packs",
-    "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+    "policy_source": "human-reviewed-route-policy-source",
+    "review_decision_id": "WO002-R07-API-POLICY-GET--api-v1-publication-packs",
+    "review_notes": "Review 07 independently reviewed expected route policy; observed FastAPI AST is compared against this row and is not the authority source.",
+    "review_owner": "System Design Authority / API policy owner pending",
     "review_status": "reviewed-route-policy-r07",
     "roles": [
       "admin",
@@ -1058,7 +1160,6 @@
     "source": "services/api/app/main.py:2213-2216"
   },
   "GET /api/v1/reporting/summary": {
-    "analysis": "function-ast-boundary",
     "auth": "role-required",
     "delegated_policy_helpers": [],
     "expected_key": "GET /api/v1/reporting/summary",
@@ -1068,7 +1169,10 @@
     "operation_id": "reporting_summary_endpoint_api_v1_reporting_summary_get",
     "optional_auth": false,
     "path": "/api/v1/reporting/summary",
-    "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+    "policy_source": "human-reviewed-route-policy-source",
+    "review_decision_id": "WO002-R07-API-POLICY-GET--api-v1-reporting-summary",
+    "review_notes": "Review 07 independently reviewed expected route policy; observed FastAPI AST is compared against this row and is not the authority source.",
+    "review_owner": "System Design Authority / API policy owner pending",
     "review_status": "reviewed-route-policy-r07",
     "roles": [
       "admin",
@@ -1081,7 +1185,6 @@
     "source": "services/api/app/main.py:2382-2400"
   },
   "GET /api/v1/roads": {
-    "analysis": "function-ast-boundary",
     "auth": "role-required",
     "delegated_policy_helpers": [],
     "expected_key": "GET /api/v1/roads",
@@ -1091,7 +1194,10 @@
     "operation_id": "list_roads_api_v1_roads_get",
     "optional_auth": false,
     "path": "/api/v1/roads",
-    "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+    "policy_source": "human-reviewed-route-policy-source",
+    "review_decision_id": "WO002-R07-API-POLICY-GET--api-v1-roads",
+    "review_notes": "Review 07 independently reviewed expected route policy; observed FastAPI AST is compared against this row and is not the authority source.",
+    "review_owner": "System Design Authority / API policy owner pending",
     "review_status": "reviewed-route-policy-r07",
     "roles": [
       "admin",
@@ -1103,7 +1209,6 @@
     "source": "services/api/app/main.py:1359-1362"
   },
   "GET /api/v1/roads/{road_id}": {
-    "analysis": "function-ast-boundary",
     "auth": "role-required",
     "delegated_policy_helpers": [],
     "expected_key": "GET /api/v1/roads/{road_id}",
@@ -1113,7 +1218,10 @@
     "operation_id": "road_detail_api_v1_roads__road_id__get",
     "optional_auth": false,
     "path": "/api/v1/roads/{road_id}",
-    "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+    "policy_source": "human-reviewed-route-policy-source",
+    "review_decision_id": "WO002-R07-API-POLICY-GET--api-v1-roads-road-id",
+    "review_notes": "Review 07 independently reviewed expected route policy; observed FastAPI AST is compared against this row and is not the authority source.",
+    "review_owner": "System Design Authority / API policy owner pending",
     "review_status": "reviewed-route-policy-r07",
     "roles": [
       "admin",
@@ -1125,7 +1233,6 @@
     "source": "services/api/app/main.py:1366-1372"
   },
   "GET /api/v1/signage/export": {
-    "analysis": "function-ast-boundary",
     "auth": "role-required",
     "delegated_policy_helpers": [],
     "expected_key": "GET /api/v1/signage/export",
@@ -1135,7 +1242,10 @@
     "operation_id": "signage_export_endpoint_api_v1_signage_export_get",
     "optional_auth": false,
     "path": "/api/v1/signage/export",
-    "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+    "policy_source": "human-reviewed-route-policy-source",
+    "review_decision_id": "WO002-R07-API-POLICY-GET--api-v1-signage-export",
+    "review_notes": "Review 07 independently reviewed expected route policy; observed FastAPI AST is compared against this row and is not the authority source.",
+    "review_owner": "System Design Authority / API policy owner pending",
     "review_status": "reviewed-route-policy-r07",
     "roles": [
       "admin",
@@ -1148,7 +1258,6 @@
     "source": "services/api/app/main.py:2118-2121"
   },
   "GET /api/v1/signage/pack": {
-    "analysis": "function-ast-boundary",
     "auth": "role-required",
     "delegated_policy_helpers": [],
     "expected_key": "GET /api/v1/signage/pack",
@@ -1158,7 +1267,10 @@
     "operation_id": "signage_pack_endpoint_api_v1_signage_pack_get",
     "optional_auth": false,
     "path": "/api/v1/signage/pack",
-    "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+    "policy_source": "human-reviewed-route-policy-source",
+    "review_decision_id": "WO002-R07-API-POLICY-GET--api-v1-signage-pack",
+    "review_notes": "Review 07 independently reviewed expected route policy; observed FastAPI AST is compared against this row and is not the authority source.",
+    "review_owner": "System Design Authority / API policy owner pending",
     "review_status": "reviewed-route-policy-r07",
     "roles": [
       "admin",
@@ -1170,7 +1282,6 @@
     "source": "services/api/app/main.py:2125-2128"
   },
   "GET /api/v1/territories": {
-    "analysis": "function-ast-boundary",
     "auth": "role-required",
     "delegated_policy_helpers": [],
     "expected_key": "GET /api/v1/territories",
@@ -1180,7 +1291,10 @@
     "operation_id": "list_territories_api_v1_territories_get",
     "optional_auth": false,
     "path": "/api/v1/territories",
-    "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+    "policy_source": "human-reviewed-route-policy-source",
+    "review_decision_id": "WO002-R07-API-POLICY-GET--api-v1-territories",
+    "review_notes": "Review 07 independently reviewed expected route policy; observed FastAPI AST is compared against this row and is not the authority source.",
+    "review_owner": "System Design Authority / API policy owner pending",
     "review_status": "reviewed-route-policy-r07",
     "roles": [
       "admin",
@@ -1192,7 +1306,6 @@
     "source": "services/api/app/main.py:1291-1302"
   },
   "GET /api/v1/territories/provinces": {
-    "analysis": "function-ast-boundary",
     "auth": "public",
     "delegated_policy_helpers": [],
     "expected_key": "GET /api/v1/territories/provinces",
@@ -1202,7 +1315,10 @@
     "operation_id": "list_provinces_api_v1_territories_provinces_get",
     "optional_auth": false,
     "path": "/api/v1/territories/provinces",
-    "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+    "policy_source": "human-reviewed-route-policy-source",
+    "review_decision_id": "WO002-R07-API-POLICY-GET--api-v1-territories-provinces",
+    "review_notes": "Review 07 independently reviewed expected route policy; observed FastAPI AST is compared against this row and is not the authority source.",
+    "review_owner": "System Design Authority / API policy owner pending",
     "review_status": "reviewed-route-policy-r07",
     "roles": [],
     "route": "/api/v1/territories/provinces",
@@ -1210,7 +1326,6 @@
     "source": "services/api/app/main.py:1224-1225"
   },
   "GET /api/v1/territories/{territory_id}": {
-    "analysis": "function-ast-boundary",
     "auth": "role-required",
     "delegated_policy_helpers": [],
     "expected_key": "GET /api/v1/territories/{territory_id}",
@@ -1220,7 +1335,10 @@
     "operation_id": "territory_detail_api_v1_territories__territory_id__get",
     "optional_auth": false,
     "path": "/api/v1/territories/{territory_id}",
-    "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+    "policy_source": "human-reviewed-route-policy-source",
+    "review_decision_id": "WO002-R07-API-POLICY-GET--api-v1-territories-territory-id",
+    "review_notes": "Review 07 independently reviewed expected route policy; observed FastAPI AST is compared against this row and is not the authority source.",
+    "review_owner": "System Design Authority / API policy owner pending",
     "review_status": "reviewed-route-policy-r07",
     "roles": [
       "admin",
@@ -1232,7 +1350,6 @@
     "source": "services/api/app/main.py:1306-1312"
   },
   "GET /api/v1/verification/lookup": {
-    "analysis": "function-ast-boundary",
     "auth": "public",
     "delegated_policy_helpers": [],
     "expected_key": "GET /api/v1/verification/lookup",
@@ -1242,7 +1359,10 @@
     "operation_id": "verification_lookup_api_v1_verification_lookup_get",
     "optional_auth": false,
     "path": "/api/v1/verification/lookup",
-    "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+    "policy_source": "human-reviewed-route-policy-source",
+    "review_decision_id": "WO002-R07-API-POLICY-GET--api-v1-verification-lookup",
+    "review_notes": "Review 07 independently reviewed expected route policy; observed FastAPI AST is compared against this row and is not the authority source.",
+    "review_owner": "System Design Authority / API policy owner pending",
     "review_status": "reviewed-route-policy-r07",
     "roles": [],
     "route": "/api/v1/verification/lookup",
@@ -1250,7 +1370,6 @@
     "source": "services/api/app/main.py:1757-1770"
   },
   "PATCH /api/v1/addresses/{address_id}": {
-    "analysis": "function-ast-boundary",
     "auth": "role-required",
     "delegated_policy_helpers": [],
     "expected_key": "PATCH /api/v1/addresses/{address_id}",
@@ -1260,7 +1379,10 @@
     "operation_id": "update_address_endpoint_api_v1_addresses__address_id__patch",
     "optional_auth": false,
     "path": "/api/v1/addresses/{address_id}",
-    "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+    "policy_source": "human-reviewed-route-policy-source",
+    "review_decision_id": "WO002-R07-API-POLICY-PATCH--api-v1-addresses-address-id",
+    "review_notes": "Review 07 independently reviewed expected route policy; observed FastAPI AST is compared against this row and is not the authority source.",
+    "review_owner": "System Design Authority / API policy owner pending",
     "review_status": "reviewed-route-policy-r07",
     "roles": [
       "admin",
@@ -1271,7 +1393,6 @@
     "source": "services/api/app/main.py:1493-1503"
   },
   "PATCH /api/v1/admin/users/{user_id}": {
-    "analysis": "function-ast-boundary",
     "auth": "role-required",
     "delegated_policy_helpers": [],
     "expected_key": "PATCH /api/v1/admin/users/{user_id}",
@@ -1281,7 +1402,10 @@
     "operation_id": "admin_update_user_api_v1_admin_users__user_id__patch",
     "optional_auth": false,
     "path": "/api/v1/admin/users/{user_id}",
-    "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+    "policy_source": "human-reviewed-route-policy-source",
+    "review_decision_id": "WO002-R07-API-POLICY-PATCH--api-v1-admin-users-user-id",
+    "review_notes": "Review 07 independently reviewed expected route policy; observed FastAPI AST is compared against this row and is not the authority source.",
+    "review_owner": "System Design Authority / API policy owner pending",
     "review_status": "reviewed-route-policy-r07",
     "roles": [
       "admin"
@@ -1291,7 +1415,6 @@
     "source": "services/api/app/main.py:1180-1191"
   },
   "PATCH /api/v1/buildings/{building_id}": {
-    "analysis": "function-ast-boundary",
     "auth": "role-required",
     "delegated_policy_helpers": [],
     "expected_key": "PATCH /api/v1/buildings/{building_id}",
@@ -1301,7 +1424,10 @@
     "operation_id": "update_building_endpoint_api_v1_buildings__building_id__patch",
     "optional_auth": false,
     "path": "/api/v1/buildings/{building_id}",
-    "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+    "policy_source": "human-reviewed-route-policy-source",
+    "review_decision_id": "WO002-R07-API-POLICY-PATCH--api-v1-buildings-building-id",
+    "review_notes": "Review 07 independently reviewed expected route policy; observed FastAPI AST is compared against this row and is not the authority source.",
+    "review_owner": "System Design Authority / API policy owner pending",
     "review_status": "reviewed-route-policy-r07",
     "roles": [
       "admin",
@@ -1312,7 +1438,6 @@
     "source": "services/api/app/main.py:1440-1450"
   },
   "PATCH /api/v1/roads/{road_id}": {
-    "analysis": "function-ast-boundary",
     "auth": "role-required",
     "delegated_policy_helpers": [],
     "expected_key": "PATCH /api/v1/roads/{road_id}",
@@ -1322,7 +1447,10 @@
     "operation_id": "update_road_endpoint_api_v1_roads__road_id__patch",
     "optional_auth": false,
     "path": "/api/v1/roads/{road_id}",
-    "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+    "policy_source": "human-reviewed-route-policy-source",
+    "review_decision_id": "WO002-R07-API-POLICY-PATCH--api-v1-roads-road-id",
+    "review_notes": "Review 07 independently reviewed expected route policy; observed FastAPI AST is compared against this row and is not the authority source.",
+    "review_owner": "System Design Authority / API policy owner pending",
     "review_status": "reviewed-route-policy-r07",
     "roles": [
       "admin",
@@ -1333,7 +1461,6 @@
     "source": "services/api/app/main.py:1388-1397"
   },
   "PATCH /api/v1/territories/{territory_id}": {
-    "analysis": "function-ast-boundary",
     "auth": "role-required",
     "delegated_policy_helpers": [],
     "expected_key": "PATCH /api/v1/territories/{territory_id}",
@@ -1343,7 +1470,10 @@
     "operation_id": "update_territory_endpoint_api_v1_territories__territory_id__patch",
     "optional_auth": false,
     "path": "/api/v1/territories/{territory_id}",
-    "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+    "policy_source": "human-reviewed-route-policy-source",
+    "review_decision_id": "WO002-R07-API-POLICY-PATCH--api-v1-territories-territory-id",
+    "review_notes": "Review 07 independently reviewed expected route policy; observed FastAPI AST is compared against this row and is not the authority source.",
+    "review_owner": "System Design Authority / API policy owner pending",
     "review_status": "reviewed-route-policy-r07",
     "roles": [
       "admin",
@@ -1354,7 +1484,6 @@
     "source": "services/api/app/main.py:1328-1338"
   },
   "POST /api/v1/address-corrections/{correction_id}/reject": {
-    "analysis": "function-ast-boundary",
     "auth": "role-required",
     "delegated_policy_helpers": [],
     "expected_key": "POST /api/v1/address-corrections/{correction_id}/reject",
@@ -1364,7 +1493,10 @@
     "operation_id": "reject_address_correction_api_v1_address_corrections__correction_id__reject_post",
     "optional_auth": false,
     "path": "/api/v1/address-corrections/{correction_id}/reject",
-    "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+    "policy_source": "human-reviewed-route-policy-source",
+    "review_decision_id": "WO002-R07-API-POLICY-POST--api-v1-address-corrections-correction-id-reject",
+    "review_notes": "Review 07 independently reviewed expected route policy; observed FastAPI AST is compared against this row and is not the authority source.",
+    "review_owner": "System Design Authority / API policy owner pending",
     "review_status": "reviewed-route-policy-r07",
     "roles": [
       "admin",
@@ -1375,7 +1507,6 @@
     "source": "services/api/app/main.py:2161-2168"
   },
   "POST /api/v1/address-corrections/{correction_id}/resolve": {
-    "analysis": "function-ast-boundary",
     "auth": "role-required",
     "delegated_policy_helpers": [],
     "expected_key": "POST /api/v1/address-corrections/{correction_id}/resolve",
@@ -1385,7 +1516,10 @@
     "operation_id": "resolve_address_correction_api_v1_address_corrections__correction_id__resolve_post",
     "optional_auth": false,
     "path": "/api/v1/address-corrections/{correction_id}/resolve",
-    "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+    "policy_source": "human-reviewed-route-policy-source",
+    "review_decision_id": "WO002-R07-API-POLICY-POST--api-v1-address-corrections-correction-id-resolve",
+    "review_notes": "Review 07 independently reviewed expected route policy; observed FastAPI AST is compared against this row and is not the authority source.",
+    "review_owner": "System Design Authority / API policy owner pending",
     "review_status": "reviewed-route-policy-r07",
     "roles": [
       "admin",
@@ -1396,7 +1530,6 @@
     "source": "services/api/app/main.py:2150-2157"
   },
   "POST /api/v1/address-corrections/{correction_id}/under-review": {
-    "analysis": "function-ast-boundary",
     "auth": "role-required",
     "delegated_policy_helpers": [],
     "expected_key": "POST /api/v1/address-corrections/{correction_id}/under-review",
@@ -1406,7 +1539,10 @@
     "operation_id": "mark_address_correction_under_review_api_v1_address_corrections__correction_id__under_review_post",
     "optional_auth": false,
     "path": "/api/v1/address-corrections/{correction_id}/under-review",
-    "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+    "policy_source": "human-reviewed-route-policy-source",
+    "review_decision_id": "WO002-R07-API-POLICY-POST--api-v1-address-corrections-correction-id-under-review",
+    "review_notes": "Review 07 independently reviewed expected route policy; observed FastAPI AST is compared against this row and is not the authority source.",
+    "review_owner": "System Design Authority / API policy owner pending",
     "review_status": "reviewed-route-policy-r07",
     "roles": [
       "admin",
@@ -1417,7 +1553,6 @@
     "source": "services/api/app/main.py:2139-2146"
   },
   "POST /api/v1/addresses": {
-    "analysis": "function-ast-boundary",
     "auth": "role-required",
     "delegated_policy_helpers": [],
     "expected_key": "POST /api/v1/addresses",
@@ -1427,7 +1562,10 @@
     "operation_id": "create_address_endpoint_api_v1_addresses_post",
     "optional_auth": false,
     "path": "/api/v1/addresses",
-    "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+    "policy_source": "human-reviewed-route-policy-source",
+    "review_decision_id": "WO002-R07-API-POLICY-POST--api-v1-addresses",
+    "review_notes": "Review 07 independently reviewed expected route policy; observed FastAPI AST is compared against this row and is not the authority source.",
+    "review_owner": "System Design Authority / API policy owner pending",
     "review_status": "reviewed-route-policy-r07",
     "roles": [
       "admin",
@@ -1438,7 +1576,6 @@
     "source": "services/api/app/main.py:1481-1489"
   },
   "POST /api/v1/admin/users": {
-    "analysis": "function-ast-boundary",
     "auth": "role-required",
     "delegated_policy_helpers": [],
     "expected_key": "POST /api/v1/admin/users",
@@ -1448,7 +1585,10 @@
     "operation_id": "admin_create_user_api_v1_admin_users_post",
     "optional_auth": false,
     "path": "/api/v1/admin/users",
-    "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+    "policy_source": "human-reviewed-route-policy-source",
+    "review_decision_id": "WO002-R07-API-POLICY-POST--api-v1-admin-users",
+    "review_notes": "Review 07 independently reviewed expected route policy; observed FastAPI AST is compared against this row and is not the authority source.",
+    "review_owner": "System Design Authority / API policy owner pending",
     "review_status": "reviewed-route-policy-r07",
     "roles": [
       "admin"
@@ -1458,7 +1598,6 @@
     "source": "services/api/app/main.py:1168-1176"
   },
   "POST /api/v1/admin/users/{user_id}/disable": {
-    "analysis": "function-ast-boundary",
     "auth": "role-required",
     "delegated_policy_helpers": [],
     "expected_key": "POST /api/v1/admin/users/{user_id}/disable",
@@ -1468,7 +1607,10 @@
     "operation_id": "admin_disable_user_api_v1_admin_users__user_id__disable_post",
     "optional_auth": false,
     "path": "/api/v1/admin/users/{user_id}/disable",
-    "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+    "policy_source": "human-reviewed-route-policy-source",
+    "review_decision_id": "WO002-R07-API-POLICY-POST--api-v1-admin-users-user-id-disable",
+    "review_notes": "Review 07 independently reviewed expected route policy; observed FastAPI AST is compared against this row and is not the authority source.",
+    "review_owner": "System Design Authority / API policy owner pending",
     "review_status": "reviewed-route-policy-r07",
     "roles": [
       "admin"
@@ -1478,7 +1620,6 @@
     "source": "services/api/app/main.py:1195-1205"
   },
   "POST /api/v1/admin/users/{user_id}/revoke-sessions": {
-    "analysis": "function-ast-boundary",
     "auth": "role-required",
     "delegated_policy_helpers": [],
     "expected_key": "POST /api/v1/admin/users/{user_id}/revoke-sessions",
@@ -1488,7 +1629,10 @@
     "operation_id": "admin_revoke_user_sessions_api_v1_admin_users__user_id__revoke_sessions_post",
     "optional_auth": false,
     "path": "/api/v1/admin/users/{user_id}/revoke-sessions",
-    "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+    "policy_source": "human-reviewed-route-policy-source",
+    "review_decision_id": "WO002-R07-API-POLICY-POST--api-v1-admin-users-user-id-revoke-sessions",
+    "review_notes": "Review 07 independently reviewed expected route policy; observed FastAPI AST is compared against this row and is not the authority source.",
+    "review_owner": "System Design Authority / API policy owner pending",
     "review_status": "reviewed-route-policy-r07",
     "roles": [
       "admin"
@@ -1498,7 +1642,6 @@
     "source": "services/api/app/main.py:1209-1219"
   },
   "POST /api/v1/auth/login": {
-    "analysis": "function-ast-boundary",
     "auth": "public",
     "delegated_policy_helpers": [],
     "expected_key": "POST /api/v1/auth/login",
@@ -1508,7 +1651,10 @@
     "operation_id": "login_api_v1_auth_login_post",
     "optional_auth": false,
     "path": "/api/v1/auth/login",
-    "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+    "policy_source": "human-reviewed-route-policy-source",
+    "review_decision_id": "WO002-R07-API-POLICY-POST--api-v1-auth-login",
+    "review_notes": "Review 07 independently reviewed expected route policy; observed FastAPI AST is compared against this row and is not the authority source.",
+    "review_owner": "System Design Authority / API policy owner pending",
     "review_status": "reviewed-route-policy-r07",
     "roles": [],
     "route": "/api/v1/auth/login",
@@ -1516,7 +1662,6 @@
     "source": "services/api/app/main.py:1112-1141"
   },
   "POST /api/v1/auth/logout": {
-    "analysis": "function-ast-boundary",
     "auth": "session-required",
     "delegated_policy_helpers": [],
     "expected_key": "POST /api/v1/auth/logout",
@@ -1526,7 +1671,10 @@
     "operation_id": "auth_logout_api_v1_auth_logout_post",
     "optional_auth": false,
     "path": "/api/v1/auth/logout",
-    "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+    "policy_source": "human-reviewed-route-policy-source",
+    "review_decision_id": "WO002-R07-API-POLICY-POST--api-v1-auth-logout",
+    "review_notes": "Review 07 independently reviewed expected route policy; observed FastAPI AST is compared against this row and is not the authority source.",
+    "review_owner": "System Design Authority / API policy owner pending",
     "review_status": "reviewed-route-policy-r07",
     "roles": [],
     "route": "/api/v1/auth/logout",
@@ -1534,7 +1682,6 @@
     "source": "services/api/app/main.py:1150-1157"
   },
   "POST /api/v1/buildings": {
-    "analysis": "function-ast-boundary",
     "auth": "role-required",
     "delegated_policy_helpers": [],
     "expected_key": "POST /api/v1/buildings",
@@ -1544,7 +1691,10 @@
     "operation_id": "create_building_endpoint_api_v1_buildings_post",
     "optional_auth": false,
     "path": "/api/v1/buildings",
-    "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+    "policy_source": "human-reviewed-route-policy-source",
+    "review_decision_id": "WO002-R07-API-POLICY-POST--api-v1-buildings",
+    "review_notes": "Review 07 independently reviewed expected route policy; observed FastAPI AST is compared against this row and is not the authority source.",
+    "review_owner": "System Design Authority / API policy owner pending",
     "review_status": "reviewed-route-policy-r07",
     "roles": [
       "admin",
@@ -1555,7 +1705,6 @@
     "source": "services/api/app/main.py:1428-1436"
   },
   "POST /api/v1/field/geotag-tasks/{submission_id}/evidence": {
-    "analysis": "function-ast-boundary",
     "auth": "role-required",
     "delegated_policy_helpers": [],
     "expected_key": "POST /api/v1/field/geotag-tasks/{submission_id}/evidence",
@@ -1565,7 +1714,10 @@
     "operation_id": "record_field_geotag_task_evidence_api_v1_field_geotag_tasks__submission_id__evidence_post",
     "optional_auth": false,
     "path": "/api/v1/field/geotag-tasks/{submission_id}/evidence",
-    "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+    "policy_source": "human-reviewed-route-policy-source",
+    "review_decision_id": "WO002-R07-API-POLICY-POST--api-v1-field-geotag-tasks-submission-id-evidence",
+    "review_notes": "Review 07 independently reviewed expected route policy; observed FastAPI AST is compared against this row and is not the authority source.",
+    "review_owner": "System Design Authority / API policy owner pending",
     "review_status": "reviewed-route-policy-r07",
     "roles": [
       "admin",
@@ -1576,7 +1728,6 @@
     "source": "services/api/app/main.py:1542-1549"
   },
   "POST /api/v1/field/geotag-tasks/{submission_id}/status": {
-    "analysis": "function-ast-boundary",
     "auth": "role-required",
     "delegated_policy_helpers": [],
     "expected_key": "POST /api/v1/field/geotag-tasks/{submission_id}/status",
@@ -1586,7 +1737,10 @@
     "operation_id": "update_field_geotag_task_status_api_v1_field_geotag_tasks__submission_id__status_post",
     "optional_auth": false,
     "path": "/api/v1/field/geotag-tasks/{submission_id}/status",
-    "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+    "policy_source": "human-reviewed-route-policy-source",
+    "review_decision_id": "WO002-R07-API-POLICY-POST--api-v1-field-geotag-tasks-submission-id-status",
+    "review_notes": "Review 07 independently reviewed expected route policy; observed FastAPI AST is compared against this row and is not the authority source.",
+    "review_owner": "System Design Authority / API policy owner pending",
     "review_status": "reviewed-route-policy-r07",
     "roles": [
       "admin",
@@ -1597,7 +1751,6 @@
     "source": "services/api/app/main.py:1531-1538"
   },
   "POST /api/v1/field/spatial-evidence/enrich": {
-    "analysis": "function-ast-boundary",
     "auth": "role-required",
     "delegated_policy_helpers": [],
     "expected_key": "POST /api/v1/field/spatial-evidence/enrich",
@@ -1607,7 +1760,10 @@
     "operation_id": "enrich_field_spatial_evidence_endpoint_api_v1_field_spatial_evidence_enrich_post",
     "optional_auth": false,
     "path": "/api/v1/field/spatial-evidence/enrich",
-    "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+    "policy_source": "human-reviewed-route-policy-source",
+    "review_decision_id": "WO002-R07-API-POLICY-POST--api-v1-field-spatial-evidence-enrich",
+    "review_notes": "Review 07 independently reviewed expected route policy; observed FastAPI AST is compared against this row and is not the authority source.",
+    "review_owner": "System Design Authority / API policy owner pending",
     "review_status": "reviewed-route-policy-r07",
     "roles": [
       "admin",
@@ -1618,7 +1774,6 @@
     "source": "services/api/app/main.py:1561-1568"
   },
   "POST /api/v1/field/submissions": {
-    "analysis": "function-ast-boundary",
     "auth": "role-required",
     "delegated_policy_helpers": [],
     "expected_key": "POST /api/v1/field/submissions",
@@ -1628,7 +1783,10 @@
     "operation_id": "create_field_submission_endpoint_api_v1_field_submissions_post",
     "optional_auth": false,
     "path": "/api/v1/field/submissions",
-    "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+    "policy_source": "human-reviewed-route-policy-source",
+    "review_decision_id": "WO002-R07-API-POLICY-POST--api-v1-field-submissions",
+    "review_notes": "Review 07 independently reviewed expected route policy; observed FastAPI AST is compared against this row and is not the authority source.",
+    "review_owner": "System Design Authority / API policy owner pending",
     "review_status": "reviewed-route-policy-r07",
     "roles": [
       "admin",
@@ -1639,7 +1797,6 @@
     "source": "services/api/app/main.py:1571-1579"
   },
   "POST /api/v1/field/submissions/{submission_id}/approve": {
-    "analysis": "function-ast-boundary",
     "auth": "role-required",
     "delegated_policy_helpers": [],
     "expected_key": "POST /api/v1/field/submissions/{submission_id}/approve",
@@ -1649,7 +1806,10 @@
     "operation_id": "approve_submission_endpoint_api_v1_field_submissions__submission_id__approve_post",
     "optional_auth": false,
     "path": "/api/v1/field/submissions/{submission_id}/approve",
-    "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+    "policy_source": "human-reviewed-route-policy-source",
+    "review_decision_id": "WO002-R07-API-POLICY-POST--api-v1-field-submissions-submission-id-approve",
+    "review_notes": "Review 07 independently reviewed expected route policy; observed FastAPI AST is compared against this row and is not the authority source.",
+    "review_owner": "System Design Authority / API policy owner pending",
     "review_status": "reviewed-route-policy-r07",
     "roles": [
       "admin",
@@ -1660,7 +1820,6 @@
     "source": "services/api/app/main.py:1705-1717"
   },
   "POST /api/v1/field/submissions/{submission_id}/evidence-files": {
-    "analysis": "function-ast-boundary",
     "auth": "role-required",
     "delegated_policy_helpers": [],
     "expected_key": "POST /api/v1/field/submissions/{submission_id}/evidence-files",
@@ -1670,7 +1829,10 @@
     "operation_id": "upload_field_submission_evidence_file_api_v1_field_submissions__submission_id__evidence_files_post",
     "optional_auth": false,
     "path": "/api/v1/field/submissions/{submission_id}/evidence-files",
-    "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+    "policy_source": "human-reviewed-route-policy-source",
+    "review_decision_id": "WO002-R07-API-POLICY-POST--api-v1-field-submissions-submission-id-evidence-files",
+    "review_notes": "Review 07 independently reviewed expected route policy; observed FastAPI AST is compared against this row and is not the authority source.",
+    "review_owner": "System Design Authority / API policy owner pending",
     "review_status": "reviewed-route-policy-r07",
     "roles": [
       "admin",
@@ -1681,7 +1843,6 @@
     "source": "services/api/app/main.py:1614-1649"
   },
   "POST /api/v1/field/submissions/{submission_id}/evidence-review": {
-    "analysis": "function-ast-boundary",
     "auth": "role-required",
     "delegated_policy_helpers": [],
     "expected_key": "POST /api/v1/field/submissions/{submission_id}/evidence-review",
@@ -1691,7 +1852,10 @@
     "operation_id": "review_field_submission_evidence_endpoint_api_v1_field_submissions__submission_id__evidence_review_post",
     "optional_auth": false,
     "path": "/api/v1/field/submissions/{submission_id}/evidence-review",
-    "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+    "policy_source": "human-reviewed-route-policy-source",
+    "review_decision_id": "WO002-R07-API-POLICY-POST--api-v1-field-submissions-submission-id-evidence-review",
+    "review_notes": "Review 07 independently reviewed expected route policy; observed FastAPI AST is compared against this row and is not the authority source.",
+    "review_owner": "System Design Authority / API policy owner pending",
     "review_status": "reviewed-route-policy-r07",
     "roles": [
       "admin",
@@ -1702,7 +1866,6 @@
     "source": "services/api/app/main.py:1663-1673"
   },
   "POST /api/v1/field/submissions/{submission_id}/reject": {
-    "analysis": "function-ast-boundary",
     "auth": "role-required",
     "delegated_policy_helpers": [],
     "expected_key": "POST /api/v1/field/submissions/{submission_id}/reject",
@@ -1712,7 +1875,10 @@
     "operation_id": "reject_submission_endpoint_api_v1_field_submissions__submission_id__reject_post",
     "optional_auth": false,
     "path": "/api/v1/field/submissions/{submission_id}/reject",
-    "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+    "policy_source": "human-reviewed-route-policy-source",
+    "review_decision_id": "WO002-R07-API-POLICY-POST--api-v1-field-submissions-submission-id-reject",
+    "review_notes": "Review 07 independently reviewed expected route policy; observed FastAPI AST is compared against this row and is not the authority source.",
+    "review_owner": "System Design Authority / API policy owner pending",
     "review_status": "reviewed-route-policy-r07",
     "roles": [
       "admin",
@@ -1723,7 +1889,6 @@
     "source": "services/api/app/main.py:1721-1728"
   },
   "POST /api/v1/field/submissions/{submission_id}/rework": {
-    "analysis": "function-ast-boundary",
     "auth": "role-required",
     "delegated_policy_helpers": [],
     "expected_key": "POST /api/v1/field/submissions/{submission_id}/rework",
@@ -1733,7 +1898,10 @@
     "operation_id": "rework_submission_endpoint_api_v1_field_submissions__submission_id__rework_post",
     "optional_auth": false,
     "path": "/api/v1/field/submissions/{submission_id}/rework",
-    "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+    "policy_source": "human-reviewed-route-policy-source",
+    "review_decision_id": "WO002-R07-API-POLICY-POST--api-v1-field-submissions-submission-id-rework",
+    "review_notes": "Review 07 independently reviewed expected route policy; observed FastAPI AST is compared against this row and is not the authority source.",
+    "review_owner": "System Design Authority / API policy owner pending",
     "review_status": "reviewed-route-policy-r07",
     "roles": [
       "admin",
@@ -1744,7 +1912,6 @@
     "source": "services/api/app/main.py:1732-1739"
   },
   "POST /api/v1/field/submissions/{submission_id}/under-review": {
-    "analysis": "function-ast-boundary",
     "auth": "role-required",
     "delegated_policy_helpers": [],
     "expected_key": "POST /api/v1/field/submissions/{submission_id}/under-review",
@@ -1754,7 +1921,10 @@
     "operation_id": "mark_submission_under_review_api_v1_field_submissions__submission_id__under_review_post",
     "optional_auth": false,
     "path": "/api/v1/field/submissions/{submission_id}/under-review",
-    "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+    "policy_source": "human-reviewed-route-policy-source",
+    "review_decision_id": "WO002-R07-API-POLICY-POST--api-v1-field-submissions-submission-id-under-review",
+    "review_notes": "Review 07 independently reviewed expected route policy; observed FastAPI AST is compared against this row and is not the authority source.",
+    "review_owner": "System Design Authority / API policy owner pending",
     "review_status": "reviewed-route-policy-r07",
     "roles": [
       "admin",
@@ -1765,7 +1935,6 @@
     "source": "services/api/app/main.py:1694-1701"
   },
   "POST /api/v1/geotag-submissions/{submission_id}/duplicate-decision": {
-    "analysis": "function-ast-boundary",
     "auth": "role-required",
     "delegated_policy_helpers": [],
     "expected_key": "POST /api/v1/geotag-submissions/{submission_id}/duplicate-decision",
@@ -1775,7 +1944,10 @@
     "operation_id": "geotag_duplicate_decision_api_v1_geotag_submissions__submission_id__duplicate_decision_post",
     "optional_auth": false,
     "path": "/api/v1/geotag-submissions/{submission_id}/duplicate-decision",
-    "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+    "policy_source": "human-reviewed-route-policy-source",
+    "review_decision_id": "WO002-R07-API-POLICY-POST--api-v1-geotag-submissions-submission-id-duplicate-decision",
+    "review_notes": "Review 07 independently reviewed expected route policy; observed FastAPI AST is compared against this row and is not the authority source.",
+    "review_owner": "System Design Authority / API policy owner pending",
     "review_status": "reviewed-route-policy-r07",
     "roles": [
       "admin",
@@ -1786,7 +1958,6 @@
     "source": "services/api/app/main.py:2096-2103"
   },
   "POST /api/v1/geotag-submissions/{submission_id}/field-check": {
-    "analysis": "function-ast-boundary",
     "auth": "role-required",
     "delegated_policy_helpers": [],
     "expected_key": "POST /api/v1/geotag-submissions/{submission_id}/field-check",
@@ -1796,7 +1967,10 @@
     "operation_id": "send_geotag_to_field_check_api_v1_geotag_submissions__submission_id__field_check_post",
     "optional_auth": false,
     "path": "/api/v1/geotag-submissions/{submission_id}/field-check",
-    "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+    "policy_source": "human-reviewed-route-policy-source",
+    "review_decision_id": "WO002-R07-API-POLICY-POST--api-v1-geotag-submissions-submission-id-field-check",
+    "review_notes": "Review 07 independently reviewed expected route policy; observed FastAPI AST is compared against this row and is not the authority source.",
+    "review_owner": "System Design Authority / API policy owner pending",
     "review_status": "reviewed-route-policy-r07",
     "roles": [
       "admin",
@@ -1807,7 +1981,6 @@
     "source": "services/api/app/main.py:2037-2044"
   },
   "POST /api/v1/geotag-submissions/{submission_id}/identity": {
-    "analysis": "function-ast-boundary",
     "auth": "role-required",
     "delegated_policy_helpers": [],
     "expected_key": "POST /api/v1/geotag-submissions/{submission_id}/identity",
@@ -1817,7 +1990,10 @@
     "operation_id": "geotag_identity_review_api_v1_geotag_submissions__submission_id__identity_post",
     "optional_auth": false,
     "path": "/api/v1/geotag-submissions/{submission_id}/identity",
-    "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+    "policy_source": "human-reviewed-route-policy-source",
+    "review_decision_id": "WO002-R07-API-POLICY-POST--api-v1-geotag-submissions-submission-id-identity",
+    "review_notes": "Review 07 independently reviewed expected route policy; observed FastAPI AST is compared against this row and is not the authority source.",
+    "review_owner": "System Design Authority / API policy owner pending",
     "review_status": "reviewed-route-policy-r07",
     "roles": [
       "admin",
@@ -1828,7 +2004,6 @@
     "source": "services/api/app/main.py:2015-2022"
   },
   "POST /api/v1/geotag-submissions/{submission_id}/publication-simulation": {
-    "analysis": "function-ast-boundary",
     "auth": "role-required",
     "delegated_policy_helpers": [],
     "expected_key": "POST /api/v1/geotag-submissions/{submission_id}/publication-simulation",
@@ -1838,7 +2013,10 @@
     "operation_id": "simulate_geotag_publication_api_v1_geotag_submissions__submission_id__publication_simulation_post",
     "optional_auth": false,
     "path": "/api/v1/geotag-submissions/{submission_id}/publication-simulation",
-    "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+    "policy_source": "human-reviewed-route-policy-source",
+    "review_decision_id": "WO002-R07-API-POLICY-POST--api-v1-geotag-submissions-submission-id-publication-simulation",
+    "review_notes": "Review 07 independently reviewed expected route policy; observed FastAPI AST is compared against this row and is not the authority source.",
+    "review_owner": "System Design Authority / API policy owner pending",
     "review_status": "reviewed-route-policy-r07",
     "roles": [
       "admin",
@@ -1849,7 +2027,6 @@
     "source": "services/api/app/main.py:2061-2068"
   },
   "POST /api/v1/geotag-submissions/{submission_id}/publish": {
-    "analysis": "function-ast-boundary",
     "auth": "role-required",
     "delegated_policy_helpers": [],
     "expected_key": "POST /api/v1/geotag-submissions/{submission_id}/publish",
@@ -1859,7 +2036,10 @@
     "operation_id": "publish_geotag_case_file_api_v1_geotag_submissions__submission_id__publish_post",
     "optional_auth": false,
     "path": "/api/v1/geotag-submissions/{submission_id}/publish",
-    "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+    "policy_source": "human-reviewed-route-policy-source",
+    "review_decision_id": "WO002-R07-API-POLICY-POST--api-v1-geotag-submissions-submission-id-publish",
+    "review_notes": "Review 07 independently reviewed expected route policy; observed FastAPI AST is compared against this row and is not the authority source.",
+    "review_owner": "System Design Authority / API policy owner pending",
     "review_status": "reviewed-route-policy-r07",
     "roles": [
       "admin"
@@ -1869,7 +2049,6 @@
     "source": "services/api/app/main.py:2072-2081"
   },
   "POST /api/v1/geotag-submissions/{submission_id}/registry-ready": {
-    "analysis": "function-ast-boundary",
     "auth": "role-required",
     "delegated_policy_helpers": [],
     "expected_key": "POST /api/v1/geotag-submissions/{submission_id}/registry-ready",
@@ -1879,7 +2058,10 @@
     "operation_id": "mark_geotag_registry_ready_api_v1_geotag_submissions__submission_id__registry_ready_post",
     "optional_auth": false,
     "path": "/api/v1/geotag-submissions/{submission_id}/registry-ready",
-    "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+    "policy_source": "human-reviewed-route-policy-source",
+    "review_decision_id": "WO002-R07-API-POLICY-POST--api-v1-geotag-submissions-submission-id-registry-ready",
+    "review_notes": "Review 07 independently reviewed expected route policy; observed FastAPI AST is compared against this row and is not the authority source.",
+    "review_owner": "System Design Authority / API policy owner pending",
     "review_status": "reviewed-route-policy-r07",
     "roles": [
       "admin",
@@ -1890,7 +2072,6 @@
     "source": "services/api/app/main.py:2048-2057"
   },
   "POST /api/v1/geotag-submissions/{submission_id}/reject": {
-    "analysis": "function-ast-boundary",
     "auth": "role-required",
     "delegated_policy_helpers": [],
     "expected_key": "POST /api/v1/geotag-submissions/{submission_id}/reject",
@@ -1900,7 +2081,10 @@
     "operation_id": "reject_geotag_submission_api_v1_geotag_submissions__submission_id__reject_post",
     "optional_auth": false,
     "path": "/api/v1/geotag-submissions/{submission_id}/reject",
-    "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+    "policy_source": "human-reviewed-route-policy-source",
+    "review_decision_id": "WO002-R07-API-POLICY-POST--api-v1-geotag-submissions-submission-id-reject",
+    "review_notes": "Review 07 independently reviewed expected route policy; observed FastAPI AST is compared against this row and is not the authority source.",
+    "review_owner": "System Design Authority / API policy owner pending",
     "review_status": "reviewed-route-policy-r07",
     "roles": [
       "admin",
@@ -1911,7 +2095,6 @@
     "source": "services/api/app/main.py:2085-2092"
   },
   "POST /api/v1/geotag-submissions/{submission_id}/road-suggestion": {
-    "analysis": "function-ast-boundary",
     "auth": "role-required",
     "delegated_policy_helpers": [],
     "expected_key": "POST /api/v1/geotag-submissions/{submission_id}/road-suggestion",
@@ -1921,7 +2104,10 @@
     "operation_id": "geotag_road_suggestion_review_api_v1_geotag_submissions__submission_id__road_suggestion_post",
     "optional_auth": false,
     "path": "/api/v1/geotag-submissions/{submission_id}/road-suggestion",
-    "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+    "policy_source": "human-reviewed-route-policy-source",
+    "review_decision_id": "WO002-R07-API-POLICY-POST--api-v1-geotag-submissions-submission-id-road-suggestion",
+    "review_notes": "Review 07 independently reviewed expected route policy; observed FastAPI AST is compared against this row and is not the authority source.",
+    "review_owner": "System Design Authority / API policy owner pending",
     "review_status": "reviewed-route-policy-r07",
     "roles": [
       "admin",
@@ -1932,7 +2118,6 @@
     "source": "services/api/app/main.py:2107-2114"
   },
   "POST /api/v1/geotag-submissions/{submission_id}/under-review": {
-    "analysis": "function-ast-boundary",
     "auth": "role-required",
     "delegated_policy_helpers": [],
     "expected_key": "POST /api/v1/geotag-submissions/{submission_id}/under-review",
@@ -1942,7 +2127,10 @@
     "operation_id": "mark_geotag_under_review_api_v1_geotag_submissions__submission_id__under_review_post",
     "optional_auth": false,
     "path": "/api/v1/geotag-submissions/{submission_id}/under-review",
-    "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+    "policy_source": "human-reviewed-route-policy-source",
+    "review_decision_id": "WO002-R07-API-POLICY-POST--api-v1-geotag-submissions-submission-id-under-review",
+    "review_notes": "Review 07 independently reviewed expected route policy; observed FastAPI AST is compared against this row and is not the authority source.",
+    "review_owner": "System Design Authority / API policy owner pending",
     "review_status": "reviewed-route-policy-r07",
     "roles": [
       "admin",
@@ -1953,7 +2141,6 @@
     "source": "services/api/app/main.py:2026-2033"
   },
   "POST /api/v1/imports/jobs": {
-    "analysis": "function-ast-boundary",
     "auth": "role-required",
     "delegated_policy_helpers": [],
     "expected_key": "POST /api/v1/imports/jobs",
@@ -1963,7 +2150,10 @@
     "operation_id": "create_import_job_endpoint_api_v1_imports_jobs_post",
     "optional_auth": false,
     "path": "/api/v1/imports/jobs",
-    "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+    "policy_source": "human-reviewed-route-policy-source",
+    "review_decision_id": "WO002-R07-API-POLICY-POST--api-v1-imports-jobs",
+    "review_notes": "Review 07 independently reviewed expected route policy; observed FastAPI AST is compared against this row and is not the authority source.",
+    "review_owner": "System Design Authority / API policy owner pending",
     "review_status": "reviewed-route-policy-r07",
     "roles": [
       "admin",
@@ -1974,7 +2164,6 @@
     "source": "services/api/app/main.py:2189-2197"
   },
   "POST /api/v1/imports/jobs/{job_id}/commit": {
-    "analysis": "function-ast-boundary",
     "auth": "role-required",
     "delegated_policy_helpers": [],
     "expected_key": "POST /api/v1/imports/jobs/{job_id}/commit",
@@ -1984,7 +2173,10 @@
     "operation_id": "commit_import_job_endpoint_api_v1_imports_jobs__job_id__commit_post",
     "optional_auth": false,
     "path": "/api/v1/imports/jobs/{job_id}/commit",
-    "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+    "policy_source": "human-reviewed-route-policy-source",
+    "review_decision_id": "WO002-R07-API-POLICY-POST--api-v1-imports-jobs-job-id-commit",
+    "review_notes": "Review 07 independently reviewed expected route policy; observed FastAPI AST is compared against this row and is not the authority source.",
+    "review_owner": "System Design Authority / API policy owner pending",
     "review_status": "reviewed-route-policy-r07",
     "roles": [
       "admin",
@@ -1995,7 +2187,6 @@
     "source": "services/api/app/main.py:2201-2209"
   },
   "POST /api/v1/operator/demo-fixtures/cleanup": {
-    "analysis": "function-ast-boundary",
     "auth": "role-required",
     "delegated_policy_helpers": [],
     "expected_key": "POST /api/v1/operator/demo-fixtures/cleanup",
@@ -2005,7 +2196,10 @@
     "operation_id": "operator_demo_fixture_cleanup_api_v1_operator_demo_fixtures_cleanup_post",
     "optional_auth": false,
     "path": "/api/v1/operator/demo-fixtures/cleanup",
-    "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+    "policy_source": "human-reviewed-route-policy-source",
+    "review_decision_id": "WO002-R07-API-POLICY-POST--api-v1-operator-demo-fixtures-cleanup",
+    "review_notes": "Review 07 independently reviewed expected route policy; observed FastAPI AST is compared against this row and is not the authority source.",
+    "review_owner": "System Design Authority / API policy owner pending",
     "review_status": "reviewed-route-policy-r07",
     "roles": [
       "admin"
@@ -2015,7 +2209,6 @@
     "source": "services/api/app/main.py:2368-2371"
   },
   "POST /api/v1/public/corrections": {
-    "analysis": "function-ast-boundary",
     "auth": "public",
     "delegated_policy_helpers": [],
     "expected_key": "POST /api/v1/public/corrections",
@@ -2025,7 +2218,10 @@
     "operation_id": "create_public_correction_api_v1_public_corrections_post",
     "optional_auth": false,
     "path": "/api/v1/public/corrections",
-    "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+    "policy_source": "human-reviewed-route-policy-source",
+    "review_decision_id": "WO002-R07-API-POLICY-POST--api-v1-public-corrections",
+    "review_notes": "Review 07 independently reviewed expected route policy; observed FastAPI AST is compared against this row and is not the authority source.",
+    "review_owner": "System Design Authority / API policy owner pending",
     "review_status": "reviewed-route-policy-r07",
     "roles": [],
     "route": "/api/v1/public/corrections",
@@ -2033,7 +2229,6 @@
     "source": "services/api/app/main.py:1817-1824"
   },
   "POST /api/v1/public/geotag-submissions": {
-    "analysis": "function-ast-boundary",
     "auth": "public",
     "delegated_policy_helpers": [],
     "expected_key": "POST /api/v1/public/geotag-submissions",
@@ -2043,7 +2238,10 @@
     "operation_id": "create_public_geotag_submission_api_v1_public_geotag_submissions_post",
     "optional_auth": false,
     "path": "/api/v1/public/geotag-submissions",
-    "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+    "policy_source": "human-reviewed-route-policy-source",
+    "review_decision_id": "WO002-R07-API-POLICY-POST--api-v1-public-geotag-submissions",
+    "review_notes": "Review 07 independently reviewed expected route policy; observed FastAPI AST is compared against this row and is not the authority source.",
+    "review_owner": "System Design Authority / API policy owner pending",
     "review_status": "reviewed-route-policy-r07",
     "roles": [],
     "route": "/api/v1/public/geotag-submissions",
@@ -2051,7 +2249,6 @@
     "source": "services/api/app/main.py:1843-1852"
   },
   "POST /api/v1/public/geotag/preview": {
-    "analysis": "function-ast-boundary",
     "auth": "public",
     "delegated_policy_helpers": [],
     "expected_key": "POST /api/v1/public/geotag/preview",
@@ -2061,7 +2258,10 @@
     "operation_id": "public_geotag_preview_api_v1_public_geotag_preview_post",
     "optional_auth": false,
     "path": "/api/v1/public/geotag/preview",
-    "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+    "policy_source": "human-reviewed-route-policy-source",
+    "review_decision_id": "WO002-R07-API-POLICY-POST--api-v1-public-geotag-preview",
+    "review_notes": "Review 07 independently reviewed expected route policy; observed FastAPI AST is compared against this row and is not the authority source.",
+    "review_owner": "System Design Authority / API policy owner pending",
     "review_status": "reviewed-route-policy-r07",
     "roles": [],
     "route": "/api/v1/public/geotag/preview",
@@ -2069,7 +2269,6 @@
     "source": "services/api/app/main.py:1828-1833"
   },
   "POST /api/v1/public/geotag/road-suggestion": {
-    "analysis": "function-ast-boundary",
     "auth": "public",
     "delegated_policy_helpers": [],
     "expected_key": "POST /api/v1/public/geotag/road-suggestion",
@@ -2079,7 +2278,10 @@
     "operation_id": "public_road_suggestion_api_v1_public_geotag_road_suggestion_post",
     "optional_auth": false,
     "path": "/api/v1/public/geotag/road-suggestion",
-    "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+    "policy_source": "human-reviewed-route-policy-source",
+    "review_decision_id": "WO002-R07-API-POLICY-POST--api-v1-public-geotag-road-suggestion",
+    "review_notes": "Review 07 independently reviewed expected route policy; observed FastAPI AST is compared against this row and is not the authority source.",
+    "review_owner": "System Design Authority / API policy owner pending",
     "review_status": "reviewed-route-policy-r07",
     "roles": [],
     "route": "/api/v1/public/geotag/road-suggestion",
@@ -2087,7 +2289,6 @@
     "source": "services/api/app/main.py:1837-1839"
   },
   "POST /api/v1/publication/packs": {
-    "analysis": "function-ast-boundary",
     "auth": "role-required",
     "delegated_policy_helpers": [],
     "expected_key": "POST /api/v1/publication/packs",
@@ -2097,7 +2298,10 @@
     "operation_id": "create_publication_pack_endpoint_api_v1_publication_packs_post",
     "optional_auth": false,
     "path": "/api/v1/publication/packs",
-    "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+    "policy_source": "human-reviewed-route-policy-source",
+    "review_decision_id": "WO002-R07-API-POLICY-POST--api-v1-publication-packs",
+    "review_notes": "Review 07 independently reviewed expected route policy; observed FastAPI AST is compared against this row and is not the authority source.",
+    "review_owner": "System Design Authority / API policy owner pending",
     "review_status": "reviewed-route-policy-r07",
     "roles": [
       "admin",
@@ -2108,7 +2312,6 @@
     "source": "services/api/app/main.py:2220-2230"
   },
   "POST /api/v1/publication/packs/{pack_id}/publish": {
-    "analysis": "function-ast-boundary",
     "auth": "role-required",
     "delegated_policy_helpers": [],
     "expected_key": "POST /api/v1/publication/packs/{pack_id}/publish",
@@ -2118,7 +2321,10 @@
     "operation_id": "publish_publication_pack_endpoint_api_v1_publication_packs__pack_id__publish_post",
     "optional_auth": false,
     "path": "/api/v1/publication/packs/{pack_id}/publish",
-    "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+    "policy_source": "human-reviewed-route-policy-source",
+    "review_decision_id": "WO002-R07-API-POLICY-POST--api-v1-publication-packs-pack-id-publish",
+    "review_notes": "Review 07 independently reviewed expected route policy; observed FastAPI AST is compared against this row and is not the authority source.",
+    "review_owner": "System Design Authority / API policy owner pending",
     "review_status": "reviewed-route-policy-r07",
     "roles": [
       "admin"
@@ -2128,7 +2334,6 @@
     "source": "services/api/app/main.py:2234-2242"
   },
   "POST /api/v1/roads": {
-    "analysis": "function-ast-boundary",
     "auth": "role-required",
     "delegated_policy_helpers": [],
     "expected_key": "POST /api/v1/roads",
@@ -2138,7 +2343,10 @@
     "operation_id": "create_road_endpoint_api_v1_roads_post",
     "optional_auth": false,
     "path": "/api/v1/roads",
-    "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+    "policy_source": "human-reviewed-route-policy-source",
+    "review_decision_id": "WO002-R07-API-POLICY-POST--api-v1-roads",
+    "review_notes": "Review 07 independently reviewed expected route policy; observed FastAPI AST is compared against this row and is not the authority source.",
+    "review_owner": "System Design Authority / API policy owner pending",
     "review_status": "reviewed-route-policy-r07",
     "roles": [
       "admin",
@@ -2149,7 +2357,6 @@
     "source": "services/api/app/main.py:1376-1384"
   },
   "POST /api/v1/territories": {
-    "analysis": "function-ast-boundary",
     "auth": "role-required",
     "delegated_policy_helpers": [],
     "expected_key": "POST /api/v1/territories",
@@ -2159,7 +2366,10 @@
     "operation_id": "create_territory_endpoint_api_v1_territories_post",
     "optional_auth": false,
     "path": "/api/v1/territories",
-    "review_notes": "Review 07 expected policy row generated from exact FastAPI decorator and handler AST, then checked against OpenAPI operation identity.",
+    "policy_source": "human-reviewed-route-policy-source",
+    "review_decision_id": "WO002-R07-API-POLICY-POST--api-v1-territories",
+    "review_notes": "Review 07 independently reviewed expected route policy; observed FastAPI AST is compared against this row and is not the authority source.",
+    "review_owner": "System Design Authority / API policy owner pending",
     "review_status": "reviewed-route-policy-r07",
     "roles": [
       "admin",
