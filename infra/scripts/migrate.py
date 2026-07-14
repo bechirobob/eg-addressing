@@ -190,12 +190,11 @@ def print_status(status: dict[str, Any]) -> None:
 
 
 def apply_migrations(conn: psycopg.Connection, migrations: list[Migration], command: str, *, lock_already_held: bool = False) -> int:
+    ensure_ledger(conn)
     if not lock_already_held:
         with conn.cursor() as cur:
             cur.execute('SELECT pg_advisory_lock(%s)', (LOCK_KEY,))
-        conn.commit()
     try:
-        ensure_ledger(conn)
         status = compute_status(conn, migrations)
         if status['mismatch_versions']:
             print_status(status | {'error': 'checksum-mismatch'})
