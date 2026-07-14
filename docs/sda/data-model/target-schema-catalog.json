@@ -4801,6 +4801,968 @@
     "field_parity_errors": [],
     "index_count": 111,
     "inserted_fixture_rows": 330,
+    "lifecycle_transition_assertions": {
+      "F07-lifecycle-positive-administrative-unit-lifecycle-official-to-historical": {
+        "audit_event": "admin.historical",
+        "authority": "GIS/Data Authority",
+        "from": "official",
+        "permission_key": "admin.unit.replace",
+        "public_effect": "current public switches after release",
+        "status": "passed",
+        "to": "historical",
+        "vocab": "administrative_unit_lifecycle"
+      },
+      "F07-lifecycle-positive-administrative-unit-lifecycle-official-to-retired": {
+        "audit_event": "admin.retire",
+        "authority": "GIS/Data Authority",
+        "from": "official",
+        "permission_key": "admin.unit.retire",
+        "public_effect": "not current public",
+        "status": "passed",
+        "to": "retired",
+        "vocab": "administrative_unit_lifecycle"
+      },
+      "F07-lifecycle-positive-administrative-unit-lifecycle-proposed-to-official": {
+        "audit_event": "admin.official",
+        "authority": "GIS/Data Authority",
+        "from": "proposed",
+        "permission_key": "admin.unit.approve",
+        "public_effect": "eligible for government projection",
+        "status": "passed",
+        "to": "official",
+        "vocab": "administrative_unit_lifecycle"
+      },
+      "F07-lifecycle-positive-administrative-unit-lifecycle-proposed-to-revoked": {
+        "audit_event": "admin.reject",
+        "authority": "GIS/Data Authority",
+        "from": "proposed",
+        "permission_key": "admin.unit.reject",
+        "public_effect": "never public",
+        "status": "passed",
+        "to": "revoked",
+        "vocab": "administrative_unit_lifecycle"
+      },
+      "F07-lifecycle-positive-building-lifecycle-active-to-demolished": {
+        "audit_event": "building.demolish",
+        "authority": "Registry Authority",
+        "from": "active",
+        "permission_key": "building.demolish",
+        "public_effect": "remove current public after release",
+        "status": "passed",
+        "to": "demolished",
+        "vocab": "building_lifecycle"
+      },
+      "F07-lifecycle-positive-building-lifecycle-active-to-retired": {
+        "audit_event": "building.retire",
+        "authority": "Registry Authority",
+        "from": "active",
+        "permission_key": "building.retire",
+        "public_effect": "remove current",
+        "status": "passed",
+        "to": "retired",
+        "vocab": "building_lifecycle"
+      },
+      "F07-lifecycle-positive-building-lifecycle-candidate-to-active": {
+        "audit_event": "building.approve",
+        "authority": "Registry Authority",
+        "from": "candidate",
+        "permission_key": "building.approve",
+        "public_effect": "public after address release",
+        "status": "passed",
+        "to": "active",
+        "vocab": "building_lifecycle"
+      },
+      "F07-lifecycle-positive-building-lifecycle-candidate-to-revoked": {
+        "audit_event": "building.reject",
+        "authority": "Registry Authority",
+        "from": "candidate",
+        "permission_key": "building.reject",
+        "public_effect": "never public",
+        "status": "passed",
+        "to": "revoked",
+        "vocab": "building_lifecycle"
+      },
+      "F07-lifecycle-positive-canonical-record-lifecycle-active-to-corrected": {
+        "audit_event": "canonical.correct",
+        "authority": "Registry Authority",
+        "from": "active",
+        "permission_key": "registry.record.correct",
+        "public_effect": "new version required before public change",
+        "status": "passed",
+        "to": "corrected",
+        "vocab": "canonical_record_lifecycle"
+      },
+      "F07-lifecycle-positive-canonical-record-lifecycle-active-to-retired": {
+        "audit_event": "canonical.retire",
+        "authority": "Registry Authority",
+        "from": "active",
+        "permission_key": "registry.record.retire",
+        "public_effect": "remove from current public release after withdrawal",
+        "status": "passed",
+        "to": "retired",
+        "vocab": "canonical_record_lifecycle"
+      },
+      "F07-lifecycle-positive-canonical-record-lifecycle-active-to-superseded": {
+        "audit_event": "canonical.supersede",
+        "authority": "Registry Authority",
+        "from": "active",
+        "permission_key": "registry.record.supersede",
+        "public_effect": "old public alias retained as historical",
+        "status": "passed",
+        "to": "superseded",
+        "vocab": "canonical_record_lifecycle"
+      },
+      "F07-lifecycle-positive-canonical-record-lifecycle-candidate-to-revoked": {
+        "audit_event": "canonical.reject",
+        "authority": "Registry Authority",
+        "from": "candidate",
+        "permission_key": "registry.record.reject",
+        "public_effect": "never public",
+        "status": "passed",
+        "to": "revoked",
+        "vocab": "canonical_record_lifecycle"
+      },
+      "F07-lifecycle-positive-canonical-record-lifecycle-candidate-to-under-review": {
+        "audit_event": "canonical.submit",
+        "authority": "Registry Authority",
+        "from": "candidate",
+        "permission_key": "registry.record.submit",
+        "public_effect": "operator-only",
+        "status": "passed",
+        "to": "under-review",
+        "vocab": "canonical_record_lifecycle"
+      },
+      "F07-lifecycle-positive-canonical-record-lifecycle-under-review-to-active": {
+        "audit_event": "canonical.approve",
+        "authority": "Registry Authority",
+        "from": "under-review",
+        "permission_key": "registry.record.approve",
+        "public_effect": "eligible for release after publication item",
+        "status": "passed",
+        "to": "active",
+        "vocab": "canonical_record_lifecycle"
+      },
+      "F07-lifecycle-positive-canonical-record-lifecycle-under-review-to-disputed": {
+        "audit_event": "canonical.dispute.open",
+        "authority": "Registry Authority",
+        "from": "under-review",
+        "permission_key": "registry.dispute.open",
+        "public_effect": "not public unless already released",
+        "status": "passed",
+        "to": "disputed",
+        "vocab": "canonical_record_lifecycle"
+      },
+      "F07-lifecycle-positive-case-lifecycle-approved-to-resolved": {
+        "audit_event": "case.resolve",
+        "authority": "Registry Authority",
+        "from": "approved",
+        "permission_key": "case.resolve",
+        "public_effect": "public only through release",
+        "status": "passed",
+        "to": "resolved",
+        "vocab": "case_lifecycle"
+      },
+      "F07-lifecycle-positive-case-lifecycle-needs-evidence-to-under-review": {
+        "audit_event": "case.evidence.receive",
+        "authority": "Registry Authority",
+        "from": "needs-evidence",
+        "permission_key": "case.evidence.receive",
+        "public_effect": "operator-only",
+        "status": "passed",
+        "to": "under-review",
+        "vocab": "case_lifecycle"
+      },
+      "F07-lifecycle-positive-case-lifecycle-rejected-to-closed": {
+        "audit_event": "case.close",
+        "authority": "Registry Authority",
+        "from": "rejected",
+        "permission_key": "case.close",
+        "public_effect": "none",
+        "status": "passed",
+        "to": "closed",
+        "vocab": "case_lifecycle"
+      },
+      "F07-lifecycle-positive-case-lifecycle-resolved-to-closed": {
+        "audit_event": "case.close",
+        "authority": "Registry Authority",
+        "from": "resolved",
+        "permission_key": "case.close",
+        "public_effect": "none",
+        "status": "passed",
+        "to": "closed",
+        "vocab": "case_lifecycle"
+      },
+      "F07-lifecycle-positive-case-lifecycle-submitted-to-under-review": {
+        "audit_event": "case.triage",
+        "authority": "Registry Authority",
+        "from": "submitted",
+        "permission_key": "case.triage",
+        "public_effect": "operator-only",
+        "status": "passed",
+        "to": "under-review",
+        "vocab": "case_lifecycle"
+      },
+      "F07-lifecycle-positive-case-lifecycle-under-review-to-approved": {
+        "audit_event": "case.approve",
+        "authority": "Registry Authority",
+        "from": "under-review",
+        "permission_key": "case.approve",
+        "public_effect": "may affect public after release",
+        "status": "passed",
+        "to": "approved",
+        "vocab": "case_lifecycle"
+      },
+      "F07-lifecycle-positive-case-lifecycle-under-review-to-needs-evidence": {
+        "audit_event": "case.evidence.request",
+        "authority": "Registry Authority",
+        "from": "under-review",
+        "permission_key": "case.request_evidence",
+        "public_effect": "operator-only",
+        "status": "passed",
+        "to": "needs-evidence",
+        "vocab": "case_lifecycle"
+      },
+      "F07-lifecycle-positive-case-lifecycle-under-review-to-rejected": {
+        "audit_event": "case.reject",
+        "authority": "Registry Authority",
+        "from": "under-review",
+        "permission_key": "case.reject",
+        "public_effect": "operator-only",
+        "status": "passed",
+        "to": "rejected",
+        "vocab": "case_lifecycle"
+      },
+      "F07-lifecycle-positive-country-lifecycle-active-to-retired": {
+        "audit_event": "country.retire",
+        "authority": "Registry Authority",
+        "from": "active",
+        "permission_key": "country.retire",
+        "public_effect": "not current",
+        "status": "passed",
+        "to": "retired",
+        "vocab": "country_lifecycle"
+      },
+      "F07-lifecycle-positive-entrance-lifecycle-active-to-retired": {
+        "audit_event": "entrance.retire",
+        "authority": "Registry Authority",
+        "from": "active",
+        "permission_key": "entrance.retire",
+        "public_effect": "not current",
+        "status": "passed",
+        "to": "retired",
+        "vocab": "entrance_lifecycle"
+      },
+      "F07-lifecycle-positive-entrance-lifecycle-candidate-to-active": {
+        "audit_event": "entrance.approve",
+        "authority": "Registry Authority",
+        "from": "candidate",
+        "permission_key": "entrance.approve",
+        "public_effect": "public through address release",
+        "status": "passed",
+        "to": "active",
+        "vocab": "entrance_lifecycle"
+      },
+      "F07-lifecycle-positive-entrance-lifecycle-candidate-to-revoked": {
+        "audit_event": "entrance.reject",
+        "authority": "Registry Authority",
+        "from": "candidate",
+        "permission_key": "entrance.reject",
+        "public_effect": "never public",
+        "status": "passed",
+        "to": "revoked",
+        "vocab": "entrance_lifecycle"
+      },
+      "F07-lifecycle-positive-field-verification-state-assigned-to-cancelled": {
+        "audit_event": "field.cancel",
+        "authority": "Field Operations",
+        "from": "assigned",
+        "permission_key": "field.cancel",
+        "public_effect": "operator-only",
+        "status": "passed",
+        "to": "cancelled",
+        "vocab": "field_verification_state"
+      },
+      "F07-lifecycle-positive-field-verification-state-assigned-to-in-progress": {
+        "audit_event": "field.start",
+        "authority": "Field Operations",
+        "from": "assigned",
+        "permission_key": "field.start",
+        "public_effect": "operator-only",
+        "status": "passed",
+        "to": "in-progress",
+        "vocab": "field_verification_state"
+      },
+      "F07-lifecycle-positive-field-verification-state-evidence-approved-to-linked-to-canonical": {
+        "audit_event": "field.link",
+        "authority": "Registry Authority",
+        "from": "evidence-approved",
+        "permission_key": "field.link",
+        "public_effect": "operator-only/public via release",
+        "status": "passed",
+        "to": "linked-to-canonical",
+        "vocab": "field_verification_state"
+      },
+      "F07-lifecycle-positive-field-verification-state-evidence-rejected-to-needs-recapture": {
+        "audit_event": "field.recapture",
+        "authority": "Field Operations",
+        "from": "evidence-rejected",
+        "permission_key": "field.recapture.request",
+        "public_effect": "operator-only",
+        "status": "passed",
+        "to": "needs-recapture",
+        "vocab": "field_verification_state"
+      },
+      "F07-lifecycle-positive-field-verification-state-evidence-under-review-to-evidence-approved": {
+        "audit_event": "field.evidence.approve",
+        "authority": "Registry Authority",
+        "from": "evidence-under-review",
+        "permission_key": "field.evidence.approve",
+        "public_effect": "eligible canonical evidence",
+        "status": "passed",
+        "to": "evidence-approved",
+        "vocab": "field_verification_state"
+      },
+      "F07-lifecycle-positive-field-verification-state-evidence-under-review-to-evidence-rejected": {
+        "audit_event": "field.evidence.reject",
+        "authority": "Registry Authority",
+        "from": "evidence-under-review",
+        "permission_key": "field.evidence.reject",
+        "public_effect": "not public",
+        "status": "passed",
+        "to": "evidence-rejected",
+        "vocab": "field_verification_state"
+      },
+      "F07-lifecycle-positive-field-verification-state-field-captured-to-evidence-under-review": {
+        "audit_event": "field.review.submit",
+        "authority": "Field Operations",
+        "from": "field-captured",
+        "permission_key": "field.submit_review",
+        "public_effect": "operator-only",
+        "status": "passed",
+        "to": "evidence-under-review",
+        "vocab": "field_verification_state"
+      },
+      "F07-lifecycle-positive-field-verification-state-in-progress-to-field-captured": {
+        "audit_event": "field.capture",
+        "authority": "Field Operations",
+        "from": "in-progress",
+        "permission_key": "field.capture",
+        "public_effect": "operator-only",
+        "status": "passed",
+        "to": "field-captured",
+        "vocab": "field_verification_state"
+      },
+      "F07-lifecycle-positive-field-verification-state-needs-recapture-to-in-progress": {
+        "audit_event": "field.restart",
+        "authority": "Field Operations",
+        "from": "needs-recapture",
+        "permission_key": "field.restart",
+        "public_effect": "operator-only",
+        "status": "passed",
+        "to": "in-progress",
+        "vocab": "field_verification_state"
+      },
+      "F07-lifecycle-positive-geometry-quality-state-accepted-canonical-to-superseded": {
+        "audit_event": "geometry.supersede",
+        "authority": "GIS/Data Authority",
+        "from": "accepted-canonical",
+        "permission_key": "geometry.supersede",
+        "public_effect": "old geometry historical",
+        "status": "passed",
+        "to": "superseded",
+        "vocab": "geometry_quality_state"
+      },
+      "F07-lifecycle-positive-geometry-quality-state-disputed-to-reviewed": {
+        "audit_event": "geometry.dispute.resolve",
+        "authority": "Registry/GIS Authority",
+        "from": "disputed",
+        "permission_key": "geometry.dispute.resolve",
+        "public_effect": "operator-only",
+        "status": "passed",
+        "to": "reviewed",
+        "vocab": "geometry_quality_state"
+      },
+      "F07-lifecycle-positive-geometry-quality-state-observed-to-quality-checked": {
+        "audit_event": "geometry.quality.run",
+        "authority": "GIS/Data Authority",
+        "from": "observed",
+        "permission_key": "geometry.quality.run",
+        "public_effect": "operator-only",
+        "status": "passed",
+        "to": "quality-checked",
+        "vocab": "geometry_quality_state"
+      },
+      "F07-lifecycle-positive-geometry-quality-state-quality-checked-to-reviewed": {
+        "audit_event": "geometry.quality.review",
+        "authority": "GIS/Data Authority",
+        "from": "quality-checked",
+        "permission_key": "geometry.quality.review",
+        "public_effect": "operator-only",
+        "status": "passed",
+        "to": "reviewed",
+        "vocab": "geometry_quality_state"
+      },
+      "F07-lifecycle-positive-geometry-quality-state-reviewed-to-accepted-canonical": {
+        "audit_event": "geometry.promote",
+        "authority": "GIS/Data Authority",
+        "from": "reviewed",
+        "permission_key": "geometry.promote",
+        "public_effect": "eligible for release",
+        "status": "passed",
+        "to": "accepted-canonical",
+        "vocab": "geometry_quality_state"
+      },
+      "F07-lifecycle-positive-geometry-quality-state-reviewed-to-disputed": {
+        "audit_event": "geometry.dispute",
+        "authority": "Registry/GIS Authority",
+        "from": "reviewed",
+        "permission_key": "geometry.dispute.open",
+        "public_effect": "operator-only",
+        "status": "passed",
+        "to": "disputed",
+        "vocab": "geometry_quality_state"
+      },
+      "F07-lifecycle-positive-geometry-quality-state-reviewed-to-rejected": {
+        "audit_event": "geometry.reject",
+        "authority": "GIS/Data Authority",
+        "from": "reviewed",
+        "permission_key": "geometry.reject",
+        "public_effect": "not public",
+        "status": "passed",
+        "to": "rejected",
+        "vocab": "geometry_quality_state"
+      },
+      "F07-lifecycle-positive-geometry-quality-state-reviewed-to-valid-with-warning": {
+        "audit_event": "geometry.warning",
+        "authority": "GIS/Data Authority",
+        "from": "reviewed",
+        "permission_key": "geometry.accept.warning",
+        "public_effect": "operator warning",
+        "status": "passed",
+        "to": "valid-with-warning",
+        "vocab": "geometry_quality_state"
+      },
+      "F07-lifecycle-positive-intake-state-duplicate-review-to-under-review": {
+        "audit_event": "intake.clear_duplicate",
+        "authority": "Registry Authority",
+        "from": "duplicate-review",
+        "permission_key": "intake.clear_duplicate",
+        "public_effect": "operator-only",
+        "status": "passed",
+        "to": "under-review",
+        "vocab": "intake_state"
+      },
+      "F07-lifecycle-positive-intake-state-needs-field-check-to-under-review": {
+        "audit_event": "intake.field_return",
+        "authority": "Field Operations",
+        "from": "needs-field-check",
+        "permission_key": "intake.field_return",
+        "public_effect": "operator-only",
+        "status": "passed",
+        "to": "under-review",
+        "vocab": "intake_state"
+      },
+      "F07-lifecycle-positive-intake-state-promoted-to-canonical-to-closed": {
+        "audit_event": "intake.close",
+        "authority": "Registry Authority",
+        "from": "promoted-to-canonical",
+        "permission_key": "intake.close",
+        "public_effect": "none",
+        "status": "passed",
+        "to": "closed",
+        "vocab": "intake_state"
+      },
+      "F07-lifecycle-positive-intake-state-rejected-to-closed": {
+        "audit_event": "intake.close",
+        "authority": "Registry Authority",
+        "from": "rejected",
+        "permission_key": "intake.close",
+        "public_effect": "none",
+        "status": "passed",
+        "to": "closed",
+        "vocab": "intake_state"
+      },
+      "F07-lifecycle-positive-intake-state-submitted-to-under-review": {
+        "audit_event": "intake.triage",
+        "authority": "Registry Authority",
+        "from": "submitted",
+        "permission_key": "intake.triage",
+        "public_effect": "operator-only",
+        "status": "passed",
+        "to": "under-review",
+        "vocab": "intake_state"
+      },
+      "F07-lifecycle-positive-intake-state-under-review-to-duplicate-review": {
+        "audit_event": "intake.duplicate",
+        "authority": "Registry Authority",
+        "from": "under-review",
+        "permission_key": "intake.duplicate",
+        "public_effect": "operator-only",
+        "status": "passed",
+        "to": "duplicate-review",
+        "vocab": "intake_state"
+      },
+      "F07-lifecycle-positive-intake-state-under-review-to-needs-field-check": {
+        "audit_event": "intake.field_check",
+        "authority": "Field Operations",
+        "from": "under-review",
+        "permission_key": "intake.field_check",
+        "public_effect": "operator-only",
+        "status": "passed",
+        "to": "needs-field-check",
+        "vocab": "intake_state"
+      },
+      "F07-lifecycle-positive-intake-state-under-review-to-promoted-to-canonical": {
+        "audit_event": "intake.promote",
+        "authority": "Registry Authority",
+        "from": "under-review",
+        "permission_key": "intake.promote",
+        "public_effect": "public after release",
+        "status": "passed",
+        "to": "promoted-to-canonical",
+        "vocab": "intake_state"
+      },
+      "F07-lifecycle-positive-intake-state-under-review-to-rejected": {
+        "audit_event": "intake.reject",
+        "authority": "Registry Authority",
+        "from": "under-review",
+        "permission_key": "intake.reject",
+        "public_effect": "not public",
+        "status": "passed",
+        "to": "rejected",
+        "vocab": "intake_state"
+      },
+      "F07-lifecycle-positive-landmark-lifecycle-candidate-to-official": {
+        "audit_event": "landmark.approve",
+        "authority": "GIS/Data Authority",
+        "from": "candidate",
+        "permission_key": "landmark.approve",
+        "public_effect": "public after release",
+        "status": "passed",
+        "to": "official",
+        "vocab": "landmark_lifecycle"
+      },
+      "F07-lifecycle-positive-landmark-lifecycle-candidate-to-revoked": {
+        "audit_event": "landmark.reject",
+        "authority": "GIS/Data Authority",
+        "from": "candidate",
+        "permission_key": "landmark.reject",
+        "public_effect": "never public",
+        "status": "passed",
+        "to": "revoked",
+        "vocab": "landmark_lifecycle"
+      },
+      "F07-lifecycle-positive-landmark-lifecycle-official-to-retired": {
+        "audit_event": "landmark.retire",
+        "authority": "GIS/Data Authority",
+        "from": "official",
+        "permission_key": "landmark.retire",
+        "public_effect": "not current",
+        "status": "passed",
+        "to": "retired",
+        "vocab": "landmark_lifecycle"
+      },
+      "F07-lifecycle-positive-locality-lifecycle-candidate-to-official": {
+        "audit_event": "locality.approve",
+        "authority": "GIS/Data Authority",
+        "from": "candidate",
+        "permission_key": "locality.approve",
+        "public_effect": "public after release",
+        "status": "passed",
+        "to": "official",
+        "vocab": "locality_lifecycle"
+      },
+      "F07-lifecycle-positive-locality-lifecycle-official-to-renamed": {
+        "audit_event": "locality.rename",
+        "authority": "GIS/Data Authority",
+        "from": "official",
+        "permission_key": "locality.rename",
+        "public_effect": "new name after release",
+        "status": "passed",
+        "to": "renamed",
+        "vocab": "locality_lifecycle"
+      },
+      "F07-lifecycle-positive-locality-lifecycle-official-to-retired": {
+        "audit_event": "locality.retire",
+        "authority": "GIS/Data Authority",
+        "from": "official",
+        "permission_key": "locality.retire",
+        "public_effect": "remove current",
+        "status": "passed",
+        "to": "retired",
+        "vocab": "locality_lifecycle"
+      },
+      "F07-lifecycle-positive-name-lifecycle-alternate-to-retired": {
+        "audit_event": "name.retire",
+        "authority": "Registry/GIS Authority",
+        "from": "alternate",
+        "permission_key": "name.retire",
+        "public_effect": "not current",
+        "status": "passed",
+        "to": "retired",
+        "vocab": "name_lifecycle"
+      },
+      "F07-lifecycle-positive-name-lifecycle-candidate-to-alternate": {
+        "audit_event": "name.alternate",
+        "authority": "Registry/GIS Authority",
+        "from": "candidate",
+        "permission_key": "name.approve.alternate",
+        "public_effect": "operator/public if release allows",
+        "status": "passed",
+        "to": "alternate",
+        "vocab": "name_lifecycle"
+      },
+      "F07-lifecycle-positive-name-lifecycle-candidate-to-official-current": {
+        "audit_event": "name.approve",
+        "authority": "Registry/GIS Authority",
+        "from": "candidate",
+        "permission_key": "name.approve.official",
+        "public_effect": "public after release",
+        "status": "passed",
+        "to": "official-current",
+        "vocab": "name_lifecycle"
+      },
+      "F07-lifecycle-positive-name-lifecycle-candidate-to-rejected": {
+        "audit_event": "name.reject",
+        "authority": "Registry/GIS Authority",
+        "from": "candidate",
+        "permission_key": "name.reject",
+        "public_effect": "never public",
+        "status": "passed",
+        "to": "rejected",
+        "vocab": "name_lifecycle"
+      },
+      "F07-lifecycle-positive-name-lifecycle-disputed-to-official-current": {
+        "audit_event": "name.resolve",
+        "authority": "Registry Authority",
+        "from": "disputed",
+        "permission_key": "name.dispute.resolve",
+        "public_effect": "restore public if released",
+        "status": "passed",
+        "to": "official-current",
+        "vocab": "name_lifecycle"
+      },
+      "F07-lifecycle-positive-name-lifecycle-official-current-to-disputed": {
+        "audit_event": "name.dispute",
+        "authority": "Registry Authority",
+        "from": "official-current",
+        "permission_key": "name.dispute.open",
+        "public_effect": "operator warning",
+        "status": "passed",
+        "to": "disputed",
+        "vocab": "name_lifecycle"
+      },
+      "F07-lifecycle-positive-name-lifecycle-official-current-to-official-historical": {
+        "audit_event": "name.replace",
+        "authority": "Registry/GIS Authority",
+        "from": "official-current",
+        "permission_key": "name.replace.official",
+        "public_effect": "old name historical",
+        "status": "passed",
+        "to": "official-historical",
+        "vocab": "name_lifecycle"
+      },
+      "F07-lifecycle-positive-non-building-object-lifecycle-active-to-retired": {
+        "audit_event": "object.retire",
+        "authority": "Registry Authority",
+        "from": "active",
+        "permission_key": "object.retire",
+        "public_effect": "not current",
+        "status": "passed",
+        "to": "retired",
+        "vocab": "non_building_object_lifecycle"
+      },
+      "F07-lifecycle-positive-non-building-object-lifecycle-candidate-to-active": {
+        "audit_event": "object.approve",
+        "authority": "Registry Authority",
+        "from": "candidate",
+        "permission_key": "object.approve",
+        "public_effect": "public through release if allowed",
+        "status": "passed",
+        "to": "active",
+        "vocab": "non_building_object_lifecycle"
+      },
+      "F07-lifecycle-positive-non-building-object-lifecycle-candidate-to-revoked": {
+        "audit_event": "object.reject",
+        "authority": "Registry Authority",
+        "from": "candidate",
+        "permission_key": "object.reject",
+        "public_effect": "never public",
+        "status": "passed",
+        "to": "revoked",
+        "vocab": "non_building_object_lifecycle"
+      },
+      "F07-lifecycle-positive-operational-area-lifecycle-active-to-closed": {
+        "audit_event": "ops.area.close",
+        "authority": "Operations Authority",
+        "from": "active",
+        "permission_key": "ops.area.close",
+        "public_effect": "operator-only",
+        "status": "passed",
+        "to": "closed",
+        "vocab": "operational_area_lifecycle"
+      },
+      "F07-lifecycle-positive-operational-area-lifecycle-active-to-suspended": {
+        "audit_event": "ops.area.suspend",
+        "authority": "Operations Authority",
+        "from": "active",
+        "permission_key": "ops.area.suspend",
+        "public_effect": "operator-only",
+        "status": "passed",
+        "to": "suspended",
+        "vocab": "operational_area_lifecycle"
+      },
+      "F07-lifecycle-positive-operational-area-lifecycle-closed-to-archived": {
+        "audit_event": "ops.area.archive",
+        "authority": "Operations Authority",
+        "from": "closed",
+        "permission_key": "ops.area.archive",
+        "public_effect": "operator-only",
+        "status": "passed",
+        "to": "archived",
+        "vocab": "operational_area_lifecycle"
+      },
+      "F07-lifecycle-positive-operational-area-lifecycle-planned-to-active": {
+        "audit_event": "ops.area.activate",
+        "authority": "Operations Authority",
+        "from": "planned",
+        "permission_key": "ops.area.activate",
+        "public_effect": "operator-only",
+        "status": "passed",
+        "to": "active",
+        "vocab": "operational_area_lifecycle"
+      },
+      "F07-lifecycle-positive-operational-area-lifecycle-suspended-to-active": {
+        "audit_event": "ops.area.reactivate",
+        "authority": "Operations Authority",
+        "from": "suspended",
+        "permission_key": "ops.area.reactivate",
+        "public_effect": "operator-only",
+        "status": "passed",
+        "to": "active",
+        "vocab": "operational_area_lifecycle"
+      },
+      "F07-lifecycle-positive-publication-lifecycle-approval-requested-to-approved": {
+        "audit_event": "publication.approve",
+        "authority": "Publication Authority",
+        "from": "approval-requested",
+        "permission_key": "publication.approve",
+        "public_effect": "ready to publish",
+        "status": "passed",
+        "to": "approved",
+        "vocab": "publication_lifecycle"
+      },
+      "F07-lifecycle-positive-publication-lifecycle-approval-requested-to-withdrawn": {
+        "audit_event": "publication.withdraw",
+        "authority": "Publication Authority",
+        "from": "approval-requested",
+        "permission_key": "publication.withdraw",
+        "public_effect": "not public",
+        "status": "passed",
+        "to": "withdrawn",
+        "vocab": "publication_lifecycle"
+      },
+      "F07-lifecycle-positive-publication-lifecycle-approved-to-published": {
+        "audit_event": "publication.publish",
+        "authority": "Publication Authority",
+        "from": "approved",
+        "permission_key": "publication.publish",
+        "public_effect": "public release active",
+        "status": "passed",
+        "to": "published",
+        "vocab": "publication_lifecycle"
+      },
+      "F07-lifecycle-positive-publication-lifecycle-draft-to-approval-requested": {
+        "audit_event": "publication.request",
+        "authority": "Publication Authority",
+        "from": "draft",
+        "permission_key": "publication.request",
+        "public_effect": "not public",
+        "status": "passed",
+        "to": "approval-requested",
+        "vocab": "publication_lifecycle"
+      },
+      "F07-lifecycle-positive-publication-lifecycle-published-to-suspended": {
+        "audit_event": "publication.suspend",
+        "authority": "Publication Authority",
+        "from": "published",
+        "permission_key": "publication.suspend",
+        "public_effect": "public hidden/suspended",
+        "status": "passed",
+        "to": "suspended",
+        "vocab": "publication_lifecycle"
+      },
+      "F07-lifecycle-positive-publication-lifecycle-published-to-withdrawn": {
+        "audit_event": "publication.withdraw",
+        "authority": "Publication Authority",
+        "from": "published",
+        "permission_key": "publication.withdraw",
+        "public_effect": "public withdrawn",
+        "status": "passed",
+        "to": "withdrawn",
+        "vocab": "publication_lifecycle"
+      },
+      "F07-lifecycle-positive-publication-lifecycle-suspended-to-published": {
+        "audit_event": "publication.reinstate",
+        "authority": "Publication Authority",
+        "from": "suspended",
+        "permission_key": "publication.reinstate",
+        "public_effect": "public active",
+        "status": "passed",
+        "to": "published",
+        "vocab": "publication_lifecycle"
+      },
+      "F07-lifecycle-positive-road-lifecycle-candidate-to-field-verified": {
+        "audit_event": "road.verify",
+        "authority": "GIS/Data Authority",
+        "from": "candidate",
+        "permission_key": "road.verify",
+        "public_effect": "operator-only",
+        "status": "passed",
+        "to": "field-verified",
+        "vocab": "road_lifecycle"
+      },
+      "F07-lifecycle-positive-road-lifecycle-field-verified-to-official": {
+        "audit_event": "road.approve",
+        "authority": "GIS/Data Authority",
+        "from": "field-verified",
+        "permission_key": "road.approve",
+        "public_effect": "public only after release",
+        "status": "passed",
+        "to": "official",
+        "vocab": "road_lifecycle"
+      },
+      "F07-lifecycle-positive-road-lifecycle-official-to-retired": {
+        "audit_event": "road.retire",
+        "authority": "GIS/Data Authority",
+        "from": "official",
+        "permission_key": "road.retire",
+        "public_effect": "remove from current public after release",
+        "status": "passed",
+        "to": "retired",
+        "vocab": "road_lifecycle"
+      },
+      "F07-lifecycle-positive-road-lifecycle-official-to-superseded": {
+        "audit_event": "road.supersede",
+        "authority": "GIS/Data Authority",
+        "from": "official",
+        "permission_key": "road.supersede",
+        "public_effect": "historical public if released",
+        "status": "passed",
+        "to": "superseded",
+        "vocab": "road_lifecycle"
+      },
+      "F07-lifecycle-positive-road-segment-lifecycle-active-to-realigned": {
+        "audit_event": "segment.realign",
+        "authority": "GIS/Data Authority",
+        "from": "active",
+        "permission_key": "road.segment.realign",
+        "public_effect": "public after release",
+        "status": "passed",
+        "to": "realigned",
+        "vocab": "road_segment_lifecycle"
+      },
+      "F07-lifecycle-positive-road-segment-lifecycle-active-to-retired": {
+        "audit_event": "segment.retire",
+        "authority": "GIS/Data Authority",
+        "from": "active",
+        "permission_key": "road.segment.retire",
+        "public_effect": "remove current",
+        "status": "passed",
+        "to": "retired",
+        "vocab": "road_segment_lifecycle"
+      },
+      "F07-lifecycle-positive-road-segment-lifecycle-draft-to-active": {
+        "audit_event": "segment.approve",
+        "authority": "GIS/Data Authority",
+        "from": "draft",
+        "permission_key": "road.segment.approve",
+        "public_effect": "operator until release",
+        "status": "passed",
+        "to": "active",
+        "vocab": "road_segment_lifecycle"
+      },
+      "F07-lifecycle-positive-source-authority-lifecycle-candidate-to-revoked": {
+        "audit_event": "source.reject",
+        "authority": "SDA",
+        "from": "candidate",
+        "permission_key": "source.reject",
+        "public_effect": "never trusted",
+        "status": "passed",
+        "to": "revoked",
+        "vocab": "source_authority_lifecycle"
+      },
+      "F07-lifecycle-positive-source-authority-lifecycle-candidate-to-trusted": {
+        "audit_event": "source.approve",
+        "authority": "SDA",
+        "from": "candidate",
+        "permission_key": "source.approve",
+        "public_effect": "operator authority list",
+        "status": "passed",
+        "to": "trusted",
+        "vocab": "source_authority_lifecycle"
+      },
+      "F07-lifecycle-positive-source-authority-lifecycle-trusted-to-deprecated": {
+        "audit_event": "source.deprecate",
+        "authority": "SDA",
+        "from": "trusted",
+        "permission_key": "source.deprecate",
+        "public_effect": "operator warning",
+        "status": "passed",
+        "to": "deprecated",
+        "vocab": "source_authority_lifecycle"
+      },
+      "F07-lifecycle-positive-source-authority-lifecycle-trusted-to-revoked": {
+        "audit_event": "source.revoke",
+        "authority": "SDA",
+        "from": "trusted",
+        "permission_key": "source.revoke",
+        "public_effect": "not used for new facts",
+        "status": "passed",
+        "to": "revoked",
+        "vocab": "source_authority_lifecycle"
+      },
+      "F07-lifecycle-positive-unit-lifecycle-active-to-merged": {
+        "audit_event": "unit.merge",
+        "authority": "Registry Authority",
+        "from": "active",
+        "permission_key": "unit.merge",
+        "public_effect": "historical only",
+        "status": "passed",
+        "to": "merged",
+        "vocab": "unit_lifecycle"
+      },
+      "F07-lifecycle-positive-unit-lifecycle-active-to-retired": {
+        "audit_event": "unit.retire",
+        "authority": "Registry Authority",
+        "from": "active",
+        "permission_key": "unit.retire",
+        "public_effect": "remove current",
+        "status": "passed",
+        "to": "retired",
+        "vocab": "unit_lifecycle"
+      },
+      "F07-lifecycle-positive-unit-lifecycle-active-to-split": {
+        "audit_event": "unit.split",
+        "authority": "Registry Authority",
+        "from": "active",
+        "permission_key": "unit.split",
+        "public_effect": "historical only",
+        "status": "passed",
+        "to": "split",
+        "vocab": "unit_lifecycle"
+      },
+      "F07-lifecycle-positive-unit-lifecycle-candidate-to-active": {
+        "audit_event": "unit.approve",
+        "authority": "Registry Authority",
+        "from": "candidate",
+        "permission_key": "unit.approve",
+        "public_effect": "public after release if allowed",
+        "status": "passed",
+        "to": "active",
+        "vocab": "unit_lifecycle"
+      }
+    },
     "missing_fields": [],
     "missing_required_triggers": [],
     "negative_harness_regression": {

@@ -315,6 +315,11 @@ if len(physical_report.get("scenario_results", {})) != 7:
     err("target report does not show seven independently executed positive scenarios")
 if len(physical_report.get("negative_results", {})) != 7:
     err("target report does not show seven negative fixture assertions")
+lifecycle_assertions = physical_report.get("lifecycle_transition_assertions", {}) if isinstance(physical_report, dict) else {}
+expected_lifecycle_edges = sum(len(edges) for edges in lifecycle_transitions.values()) if isinstance(lifecycle_transitions, dict) else 0
+gate("F07-lifecycle-positive-graph-executed", "F07", expected_lifecycle_edges > 0 and len(lifecycle_assertions) == expected_lifecycle_edges and all(v.get("status") == "passed" for v in lifecycle_assertions.values()), "every authored lifecycle transition must be loaded into lifecycle_transition_policy and pass validate_lifecycle_transition", "docs/sda/data-model/target-schema-catalog.json")
+for assertion_id, result in lifecycle_assertions.items() if isinstance(lifecycle_assertions, dict) else []:
+    gate(assertion_id, "F07", result.get("status") == "passed" and result.get("permission_key") and result.get("authority") and result.get("audit_event") and result.get("public_effect"), "lifecycle assertion must include permission, authority, audit, and public-effect metadata", "docs/sda/data-model/target-schema-catalog.json")
 harness_regression = physical_report.get("negative_harness_regression") or {}
 if harness_regression.get("status") != "passed" or harness_regression.get("error_class") != "NegativeFixtureDidNotFail":
     err("negative harness false-pass regression did not prove successful invalid actions fail outside the exception handler")
@@ -487,6 +492,7 @@ else:
         f"- F02 transform assertions: {summary.get('assertions_executed', 0)}",
         f"- F09 convergence units: {len(reviewed_units) if isinstance(reviewed_units, list) else 0}",
         f"- Multi-unit canonical records: {len(mu_records)}",
+        f"- F07 lifecycle transitions executed: {len(lifecycle_assertions) if isinstance(lifecycle_assertions, dict) else 0}",
     ])
 report = "\n".join(report_lines) + "\n"
 (DM / "design-consistency-report.md").write_text(report, encoding="utf-8")

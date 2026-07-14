@@ -1163,6 +1163,22 @@ def render_target_sql(model: dict[str, Any]) -> str:
         "CREATE UNIQUE INDEX proposed_public_code_alias_one_current ON proposed_public_code_alias(location_record_id) WHERE successor_alias_id IS NULL AND code_state='active-public';",
         "CREATE UNIQUE INDEX proposed_admin_code_history_one_current ON proposed_administrative_code_history(administrative_unit_id, code_scheme) WHERE recorded_to IS NULL AND effective_to IS NULL;",
     ]
+    for vocab, edges in sorted(authored_lifecycle_transitions().items()):
+        for edge in edges:
+            lines.append(
+                "INSERT INTO lifecycle_transition_policy(vocab, from_state, to_state, permission_key, evidence, audit_event, public_effect, terminal) VALUES ("
+                + ", ".join([
+                    sql_literal(vocab),
+                    sql_literal(edge["from"]),
+                    sql_literal(edge["to"]),
+                    sql_literal(edge["permission_key"]),
+                    sql_literal(edge["evidence"]),
+                    sql_literal(edge["audit_event"]),
+                    sql_literal(edge["public_effect"]),
+                    "true" if str(edge.get("terminal", "false")).lower() == "true" else "false",
+                ])
+                + ");"
+            )
     return "\n".join(lines) + "\n"
 
 
@@ -1535,6 +1551,36 @@ def prove_negative_harness_fails_on_success() -> dict[str, str]:
     raise AssertionError("negative harness regression did not detect a successful invalid action")
 
 
+def execute_lifecycle_transition_assertions(cur) -> dict[str, dict[str, str]]:
+    results: dict[str, dict[str, str]] = {}
+    for vocab, edges in sorted(authored_lifecycle_transitions().items()):
+        seen_edges: set[tuple[str, str]] = set()
+        for edge in edges:
+            key = (edge["from"], edge["to"])
+            assertion_id = f"F07-lifecycle-positive-{vocab}-{edge['from']}-to-{edge['to']}".replace("_", "-").replace(" ", "-")
+            if key in seen_edges:
+                raise AssertionError(f"duplicate lifecycle edge {vocab}:{key}")
+            seen_edges.add(key)
+            cur.execute("SELECT validate_lifecycle_transition(%s,%s,%s) AS ok", [vocab, edge["from"], edge["to"]])
+            row = cur.fetchone()
+            if not row or row["ok"] is not True:
+                raise AssertionError(f"allowed lifecycle transition did not pass: {vocab} {edge['from']}->{edge['to']}")
+            for required in ["permission_key", "institutional_scope", "authority", "evidence", "audit_event", "public_effect", "denial_behavior"]:
+                if not edge.get(required):
+                    raise AssertionError(f"{vocab} {edge['from']}->{edge['to']} missing {required}")
+            results[assertion_id] = {
+                "status": "passed",
+                "vocab": vocab,
+                "from": edge["from"],
+                "to": edge["to"],
+                "permission_key": edge["permission_key"],
+                "authority": edge["authority"],
+                "audit_event": edge["audit_event"],
+                "public_effect": edge["public_effect"],
+            }
+    return results
+
+
 def execute_negative_fixtures(cur, model: dict[str, Any], records: dict[str, list[dict[str, Any]]]) -> dict[str, dict[str, str]]:
     results: dict[str, dict[str, str]] = {}
     # Invalid subject reference.
@@ -1568,6 +1614,7 @@ def execute_target_schema_and_fixtures(model: dict[str, Any], fixtures: dict[str
     write("docs/sda/data-model/draft-physical-schema.sql", sql)
     scenario_results: dict[str, Any] = {}
     negative_results: dict[str, dict[str, str]] = {}
+    lifecycle_transition_assertions: dict[str, dict[str, str]] = {}
     negative_harness_regression = prove_negative_harness_fails_on_success()
     last_cols: list[dict[str, Any]] = []
     last_constraint_count = 0
@@ -1583,6 +1630,7 @@ def execute_target_schema_and_fixtures(model: dict[str, Any], fixtures: dict[str
             cur.execute("SET CONSTRAINTS ALL DEFERRED")
             inserted = insert_records(cur, model, records)
             if scenario == "urban-street-address":
+                lifecycle_transition_assertions = execute_lifecycle_transition_assertions(cur)
                 negative_results = execute_negative_fixtures(cur, model, records)
             cur.execute("COMMIT")
             scenario_results[scenario] = {"inserted_rows": inserted, "status": "passed"}
@@ -1632,7 +1680,7 @@ def execute_target_schema_and_fixtures(model: dict[str, Any], fixtures: dict[str
             field_parity_errors.append(f"{fq} nullable {phys.get('is_nullable')} != {expected_nullable}")
     required_triggers = ["registry_subject_native_trg", "required_object_roles_trg", "location_record_version_chain_trg", "public_code_alias_chain_trg", "publication_prerequisite_trg", "geometry_version_semantics_trg", "geometry_observation_semantics_trg"]
     missing_required_triggers = sorted(set(required_triggers) - {t["trigger_name"] for t in last_triggers})
-    report = {"scenario_results": scenario_results, "negative_results": negative_results, "negative_harness_regression": negative_harness_regression, "inserted_fixture_rows": sum(v["inserted_rows"] for v in scenario_results.values()), "physical_columns": len(physical_fields), "target_fields": len(expected), "missing_fields": missing, "extra_fields": extra, "field_parity_errors": field_parity_errors, "constraint_count": last_constraint_count, "index_count": last_index_count, "trigger_count": len(last_triggers), "missing_required_triggers": missing_required_triggers}
+    report = {"scenario_results": scenario_results, "negative_results": negative_results, "negative_harness_regression": negative_harness_regression, "lifecycle_transition_assertions": lifecycle_transition_assertions, "inserted_fixture_rows": sum(v["inserted_rows"] for v in scenario_results.values()), "physical_columns": len(physical_fields), "target_fields": len(expected), "missing_fields": missing, "extra_fields": extra, "field_parity_errors": field_parity_errors, "constraint_count": last_constraint_count, "index_count": last_index_count, "trigger_count": len(last_triggers), "missing_required_triggers": missing_required_triggers}
     write_json("docs/sda/data-model/target-schema-catalog.json", {"columns": last_cols, "constraints": last_constraints, "indexes": last_indexes, "triggers": last_triggers, "report": report})
     write("docs/sda/data-model/target-schema-validation-report.md", "# Target Schema Validation Report\n\n" + md_table(["Check", "Result"], [["Target schema executed in disposable PostGIS schema", "PASS"], ["Negative harness false-pass regression", negative_harness_regression["status"]], ["Independent positive scenarios", len(scenario_results)], ["Positive fixture rows inserted", report["inserted_fixture_rows"]], ["Negative fixtures rejected", len(negative_results)], ["Physical columns", len(physical_fields)], ["Target fields", len(expected)], ["Missing fields", missing or "none"], ["Extra fields", extra or "none"], ["Constraints", last_constraint_count], ["Indexes", last_index_count]]))
     if missing:
