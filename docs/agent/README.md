@@ -1,23 +1,20 @@
 # NLI Delivery Agent Skill Pack
 
-**Version:** 1.0  
+**Version:** 2.0  
 **Status:** Proposed operational standard  
 **Audience:** implementation agents, human engineers, reviewers, and operators working under the System Design Authority  
 **Authority:** subordinate to `AGENTS.md`, active SDA work orders, accepted ADRs, and mandatory standards
 
 ## Purpose
 
-This pack gives the implementation agent a repeatable operating system for delivering the Equatorial Guinea National Location Infrastructure (NLI). It is designed to reduce avoidable review cycles caused by:
+This pack gives the implementation agent a repeatable operating system for delivering the **complete Equatorial Guinea National Location Infrastructure programme**.
 
-- scope leakage between work orders;
-- incomplete repository or data discovery;
-- generic plans and boilerplate evidence;
-- generated artefacts validating their own assumptions;
-- source-string checks replacing executable semantic tests;
-- stale pull-request heads and workflow evidence;
-- review findings being bulk-marked resolved without finding-specific proof;
-- unrelated bug fixes being mixed into an active architecture or implementation PR;
-- inaccurate readiness or completion claims.
+It covers:
+
+- authority, scope, current-state discovery, planning, semantic evidence, GitHub delivery, review remediation, maintenance isolation, operations, and self-audit;
+- system architecture, public/operator/field applications, backend services, citizen and registry workflows, verification, publication, integrations, workers, analytics, infrastructure, performance, adoption, and programme planning.
+
+It is designed to reduce avoidable review cycles caused by scope leakage, incomplete discovery, generic evidence, self-validating artefacts, simulated tests, stale heads, mixed maintenance fixes, incomplete operational planning, and inaccurate readiness claims.
 
 The skill pack does not replace the SDA control layer. It operationalizes it.
 
@@ -32,11 +29,9 @@ Use this order when instructions conflict:
 5. This skill pack.
 6. Existing local implementation conventions.
 
-A skill card may make a process stricter, but it may not weaken a work order or accepted standard.
+A skill may make a process stricter, but it may not weaken a work order or accepted standard.
 
 ## Mandatory agent loop
-
-Every task follows this loop:
 
 ```text
 ORIENT → CLASSIFY → PLAN → DECIDE → IMPLEMENT/MODEL
@@ -46,9 +41,11 @@ ORIENT → CLASSIFY → PLAN → DECIDE → IMPLEMENT/MODEL
 
 The agent must not skip directly from implementation to “done.”
 
-## Skill routing
+## Two-layer skill model
 
-Start with [`skill-manifest.yaml`](skill-manifest.yaml). Select the primary skill and every supporting skill triggered by the task’s effects.
+### Layer A — Cross-cutting delivery and governance (`S01–S16`)
+
+These skills govern how every task is authorized, investigated, planned, implemented, tested, submitted, reviewed, separated from maintenance, operated, and handed off.
 
 At minimum, every task uses:
 
@@ -58,94 +55,117 @@ At minimum, every task uses:
 - [`S12 — GitHub delivery and exact-head proof`](skills/S12-github-delivery-and-exact-head-proof.md)
 - [`S16 — Self-audit and context handoff`](skills/S16-self-audit-and-context-handoff.md)
 
-Add domain skills as required:
+Add cross-cutting skills based on effects:
 
 | Trigger | Skill |
 |---|---|
 | Repository or architecture discovery | [`S02`](skills/S02-repository-orientation-and-impact.md) |
 | ADR, policy ambiguity, authority decision | [`S04`](skills/S04-rfi-and-adr-management.md) |
 | Current schema, routes, roles, or workflow inventory | [`S05`](skills/S05-authoritative-current-state-discovery.md) |
-| Canonical data model, ERD, field mapping, convergence | [`S06`](skills/S06-canonical-data-model-and-convergence.md) |
+| Canonical data model, ERD, mapping, convergence | [`S06`](skills/S06-canonical-data-model-and-convergence.md) |
 | Schema migration, reference data, fixtures | [`S07`](skills/S07-database-migrations-and-reference-data.md) |
-| API, identity, authorization, privacy, partner contracts | [`S08`](skills/S08-api-identity-security-and-privacy.md) |
-| GIS, evidence, publication, geometry authority | [`S09`](skills/S09-gis-evidence-and-publication.md) |
-| UI, accessibility, localization, workflow changes | [`S10`](skills/S10-ui-accessibility-localization-and-workflows.md) |
-| SDA review comments and rework | [`S13`](skills/S13-sda-review-remediation.md) |
-| Incidental bug, CI defect, emergency or maintenance fix | [`S14`](skills/S14-maintenance-fix-isolation.md) |
+| API, identity, authorization, privacy, partner contract | [`S08`](skills/S08-api-identity-security-and-privacy.md) |
+| GIS, evidence, geometry authority, publication | [`S09`](skills/S09-gis-evidence-and-publication.md) |
+| UI, accessibility, localization, workflow | [`S10`](skills/S10-ui-accessibility-localization-and-workflows.md) |
+| SDA review findings and rework | [`S13`](skills/S13-sda-review-remediation.md) |
+| Incidental bug, CI defect, emergency/maintenance fix | [`S14`](skills/S14-maintenance-fix-isolation.md) |
 | Deployment, operations, backup, restore, DR | [`S15`](skills/S15-release-operations-and-dr.md) |
+
+### Layer B — Whole-project product and platform (`S17–S31`)
+
+These skills ensure the agent can work across the entire project, not only a specific architecture or data-model section.
+
+| Project surface | Skill |
+|---|---|
+| System architecture, bounded domains, trust zones, module ownership | [`S17`](skills/S17-system-architecture-and-domain-boundaries.md) |
+| Next.js/TypeScript portals, shared UI, browser state, design system | [`S18`](skills/S18-frontend-applications-and-design-system.md) |
+| FastAPI services, domain logic, persistence, transactions | [`S19`](skills/S19-backend-services-and-domain-logic.md) |
+| Citizen lookup, submission, tracking, corrections, public proof | [`S20`](skills/S20-citizen-portal-and-public-services.md) |
+| Registry operations, case files, roads/buildings/addresses, bulk actions | [`S21`](skills/S21-registry-operations-and-case-management.md) |
+| Enumerator/supervisor mobile and offline synchronization | [`S22`](skills/S22-field-operations-mobile-and-offline-sync.md) |
+| Verification, duplicates, quality, evidence review, recapture | [`S23`](skills/S23-verification-quality-and-evidence-review.md) |
+| Publication, corrections, certificates, QR, signage, revocation | [`S24`](skills/S24-publication-corrections-certificates-and-signage.md) |
+| Agency APIs, service clients, webhooks, notifications, reconciliation | [`S25`](skills/S25-agency-integrations-notifications-and-interoperability.md) |
+| Imports, exports, workers, queues, retries, batch processing | [`S26`](skills/S26-import-export-worker-and-batch-processing.md) |
+| Reporting, KPIs, analytics, statistics, national data products | [`S27`](skills/S27-reporting-analytics-and-national-data-products.md) |
+| Environments, containers, ingress, secrets, IaC, deployment | [`S28`](skills/S28-infrastructure-environments-and-platform-engineering.md) |
+| Load, capacity, scaling, caching, backpressure, resilience | [`S29`](skills/S29-performance-scalability-and-resilience.md) |
+| Helpdesk, training, onboarding, release communication, adoption | [`S30`](skills/S30-support-training-and-change-adoption.md) |
+| Roadmap, backlog, dependencies, releases, rollout, programme status | [`S31`](skills/S31-programme-planning-roadmap-and-release-management.md) |
+
+Most substantive work requires skills from both layers. Select skills by **effects**, not by task title.
+
+## Whole-project coverage matrix
+
+Use [`PROJECT-COVERAGE-MATRIX.md`](PROJECT-COVERAGE-MATRIX.md) to verify coverage of:
+
+- repository areas;
+- NLI bounded domains;
+- current modules;
+- user roles and institutions;
+- discovery, design, implementation, verification, release, operation, and improvement;
+- authority, data integrity, security, GIS, accessibility, interoperability, scale, DR, adoption, and programme sequencing.
+
+No project module or future national service is outside the skill pack. When a new recurring surface appears, update the matrix, manifest, validator, and relevant skill cards.
 
 ## Standard skill-card contract
 
 Each skill card defines:
 
 - **Invoke when** — task triggers.
-- **Required inputs** — documents and source evidence.
+- **Required inputs** — controlled documents and source evidence.
 - **Procedure** — mandatory execution steps.
 - **Outputs** — controlled artefacts to produce.
 - **Stop/RFI conditions** — circumstances where guessing is prohibited.
 - **Evidence gate** — proof required before claiming completion.
 - **Anti-patterns** — known failure modes.
 
-The agent must follow the card, not merely mention that it was read.
+The agent must follow the card, not merely mention it.
 
 ## Non-negotiable operating rules
 
 ### 1. Scope is a hard boundary
 
-Before changing a file, classify it as:
-
-- explicitly in scope;
-- necessary supporting evidence;
-- unrelated maintenance;
-- prohibited.
-
-An unrelated defect discovered during a task is not silently fixed in the same PR. Use S14 to isolate it.
+Before changing a file, classify it as explicitly in scope, supporting evidence, unrelated maintenance, or prohibited. Use S14 for unrelated defects.
 
 ### 2. Expected evidence must be independent
 
-Do not generate the “expected” result from the same logic that generates the “observed” result. Examples:
-
-- observed route policies must be compared with a separately reviewed expected-policy registry;
-- mappings must be reviewed source data, not heuristic fallbacks;
-- scenario expectations must be authored independently of the schema generator;
-- review dispositions must be written by the SDA, not rewritten by the remediation agent.
+Do not generate expected policy, mappings, scenarios, or dispositions from the same logic that generates observed results.
 
 ### 3. Presence is not semantic proof
 
-A file, row count, heading, green build, or keyword match does not prove correctness. Tests must exercise the claimed behavior, including negative cases and authority boundaries.
+A file, count, heading, route, dashboard, queue definition, or green build does not prove correctness. Execute the claimed behavior, including negative, failure, recovery, authority, and scenario cases.
 
 ### 4. Review records are immutable authority records
 
-The implementation agent may update only the explicitly designated resolution-log section of an SDA review. It must never change:
-
-- reviewer outcome;
-- finding class;
-- reviewer observation;
-- required resolution;
-- reviewer disposition table.
-
-A later review supersedes an earlier review; it does not erase it.
+The implementation agent may update only the designated resolution-log section. It must not alter reviewer outcome, finding, required resolution, or disposition.
 
 ### 5. Exact-head evidence must be truthful
 
-A committed file cannot contain its own final commit SHA. Use this binding model:
+Use:
 
-1. Commit implementation and controlled evidence.
-2. Push and obtain the final implementation SHA.
-3. Run CI against that SHA.
-4. Record SHA and workflow/job IDs in the PR body or immutable PR comment.
-5. The later SDA review record identifies the exact implementation SHA assessed.
+```text
+implementation commit → exact-head CI → PR comment/metadata → SDA review record
+```
 
-Never fake a self-referential SHA.
+Never fabricate a self-referential SHA.
 
-### 6. “Done” has four separate meanings
+### 6. Canonical authority remains singular
 
-- **Implemented:** the artefact or code exists.
+Frontend caches, local field stores, Redis, queues, integrations, analytics, exports, and partner systems must not become competing registry, identity, GIS, evidence, or publication authorities.
+
+### 7. Operational completion is part of delivery
+
+Where applicable, include migration, infrastructure, observability, backup/recovery, training, support, partner communication, performance, and rollout gates—not only code.
+
+### 8. “Done” has four separate meanings
+
+- **Implemented:** the artefact/code exists.
 - **Verified:** named evidence passes at an exact commit.
-- **Submitted:** branch is pushed and a reviewable draft PR exists.
-- **Accepted:** SDA has recorded an acceptance outcome.
+- **Submitted:** branch is pushed and a reviewable PR exists.
+- **Accepted:** SDA recorded acceptance.
 
-The agent must state which meaning applies.
+State which meaning applies.
 
 ## Required task artefacts
 
@@ -158,6 +178,13 @@ Use these templates:
 
 Existing SDA templates remain authoritative for work-order plans, RFIs, PR evidence, and SDA reviews.
 
+The task context pack must name:
+
+- selected S01–S16 skills;
+- selected S17–S31 skills;
+- affected repository areas, domains, modules, roles, trust zones, environments, and lifecycle stages;
+- skills considered but not applicable and why.
+
 ## Validation
 
 Validate the pack after changes with:
@@ -166,18 +193,19 @@ Validate the pack after changes with:
 python docs/agent/scripts/validate_skill_pack.py
 ```
 
-The validator checks manifest IDs and file references, mandatory skill-card sections, core pack files, local Markdown links, and the `AGENTS.md` integration. A successful validator run does not replace SDA review of the operating rules themselves.
+The validator checks skill IDs/files, required card sections, links, whole-project coverage, manifest routing, and `AGENTS.md` integration. A passing validator does not replace SDA review of the operating rules.
 
 ## Activation
 
-A concise activation prompt is provided at [`BOOTSTRAP-PROMPT.md`](BOOTSTRAP-PROMPT.md). It should be given to the agent once the skill-pack PR is merged. The repository remains the continuing source of truth; the prompt only directs the agent to it.
+Use [`BOOTSTRAP-PROMPT.md`](BOOTSTRAP-PROMPT.md) after merge. The repository remains the continuing source of truth; the prompt directs the agent to it.
 
 ## Maintenance
 
-When a repeated review failure occurs:
+When repeated delivery or domain failures occur:
 
-1. identify whether an existing skill should have prevented it;
-2. strengthen the skill’s stop condition or evidence gate;
+1. identify the skill that should have prevented the failure;
+2. strengthen its stop condition, procedure, or evidence gate;
 3. add a regression check where practical;
-4. record the change through an ordinary documentation PR;
-5. do not weaken acceptance criteria to reduce review cycles.
+4. update the coverage matrix and manifest if a project surface is missing;
+5. record the change through an ordinary documentation PR;
+6. never weaken acceptance criteria merely to reduce review cycles.
