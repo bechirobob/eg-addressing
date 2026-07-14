@@ -920,191 +920,25 @@ def review08_execute_failure_probe(cur, base_sql: str, name: str, mutation_sql: 
 
 
 def execute_transformation_fixtures(registry: list[dict[str, Any]], semantics: dict[str, dict[str, Any]]) -> dict[str, Any]:
-    path = transformation_fixtures_path()
-    if not path.exists():
-        raise SystemExit("transformation-fixtures-reviewed.json is required for Review 08 F02")
-    payload = json.loads(path.read_text(encoding="utf-8"))
-    fixtures = payload.get("fixtures") if isinstance(payload, dict) else None
-    if not isinstance(fixtures, list):
-        raise SystemExit("transformation-fixtures-reviewed.json must contain fixtures[]")
-    by_group: dict[str, list[dict[str, Any]]] = defaultdict(list)
-    for row in registry:
-        by_group[row["transform_group_id"]].append(row)
-    fixture_by_group = {f.get("transform_group_id"): f for f in fixtures if isinstance(f, dict)}
-    required_classes = {"source-row-identity", "target-value", "reference-final-fk", "archive-created", "owned-exception", "no-loss-count", "no-loss-value-hash", "reviewed-classification"}
-    errors: list[str] = []
-    for group, rows in sorted(by_group.items()):
-        fixture = fixture_by_group.get(group)
-        if not fixture:
-            errors.append(f"missing transformation fixture for {group}")
-            continue
-        if fixture.get("review_status") != "approved-review07-transform-fixture":
-            errors.append(f"{group} fixture lacks Review 07 approval marker")
-        fixture_fields = set(fixture.get("source_fields") or [])
-        registry_fields = {r["current"] for r in rows}
-        if fixture_fields != registry_fields:
-            errors.append(f"{group} fixture source_fields do not match reviewed registry rows")
-    if errors:
-        raise SystemExit("transformation fixture metadata failed before DB execution:\n- " + "\n- ".join(errors[:120]))
+    """Execute Review 09 independent F02 transformation suite.
 
-    database_url = os.environ.get("DATABASE_URL")
-    if not database_url:
-        raise SystemExit("DATABASE_URL is required for Review 08 F02 transformation execution")
-
-    transform_rows: list[dict[str, Any]] = []
-    with psycopg.connect(database_url, row_factory=dict_row) as conn:
-        with conn.cursor() as cur:
-            cur.execute("DROP TABLE IF EXISTS review08_transform_source_field, review08_transform_target_field, review08_transform_archive, review08_transform_exception, review08_transform_crosswalk, review08_transform_relationship")
-            cur.execute("CREATE TEMP TABLE review08_transform_source_field (transform_group_id text, current_field text, source_table text, source_row_key text, source_value text, source_hash text, classification text, disposition text)")
-            cur.execute("CREATE TEMP TABLE review08_transform_target_field (target_output_id text PRIMARY KEY, transform_group_id text, current_field text, observed_source_row_key text, target_field text, actual_target_value text, target_hash text, translation_status text)")
-            cur.execute("CREATE TEMP TABLE review08_transform_archive (archive_id text PRIMARY KEY, transform_group_id text, current_field text, source_row_key text, archived_value text, archive_hash text)")
-            cur.execute("CREATE TEMP TABLE review08_transform_exception (exception_id text PRIMARY KEY, transform_group_id text, current_field text, source_row_key text, owner text, exception_reason text)")
-            cur.execute("CREATE TEMP TABLE review08_transform_crosswalk (crosswalk_id text PRIMARY KEY, transform_group_id text, current_field text, source_row_key text, source_value text, final_canonical_fk text)")
-            cur.execute("CREATE TEMP TABLE review08_transform_relationship (relationship_id text PRIMARY KEY, transform_group_id text, current_field text, source_row_key text, target_output_id text, relationship_kind text)")
-            for group, rows in sorted(by_group.items()):
-                for row in sorted(rows, key=lambda r: r["current"]):
-                    current = row["current"]
-                    source_table = current.split(".", 1)[0]
-                    source_row_key = f"{source_table}:review08:{hashlib.sha1(current.encode()).hexdigest()[:12]}"
-                    source_value = review08_source_value(row)
-                    expected_value = review08_expected_target_value(row, source_value)
-                    source_hash = review08_hash([source_row_key, current, source_value, expected_value])
-                    target_hash = review08_hash([source_row_key, current, source_value, expected_value])
-                    target_field = row.get("target") or semantics[current].get("target_projection_boundary") or "migration_exception.unresolved_target"
-                    target_output_id = "txout-" + hashlib.sha1(f"{group}|{current}|{source_row_key}".encode()).hexdigest()[:20]
-                    requires_archive = row.get("disposition") in {"governed-archive", "formal-exception"}
-                    requires_exception = row.get("disposition") in {"controlled-translation", "formal-exception"}
-                    reference = row.get("reference_crosswalk_join") if isinstance(row.get("reference_crosswalk_join"), dict) else None
-                    requires_final_fk = bool(reference)
-                    final_canonical_fk = None
-                    if reference:
-                        final_output = reference.get("final_target_fk_output") or "migration_exception.migration_exception_id"
-                        if final_output not in {"legacy_crosswalk.legacy_id", "proposed_legacy_crosswalk.legacy_id"}:
-                            final_canonical_fk = "canonical-" + hashlib.sha1(f"{final_output}|{source_value}".encode()).hexdigest()[:16]
-                    archive_id = "archive-" + hashlib.sha1(f"{group}|{current}|{source_value}".encode()).hexdigest()[:16] if requires_archive else None
-                    exception_id = "exception-" + hashlib.sha1(f"{group}|{current}|{source_value}".encode()).hexdigest()[:16] if requires_exception else None
-                    translation_status = "controlled-or-exception" if row.get("disposition") == "controlled-translation" else "not-controlled"
-                    cur.execute("INSERT INTO review08_transform_source_field VALUES (%s,%s,%s,%s,%s,%s,%s,%s)", (group, current, source_table, source_row_key, str(source_value), source_hash, semantics[current]["classification"], row.get("disposition")))
-                    cur.execute("INSERT INTO review08_transform_target_field VALUES (%s,%s,%s,%s,%s,%s,%s,%s)", (target_output_id, group, current, source_row_key, target_field, str(expected_value), target_hash, translation_status))
-                    if archive_id:
-                        cur.execute("INSERT INTO review08_transform_archive VALUES (%s,%s,%s,%s,%s,%s)", (archive_id, group, current, source_row_key, str(source_value), source_hash))
-                    if exception_id:
-                        owner = row.get("exception_type_owner") or "SDA migration-exception owner"
-                        cur.execute("INSERT INTO review08_transform_exception VALUES (%s,%s,%s,%s,%s,%s)", (exception_id, group, current, source_row_key, str(owner), "controlled or formal exception path exercised"))
-                    if requires_final_fk:
-                        cur.execute("INSERT INTO review08_transform_crosswalk VALUES (%s,%s,%s,%s,%s,%s)", ("crosswalk-" + hashlib.sha1(f"{group}|{current}".encode()).hexdigest()[:16], group, current, source_row_key, str(source_value), final_canonical_fk))
-                    cur.execute("INSERT INTO review08_transform_relationship VALUES (%s,%s,%s,%s,%s,%s)", ("rel-" + hashlib.sha1(f"{group}|{current}|{target_output_id}".encode()).hexdigest()[:16], group, current, source_row_key, target_output_id, "source-to-target-field-output"))
-            base_sql = """
-                SELECT s.transform_group_id, s.current_field, s.source_table, s.source_row_key, s.source_value,
-                       s.source_hash, s.classification, s.disposition,
-                       t.observed_source_row_key, t.target_output_id, t.target_field,
-                       t.actual_target_value, t.actual_target_value AS expected_target_value,
-                       t.target_hash AS target_hash,
-                       t.translation_status,
-                       (a.archive_id IS NOT NULL) AS requires_archive, a.archive_id,
-                       (e.exception_id IS NOT NULL) AS requires_exception, e.exception_id,
-                       (x.crosswalk_id IS NOT NULL) AS requires_final_fk, x.final_canonical_fk,
-                       COUNT(r.relationship_id)::int AS relationship_count,
-                       1 AS expected_relationship_count
-                FROM review08_transform_source_field s
-                JOIN review08_transform_target_field t USING (transform_group_id, current_field)
-                LEFT JOIN review08_transform_archive a USING (transform_group_id, current_field, source_row_key)
-                LEFT JOIN review08_transform_exception e USING (transform_group_id, current_field, source_row_key)
-                LEFT JOIN review08_transform_crosswalk x USING (transform_group_id, current_field, source_row_key)
-                LEFT JOIN review08_transform_relationship r USING (transform_group_id, current_field, source_row_key, target_output_id)
-                GROUP BY s.transform_group_id, s.current_field, s.source_table, s.source_row_key, s.source_value,
-                         s.source_hash, s.classification, s.disposition, t.observed_source_row_key,
-                         t.target_output_id, t.target_field, t.actual_target_value, t.target_hash,
-                         t.translation_status, a.archive_id, e.exception_id, x.crosswalk_id, x.final_canonical_fk
-            """
-            cur.execute(base_sql + " ORDER BY s.current_field")
-            transform_rows = [dict(r) for r in cur.fetchall()]
-            actual_errors = review08_validate_transform_rows(transform_rows)
-            if actual_errors:
-                errors.extend(actual_errors)
-            # Idempotent rerun proof: insert same source rows into a temp table with ON CONFLICT-equivalent identity check.
-            cur.execute("CREATE TEMP TABLE review08_idempotency_probe AS SELECT target_output_id FROM review08_transform_target_field")
-            cur.execute("INSERT INTO review08_idempotency_probe SELECT target_output_id FROM review08_transform_target_field")
-            cur.execute("SELECT COUNT(*) AS total, COUNT(DISTINCT target_output_id) AS distinct_total FROM review08_idempotency_probe")
-            idem = cur.fetchone()
-            idempotent = idem["distinct_total"] * 2 == idem["total"]
-            failure_tests = [
-                review08_execute_failure_probe(cur, base_sql, "wrong-transformed-value", "UPDATE probe_rows SET actual_target_value='__wrong__' WHERE current_field=(SELECT current_field FROM probe_rows ORDER BY current_field LIMIT 1)", "wrong transformed value"),
-                review08_execute_failure_probe(cur, base_sql, "wrong-controlled-translation", "UPDATE probe_rows SET translation_status='wrong' WHERE disposition='controlled-translation'", "wrong controlled translation"),
-                review08_execute_failure_probe(cur, base_sql, "unresolved-final-fk", "UPDATE probe_rows SET final_canonical_fk=NULL WHERE requires_final_fk", "unresolved final FK"),
-                review08_execute_failure_probe(cur, base_sql, "missing-archive-record", "UPDATE probe_rows SET archive_id=NULL WHERE requires_archive", "missing archive record"),
-                review08_execute_failure_probe(cur, base_sql, "missing-exception-record", "UPDATE probe_rows SET exception_id=NULL WHERE requires_exception", "missing exception record"),
-                review08_execute_failure_probe(cur, base_sql, "duplicate-output", "INSERT INTO probe_rows SELECT * FROM probe_rows LIMIT 1", "duplicate output"),
-                review08_execute_failure_probe(cur, base_sql, "relationship-loss", "UPDATE probe_rows SET relationship_count=0", "relationship loss"),
-                review08_execute_failure_probe(cur, base_sql, "value-hash-mismatch", "UPDATE probe_rows SET target_hash='bad-hash' WHERE current_field=(SELECT current_field FROM probe_rows ORDER BY current_field LIMIT 1)", "value/hash mismatch"),
-            ]
-    assertions: list[dict[str, Any]] = []
-    for row in transform_rows:
-        current = row["current_field"]
-        base = current.replace(".", "-").replace("_", "-")
-        row_classes = {"source-row-identity", "target-value", "no-loss-count", "no-loss-value-hash", "reviewed-classification"}
-        if row["requires_final_fk"]:
-            row_classes.add("reference-final-fk")
-        if row["requires_archive"]:
-            row_classes.add("archive-created")
-        if row["requires_exception"]:
-            row_classes.add("owned-exception")
-        for assertion_class in sorted(row_classes):
-            assertions.append({
-                "assertion_id": "F02-" + assertion_class + "-" + base,
-                "finding": "F02",
-                "assertion_class": assertion_class,
-                "transform_group_id": row["transform_group_id"],
-                "status": "passed",
-                "evidence": {
-                    "execution_mode": "review08-disposable-source-to-target-db-execution",
-                    "source_field": current,
-                    "source_row_key": row["source_row_key"],
-                    "source_value_hash": row["source_hash"],
-                    "target_field": row["target_field"],
-                    "target_output_id": row["target_output_id"],
-                    "target_value_hash": row["target_hash"],
-                    "final_canonical_fk": row.get("final_canonical_fk"),
-                    "archive_id": row.get("archive_id"),
-                    "exception_id": row.get("exception_id"),
-                    "classification": row.get("classification"),
-                    "relationship_count": row.get("relationship_count"),
-                },
-            })
-    seen_classes = {a["assertion_class"] for a in assertions}
-    missing_classes = sorted(required_classes - seen_classes)
-    if missing_classes:
-        errors.append(f"transformation fixture report missing assertion classes {missing_classes}")
-    missed_failures = [f for f in failure_tests if f["status"] != "caught"]
-    if missed_failures:
-        errors.append(f"Review 08 F02 failure probes missed defects: {[f['mutation'] for f in missed_failures]}")
-    if not idempotent:
-        errors.append("idempotent rerun proof failed")
-    report = {
-        "summary": {
-            "execution_mode": "actual-disposable-source-target-transformation",
-            "transform_groups": len(by_group),
-            "fixtures_reviewed": len(fixtures),
-            "source_rows_inserted": len(transform_rows),
-            "target_rows_inserted": len(transform_rows),
-            "fixtures_executed": len(fixture_by_group),
-            "assertions_executed": len(assertions),
-            "failure_tests": len(failure_tests),
-            "failure_tests_caught": len([f for f in failure_tests if f["status"] == "caught"]),
-            "idempotent_rerun": idempotent,
-            "errors": errors,
-        },
-        "failure_tests": failure_tests,
-        "sample_executed_rows": transform_rows[:25],
-        "assertions": assertions,
-    }
-    write_json("docs/sda/data-model/transformation-fixture-report.json", report)
-    rows = [[a["assertion_id"], a["transform_group_id"], a["assertion_class"], a["status"], a["evidence"].get("target_field", "—")] for a in assertions]
-    intro = "# Review 08 F02 Transformation Execution Report\n\nReviewed transformation fixtures are executed against disposable source and target tables in PostgreSQL. The report is generated from inserted source rows, inserted target/audit/exception/crosswalk rows, query-back comparisons, idempotency proof, and real failure probes. This remains design-only evidence and does not authorize NLI-WO-002B runtime migration execution.\n\n"
-    summary_rows = [[k, v] for k, v in report["summary"].items() if k != "errors"]
-    write("docs/sda/data-model/transformation-fixture-report.md", intro + "## Summary\n\n" + md_table(["Metric", "Value"], summary_rows) + "\n\n## Assertions\n\n" + md_table(["Assertion", "Transform group", "Class", "Status", "Target/evidence"], rows))
-    if errors:
-        raise SystemExit("transformation fixture execution failed:\n- " + "\n- ".join(errors[:120]))
+    Review 09 rejected the Review 08 circular oracle. Keep this pipeline wired to
+    the Review 09 helper so regeneration cannot silently fall back to expected == actual.
+    """
+    helper = DM / "scripts" / "review09_f02_independent_transform.py"
+    env = os.environ.copy()
+    env.setdefault("PYTHONPATH", str(ROOT / "services" / "api"))
+    subprocess.run([sys.executable, str(helper)], cwd=ROOT, env=env, check=True)
+    report = json.loads((ROOT / "docs/sda/data-model/transformation-fixture-report.json").read_text(encoding="utf-8"))
+    summary = report.get("summary", {}) if isinstance(report, dict) else {}
+    if summary.get("execution_mode") != "review09-independent-source-expected-transform-execution":
+        raise SystemExit("Review 09 F02 helper did not produce independent execution evidence")
+    if summary.get("idempotency_status") != "passed" or any(summary.get("second_run_inserts", {}).values()):
+        raise SystemExit("Review 09 F02 idempotency requires zero second-run inserts")
+    if summary.get("failure_tests_caught") != summary.get("failure_tests"):
+        raise SystemExit("Review 09 F02 failure probes did not all fail as expected")
+    if summary.get("errors"):
+        raise SystemExit("Review 09 F02 report contains errors")
     return report
 
 
