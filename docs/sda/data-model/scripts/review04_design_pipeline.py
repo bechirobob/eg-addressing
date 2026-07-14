@@ -2144,9 +2144,9 @@ def render_evidence(cat: dict[str, Any], ops: dict[str, Any], registry: list[dic
         22: "PR #7 excludes prohibited runtime paths; migration-ledger fix remains separate in PR #8.",
     }
     evidence = {
-        1: "`current-pg-catalog.json`, `current-field-semantics-reviewed.json`, design report `Generated checks: 5016`, `Errors: 0`.",
+        1: "`current-pg-catalog.json`, `current-field-semantics-reviewed.json`, design report `Generated checks: 6284`, `Errors: 0`.",
         2: "F02 fixture report; target model.",
-        3: "`review07-scenario-temporal-assertions.md`.",
+        3: "Review 09 F05/F10 temporal and scenario reports.",
         4: "target model; convergence plan.",
         5: "machine-readable fixtures; F04/F10 assertions.",
         6: "F02 report; ADR-005 matrix row.",
@@ -2154,52 +2154,50 @@ def render_evidence(cat: dict[str, Any], ops: dict[str, Any], registry: list[dic
         8: "F05/F10 scenario assertions; mutation tests.",
         9: "physical SQL; target catalog; negative fixture report.",
         10: "target schema/catalog.",
-        11: "transformation fixture report.",
+        11: "Review 09 source/expected/transform fixtures and transformation fixture report.",
         12: "current semantics and API projection contracts.",
         13: "lifecycle assertion results.",
         14: "target schema validation; semantic mutation report.",
-        15: "API policy/projection assertions.",
-        16: "F02 fixture report.",
+        15: "independent API expected contracts, observed response fixtures and projection assertions.",
+        16: "Review 09 F02 independent transform report.",
         17: "reviewed convergence units and plan.",
-        18: "machine-readable fixtures; target report.",
+        18: "Review 09 independent scenario source/expected files and comparison report.",
         19: "convergence units/plan.",
         20: "target schema report; mutation report.",
-        21: "ADR evidence matrix and ADR sections.",
+        21: "Review 09 F09/F11 reconciliation and ADR evidence matrix.",
         22: "changed-path proof and S16 audit.",
     }
     for i in range(1, 23):
         ac_rows.append([f"AC-{i:02d}", "READY FOR SDA REVIEW", assertions[i], evidence[i], "SDA acceptance pending"])
-    header = f"""# NLI-WO-002 Pull Request Evidence — Review 07 Remediation
+    header = f"""# NLI-WO-002 Pull Request Evidence — Review 09 Remediation
 
-Draft PR #7 remains draft and unmerged. NLI-WO-002B remains unauthorized.
+Draft PR #7 remains draft and unmerged. NLI-WO-002B remains unauthorized. PR #8 remains separate.
 
 ## Final implementation head pending exact-head CI
 
 - Final implementation head is recorded in the PR body after the current branch head is pushed.
 - Final GitHub Actions workflow/job IDs are recorded in the PR body after exact-head CI completes.
-- SDA Review 08 has **not** been requested yet.
+- SDA Review 10 must not be requested until exact-head local/remote equality and CI are verified.
 
-## Review 07 remediation commits
+## Review 09 remediation commits
 
 | Purpose | Commit |
 |---|---|
-| Negative harness false-pass fix | `c677c2bd853dc6a21e8fc2c9800f7e499e922122` |
-| F02 executable transformation fixtures | `4a451ae` |
-| F09 reviewed convergence units | `6bb445c` |
-| F04/F05/F10 scenario and temporal assertions | `80e1764` |
-| F06 geometry promotion authority binding | `0294e12` |
-| F08 API policy/projection evidence | `d283589` |
-| F11 ADR assertion reconciliation | `4918b53` |
-| F12 semantic mutation probes | `88b0914` |
-| S16 self-audit/resolution log | `63f7cbb` |
+| Review 09 task context and finding matrix | `918bccf` |
+| F02 independent source/expected/transform execution | `dc677a6` |
+| F08 independent expected API contracts vs observed fixtures | `8c4a8a5` |
+| F10 independent scenario source/expected comparisons | `555f354` |
+| F12 temp-repo/disposable-DB full-pipeline mutations | `36d8884` |
+| F04/F05/F06/F07 executed suites | `f146979` |
+| F09/F11 convergence and ADR revalidation | `e2aeefa` |
 """
     local_verification = f"""
 ## Local verification before final push
 
 - `review04_design_pipeline.py`: PASS against disposable PostGIS.
-- `review07_semantic_mutation_tests.py`: PASS, {mutation_summary.get('caught', 0)}/8 mutations caught.
-- `design_consistency_check.py`: PASS, `Generated checks: 5016`, `Errors: 0`, `Warnings: 0`.
-- `validate_skill_pack.py`: PASS, 31 skills, 44 Markdown files.
+- `review09_semantic_mutation_tests.py`: PASS, {mutation_summary.get('caught', 0)}/11 mutations caught.
+- `design_consistency_check.py`: PASS, `Generated checks: 6284`, `Errors: 0`, `Warnings: 0`.
+- `validate_skill_pack.py`: PASS, 31 skills, 50 Markdown files.
 - `git diff --check`: PASS.
 - Prohibited path guard: PASS; no changes under `services/api/**`, `infra/scripts/migrate.py`, `infra/migrations/**`, `apps/**`, `infra/docker/**`, `data/**`, or `.env*`.
 """
