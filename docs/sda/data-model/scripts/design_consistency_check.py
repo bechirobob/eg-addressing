@@ -344,6 +344,12 @@ gate("F07-lifecycle-positive-graph-executed", "F07", expected_lifecycle_edges > 
 for assertion_id, result in lifecycle_assertions.items() if isinstance(lifecycle_assertions, dict) else []:
     gate(assertion_id, "F07", result.get("status") == "passed" and result.get("permission_key") and result.get("authority") and result.get("audit_event") and result.get("public_effect"), "lifecycle assertion must include permission, authority, audit, and public-effect metadata", "docs/sda/data-model/target-schema-catalog.json")
 review07_scenario_assertions = physical_report.get("review07_scenario_assertions", {}) if isinstance(physical_report, dict) else {}
+review08_scenario_query_results = physical_report.get("review08_scenario_query_results", {}) if isinstance(physical_report, dict) else {}
+review08_query_assertions = [a for scenario in review08_scenario_query_results.values() if isinstance(scenario, dict) for a in scenario.get("assertions", {}).values()]
+gate("F10-review08-persisted-scenario-query-results", "F10", len(review08_scenario_query_results) == 7 and len(review08_query_assertions) >= 63 and all(v.get("status") == "passed" for v in review08_scenario_query_results.values()), "Review 08 F10 must query persisted target DB state for all seven scenarios", "docs/sda/data-model/review08-scenario-query-report.json")
+for scenario, result in review08_scenario_query_results.items() if isinstance(review08_scenario_query_results, dict) else []:
+    required_sections = ["entity_ids", "relationship_edges", "geometry_and_provenance", "publication_releases", "public_projection", "operator_projection", "historical_output"]
+    gate(f"F10-review08-query-sections-{scenario}", "F10", result.get("status") == "passed" and all(result.get(section) for section in required_sections) and result.get("queried_fixture_rows", 0) == result.get("expected_fixture_rows", -1), "F10 scenario must include persisted query evidence for entities, relationships, geometry, publication, projections and history", "docs/sda/data-model/review08-scenario-query-report.json")
 gate("F04-F05-F10-review07-scenario-assertions-present", "F04/F05/F10", len(review07_scenario_assertions) >= 49 and all(v.get("status") == "passed" for v in review07_scenario_assertions.values()), "Review 07 F04/F05/F10 named scenario/temporal assertions must all pass", "docs/sda/data-model/target-schema-catalog.json")
 for assertion_id, result in review07_scenario_assertions.items() if isinstance(review07_scenario_assertions, dict) else []:
     gate(assertion_id, result.get("finding", "F04/F05/F10"), result.get("status") == "passed", "Review 07 scenario/cardinality/temporal assertion failed", "docs/sda/data-model/review07-scenario-temporal-assertions.md")
@@ -556,6 +562,7 @@ else:
         f"- Multi-unit canonical records: {len(mu_records)}",
         f"- F07 lifecycle transitions executed: {len(lifecycle_assertions) if isinstance(lifecycle_assertions, dict) else 0}",
         f"- F04/F05/F10 scenario assertions: {len(review07_scenario_assertions) if isinstance(review07_scenario_assertions, dict) else 0}",
+        f"- F10 persisted scenario DB query assertions: {sum(len(v.get('assertions', {})) for v in physical_report.get('review08_scenario_query_results', {}).values()) if isinstance(physical_report.get('review08_scenario_query_results', {}), dict) else 0}",
         f"- F06 geometry authority negatives: {len(required_f06_negatives & set(negative_results)) if isinstance(negative_results, dict) else 0}",
         f"- F08 API projection assertions: {api_projection_assertions.get('summary', {}).get('assertions', 0) if isinstance(api_projection_assertions, dict) else 0}",
         f"- F12 semantic mutations caught: {mutation_summary.get('caught', 0) if isinstance(mutation_summary, dict) else 0}",

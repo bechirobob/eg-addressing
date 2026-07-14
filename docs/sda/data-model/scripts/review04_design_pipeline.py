@@ -1926,6 +1926,125 @@ def write_review07_scenario_assertion_report(assertions: dict[str, dict[str, Any
         rows.append([assertion_id, result.get("finding", "—"), result.get("status", "—"), json.dumps(result.get("evidence", {}), sort_keys=True, default=str)[:240]])
     write("docs/sda/data-model/review07-scenario-temporal-assertions.md", "# Review 07 F04/F05/F10 Scenario and Temporal Assertions\n\n" + md_table(["Assertion", "Finding", "Status", "Evidence"], rows) + "\n")
 
+def qident(name: str) -> str:
+    if not re.match(r"^[a-zA-Z_][a-zA-Z0-9_]*$", name):
+        raise ValueError(f"unsafe SQL identifier {name!r}")
+    return '"' + name + '"'
+
+
+def review08_pk_field(model: dict[str, Any], entity: str) -> str | None:
+    fields = model.get("entities", {}).get(entity, {}).get("fields", [])
+    for field in fields:
+        if any("primary key" in str(c).lower() for c in field.get("constraints", [])):
+            return field["name"]
+    if fields:
+        return fields[0]["name"]
+    return None
+
+
+def review08_query_rows_by_fixture_ids(cur, model: dict[str, Any], entity: str, records: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    pk = review08_pk_field(model, entity)
+    if not pk or not records:
+        return []
+    ids = [str(r[pk]) for r in records if pk in r]
+    if not ids:
+        return []
+    table = "proposed_" + entity
+    cur.execute(f"SELECT * FROM {qident(table)} WHERE {qident(pk)} = ANY(%s) ORDER BY {qident(pk)}", (ids,))
+    return [dict(r) for r in cur.fetchall()]
+
+
+def review08_slim_rows(rows: list[dict[str, Any]], keep: list[str]) -> list[dict[str, Any]]:
+    out = []
+    for row in rows:
+        slim = {k: str(row.get(k)) if row.get(k) is not None else None for k in keep if k in row}
+        out.append(slim)
+    return out
+
+
+def execute_review08_scenario_queries(cur, model: dict[str, Any], scenario: str, records: dict[str, list[dict[str, Any]]]) -> dict[str, Any]:
+    entity_counts: dict[str, int] = {}
+    entity_ids: dict[str, list[str]] = {}
+    for entity, rows in sorted(records.items()):
+        pk = review08_pk_field(model, entity)
+        queried = review08_query_rows_by_fixture_ids(cur, model, entity, rows)
+        entity_counts[entity] = len(queried)
+        entity_ids[entity] = [str(r.get(pk)) for r in queried if pk and r.get(pk) is not None]
+
+    location_versions = review08_query_rows_by_fixture_ids(cur, model, "location_record_version", records.get("location_record_version", []))
+    object_links = review08_query_rows_by_fixture_ids(cur, model, "location_record_object_link", records.get("location_record_object_link", []))
+    geometries = review08_query_rows_by_fixture_ids(cur, model, "geometry_version", records.get("geometry_version", []))
+    observations = review08_query_rows_by_fixture_ids(cur, model, "geometry_observation", records.get("geometry_observation", []))
+    decisions = review08_query_rows_by_fixture_ids(cur, model, "decision_event", records.get("decision_event", []))
+    evidence = review08_query_rows_by_fixture_ids(cur, model, "evidence_object", records.get("evidence_object", []))
+    releases = review08_query_rows_by_fixture_ids(cur, model, "publication_release", records.get("publication_release", []))
+    release_items = review08_query_rows_by_fixture_ids(cur, model, "publication_release_item", records.get("publication_release_item", []))
+    admin_versions = review08_query_rows_by_fixture_ids(cur, model, "administrative_unit_version", records.get("administrative_unit_version", []))
+    names = review08_query_rows_by_fixture_ids(cur, model, "name_record", records.get("name_record", []))
+
+    expected_total = sum(len(v) for v in records.values())
+    queried_total = sum(entity_counts.values())
+    public_projection = review08_slim_rows(release_items, ["release_item_id", "location_record_id", "location_record_version_id", "public_code_alias_id", "projection_state", "published_label", "projection_payload_hash", "projection_payload_json"])
+    operator_projection = {
+        "location_versions": review08_slim_rows(location_versions, ["location_record_version_id", "location_record_id", "version_number", "lifecycle_state", "effective_from", "effective_to", "recorded_at"]),
+        "object_links": review08_slim_rows(object_links, ["link_id", "location_record_version_id", "subject_id", "object_role", "cardinality_rank"]),
+        "names": review08_slim_rows(names, ["name_record_id", "language_code", "name_kind", "name_status", "name_text", "effective_from", "effective_to"]),
+        "geometry": review08_slim_rows(geometries, ["geometry_version_id", "geometry_role", "quality_state", "promotion_decision_event_id", "promotion_evidence_object_id"]),
+        "evidence_count": len(evidence),
+        "decision_count": len(decisions),
+    }
+    historical_output = {
+        "location_lifecycle_timeline": review08_slim_rows(location_versions, ["location_record_version_id", "lifecycle_state", "effective_from", "effective_to", "recorded_at", "recorded_to"]),
+        "admin_effective_versions": review08_slim_rows(admin_versions, ["administrative_unit_version_id", "admin_level", "lifecycle_state", "effective_from", "effective_to", "recorded_at"]),
+        "publication_versions": review08_slim_rows(release_items, ["release_item_id", "location_record_version_id", "projection_state", "published_label"]),
+    }
+    relationship_edges = [
+        {"link_id": str(r.get("link_id")), "location_record_version_id": str(r.get("location_record_version_id")), "subject_id": str(r.get("subject_id")), "object_role": str(r.get("object_role"))}
+        for r in object_links
+    ]
+    geometry_provenance = {
+        "geometry_versions": review08_slim_rows(geometries, ["geometry_version_id", "geometry_role", "quality_state", "validated_by_actor_id", "promotion_authority_scope", "promotion_decision_event_id", "promotion_evidence_object_id"]),
+        "observations": review08_slim_rows(observations, ["geometry_observation_id", "geometry_role", "source_id", "capture_method", "accuracy_meters"]),
+        "authority_decisions": review08_slim_rows(decisions, ["decision_event_id", "decision_type", "decision_outcome", "actor_id", "institution_id", "territorial_scope", "details_json"]),
+        "evidence_objects": review08_slim_rows(evidence, ["evidence_object_id", "evidence_type", "source_id", "content_hash", "classification"]),
+    }
+    assertions = {
+        f"F10-{review07_slug(scenario)}-entities-and-identifiers": bool(entity_counts and queried_total == expected_total),
+        f"F10-{review07_slug(scenario)}-versions-and-relationships": bool(location_versions and relationship_edges),
+        f"F10-{review07_slug(scenario)}-geometry-and-provenance": bool(geometries and observations and decisions and evidence),
+        f"F10-{review07_slug(scenario)}-evidence-and-authority": bool(decisions and evidence),
+        f"F10-{review07_slug(scenario)}-lifecycle-timeline": bool(location_versions or admin_versions),
+        f"F10-{review07_slug(scenario)}-publication-release": bool(releases and release_items),
+        f"F10-{review07_slug(scenario)}-public-projection": bool(public_projection),
+        f"F10-{review07_slug(scenario)}-operator-projection": bool(operator_projection["location_versions"] and operator_projection["object_links"]),
+        f"F10-{review07_slug(scenario)}-historical-output": bool(historical_output["location_lifecycle_timeline"] or historical_output["admin_effective_versions"]),
+    }
+    failed = [k for k, v in assertions.items() if not v]
+    return {
+        "scenario": scenario,
+        "status": "passed" if not failed else "failed",
+        "expected_fixture_rows": expected_total,
+        "queried_fixture_rows": queried_total,
+        "entity_counts": entity_counts,
+        "entity_ids": entity_ids,
+        "relationship_edges": relationship_edges,
+        "geometry_and_provenance": geometry_provenance,
+        "publication_releases": review08_slim_rows(releases, ["publication_release_id", "release_state", "audience", "approved_at", "manifest_uri"]),
+        "public_projection": public_projection,
+        "operator_projection": operator_projection,
+        "historical_output": historical_output,
+        "assertions": {k: {"finding": "F10", "status": "passed" if v else "failed", "evidence_source": "review08-disposable-target-db-query"} for k, v in assertions.items()},
+        "failed_assertions": failed,
+    }
+
+
+def write_review08_scenario_query_report(results: dict[str, Any]) -> None:
+    write_json("docs/sda/data-model/review08-scenario-query-report.json", {"summary": {"execution_mode": "review08-disposable-target-db-query", "scenarios": len(results), "assertions": sum(len(v.get("assertions", {})) for v in results.values()), "failed": [s for s, v in results.items() if v.get("status") != "passed"]}, "scenarios": results})
+    rows: list[list[Any]] = []
+    for scenario, result in sorted(results.items()):
+        rows.append([scenario, result.get("status"), result.get("queried_fixture_rows"), len(result.get("assertions", {})), ", ".join(result.get("failed_assertions", [])) or "none"])
+    write("docs/sda/data-model/review08-scenario-query-report.md", "# Review 08 F10 Scenario Query Report\n\nEach scenario is inserted into the disposable target database, then queried back from target tables for entities, identifiers, versions, relationships, geometry/provenance, evidence/authority, lifecycle timelines, publication releases, public projection, operator projection and historical output.\n\n" + md_table(["Scenario", "Status", "Queried rows", "Assertions", "Failed"], rows))
+
 
 def execute_target_schema_and_fixtures(model: dict[str, Any], fixtures: dict[str, Any]) -> dict[str, Any]:
     sql = render_target_sql(model)
@@ -1934,6 +2053,7 @@ def execute_target_schema_and_fixtures(model: dict[str, Any], fixtures: dict[str
     negative_results: dict[str, dict[str, str]] = {}
     lifecycle_transition_assertions: dict[str, dict[str, str]] = {}
     review07_scenario_assertions: dict[str, dict[str, Any]] = {}
+    review08_scenario_query_results: dict[str, Any] = {}
     negative_harness_regression = prove_negative_harness_fails_on_success()
     last_cols: list[dict[str, Any]] = []
     last_constraint_count = 0
@@ -1948,11 +2068,12 @@ def execute_target_schema_and_fixtures(model: dict[str, Any], fixtures: dict[str
             cur.execute("BEGIN")
             cur.execute("SET CONSTRAINTS ALL DEFERRED")
             inserted = insert_records(cur, model, records)
+            review08_scenario_query_results[scenario] = execute_review08_scenario_queries(cur, model, scenario, records)
             if scenario == "urban-street-address":
                 lifecycle_transition_assertions = execute_lifecycle_transition_assertions(cur)
                 negative_results = execute_negative_fixtures(cur, model, records)
             cur.execute("COMMIT")
-            scenario_results[scenario] = {"inserted_rows": inserted, "status": "passed"}
+            scenario_results[scenario] = {"inserted_rows": inserted, "status": "passed", "review08_query_status": review08_scenario_query_results[scenario]["status"]}
         cur.execute("SET search_path = nli_wo002_target, public")
         cur.execute("""
             SELECT table_name, column_name, data_type, udt_name, is_nullable, column_default
@@ -1971,6 +2092,7 @@ def execute_target_schema_and_fixtures(model: dict[str, Any], fixtures: dict[str
         last_triggers = [dict(r) for r in cur.fetchall()]
     review07_scenario_assertions = build_review07_scenario_assertions(model, fixtures)
     write_review07_scenario_assertion_report(review07_scenario_assertions)
+    write_review08_scenario_query_report(review08_scenario_query_results)
     physical_fields = {f"{r['table_name'].replace('proposed_','')}.{r['column_name']}": r for r in last_cols if r["table_name"].startswith("proposed_")}
     expected = target_field_index(model)
     missing = sorted(set(expected) - set(physical_fields))
@@ -2001,9 +2123,9 @@ def execute_target_schema_and_fixtures(model: dict[str, Any], fixtures: dict[str
             field_parity_errors.append(f"{fq} nullable {phys.get('is_nullable')} != {expected_nullable}")
     required_triggers = ["registry_subject_native_trg", "required_object_roles_trg", "location_record_version_chain_trg", "public_code_alias_chain_trg", "publication_prerequisite_trg", "geometry_version_semantics_trg", "geometry_observation_semantics_trg"]
     missing_required_triggers = sorted(set(required_triggers) - {t["trigger_name"] for t in last_triggers})
-    report = {"scenario_results": scenario_results, "negative_results": negative_results, "negative_harness_regression": negative_harness_regression, "lifecycle_transition_assertions": lifecycle_transition_assertions, "review07_scenario_assertions": review07_scenario_assertions, "inserted_fixture_rows": sum(v["inserted_rows"] for v in scenario_results.values()), "physical_columns": len(physical_fields), "target_fields": len(expected), "missing_fields": missing, "extra_fields": extra, "field_parity_errors": field_parity_errors, "constraint_count": last_constraint_count, "index_count": last_index_count, "trigger_count": len(last_triggers), "missing_required_triggers": missing_required_triggers}
+    report = {"scenario_results": scenario_results, "negative_results": negative_results, "negative_harness_regression": negative_harness_regression, "lifecycle_transition_assertions": lifecycle_transition_assertions, "review07_scenario_assertions": review07_scenario_assertions, "review08_scenario_query_results": review08_scenario_query_results, "inserted_fixture_rows": sum(v["inserted_rows"] for v in scenario_results.values()), "physical_columns": len(physical_fields), "target_fields": len(expected), "missing_fields": missing, "extra_fields": extra, "field_parity_errors": field_parity_errors, "constraint_count": last_constraint_count, "index_count": last_index_count, "trigger_count": len(last_triggers), "missing_required_triggers": missing_required_triggers}
     write_json("docs/sda/data-model/target-schema-catalog.json", {"columns": last_cols, "constraints": last_constraints, "indexes": last_indexes, "triggers": last_triggers, "report": report})
-    write("docs/sda/data-model/target-schema-validation-report.md", "# Target Schema Validation Report\n\n" + md_table(["Check", "Result"], [["Target schema executed in disposable PostGIS schema", "PASS"], ["Negative harness false-pass regression", negative_harness_regression["status"]], ["Independent positive scenarios", len(scenario_results)], ["Positive fixture rows inserted", report["inserted_fixture_rows"]], ["Negative fixtures rejected", len(negative_results)], ["Review 07 scenario/temporal assertions", len(review07_scenario_assertions)], ["Physical columns", len(physical_fields)], ["Target fields", len(expected)], ["Missing fields", missing or "none"], ["Extra fields", extra or "none"], ["Constraints", last_constraint_count], ["Indexes", last_index_count]]))
+    write("docs/sda/data-model/target-schema-validation-report.md", "# Target Schema Validation Report\n\n" + md_table(["Check", "Result"], [["Target schema executed in disposable PostGIS schema", "PASS"], ["Negative harness false-pass regression", negative_harness_regression["status"]], ["Independent positive scenarios", len(scenario_results)], ["Positive fixture rows inserted", report["inserted_fixture_rows"]], ["Negative fixtures rejected", len(negative_results)], ["Review 07 scenario/temporal assertions", len(review07_scenario_assertions)], ["Review 08 scenario DB query assertions", sum(len(v.get("assertions", {})) for v in review08_scenario_query_results.values())], ["Physical columns", len(physical_fields)], ["Target fields", len(expected)], ["Missing fields", missing or "none"], ["Extra fields", extra or "none"], ["Constraints", last_constraint_count], ["Indexes", last_index_count]]))
     if missing:
         raise SystemExit(f"target schema missing fields: {missing[:10]}")
     if field_parity_errors:
@@ -2012,6 +2134,9 @@ def execute_target_schema_and_fixtures(model: dict[str, Any], fixtures: dict[str
         raise SystemExit(f"target schema missing required semantic triggers: {missing_required_triggers}")
     if len(scenario_results) != 7 or len(negative_results) < 11:
         raise SystemExit(f"scenario validation incomplete: positives={len(scenario_results)} negatives={len(negative_results)}")
+    failed_r08 = [s for s, v in review08_scenario_query_results.items() if v.get("status") != "passed"]
+    if len(review08_scenario_query_results) != 7 or failed_r08:
+        raise SystemExit(f"Review 08 scenario query validation incomplete: scenarios={len(review08_scenario_query_results)} failed={failed_r08}")
     return report
 
 
