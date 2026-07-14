@@ -66,6 +66,7 @@ projection_contracts = load_json("docs/sda/data-model/openapi-reviewed-projectio
 api_projection_assertions = load_json("docs/sda/data-model/openapi-policy-projection-assertions.json")
 api_projection_summary = api_projection_assertions.get("summary", {}) if isinstance(api_projection_assertions, dict) else {}
 semantic_mutation_report = load_json("docs/sda/data-model/semantic-mutation-test-report.json")
+integrity_report = load_json("docs/sda/data-model/review08-f04-f07-integrity-report.json")
 adr_matrix_text = read("docs/sda/data-model/adr-005-009-evidence-matrix.md")
 target_catalog = load_json("docs/sda/data-model/target-schema-catalog.json")
 fixtures = load_json("docs/sda/data-model/representative-records/machine-readable-fixtures.json")
@@ -509,6 +510,13 @@ for fq in ["geometry_version.promotion_decision_event_id", "geometry_version.pro
 catalog_tables_seen = {c.get("table_name") for c in (target_catalog.get("columns", []) if isinstance(target_catalog, dict) else [])}
 if "lifecycle_transition_policy" not in catalog_tables_seen:
     err("target schema does not include executable lifecycle_transition_policy table")
+
+integrity_summary = integrity_report.get("summary", {}) if isinstance(integrity_report, dict) else {}
+gate("F04-F07-review08-integrity-report-passed", "F04/F05/F06/F07", integrity_summary.get("execution_mode") == "review08-integrity-report-from-executed-target-schema" and integrity_summary.get("status") == "passed" and integrity_summary.get("errors") == [], "Review 08 F04-F07 integrity report must be generated from executed target schema evidence", "docs/sda/data-model/review08-f04-f07-integrity-report.json")
+gate("F04-cardinality-review08-matrix", "F04", integrity_summary.get("f04_record_types", 0) >= 7 and all(v.get("status") in {"passed", "rejected-by-real-execution"} for v in integrity_report.get("F04", {}).get("negative", {}).values()), "F04 must include positive record-type coverage and missing/excessive/invalid role/entity negative evidence", "docs/sda/data-model/review08-f04-f07-integrity-report.json")
+gate("F05-temporal-review08-register", "F05", integrity_summary.get("f05_temporal_entities", 0) >= 7 and integrity_report.get("F05", {}).get("negative_tests", {}).get("overlap", {}).get("status") == "rejected-by-real-execution", "F05 must include temporal strategy register and reconstruction/negative temporal evidence", "docs/sda/data-model/review08-f04-f07-integrity-report.json")
+gate("F06-geometry-authority-review08", "F06", integrity_summary.get("f06_negative_tests", 0) >= 5 and all(integrity_report.get("F06", {}).get("trigger_text_checks", {}).values()), "F06 must bind geometry authority to actor/institution/permission/scope/observation/evidence/quality and execute negatives", "docs/sda/data-model/review08-f04-f07-integrity-report.json")
+gate("F07-lifecycle-review08-graph", "F07", integrity_summary.get("f07_lifecycle_edges", 0) == expected_lifecycle_edges and integrity_report.get("F07", {}).get("negative_tests", {}).get("denial", {}).get("status") == "rejected-by-real-execution", "F07 must validate lifecycle graph reachability/terminality/denial metadata and execute denied transition evidence", "docs/sda/data-model/review08-f04-f07-integrity-report.json")
 
 # ADR Review 07 reconciliation must cite named assertions, not aggregate-only evidence.
 mutation_summary = semantic_mutation_report.get("summary", {}) if isinstance(semantic_mutation_report, dict) else {}
