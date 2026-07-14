@@ -4803,14 +4803,47 @@
     "inserted_fixture_rows": 324,
     "missing_fields": [],
     "missing_required_triggers": [],
+    "negative_harness_regression": {
+      "error_class": "NegativeFixtureDidNotFail",
+      "proves": "successful invalid action raises outside the database-exception handler",
+      "status": "passed"
+    },
     "negative_results": {
-      "invalid-cardinality-primary-object": "rejected-by-real-execution",
-      "invalid-geometry-role-type": "rejected-by-real-execution",
-      "invalid-publication-prerequisite": "rejected-by-real-execution",
-      "invalid-self-supersession": "rejected-by-real-execution",
-      "invalid-state-transition": "rejected-by-real-execution",
-      "invalid-subject-reference": "rejected-by-real-execution",
-      "invalid-temporal-overlap": "rejected-by-real-execution"
+      "invalid-cardinality-primary-object": {
+        "error_class": "RaiseException",
+        "expected_message": "exceeds max count",
+        "status": "rejected-by-real-execution"
+      },
+      "invalid-geometry-role-type": {
+        "error_class": "RaiseException",
+        "expected_message": "invalid geometry type",
+        "status": "rejected-by-real-execution"
+      },
+      "invalid-publication-prerequisite": {
+        "error_class": "RaiseException",
+        "expected_message": "publication prerequisite",
+        "status": "rejected-by-real-execution"
+      },
+      "invalid-self-supersession": {
+        "error_class": "RaiseException",
+        "expected_message": "cannot supersede itself",
+        "status": "rejected-by-real-execution"
+      },
+      "invalid-state-transition": {
+        "error_class": "RaiseException",
+        "expected_message": "forbidden transition",
+        "status": "rejected-by-real-execution"
+      },
+      "invalid-subject-reference": {
+        "error_class": "RaiseException",
+        "expected_message": "registry subject",
+        "status": "rejected-by-real-execution"
+      },
+      "invalid-temporal-overlap": {
+        "error_class": "ExclusionViolation",
+        "expected_message": "conflicting key value violates exclusion constraint",
+        "status": "rejected-by-real-execution"
+      }
     },
     "physical_columns": 357,
     "scenario_results": {
@@ -4849,13 +4882,13 @@
   "triggers": [
     {
       "action_timing": "BEFORE",
-      "event_manipulation": "INSERT",
+      "event_manipulation": "UPDATE",
       "table_name": "proposed_dispute_case",
       "trigger_name": "dispute_case_subject_trg"
     },
     {
       "action_timing": "BEFORE",
-      "event_manipulation": "UPDATE",
+      "event_manipulation": "INSERT",
       "table_name": "proposed_dispute_case",
       "trigger_name": "dispute_case_subject_trg"
     },
@@ -4897,13 +4930,13 @@
     },
     {
       "action_timing": "BEFORE",
-      "event_manipulation": "INSERT",
+      "event_manipulation": "UPDATE",
       "table_name": "proposed_geometry_version",
       "trigger_name": "geometry_version_subject_trg"
     },
     {
       "action_timing": "BEFORE",
-      "event_manipulation": "UPDATE",
+      "event_manipulation": "INSERT",
       "table_name": "proposed_geometry_version",
       "trigger_name": "geometry_version_subject_trg"
     },
@@ -4921,13 +4954,13 @@
     },
     {
       "action_timing": "BEFORE",
-      "event_manipulation": "INSERT",
+      "event_manipulation": "UPDATE",
       "table_name": "proposed_location_record_object_link",
       "trigger_name": "object_role_cardinality_trg"
     },
     {
       "action_timing": "BEFORE",
-      "event_manipulation": "UPDATE",
+      "event_manipulation": "INSERT",
       "table_name": "proposed_location_record_object_link",
       "trigger_name": "object_role_cardinality_trg"
     },
@@ -4945,21 +4978,15 @@
     },
     {
       "action_timing": "AFTER",
-      "event_manipulation": "UPDATE",
-      "table_name": "proposed_location_record_version",
-      "trigger_name": "required_object_roles_trg"
-    },
-    {
-      "action_timing": "AFTER",
       "event_manipulation": "INSERT",
       "table_name": "proposed_location_record_version",
       "trigger_name": "required_object_roles_trg"
     },
     {
-      "action_timing": "BEFORE",
+      "action_timing": "AFTER",
       "event_manipulation": "UPDATE",
-      "table_name": "proposed_name_record",
-      "trigger_name": "current_official_name_trg"
+      "table_name": "proposed_location_record_version",
+      "trigger_name": "required_object_roles_trg"
     },
     {
       "action_timing": "BEFORE",
@@ -4971,7 +4998,7 @@
       "action_timing": "BEFORE",
       "event_manipulation": "UPDATE",
       "table_name": "proposed_name_record",
-      "trigger_name": "name_record_subject_trg"
+      "trigger_name": "current_official_name_trg"
     },
     {
       "action_timing": "BEFORE",
@@ -4980,6 +5007,18 @@
       "trigger_name": "name_record_subject_trg"
     },
     {
+      "action_timing": "BEFORE",
+      "event_manipulation": "UPDATE",
+      "table_name": "proposed_name_record",
+      "trigger_name": "name_record_subject_trg"
+    },
+    {
+      "action_timing": "AFTER",
+      "event_manipulation": "UPDATE",
+      "table_name": "proposed_public_code_alias",
+      "trigger_name": "public_code_alias_chain_trg"
+    },
+    {
       "action_timing": "AFTER",
       "event_manipulation": "INSERT",
       "table_name": "proposed_public_code_alias",
@@ -4987,19 +5026,13 @@
     },
     {
       "action_timing": "AFTER",
-      "event_manipulation": "UPDATE",
-      "table_name": "proposed_public_code_alias",
-      "trigger_name": "public_code_alias_chain_trg"
-    },
-    {
-      "action_timing": "AFTER",
-      "event_manipulation": "UPDATE",
+      "event_manipulation": "INSERT",
       "table_name": "proposed_publication_release_item",
       "trigger_name": "publication_prerequisite_trg"
     },
     {
       "action_timing": "AFTER",
-      "event_manipulation": "INSERT",
+      "event_manipulation": "UPDATE",
       "table_name": "proposed_publication_release_item",
       "trigger_name": "publication_prerequisite_trg"
     },

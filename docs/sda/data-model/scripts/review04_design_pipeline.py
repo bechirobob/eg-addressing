@@ -1254,7 +1254,7 @@ def scenario_records(model: dict[str, Any], scenario: str, idx: int) -> dict[str
 def generate_fixtures(model: dict[str, Any]) -> dict[str, Any]:
     scenarios = {name: scenario_records(model, name, i + 1) for i, name in enumerate(SCENARIO_NAMES)}
     negatives = {
-        "invalid-cardinality-primary-object": {"expect_error": "already has a current primary object"},
+        "invalid-cardinality-primary-object": {"expect_error": "exceeds max count"},
         "invalid-temporal-overlap": {"expect_error": "conflicting key value violates exclusion constraint"},
         "invalid-state-transition": {"expect_error": "forbidden transition"},
         "invalid-subject-reference": {"expect_error": "registry subject"},
@@ -1288,43 +1288,88 @@ def insert_records(cur, model: dict[str, Any], records: dict[str, list[dict[str,
     return inserted
 
 
-def execute_negative_fixtures(cur, model: dict[str, Any], records: dict[str, list[dict[str, Any]]]) -> dict[str, str]:
-    results: dict[str, str] = {}
-    def expect_sql_failure(name: str, savepoint: str, statements: list[tuple[str, list[Any]]]) -> None:
-        try:
-            cur.execute(f"SAVEPOINT {savepoint}")
-            for sql, vals in statements:
-                cur.execute(sql, vals)
-            cur.execute("SET CONSTRAINTS ALL IMMEDIATE")
-            cur.execute(f"RELEASE SAVEPOINT {savepoint}")
-            raise AssertionError(f"{name} did not fail")
-        except Exception:
-            cur.execute(f"ROLLBACK TO SAVEPOINT {savepoint}")
-            cur.execute("SET CONSTRAINTS ALL DEFERRED")
-            results[name] = "rejected-by-real-execution"
+class NegativeFixtureDidNotFail(AssertionError):
+    """Raised when a negative fixture unexpectedly succeeds."""
+
+
+def expect_sql_failure(cur, results: dict[str, dict[str, str]], name: str, savepoint: str, statements: list[tuple[str, list[Any]]], expected_message: str) -> None:
+    cur.execute(f"SAVEPOINT {savepoint}")
+    try:
+        for sql, vals in statements:
+            cur.execute(sql, vals)
+        cur.execute("SET CONSTRAINTS ALL IMMEDIATE")
+    except psycopg.Error as exc:
+        message = str(exc)
+        cur.execute(f"ROLLBACK TO SAVEPOINT {savepoint}")
+        cur.execute(f"RELEASE SAVEPOINT {savepoint}")
+        cur.execute("SET CONSTRAINTS ALL DEFERRED")
+        if expected_message not in message:
+            raise AssertionError(f"{name} failed with unexpected error; expected {expected_message!r}, got {message!r}") from exc
+        results[name] = {
+            "status": "rejected-by-real-execution",
+            "expected_message": expected_message,
+            "error_class": exc.__class__.__name__,
+        }
+        return
+
+    cur.execute(f"ROLLBACK TO SAVEPOINT {savepoint}")
+    cur.execute(f"RELEASE SAVEPOINT {savepoint}")
+    cur.execute("SET CONSTRAINTS ALL DEFERRED")
+    raise NegativeFixtureDidNotFail(f"{name} did not fail")
+
+
+def prove_negative_harness_fails_on_success() -> dict[str, str]:
+    class FakeCursor:
+        def __init__(self) -> None:
+            self.statements: list[str] = []
+
+        def execute(self, sql: str, vals: list[Any] | None = None) -> None:
+            self.statements.append(sql)
+
+    results: dict[str, dict[str, str]] = {}
+    try:
+        expect_sql_failure(
+            FakeCursor(),
+            results,
+            "harness-regression-invalid-action",
+            "neg_harness_regression",
+            [("SELECT 1", [])],
+            "this message should never appear",
+        )
+    except NegativeFixtureDidNotFail as exc:
+        return {
+            "status": "passed",
+            "proves": "successful invalid action raises outside the database-exception handler",
+            "error_class": exc.__class__.__name__,
+        }
+    raise AssertionError("negative harness regression did not detect a successful invalid action")
+
+
+def execute_negative_fixtures(cur, model: dict[str, Any], records: dict[str, list[dict[str, Any]]]) -> dict[str, dict[str, str]]:
+    results: dict[str, dict[str, str]] = {}
     # Invalid subject reference.
     bad = records["name_record"][0].copy(); bad["name_record_id"] = "negative-name-subject"; bad["subject_id"] = "missing-subject"
-    expect_sql_failure("invalid-subject-reference", "neg_subject", [("INSERT INTO proposed_name_record (" + ",".join(bad) + ") VALUES (" + ",".join(["%s"] * len(bad)) + ")", list(bad.values()))])
-    # Invalid geometry type for role.
-    gv = records["geometry_version"][0].copy(); gv["geometry_version_id"] = "negative-geometry-type"; gv["geometry_role"] = "road-centerline"; gv["geom"] = "SRID=4326;POINT(8.78 3.75)"
+    expect_sql_failure(results=results, cur=cur, name="invalid-subject-reference", savepoint="neg_subject", expected_message="registry subject", statements=[("INSERT INTO proposed_name_record (" + ",".join(bad) + ") VALUES (" + ",".join(["%s"] * len(bad)) + ")", list(bad.values()))])
+    # Invalid geometry type for an otherwise allowed subject/role pairing.
+    gv = records["geometry_version"][0].copy(); gv["geometry_version_id"] = "negative-geometry-type"; gv["geometry_role"] = "building-point"; gv["geom"] = "SRID=4326;LINESTRING(8.78 3.75,8.79 3.76)"
     cols=list(gv); vals=[gv[c] for c in cols]; placeholders=["ST_GeomFromEWKT(%s)" if c=="geom" else "%s" for c in cols]
-    expect_sql_failure("invalid-geometry-role-type", "neg_geom", [("INSERT INTO proposed_geometry_version ("+",".join(cols)+") VALUES ("+",".join(placeholders)+")", vals)])
+    expect_sql_failure(results=results, cur=cur, name="invalid-geometry-role-type", savepoint="neg_geom", expected_message="invalid geometry type", statements=[("INSERT INTO proposed_geometry_version ("+",".join(cols)+") VALUES ("+",".join(placeholders)+")", vals)])
     # Self supersession.
     gv = records["geometry_version"][0].copy(); gv["geometry_version_id"] = "negative-self-supersession"; gv["superseded_by_geometry_version_id"] = gv["geometry_version_id"]
     cols=list(gv); vals=[gv[c] for c in cols]; placeholders=["ST_GeomFromEWKT(%s)" if c=="geom" else "%s" for c in cols]
-    expect_sql_failure("invalid-self-supersession", "neg_super", [("INSERT INTO proposed_geometry_version ("+",".join(cols)+") VALUES ("+",".join(placeholders)+")", vals)])
+    expect_sql_failure(results=results, cur=cur, name="invalid-self-supersession", savepoint="neg_super", expected_message="cannot supersede itself", statements=[("INSERT INTO proposed_geometry_version ("+",".join(cols)+") VALUES ("+",".join(placeholders)+")", vals)])
     # Duplicate primary object cardinality.
     link = records["location_record_object_link"][0].copy(); link["link_id"] = "negative-cardinality"; link["cardinality_rank"] = 2
-    expect_sql_failure("invalid-cardinality-primary-object", "neg_card", [("INSERT INTO proposed_location_record_object_link ("+",".join(link)+") VALUES ("+",".join(["%s"]*len(link))+")", list(link.values()))])
+    expect_sql_failure(results=results, cur=cur, name="invalid-cardinality-primary-object", savepoint="neg_card", expected_message="exceeds max count", statements=[("INSERT INTO proposed_location_record_object_link ("+",".join(link)+") VALUES ("+",".join(["%s"]*len(link))+")", list(link.values()))])
     # Temporal overlap through exclusion constraint.
-    ver = records["location_record_version"][0].copy(); ver["location_record_version_id"] = "negative-temporal-overlap"; ver["version_number"] = 99; ver.pop("predecessor_version_id", None); ver.pop("successor_version_id", None)
-    expect_sql_failure("invalid-temporal-overlap", "neg_temporal", [("INSERT INTO proposed_location_record_version ("+",".join(ver)+") VALUES ("+",".join(["%s"]*len(ver))+")", list(ver.values()))])
+    ver = records["location_record_version"][0].copy(); ver["location_record_version_id"] = "negative-temporal-overlap"; ver["version_number"] = 99; ver["recorded_to"] = "2027-01-01T00:00:00Z"; ver.pop("predecessor_version_id", None); ver.pop("successor_version_id", None)
+    expect_sql_failure(results=results, cur=cur, name="invalid-temporal-overlap", savepoint="neg_temporal", expected_message="conflicting key value violates exclusion constraint", statements=[("INSERT INTO proposed_location_record_version ("+",".join(ver)+") VALUES ("+",".join(["%s"]*len(ver))+")", list(ver.values()))])
     # Invalid state transition through executable policy validator.
-    expect_sql_failure("invalid-state-transition", "neg_transition", [("SELECT validate_lifecycle_transition(%s,%s,%s)", ["canonical_record_lifecycle", "active", "candidate"])])
+    expect_sql_failure(results=results, cur=cur, name="invalid-state-transition", savepoint="neg_transition", expected_message="forbidden transition", statements=[("SELECT validate_lifecycle_transition(%s,%s,%s)", ["canonical_record_lifecycle", "active", "candidate"])])
     # Publication prerequisite through trigger.
     rel = records["publication_release"][0].copy(); rel["publication_release_id"] = "negative-publication-release"; rel["release_state"] = "draft"
     item = records["publication_release_item"][0].copy(); item["publication_release_item_id"] = "negative-publication-item"; item["publication_release_id"] = rel["publication_release_id"]
-    expect_sql_failure("invalid-publication-prerequisite", "neg_publication", [("INSERT INTO proposed_publication_release ("+",".join(rel)+") VALUES ("+",".join(["%s"]*len(rel))+")", list(rel.values())), ("INSERT INTO proposed_publication_release_item ("+",".join(item)+") VALUES ("+",".join(["%s"]*len(item))+")", [json.dumps(v, sort_keys=True) if isinstance(v,(dict,list)) else v for v in item.values()])])
+    expect_sql_failure(results=results, cur=cur, name="invalid-publication-prerequisite", savepoint="neg_publication", expected_message="publication prerequisite", statements=[("INSERT INTO proposed_publication_release ("+",".join(rel)+") VALUES ("+",".join(["%s"]*len(rel))+")", list(rel.values())), ("INSERT INTO proposed_publication_release_item ("+",".join(item)+") VALUES ("+",".join(["%s"]*len(item))+")", [json.dumps(v, sort_keys=True) if isinstance(v,(dict,list)) else v for v in item.values()])])
     return results
 
 
@@ -1332,7 +1377,8 @@ def execute_target_schema_and_fixtures(model: dict[str, Any], fixtures: dict[str
     sql = render_target_sql(model)
     write("docs/sda/data-model/draft-physical-schema.sql", sql)
     scenario_results: dict[str, Any] = {}
-    negative_results: dict[str, str] = {}
+    negative_results: dict[str, dict[str, str]] = {}
+    negative_harness_regression = prove_negative_harness_fails_on_success()
     last_cols: list[dict[str, Any]] = []
     last_constraint_count = 0
     last_index_count = 0
@@ -1396,9 +1442,9 @@ def execute_target_schema_and_fixtures(model: dict[str, Any], fixtures: dict[str
             field_parity_errors.append(f"{fq} nullable {phys.get('is_nullable')} != {expected_nullable}")
     required_triggers = ["registry_subject_native_trg", "required_object_roles_trg", "location_record_version_chain_trg", "public_code_alias_chain_trg", "publication_prerequisite_trg", "geometry_version_semantics_trg", "geometry_observation_semantics_trg"]
     missing_required_triggers = sorted(set(required_triggers) - {t["trigger_name"] for t in last_triggers})
-    report = {"scenario_results": scenario_results, "negative_results": negative_results, "inserted_fixture_rows": sum(v["inserted_rows"] for v in scenario_results.values()), "physical_columns": len(physical_fields), "target_fields": len(expected), "missing_fields": missing, "extra_fields": extra, "field_parity_errors": field_parity_errors, "constraint_count": last_constraint_count, "index_count": last_index_count, "trigger_count": len(last_triggers), "missing_required_triggers": missing_required_triggers}
+    report = {"scenario_results": scenario_results, "negative_results": negative_results, "negative_harness_regression": negative_harness_regression, "inserted_fixture_rows": sum(v["inserted_rows"] for v in scenario_results.values()), "physical_columns": len(physical_fields), "target_fields": len(expected), "missing_fields": missing, "extra_fields": extra, "field_parity_errors": field_parity_errors, "constraint_count": last_constraint_count, "index_count": last_index_count, "trigger_count": len(last_triggers), "missing_required_triggers": missing_required_triggers}
     write_json("docs/sda/data-model/target-schema-catalog.json", {"columns": last_cols, "constraints": last_constraints, "indexes": last_indexes, "triggers": last_triggers, "report": report})
-    write("docs/sda/data-model/target-schema-validation-report.md", "# Target Schema Validation Report\n\n" + md_table(["Check", "Result"], [["Target schema executed in disposable PostGIS schema", "PASS"], ["Independent positive scenarios", len(scenario_results)], ["Positive fixture rows inserted", report["inserted_fixture_rows"]], ["Negative fixtures rejected", len(negative_results)], ["Physical columns", len(physical_fields)], ["Target fields", len(expected)], ["Missing fields", missing or "none"], ["Extra fields", extra or "none"], ["Constraints", last_constraint_count], ["Indexes", last_index_count]]))
+    write("docs/sda/data-model/target-schema-validation-report.md", "# Target Schema Validation Report\n\n" + md_table(["Check", "Result"], [["Target schema executed in disposable PostGIS schema", "PASS"], ["Negative harness false-pass regression", negative_harness_regression["status"]], ["Independent positive scenarios", len(scenario_results)], ["Positive fixture rows inserted", report["inserted_fixture_rows"]], ["Negative fixtures rejected", len(negative_results)], ["Physical columns", len(physical_fields)], ["Target fields", len(expected)], ["Missing fields", missing or "none"], ["Extra fields", extra or "none"], ["Constraints", last_constraint_count], ["Indexes", last_index_count]]))
     if missing:
         raise SystemExit(f"target schema missing fields: {missing[:10]}")
     if field_parity_errors:

@@ -241,9 +241,17 @@ if len(physical_report.get("scenario_results", {})) != 7:
     err("target report does not show seven independently executed positive scenarios")
 if len(physical_report.get("negative_results", {})) != 7:
     err("target report does not show seven negative fixture assertions")
+harness_regression = physical_report.get("negative_harness_regression") or {}
+if harness_regression.get("status") != "passed" or harness_regression.get("error_class") != "NegativeFixtureDidNotFail":
+    err("negative harness false-pass regression did not prove successful invalid actions fail outside the exception handler")
 for neg_name, neg_result in (physical_report.get("negative_results", {}) or {}).items():
-    if neg_result != "rejected-by-real-execution":
+    if not isinstance(neg_result, dict):
+        err(f"negative fixture {neg_name} used legacy string result instead of expected exception metadata")
+        continue
+    if neg_result.get("status") != "rejected-by-real-execution":
         err(f"negative fixture {neg_name} was not produced by real SQL/policy execution: {neg_result}")
+    if not neg_result.get("expected_message") or not neg_result.get("error_class"):
+        err(f"negative fixture {neg_name} missing expected error message/class metadata")
 if "Errors: 0" not in report_text:
     err("Review 06 semantic report does not show Errors: 0")
 if "Current migrations applied to disposable PostgreSQL/PostGIS" not in report_text:

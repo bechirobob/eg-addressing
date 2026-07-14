@@ -1,7 +1,7 @@
 {
   "negative_fixtures": {
     "invalid-cardinality-primary-object": {
-      "expect_error": "already has a current primary object"
+      "expect_error": "exceeds max count"
     },
     "invalid-geometry-role-type": {
       "expect_error": "invalid geometry type"
