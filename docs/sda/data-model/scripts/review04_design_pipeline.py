@@ -1479,7 +1479,7 @@ def render_evidence(cat: dict[str, Any], ops: dict[str, Any], registry: list[dic
     for i in range(1, 23):
         ac = f"AC-{i:02d}"
         ac_rows.append([ac, "READY FOR SDA REVIEW", assertions[ac], "Review 06 semantic-design CI exact-head run; final IDs stamped after green CI", "SDA acceptance pending"])
-    write("docs/sda/evidence/NLI-WO-002-pull-request-evidence.md", "# NLI-WO-002 Pull Request Evidence — Review 04\n\n" + FINAL_HEAD_NOTE + "\n\n## Criterion-specific evidence matrix\n\n" + md_table(["Criterion", "Status", "Assertion", "Evidence", "Remaining condition"], ac_rows) + "\n\n## Changed-path proof\n\nGenerated at final closeout after push; scope guard requires no `services/api/**`, `infra/migrations/**`, `apps/**`, `infra/docker/**`, `data/**`, or `.env*` changes. The only permitted non-docs change is `.github/workflows/api-ci.yml` for SDA design CI.\n")
+    write("docs/sda/evidence/NLI-WO-002-pull-request-evidence.md", "# NLI-WO-002 Pull Request Evidence — Review 07\n\n" + FINAL_HEAD_NOTE + "\n\n## Criterion-specific evidence matrix\n\n" + md_table(["Criterion", "Status", "Assertion", "Evidence", "Remaining condition"], ac_rows) + "\n\n## Changed-path proof\n\nGenerated at final closeout after push; scope guard requires no `services/api/**`, `infra/migrations/**`, `apps/**`, `infra/docker/**`, `data/**`, or `.env*` changes. The only permitted non-docs change is `.github/workflows/api-ci.yml` for SDA design CI.\n")
 
 
 def update_review_log(fixing: str = FIXING_COMMIT_PLACEHOLDER) -> None:
