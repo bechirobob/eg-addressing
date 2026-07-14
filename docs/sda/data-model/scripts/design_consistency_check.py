@@ -64,6 +64,7 @@ route_policies = load_json("docs/sda/data-model/openapi-expected-route-policies.
 reviewed_route_policies = load_json("docs/sda/data-model/openapi-reviewed-route-policies.json")
 projection_contracts = load_json("docs/sda/data-model/openapi-reviewed-projection-contracts.json")
 api_projection_assertions = load_json("docs/sda/data-model/openapi-policy-projection-assertions.json")
+api_projection_summary = api_projection_assertions.get("summary", {}) if isinstance(api_projection_assertions, dict) else {}
 semantic_mutation_report = load_json("docs/sda/data-model/semantic-mutation-test-report.json")
 adr_matrix_text = read("docs/sda/data-model/adr-005-009-evidence-matrix.md")
 target_catalog = load_json("docs/sda/data-model/target-schema-catalog.json")
@@ -264,6 +265,7 @@ for key, roles in {"GET /api/v1/addresses": {"viewer","editor","admin"}, "GET /a
         err(f"{key} roles must be viewer/editor/admin")
 if route_policies.get("POST /api/v1/auth/logout", {}).get("auth") != "session-required":
     err("logout must be classified session-required, not public")
+gate("F08-review08-api-contract-summary", "F08", api_projection_summary.get("execution_mode") == "review08-independent-api-projection-contracts" and api_projection_summary.get("operations") == len(ops) and api_projection_summary.get("generic_success_payloads") == 0 and api_projection_summary.get("errors") == [], "F08 API projection assertions must be Review 08 independent contracts with no generic successful payload envelopes", "docs/sda/data-model/openapi-policy-projection-assertions.json")
 for op in ops:
     route_key = f"{op.get('method')} {op.get('path')}"
     if route_key not in route_policies:
@@ -277,7 +279,7 @@ for op in ops:
         err(f"route policy reviewed row disagrees with observed AST handler/method for {route_key}")
 
     contract = projection_contracts.get(op.get("operation_id"), {}) if isinstance(projection_contracts, dict) else {}
-    if contract.get("review_status") not in {"reviewed-api-projection-r07", "reviewed-api-projection-r06"}:
+    if contract.get("review_status") not in {"reviewed-api-projection-r08"}:
         err(f"OpenAPI operation {op.get('operation_id')} missing reviewed projection contract")
     gate(f"F08-reviewed-projection-contract-{op.get('operation_id')}", "F08", bool(contract.get("policy_source") == "human-reviewed-field-projection-source" and contract.get("review_owner") and contract.get("review_decision_id")), "projection contract must be independently reviewed with owner and decision id", "docs/sda/data-model/openapi-reviewed-projection-contracts.json")
     for field in contract.get("fields", []) if isinstance(contract, dict) else []:
