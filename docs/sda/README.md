@@ -18,12 +18,19 @@ Read documents in this order:
 
 When these documents conflict, the precedence rules in `AGENTS.md` apply. Material ambiguity must be raised as an RFI rather than resolved by assumption.
 
+## Delivery-agent operating layer
+
+The SDA defines **what** must be true and what evidence is required. The sibling [`../agent/`](../agent/) skill pack defines the repeatable **how** for implementation agents: intake, scope control, planning, domain execution, semantic evidence, GitHub exact-head delivery, review remediation, maintenance isolation, and self-audit.
+
+The skill pack is subordinate to the SDA control layer. It may make delivery stricter, but it may not weaken a work order, ADR, standard, or review finding.
+
 ## Current control state
 
 - SDA charter: **established**
 - Current-state baseline: **v0.1**
 - Target reference architecture: **v0.1**
 - Risk register: **active and controlled**
+- Agent delivery skill pack: **proposed through `docs/agent/`**
 - Accepted implementation work: [`NLI-WO-001 — Controlled Database and Reference-Data Lifecycle`](work-orders/NLI-WO-001-closeout.md)
 - Active design-authority work order: [`NLI-WO-002 — Canonical National Location Data Model`](work-orders/NLI-WO-002-canonical-national-location-data-model.md)
 - National production status: **not approved**
@@ -32,17 +39,19 @@ When these documents conflict, the precedence rules in `AGENTS.md` apply. Materi
 ## Directory structure
 
 ```text
-docs/sda/
-  README.md
-  charter.md
-  architecture-baseline.md
-  target-reference-architecture.md
-  risk-register.md
-  standards/       Mandatory engineering rules
-  adrs/            Accepted architecture decisions
-  work-orders/     Issued directives and immutable closeout records
-  templates/       Required evidence and RFI formats
-  reviews/         SDA acceptance and rework records
+docs/
+  agent/           Delivery-agent skills, routing, prompts, and self-audit templates
+  sda/
+    README.md
+    charter.md
+    architecture-baseline.md
+    target-reference-architecture.md
+    risk-register.md
+    standards/       Mandatory engineering rules
+    adrs/            Accepted architecture decisions
+    work-orders/     Issued directives and immutable closeout records
+    templates/       Required evidence and RFI formats
+    reviews/         SDA acceptance and rework records
 ```
 
 ## Controlled delivery cycle
