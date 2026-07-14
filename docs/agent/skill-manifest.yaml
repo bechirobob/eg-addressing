@@ -1,4 +1,4 @@
-version: 1.0
+version: 2.0
 programme: Equatorial Guinea National Location Infrastructure
 status: proposed
 precedence:
@@ -225,14 +225,213 @@ skills:
       - compact context pack
       - truthful completion declaration
 
+  - id: S17
+    name: System architecture and domain boundaries
+    file: skills/S17-system-architecture-and-domain-boundaries.md
+    triggers:
+      - architecture or repository structure
+      - bounded domains or trust zones
+      - module ownership or dependency direction
+      - service extraction or asynchronous boundary
+    outputs:
+      - domain ownership matrix
+      - trust-boundary and data-flow map
+      - interface and transaction design
+
+  - id: S18
+    name: Frontend applications and design system
+    file: skills/S18-frontend-applications-and-design-system.md
+    triggers:
+      - Next.js or TypeScript application
+      - public, operator, or field route
+      - shared UI or browser state
+      - responsive or design-system change
+    outputs:
+      - route and component map
+      - accessible bilingual workflow
+      - browser and design-system evidence
+
+  - id: S19
+    name: Backend services and domain logic
+    file: skills/S19-backend-services-and-domain-logic.md
+    triggers:
+      - FastAPI handler or application service
+      - domain invariant or state transition
+      - persistence adapter or transaction
+      - idempotency, audit, or backend refactor
+    outputs:
+      - use-case and transaction design
+      - domain implementation
+      - backend and contract evidence
+
+  - id: S20
+    name: Citizen portal and public services
+    file: skills/S20-citizen-portal-and-public-services.md
+    triggers:
+      - public lookup or proof
+      - citizen submission or tracking
+      - public correction or privacy notice
+      - public geotagging or abuse control
+    outputs:
+      - citizen journey
+      - public-safe projection
+      - privacy, accessibility, and abuse evidence
+
+  - id: S21
+    name: Registry operations and case management
+    file: skills/S21-registry-operations-and-case-management.md
+    triggers:
+      - registry operator workflow
+      - roads, buildings, addresses, or holds
+      - case file, approval preparation, or bulk registry action
+      - territorial operator scope
+    outputs:
+      - operator case design
+      - scoped state and concurrency rules
+      - audit and workflow evidence
+
+  - id: S22
+    name: Field operations, mobile, and offline synchronization
+    file: skills/S22-field-operations-mobile-and-offline-sync.md
+    triggers:
+      - enumerator or supervisor workflow
+      - mobile/offline capture
+      - assignment, device, GPS, or evidence sync
+      - recapture or field conflict
+    outputs:
+      - offline package and state model
+      - synchronization and conflict design
+      - device/network evidence
+
+  - id: S23
+    name: Verification, quality, and evidence review
+    file: skills/S23-verification-quality-and-evidence-review.md
+    triggers:
+      - verification or quality signal
+      - duplicate or discrepancy review
+      - evidence approval or recapture
+      - human review recommendation
+    outputs:
+      - verification rule registry
+      - decision and reviewer model
+      - quality and audit evidence
+
+  - id: S24
+    name: Publication, corrections, certificates, and signage
+    file: skills/S24-publication-corrections-certificates-and-signage.md
+    triggers:
+      - publication or release manifest
+      - correction, dispute, or revocation
+      - public proof, certificate, QR, or signage
+      - partner/public release
+    outputs:
+      - publication authority and prerequisites
+      - immutable release manifest
+      - correction and artifact evidence
+
+  - id: S25
+    name: Agency integrations, notifications, and interoperability
+    file: skills/S25-agency-integrations-notifications-and-interoperability.md
+    triggers:
+      - agency or partner onboarding
+      - machine identity or partner API
+      - webhook, event, notification, or reconciliation
+      - batch exchange or contract versioning
+    outputs:
+      - partner contract and scope
+      - delivery/retry/reconciliation design
+      - interoperability evidence
+
+  - id: S26
+    name: Import, export, worker, and batch processing
+    file: skills/S26-import-export-worker-and-batch-processing.md
+    triggers:
+      - import or export
+      - worker, queue, retry, or scheduled job
+      - large file, batch, or generated artifact
+      - asynchronous processing
+    outputs:
+      - job/import/export state model
+      - staging, idempotency, and retry design
+      - batch and artifact evidence
+
+  - id: S27
+    name: Reporting, analytics, and national data products
+    file: skills/S27-reporting-analytics-and-national-data-products.md
+    triggers:
+      - report, dashboard, KPI, or SLA
+      - analytics, statistics, or governed extract
+      - metric definition or historical reporting
+      - national data product
+    outputs:
+      - metric and data-product dictionary
+      - lineage/read model
+      - privacy and analytical evidence
+
+  - id: S28
+    name: Infrastructure, environments, and platform engineering
+    file: skills/S28-infrastructure-environments-and-platform-engineering.md
+    triggers:
+      - container, ingress, network, secret, or IaC
+      - environment or deployment topology
+      - data service or platform configuration
+      - production platform preparation
+    outputs:
+      - environment and topology design
+      - platform configuration and provenance
+      - deployment and reconstruction evidence
+
+  - id: S29
+    name: Performance, scalability, and resilience
+    file: skills/S29-performance-scalability-and-resilience.md
+    triggers:
+      - load, latency, capacity, or national scale
+      - cache, queue, concurrency, or backpressure
+      - dependency failure or graceful degradation
+      - rollout capacity gate
+    outputs:
+      - workload/capacity model
+      - load and failure results
+      - scaling and monitoring gates
+
+  - id: S30
+    name: Support, training, and change adoption
+    file: skills/S30-support-training-and-change-adoption.md
+    triggers:
+      - helpdesk or support
+      - training or onboarding
+      - release/change communication
+      - pilot or institutional adoption
+    outputs:
+      - role-specific training
+      - support and escalation model
+      - adoption and feedback evidence
+
+  - id: S31
+    name: Programme planning, roadmap, and release management
+    file: skills/S31-programme-planning-roadmap-and-release-management.md
+    triggers:
+      - roadmap, backlog, or module maturity
+      - dependency or critical path
+      - release train or rollout wave
+      - progress score or programme status
+    outputs:
+      - capability maturity matrix
+      - dependency and work-order roadmap
+      - release, rollout, and programme evidence
+
 routing_rules:
   - rule: A task may invoke several skills; select by effects, not by the task title.
+  - rule: Every task uses S01, S03, S11, S12, and S16.
+  - rule: Use S17-S31 to cover every affected product, platform, operational, adoption, and programme domain.
   - rule: Any database effect invokes S07, even when discovered during an API or UI task.
   - rule: Any sensitive-data or authorization effect invokes S08.
   - rule: Any geometry, evidence, or publication effect invokes S09.
-  - rule: Any user-visible workflow invokes S10.
+  - rule: Any user-visible workflow invokes S10 and the applicable application/domain skill.
   - rule: Any review finding invokes S13 before implementation changes.
   - rule: Any out-of-scope defect invokes S14 and must be isolated.
+  - rule: Any operational release, platform, or recovery effect invokes S15 and the applicable S28-S30 skills.
   - rule: S11 cannot be satisfied by file presence, counts, strings, or green CI alone.
   - rule: S12 submission is incomplete until GitHub shows the pushed branch and accessible PR.
   - rule: S16 must run before every completion or review-request message.
+  - rule: New future national services must update PROJECT-COVERAGE-MATRIX.md and avoid a competing registry, identity, GIS, or publication authority.
