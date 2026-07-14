@@ -128,8 +128,6 @@ def repair_expected_contracts() -> None:
                 'type': 'controlled-fixture-field',
             })
     write(EXPECTED, data)
-    if OBSERVED.exists():
-        OBSERVED.unlink()
 
 def field_key(f: dict[str, Any]) -> tuple[str,str]:
     return (str(f.get('direction')), str(f.get('field')))

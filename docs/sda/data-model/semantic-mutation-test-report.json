@@ -1,97 +1,86 @@
 {
   "results": [
     {
-      "execution_mode": "temp-workspace-actual-design-checker",
       "exit_code": 1,
-      "expected_reason": "named transform assertion must come from disposable DB execution",
-      "mutation": "wrong-transformed-output",
-      "observed_excerpt": "# Design Consistency Report\n\nGenerated checks: 6436\nErrors: 6\nWarnings: 0\n\n## Errors\n- F02-no-loss-count-address-corrections-address-id: named transform assertion must come from disposable DB execution with source/target hashes and output IDs\n- missing ADR-005\n- missing ADR-006\n- missing ADR-007\n- missing ADR-008\n- missing ADR-009\n",
+      "expected_reason": "target-value",
+      "mutation": "wrong-transformation-logic",
+      "observed_excerpt": "$ /home/ubuntu/projects/eg-addressing/.venv-api-test/bin/python docs/sda/data-model/scripts/review09_f02_independent_transform.py\n{\"assertions_executed\": 1370, \"duplicate_counts\": {\"archive\": 0, \"crosswalk\": 0, \"exception\": 0, \"relationship\": 0, \"target_field\": 0, \"target_identity\": 0}, \"errors\": [\"target-value failed for address_corrections.correction_type: expected label got EXCEPTION::record-update\", \"no-loss-value-hash failed for address_corrections.correction_type: mismatched hash\"], \"execution_mode\": \"review09-independent-source-expected-transform-execution\", \"expected_fixture\": \"docs/sda/data-model/review09-expected-target-fixtures-reviewed.json\", \"failure_tests\": 10, \"failure_tests_caught\": 10, \"first_run_inserts\": {\"archive\": 125, \"crosswalk\": 39, \"exception\": 21, \"relationship\": 237, \"source\": 237, \"target\": 237, \"target_identity\": 237}, \"idempotency_status\": \"passed\", \"second_run_inserts\": {\"archive\": 0, \"crosswalk\": 0, \"exception\": 0, \"relationship\": 0, \"source\": 0, \"target\": 0, \"target_identity\": 0}, \"source_fixture\": \"docs/sda/data-model/review09-source-fixtures-reviewed.json\", \"source_rows_inserted\": 237, \"status\": \"failed\", \"target_identities_inserted\": 237, \"target_rows_inserted\": 237, \"transform_groups\": 90, \"transform_implementation\": \"docs/sda/data-model/review09-transform-implementation-reviewed.json\"}\nReview 09 F02 failed\n",
       "status": "passed"
     },
     {
-      "execution_mode": "temp-workspace-actual-design-checker",
       "exit_code": 1,
-      "expected_reason": "archive-created assertion must include governed archive row evidence",
-      "mutation": "missing-archive-or-final-fk",
-      "observed_excerpt": "# Design Consistency Report\n\nGenerated checks: 6436\nErrors: 7\nWarnings: 0\n\n## Errors\n- F02-reference-final-fk-address-corrections-address-id: reference-final-fk assertion must include resolved final canonical FK evidence\n- F02-archive-created-address-corrections-note: archive-created assertion must include governed archive row evidence\n- missing ADR-005\n- missing ADR-006\n- missing ADR-007\n- missing ADR-008\n- missing ADR-009\n",
+      "expected_reason": "target-value",
+      "mutation": "expected-versus-observed-transform-mismatch",
+      "observed_excerpt": "$ /home/ubuntu/projects/eg-addressing/.venv-api-test/bin/python docs/sda/data-model/scripts/review09_f02_independent_transform.py\n{\"assertions_executed\": 1370, \"duplicate_counts\": {\"archive\": 0, \"crosswalk\": 0, \"exception\": 0, \"relationship\": 0, \"target_field\": 0, \"target_identity\": 0}, \"errors\": [\"target-value failed for address_corrections.correction_type: expected __wrong_expected__ got label\"], \"execution_mode\": \"review09-independent-source-expected-transform-execution\", \"expected_fixture\": \"docs/sda/data-model/review09-expected-target-fixtures-reviewed.json\", \"failure_tests\": 10, \"failure_tests_caught\": 10, \"first_run_inserts\": {\"archive\": 125, \"crosswalk\": 39, \"exception\": 21, \"relationship\": 237, \"source\": 237, \"target\": 237, \"target_identity\": 237}, \"idempotency_status\": \"passed\", \"second_run_inserts\": {\"archive\": 0, \"crosswalk\": 0, \"exception\": 0, \"relationship\": 0, \"source\": 0, \"target\": 0, \"target_identity\": 0}, \"source_fixture\": \"docs/sda/data-model/review09-source-fixtures-reviewed.json\", \"source_rows_inserted\": 237, \"status\": \"failed\", \"target_identities_inserted\": 237, \"target_rows_inserted\": 237, \"transform_groups\": 90, \"transform_implementation\": \"docs/sda/data-model/review09-transform-implementation-reviewed.json\"}\nReview 09 F02 failed\n",
       "status": "passed"
     },
     {
-      "execution_mode": "temp-workspace-actual-design-checker",
       "exit_code": 1,
-      "expected_reason": "missing classification",
-      "mutation": "wrong-field-classification",
-      "observed_excerpt": "# Design Consistency Report\n\nGenerated checks: 6436\nErrors: 6\nWarnings: 0\n\n## Errors\n- OpenAPI contract address_corrections_api_v1_address_corrections_get field status missing classification\n- missing ADR-005\n- missing ADR-006\n- missing ADR-007\n- missing ADR-008\n- missing ADR-009\n",
+      "expected_reason": "archive-created",
+      "mutation": "missing-archive-or-real-fk",
+      "observed_excerpt": "$ /home/ubuntu/projects/eg-addressing/.venv-api-test/bin/python docs/sda/data-model/scripts/review09_f02_independent_transform.py\n{\"assertions_executed\": 1370, \"duplicate_counts\": {\"archive\": 0, \"crosswalk\": 0, \"exception\": 0, \"relationship\": 0, \"target_field\": 0, \"target_identity\": 0}, \"errors\": [\"archive-created failed for address_corrections.note: missing archive or archive mismatch\"], \"execution_mode\": \"review09-independent-source-expected-transform-execution\", \"expected_fixture\": \"docs/sda/data-model/review09-expected-target-fixtures-reviewed.json\", \"failure_tests\": 10, \"failure_tests_caught\": 10, \"first_run_inserts\": {\"archive\": 124, \"crosswalk\": 39, \"exception\": 21, \"relationship\": 237, \"source\": 237, \"target\": 237, \"target_identity\": 237}, \"idempotency_status\": \"passed\", \"second_run_inserts\": {\"archive\": 0, \"crosswalk\": 0, \"exception\": 0, \"relationship\": 0, \"source\": 0, \"target\": 0, \"target_identity\": 0}, \"source_fixture\": \"docs/sda/data-model/review09-source-fixtures-reviewed.json\", \"source_rows_inserted\": 237, \"status\": \"failed\", \"target_identities_inserted\": 237, \"target_rows_inserted\": 237, \"transform_groups\": 90, \"transform_implementation\": \"docs/sda/data-model/review09-transform-implementation-reviewed.json\"}\nReview 09 F02 failed\n",
       "status": "passed"
     },
     {
-      "execution_mode": "temp-workspace-actual-design-checker",
       "exit_code": 1,
-      "expected_reason": "target schema actual trigger catalog missing required semantic triggers",
-      "mutation": "removed-cardinality-constraint",
-      "observed_excerpt": "# Design Consistency Report\n\nGenerated checks: 6436\nErrors: 6\nWarnings: 0\n\n## Errors\n- target schema actual trigger catalog missing required semantic triggers: ['required_object_roles_trg']\n- missing ADR-005\n- missing ADR-006\n- missing ADR-007\n- missing ADR-008\n- missing ADR-009\n",
+      "expected_reason": "classification owner",
+      "mutation": "wrong-classification",
+      "observed_excerpt": "rce-expected-transform-execution\", \"expected_fixture\": \"docs/sda/data-model/review09-expected-target-fixtures-reviewed.json\", \"failure_tests\": 10, \"failure_tests_caught\": 10, \"first_run_inserts\": {\"archive\": 125, \"crosswalk\": 39, \"exception\": 21, \"relationship\": 237, \"source\": 237, \"target\": 237, \"target_identity\": 237}, \"idempotency_status\": \"passed\", \"second_run_inserts\": {\"archive\": 0, \"crosswalk\": 0, \"exception\": 0, \"relationship\": 0, \"source\": 0, \"target\": 0, \"target_identity\": 0}, \"source_fixture\": \"docs/sda/data-model/review09-source-fixtures-reviewed.json\", \"source_rows_inserted\": 237, \"status\": \"passed\", \"target_identities_inserted\": 237, \"target_rows_inserted\": 237, \"transform_groups\": 90, \"transform_implementation\": \"docs/sda/data-model/review09-transform-implementation-reviewed.json\"}\n\n$ /home/ubuntu/projects/eg-addressing/.venv-api-test/bin/python docs/sda/data-model/scripts/review09_api_contract_comparison.py\n{\"assertions\": 1626, \"contracts\": 105, \"errors\": [\"address_corrections_api_v1_address_corrections_get field status lacks classification owner\"], \"execution_mode\": \"review09-independent-api-contract-comparison\", \"expected_contract_source\": \"docs/sda/data-model/openapi-expected-contracts-reviewed.json\", \"generic_success_payloads\": 0, \"observed_fixture_source\": \"docs/sda/data-model/openapi-observed-response-fixtures-reviewed.json\", \"operations\": 105, \"status\": \"failed\"}\naddress_corrections_api_v1_address_corrections_get field status lacks classification owner\n",
       "status": "passed"
     },
     {
-      "execution_mode": "temp-workspace-actual-design-checker",
       "exit_code": 1,
-      "expected_reason": "invalid-temporal-overlap was not produced by real SQL/policy execution",
-      "mutation": "temporal-cycle-or-overlap",
-      "observed_excerpt": "# Design Consistency Report\n\nGenerated checks: 6436\nErrors: 6\nWarnings: 0\n\n## Errors\n- negative fixture invalid-temporal-overlap was not produced by real SQL/policy execution: {'error_class': 'ExclusionViolation', 'expected_message': 'conflicting key value violates exclusion constraint', 'status': 'passed-invalidly'}\n- missing ADR-005\n- missing ADR-006\n- missing ADR-007\n- missing ADR-008\n- missing ADR-009\n",
+      "expected_reason": "integrity report",
+      "mutation": "cardinality-source-defect",
+      "observed_excerpt": "ck.py\n# Design Consistency Report\n\nGenerated checks: 6278\nErrors: 17\nWarnings: 0\n\n## Errors\n- F04-F07-review08-integrity-report-passed: Review 08 F04-F07 integrity report must be generated from executed target schema evidence\n- F12-semantic-mutation-suite-passed: semantic mutation suite must run actual temp-workspace checker executions and catch all required defect classes\n- F12-mutation-wrong-transformed-output: semantic mutation report missing wrong-transformed-output\n- F12-mutation-missing-archive-or-final-fk: semantic mutation report missing missing-archive-or-final-fk\n- F12-mutation-wrong-field-classification: semantic mutation report missing wrong-field-classification\n- F12-mutation-removed-cardinality-constraint: semantic mutation report missing removed-cardinality-constraint\n- F12-mutation-temporal-cycle-or-overlap: semantic mutation report missing temporal-cycle-or-overlap\n- F12-mutation-weakened-geometry-authority: semantic mutation report missing weakened-geometry-authority\n- F12-mutation-missing-lifecycle-transition: semantic mutation report missing missing-lifecycle-transition\n- F12-mutation-wrong-api-policy: semantic mutation report missing wrong-api-policy\n- F12-mutation-missing-api-response-field-projection: semantic mutation report missing missing-api-response-field-projection\n- F12-mutation-broken-scenario-output: semantic mutation report missing broken-scenario-output\n- missing ADR-005\n- missing ADR-006\n- missing ADR-007\n- missing ADR-008\n- missing ADR-009\n",
       "status": "passed"
     },
     {
-      "execution_mode": "temp-workspace-actual-design-checker",
       "exit_code": 1,
-      "expected_reason": "geometry promotion trigger does not bind actor permission",
-      "mutation": "weakened-geometry-authority",
-      "observed_excerpt": "# Design Consistency Report\n\nGenerated checks: 6436\nErrors: 6\nWarnings: 0\n\n## Errors\n- geometry promotion trigger does not bind actor permission to geometry_role_matrix promotion_permission\n- missing ADR-005\n- missing ADR-006\n- missing ADR-007\n- missing ADR-008\n- missing ADR-009\n",
+      "expected_reason": "F05",
+      "mutation": "temporal-cycle-owner-overlap-backdated-defect",
+      "observed_excerpt": "stency_check.py\n# Design Consistency Report\n\nGenerated checks: 6278\nErrors: 17\nWarnings: 0\n\n## Errors\n- F05-temporal-review08-register: F05 must include temporal strategy register and reconstruction/negative temporal evidence\n- F12-semantic-mutation-suite-passed: semantic mutation suite must run actual temp-workspace checker executions and catch all required defect classes\n- F12-mutation-wrong-transformed-output: semantic mutation report missing wrong-transformed-output\n- F12-mutation-missing-archive-or-final-fk: semantic mutation report missing missing-archive-or-final-fk\n- F12-mutation-wrong-field-classification: semantic mutation report missing wrong-field-classification\n- F12-mutation-removed-cardinality-constraint: semantic mutation report missing removed-cardinality-constraint\n- F12-mutation-temporal-cycle-or-overlap: semantic mutation report missing temporal-cycle-or-overlap\n- F12-mutation-weakened-geometry-authority: semantic mutation report missing weakened-geometry-authority\n- F12-mutation-missing-lifecycle-transition: semantic mutation report missing missing-lifecycle-transition\n- F12-mutation-wrong-api-policy: semantic mutation report missing wrong-api-policy\n- F12-mutation-missing-api-response-field-projection: semantic mutation report missing missing-api-response-field-projection\n- F12-mutation-broken-scenario-output: semantic mutation report missing broken-scenario-output\n- missing ADR-005\n- missing ADR-006\n- missing ADR-007\n- missing ADR-008\n- missing ADR-009\n",
       "status": "passed"
     },
     {
-      "execution_mode": "temp-workspace-actual-design-checker",
       "exit_code": 1,
-      "expected_reason": "every authored lifecycle transition",
-      "mutation": "missing-lifecycle-transition",
-      "observed_excerpt": "# Design Consistency Report\n\nGenerated checks: 6435\nErrors: 6\nWarnings: 0\n\n## Errors\n- F07-lifecycle-positive-graph-executed: every authored lifecycle transition must be loaded into lifecycle_transition_policy and pass validate_lifecycle_transition\n- missing ADR-005\n- missing ADR-006\n- missing ADR-007\n- missing ADR-008\n- missing ADR-009\n",
+      "expected_reason": "F06",
+      "mutation": "weakened-typed-geometry-authority",
+      "observed_excerpt": "ncy Report\n\nGenerated checks: 6278\nErrors: 17\nWarnings: 0\n\n## Errors\n- F06-geometry-authority-review08: F06 must bind geometry authority to actor/institution/permission/scope/observation/evidence/quality and execute negatives\n- F12-semantic-mutation-suite-passed: semantic mutation suite must run actual temp-workspace checker executions and catch all required defect classes\n- F12-mutation-wrong-transformed-output: semantic mutation report missing wrong-transformed-output\n- F12-mutation-missing-archive-or-final-fk: semantic mutation report missing missing-archive-or-final-fk\n- F12-mutation-wrong-field-classification: semantic mutation report missing wrong-field-classification\n- F12-mutation-removed-cardinality-constraint: semantic mutation report missing removed-cardinality-constraint\n- F12-mutation-temporal-cycle-or-overlap: semantic mutation report missing temporal-cycle-or-overlap\n- F12-mutation-weakened-geometry-authority: semantic mutation report missing weakened-geometry-authority\n- F12-mutation-missing-lifecycle-transition: semantic mutation report missing missing-lifecycle-transition\n- F12-mutation-wrong-api-policy: semantic mutation report missing wrong-api-policy\n- F12-mutation-missing-api-response-field-projection: semantic mutation report missing missing-api-response-field-projection\n- F12-mutation-broken-scenario-output: semantic mutation report missing broken-scenario-output\n- missing ADR-005\n- missing ADR-006\n- missing ADR-007\n- missing ADR-008\n- missing ADR-009\n",
       "status": "passed"
     },
     {
-      "execution_mode": "temp-workspace-actual-design-checker",
       "exit_code": 1,
-      "expected_reason": "route policy must be independently reviewed",
-      "mutation": "wrong-api-policy",
-      "observed_excerpt": "# Design Consistency Report\n\nGenerated checks: 6436\nErrors: 7\nWarnings: 0\n\n## Errors\n- openapi-expected-route-policies must exactly mirror independently reviewed route policy registry\n- F08-reviewed-route-policy-DELETE--api-v1-addresses-{address_id}: route policy must be independently reviewed and not claim observed AST as expected authority\n- missing ADR-005\n- missing ADR-006\n- missing ADR-007\n- missing ADR-008\n- missing ADR-009\n",
+      "expected_reason": "F07",
+      "mutation": "lifecycle-graph-contextual-authorization-defect",
+      "observed_excerpt": "gn Consistency Report\n\nGenerated checks: 6278\nErrors: 17\nWarnings: 0\n\n## Errors\n- F07-lifecycle-review08-graph: F07 must validate lifecycle graph reachability/terminality/denial metadata and execute denied transition evidence\n- F12-semantic-mutation-suite-passed: semantic mutation suite must run actual temp-workspace checker executions and catch all required defect classes\n- F12-mutation-wrong-transformed-output: semantic mutation report missing wrong-transformed-output\n- F12-mutation-missing-archive-or-final-fk: semantic mutation report missing missing-archive-or-final-fk\n- F12-mutation-wrong-field-classification: semantic mutation report missing wrong-field-classification\n- F12-mutation-removed-cardinality-constraint: semantic mutation report missing removed-cardinality-constraint\n- F12-mutation-temporal-cycle-or-overlap: semantic mutation report missing temporal-cycle-or-overlap\n- F12-mutation-weakened-geometry-authority: semantic mutation report missing weakened-geometry-authority\n- F12-mutation-missing-lifecycle-transition: semantic mutation report missing missing-lifecycle-transition\n- F12-mutation-wrong-api-policy: semantic mutation report missing wrong-api-policy\n- F12-mutation-missing-api-response-field-projection: semantic mutation report missing missing-api-response-field-projection\n- F12-mutation-broken-scenario-output: semantic mutation report missing broken-scenario-output\n- missing ADR-005\n- missing ADR-006\n- missing ADR-007\n- missing ADR-008\n- missing ADR-009\n",
       "status": "passed"
     },
     {
-      "execution_mode": "temp-workspace-actual-design-checker",
       "exit_code": 1,
-      "expected_reason": "every successful response must have exact reviewed response fields",
-      "mutation": "missing-api-response-field-projection",
-      "observed_excerpt": "# Design Consistency Report\n\nGenerated checks: 6434\nErrors: 6\nWarnings: 0\n\n## Errors\n- F08-success-response-fields-address_corrections_api_v1_address_corrections_get-200: every successful response must have exact reviewed response fields\n- missing ADR-005\n- missing ADR-006\n- missing ADR-007\n- missing ADR-008\n- missing ADR-009\n",
+      "expected_reason": "missing observed handler response fixture",
+      "mutation": "observed-versus-expected-api-drift",
+      "observed_excerpt": "expected-transform-execution\", \"expected_fixture\": \"docs/sda/data-model/review09-expected-target-fixtures-reviewed.json\", \"failure_tests\": 10, \"failure_tests_caught\": 10, \"first_run_inserts\": {\"archive\": 125, \"crosswalk\": 39, \"exception\": 21, \"relationship\": 237, \"source\": 237, \"target\": 237, \"target_identity\": 237}, \"idempotency_status\": \"passed\", \"second_run_inserts\": {\"archive\": 0, \"crosswalk\": 0, \"exception\": 0, \"relationship\": 0, \"source\": 0, \"target\": 0, \"target_identity\": 0}, \"source_fixture\": \"docs/sda/data-model/review09-source-fixtures-reviewed.json\", \"source_rows_inserted\": 237, \"status\": \"passed\", \"target_identities_inserted\": 237, \"target_rows_inserted\": 237, \"transform_groups\": 90, \"transform_implementation\": \"docs/sda/data-model/review09-transform-implementation-reviewed.json\"}\n\n$ /home/ubuntu/projects/eg-addressing/.venv-api-test/bin/python docs/sda/data-model/scripts/review09_api_contract_comparison.py\n{\"assertions\": 1617, \"contracts\": 104, \"errors\": [\"address_corrections_api_v1_address_corrections_get missing observed handler response fixture\"], \"execution_mode\": \"review09-independent-api-contract-comparison\", \"expected_contract_source\": \"docs/sda/data-model/openapi-expected-contracts-reviewed.json\", \"generic_success_payloads\": 0, \"observed_fixture_source\": \"docs/sda/data-model/openapi-observed-response-fixtures-reviewed.json\", \"operations\": 105, \"status\": \"failed\"}\naddress_corrections_api_v1_address_corrections_get missing observed handler response fixture\n",
       "status": "passed"
     },
     {
-      "execution_mode": "temp-workspace-actual-design-checker",
       "exit_code": 1,
-      "expected_reason": "F10 scenario must include persisted query evidence",
-      "mutation": "broken-scenario-output",
-      "observed_excerpt": "# Design Consistency Report\n\nGenerated checks: 6436\nErrors: 6\nWarnings: 0\n\n## Errors\n- F10-review08-query-sections-multi-unit-building: F10 scenario must include persisted query evidence for entities, relationships, geometry, publication, projections and history\n- missing ADR-005\n- missing ADR-006\n- missing ADR-007\n- missing ADR-008\n- missing ADR-009\n",
+      "expected_reason": "entity_counts",
+      "mutation": "incorrect-scenario-projection-history",
+      "observed_excerpt": "ion\": 21, \"relationship\": 237, \"source\": 237, \"target\": 237, \"target_identity\": 237}, \"idempotency_status\": \"passed\", \"second_run_inserts\": {\"archive\": 0, \"crosswalk\": 0, \"exception\": 0, \"relationship\": 0, \"source\": 0, \"target\": 0, \"target_identity\": 0}, \"source_fixture\": \"docs/sda/data-model/review09-source-fixtures-reviewed.json\", \"source_rows_inserted\": 237, \"status\": \"passed\", \"target_identities_inserted\": 237, \"target_rows_inserted\": 237, \"transform_groups\": 90, \"transform_implementation\": \"docs/sda/data-model/review09-transform-implementation-reviewed.json\"}\n\n$ /home/ubuntu/projects/eg-addressing/.venv-api-test/bin/python docs/sda/data-model/scripts/review09_api_contract_comparison.py\n{\"assertions\": 1626, \"contracts\": 105, \"errors\": [], \"execution_mode\": \"review09-independent-api-contract-comparison\", \"expected_contract_source\": \"docs/sda/data-model/openapi-expected-contracts-reviewed.json\", \"generic_success_payloads\": 0, \"observed_fixture_source\": \"docs/sda/data-model/openapi-observed-response-fixtures-reviewed.json\", \"operations\": 105, \"status\": \"passed\"}\n\n$ /home/ubuntu/projects/eg-addressing/.venv-api-test/bin/python docs/sda/data-model/scripts/review09_scenario_comparison.py\n{\"assertions\": 70, \"errors\": [\"rural-landmark-location: entity_counts.__wrong__ missing observed value\"], \"execution_mode\": \"review09-independent-scenario-source-expected-comparison\", \"failed\": [\"rural-landmark-location\"], \"scenarios\": 7, \"status\": \"failed\"}\nReview09 scenario comparison failed\n",
       "status": "passed"
     },
     {
-      "execution_mode": "temp-workspace-actual-design-checker",
       "exit_code": 1,
-      "expected_reason": "negative harness false-pass regression",
+      "expected_reason": "negative harness",
       "mutation": "negative-harness-false-pass-regression",
-      "observed_excerpt": "# Design Consistency Report\n\nGenerated checks: 6436\nErrors: 6\nWarnings: 0\n\n## Errors\n- negative harness false-pass regression did not prove successful invalid actions fail outside the exception handler\n- missing ADR-005\n- missing ADR-006\n- missing ADR-007\n- missing ADR-008\n- missing ADR-009\n",
+      "observed_excerpt": "n_consistency_check.py\n# Design Consistency Report\n\nGenerated checks: 6278\nErrors: 17\nWarnings: 0\n\n## Errors\n- negative harness false-pass regression did not prove successful invalid actions fail outside the exception handler\n- F12-semantic-mutation-suite-passed: semantic mutation suite must run actual temp-workspace checker executions and catch all required defect classes\n- F12-mutation-wrong-transformed-output: semantic mutation report missing wrong-transformed-output\n- F12-mutation-missing-archive-or-final-fk: semantic mutation report missing missing-archive-or-final-fk\n- F12-mutation-wrong-field-classification: semantic mutation report missing wrong-field-classification\n- F12-mutation-removed-cardinality-constraint: semantic mutation report missing removed-cardinality-constraint\n- F12-mutation-temporal-cycle-or-overlap: semantic mutation report missing temporal-cycle-or-overlap\n- F12-mutation-weakened-geometry-authority: semantic mutation report missing weakened-geometry-authority\n- F12-mutation-missing-lifecycle-transition: semantic mutation report missing missing-lifecycle-transition\n- F12-mutation-wrong-api-policy: semantic mutation report missing wrong-api-policy\n- F12-mutation-missing-api-response-field-projection: semantic mutation report missing missing-api-response-field-projection\n- F12-mutation-broken-scenario-output: semantic mutation report missing broken-scenario-output\n- missing ADR-005\n- missing ADR-006\n- missing ADR-007\n- missing ADR-008\n- missing ADR-009\n",
       "status": "passed"
     }
   ],
   "summary": {
     "caught": 11,
-    "execution_mode": "review08-temp-workspace-actual-pipeline-checker",
+    "execution_mode": "review09-temp-repo-disposable-db-full-pipeline-mutations",
     "failed": 0,
     "mutations": 11,
     "status": "passed"

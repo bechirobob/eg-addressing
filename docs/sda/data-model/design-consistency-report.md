@@ -1,6 +1,6 @@
 # Design Consistency Report
 
-Generated checks: 6270
+Generated checks: 6278
 Errors: 0
 Warnings: 0
 
@@ -10,7 +10,7 @@ Warnings: 0
 - Transformation rows: 237
 - Target fields: 357
 - Fixture scenarios: 7
-- Named assertion gates: 6270
+- Named assertion gates: 6278
 - F02 transform assertions: 1370
 - F02 source/target rows executed: 237/237
 - F02 failure probes caught: 10/10
