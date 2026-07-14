@@ -1,0 +1,875 @@
+{
+  "adr_rows": [
+    [
+      "ADR-005",
+      "identity/public aliases/crosswalk authority",
+      "F02/F09",
+      "F02-source-row-identity-*; F02-reference-final-fk-*; F02-review09-real-idempotency; F09-review09-convergence-*",
+      "review09-source-fixtures-reviewed.json; review09-expected-target-fixtures-reviewed.json; review09-transform-implementation-reviewed.json; transformation-fixture-report.json; review09-f09-f11-reconciliation-report.json",
+      "proposed; executable Review 09 evidence passing",
+      "NLI-WO-002B unauthorized; owner approval and runtime migration authority still required"
+    ],
+    [
+      "ADR-006",
+      "administrative geography and operational areas",
+      "F05/F09/F10",
+      "F05-review09-executed-report-passed; F05-admin-boundary-*; F10-review09-independent-scenario-comparison-passed; F10-scenario-*; F09-review09-convergence-*; F09-reviewed-convergence-unit-*",
+      "review09-f05-temporal-execution-report.json; review09-scenario-comparison-report.json; review09-f09-f11-reconciliation-report.json",
+      "proposed; executable Review 09 evidence passing",
+      "official territorial rollout/publication authority remains future SDA decision"
+    ],
+    [
+      "ADR-007",
+      "subject registry and addressable object cardinality",
+      "F04/F10",
+      "F04-review09-executed-report-passed; F04-cardinality-positive-*; F10-review09-scenario-*; F10-scenario-*",
+      "review09-f04-record-role-execution-report.json; review09-scenario-comparison-report.json",
+      "proposed; executable Review 09 evidence passing",
+      "runtime migration/application changes remain out of scope"
+    ],
+    [
+      "ADR-008",
+      "temporal versioning and supersession",
+      "F05/F07/F10/F12",
+      "F05-review09-executed-report-passed; F05-admin-boundary-*; F07-review09-lifecycle-graph-report-passed; F07-lifecycle-positive-*; F10-review09-independent-scenario-comparison-passed; F10-scenario-*; F12-mutation-*",
+      "review09-f05-temporal-execution-report.json; review09-f07-lifecycle-graph-report.json; review09-scenario-comparison-report.json; semantic-mutation-test-report.json",
+      "proposed; executable Review 09 evidence passing",
+      "dual-read parity and removal authority require future WO-002B"
+    ],
+    [
+      "ADR-009",
+      "geometry evidence and provenance",
+      "F06/F12",
+      "F06-review09-executed-report-passed; F06-geometry-authority-*; F12-mutation-weakened-typed-geometry-authority",
+      "review09-f06-typed-geometry-authority-report.json; semantic-mutation-test-report.json",
+      "proposed; executable Review 09 evidence passing",
+      "institutional actors/scopes remain design evidence only until SDA approval"
+    ]
+  ],
+  "convergence_units": [
+    {
+      "assertions": 17,
+      "execution_backed": true,
+      "final_fk_ok": true,
+      "missing": [],
+      "status": "passed",
+      "transform_group_id": "WO002-R06-correction-case-address_corrections",
+      "unit_id": "MU01"
+    },
+    {
+      "assertions": 30,
+      "execution_backed": true,
+      "final_fk_ok": true,
+      "missing": [],
+      "status": "passed",
+      "transform_group_id": "WO002-R06-correction-case-archive-address_corrections",
+      "unit_id": "MU02"
+    },
+    {
+      "assertions": 15,
+      "execution_backed": true,
+      "final_fk_ok": true,
+      "missing": [],
+      "status": "passed",
+      "transform_group_id": "WO002-R06-geometry-observation-address_points",
+      "unit_id": "MU03"
+    },
+    {
+      "assertions": 15,
+      "execution_backed": true,
+      "final_fk_ok": true,
+      "missing": [],
+      "status": "passed",
+      "transform_group_id": "WO002-R06-geometry-observation-address_records",
+      "unit_id": "MU04"
+    },
+    {
+      "assertions": 15,
+      "execution_backed": true,
+      "final_fk_ok": true,
+      "missing": [],
+      "status": "passed",
+      "transform_group_id": "WO002-R06-geometry-observation-citizen_geotag_submissions",
+      "unit_id": "MU05"
+    },
+    {
+      "assertions": 11,
+      "execution_backed": true,
+      "final_fk_ok": true,
+      "missing": [],
+      "status": "passed",
+      "transform_group_id": "WO002-R06-identity-crosswalk-address_corrections",
+      "unit_id": "MU06"
+    },
+    {
+      "assertions": 11,
+      "execution_backed": true,
+      "final_fk_ok": true,
+      "missing": [],
+      "status": "passed",
+      "transform_group_id": "WO002-R06-identity-crosswalk-address_points",
+      "unit_id": "MU07"
+    },
+    {
+      "assertions": 21,
+      "execution_backed": true,
+      "final_fk_ok": true,
+      "missing": [],
+      "status": "passed",
+      "transform_group_id": "WO002-R06-identity-crosswalk-address_record_events",
+      "unit_id": "MU08"
+    },
+    {
+      "assertions": 19,
+      "execution_backed": true,
+      "final_fk_ok": true,
+      "missing": [],
+      "status": "passed",
+      "transform_group_id": "WO002-R06-identity-crosswalk-address_records",
+      "unit_id": "MU09"
+    },
+    {
+      "assertions": 31,
+      "execution_backed": true,
+      "final_fk_ok": true,
+      "missing": [],
+      "status": "passed",
+      "transform_group_id": "WO002-R06-identity-crosswalk-addresses",
+      "unit_id": "MU10"
+    },
+    {
+      "assertions": 13,
+      "execution_backed": true,
+      "final_fk_ok": true,
+      "missing": [],
+      "status": "passed",
+      "transform_group_id": "WO002-R06-identity-crosswalk-admin_units",
+      "unit_id": "MU11"
+    },
+    {
+      "assertions": 21,
+      "execution_backed": true,
+      "final_fk_ok": true,
+      "missing": [],
+      "status": "passed",
+      "transform_group_id": "WO002-R06-identity-crosswalk-audit_logs",
+      "unit_id": "MU12"
+    },
+    {
+      "assertions": 6,
+      "execution_backed": true,
+      "final_fk_ok": true,
+      "missing": [],
+      "status": "passed",
+      "transform_group_id": "WO002-R06-identity-crosswalk-auth_tokens",
+      "unit_id": "MU13"
+    },
+    {
+      "assertions": 17,
+      "execution_backed": true,
+      "final_fk_ok": true,
+      "missing": [],
+      "status": "passed",
+      "transform_group_id": "WO002-R06-identity-crosswalk-buildings",
+      "unit_id": "MU14"
+    },
+    {
+      "assertions": 19,
+      "execution_backed": true,
+      "final_fk_ok": true,
+      "missing": [],
+      "status": "passed",
+      "transform_group_id": "WO002-R06-identity-crosswalk-citizen_geotag_submissions",
+      "unit_id": "MU15"
+    },
+    {
+      "assertions": 8,
+      "execution_backed": true,
+      "final_fk_ok": true,
+      "missing": [],
+      "status": "passed",
+      "transform_group_id": "WO002-R06-identity-crosswalk-development_fixture_batches",
+      "unit_id": "MU16"
+    },
+    {
+      "assertions": 16,
+      "execution_backed": true,
+      "final_fk_ok": true,
+      "missing": [],
+      "status": "passed",
+      "transform_group_id": "WO002-R06-identity-crosswalk-development_fixture_records",
+      "unit_id": "MU17"
+    },
+    {
+      "assertions": 14,
+      "execution_backed": true,
+      "final_fk_ok": true,
+      "missing": [],
+      "status": "passed",
+      "transform_group_id": "WO002-R06-identity-crosswalk-field_assignments",
+      "unit_id": "MU18"
+    },
+    {
+      "assertions": 27,
+      "execution_backed": true,
+      "final_fk_ok": true,
+      "missing": [],
+      "status": "passed",
+      "transform_group_id": "WO002-R06-identity-crosswalk-field_submissions",
+      "unit_id": "MU19"
+    },
+    {
+      "assertions": 5,
+      "execution_backed": true,
+      "final_fk_ok": true,
+      "missing": [],
+      "status": "passed",
+      "transform_group_id": "WO002-R06-identity-crosswalk-import_jobs",
+      "unit_id": "MU20"
+    },
+    {
+      "assertions": 22,
+      "execution_backed": true,
+      "final_fk_ok": true,
+      "missing": [],
+      "status": "passed",
+      "transform_group_id": "WO002-R06-identity-crosswalk-import_rows",
+      "unit_id": "MU21"
+    },
+    {
+      "assertions": 14,
+      "execution_backed": true,
+      "final_fk_ok": true,
+      "missing": [],
+      "status": "passed",
+      "transform_group_id": "WO002-R06-identity-crosswalk-publication_pack_addresses",
+      "unit_id": "MU22"
+    },
+    {
+      "assertions": 5,
+      "execution_backed": true,
+      "final_fk_ok": true,
+      "missing": [],
+      "status": "passed",
+      "transform_group_id": "WO002-R06-identity-crosswalk-publication_packs",
+      "unit_id": "MU23"
+    },
+    {
+      "assertions": 13,
+      "execution_backed": true,
+      "final_fk_ok": true,
+      "missing": [],
+      "status": "passed",
+      "transform_group_id": "WO002-R06-identity-crosswalk-reference_data_load_history",
+      "unit_id": "MU24"
+    },
+    {
+      "assertions": 8,
+      "execution_backed": true,
+      "final_fk_ok": true,
+      "missing": [],
+      "status": "passed",
+      "transform_group_id": "WO002-R06-identity-crosswalk-reference_data_loads",
+      "unit_id": "MU25"
+    },
+    {
+      "assertions": 11,
+      "execution_backed": true,
+      "final_fk_ok": true,
+      "missing": [],
+      "status": "passed",
+      "transform_group_id": "WO002-R06-identity-crosswalk-roads",
+      "unit_id": "MU26"
+    },
+    {
+      "assertions": 11,
+      "execution_backed": true,
+      "final_fk_ok": true,
+      "missing": [],
+      "status": "passed",
+      "transform_group_id": "WO002-R06-identity-crosswalk-territories",
+      "unit_id": "MU27"
+    },
+    {
+      "assertions": 5,
+      "execution_backed": true,
+      "final_fk_ok": true,
+      "missing": [],
+      "status": "passed",
+      "transform_group_id": "WO002-R06-identity-crosswalk-users",
+      "unit_id": "MU28"
+    },
+    {
+      "assertions": 5,
+      "execution_backed": true,
+      "final_fk_ok": true,
+      "missing": [],
+      "status": "passed",
+      "transform_group_id": "WO002-R06-name-record-address_record_events",
+      "unit_id": "MU29"
+    },
+    {
+      "assertions": 5,
+      "execution_backed": true,
+      "final_fk_ok": true,
+      "missing": [],
+      "status": "passed",
+      "transform_group_id": "WO002-R06-name-record-address_records",
+      "unit_id": "MU30"
+    },
+    {
+      "assertions": 10,
+      "execution_backed": true,
+      "final_fk_ok": true,
+      "missing": [],
+      "status": "passed",
+      "transform_group_id": "WO002-R06-name-record-admin_units",
+      "unit_id": "MU31"
+    },
+    {
+      "assertions": 5,
+      "execution_backed": true,
+      "final_fk_ok": true,
+      "missing": [],
+      "status": "passed",
+      "transform_group_id": "WO002-R06-name-record-audit_logs",
+      "unit_id": "MU32"
+    },
+    {
+      "assertions": 5,
+      "execution_backed": true,
+      "final_fk_ok": true,
+      "missing": [],
+      "status": "passed",
+      "transform_group_id": "WO002-R06-name-record-buildings",
+      "unit_id": "MU33"
+    },
+    {
+      "assertions": 30,
+      "execution_backed": true,
+      "final_fk_ok": true,
+      "missing": [],
+      "status": "passed",
+      "transform_group_id": "WO002-R06-name-record-citizen_geotag_submissions",
+      "unit_id": "MU34"
+    },
+    {
+      "assertions": 5,
+      "execution_backed": true,
+      "final_fk_ok": true,
+      "missing": [],
+      "status": "passed",
+      "transform_group_id": "WO002-R06-name-record-development_fixture_records",
+      "unit_id": "MU35"
+    },
+    {
+      "assertions": 5,
+      "execution_backed": true,
+      "final_fk_ok": true,
+      "missing": [],
+      "status": "passed",
+      "transform_group_id": "WO002-R06-name-record-field_submissions",
+      "unit_id": "MU36"
+    },
+    {
+      "assertions": 10,
+      "execution_backed": true,
+      "final_fk_ok": true,
+      "missing": [],
+      "status": "passed",
+      "transform_group_id": "WO002-R06-name-record-import_jobs",
+      "unit_id": "MU37"
+    },
+    {
+      "assertions": 5,
+      "execution_backed": true,
+      "final_fk_ok": true,
+      "missing": [],
+      "status": "passed",
+      "transform_group_id": "WO002-R06-name-record-import_rows",
+      "unit_id": "MU38"
+    },
+    {
+      "assertions": 5,
+      "execution_backed": true,
+      "final_fk_ok": true,
+      "missing": [],
+      "status": "passed",
+      "transform_group_id": "WO002-R06-name-record-provinces",
+      "unit_id": "MU39"
+    },
+    {
+      "assertions": 5,
+      "execution_backed": true,
+      "final_fk_ok": true,
+      "missing": [],
+      "status": "passed",
+      "transform_group_id": "WO002-R06-name-record-publication_packs",
+      "unit_id": "MU40"
+    },
+    {
+      "assertions": 5,
+      "execution_backed": true,
+      "final_fk_ok": true,
+      "missing": [],
+      "status": "passed",
+      "transform_group_id": "WO002-R06-name-record-roads",
+      "unit_id": "MU41"
+    },
+    {
+      "assertions": 5,
+      "execution_backed": true,
+      "final_fk_ok": true,
+      "missing": [],
+      "status": "passed",
+      "transform_group_id": "WO002-R06-name-record-territories",
+      "unit_id": "MU42"
+    },
+    {
+      "assertions": 10,
+      "execution_backed": true,
+      "final_fk_ok": true,
+      "missing": [],
+      "status": "passed",
+      "transform_group_id": "WO002-R06-name-record-users",
+      "unit_id": "MU43"
+    },
+    {
+      "assertions": 5,
+      "execution_backed": true,
+      "final_fk_ok": true,
+      "missing": [],
+      "status": "passed",
+      "transform_group_id": "WO002-R06-public-code-alias-addresses",
+      "unit_id": "MU44"
+    },
+    {
+      "assertions": 5,
+      "execution_backed": true,
+      "final_fk_ok": true,
+      "missing": [],
+      "status": "passed",
+      "transform_group_id": "WO002-R06-public-code-alias-admin_units",
+      "unit_id": "MU45"
+    },
+    {
+      "assertions": 5,
+      "execution_backed": true,
+      "final_fk_ok": true,
+      "missing": [],
+      "status": "passed",
+      "transform_group_id": "WO002-R06-public-code-alias-provinces",
+      "unit_id": "MU46"
+    },
+    {
+      "assertions": 10,
+      "execution_backed": true,
+      "final_fk_ok": true,
+      "missing": [],
+      "status": "passed",
+      "transform_group_id": "WO002-R06-recorded-time-address_corrections",
+      "unit_id": "MU47"
+    },
+    {
+      "assertions": 10,
+      "execution_backed": true,
+      "final_fk_ok": true,
+      "missing": [],
+      "status": "passed",
+      "transform_group_id": "WO002-R06-recorded-time-address_points",
+      "unit_id": "MU48"
+    },
+    {
+      "assertions": 5,
+      "execution_backed": true,
+      "final_fk_ok": true,
+      "missing": [],
+      "status": "passed",
+      "transform_group_id": "WO002-R06-recorded-time-address_record_events",
+      "unit_id": "MU49"
+    },
+    {
+      "assertions": 10,
+      "execution_backed": true,
+      "final_fk_ok": true,
+      "missing": [],
+      "status": "passed",
+      "transform_group_id": "WO002-R06-recorded-time-address_records",
+      "unit_id": "MU50"
+    },
+    {
+      "assertions": 10,
+      "execution_backed": true,
+      "final_fk_ok": true,
+      "missing": [],
+      "status": "passed",
+      "transform_group_id": "WO002-R06-recorded-time-addresses",
+      "unit_id": "MU51"
+    },
+    {
+      "assertions": 10,
+      "execution_backed": true,
+      "final_fk_ok": true,
+      "missing": [],
+      "status": "passed",
+      "transform_group_id": "WO002-R06-recorded-time-admin_units",
+      "unit_id": "MU52"
+    },
+    {
+      "assertions": 5,
+      "execution_backed": true,
+      "final_fk_ok": true,
+      "missing": [],
+      "status": "passed",
+      "transform_group_id": "WO002-R06-recorded-time-audit_logs",
+      "unit_id": "MU53"
+    },
+    {
+      "assertions": 20,
+      "execution_backed": true,
+      "final_fk_ok": true,
+      "missing": [],
+      "status": "passed",
+      "transform_group_id": "WO002-R06-recorded-time-auth_tokens",
+      "unit_id": "MU54"
+    },
+    {
+      "assertions": 10,
+      "execution_backed": true,
+      "final_fk_ok": true,
+      "missing": [],
+      "status": "passed",
+      "transform_group_id": "WO002-R06-recorded-time-buildings",
+      "unit_id": "MU55"
+    },
+    {
+      "assertions": 20,
+      "execution_backed": true,
+      "final_fk_ok": true,
+      "missing": [],
+      "status": "passed",
+      "transform_group_id": "WO002-R06-recorded-time-citizen_geotag_submissions",
+      "unit_id": "MU56"
+    },
+    {
+      "assertions": 10,
+      "execution_backed": true,
+      "final_fk_ok": true,
+      "missing": [],
+      "status": "passed",
+      "transform_group_id": "WO002-R06-recorded-time-development_fixture_batches",
+      "unit_id": "MU57"
+    },
+    {
+      "assertions": 10,
+      "execution_backed": true,
+      "final_fk_ok": true,
+      "missing": [],
+      "status": "passed",
+      "transform_group_id": "WO002-R06-recorded-time-development_fixture_records",
+      "unit_id": "MU58"
+    },
+    {
+      "assertions": 5,
+      "execution_backed": true,
+      "final_fk_ok": true,
+      "missing": [],
+      "status": "passed",
+      "transform_group_id": "WO002-R06-recorded-time-field_assignments",
+      "unit_id": "MU59"
+    },
+    {
+      "assertions": 15,
+      "execution_backed": true,
+      "final_fk_ok": true,
+      "missing": [],
+      "status": "passed",
+      "transform_group_id": "WO002-R06-recorded-time-field_submissions",
+      "unit_id": "MU60"
+    },
+    {
+      "assertions": 10,
+      "execution_backed": true,
+      "final_fk_ok": true,
+      "missing": [],
+      "status": "passed",
+      "transform_group_id": "WO002-R06-recorded-time-import_jobs",
+      "unit_id": "MU61"
+    },
+    {
+      "assertions": 5,
+      "execution_backed": true,
+      "final_fk_ok": true,
+      "missing": [],
+      "status": "passed",
+      "transform_group_id": "WO002-R06-recorded-time-provinces",
+      "unit_id": "MU62"
+    },
+    {
+      "assertions": 10,
+      "execution_backed": true,
+      "final_fk_ok": true,
+      "missing": [],
+      "status": "passed",
+      "transform_group_id": "WO002-R06-recorded-time-publication_packs",
+      "unit_id": "MU63"
+    },
+    {
+      "assertions": 5,
+      "execution_backed": true,
+      "final_fk_ok": true,
+      "missing": [],
+      "status": "passed",
+      "transform_group_id": "WO002-R06-recorded-time-reference_data_load_history",
+      "unit_id": "MU64"
+    },
+    {
+      "assertions": 5,
+      "execution_backed": true,
+      "final_fk_ok": true,
+      "missing": [],
+      "status": "passed",
+      "transform_group_id": "WO002-R06-recorded-time-reference_data_loads",
+      "unit_id": "MU65"
+    },
+    {
+      "assertions": 10,
+      "execution_backed": true,
+      "final_fk_ok": true,
+      "missing": [],
+      "status": "passed",
+      "transform_group_id": "WO002-R06-recorded-time-roads",
+      "unit_id": "MU66"
+    },
+    {
+      "assertions": 10,
+      "execution_backed": true,
+      "final_fk_ok": true,
+      "missing": [],
+      "status": "passed",
+      "transform_group_id": "WO002-R06-recorded-time-territories",
+      "unit_id": "MU67"
+    },
+    {
+      "assertions": 5,
+      "execution_backed": true,
+      "final_fk_ok": true,
+      "missing": [],
+      "status": "passed",
+      "transform_group_id": "WO002-R06-recorded-time-users",
+      "unit_id": "MU68"
+    },
+    {
+      "assertions": 6,
+      "execution_backed": true,
+      "final_fk_ok": true,
+      "missing": [],
+      "status": "passed",
+      "transform_group_id": "WO002-R06-source-archive-address_corrections",
+      "unit_id": "MU69"
+    },
+    {
+      "assertions": 12,
+      "execution_backed": true,
+      "final_fk_ok": true,
+      "missing": [],
+      "status": "passed",
+      "transform_group_id": "WO002-R06-source-archive-address_points",
+      "unit_id": "MU70"
+    },
+    {
+      "assertions": 18,
+      "execution_backed": true,
+      "final_fk_ok": true,
+      "missing": [],
+      "status": "passed",
+      "transform_group_id": "WO002-R06-source-archive-address_record_events",
+      "unit_id": "MU71"
+    },
+    {
+      "assertions": 49,
+      "execution_backed": true,
+      "final_fk_ok": true,
+      "missing": [],
+      "status": "passed",
+      "transform_group_id": "WO002-R06-source-archive-address_records",
+      "unit_id": "MU72"
+    },
+    {
+      "assertions": 49,
+      "execution_backed": true,
+      "final_fk_ok": true,
+      "missing": [],
+      "status": "passed",
+      "transform_group_id": "WO002-R06-source-archive-addresses",
+      "unit_id": "MU73"
+    },
+    {
+      "assertions": 25,
+      "execution_backed": true,
+      "final_fk_ok": true,
+      "missing": [],
+      "status": "passed",
+      "transform_group_id": "WO002-R06-source-archive-admin_units",
+      "unit_id": "MU74"
+    },
+    {
+      "assertions": 24,
+      "execution_backed": true,
+      "final_fk_ok": true,
+      "missing": [],
+      "status": "passed",
+      "transform_group_id": "WO002-R06-source-archive-audit_logs",
+      "unit_id": "MU75"
+    },
+    {
+      "assertions": 6,
+      "execution_backed": true,
+      "final_fk_ok": true,
+      "missing": [],
+      "status": "passed",
+      "transform_group_id": "WO002-R06-source-archive-auth_tokens",
+      "unit_id": "MU76"
+    },
+    {
+      "assertions": 24,
+      "execution_backed": true,
+      "final_fk_ok": true,
+      "missing": [],
+      "status": "passed",
+      "transform_group_id": "WO002-R06-source-archive-buildings",
+      "unit_id": "MU77"
+    },
+    {
+      "assertions": 102,
+      "execution_backed": true,
+      "final_fk_ok": true,
+      "missing": [],
+      "status": "passed",
+      "transform_group_id": "WO002-R06-source-archive-citizen_geotag_submissions",
+      "unit_id": "MU78"
+    },
+    {
+      "assertions": 18,
+      "execution_backed": true,
+      "final_fk_ok": true,
+      "missing": [],
+      "status": "passed",
+      "transform_group_id": "WO002-R06-source-archive-development_fixture_batches",
+      "unit_id": "MU79"
+    },
+    {
+      "assertions": 24,
+      "execution_backed": true,
+      "final_fk_ok": true,
+      "missing": [],
+      "status": "passed",
+      "transform_group_id": "WO002-R06-source-archive-field_assignments",
+      "unit_id": "MU80"
+    },
+    {
+      "assertions": 36,
+      "execution_backed": true,
+      "final_fk_ok": true,
+      "missing": [],
+      "status": "passed",
+      "transform_group_id": "WO002-R06-source-archive-field_submissions",
+      "unit_id": "MU81"
+    },
+    {
+      "assertions": 12,
+      "execution_backed": true,
+      "final_fk_ok": true,
+      "missing": [],
+      "status": "passed",
+      "transform_group_id": "WO002-R06-source-archive-import_jobs",
+      "unit_id": "MU82"
+    },
+    {
+      "assertions": 36,
+      "execution_backed": true,
+      "final_fk_ok": true,
+      "missing": [],
+      "status": "passed",
+      "transform_group_id": "WO002-R06-source-archive-import_rows",
+      "unit_id": "MU83"
+    },
+    {
+      "assertions": 12,
+      "execution_backed": true,
+      "final_fk_ok": true,
+      "missing": [],
+      "status": "passed",
+      "transform_group_id": "WO002-R06-source-archive-publication_packs",
+      "unit_id": "MU84"
+    },
+    {
+      "assertions": 30,
+      "execution_backed": true,
+      "final_fk_ok": true,
+      "missing": [],
+      "status": "passed",
+      "transform_group_id": "WO002-R06-source-archive-reference_data_load_history",
+      "unit_id": "MU85"
+    },
+    {
+      "assertions": 30,
+      "execution_backed": true,
+      "final_fk_ok": true,
+      "missing": [],
+      "status": "passed",
+      "transform_group_id": "WO002-R06-source-archive-reference_data_loads",
+      "unit_id": "MU86"
+    },
+    {
+      "assertions": 24,
+      "execution_backed": true,
+      "final_fk_ok": true,
+      "missing": [],
+      "status": "passed",
+      "transform_group_id": "WO002-R06-source-archive-roads",
+      "unit_id": "MU87"
+    },
+    {
+      "assertions": 30,
+      "execution_backed": true,
+      "final_fk_ok": true,
+      "missing": [],
+      "status": "passed",
+      "transform_group_id": "WO002-R06-source-archive-schema_migrations",
+      "unit_id": "MU88"
+    },
+    {
+      "assertions": 25,
+      "execution_backed": true,
+      "final_fk_ok": true,
+      "missing": [],
+      "status": "passed",
+      "transform_group_id": "WO002-R06-source-archive-territories",
+      "unit_id": "MU89"
+    },
+    {
+      "assertions": 18,
+      "execution_backed": true,
+      "final_fk_ok": true,
+      "missing": [],
+      "status": "passed",
+      "transform_group_id": "WO002-R06-source-archive-users",
+      "unit_id": "MU90"
+    }
+  ],
+  "summary": {
+    "adr_rows": 5,
+    "convergence_units": 90,
+    "errors": [],
+    "execution_mode": "review09-f09-f11-revalidation-after-independent-suites",
+    "f02_execution_mode": "review09-independent-source-expected-transform-execution",
+    "f02_idempotency": "passed",
+    "f04_f07_status": "passed",
+    "f08_status": "passed",
+    "f10_status": "passed",
+    "f12_status": "passed",
+    "status": "passed",
+    "units_passed": 90
+  }
+}

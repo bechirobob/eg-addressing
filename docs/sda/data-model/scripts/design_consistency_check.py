@@ -68,6 +68,7 @@ api_projection_summary = api_projection_assertions.get("summary", {}) if isinsta
 semantic_mutation_report = load_json("docs/sda/data-model/semantic-mutation-test-report.json")
 integrity_report = load_json("docs/sda/data-model/review08-f04-f07-integrity-report.json")
 reconciliation_report = load_json("docs/sda/data-model/review08-f09-f11-reconciliation-report.json")
+review09_reconciliation_report = load_json("docs/sda/data-model/review09-f09-f11-reconciliation-report.json")
 review09_scenario_report = load_json("docs/sda/data-model/review09-scenario-comparison-report.json")
 review09_f04_f07_suite = load_json("docs/sda/data-model/review09-f04-f07-executed-test-suite.json")
 review09_f04_report = load_json("docs/sda/data-model/review09-f04-record-role-execution-report.json")
@@ -272,6 +273,8 @@ for unit in reviewed_units if isinstance(reviewed_units, list) else []:
 
 reconciliation_summary = reconciliation_report.get("summary", {}) if isinstance(reconciliation_report, dict) else {}
 gate("F09-F11-review08-reconciliation-passed", "F09/F11", reconciliation_summary.get("execution_mode") == "review08-f09-f11-revalidation" and reconciliation_summary.get("status") == "passed" and reconciliation_summary.get("units_passed") == len(reviewed_units) and reconciliation_summary.get("errors") == [], "F09/F11 reconciliation must revalidate convergence units and ADR evidence after Review 08 executable guarantees", "docs/sda/data-model/review08-f09-f11-reconciliation-report.json")
+review09_reconciliation_summary = review09_reconciliation_report.get("summary", {}) if isinstance(review09_reconciliation_report, dict) else {}
+gate("F09-F11-review09-reconciliation-passed", "F09/F11", review09_reconciliation_summary.get("execution_mode") == "review09-f09-f11-revalidation-after-independent-suites" and review09_reconciliation_summary.get("status") == "passed" and review09_reconciliation_summary.get("units_passed") == len(reviewed_units) and review09_reconciliation_summary.get("errors") == [] and review09_reconciliation_summary.get("f02_execution_mode") == "review09-independent-source-expected-transform-execution" and review09_reconciliation_summary.get("f02_idempotency") == "passed" and review09_reconciliation_summary.get("f04_f07_status") == "passed" and review09_reconciliation_summary.get("f08_status") == "passed" and review09_reconciliation_summary.get("f10_status") == "passed" and review09_reconciliation_summary.get("f12_status") == "passed", "F09/F11 Review 09 reconciliation must run only after independent F02/F04-F10/F12 suites pass", "docs/sda/data-model/review09-f09-f11-reconciliation-report.json")
 
 # OpenAPI field coverage and auth policy.
 ops = openapi_ops.get("operations", []) if isinstance(openapi_ops, dict) else []
