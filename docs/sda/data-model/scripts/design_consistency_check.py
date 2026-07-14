@@ -45,6 +45,7 @@ def read(rel: str) -> str:
 
 model = load_json("docs/sda/data-model/target-model.json")
 registry = load_json("docs/sda/data-model/transformation-registry.json")
+reviewed_registry = load_json("docs/sda/data-model/transformation-registry-reviewed.json")
 cat = load_json("docs/sda/data-model/current-pg-catalog.json")
 openapi_ops = load_json("docs/sda/data-model/openapi-operation-inventory.json")
 target_catalog = load_json("docs/sda/data-model/target-schema-catalog.json")
@@ -86,7 +87,26 @@ if not current_fields:
     err("pg_catalog current field inventory is empty")
 if len(registry) != len(current_fields):
     err(f"transformation registry rows {len(registry)} != current fields {len(current_fields)}")
+if len(reviewed_registry) != len(current_fields):
+    err(f"reviewed transformation source rows {len(reviewed_registry)} != current fields {len(current_fields)}")
+if isinstance(registry, list) and isinstance(reviewed_registry, list):
+    if sorted(r.get("current") for r in registry) != sorted(r.get("current") for r in reviewed_registry):
+        err("generated transformation registry does not match reviewed source current-field set")
+pipeline_text = read("docs/sda/data-model/scripts/review04_design_pipeline.py")
+if "def map_target_for(" in pipeline_text:
+    err("pipeline still contains map_target_for fallback function")
+for forbidden in ["all IDs to crosswalk", "everything else to raw archive", "return \"source_payload_archive.payload_uri\", \"governed-archive/compatibility\""]:
+    if forbidden in pipeline_text:
+        err(f"pipeline still contains broad fallback marker: {forbidden}")
 allowed_dispositions = {"typed-transform", "structured-transform", "controlled-translation", "governed-archive", "formal-exception", "migration-ledger"}
+review_required_keys = {"source_row_key", "source_value_semantics", "target_rows_fields", "target_id_generation", "archive_object", "authority_prerequisite", "exception_type_owner", "no_loss_proof", "review_status", "review_owner", "review_decision_id"}
+for row in reviewed_registry if isinstance(reviewed_registry, list) else []:
+    current = row.get("current")
+    if row.get("review_status") not in {"approved-review04-remediation", "approved-manual-exception"}:
+        err(f"{current} is not consciously approved in reviewed transformation source")
+    missing_review = sorted(k for k in review_required_keys if not row.get(k))
+    if missing_review:
+        err(f"{current} missing reviewed transformation keys {missing_review}")
 for row in registry if isinstance(registry, list) else []:
     current = row.get("current")
     target = row.get("target")

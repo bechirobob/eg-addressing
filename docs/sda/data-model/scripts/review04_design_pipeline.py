@@ -512,98 +512,90 @@ def primary_field(entity: str, meta: dict[str, Any]) -> str:
     return fields[0]
 
 
-def map_target_for(table: str, field: str, model: dict[str, Any]) -> tuple[str, str, str]:
-    """Return target, disposition, transformation_kind. Explicit per-field logic, no table-wide fallback."""
-    current = f"{table}.{field}"
-    # Security/control tables are preserved as governed archive/compatibility, not canonicalized.
-    if table in {"users", "auth_tokens", "audit_logs", "development_fixture_batches", "development_fixture_records"}:
-        return "source_payload_archive.payload_uri", "governed-archive/security-compatibility", "archive-restricted-raw-value"
-    explicit: dict[str, tuple[str, str, str]] = {
-        "schema_migrations.version": ("source_record.source_record_id", "migration-ledger", "ledger-crosswalk"),
-        "schema_migrations.filename": ("source_record.source_name", "migration-ledger", "copy"),
-        "schema_migrations.checksum": ("source_record.raw_payload_hash", "migration-ledger", "copy-integrity-hash"),
-        "schema_migrations.applied_at": ("source_record.recorded_at", "migration-ledger", "copy"),
-        "schema_migrations.execution_context": ("source_payload_archive.payload_uri", "governed-archive", "archive-json-payload"),
-        "address_records.id": ("legacy_crosswalk.legacy_id", "typed-transform", "preserve legacy id in crosswalk; generate new ULID location_record_id"),
-        "address_records.address_code": ("public_code_alias.public_code", "typed-transform", "copy only after release-authority check; otherwise exception"),
-        "address_records.address_label": ("name_record.name_value", "typed-transform", "copy as candidate/official name depending authority"),
-        "address_records.latitude": ("geometry_observation.observed_geom", "structured-transform", "combine latitude+longitude into Point SRID 4326"),
-        "address_records.longitude": ("geometry_observation.observed_geom", "structured-transform", "combine latitude+longitude into Point SRID 4326"),
-        "address_records.geom": ("geometry_version.geom", "typed-transform", "preserve approved geometry if valid"),
-        "address_records.source_submission_id": ("source_record.external_reference", "typed-transform", "crosswalk to source submission"),
-        "address_records.is_archived": ("location_record_version.lifecycle_state", "controlled-translation", "false->active; true->retired with required decision exception if timestamp absent"),
-        "address_records.publication_state": ("publication_release_item.release_item_state", "controlled-translation", "only with publication authority; otherwise migration_exception"),
-        "citizen_geotag_submissions.citizen_name": ("source_payload_archive.payload_uri", "governed-archive/restricted", "encrypt and archive raw; expose masked metadata only"),
-        "citizen_geotag_submissions.citizen_contact": ("source_payload_archive.payload_uri", "governed-archive/restricted", "encrypt and archive raw; expose masked metadata only"),
-        "citizen_geotag_submissions.dip_last4": ("source_payload_archive.payload_uri", "governed-archive/highly-restricted", "archive restricted identity fragment with access policy"),
-        "citizen_geotag_submissions.field_note": ("evidence_record.evidence_summary", "typed-transform", "preserve note text as restricted evidence summary, not classification"),
-        "address_corrections.reviewer_note": ("correction_case.resolution_summary", "typed-transform", "preserve reviewer note in case narrative"),
-        "address_corrections.updated_at": ("decision_event.recorded_at", "typed-transform", "copy as recorded update event; not resolved_at unless resolved status"),
+def reviewed_registry_path() -> Path:
+    return DM / "transformation-registry-reviewed.json"
+
+
+def load_reviewed_transform_registry(cat: dict[str, Any], model: dict[str, Any]) -> list[dict[str, Any]]:
+    """Load the review-owned registry and reject unapproved/missing current fields.
+
+    Review 04 explicitly rejected broad fallback generation. This registry is now
+    the source of authority. The pipeline may enrich rows with live pg_catalog
+    metadata, but it may not choose a target for an unknown field.
+    """
+    path = reviewed_registry_path()
+    if not path.exists():
+        raise SystemExit("transformation-registry-reviewed.json is required; CI must not synthesize fallback mappings")
+    registry = json.loads(path.read_text(encoding="utf-8"))
+    if not isinstance(registry, list):
+        raise SystemExit("transformation-registry-reviewed.json must be a list of reviewed rows")
+    current_columns: dict[str, dict[str, Any]] = {}
+    for table, meta in sorted(cat["tables"].items()):
+        for col in meta["columns"]:
+            current_columns[f"{table}.{col['column_name']}"] = col
+    target_fields = target_field_index(model)
+    required_keys = {
+        "current", "source_row_key", "source_keys", "source_value_semantics",
+        "target", "target_rows_fields", "target_id_generation",
+        "value_preservation", "controlled_value_translation", "archive_object",
+        "authority_prerequisite", "authority", "exception_type_owner",
+        "exception_handling", "validation_sql", "no_loss_proof",
+        "compatibility_period", "retirement_condition", "classification",
+        "review_status", "review_owner", "review_decision_id",
     }
-    if current in explicit:
-        return explicit[current]
-    # Field-by-field semantic target selection. Every row still carries its own source key and rules.
-    f = field.lower()
-    if f in {"id", "assignment_id", "job_id", "publication_pack_id", "address_id"} or f.endswith("_id"):
-        return "legacy_crosswalk.legacy_id", "typed-transform", "preserve legacy id; generate target id; record crosswalk"
-    if "status" in f or f in {"readiness", "publication_state", "validation_status", "review_status", "field_status"}:
-        return "migration_exception.exception_type", "controlled-translation", "translate via registry; unknown values create exception"
-    if f in {"latitude", "longitude", "accuracy_meters"}:
-        return "geometry_observation.observed_geom", "structured-transform", "combine coordinate/accuracy fields into geometry observation"
-    if "geom" in f or "spatial" in f:
-        return "geometry_observation.observed_geom", "structured-transform", "validate SRID/type and preserve raw evidence"
-    if "name" in f or "label" in f or "formatted" in f:
-        return "name_record.name_value", "typed-transform", "preserve multilingual/display/search name with name_kind/status"
-    if "code" in f:
-        if table in {"admin_units", "provinces", "territories"}:
-            return "administrative_code_history.official_code", "typed-transform", "copy into effective-dated administrative code history"
-        return "public_code_alias.public_code", "typed-transform", "copy into public alias only after release-authority approval"
-    if f.endswith("_at") or f in {"created_at", "updated_at"}:
-        return "decision_event.recorded_at", "typed-transform", "preserve as recorded event timestamp"
-    if "note" in f or "evidence" in f or "payload" in f or "details" in f:
-        return "evidence_record.evidence_summary", "governed-archive/restricted", "archive raw value and summarize safely"
-    return "source_payload_archive.payload_uri", "governed-archive/compatibility", "preserve raw current value in controlled source archive"
+    allowed_dispositions = {"typed-transform", "structured-transform", "controlled-translation", "governed-archive", "formal-exception", "migration-ledger"}
+    seen: set[str] = set()
+    errors: list[str] = []
+    enriched: list[dict[str, Any]] = []
+    for row in registry:
+        if not isinstance(row, dict):
+            errors.append("registry contains non-object row")
+            continue
+        current = row.get("current")
+        if not current:
+            errors.append("registry row missing current")
+            continue
+        if current in seen:
+            errors.append(f"duplicate reviewed transformation row for {current}")
+        seen.add(current)
+        missing = sorted(required_keys - set(row))
+        if missing:
+            errors.append(f"{current} missing reviewed keys {missing}")
+        if row.get("review_status") not in {"approved-review04-remediation", "approved-manual-exception"}:
+            errors.append(f"{current} is not consciously approved")
+        if row.get("disposition") not in allowed_dispositions:
+            errors.append(f"{current} has invalid disposition {row.get('disposition')}")
+        if current not in current_columns:
+            errors.append(f"{current} no longer exists in pg_catalog current inventory")
+            continue
+        target = row.get("target")
+        if target not in target_fields:
+            errors.append(f"{current} target {target} not in typed target registry")
+        if not str(row.get("validation_sql", "")).strip().lower().startswith("select"):
+            errors.append(f"{current} validation_sql must be executable/read-only SELECT")
+        if row.get("disposition") == "formal-exception" and "owner" not in str(row.get("exception_type_owner", "")).lower():
+            errors.append(f"{current} formal exception lacks owner")
+        col = current_columns[current]
+        enriched_row = dict(row)
+        enriched_row["current_pg_type"] = col["data_type"]
+        enriched_row["current_udt"] = col["udt_name"]
+        enriched_row["nullable"] = col["is_nullable"] == "YES"
+        enriched_row["default"] = col["column_default"]
+        enriched.append(enriched_row)
+    missing_current = sorted(set(current_columns) - seen)
+    if missing_current:
+        errors.extend(f"pg_catalog current field lacks reviewed transformation: {f}" for f in missing_current)
+    if errors:
+        raise SystemExit("reviewed transformation registry failed:\n- " + "\n- ".join(errors[:80]))
+    return sorted(enriched, key=lambda r: r["current"])
 
 
 def build_transform_registry(cat: dict[str, Any], model: dict[str, Any]) -> list[dict[str, Any]]:
-    fields = target_field_index(model)
-    registry = []
-    for table, meta in sorted(cat["tables"].items()):
-        for col in meta["columns"]:
-            current = f"{table}.{col['column_name']}"
-            target, disposition, kind = map_target_for(table, col["column_name"], model)
-            if target not in fields and not target.startswith("source_record.raw_payload"):
-                # Formal exceptions are still explicit target/disposition rows.
-                target = "migration_exception.migration_exception_id"
-                disposition = "formal-exception"
-                kind = f"target-review-required for {current}"
-            classification = classify_current(table, col["column_name"])
-            registry.append({
-                "current": current,
-                "source_keys": [current],
-                "current_pg_type": col["data_type"],
-                "current_udt": col["udt_name"],
-                "nullable": col["is_nullable"] == "YES",
-                "default": col["column_default"],
-                "target": target,
-                "target_ids_and_crosswalks": "Generate target ULID where target owns identity; always store legacy table/field/pk in legacy_crosswalk for reversible lookup.",
-                "value_preservation": "copy typed value" if "archive" not in disposition else "store raw restricted value in source_payload_archive.payload_uri plus hash; hash alone is not the archive",
-                "controlled_value_translation": controlled_translation_rule(col["column_name"]),
-                "authority": authority_for(table, col["column_name"]),
-                "classification": classification,
-                "disposition": disposition.split("/", 1)[0],
-                "disposition_detail": disposition,
-                "transformation_kind": kind,
-                "exception_handling": "write migration_exception with source key, reason, proposed target and required owner decision; do not silently drop or fabricate",
-                "validation_sql": validation_sql_for(current, target, col),
-                "compatibility_period": "dual-read/compatibility projection until WO-002B cutover gate validates zero unmapped required fields and approved exception backlog",
-                "retirement_condition": "retire current field dependency after app version NLI-WO-002B+2 reads canonical target and legacy crosswalk/archive audit passes",
-                "loss_risk": "none when archive/crosswalk exists; authority exception required for non-reconstructable derived states",
-            })
+    registry = load_reviewed_transform_registry(cat, model)
     write_json("docs/sda/data-model/transformation-registry.json", registry)
     write_json("docs/sda/data-model/current-to-target-mapping.json", registry)
-    rows = [[r["current"], r["source_keys"], r["target"], r["transformation_kind"], r["value_preservation"], r["controlled_value_translation"], r["authority"], r["classification"], r["exception_handling"], r["validation_sql"], r["compatibility_period"], r["retirement_condition"]] for r in registry]
-    text = "# Current-to-Target Transformation Registry\n\nHand-reviewed typed transformation registry for every current pg_catalog field. Table-wide/default mapping dictionaries are not used as authority; each row states source keys, target/crosswalk behavior, preservation, controlled translation, owner, exception handling, validation SQL, compatibility and retirement.\n\n" + md_table(["Current field", "Source keys", "Target/disposition", "Transformation", "Value preservation", "Controlled-value translation", "Authority", "Classification", "Exception handling", "Validation SQL", "Compatibility", "Retirement"], rows)
+    rows = [[r["current"], r["source_keys"], r["source_value_semantics"], r["target"], r["target_id_generation"], r["value_preservation"], r["controlled_value_translation"], r["archive_object"], r["authority_prerequisite"], r["classification"], r["exception_type_owner"], r["validation_sql"], r["no_loss_proof"], r["compatibility_period"], r["retirement_condition"], r["review_decision_id"]] for r in registry]
+    text = "# Current-to-Target Transformation Registry\n\nReview-owned typed transformation registry for every current pg_catalog field. Unknown current fields fail CI; the pipeline does not manufacture default mappings. Each row states source semantics, source keys, exact targets/crosswalks, value preservation, controlled translation, authority, exception handling, validation SQL and no-loss proof.\n\n" + md_table(["Current field", "Source keys", "Source value semantics", "Target field", "Target ID/crosswalk", "Value preservation", "Controlled-value translation", "Archive object", "Authority prerequisite", "Classification", "Exception owner/handling", "Validation SQL", "No-loss proof", "Compatibility", "Retirement", "Review decision"], rows)
     write("docs/sda/data-model/current-to-target-mapping.md", text)
     return registry
 
