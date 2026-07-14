@@ -1,445 +1,83 @@
 {
   "expected": {
-    "entity_counts": {
-      "administrative_code_history": 1,
-      "administrative_unit": 1,
-      "administrative_unit_version": 1,
-      "building": 1,
-      "building_primary_entrance": 1,
-      "correction_case": 1,
-      "country": 1,
-      "decision_event": 1,
-      "dispute_case": 1,
-      "entrance": 1,
-      "evidence_object": 1,
-      "field_assignment": 1,
-      "field_observation": 1,
-      "geometry_observation": 1,
-      "geometry_quality_assessment": 1,
-      "geometry_transformation": 1,
-      "geometry_version": 1,
-      "intake_case": 1,
-      "landmark": 1,
-      "legacy_crosswalk": 1,
-      "licence": 1,
-      "locality": 1,
-      "location_record": 3,
-      "location_record_assertion": 1,
-      "location_record_object_link": 5,
-      "location_record_relationship": 1,
-      "location_record_version": 3,
-      "migration_exception": 1,
-      "name_record": 1,
-      "non_building_object": 1,
-      "operational_area": 1,
-      "operational_area_coverage": 1,
-      "parcel_reference": 1,
-      "partner_projection": 1,
-      "public_code_alias": 2,
-      "publication_release": 1,
-      "publication_release_item": 2,
-      "registry_subject": 4,
-      "road": 1,
-      "road_segment": 1,
-      "source_authority": 1,
-      "source_package": 1,
-      "source_payload_archive": 1,
-      "source_record": 1,
-      "unit": 2
-    },
-    "entity_ids": {
-      "administrative_code_history": [
-        "multi-unit-building-administrative_code_history-03"
-      ],
-      "administrative_unit": [
-        "multi-unit-building-administrative_unit-03"
-      ],
-      "administrative_unit_version": [
-        "multi-unit-building-administrative_unit_version-03"
-      ],
-      "building": [
-        "multi-unit-building-building-03"
-      ],
-      "building_primary_entrance": [
-        "multi-unit-building-building_primary_entrance-03"
-      ],
-      "correction_case": [
-        "multi-unit-building-correction_case-03"
-      ],
-      "country": [
-        "multi-unit-building-country-03"
-      ],
-      "decision_event": [
-        "multi-unit-building-decision_event-03"
-      ],
-      "dispute_case": [
-        "multi-unit-building-dispute_case-03"
-      ],
-      "entrance": [
-        "multi-unit-building-entrance-03"
-      ],
-      "evidence_object": [
-        "multi-unit-building-evidence_object-03"
-      ],
-      "field_assignment": [
-        "multi-unit-building-field_assignment-03"
-      ],
-      "field_observation": [
-        "multi-unit-building-field_observation-03"
-      ],
-      "geometry_observation": [
-        "multi-unit-building-geometry_observation-03"
-      ],
-      "geometry_quality_assessment": [
-        "multi-unit-building-geometry_quality_assessment-03"
-      ],
-      "geometry_transformation": [
-        "multi-unit-building-geometry_transformation-03"
-      ],
-      "geometry_version": [
-        "multi-unit-building-geometry_version-03"
-      ],
-      "intake_case": [
-        "multi-unit-building-intake_case-03"
-      ],
-      "landmark": [
-        "multi-unit-building-landmark-03"
-      ],
-      "legacy_crosswalk": [
-        "multi-unit-building-legacy_crosswalk-03"
-      ],
-      "licence": [
-        "multi-unit-building-licence-03"
-      ],
-      "locality": [
-        "multi-unit-building-locality-03"
-      ],
-      "location_record": [
-        "multi-unit-building-location_record-03",
-        "multi-unit-building-location-record-building-positive",
-        "multi-unit-building-location-record-unit-02"
-      ],
-      "location_record_assertion": [
-        "multi-unit-building-location_record_assertion-03"
-      ],
-      "location_record_object_link": [
-        "multi-unit-building-location_record_object_link-03",
-        "multi-unit-building-object-link-building-positive-primary",
-        "multi-unit-building-object-link-parent-building",
-        "multi-unit-building-object-link-unit-02-parent-building",
-        "multi-unit-building-object-link-unit-02-primary"
-      ],
-      "location_record_relationship": [
-        "multi-unit-building-location_record_relationship-03"
-      ],
-      "location_record_version": [
-        "multi-unit-building-location_record_version-03",
-        "multi-unit-building-location-record-version-building-positive",
-        "multi-unit-building-location-record-version-unit-02"
-      ],
-      "migration_exception": [
-        "multi-unit-building-migration_exception-03"
-      ],
-      "name_record": [
-        "multi-unit-building-name_record-03"
-      ],
-      "non_building_object": [
-        "multi-unit-building-non_building_object-03"
-      ],
-      "operational_area": [
-        "multi-unit-building-operational_area-03"
-      ],
-      "operational_area_coverage": [
-        "multi-unit-building-operational_area_coverage-03"
-      ],
-      "parcel_reference": [
-        "multi-unit-building-parcel_reference-03"
-      ],
-      "partner_projection": [
-        "multi-unit-building-partner_projection-03"
-      ],
-      "public_code_alias": [
-        "multi-unit-building-public_code_alias-03",
-        "multi-unit-building-public-code-alias-unit-02"
-      ],
-      "publication_release": [
-        "multi-unit-building-publication_release-03"
-      ],
-      "publication_release_item": [
-        "multi-unit-building-publication_release_item-03",
-        "multi-unit-building-publication-release-item-unit-02"
-      ],
-      "registry_subject": [
-        "multi-unit-building-registry_subject-03",
-        "multi-unit-building-registry-subject-building-positive",
-        "multi-unit-building-registry-subject-parent-building",
-        "multi-unit-building-registry-subject-unit-02"
-      ],
-      "road": [
-        "multi-unit-building-road-03"
-      ],
-      "road_segment": [
-        "multi-unit-building-road_segment-03"
-      ],
-      "source_authority": [
-        "multi-unit-building-source_authority-03"
-      ],
-      "source_package": [
-        "multi-unit-building-source_package-03"
-      ],
-      "source_payload_archive": [
-        "multi-unit-building-source_payload_archive-03"
-      ],
-      "source_record": [
-        "multi-unit-building-source_record-03"
-      ],
-      "unit": [
-        "multi-unit-building-unit-02",
-        "multi-unit-building-unit-03"
-      ]
-    },
-    "expected_absences": {
-      "forbidden_cross_scenario_entities": [],
-      "forbidden_operator_secret_leakage": [],
-      "forbidden_public_before_release": []
-    },
-    "geometry_and_provenance": {
-      "authority_decisions": [
-        {
-          "actor_id": "decision_event-actor_id-001",
-          "decision_event_id": "multi-unit-building-decision_event-03",
-          "decision_outcome": "approved",
-          "decision_type": "approve-geometry",
-          "details_json": "{'institution_id': 'national-gis-authority', 'permission_key': 'geometry.promote', 'territorial_scope': 'national-gis-authority', 'evidence_object_id': 'multi-unit-building-evidence_object-03', 'source_observation_id': 'multi-unit-building-geometry_observation-03', 'quality_authority_actor_id': 'decision_event-actor_id-001'}"
-        }
-      ],
-      "evidence_objects": [
-        {
-          "classification": "government-internal",
-          "content_hash": "evidence_object-content_hash-value",
-          "evidence_object_id": "multi-unit-building-evidence_object-03"
-        }
-      ],
-      "geometry_versions": [
-        {
-          "geometry_role": "entrance-point",
-          "geometry_version_id": "multi-unit-building-geometry_version-03",
-          "promotion_authority_scope": "national-gis-authority",
-          "promotion_decision_event_id": "multi-unit-building-decision_event-03",
-          "promotion_evidence_object_id": "multi-unit-building-evidence_object-03",
-          "quality_state": "accepted-canonical",
-          "validated_by_actor_id": "decision_event-actor_id-001"
-        }
-      ],
-      "observations": [
-        {
-          "capture_method": "browser-gps",
-          "geometry_observation_id": "multi-unit-building-geometry_observation-03",
-          "geometry_role": "entrance-point"
-        }
-      ]
-    },
-    "historical_output": {
-      "admin_effective_versions": [
-        {
-          "admin_level": "country",
-          "administrative_unit_version_id": "multi-unit-building-administrative_unit_version-03",
-          "effective_from": "2026-07-14 00:00:00+00:00",
-          "effective_to": null,
-          "lifecycle_state": "official",
-          "recorded_at": "2026-07-14 00:00:00+00:00"
-        }
-      ],
-      "location_lifecycle_timeline": [
-        {
-          "effective_from": "2026-07-14 00:00:00+00:00",
-          "effective_to": null,
-          "lifecycle_state": "active",
-          "location_record_version_id": "multi-unit-building-location_record_version-03",
-          "recorded_at": "2026-07-14 00:00:00+00:00",
-          "recorded_to": null
-        },
-        {
-          "effective_from": "2026-07-14 00:00:00+00:00",
-          "effective_to": null,
-          "lifecycle_state": "active",
-          "location_record_version_id": "multi-unit-building-location-record-version-building-positive",
-          "recorded_at": "2026-07-14 00:00:00+00:00",
-          "recorded_to": null
-        },
-        {
-          "effective_from": "2026-07-14 00:00:00+00:00",
-          "effective_to": null,
-          "lifecycle_state": "active",
-          "location_record_version_id": "multi-unit-building-location-record-version-unit-02",
-          "recorded_at": "2026-07-14 00:00:00+00:00",
-          "recorded_to": null
-        }
-      ],
-      "publication_versions": [
-        {
-          "location_record_version_id": "multi-unit-building-location_record_version-03",
-          "projection_state": "included",
-          "published_label": "publication_release_item-published_label-value"
-        },
-        {
-          "location_record_version_id": "multi-unit-building-location-record-version-unit-02",
-          "projection_state": "included",
-          "published_label": "Unit B"
-        }
-      ]
-    },
-    "operator_projection": {
-      "decision_count": 1,
-      "evidence_count": 1,
-      "geometry": [
-        {
-          "geometry_role": "entrance-point",
-          "geometry_version_id": "multi-unit-building-geometry_version-03",
-          "promotion_decision_event_id": "multi-unit-building-decision_event-03",
-          "promotion_evidence_object_id": "multi-unit-building-evidence_object-03",
-          "quality_state": "accepted-canonical"
-        }
-      ],
-      "location_versions": [
-        {
-          "effective_from": "2026-07-14 00:00:00+00:00",
-          "effective_to": null,
-          "lifecycle_state": "active",
-          "location_record_id": "multi-unit-building-location_record-03",
-          "location_record_version_id": "multi-unit-building-location_record_version-03",
-          "recorded_at": "2026-07-14 00:00:00+00:00",
-          "version_number": "3"
-        },
-        {
-          "effective_from": "2026-07-14 00:00:00+00:00",
-          "effective_to": null,
-          "lifecycle_state": "active",
-          "location_record_id": "multi-unit-building-location-record-building-positive",
-          "location_record_version_id": "multi-unit-building-location-record-version-building-positive",
-          "recorded_at": "2026-07-14 00:00:00+00:00",
-          "version_number": "1"
-        },
-        {
-          "effective_from": "2026-07-14 00:00:00+00:00",
-          "effective_to": null,
-          "lifecycle_state": "active",
-          "location_record_id": "multi-unit-building-location-record-unit-02",
-          "location_record_version_id": "multi-unit-building-location-record-version-unit-02",
-          "recorded_at": "2026-07-14 00:00:00+00:00",
-          "version_number": "1"
-        }
-      ],
-      "names": [
-        {
-          "effective_from": "2026-07-14 00:00:00+00:00",
-          "effective_to": null,
-          "language_code": "es",
-          "name_kind": "official-es",
-          "name_record_id": "multi-unit-building-name_record-03",
-          "name_status": "official-current",
-          "name_text": "multi-unit-building official name"
-        }
-      ],
-      "object_links": [
-        {
-          "cardinality_rank": "1",
-          "link_id": "multi-unit-building-location_record_object_link-03",
-          "location_record_version_id": "multi-unit-building-location_record_version-03",
-          "object_role": "primary-subject",
-          "subject_id": "multi-unit-building-registry_subject-03"
-        },
-        {
-          "cardinality_rank": "1",
-          "link_id": "multi-unit-building-object-link-building-positive-primary",
-          "location_record_version_id": "multi-unit-building-location-record-version-building-positive",
-          "object_role": "primary-subject",
-          "subject_id": "multi-unit-building-registry-subject-building-positive"
-        },
-        {
-          "cardinality_rank": "1",
-          "link_id": "multi-unit-building-object-link-parent-building",
-          "location_record_version_id": "multi-unit-building-location_record_version-03",
-          "object_role": "parent-building",
-          "subject_id": "multi-unit-building-registry-subject-parent-building"
-        },
-        {
-          "cardinality_rank": "1",
-          "link_id": "multi-unit-building-object-link-unit-02-parent-building",
-          "location_record_version_id": "multi-unit-building-location-record-version-unit-02",
-          "object_role": "parent-building",
-          "subject_id": "multi-unit-building-registry-subject-parent-building"
-        },
-        {
-          "cardinality_rank": "1",
-          "link_id": "multi-unit-building-object-link-unit-02-primary",
-          "location_record_version_id": "multi-unit-building-location-record-version-unit-02",
-          "object_role": "primary-subject",
-          "subject_id": "multi-unit-building-registry-subject-unit-02"
-        }
-      ]
-    },
-    "public_projection": [
+    "canonical": [
       {
-        "location_record_id": "multi-unit-building-location_record-03",
-        "location_record_version_id": "multi-unit-building-location_record_version-03",
-        "projection_payload_hash": "publication_release_item-projection_payload_hash-value",
-        "projection_payload_json": "{'entity': 'publication_release_item', 'fixture': True}",
-        "projection_state": "included",
-        "public_code_alias_id": "multi-unit-building-public_code_alias-03",
-        "published_label": "publication_release_item-published_label-value"
+        "canonical_state": "active",
+        "entity_id": "multi-unit-building-building-1",
+        "entity_type": "building",
+        "label": "Malabo Mixed-Use Building"
       },
       {
-        "location_record_id": "multi-unit-building-location-record-unit-02",
-        "location_record_version_id": "multi-unit-building-location-record-version-unit-02",
-        "projection_payload_hash": "multi-unit-unit-b-projection-hash",
-        "projection_payload_json": "{'unit': 'B', 'scenario': 'multi-unit-building', 'canonical_record': 'multi-unit-building-location-record-unit-02'}",
-        "projection_state": "included",
-        "public_code_alias_id": "multi-unit-building-public-code-alias-unit-02",
-        "published_label": "Unit B"
+        "canonical_state": "active",
+        "entity_id": "multi-unit-building-unit-2",
+        "entity_type": "unit",
+        "label": "Unit 2A"
       }
     ],
-    "publication_releases": [
+    "effective_as_of": [
       {
-        "publication_release_id": "multi-unit-building-publication_release-03",
-        "release_state": "approved"
+        "entity_id": "multi-unit-building-building-1",
+        "label": "Malabo Mixed-Use Building"
+      },
+      {
+        "entity_id": "multi-unit-building-unit-2",
+        "label": "Unit 2A"
       }
     ],
-    "queried_fixture_rows": 59,
-    "relationship_edges": [
+    "expected_absences": {},
+    "operator_projection": [
       {
-        "link_id": "multi-unit-building-location_record_object_link-03",
-        "location_record_version_id": "multi-unit-building-location_record_version-03",
-        "object_role": "primary-subject",
-        "subject_id": "multi-unit-building-registry_subject-03"
+        "attributes": {
+          "units": "2"
+        },
+        "canonical_state": "active",
+        "entity_id": "multi-unit-building-building-1",
+        "entity_type": "building",
+        "label": "Malabo Mixed-Use Building"
       },
       {
-        "link_id": "multi-unit-building-object-link-building-positive-primary",
-        "location_record_version_id": "multi-unit-building-location-record-version-building-positive",
-        "object_role": "primary-subject",
-        "subject_id": "multi-unit-building-registry-subject-building-positive"
+        "attributes": {
+          "parent": "Malabo Mixed-Use Building"
+        },
+        "canonical_state": "active",
+        "entity_id": "multi-unit-building-unit-2",
+        "entity_type": "unit",
+        "label": "Unit 2A"
+      }
+    ],
+    "public_release": [
+      {
+        "entity_id": "multi-unit-building-building-1",
+        "label": "Malabo Mixed-Use Building"
+      }
+    ],
+    "recorded_as_of": [
+      {
+        "entity_id": "multi-unit-building-building-1",
+        "label": "Malabo Mixed-Use Building"
       },
       {
-        "link_id": "multi-unit-building-object-link-parent-building",
-        "location_record_version_id": "multi-unit-building-location_record_version-03",
-        "object_role": "parent-building",
-        "subject_id": "multi-unit-building-registry-subject-parent-building"
-      },
-      {
-        "link_id": "multi-unit-building-object-link-unit-02-parent-building",
-        "location_record_version_id": "multi-unit-building-location-record-version-unit-02",
-        "object_role": "parent-building",
-        "subject_id": "multi-unit-building-registry-subject-parent-building"
-      },
-      {
-        "link_id": "multi-unit-building-object-link-unit-02-primary",
-        "location_record_version_id": "multi-unit-building-location-record-version-unit-02",
-        "object_role": "primary-subject",
-        "subject_id": "multi-unit-building-registry-subject-unit-02"
+        "entity_id": "multi-unit-building-unit-2",
+        "label": "Unit 2A"
       }
     ]
   },
-  "review_status": "approved-review09-scenario-expected-result",
+  "expected_absence_queries": [
+    {
+      "name": "no-unreleased-public-rows",
+      "params": [
+        "multi-unit-building"
+      ],
+      "sql": "SELECT entity_id FROM r10_scenario_entity WHERE scenario=%s AND public_visible=false AND public_release_date IS NOT NULL"
+    }
+  ],
+  "query_dates": {
+    "effective": "2026-07-14",
+    "public_release": "2026-07-14",
+    "recorded": "2026-07-14T00:00:00Z"
+  },
+  "review_owner": "SDA scenario expected-result owner",
+  "review_status": "approved-review10-scenario-expected-result",
   "scenario": "multi-unit-building",
-  "version": "review09"
+  "version": "review10"
 }

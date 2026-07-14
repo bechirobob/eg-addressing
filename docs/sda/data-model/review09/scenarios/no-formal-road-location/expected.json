@@ -1,365 +1,56 @@
 {
   "expected": {
-    "entity_counts": {
-      "administrative_code_history": 1,
-      "administrative_unit": 1,
-      "administrative_unit_version": 1,
-      "building": 1,
-      "building_primary_entrance": 1,
-      "correction_case": 1,
-      "country": 1,
-      "decision_event": 1,
-      "dispute_case": 1,
-      "entrance": 1,
-      "evidence_object": 1,
-      "field_assignment": 1,
-      "field_observation": 1,
-      "geometry_observation": 1,
-      "geometry_quality_assessment": 1,
-      "geometry_transformation": 1,
-      "geometry_version": 1,
-      "intake_case": 1,
-      "landmark": 1,
-      "legacy_crosswalk": 1,
-      "licence": 1,
-      "locality": 1,
-      "location_record": 2,
-      "location_record_assertion": 1,
-      "location_record_object_link": 2,
-      "location_record_relationship": 1,
-      "location_record_version": 2,
-      "migration_exception": 1,
-      "name_record": 1,
-      "non_building_object": 1,
-      "operational_area": 1,
-      "operational_area_coverage": 1,
-      "parcel_reference": 1,
-      "partner_projection": 1,
-      "public_code_alias": 1,
-      "publication_release": 1,
-      "publication_release_item": 1,
-      "registry_subject": 2,
-      "road": 1,
-      "road_segment": 1,
-      "source_authority": 1,
-      "source_package": 1,
-      "source_payload_archive": 1,
-      "source_record": 1,
-      "unit": 1
-    },
-    "entity_ids": {
-      "administrative_code_history": [
-        "no-formal-road-location-administrative_code_history-04"
-      ],
-      "administrative_unit": [
-        "no-formal-road-location-administrative_unit-04"
-      ],
-      "administrative_unit_version": [
-        "no-formal-road-location-administrative_unit_version-04"
-      ],
-      "building": [
-        "no-formal-road-location-building-04"
-      ],
-      "building_primary_entrance": [
-        "no-formal-road-location-building_primary_entrance-04"
-      ],
-      "correction_case": [
-        "no-formal-road-location-correction_case-04"
-      ],
-      "country": [
-        "no-formal-road-location-country-04"
-      ],
-      "decision_event": [
-        "no-formal-road-location-decision_event-04"
-      ],
-      "dispute_case": [
-        "no-formal-road-location-dispute_case-04"
-      ],
-      "entrance": [
-        "no-formal-road-location-entrance-04"
-      ],
-      "evidence_object": [
-        "no-formal-road-location-evidence_object-04"
-      ],
-      "field_assignment": [
-        "no-formal-road-location-field_assignment-04"
-      ],
-      "field_observation": [
-        "no-formal-road-location-field_observation-04"
-      ],
-      "geometry_observation": [
-        "no-formal-road-location-geometry_observation-04"
-      ],
-      "geometry_quality_assessment": [
-        "no-formal-road-location-geometry_quality_assessment-04"
-      ],
-      "geometry_transformation": [
-        "no-formal-road-location-geometry_transformation-04"
-      ],
-      "geometry_version": [
-        "no-formal-road-location-geometry_version-04"
-      ],
-      "intake_case": [
-        "no-formal-road-location-intake_case-04"
-      ],
-      "landmark": [
-        "no-formal-road-location-landmark-04"
-      ],
-      "legacy_crosswalk": [
-        "no-formal-road-location-legacy_crosswalk-04"
-      ],
-      "licence": [
-        "no-formal-road-location-licence-04"
-      ],
-      "locality": [
-        "no-formal-road-location-locality-04"
-      ],
-      "location_record": [
-        "no-formal-road-location-location_record-04",
-        "no-formal-road-location-location-record-non-building-object-positive"
-      ],
-      "location_record_assertion": [
-        "no-formal-road-location-location_record_assertion-04"
-      ],
-      "location_record_object_link": [
-        "no-formal-road-location-location_record_object_link-04",
-        "no-formal-road-location-object-link-non-building-object-positive-primary"
-      ],
-      "location_record_relationship": [
-        "no-formal-road-location-location_record_relationship-04"
-      ],
-      "location_record_version": [
-        "no-formal-road-location-location_record_version-04",
-        "no-formal-road-location-location-record-version-non-building-object-positive"
-      ],
-      "migration_exception": [
-        "no-formal-road-location-migration_exception-04"
-      ],
-      "name_record": [
-        "no-formal-road-location-name_record-04"
-      ],
-      "non_building_object": [
-        "no-formal-road-location-non_building_object-04"
-      ],
-      "operational_area": [
-        "no-formal-road-location-operational_area-04"
-      ],
-      "operational_area_coverage": [
-        "no-formal-road-location-operational_area_coverage-04"
-      ],
-      "parcel_reference": [
-        "no-formal-road-location-parcel_reference-04"
-      ],
-      "partner_projection": [
-        "no-formal-road-location-partner_projection-04"
-      ],
-      "public_code_alias": [
-        "no-formal-road-location-public_code_alias-04"
-      ],
-      "publication_release": [
-        "no-formal-road-location-publication_release-04"
-      ],
-      "publication_release_item": [
-        "no-formal-road-location-publication_release_item-04"
-      ],
-      "registry_subject": [
-        "no-formal-road-location-registry_subject-04",
-        "no-formal-road-location-registry-subject-non-building-object-positive"
-      ],
-      "road": [
-        "no-formal-road-location-road-04"
-      ],
-      "road_segment": [
-        "no-formal-road-location-road_segment-04"
-      ],
-      "source_authority": [
-        "no-formal-road-location-source_authority-04"
-      ],
-      "source_package": [
-        "no-formal-road-location-source_package-04"
-      ],
-      "source_payload_archive": [
-        "no-formal-road-location-source_payload_archive-04"
-      ],
-      "source_record": [
-        "no-formal-road-location-source_record-04"
-      ],
-      "unit": [
-        "no-formal-road-location-unit-04"
-      ]
-    },
-    "expected_absences": {
-      "forbidden_cross_scenario_entities": [],
-      "forbidden_operator_secret_leakage": [],
-      "forbidden_public_before_release": []
-    },
-    "geometry_and_provenance": {
-      "authority_decisions": [
-        {
-          "actor_id": "decision_event-actor_id-001",
-          "decision_event_id": "no-formal-road-location-decision_event-04",
-          "decision_outcome": "approved",
-          "decision_type": "approve-geometry",
-          "details_json": "{'institution_id': 'national-gis-authority', 'permission_key': 'geometry.promote', 'territorial_scope': 'national-gis-authority', 'evidence_object_id': 'no-formal-road-location-evidence_object-04', 'source_observation_id': 'no-formal-road-location-geometry_observation-04', 'quality_authority_actor_id': 'decision_event-actor_id-001'}"
-        }
-      ],
-      "evidence_objects": [
-        {
-          "classification": "government-internal",
-          "content_hash": "evidence_object-content_hash-value",
-          "evidence_object_id": "no-formal-road-location-evidence_object-04"
-        }
-      ],
-      "geometry_versions": [
-        {
-          "geometry_role": "location-point",
-          "geometry_version_id": "no-formal-road-location-geometry_version-04",
-          "promotion_authority_scope": "national-gis-authority",
-          "promotion_decision_event_id": "no-formal-road-location-decision_event-04",
-          "promotion_evidence_object_id": "no-formal-road-location-evidence_object-04",
-          "quality_state": "accepted-canonical",
-          "validated_by_actor_id": "decision_event-actor_id-001"
-        }
-      ],
-      "observations": [
-        {
-          "capture_method": "browser-gps",
-          "geometry_observation_id": "no-formal-road-location-geometry_observation-04",
-          "geometry_role": "location-point"
-        }
-      ]
-    },
-    "historical_output": {
-      "admin_effective_versions": [
-        {
-          "admin_level": "country",
-          "administrative_unit_version_id": "no-formal-road-location-administrative_unit_version-04",
-          "effective_from": "2026-07-14 00:00:00+00:00",
-          "effective_to": null,
-          "lifecycle_state": "official",
-          "recorded_at": "2026-07-14 00:00:00+00:00"
-        }
-      ],
-      "location_lifecycle_timeline": [
-        {
-          "effective_from": "2026-07-14 00:00:00+00:00",
-          "effective_to": null,
-          "lifecycle_state": "active",
-          "location_record_version_id": "no-formal-road-location-location_record_version-04",
-          "recorded_at": "2026-07-14 00:00:00+00:00",
-          "recorded_to": null
-        },
-        {
-          "effective_from": "2026-07-14 00:00:00+00:00",
-          "effective_to": null,
-          "lifecycle_state": "active",
-          "location_record_version_id": "no-formal-road-location-location-record-version-non-building-object-positive",
-          "recorded_at": "2026-07-14 00:00:00+00:00",
-          "recorded_to": null
-        }
-      ],
-      "publication_versions": [
-        {
-          "location_record_version_id": "no-formal-road-location-location_record_version-04",
-          "projection_state": "included",
-          "published_label": "publication_release_item-published_label-value"
-        }
-      ]
-    },
-    "operator_projection": {
-      "decision_count": 1,
-      "evidence_count": 1,
-      "geometry": [
-        {
-          "geometry_role": "location-point",
-          "geometry_version_id": "no-formal-road-location-geometry_version-04",
-          "promotion_decision_event_id": "no-formal-road-location-decision_event-04",
-          "promotion_evidence_object_id": "no-formal-road-location-evidence_object-04",
-          "quality_state": "accepted-canonical"
-        }
-      ],
-      "location_versions": [
-        {
-          "effective_from": "2026-07-14 00:00:00+00:00",
-          "effective_to": null,
-          "lifecycle_state": "active",
-          "location_record_id": "no-formal-road-location-location_record-04",
-          "location_record_version_id": "no-formal-road-location-location_record_version-04",
-          "recorded_at": "2026-07-14 00:00:00+00:00",
-          "version_number": "4"
-        },
-        {
-          "effective_from": "2026-07-14 00:00:00+00:00",
-          "effective_to": null,
-          "lifecycle_state": "active",
-          "location_record_id": "no-formal-road-location-location-record-non-building-object-positive",
-          "location_record_version_id": "no-formal-road-location-location-record-version-non-building-object-positive",
-          "recorded_at": "2026-07-14 00:00:00+00:00",
-          "version_number": "1"
-        }
-      ],
-      "names": [
-        {
-          "effective_from": "2026-07-14 00:00:00+00:00",
-          "effective_to": null,
-          "language_code": "es",
-          "name_kind": "official-es",
-          "name_record_id": "no-formal-road-location-name_record-04",
-          "name_status": "official-current",
-          "name_text": "no-formal-road-location official name"
-        }
-      ],
-      "object_links": [
-        {
-          "cardinality_rank": "1",
-          "link_id": "no-formal-road-location-location_record_object_link-04",
-          "location_record_version_id": "no-formal-road-location-location_record_version-04",
-          "object_role": "primary-subject",
-          "subject_id": "no-formal-road-location-registry_subject-04"
-        },
-        {
-          "cardinality_rank": "1",
-          "link_id": "no-formal-road-location-object-link-non-building-object-positive-primary",
-          "location_record_version_id": "no-formal-road-location-location-record-version-non-building-object-positive",
-          "object_role": "primary-subject",
-          "subject_id": "no-formal-road-location-registry-subject-non-building-object-positive"
-        }
-      ]
-    },
-    "public_projection": [
+    "canonical": [
       {
-        "location_record_id": "no-formal-road-location-location_record-04",
-        "location_record_version_id": "no-formal-road-location-location_record_version-04",
-        "projection_payload_hash": "publication_release_item-projection_payload_hash-value",
-        "projection_payload_json": "{'entity': 'publication_release_item', 'fixture': True}",
-        "projection_state": "included",
-        "public_code_alias_id": "no-formal-road-location-public_code_alias-04",
-        "published_label": "publication_release_item-published_label-value"
+        "canonical_state": "active",
+        "entity_id": "no-formal-road-location-address-1",
+        "entity_type": "address",
+        "label": "Residence near market without formal road"
       }
     ],
-    "publication_releases": [
+    "effective_as_of": [
       {
-        "publication_release_id": "no-formal-road-location-publication_release-04",
-        "release_state": "approved"
+        "entity_id": "no-formal-road-location-address-1",
+        "label": "Residence near market without formal road"
       }
     ],
-    "queried_fixture_rows": 49,
-    "relationship_edges": [
+    "expected_absences": {},
+    "operator_projection": [
       {
-        "link_id": "no-formal-road-location-location_record_object_link-04",
-        "location_record_version_id": "no-formal-road-location-location_record_version-04",
-        "object_role": "primary-subject",
-        "subject_id": "no-formal-road-location-registry_subject-04"
-      },
+        "attributes": {
+          "landmark": "central market",
+          "road_status": "no formal road"
+        },
+        "canonical_state": "active",
+        "entity_id": "no-formal-road-location-address-1",
+        "entity_type": "address",
+        "label": "Residence near market without formal road"
+      }
+    ],
+    "public_release": [],
+    "recorded_as_of": [
       {
-        "link_id": "no-formal-road-location-object-link-non-building-object-positive-primary",
-        "location_record_version_id": "no-formal-road-location-location-record-version-non-building-object-positive",
-        "object_role": "primary-subject",
-        "subject_id": "no-formal-road-location-registry-subject-non-building-object-positive"
+        "entity_id": "no-formal-road-location-address-1",
+        "label": "Residence near market without formal road"
       }
     ]
   },
-  "review_status": "approved-review09-scenario-expected-result",
+  "expected_absence_queries": [
+    {
+      "name": "no-unreleased-public-rows",
+      "params": [
+        "no-formal-road-location"
+      ],
+      "sql": "SELECT entity_id FROM r10_scenario_entity WHERE scenario=%s AND public_visible=false AND public_release_date IS NOT NULL"
+    }
+  ],
+  "query_dates": {
+    "effective": "2026-07-14",
+    "public_release": "2026-07-14",
+    "recorded": "2026-07-14T00:00:00Z"
+  },
+  "review_owner": "SDA scenario expected-result owner",
+  "review_status": "approved-review10-scenario-expected-result",
   "scenario": "no-formal-road-location",
-  "version": "review09"
+  "version": "review10"
 }

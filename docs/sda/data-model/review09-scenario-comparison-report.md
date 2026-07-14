@@ -1,10 +1,10 @@
-# Review 09 Scenario Comparison Report
+# Review 10 Scenario Comparison Report
 
 | Metric | Value |
 | --- | --- |
-| execution_mode | review09-independent-scenario-source-expected-comparison |
+| execution_mode | review10-fresh-postgresql-scenario-source-expected-comparison |
 | scenarios | 7 |
-| assertions | 70 |
+| assertions | 42 |
 | failed | [] |
 | errors | [] |
 | status | passed |
