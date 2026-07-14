@@ -1,0 +1,238 @@
+version: 1.0
+programme: Equatorial Guinea National Location Infrastructure
+status: proposed
+precedence:
+  - active_sda_work_order
+  - accepted_adrs
+  - mandatory_sda_standards
+  - AGENTS.md
+  - this_skill_pack
+
+mandatory_for_every_task:
+  - S01
+  - S03
+  - S11
+  - S12
+  - S16
+
+skills:
+  - id: S01
+    name: Authority, intake, and scope control
+    file: skills/S01-authority-intake-and-scope.md
+    triggers:
+      - every task
+      - new work order
+      - follow-up request
+      - ambiguous scope
+    outputs:
+      - authority chain
+      - scope and prohibited-path matrix
+      - task classification
+
+  - id: S02
+    name: Repository orientation and impact analysis
+    file: skills/S02-repository-orientation-and-impact.md
+    triggers:
+      - unfamiliar repository area
+      - architecture audit
+      - cross-domain change
+      - dependency or data-flow change
+    outputs:
+      - affected-domain map
+      - writer-reader-impact inventory
+      - likely file list
+
+  - id: S03
+    name: Acceptance-criteria planning and decision control
+    file: skills/S03-acceptance-planning-and-rfi.md
+    triggers:
+      - every work order
+      - acceptance criteria
+      - implementation or modelling plan
+    outputs:
+      - criterion-mapped plan
+      - test and evidence matrix
+      - decision and RFI list
+
+  - id: S04
+    name: RFI and ADR management
+    file: skills/S04-rfi-and-adr-management.md
+    triggers:
+      - reserved architecture question
+      - institutional authority dependency
+      - competing valid designs
+      - new dependency, data class, lifecycle, role, or identifier
+    outputs:
+      - formal RFI
+      - proposed or superseding ADR
+      - decision traceability matrix
+
+  - id: S05
+    name: Authoritative current-state discovery
+    file: skills/S05-authoritative-current-state-discovery.md
+    triggers:
+      - schema inventory
+      - route or OpenAPI inventory
+      - role and permission discovery
+      - current workflow or data-flow audit
+    outputs:
+      - catalog-derived inventory
+      - OpenAPI and policy inventory
+      - source-of-truth register
+
+  - id: S06
+    name: Canonical data model and convergence
+    file: skills/S06-canonical-data-model-and-convergence.md
+    triggers:
+      - ERD or data dictionary
+      - canonical entity design
+      - current-to-target mapping
+      - expand-migrate-contract plan
+    outputs:
+      - typed target model
+      - reviewed transformation registry
+      - executable disposable-schema validation
+      - convergence units
+
+  - id: S07
+    name: Database migrations and reference data
+    file: skills/S07-database-migrations-and-reference-data.md
+    triggers:
+      - executable schema change
+      - migration runner
+      - reference data
+      - fixture lifecycle
+      - data backfill
+    outputs:
+      - immutable migrations
+      - empty and upgrade evidence
+      - rollback or forward-recovery plan
+
+  - id: S08
+    name: API, identity, security, and privacy
+    file: skills/S08-api-identity-security-and-privacy.md
+    triggers:
+      - API contract change
+      - authentication or session change
+      - role, permission, or territorial scope
+      - sensitive data or partner integration
+    outputs:
+      - method-path-operation policy matrix
+      - field-level projection contract
+      - allow and deny evidence
+
+  - id: S09
+    name: GIS, evidence, and publication
+    file: skills/S09-gis-evidence-and-publication.md
+    triggers:
+      - geometry or coordinate change
+      - evidence object
+      - validation or provenance
+      - publication, signage, certificate, or public release
+    outputs:
+      - geometry authority and provenance model
+      - chain-of-custody evidence
+      - publication authority checks
+
+  - id: S10
+    name: UI, accessibility, localization, and workflows
+    file: skills/S10-ui-accessibility-localization-and-workflows.md
+    triggers:
+      - user-facing workflow
+      - public or operator screen
+      - Spanish or English content
+      - accessibility or responsive behavior
+    outputs:
+      - workflow evidence pack
+      - role-language-viewport screenshots
+      - accessibility and localization results
+
+  - id: S11
+    name: Testing and semantic evidence
+    file: skills/S11-testing-and-semantic-evidence.md
+    triggers:
+      - every task
+      - claim of PASS or completion
+      - CI or validation tooling
+      - negative or failure behavior
+    outputs:
+      - claim-to-assertion matrix
+      - executable positive and negative tests
+      - evidence limitations
+
+  - id: S12
+    name: GitHub delivery and exact-head proof
+    file: skills/S12-github-delivery-and-exact-head-proof.md
+    triggers:
+      - branch creation
+      - commit, push, PR, or CI
+      - SDA review request
+      - exact-head evidence
+    outputs:
+      - reviewable branch and draft PR
+      - exact-head CI record
+      - accurate submission status
+
+  - id: S13
+    name: SDA review remediation
+    file: skills/S13-sda-review-remediation.md
+    triggers:
+      - REWORK REQUIRED
+      - PR review findings
+      - Review 02 or later
+      - finding-resolution log
+    outputs:
+      - finding-by-finding root-cause matrix
+      - individual correction evidence
+      - protected review-record update
+
+  - id: S14
+    name: Maintenance-fix isolation
+    file: skills/S14-maintenance-fix-isolation.md
+    triggers:
+      - unrelated bug discovered
+      - CI exposes existing defect
+      - runtime fix during design-only work
+      - emergency maintenance
+    outputs:
+      - separate issue or PR
+      - scope-safe cherry-pick plan
+      - regression evidence
+
+  - id: S15
+    name: Release, operations, and disaster recovery
+    file: skills/S15-release-operations-and-dr.md
+    triggers:
+      - deployment or environment change
+      - backup, restore, or failover
+      - observability or incident response
+      - production-readiness claim
+    outputs:
+      - release/runbook evidence
+      - recovery and failure tests
+      - explicit readiness boundary
+
+  - id: S16
+    name: Self-audit and context handoff
+    file: skills/S16-self-audit-and-context-handoff.md
+    triggers:
+      - every submission
+      - long-running task
+      - context transfer
+      - before saying done
+    outputs:
+      - self-audit
+      - compact context pack
+      - truthful completion declaration
+
+routing_rules:
+  - rule: A task may invoke several skills; select by effects, not by the task title.
+  - rule: Any database effect invokes S07, even when discovered during an API or UI task.
+  - rule: Any sensitive-data or authorization effect invokes S08.
+  - rule: Any geometry, evidence, or publication effect invokes S09.
+  - rule: Any user-visible workflow invokes S10.
+  - rule: Any review finding invokes S13 before implementation changes.
+  - rule: Any out-of-scope defect invokes S14 and must be isolated.
+  - rule: S11 cannot be satisfied by file presence, counts, strings, or green CI alone.
+  - rule: S12 submission is incomplete until GitHub shows the pushed branch and accessible PR.
+  - rule: S16 must run before every completion or review-request message.
