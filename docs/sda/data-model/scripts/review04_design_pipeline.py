@@ -1397,6 +1397,47 @@ def scenario_records(model: dict[str, Any], scenario: str, idx: int) -> dict[str
             parent_b[pk["location_record_object_link"]] = f"{scenario}-object-link-unit-02-parent-building"
             parent_b["location_record_version_id"] = unit_b_version_id
             records["location_record_object_link"].extend([primary_b, parent_b])
+    # Review 07 F04: ensure all canonical record types have positive inserted fixture records.
+    def add_auxiliary_canonical_record(record_type: str, native_entity: str, native_id: str, suffix: str) -> None:
+        required = ["location_record", "location_record_version", "registry_subject", "location_record_object_link"]
+        if not all(name in records for name in required):
+            return
+        record_id = f"{scenario}-location-record-{suffix}"
+        version_id = f"{scenario}-location-record-version-{suffix}"
+        subject_id = f"{scenario}-registry-subject-{suffix}"
+        link_id = f"{scenario}-object-link-{suffix}-primary"
+        lr = dict(records["location_record"][0])
+        lr[pk["location_record"]] = record_id
+        lr["record_type"] = record_type
+        records["location_record"].append(lr)
+        subject = dict(records["registry_subject"][0])
+        subject[pk["registry_subject"]] = subject_id
+        subject["subject_entity"] = native_entity
+        subject["native_id"] = native_id
+        subject["subject_state"] = "active"
+        records["registry_subject"].append(subject)
+        version = dict(records["location_record_version"][0])
+        version[pk["location_record_version"]] = version_id
+        version["location_record_id"] = record_id
+        version["version_number"] = 1
+        version.pop("predecessor_version_id", None)
+        version.pop("successor_version_id", None)
+        records["location_record_version"].append(version)
+        link = dict(records["location_record_object_link"][0])
+        link[pk["location_record_object_link"]] = link_id
+        link["location_record_version_id"] = version_id
+        link["object_role"] = "primary-subject"
+        link["subject_id"] = subject_id
+        link["cardinality_rank"] = 1
+        records["location_record_object_link"].append(link)
+
+    if scenario == "multi-unit-building" and "building" in records:
+        add_auxiliary_canonical_record("building", "building", pk_values["building"], "building-positive")
+    if scenario == "urban-street-address" and "entrance" in records:
+        add_auxiliary_canonical_record("entrance", "entrance", pk_values["entrance"], "entrance-positive")
+    if scenario == "no-formal-road-location" and "non_building_object" in records:
+        add_auxiliary_canonical_record("non-building-object", "non_building_object", pk_values["non_building_object"], "non-building-object-positive")
+
     if scenario == "corrected-superseded-address" and "location_record_version" in records:
         first = records["location_record_version"][0]
         first["location_record_version_id"] = f"{scenario}-location-record-version-v1"
@@ -1609,12 +1650,101 @@ def execute_negative_fixtures(cur, model: dict[str, Any], records: dict[str, lis
     return results
 
 
+def review07_slug(value: str) -> str:
+    return re.sub(r"[^a-z0-9]+", "-", str(value).lower()).strip("-")
+
+
+def build_review07_scenario_assertions(model: dict[str, Any], fixtures: dict[str, Any]) -> dict[str, dict[str, Any]]:
+    scenarios = fixtures.get("scenarios", {})
+    results: dict[str, dict[str, Any]] = {}
+
+    def add(assertion_id: str, finding: str, status: bool, evidence: dict[str, Any]) -> None:
+        results[assertion_id] = {"finding": finding, "status": "passed" if status else "failed", "evidence": evidence}
+        if not status:
+            raise AssertionError(f"Review 07 assertion failed: {assertion_id}: {evidence}")
+
+    # F04: every canonical record type is present in positive fixtures and has cardinality rules.
+    expected_record_types = sorted(model.get("record_object_cardinality", {}))
+    observed_record_types = sorted({
+        row.get("record_type")
+        for scenario in scenarios.values()
+        for row in scenario.get("location_record", [])
+        if row.get("record_type")
+    })
+    for record_type in expected_record_types:
+        add(
+            f"F04-cardinality-positive-record-type-{review07_slug(record_type)}",
+            "F04",
+            record_type in observed_record_types,
+            {"record_type": record_type, "observed_record_types": observed_record_types},
+        )
+        roles = model.get("record_object_cardinality", {}).get(record_type, {})
+        add(
+            f"F04-cardinality-matrix-rules-{review07_slug(record_type)}",
+            "F04",
+            bool(roles) and all("allowed_subject_entities" in rule and "min" in rule and "max" in rule for rule in roles.values()),
+            {"record_type": record_type, "roles": sorted(roles)},
+        )
+
+    multi = scenarios.get("multi-unit-building", {})
+    unit_record_ids = {r.get("location_record_id") for r in multi.get("location_record", []) if r.get("record_type") == "unit"}
+    multi_versions = {r.get("location_record_version_id") for r in multi.get("location_record_version", []) if r.get("location_record_id") in unit_record_ids}
+    primary_versions = {r.get("location_record_version_id") for r in multi.get("location_record_object_link", []) if r.get("object_role") == "primary-subject"}
+    parent_versions = {r.get("location_record_version_id") for r in multi.get("location_record_object_link", []) if r.get("object_role") == "parent-building"}
+    add("F04-multi-unit-independent-canonical-records", "F04", len(unit_record_ids) >= 2 and len(multi_versions) >= 2, {"unit_location_records": sorted(unit_record_ids), "versions": sorted(multi_versions)})
+    add("F04-multi-unit-parent-building-cardinality", "F04", multi_versions <= primary_versions and multi_versions <= parent_versions, {"unit_versions": sorted(multi_versions), "primary_versions": sorted(primary_versions), "parent_versions": sorted(parent_versions)})
+    add("F04-negative-cardinality-suite", "F04", all(name in (fixtures.get("negative_fixtures", {}) or {}) for name in ["invalid-cardinality-primary-object", "invalid-subject-reference"]), {"negative_fixtures": sorted((fixtures.get("negative_fixtures", {}) or {}))})
+
+    # F05: temporal/history scenarios must carry old/new intervals and reconstructable date-specific versions.
+    corrected = scenarios.get("corrected-superseded-address", {})
+    corrected_versions = corrected.get("location_record_version", [])
+    add("F05-corrected-address-two-version-history", "F05", len(corrected_versions) >= 2 and any(v.get("effective_to") for v in corrected_versions) and any(v.get("effective_to") is None for v in corrected_versions), {"versions": corrected_versions})
+    add("F05-corrected-address-reciprocal-chain", "F05", any(v.get("successor_version_id") for v in corrected_versions) and any(v.get("predecessor_version_id") for v in corrected_versions), {"versions": corrected_versions})
+    admin = scenarios.get("administrative-boundary-change", {})
+    admin_versions = admin.get("administrative_unit_version", [])
+    add("F05-admin-boundary-old-new-versions", "F05", len(admin_versions) >= 2 and any(v.get("effective_to") for v in admin_versions) and any(v.get("effective_to") is None for v in admin_versions), {"versions": admin_versions})
+    add("F05-negative-temporal-overlap-executed", "F05", "invalid-temporal-overlap" in (fixtures.get("negative_fixtures", {}) or {}), {"negative_fixtures": sorted((fixtures.get("negative_fixtures", {}) or {}))})
+    temporal_entities = ["location_record_version", "public_code_alias", "administrative_unit_version", "geometry_version", "location_record_object_link", "publication_release_item"]
+    for entity in temporal_entities:
+        add(f"F05-temporal-fixture-coverage-{review07_slug(entity)}", "F05", any(s.get(entity) for s in scenarios.values()), {"entity": entity, "scenarios": [name for name, s in scenarios.items() if s.get(entity)]})
+
+    # F10: seven scenario-specific datasets need exact projection anchors, not one-row shell confidence.
+    required_scenarios = set(SCENARIO_NAMES)
+    add("F10-seven-scenario-datasets-present", "F10", set(scenarios) == required_scenarios, {"expected": sorted(required_scenarios), "observed": sorted(scenarios)})
+    scenario_expectations = {
+        "urban-street-address": {"record_type": "address", "requires": ["location_record", "building", "road", "entrance", "publication_release_item"]},
+        "rural-landmark-location": {"record_type": "landmark", "requires": ["location_record", "landmark", "geometry_version", "publication_release_item"]},
+        "multi-unit-building": {"record_type": "unit", "requires": ["location_record", "unit", "public_code_alias", "publication_release_item"]},
+        "no-formal-road-location": {"record_type": "service-location", "requires": ["location_record", "publication_release_item"]},
+        "corrected-superseded-address": {"record_type": "address", "requires": ["location_record_version", "publication_release_item", "correction_case"]},
+        "disputed-geometry": {"record_type": "address", "requires": ["dispute_case", "geometry_version", "publication_release_item"]},
+        "administrative-boundary-change": {"record_type": "service-location", "requires": ["administrative_unit_version", "geometry_version", "publication_release_item"]},
+    }
+    for scenario, expectation in scenario_expectations.items():
+        data = scenarios.get(scenario, {})
+        record_types = {r.get("record_type") for r in data.get("location_record", [])}
+        add(f"F10-scenario-{review07_slug(scenario)}-record-type", "F10", expectation["record_type"] in record_types, {"scenario": scenario, "record_types": sorted(x for x in record_types if x)})
+        missing = [entity for entity in expectation["requires"] if not data.get(entity)]
+        add(f"F10-scenario-{review07_slug(scenario)}-required-dataset", "F10", not missing, {"scenario": scenario, "missing": missing, "required": expectation["requires"]})
+        add(f"F10-scenario-{review07_slug(scenario)}-projection-anchor", "F10", bool(data.get("publication_release_item")) and all(i.get("projection_payload_hash") and i.get("projection_payload_json") for i in data.get("publication_release_item", [])), {"scenario": scenario, "release_items": data.get("publication_release_item", [])})
+
+    return results
+
+
+def write_review07_scenario_assertion_report(assertions: dict[str, dict[str, Any]]) -> None:
+    rows = []
+    for assertion_id, result in sorted(assertions.items()):
+        rows.append([assertion_id, result.get("finding", "—"), result.get("status", "—"), json.dumps(result.get("evidence", {}), sort_keys=True, default=str)[:240]])
+    write("docs/sda/data-model/review07-scenario-temporal-assertions.md", "# Review 07 F04/F05/F10 Scenario and Temporal Assertions\n\n" + md_table(["Assertion", "Finding", "Status", "Evidence"], rows) + "\n")
+
+
 def execute_target_schema_and_fixtures(model: dict[str, Any], fixtures: dict[str, Any]) -> dict[str, Any]:
     sql = render_target_sql(model)
     write("docs/sda/data-model/draft-physical-schema.sql", sql)
     scenario_results: dict[str, Any] = {}
     negative_results: dict[str, dict[str, str]] = {}
     lifecycle_transition_assertions: dict[str, dict[str, str]] = {}
+    review07_scenario_assertions: dict[str, dict[str, Any]] = {}
     negative_harness_regression = prove_negative_harness_fails_on_success()
     last_cols: list[dict[str, Any]] = []
     last_constraint_count = 0
@@ -1650,6 +1780,8 @@ def execute_target_schema_and_fixtures(model: dict[str, Any], fixtures: dict[str
         last_index_count = len(last_indexes)
         cur.execute("SELECT event_object_table AS table_name, trigger_name, action_timing, event_manipulation FROM information_schema.triggers WHERE trigger_schema='nli_wo002_target' ORDER BY event_object_table, trigger_name, action_timing, event_manipulation")
         last_triggers = [dict(r) for r in cur.fetchall()]
+    review07_scenario_assertions = build_review07_scenario_assertions(model, fixtures)
+    write_review07_scenario_assertion_report(review07_scenario_assertions)
     physical_fields = {f"{r['table_name'].replace('proposed_','')}.{r['column_name']}": r for r in last_cols if r["table_name"].startswith("proposed_")}
     expected = target_field_index(model)
     missing = sorted(set(expected) - set(physical_fields))
@@ -1680,9 +1812,9 @@ def execute_target_schema_and_fixtures(model: dict[str, Any], fixtures: dict[str
             field_parity_errors.append(f"{fq} nullable {phys.get('is_nullable')} != {expected_nullable}")
     required_triggers = ["registry_subject_native_trg", "required_object_roles_trg", "location_record_version_chain_trg", "public_code_alias_chain_trg", "publication_prerequisite_trg", "geometry_version_semantics_trg", "geometry_observation_semantics_trg"]
     missing_required_triggers = sorted(set(required_triggers) - {t["trigger_name"] for t in last_triggers})
-    report = {"scenario_results": scenario_results, "negative_results": negative_results, "negative_harness_regression": negative_harness_regression, "lifecycle_transition_assertions": lifecycle_transition_assertions, "inserted_fixture_rows": sum(v["inserted_rows"] for v in scenario_results.values()), "physical_columns": len(physical_fields), "target_fields": len(expected), "missing_fields": missing, "extra_fields": extra, "field_parity_errors": field_parity_errors, "constraint_count": last_constraint_count, "index_count": last_index_count, "trigger_count": len(last_triggers), "missing_required_triggers": missing_required_triggers}
+    report = {"scenario_results": scenario_results, "negative_results": negative_results, "negative_harness_regression": negative_harness_regression, "lifecycle_transition_assertions": lifecycle_transition_assertions, "review07_scenario_assertions": review07_scenario_assertions, "inserted_fixture_rows": sum(v["inserted_rows"] for v in scenario_results.values()), "physical_columns": len(physical_fields), "target_fields": len(expected), "missing_fields": missing, "extra_fields": extra, "field_parity_errors": field_parity_errors, "constraint_count": last_constraint_count, "index_count": last_index_count, "trigger_count": len(last_triggers), "missing_required_triggers": missing_required_triggers}
     write_json("docs/sda/data-model/target-schema-catalog.json", {"columns": last_cols, "constraints": last_constraints, "indexes": last_indexes, "triggers": last_triggers, "report": report})
-    write("docs/sda/data-model/target-schema-validation-report.md", "# Target Schema Validation Report\n\n" + md_table(["Check", "Result"], [["Target schema executed in disposable PostGIS schema", "PASS"], ["Negative harness false-pass regression", negative_harness_regression["status"]], ["Independent positive scenarios", len(scenario_results)], ["Positive fixture rows inserted", report["inserted_fixture_rows"]], ["Negative fixtures rejected", len(negative_results)], ["Physical columns", len(physical_fields)], ["Target fields", len(expected)], ["Missing fields", missing or "none"], ["Extra fields", extra or "none"], ["Constraints", last_constraint_count], ["Indexes", last_index_count]]))
+    write("docs/sda/data-model/target-schema-validation-report.md", "# Target Schema Validation Report\n\n" + md_table(["Check", "Result"], [["Target schema executed in disposable PostGIS schema", "PASS"], ["Negative harness false-pass regression", negative_harness_regression["status"]], ["Independent positive scenarios", len(scenario_results)], ["Positive fixture rows inserted", report["inserted_fixture_rows"]], ["Negative fixtures rejected", len(negative_results)], ["Review 07 scenario/temporal assertions", len(review07_scenario_assertions)], ["Physical columns", len(physical_fields)], ["Target fields", len(expected)], ["Missing fields", missing or "none"], ["Extra fields", extra or "none"], ["Constraints", last_constraint_count], ["Indexes", last_index_count]]))
     if missing:
         raise SystemExit(f"target schema missing fields: {missing[:10]}")
     if field_parity_errors:

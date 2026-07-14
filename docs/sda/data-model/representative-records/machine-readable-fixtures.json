@@ -1904,6 +1904,12 @@
           "created_at": "2026-07-14T00:00:00Z",
           "location_record_id": "multi-unit-building-location-record-unit-02",
           "record_type": "unit"
+        },
+        {
+          "classification": "government-internal",
+          "created_at": "2026-07-14T00:00:00Z",
+          "location_record_id": "multi-unit-building-location-record-building-positive",
+          "record_type": "building"
         }
       ],
       "location_record_assertion": [
@@ -1954,6 +1960,14 @@
           "location_record_version_id": "multi-unit-building-location-record-version-unit-02",
           "object_role": "parent-building",
           "subject_id": "multi-unit-building-registry-subject-parent-building"
+        },
+        {
+          "cardinality_rank": 1,
+          "effective_from": "2026-07-14T00:00:00Z",
+          "link_id": "multi-unit-building-object-link-building-positive-primary",
+          "location_record_version_id": "multi-unit-building-location-record-version-building-positive",
+          "object_role": "primary-subject",
+          "subject_id": "multi-unit-building-registry-subject-building-positive"
         }
       ],
       "location_record_relationship": [
@@ -1989,6 +2003,19 @@
           "locality_id": "multi-unit-building-locality-03",
           "location_record_id": "multi-unit-building-location-record-unit-02",
           "location_record_version_id": "multi-unit-building-location-record-version-unit-02",
+          "recorded_at": "2026-07-14T00:00:00Z",
+          "source_decision_event_id": "multi-unit-building-decision_event-03",
+          "version_number": 1
+        },
+        {
+          "administrative_unit_version_id": "multi-unit-building-administrative_unit_version-03",
+          "correction_case_id": "multi-unit-building-correction_case-03",
+          "display_label_es": "location_record_version-display_label_es-value",
+          "effective_from": "2026-07-14T00:00:00Z",
+          "lifecycle_state": "active",
+          "locality_id": "multi-unit-building-locality-03",
+          "location_record_id": "multi-unit-building-location-record-building-positive",
+          "location_record_version_id": "multi-unit-building-location-record-version-building-positive",
           "recorded_at": "2026-07-14T00:00:00Z",
           "source_decision_event_id": "multi-unit-building-decision_event-03",
           "version_number": 1
@@ -2162,6 +2189,14 @@
           "native_id": "multi-unit-building-building-03",
           "subject_entity": "building",
           "subject_id": "multi-unit-building-registry-subject-parent-building",
+          "subject_state": "active"
+        },
+        {
+          "created_at": "2026-07-14T00:00:00Z",
+          "delete_policy": "retire-only",
+          "native_id": "multi-unit-building-building-03",
+          "subject_entity": "building",
+          "subject_id": "multi-unit-building-registry-subject-building-positive",
           "subject_state": "active"
         }
       ],
@@ -2507,6 +2542,12 @@
           "created_at": "2026-07-14T00:00:00Z",
           "location_record_id": "no-formal-road-location-location_record-04",
           "record_type": "service-location"
+        },
+        {
+          "classification": "government-internal",
+          "created_at": "2026-07-14T00:00:00Z",
+          "location_record_id": "no-formal-road-location-location-record-non-building-object-positive",
+          "record_type": "non-building-object"
         }
       ],
       "location_record_assertion": [
@@ -2533,6 +2574,14 @@
           "location_record_version_id": "no-formal-road-location-location_record_version-04",
           "object_role": "primary-subject",
           "subject_id": "no-formal-road-location-registry_subject-04"
+        },
+        {
+          "cardinality_rank": 1,
+          "effective_from": "2026-07-14T00:00:00Z",
+          "link_id": "no-formal-road-location-object-link-non-building-object-positive-primary",
+          "location_record_version_id": "no-formal-road-location-location-record-version-non-building-object-positive",
+          "object_role": "primary-subject",
+          "subject_id": "no-formal-road-location-registry-subject-non-building-object-positive"
         }
       ],
       "location_record_relationship": [
@@ -2558,6 +2607,19 @@
           "recorded_at": "2026-07-14T00:00:00Z",
           "source_decision_event_id": "no-formal-road-location-decision_event-04",
           "version_number": 4
+        },
+        {
+          "administrative_unit_version_id": "no-formal-road-location-administrative_unit_version-04",
+          "correction_case_id": "no-formal-road-location-correction_case-04",
+          "display_label_es": "location_record_version-display_label_es-value",
+          "effective_from": "2026-07-14T00:00:00Z",
+          "lifecycle_state": "active",
+          "locality_id": "no-formal-road-location-locality-04",
+          "location_record_id": "no-formal-road-location-location-record-non-building-object-positive",
+          "location_record_version_id": "no-formal-road-location-location-record-version-non-building-object-positive",
+          "recorded_at": "2026-07-14T00:00:00Z",
+          "source_decision_event_id": "no-formal-road-location-decision_event-04",
+          "version_number": 1
         }
       ],
       "migration_exception": [
@@ -2688,6 +2750,14 @@
           "native_id": "no-formal-road-location-location_record-04",
           "subject_entity": "location_record",
           "subject_id": "no-formal-road-location-registry_subject-04",
+          "subject_state": "active"
+        },
+        {
+          "created_at": "2026-07-14T00:00:00Z",
+          "delete_policy": "retire-only",
+          "native_id": "no-formal-road-location-non_building_object-04",
+          "subject_entity": "non_building_object",
+          "subject_id": "no-formal-road-location-registry-subject-non-building-object-positive",
           "subject_state": "active"
         }
       ],
@@ -3539,6 +3609,12 @@
           "created_at": "2026-07-14T00:00:00Z",
           "location_record_id": "urban-street-address-location_record-01",
           "record_type": "address"
+        },
+        {
+          "classification": "government-internal",
+          "created_at": "2026-07-14T00:00:00Z",
+          "location_record_id": "urban-street-address-location-record-entrance-positive",
+          "record_type": "entrance"
         }
       ],
       "location_record_assertion": [
@@ -3565,6 +3641,14 @@
           "location_record_version_id": "urban-street-address-location_record_version-01",
           "object_role": "primary-subject",
           "subject_id": "urban-street-address-registry_subject-01"
+        },
+        {
+          "cardinality_rank": 1,
+          "effective_from": "2026-07-14T00:00:00Z",
+          "link_id": "urban-street-address-object-link-entrance-positive-primary",
+          "location_record_version_id": "urban-street-address-location-record-version-entrance-positive",
+          "object_role": "primary-subject",
+          "subject_id": "urban-street-address-registry-subject-entrance-positive"
         }
       ],
       "location_record_relationship": [
@@ -3587,6 +3671,19 @@
           "locality_id": "urban-street-address-locality-01",
           "location_record_id": "urban-street-address-location_record-01",
           "location_record_version_id": "urban-street-address-location_record_version-01",
+          "recorded_at": "2026-07-14T00:00:00Z",
+          "source_decision_event_id": "urban-street-address-decision_event-01",
+          "version_number": 1
+        },
+        {
+          "administrative_unit_version_id": "urban-street-address-administrative_unit_version-01",
+          "correction_case_id": "urban-street-address-correction_case-01",
+          "display_label_es": "location_record_version-display_label_es-value",
+          "effective_from": "2026-07-14T00:00:00Z",
+          "lifecycle_state": "active",
+          "locality_id": "urban-street-address-locality-01",
+          "location_record_id": "urban-street-address-location-record-entrance-positive",
+          "location_record_version_id": "urban-street-address-location-record-version-entrance-positive",
           "recorded_at": "2026-07-14T00:00:00Z",
           "source_decision_event_id": "urban-street-address-decision_event-01",
           "version_number": 1
@@ -3720,6 +3817,14 @@
           "native_id": "urban-street-address-building-01",
           "subject_entity": "building",
           "subject_id": "urban-street-address-registry_subject-01",
+          "subject_state": "active"
+        },
+        {
+          "created_at": "2026-07-14T00:00:00Z",
+          "delete_policy": "retire-only",
+          "native_id": "urban-street-address-entrance-01",
+          "subject_entity": "entrance",
+          "subject_id": "urban-street-address-registry-subject-entrance-positive",
           "subject_state": "active"
         }
       ],

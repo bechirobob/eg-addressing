@@ -320,6 +320,10 @@ expected_lifecycle_edges = sum(len(edges) for edges in lifecycle_transitions.val
 gate("F07-lifecycle-positive-graph-executed", "F07", expected_lifecycle_edges > 0 and len(lifecycle_assertions) == expected_lifecycle_edges and all(v.get("status") == "passed" for v in lifecycle_assertions.values()), "every authored lifecycle transition must be loaded into lifecycle_transition_policy and pass validate_lifecycle_transition", "docs/sda/data-model/target-schema-catalog.json")
 for assertion_id, result in lifecycle_assertions.items() if isinstance(lifecycle_assertions, dict) else []:
     gate(assertion_id, "F07", result.get("status") == "passed" and result.get("permission_key") and result.get("authority") and result.get("audit_event") and result.get("public_effect"), "lifecycle assertion must include permission, authority, audit, and public-effect metadata", "docs/sda/data-model/target-schema-catalog.json")
+review07_scenario_assertions = physical_report.get("review07_scenario_assertions", {}) if isinstance(physical_report, dict) else {}
+gate("F04-F05-F10-review07-scenario-assertions-present", "F04/F05/F10", len(review07_scenario_assertions) >= 49 and all(v.get("status") == "passed" for v in review07_scenario_assertions.values()), "Review 07 F04/F05/F10 named scenario/temporal assertions must all pass", "docs/sda/data-model/target-schema-catalog.json")
+for assertion_id, result in review07_scenario_assertions.items() if isinstance(review07_scenario_assertions, dict) else []:
+    gate(assertion_id, result.get("finding", "F04/F05/F10"), result.get("status") == "passed", "Review 07 scenario/cardinality/temporal assertion failed", "docs/sda/data-model/review07-scenario-temporal-assertions.md")
 harness_regression = physical_report.get("negative_harness_regression") or {}
 if harness_regression.get("status") != "passed" or harness_regression.get("error_class") != "NegativeFixtureDidNotFail":
     err("negative harness false-pass regression did not prove successful invalid actions fail outside the exception handler")
@@ -364,8 +368,10 @@ if len(scenarios.get("administrative-boundary-change", {}).get("administrative_u
     err("administrative-boundary-change scenario must contain old and new admin versions")
 # Review 07 F04/F10: multi-unit scenario must prove separate canonical unit records, aliases, release items, and parent-building links.
 multi_unit = scenarios.get("multi-unit-building", {})
-mu_records = multi_unit.get("location_record", []) if isinstance(multi_unit, dict) else []
-mu_versions = multi_unit.get("location_record_version", []) if isinstance(multi_unit, dict) else []
+mu_records = [r for r in (multi_unit.get("location_record", []) if isinstance(multi_unit, dict) else []) if r.get("record_type") == "unit"]
+mu_versions_all = multi_unit.get("location_record_version", []) if isinstance(multi_unit, dict) else []
+mu_unit_record_ids = {r.get("location_record_id") for r in mu_records}
+mu_versions = [v for v in mu_versions_all if v.get("location_record_id") in mu_unit_record_ids]
 mu_aliases = multi_unit.get("public_code_alias", []) if isinstance(multi_unit, dict) else []
 mu_items = multi_unit.get("publication_release_item", []) if isinstance(multi_unit, dict) else []
 mu_links = multi_unit.get("location_record_object_link", []) if isinstance(multi_unit, dict) else []
@@ -493,6 +499,7 @@ else:
         f"- F09 convergence units: {len(reviewed_units) if isinstance(reviewed_units, list) else 0}",
         f"- Multi-unit canonical records: {len(mu_records)}",
         f"- F07 lifecycle transitions executed: {len(lifecycle_assertions) if isinstance(lifecycle_assertions, dict) else 0}",
+        f"- F04/F05/F10 scenario assertions: {len(review07_scenario_assertions) if isinstance(review07_scenario_assertions, dict) else 0}",
     ])
 report = "\n".join(report_lines) + "\n"
 (DM / "design-consistency-report.md").write_text(report, encoding="utf-8")

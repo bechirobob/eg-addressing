@@ -44,7 +44,7 @@ Final PR-head CI after this evidence closeout is recorded in the SDA Review 07 r
 | AC-15 | READY FOR SDA REVIEW | 105 OpenAPI operations have exact method/path/handler/auth/roles and concrete projection contracts. | Route policy and projection contract registries. | SDA acceptance pending |
 | AC-16 | READY FOR SDA REVIEW | transformation registry covers 237 current fields with executable SELECT no-loss assertions and reference joins. | Transformation registry and semantic checker. | SDA acceptance pending |
 | AC-17 | READY FOR SDA REVIEW | convergence plan is rebuilt after accepted transformation rows and no longer uses pseudo-ASSERT validation. | Schema convergence plan. | SDA acceptance pending |
-| AC-18 | READY FOR SDA REVIEW | seven scenario builders insert 330 target rows and execute seven negative cases. | Machine-readable fixtures and target report. | SDA acceptance pending |
+| AC-18 | READY FOR SDA REVIEW | seven scenario builders insert 342 target rows and execute seven negative cases. | Machine-readable fixtures and target report. | SDA acceptance pending |
 | AC-19 | READY FOR SDA REVIEW | scale assumptions remain explicitly review inputs, not implementation authorization. | Convergence plan and Review 06 resolution log. | SDA acceptance pending |
 | AC-20 | READY FOR SDA REVIEW | dependency-safe target SQL executes in disposable PostGIS and catalog parity is checked. | sda-design-model job evidence; final PR-head job IDs are in the Review 07 request comment. | SDA acceptance pending |
 | AC-21 | READY FOR SDA REVIEW | ADRs 005-009 are hand-maintained source docs with Review 07 assertion reconciliation. | ADRs 005-009. | SDA acceptance pending |
