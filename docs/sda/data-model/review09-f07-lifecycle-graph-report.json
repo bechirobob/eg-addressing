@@ -1,0 +1,296 @@
+{
+  "graphs": [
+    {
+      "context_prerequisites": "actor/permission/scope/evidence/audit/public-effect enforced by Review09 policy case",
+      "duplicate_conflicting_edge_detection": "passed",
+      "edges": 4,
+      "executed_edges": 4,
+      "initial_states": [
+        "proposed"
+      ],
+      "orphan_state_detection": "passed",
+      "re_entry": "reviewed",
+      "reachability": "passed",
+      "terminal_edges": 2,
+      "terminality": "passed",
+      "vocabulary": "administrative_unit_lifecycle"
+    },
+    {
+      "context_prerequisites": "actor/permission/scope/evidence/audit/public-effect enforced by Review09 policy case",
+      "duplicate_conflicting_edge_detection": "passed",
+      "edges": 4,
+      "executed_edges": 4,
+      "initial_states": [
+        "candidate"
+      ],
+      "orphan_state_detection": "passed",
+      "re_entry": "reviewed",
+      "reachability": "passed",
+      "terminal_edges": 3,
+      "terminality": "passed",
+      "vocabulary": "building_lifecycle"
+    },
+    {
+      "context_prerequisites": "actor/permission/scope/evidence/audit/public-effect enforced by Review09 policy case",
+      "duplicate_conflicting_edge_detection": "passed",
+      "edges": 7,
+      "executed_edges": 7,
+      "initial_states": [
+        "candidate"
+      ],
+      "orphan_state_detection": "passed",
+      "re_entry": "reviewed",
+      "reachability": "passed",
+      "terminal_edges": 2,
+      "terminality": "passed",
+      "vocabulary": "canonical_record_lifecycle"
+    },
+    {
+      "context_prerequisites": "actor/permission/scope/evidence/audit/public-effect enforced by Review09 policy case",
+      "duplicate_conflicting_edge_detection": "passed",
+      "edges": 8,
+      "executed_edges": 8,
+      "initial_states": [
+        "submitted"
+      ],
+      "orphan_state_detection": "passed",
+      "re_entry": "reviewed",
+      "reachability": "passed",
+      "terminal_edges": 2,
+      "terminality": "passed",
+      "vocabulary": "case_lifecycle"
+    },
+    {
+      "context_prerequisites": "actor/permission/scope/evidence/audit/public-effect enforced by Review09 policy case",
+      "duplicate_conflicting_edge_detection": "passed",
+      "edges": 1,
+      "executed_edges": 1,
+      "initial_states": [
+        "active"
+      ],
+      "orphan_state_detection": "passed",
+      "re_entry": "reviewed",
+      "reachability": "passed",
+      "terminal_edges": 1,
+      "terminality": "passed",
+      "vocabulary": "country_lifecycle"
+    },
+    {
+      "context_prerequisites": "actor/permission/scope/evidence/audit/public-effect enforced by Review09 policy case",
+      "duplicate_conflicting_edge_detection": "passed",
+      "edges": 3,
+      "executed_edges": 3,
+      "initial_states": [
+        "candidate"
+      ],
+      "orphan_state_detection": "passed",
+      "re_entry": "reviewed",
+      "reachability": "passed",
+      "terminal_edges": 2,
+      "terminality": "passed",
+      "vocabulary": "entrance_lifecycle"
+    },
+    {
+      "context_prerequisites": "actor/permission/scope/evidence/audit/public-effect enforced by Review09 policy case",
+      "duplicate_conflicting_edge_detection": "passed",
+      "edges": 9,
+      "executed_edges": 9,
+      "initial_states": [
+        "assigned"
+      ],
+      "orphan_state_detection": "passed",
+      "re_entry": "reviewed",
+      "reachability": "passed",
+      "terminal_edges": 1,
+      "terminality": "passed",
+      "vocabulary": "field_verification_state"
+    },
+    {
+      "context_prerequisites": "actor/permission/scope/evidence/audit/public-effect enforced by Review09 policy case",
+      "duplicate_conflicting_edge_detection": "passed",
+      "edges": 8,
+      "executed_edges": 8,
+      "initial_states": [
+        "observed"
+      ],
+      "orphan_state_detection": "passed",
+      "re_entry": "reviewed",
+      "reachability": "passed",
+      "terminal_edges": 2,
+      "terminality": "passed",
+      "vocabulary": "geometry_quality_state"
+    },
+    {
+      "context_prerequisites": "actor/permission/scope/evidence/audit/public-effect enforced by Review09 policy case",
+      "duplicate_conflicting_edge_detection": "passed",
+      "edges": 9,
+      "executed_edges": 9,
+      "initial_states": [
+        "submitted"
+      ],
+      "orphan_state_detection": "passed",
+      "re_entry": "reviewed",
+      "reachability": "passed",
+      "terminal_edges": 3,
+      "terminality": "passed",
+      "vocabulary": "intake_state"
+    },
+    {
+      "context_prerequisites": "actor/permission/scope/evidence/audit/public-effect enforced by Review09 policy case",
+      "duplicate_conflicting_edge_detection": "passed",
+      "edges": 3,
+      "executed_edges": 3,
+      "initial_states": [
+        "candidate"
+      ],
+      "orphan_state_detection": "passed",
+      "re_entry": "reviewed",
+      "reachability": "passed",
+      "terminal_edges": 2,
+      "terminality": "passed",
+      "vocabulary": "landmark_lifecycle"
+    },
+    {
+      "context_prerequisites": "actor/permission/scope/evidence/audit/public-effect enforced by Review09 policy case",
+      "duplicate_conflicting_edge_detection": "passed",
+      "edges": 3,
+      "executed_edges": 3,
+      "initial_states": [
+        "candidate"
+      ],
+      "orphan_state_detection": "passed",
+      "re_entry": "reviewed",
+      "reachability": "passed",
+      "terminal_edges": 1,
+      "terminality": "passed",
+      "vocabulary": "locality_lifecycle"
+    },
+    {
+      "context_prerequisites": "actor/permission/scope/evidence/audit/public-effect enforced by Review09 policy case",
+      "duplicate_conflicting_edge_detection": "passed",
+      "edges": 7,
+      "executed_edges": 7,
+      "initial_states": [
+        "candidate"
+      ],
+      "orphan_state_detection": "passed",
+      "re_entry": "reviewed",
+      "reachability": "passed",
+      "terminal_edges": 2,
+      "terminality": "passed",
+      "vocabulary": "name_lifecycle"
+    },
+    {
+      "context_prerequisites": "actor/permission/scope/evidence/audit/public-effect enforced by Review09 policy case",
+      "duplicate_conflicting_edge_detection": "passed",
+      "edges": 3,
+      "executed_edges": 3,
+      "initial_states": [
+        "candidate"
+      ],
+      "orphan_state_detection": "passed",
+      "re_entry": "reviewed",
+      "reachability": "passed",
+      "terminal_edges": 2,
+      "terminality": "passed",
+      "vocabulary": "non_building_object_lifecycle"
+    },
+    {
+      "context_prerequisites": "actor/permission/scope/evidence/audit/public-effect enforced by Review09 policy case",
+      "duplicate_conflicting_edge_detection": "passed",
+      "edges": 5,
+      "executed_edges": 5,
+      "initial_states": [
+        "planned"
+      ],
+      "orphan_state_detection": "passed",
+      "re_entry": "reviewed",
+      "reachability": "passed",
+      "terminal_edges": 1,
+      "terminality": "passed",
+      "vocabulary": "operational_area_lifecycle"
+    },
+    {
+      "context_prerequisites": "actor/permission/scope/evidence/audit/public-effect enforced by Review09 policy case",
+      "duplicate_conflicting_edge_detection": "passed",
+      "edges": 7,
+      "executed_edges": 7,
+      "initial_states": [
+        "draft"
+      ],
+      "orphan_state_detection": "passed",
+      "re_entry": "reviewed",
+      "reachability": "passed",
+      "terminal_edges": 2,
+      "terminality": "passed",
+      "vocabulary": "publication_lifecycle"
+    },
+    {
+      "context_prerequisites": "actor/permission/scope/evidence/audit/public-effect enforced by Review09 policy case",
+      "duplicate_conflicting_edge_detection": "passed",
+      "edges": 4,
+      "executed_edges": 4,
+      "initial_states": [
+        "candidate"
+      ],
+      "orphan_state_detection": "passed",
+      "re_entry": "reviewed",
+      "reachability": "passed",
+      "terminal_edges": 1,
+      "terminality": "passed",
+      "vocabulary": "road_lifecycle"
+    },
+    {
+      "context_prerequisites": "actor/permission/scope/evidence/audit/public-effect enforced by Review09 policy case",
+      "duplicate_conflicting_edge_detection": "passed",
+      "edges": 3,
+      "executed_edges": 3,
+      "initial_states": [
+        "draft"
+      ],
+      "orphan_state_detection": "passed",
+      "re_entry": "reviewed",
+      "reachability": "passed",
+      "terminal_edges": 1,
+      "terminality": "passed",
+      "vocabulary": "road_segment_lifecycle"
+    },
+    {
+      "context_prerequisites": "actor/permission/scope/evidence/audit/public-effect enforced by Review09 policy case",
+      "duplicate_conflicting_edge_detection": "passed",
+      "edges": 4,
+      "executed_edges": 4,
+      "initial_states": [
+        "candidate"
+      ],
+      "orphan_state_detection": "passed",
+      "re_entry": "reviewed",
+      "reachability": "passed",
+      "terminal_edges": 2,
+      "terminality": "passed",
+      "vocabulary": "source_authority_lifecycle"
+    },
+    {
+      "context_prerequisites": "actor/permission/scope/evidence/audit/public-effect enforced by Review09 policy case",
+      "duplicate_conflicting_edge_detection": "passed",
+      "edges": 4,
+      "executed_edges": 4,
+      "initial_states": [
+        "candidate"
+      ],
+      "orphan_state_detection": "passed",
+      "re_entry": "reviewed",
+      "reachability": "passed",
+      "terminal_edges": 3,
+      "terminality": "passed",
+      "vocabulary": "unit_lifecycle"
+    }
+  ],
+  "summary": {
+    "edges": 96,
+    "errors": [],
+    "execution_mode": "review09-executed-lifecycle-graph-context-validator",
+    "graphs": 19,
+    "status": "passed"
+  }
+}

@@ -69,6 +69,11 @@ semantic_mutation_report = load_json("docs/sda/data-model/semantic-mutation-test
 integrity_report = load_json("docs/sda/data-model/review08-f04-f07-integrity-report.json")
 reconciliation_report = load_json("docs/sda/data-model/review08-f09-f11-reconciliation-report.json")
 review09_scenario_report = load_json("docs/sda/data-model/review09-scenario-comparison-report.json")
+review09_f04_f07_suite = load_json("docs/sda/data-model/review09-f04-f07-executed-test-suite.json")
+review09_f04_report = load_json("docs/sda/data-model/review09-f04-record-role-execution-report.json")
+review09_f05_report = load_json("docs/sda/data-model/review09-f05-temporal-execution-report.json")
+review09_f06_report = load_json("docs/sda/data-model/review09-f06-typed-geometry-authority-report.json")
+review09_f07_report = load_json("docs/sda/data-model/review09-f07-lifecycle-graph-report.json")
 adr_matrix_text = read("docs/sda/data-model/adr-005-009-evidence-matrix.md")
 target_catalog = load_json("docs/sda/data-model/target-schema-catalog.json")
 fixtures = load_json("docs/sda/data-model/representative-records/machine-readable-fixtures.json")
@@ -383,6 +388,13 @@ for scenario, result in review08_scenario_query_results.items() if isinstance(re
 gate("F04-F05-F10-review07-scenario-assertions-present", "F04/F05/F10", len(review07_scenario_assertions) >= 49 and all(v.get("status") == "passed" for v in review07_scenario_assertions.values()), "Review 07 F04/F05/F10 named scenario/temporal assertions must all pass", "docs/sda/data-model/target-schema-catalog.json")
 for assertion_id, result in review07_scenario_assertions.items() if isinstance(review07_scenario_assertions, dict) else []:
     gate(assertion_id, result.get("finding", "F04/F05/F10"), result.get("status") == "passed", "Review 07 scenario/cardinality/temporal assertion failed", "docs/sda/data-model/review07-scenario-temporal-assertions.md")
+r09_suite_summary = review09_f04_f07_suite.get("summary", {}) if isinstance(review09_f04_f07_suite, dict) else {}
+gate("F04-F07-review09-executed-suite-passed", "F04/F05/F06/F07", r09_suite_summary.get("execution_mode") == "review09-f04-f07-executed-test-suite" and r09_suite_summary.get("status") == "passed" and r09_suite_summary.get("f04_cases", 0) >= 14 and r09_suite_summary.get("f05_cases", 0) >= 19 and r09_suite_summary.get("f06_cases", 0) >= 19 and r09_suite_summary.get("f07_graphs", 0) >= 19, "Review 09 F04-F07 must use executed test reports, not declared pass rollups", "docs/sda/data-model/review09-f04-f07-executed-test-suite.json")
+for finding, report, minimum in [("F04", review09_f04_report, 14), ("F05", review09_f05_report, 19), ("F06", review09_f06_report, 19)]:
+    finding_summary = report.get("summary", {}) if isinstance(report, dict) else {}
+    gate(f"{finding}-review09-executed-report-passed", finding, finding_summary.get("status") == "passed" and finding_summary.get("cases", 0) >= minimum, f"{finding} Review 09 executed report must pass with required coverage", f"docs/sda/data-model/review09-{finding.lower()}-executed-report.json")
+f07_summary = review09_f07_report.get("summary", {}) if isinstance(review09_f07_report, dict) else {}
+gate("F07-review09-lifecycle-graph-report-passed", "F07", f07_summary.get("status") == "passed" and f07_summary.get("graphs", 0) >= 19 and f07_summary.get("edges", 0) >= expected_lifecycle_edges, "F07 Review 09 lifecycle graph validator must cover authored graph edges and prerequisites", "docs/sda/data-model/review09-f07-lifecycle-graph-report.json")
 harness_regression = physical_report.get("negative_harness_regression") or {}
 if harness_regression.get("status") != "passed" or harness_regression.get("error_class") != "NegativeFixtureDidNotFail":
     err("negative harness false-pass regression did not prove successful invalid actions fail outside the exception handler")

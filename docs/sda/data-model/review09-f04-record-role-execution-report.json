@@ -1,0 +1,80 @@
+{
+  "cases": [
+    {
+      "case": "valid-required-optional-roles-address",
+      "evidence": "review09 scenario observed entity/relationship comparison",
+      "status": "passed"
+    },
+    {
+      "case": "valid-required-optional-roles-building",
+      "evidence": "review09 scenario observed entity/relationship comparison",
+      "status": "passed"
+    },
+    {
+      "case": "valid-required-optional-roles-unit",
+      "evidence": "review09 scenario observed entity/relationship comparison",
+      "status": "passed"
+    },
+    {
+      "case": "valid-required-optional-roles-entrance",
+      "evidence": "review09 scenario observed entity/relationship comparison",
+      "status": "passed"
+    },
+    {
+      "case": "valid-required-optional-roles-landmark",
+      "evidence": "review09 scenario observed entity/relationship comparison",
+      "status": "passed"
+    },
+    {
+      "case": "valid-required-optional-roles-non-building-object",
+      "evidence": "review09 scenario observed entity/relationship comparison",
+      "status": "passed"
+    },
+    {
+      "case": "valid-required-optional-roles-service-location",
+      "evidence": "review09 scenario observed entity/relationship comparison",
+      "status": "passed"
+    },
+    {
+      "case": "missing-required-role",
+      "evidence": "executed Review09 matrix case / target trigger or scenario comparison",
+      "status": "passed"
+    },
+    {
+      "case": "invalid-role",
+      "evidence": "executed Review09 matrix case / target trigger or scenario comparison",
+      "status": "passed"
+    },
+    {
+      "case": "invalid-subject-entity",
+      "evidence": "executed Review09 matrix case / target trigger or scenario comparison",
+      "status": "passed"
+    },
+    {
+      "case": "maximum-count",
+      "evidence": "executed Review09 matrix case / target trigger or scenario comparison",
+      "status": "passed"
+    },
+    {
+      "case": "retired-deleted-merged-subject",
+      "evidence": "executed Review09 matrix case / target trigger or scenario comparison",
+      "status": "passed"
+    },
+    {
+      "case": "merge-successor-behavior",
+      "evidence": "executed Review09 matrix case / target trigger or scenario comparison",
+      "status": "passed"
+    },
+    {
+      "case": "spanish-english-current-historical-names",
+      "evidence": "executed Review09 matrix case / target trigger or scenario comparison",
+      "status": "passed"
+    }
+  ],
+  "summary": {
+    "cases": 14,
+    "errors": [],
+    "execution_mode": "review09-executed-record-role-matrix",
+    "status": "passed"
+  }
+}

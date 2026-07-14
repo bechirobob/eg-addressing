@@ -1,0 +1,106 @@
+{
+  "cases": [
+    {
+      "case": "typed-actor_identity",
+      "evidence": "review09 typed authority design relationship",
+      "status": "passed"
+    },
+    {
+      "case": "typed-service_identity",
+      "evidence": "review09 typed authority design relationship",
+      "status": "passed"
+    },
+    {
+      "case": "typed-institution_membership",
+      "evidence": "review09 typed authority design relationship",
+      "status": "passed"
+    },
+    {
+      "case": "typed-permission",
+      "evidence": "review09 typed authority design relationship",
+      "status": "passed"
+    },
+    {
+      "case": "typed-territorial_scope",
+      "evidence": "review09 typed authority design relationship",
+      "status": "passed"
+    },
+    {
+      "case": "typed-data_scope",
+      "evidence": "review09 typed authority design relationship",
+      "status": "passed"
+    },
+    {
+      "case": "typed-decision_authority",
+      "evidence": "review09 typed authority design relationship",
+      "status": "passed"
+    },
+    {
+      "case": "typed-observation",
+      "evidence": "review09 typed authority design relationship",
+      "status": "passed"
+    },
+    {
+      "case": "typed-evidence",
+      "evidence": "review09 typed authority design relationship",
+      "status": "passed"
+    },
+    {
+      "case": "typed-quality_assessment",
+      "evidence": "review09 typed authority design relationship",
+      "status": "passed"
+    },
+    {
+      "case": "wrong-actor-membership",
+      "evidence": "executed geometry authority matrix / mutation",
+      "status": "passed"
+    },
+    {
+      "case": "wrong-institution",
+      "evidence": "executed geometry authority matrix / mutation",
+      "status": "passed"
+    },
+    {
+      "case": "wrong-scope",
+      "evidence": "executed geometry authority matrix / mutation",
+      "status": "passed"
+    },
+    {
+      "case": "unrelated-quality-assessment",
+      "evidence": "executed geometry authority matrix / mutation",
+      "status": "passed"
+    },
+    {
+      "case": "unrelated-observation",
+      "evidence": "executed geometry authority matrix / mutation",
+      "status": "passed"
+    },
+    {
+      "case": "unrelated-evidence",
+      "evidence": "executed geometry authority matrix / mutation",
+      "status": "passed"
+    },
+    {
+      "case": "cross-subject-successor",
+      "evidence": "executed geometry authority matrix / mutation",
+      "status": "passed"
+    },
+    {
+      "case": "cross-role-successor",
+      "evidence": "executed geometry authority matrix / mutation",
+      "status": "passed"
+    },
+    {
+      "case": "multi-node-cycle",
+      "evidence": "executed geometry authority matrix / mutation",
+      "status": "passed"
+    }
+  ],
+  "summary": {
+    "cases": 19,
+    "errors": [],
+    "execution_mode": "review09-executed-typed-geometry-authority-matrix",
+    "status": "passed",
+    "typed_relationships": 10
+  }
+}

@@ -1,0 +1,106 @@
+{
+  "cases": [
+    {
+      "case": "location_record_version-strategy",
+      "status": "passed",
+      "strategy": "bitemporal"
+    },
+    {
+      "case": "administrative_unit_version-strategy",
+      "status": "passed",
+      "strategy": "recorded-time versioned"
+    },
+    {
+      "case": "administrative_code_history-strategy",
+      "status": "passed",
+      "strategy": "recorded-time versioned"
+    },
+    {
+      "case": "geometry_version-strategy",
+      "status": "passed",
+      "strategy": "bitemporal"
+    },
+    {
+      "case": "public_code_alias-strategy",
+      "status": "passed",
+      "strategy": "recorded-time versioned"
+    },
+    {
+      "case": "name_record-strategy",
+      "status": "passed",
+      "strategy": "recorded-time versioned"
+    },
+    {
+      "case": "publication_release_item-strategy",
+      "status": "passed",
+      "strategy": "recorded-time versioned"
+    },
+    {
+      "case": "location_record_object_link-strategy",
+      "status": "passed",
+      "strategy": "recorded-time versioned"
+    },
+    {
+      "case": "location_record_relationship-strategy",
+      "status": "passed",
+      "strategy": "recorded-time versioned"
+    },
+    {
+      "case": "registry-as-recorded-named-date",
+      "evidence": "review09 scenario history or negative SQL execution",
+      "status": "passed"
+    },
+    {
+      "case": "effective-as-of-named-date",
+      "evidence": "review09 scenario history or negative SQL execution",
+      "status": "passed"
+    },
+    {
+      "case": "public-release-named-date",
+      "evidence": "review09 scenario history or negative SQL execution",
+      "status": "passed"
+    },
+    {
+      "case": "two-node-cycle",
+      "evidence": "review09 scenario history or negative SQL execution",
+      "status": "passed"
+    },
+    {
+      "case": "multi-node-cycle",
+      "evidence": "review09 scenario history or negative SQL execution",
+      "status": "passed"
+    },
+    {
+      "case": "reciprocal-mismatch",
+      "evidence": "review09 scenario history or negative SQL execution",
+      "status": "passed"
+    },
+    {
+      "case": "cross-owner-chain",
+      "evidence": "review09 scenario history or negative SQL execution",
+      "status": "passed"
+    },
+    {
+      "case": "overlap",
+      "evidence": "review09 scenario history or negative SQL execution",
+      "status": "passed"
+    },
+    {
+      "case": "backdated-correction",
+      "evidence": "review09 scenario history or negative SQL execution",
+      "status": "passed"
+    },
+    {
+      "case": "dependent-interval",
+      "evidence": "review09 scenario history or negative SQL execution",
+      "status": "passed"
+    }
+  ],
+  "summary": {
+    "cases": 19,
+    "entities": 9,
+    "errors": [],
+    "execution_mode": "review09-executed-temporal-reconstruction-matrix",
+    "status": "passed"
+  }
+}
