@@ -20,6 +20,7 @@ DM = SDA / "data-model"
 DATE = "2026-07-14"
 BRANCH = "nli/wo-002-canonical-location-model"
 REVIEW_HEAD_NOTE = "Exact final head is recorded in PR #7 body and SDA Review 03 request comment after push."
+FIXING_COMMIT = "2da26c50cce81efba9b1645bf507b00c1b0e0ead"
 
 
 def write(rel: str, text: str) -> None:
@@ -1144,9 +1145,9 @@ def update_review_log() -> None:
             11: "ADRs/RFIs rewritten to templates and 12-question matrix added.",
             12: "Portable generator and semantic checker added to CI with regeneration diff check.",
         }[i]
-        rows.append(f"| F{i:02d} | Resolved for SDA Review 03: {evidence} | Fixing commit recorded after push; `design-consistency-report.md`; final workflow IDs in PR comment. | READY FOR SDA REVIEW | {DATE} |")
+        rows.append(f"| F{i:02d} | Resolved for SDA Review 03: {evidence} | `{FIXING_COMMIT}`; `design-consistency-report.md`; final workflow IDs in PR comment. | READY FOR SDA REVIEW | {DATE} |")
     block = "\n".join(rows)
-    text = re.sub(r"\| F01 \| Pending \| — \| OPEN \| 2026-07-14 \|[\s\S]*?\| F12 \| Pending \| — \| OPEN \| 2026-07-14 \|", block, text)
+    text = re.sub(r"\| F01 \|[^\n]+\|\n\| F02 \|[^\n]+\|\n\| F03 \|[^\n]+\|\n\| F04 \|[^\n]+\|\n\| F05 \|[^\n]+\|\n\| F06 \|[^\n]+\|\n\| F07 \|[^\n]+\|\n\| F08 \|[^\n]+\|\n\| F09 \|[^\n]+\|\n\| F10 \|[^\n]+\|\n\| F11 \|[^\n]+\|\n\| F12 \|[^\n]+\|", block, text)
     p.write_text(text, encoding="utf-8")
 
 

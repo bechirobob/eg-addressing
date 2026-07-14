@@ -27,18 +27,18 @@ This review does not authorize NLI-WO-002B, executable schema work, production d
 
 | Finding | Review 02 disposition | Assessment |
 |---|---|---|
-| F01 | OPEN | AC/evidence rows remain generic; the evidence file lacks the exact head and still says remote workflows are pending. |
-| F02 | PARTIALLY RESOLVED — OPEN | A row is generated for many current fields, but inventory/mapping semantics, readers/writers, classifications, target references, transformations, and validation are heuristic or invalid. |
-| F03 | PARTIALLY RESOLVED — OPEN | A target registry exists, but target-model, ERD, dictionary, field map, and SQL are only textually—not semantically—reconciled. |
-| F04 | PARTIALLY RESOLVED — OPEN | ADRs state high-level choices, but cardinality, optionality, naming, hierarchy versioning, and record/object rules remain incomplete or contradicted by the schema. |
-| F05 | PARTIALLY RESOLVED — OPEN | Effective/recorded fields and exact-version release references were added, but multiple current-state authorities and impossible required links remain. |
-| F06 | PARTIALLY RESOLVED — OPEN | Observation/version entities were added; subject integrity, geometry role/type integrity, transformation/licensing lineage, and boundary handling remain incomplete. |
-| F07 | PARTIALLY RESOLVED — OPEN | Earlier spelling conflicts were reduced, but many controlled fields lack vocabularies and most state machines lack complete transition rules. |
-| F08 | PARTIALLY RESOLVED — OPEN | Dictionary and API map are larger but remain generated/generic and do not provide complete semantic or response-field projection coverage. |
-| F09 | PARTIALLY RESOLVED — OPEN | Migration batches and precedence were added, but the plan is not derived from valid per-field mappings and lacks quantified scale/compatibility/recovery detail. |
-| F10 | OPEN | Representative files are expanded copies of one template, not scenario-specific worked records. |
-| F11 | OPEN | ADR/RFI records remain too brief and the required reserved-question-to-decision matrix is absent. |
-| F12 | OPEN | The checker performs substring/count checks, the generator is non-portable and self-overwriting, and neither validation tool runs in CI. |
+| F01 | Resolved for SDA Review 03: AC matrix and PR evidence rebuilt with exact artifacts; final head recorded post-push. | `2da26c50cce81efba9b1645bf507b00c1b0e0ead`; `design-consistency-report.md`; final workflow IDs in PR comment. | READY FOR SDA REVIEW | 2026-07-14 |
+| F02 | Resolved for SDA Review 03: Validated current-to-target mapping registry; no invalid target references. | `2da26c50cce81efba9b1645bf507b00c1b0e0ead`; `design-consistency-report.md`; final workflow IDs in PR comment. | READY FOR SDA REVIEW | 2026-07-14 |
+| F03 | Resolved for SDA Review 03: Typed target metadata replaces suffix inference; dictionary/schema generated from explicit metadata. | `2da26c50cce81efba9b1645bf507b00c1b0e0ead`; `design-consistency-report.md`; final workflow IDs in PR comment. | READY FOR SDA REVIEW | 2026-07-14 |
+| F04 | Resolved for SDA Review 03: ADR-006/007 plus cardinality/name/admin/object models corrected. | `2da26c50cce81efba9b1645bf507b00c1b0e0ead`; `design-consistency-report.md`; final workflow IDs in PR comment. | READY FOR SDA REVIEW | 2026-07-14 |
+| F05 | Resolved for SDA Review 03: Single current mechanism, optional links, exact publication snapshots corrected. | `2da26c50cce81efba9b1645bf507b00c1b0e0ead`; `design-consistency-report.md`; final workflow IDs in PR comment. | READY FOR SDA REVIEW | 2026-07-14 |
+| F06 | Resolved for SDA Review 03: Geometry role/type/source/licence/transformation/quality/dispute model corrected. | `2da26c50cce81efba9b1645bf507b00c1b0e0ead`; `design-consistency-report.md`; final workflow IDs in PR comment. | READY FOR SDA REVIEW | 2026-07-14 |
+| F07 | Resolved for SDA Review 03: Field-to-vocabulary registry and transition tables completed. | `2da26c50cce81efba9b1645bf507b00c1b0e0ead`; `design-consistency-report.md`; final workflow IDs in PR comment. | READY FOR SDA REVIEW | 2026-07-14 |
+| F08 | Resolved for SDA Review 03: Semantic dictionary and route projection matrix generated. | `2da26c50cce81efba9b1645bf507b00c1b0e0ead`; `design-consistency-report.md`; final workflow IDs in PR comment. | READY FOR SDA REVIEW | 2026-07-14 |
+| F09 | Resolved for SDA Review 03: Convergence plan rebuilt from validated field map with owners/gates/scale. | `2da26c50cce81efba9b1645bf507b00c1b0e0ead`; `design-consistency-report.md`; final workflow IDs in PR comment. | READY FOR SDA REVIEW | 2026-07-14 |
+| F10 | Resolved for SDA Review 03: Representative records replaced with distinct scenario-specific records. | `2da26c50cce81efba9b1645bf507b00c1b0e0ead`; `design-consistency-report.md`; final workflow IDs in PR comment. | READY FOR SDA REVIEW | 2026-07-14 |
+| F11 | Resolved for SDA Review 03: ADRs/RFIs rewritten to templates and 12-question matrix added. | `2da26c50cce81efba9b1645bf507b00c1b0e0ead`; `design-consistency-report.md`; final workflow IDs in PR comment. | READY FOR SDA REVIEW | 2026-07-14 |
+| F12 | Resolved for SDA Review 03: Portable generator and semantic checker added to CI with regeneration diff check. | `2da26c50cce81efba9b1645bf507b00c1b0e0ead`; `design-consistency-report.md`; final workflow IDs in PR comment. | READY FOR SDA REVIEW | 2026-07-14 |
 
 ## 3. Acceptance-criterion decision
 
@@ -214,15 +214,15 @@ Keep PR #7 in draft. NLI-WO-002B remains unauthorized.
 
 | Finding | Agent response | Commit/evidence | SDA disposition | Date |
 |---|---|---|---|---|
-| F01 | Resolved for SDA Review 03: AC matrix and PR evidence rebuilt with exact artifacts; final head recorded post-push. | Fixing commit recorded after push; `design-consistency-report.md`; final workflow IDs in PR comment. | READY FOR SDA REVIEW | 2026-07-14 |
-| F02 | Resolved for SDA Review 03: Validated current-to-target mapping registry; no invalid target references. | Fixing commit recorded after push; `design-consistency-report.md`; final workflow IDs in PR comment. | READY FOR SDA REVIEW | 2026-07-14 |
-| F03 | Resolved for SDA Review 03: Typed target metadata replaces suffix inference; dictionary/schema generated from explicit metadata. | Fixing commit recorded after push; `design-consistency-report.md`; final workflow IDs in PR comment. | READY FOR SDA REVIEW | 2026-07-14 |
-| F04 | Resolved for SDA Review 03: ADR-006/007 plus cardinality/name/admin/object models corrected. | Fixing commit recorded after push; `design-consistency-report.md`; final workflow IDs in PR comment. | READY FOR SDA REVIEW | 2026-07-14 |
-| F05 | Resolved for SDA Review 03: Single current mechanism, optional links, exact publication snapshots corrected. | Fixing commit recorded after push; `design-consistency-report.md`; final workflow IDs in PR comment. | READY FOR SDA REVIEW | 2026-07-14 |
-| F06 | Resolved for SDA Review 03: Geometry role/type/source/licence/transformation/quality/dispute model corrected. | Fixing commit recorded after push; `design-consistency-report.md`; final workflow IDs in PR comment. | READY FOR SDA REVIEW | 2026-07-14 |
-| F07 | Resolved for SDA Review 03: Field-to-vocabulary registry and transition tables completed. | Fixing commit recorded after push; `design-consistency-report.md`; final workflow IDs in PR comment. | READY FOR SDA REVIEW | 2026-07-14 |
-| F08 | Resolved for SDA Review 03: Semantic dictionary and route projection matrix generated. | Fixing commit recorded after push; `design-consistency-report.md`; final workflow IDs in PR comment. | READY FOR SDA REVIEW | 2026-07-14 |
-| F09 | Resolved for SDA Review 03: Convergence plan rebuilt from validated field map with owners/gates/scale. | Fixing commit recorded after push; `design-consistency-report.md`; final workflow IDs in PR comment. | READY FOR SDA REVIEW | 2026-07-14 |
-| F10 | Resolved for SDA Review 03: Representative records replaced with distinct scenario-specific records. | Fixing commit recorded after push; `design-consistency-report.md`; final workflow IDs in PR comment. | READY FOR SDA REVIEW | 2026-07-14 |
-| F11 | Resolved for SDA Review 03: ADRs/RFIs rewritten to templates and 12-question matrix added. | Fixing commit recorded after push; `design-consistency-report.md`; final workflow IDs in PR comment. | READY FOR SDA REVIEW | 2026-07-14 |
-| F12 | Resolved for SDA Review 03: Portable generator and semantic checker added to CI with regeneration diff check. | Fixing commit recorded after push; `design-consistency-report.md`; final workflow IDs in PR comment. | READY FOR SDA REVIEW | 2026-07-14 |
+| F01 | Resolved for SDA Review 03: AC matrix and PR evidence rebuilt with exact artifacts; final head recorded post-push. | `2da26c50cce81efba9b1645bf507b00c1b0e0ead`; `design-consistency-report.md`; final workflow IDs in PR comment. | READY FOR SDA REVIEW | 2026-07-14 |
+| F02 | Resolved for SDA Review 03: Validated current-to-target mapping registry; no invalid target references. | `2da26c50cce81efba9b1645bf507b00c1b0e0ead`; `design-consistency-report.md`; final workflow IDs in PR comment. | READY FOR SDA REVIEW | 2026-07-14 |
+| F03 | Resolved for SDA Review 03: Typed target metadata replaces suffix inference; dictionary/schema generated from explicit metadata. | `2da26c50cce81efba9b1645bf507b00c1b0e0ead`; `design-consistency-report.md`; final workflow IDs in PR comment. | READY FOR SDA REVIEW | 2026-07-14 |
+| F04 | Resolved for SDA Review 03: ADR-006/007 plus cardinality/name/admin/object models corrected. | `2da26c50cce81efba9b1645bf507b00c1b0e0ead`; `design-consistency-report.md`; final workflow IDs in PR comment. | READY FOR SDA REVIEW | 2026-07-14 |
+| F05 | Resolved for SDA Review 03: Single current mechanism, optional links, exact publication snapshots corrected. | `2da26c50cce81efba9b1645bf507b00c1b0e0ead`; `design-consistency-report.md`; final workflow IDs in PR comment. | READY FOR SDA REVIEW | 2026-07-14 |
+| F06 | Resolved for SDA Review 03: Geometry role/type/source/licence/transformation/quality/dispute model corrected. | `2da26c50cce81efba9b1645bf507b00c1b0e0ead`; `design-consistency-report.md`; final workflow IDs in PR comment. | READY FOR SDA REVIEW | 2026-07-14 |
+| F07 | Resolved for SDA Review 03: Field-to-vocabulary registry and transition tables completed. | `2da26c50cce81efba9b1645bf507b00c1b0e0ead`; `design-consistency-report.md`; final workflow IDs in PR comment. | READY FOR SDA REVIEW | 2026-07-14 |
+| F08 | Resolved for SDA Review 03: Semantic dictionary and route projection matrix generated. | `2da26c50cce81efba9b1645bf507b00c1b0e0ead`; `design-consistency-report.md`; final workflow IDs in PR comment. | READY FOR SDA REVIEW | 2026-07-14 |
+| F09 | Resolved for SDA Review 03: Convergence plan rebuilt from validated field map with owners/gates/scale. | `2da26c50cce81efba9b1645bf507b00c1b0e0ead`; `design-consistency-report.md`; final workflow IDs in PR comment. | READY FOR SDA REVIEW | 2026-07-14 |
+| F10 | Resolved for SDA Review 03: Representative records replaced with distinct scenario-specific records. | `2da26c50cce81efba9b1645bf507b00c1b0e0ead`; `design-consistency-report.md`; final workflow IDs in PR comment. | READY FOR SDA REVIEW | 2026-07-14 |
+| F11 | Resolved for SDA Review 03: ADRs/RFIs rewritten to templates and 12-question matrix added. | `2da26c50cce81efba9b1645bf507b00c1b0e0ead`; `design-consistency-report.md`; final workflow IDs in PR comment. | READY FOR SDA REVIEW | 2026-07-14 |
+| F12 | Resolved for SDA Review 03: Portable generator and semantic checker added to CI with regeneration diff check. | `2da26c50cce81efba9b1645bf507b00c1b0e0ead`; `design-consistency-report.md`; final workflow IDs in PR comment. | READY FOR SDA REVIEW | 2026-07-14 |
