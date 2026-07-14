@@ -11,6 +11,18 @@ INSERT INTO vocab_admin_level(value, meaning) VALUES ('district', 'District-leve
 INSERT INTO vocab_admin_level(value, meaning) VALUES ('local_council', 'Recognized lower level when authorized.');
 INSERT INTO vocab_admin_level(value, meaning) VALUES ('municipality', 'Municipality-level administrative unit.');
 INSERT INTO vocab_admin_level(value, meaning) VALUES ('province', 'First-level administrative unit.');
+CREATE TABLE vocab_administrative_unit_lifecycle (value text PRIMARY KEY, meaning text NOT NULL);
+INSERT INTO vocab_administrative_unit_lifecycle(value, meaning) VALUES ('historical', 'Historical official version.');
+INSERT INTO vocab_administrative_unit_lifecycle(value, meaning) VALUES ('official', 'Official active version.');
+INSERT INTO vocab_administrative_unit_lifecycle(value, meaning) VALUES ('proposed', 'Proposed administrative version.');
+INSERT INTO vocab_administrative_unit_lifecycle(value, meaning) VALUES ('retired', 'Retired version.');
+INSERT INTO vocab_administrative_unit_lifecycle(value, meaning) VALUES ('revoked', 'Revoked version.');
+CREATE TABLE vocab_building_lifecycle (value text PRIMARY KEY, meaning text NOT NULL);
+INSERT INTO vocab_building_lifecycle(value, meaning) VALUES ('active', 'Active building.');
+INSERT INTO vocab_building_lifecycle(value, meaning) VALUES ('candidate', 'Candidate building.');
+INSERT INTO vocab_building_lifecycle(value, meaning) VALUES ('demolished', 'Demolished building.');
+INSERT INTO vocab_building_lifecycle(value, meaning) VALUES ('retired', 'Retired building.');
+INSERT INTO vocab_building_lifecycle(value, meaning) VALUES ('revoked', 'Revoked building.');
 CREATE TABLE vocab_canonical_record_lifecycle (value text PRIMARY KEY, meaning text NOT NULL);
 INSERT INTO vocab_canonical_record_lifecycle(value, meaning) VALUES ('active', 'Current approved canonical state.');
 INSERT INTO vocab_canonical_record_lifecycle(value, meaning) VALUES ('candidate', 'Candidate record.');
@@ -69,6 +81,10 @@ INSERT INTO vocab_decision_type(value, meaning) VALUES ('promote-record', 'Promo
 INSERT INTO vocab_decision_type(value, meaning) VALUES ('resolve-dispute', 'Resolve dispute.');
 INSERT INTO vocab_decision_type(value, meaning) VALUES ('supersede-record', 'Supersede record/version.');
 INSERT INTO vocab_decision_type(value, meaning) VALUES ('withdraw-publication', 'Withdraw release.');
+CREATE TABLE vocab_delete_policy (value text PRIMARY KEY, meaning text NOT NULL);
+INSERT INTO vocab_delete_policy(value, meaning) VALUES ('cascade-prohibited', 'Reject delete while dependent links exist.');
+INSERT INTO vocab_delete_policy(value, meaning) VALUES ('merge-required', 'Merge/supersession required before retirement.');
+INSERT INTO vocab_delete_policy(value, meaning) VALUES ('retire-only', 'Do not hard delete; retire and preserve links.');
 CREATE TABLE vocab_dispute_type (value text PRIMARY KEY, meaning text NOT NULL);
 INSERT INTO vocab_dispute_type(value, meaning) VALUES ('authority', 'Authority/source dispute.');
 INSERT INTO vocab_dispute_type(value, meaning) VALUES ('duplicate', 'Duplicate/supersession dispute.');
@@ -137,6 +153,11 @@ INSERT INTO vocab_lifecycle_state(value, meaning) VALUES ('registry-review', 'Un
 INSERT INTO vocab_lifecycle_state(value, meaning) VALUES ('retired', 'No longer valid for current use.');
 INSERT INTO vocab_lifecycle_state(value, meaning) VALUES ('revoked', 'Invalidated by authority.');
 INSERT INTO vocab_lifecycle_state(value, meaning) VALUES ('superseded', 'Replaced by successor record or version.');
+CREATE TABLE vocab_locality_lifecycle (value text PRIMARY KEY, meaning text NOT NULL);
+INSERT INTO vocab_locality_lifecycle(value, meaning) VALUES ('candidate', 'Candidate locality.');
+INSERT INTO vocab_locality_lifecycle(value, meaning) VALUES ('official', 'Official locality.');
+INSERT INTO vocab_locality_lifecycle(value, meaning) VALUES ('renamed', 'Renamed locality.');
+INSERT INTO vocab_locality_lifecycle(value, meaning) VALUES ('retired', 'Retired locality.');
 CREATE TABLE vocab_locality_type (value text PRIMARY KEY, meaning text NOT NULL);
 INSERT INTO vocab_locality_type(value, meaning) VALUES ('informal_area', 'Recognized operational/local context pending authority.');
 INSERT INTO vocab_locality_type(value, meaning) VALUES ('neighbourhood', 'Neighbourhood not necessarily legal hierarchy.');
@@ -264,6 +285,17 @@ INSERT INTO vocab_road_class(value, meaning) VALUES ('service-road', 'Service/ac
 INSERT INTO vocab_road_class(value, meaning) VALUES ('street', 'Urban street.');
 INSERT INTO vocab_road_class(value, meaning) VALUES ('track', 'Track/unpaved access.');
 INSERT INTO vocab_road_class(value, meaning) VALUES ('unknown', 'Unknown class pending validation.');
+CREATE TABLE vocab_road_lifecycle (value text PRIMARY KEY, meaning text NOT NULL);
+INSERT INTO vocab_road_lifecycle(value, meaning) VALUES ('candidate', 'Candidate road.');
+INSERT INTO vocab_road_lifecycle(value, meaning) VALUES ('field-verified', 'Field verified road.');
+INSERT INTO vocab_road_lifecycle(value, meaning) VALUES ('official', 'Official road.');
+INSERT INTO vocab_road_lifecycle(value, meaning) VALUES ('retired', 'Retired road.');
+INSERT INTO vocab_road_lifecycle(value, meaning) VALUES ('superseded', 'Superseded road.');
+CREATE TABLE vocab_road_segment_lifecycle (value text PRIMARY KEY, meaning text NOT NULL);
+INSERT INTO vocab_road_segment_lifecycle(value, meaning) VALUES ('active', 'Active segment.');
+INSERT INTO vocab_road_segment_lifecycle(value, meaning) VALUES ('draft', 'Draft segment.');
+INSERT INTO vocab_road_segment_lifecycle(value, meaning) VALUES ('realigned', 'Realigned segment.');
+INSERT INTO vocab_road_segment_lifecycle(value, meaning) VALUES ('retired', 'Retired segment.');
 CREATE TABLE vocab_source_authority_class (value text PRIMARY KEY, meaning text NOT NULL);
 INSERT INTO vocab_source_authority_class(value, meaning) VALUES ('citizen-submitted', 'Citizen submission.');
 INSERT INTO vocab_source_authority_class(value, meaning) VALUES ('derived-system', 'System-derived value.');
@@ -280,6 +312,17 @@ INSERT INTO vocab_source_authority_lifecycle(value, meaning) VALUES ('candidate'
 INSERT INTO vocab_source_authority_lifecycle(value, meaning) VALUES ('deprecated', 'Deprecated source.');
 INSERT INTO vocab_source_authority_lifecycle(value, meaning) VALUES ('revoked', 'Revoked source.');
 INSERT INTO vocab_source_authority_lifecycle(value, meaning) VALUES ('trusted', 'Trusted source.');
+CREATE TABLE vocab_subject_lifecycle (value text PRIMARY KEY, meaning text NOT NULL);
+INSERT INTO vocab_subject_lifecycle(value, meaning) VALUES ('active', 'Subject can receive links.');
+INSERT INTO vocab_subject_lifecycle(value, meaning) VALUES ('deleted-prohibited', 'Delete attempted but policy requires retirement.');
+INSERT INTO vocab_subject_lifecycle(value, meaning) VALUES ('merged', 'Subject merged into successor.');
+INSERT INTO vocab_subject_lifecycle(value, meaning) VALUES ('retired', 'Subject retained but not assignable.');
+CREATE TABLE vocab_unit_lifecycle (value text PRIMARY KEY, meaning text NOT NULL);
+INSERT INTO vocab_unit_lifecycle(value, meaning) VALUES ('active', 'Active unit.');
+INSERT INTO vocab_unit_lifecycle(value, meaning) VALUES ('candidate', 'Candidate unit.');
+INSERT INTO vocab_unit_lifecycle(value, meaning) VALUES ('merged', 'Merged unit.');
+INSERT INTO vocab_unit_lifecycle(value, meaning) VALUES ('retired', 'Retired unit.');
+INSERT INTO vocab_unit_lifecycle(value, meaning) VALUES ('split', 'Split unit.');
 CREATE TABLE vocab_unit_type (value text PRIMARY KEY, meaning text NOT NULL);
 INSERT INTO vocab_unit_type(value, meaning) VALUES ('apartment', 'Apartment/flat.');
 INSERT INTO vocab_unit_type(value, meaning) VALUES ('compound-unit', 'Compound/yard unit.');
@@ -301,7 +344,6 @@ CREATE TABLE proposed_administrative_code_history (
 CREATE TABLE proposed_administrative_unit (
   administrative_unit_id text NOT NULL,
   country_id text NOT NULL,
-  stable_code text NOT NULL,
   created_at timestamptz NOT NULL DEFAULT now(),
   retired_at timestamptz,
   CONSTRAINT proposed_administrative_unit_pk PRIMARY KEY (administrative_unit_id)
@@ -371,13 +413,12 @@ CREATE TABLE proposed_decision_event (
 );
 CREATE TABLE proposed_dispute_case (
   dispute_case_id text NOT NULL,
-  target_entity text NOT NULL,
-  target_id text NOT NULL,
   dispute_type text NOT NULL,
   case_state text NOT NULL,
   opened_at timestamptz NOT NULL,
   resolved_at timestamptz,
   resolution_event_id text,
+  subject_id text NOT NULL,
   CONSTRAINT proposed_dispute_case_pk PRIMARY KEY (dispute_case_id)
 );
 CREATE TABLE proposed_entrance (
@@ -425,8 +466,6 @@ CREATE TABLE proposed_field_observation (
 );
 CREATE TABLE proposed_geometry_observation (
   geometry_observation_id text NOT NULL,
-  subject_hint_entity text,
-  subject_hint_id text,
   observed_geom geometry(geometry,4326) NOT NULL,
   geometry_role text NOT NULL,
   capture_method text NOT NULL,
@@ -437,6 +476,7 @@ CREATE TABLE proposed_geometry_observation (
   observed_at timestamptz NOT NULL,
   recorded_at timestamptz NOT NULL DEFAULT now(),
   classification text NOT NULL DEFAULT 'restricted',
+  subject_id text NOT NULL,
   CONSTRAINT proposed_geometry_observation_pk PRIMARY KEY (geometry_observation_id)
 );
 CREATE TABLE proposed_geometry_quality_assessment (
@@ -462,7 +502,6 @@ CREATE TABLE proposed_geometry_transformation (
 );
 CREATE TABLE proposed_geometry_version (
   geometry_version_id text NOT NULL,
-  subject_entity text NOT NULL,
   subject_id text NOT NULL,
   geometry_role text NOT NULL,
   geom geometry(geometry,4326) NOT NULL,
@@ -550,12 +589,11 @@ CREATE TABLE proposed_location_record_assertion (
 CREATE TABLE proposed_location_record_object_link (
   link_id text NOT NULL,
   location_record_version_id text NOT NULL,
-  object_entity text NOT NULL,
-  object_id text NOT NULL,
   object_role text NOT NULL,
   cardinality_rank integer NOT NULL DEFAULT 1,
   effective_from timestamptz NOT NULL,
   effective_to timestamptz,
+  subject_id text NOT NULL,
   CONSTRAINT proposed_location_record_object_link_pk PRIMARY KEY (link_id)
 );
 CREATE TABLE proposed_location_record_relationship (
@@ -604,7 +642,6 @@ CREATE TABLE proposed_migration_exception (
 );
 CREATE TABLE proposed_name_record (
   name_record_id text NOT NULL,
-  subject_entity text NOT NULL,
   subject_id text NOT NULL,
   language_code text NOT NULL,
   name_kind text NOT NULL,
@@ -708,6 +745,10 @@ CREATE TABLE proposed_registry_subject (
   subject_entity text NOT NULL,
   subject_native_id text NOT NULL,
   created_at timestamptz NOT NULL DEFAULT now(),
+  native_id text NOT NULL,
+  subject_state text NOT NULL DEFAULT 'active',
+  retired_at timestamptz,
+  delete_policy text NOT NULL DEFAULT 'retire-only',
   CONSTRAINT proposed_registry_subject_pk PRIMARY KEY (subject_id)
 );
 CREATE TABLE proposed_road (
@@ -785,7 +826,7 @@ ALTER TABLE proposed_administrative_unit ADD CONSTRAINT proposed_administrative_
 ALTER TABLE proposed_administrative_unit_version ADD CONSTRAINT proposed_administrative_unit_version_administrative_unit_id_fk FOREIGN KEY (administrative_unit_id) REFERENCES proposed_administrative_unit(administrative_unit_id) DEFERRABLE INITIALLY DEFERRED;
 ALTER TABLE proposed_administrative_unit_version ADD CONSTRAINT proposed_administrative_unit_version_parent_administrative_unit_id_fk FOREIGN KEY (parent_administrative_unit_id) REFERENCES proposed_administrative_unit(administrative_unit_id) DEFERRABLE INITIALLY DEFERRED;
 ALTER TABLE proposed_administrative_unit_version ADD CONSTRAINT proposed_administrative_unit_version_admin_level_vocab_fk FOREIGN KEY (admin_level) REFERENCES vocab_admin_level(value) DEFERRABLE INITIALLY DEFERRED;
-ALTER TABLE proposed_administrative_unit_version ADD CONSTRAINT proposed_administrative_unit_version_lifecycle_state_vocab_fk FOREIGN KEY (lifecycle_state) REFERENCES vocab_lifecycle_state(value) DEFERRABLE INITIALLY DEFERRED;
+ALTER TABLE proposed_administrative_unit_version ADD CONSTRAINT proposed_administrative_unit_version_lifecycle_state_vocab_fk FOREIGN KEY (lifecycle_state) REFERENCES vocab_administrative_unit_lifecycle(value) DEFERRABLE INITIALLY DEFERRED;
 ALTER TABLE proposed_administrative_unit_version ADD CONSTRAINT proposed_administrative_unit_version_effective_interval_ck CHECK (effective_to IS NULL OR effective_from < effective_to);
 ALTER TABLE proposed_administrative_unit_version ADD CONSTRAINT proposed_administrative_unit_version_source_authority_id_fk FOREIGN KEY (source_authority_id) REFERENCES proposed_source_authority(source_authority_id) DEFERRABLE INITIALLY DEFERRED;
 ALTER TABLE proposed_administrative_unit_version ADD CONSTRAINT proposed_administrative_unit_version_classification_vocab_fk FOREIGN KEY (classification) REFERENCES vocab_classification(value) DEFERRABLE INITIALLY DEFERRED;
@@ -806,6 +847,7 @@ ALTER TABLE proposed_decision_event ADD CONSTRAINT proposed_decision_event_autho
 ALTER TABLE proposed_dispute_case ADD CONSTRAINT proposed_dispute_case_dispute_type_vocab_fk FOREIGN KEY (dispute_type) REFERENCES vocab_dispute_type(value) DEFERRABLE INITIALLY DEFERRED;
 ALTER TABLE proposed_dispute_case ADD CONSTRAINT proposed_dispute_case_case_state_vocab_fk FOREIGN KEY (case_state) REFERENCES vocab_case_state(value) DEFERRABLE INITIALLY DEFERRED;
 ALTER TABLE proposed_dispute_case ADD CONSTRAINT proposed_dispute_case_resolution_event_id_fk FOREIGN KEY (resolution_event_id) REFERENCES proposed_decision_event(decision_event_id) DEFERRABLE INITIALLY DEFERRED;
+ALTER TABLE proposed_dispute_case ADD CONSTRAINT proposed_dispute_case_subject_id_fk FOREIGN KEY (subject_id) REFERENCES proposed_registry_subject(subject_id) DEFERRABLE INITIALLY DEFERRED;
 ALTER TABLE proposed_entrance ADD CONSTRAINT proposed_entrance_building_id_fk FOREIGN KEY (building_id) REFERENCES proposed_building(building_id) DEFERRABLE INITIALLY DEFERRED;
 ALTER TABLE proposed_entrance ADD CONSTRAINT proposed_entrance_entrance_role_vocab_fk FOREIGN KEY (entrance_role) REFERENCES vocab_entrance_role(value) DEFERRABLE INITIALLY DEFERRED;
 ALTER TABLE proposed_entrance ADD CONSTRAINT proposed_entrance_lifecycle_state_vocab_fk FOREIGN KEY (lifecycle_state) REFERENCES vocab_reference_object_lifecycle(value) DEFERRABLE INITIALLY DEFERRED;
@@ -829,8 +871,10 @@ ALTER TABLE proposed_geometry_observation ADD CONSTRAINT proposed_geometry_obser
 ALTER TABLE proposed_geometry_observation ADD CONSTRAINT proposed_geometry_observation_evidence_object_id_fk FOREIGN KEY (evidence_object_id) REFERENCES proposed_evidence_object(evidence_object_id) DEFERRABLE INITIALLY DEFERRED;
 ALTER TABLE proposed_geometry_observation ADD CONSTRAINT proposed_geometry_observation_licence_id_fk FOREIGN KEY (licence_id) REFERENCES proposed_licence(licence_id) DEFERRABLE INITIALLY DEFERRED;
 ALTER TABLE proposed_geometry_observation ADD CONSTRAINT proposed_geometry_observation_classification_vocab_fk FOREIGN KEY (classification) REFERENCES vocab_classification(value) DEFERRABLE INITIALLY DEFERRED;
+ALTER TABLE proposed_geometry_observation ADD CONSTRAINT proposed_geometry_observation_subject_id_fk FOREIGN KEY (subject_id) REFERENCES proposed_registry_subject(subject_id) DEFERRABLE INITIALLY DEFERRED;
 ALTER TABLE proposed_geometry_quality_assessment ADD CONSTRAINT proposed_geometry_quality_assessment_geometry_version_id_fk FOREIGN KEY (geometry_version_id) REFERENCES proposed_geometry_version(geometry_version_id) DEFERRABLE INITIALLY DEFERRED;
 ALTER TABLE proposed_geometry_quality_assessment ADD CONSTRAINT proposed_geometry_quality_assessment_check_result_vocab_fk FOREIGN KEY (check_result) REFERENCES vocab_quality_check_result(value) DEFERRABLE INITIALLY DEFERRED;
+ALTER TABLE proposed_geometry_version ADD CONSTRAINT proposed_geometry_version_subject_id_fk FOREIGN KEY (subject_id) REFERENCES proposed_registry_subject(subject_id) DEFERRABLE INITIALLY DEFERRED;
 ALTER TABLE proposed_geometry_version ADD CONSTRAINT proposed_geometry_version_geometry_role_vocab_fk FOREIGN KEY (geometry_role) REFERENCES vocab_geometry_role(value) DEFERRABLE INITIALLY DEFERRED;
 ALTER TABLE proposed_geometry_version ADD CONSTRAINT proposed_geometry_version_geom_valid_ck CHECK (geom IS NULL OR (ST_IsValid(geom) AND ST_SRID(geom) = 4326));
 CREATE INDEX proposed_geometry_version_geom_gist ON proposed_geometry_version USING GIST (geom);
@@ -863,6 +907,7 @@ ALTER TABLE proposed_location_record_assertion ADD CONSTRAINT proposed_location_
 ALTER TABLE proposed_location_record_object_link ADD CONSTRAINT proposed_location_record_object_link_location_record_version_id_fk FOREIGN KEY (location_record_version_id) REFERENCES proposed_location_record_version(location_record_version_id) DEFERRABLE INITIALLY DEFERRED;
 ALTER TABLE proposed_location_record_object_link ADD CONSTRAINT proposed_location_record_object_link_object_role_vocab_fk FOREIGN KEY (object_role) REFERENCES vocab_object_role(value) DEFERRABLE INITIALLY DEFERRED;
 ALTER TABLE proposed_location_record_object_link ADD CONSTRAINT proposed_location_record_object_link_effective_interval_ck CHECK (effective_to IS NULL OR effective_from < effective_to);
+ALTER TABLE proposed_location_record_object_link ADD CONSTRAINT proposed_location_record_object_link_subject_id_fk FOREIGN KEY (subject_id) REFERENCES proposed_registry_subject(subject_id) DEFERRABLE INITIALLY DEFERRED;
 ALTER TABLE proposed_location_record_relationship ADD CONSTRAINT proposed_location_record_relationship_from_location_record_id_fk FOREIGN KEY (from_location_record_id) REFERENCES proposed_location_record(location_record_id) DEFERRABLE INITIALLY DEFERRED;
 ALTER TABLE proposed_location_record_relationship ADD CONSTRAINT proposed_location_record_relationship_to_location_record_id_fk FOREIGN KEY (to_location_record_id) REFERENCES proposed_location_record(location_record_id) DEFERRABLE INITIALLY DEFERRED;
 ALTER TABLE proposed_location_record_relationship ADD CONSTRAINT proposed_location_record_relationship_relationship_type_vocab_fk FOREIGN KEY (relationship_type) REFERENCES vocab_relationship_type(value) DEFERRABLE INITIALLY DEFERRED;
@@ -877,6 +922,7 @@ ALTER TABLE proposed_location_record_version ADD CONSTRAINT proposed_location_re
 ALTER TABLE proposed_location_record_version ADD CONSTRAINT proposed_location_record_version_successor_version_id_fk FOREIGN KEY (successor_version_id) REFERENCES proposed_location_record_version(location_record_version_id) DEFERRABLE INITIALLY DEFERRED;
 ALTER TABLE proposed_location_record_version ADD CONSTRAINT proposed_location_record_version_correction_case_id_fk FOREIGN KEY (correction_case_id) REFERENCES proposed_correction_case(correction_case_id) DEFERRABLE INITIALLY DEFERRED;
 ALTER TABLE proposed_location_record_version ADD CONSTRAINT proposed_location_record_version_source_decision_event_id_fk FOREIGN KEY (source_decision_event_id) REFERENCES proposed_decision_event(decision_event_id) DEFERRABLE INITIALLY DEFERRED;
+ALTER TABLE proposed_name_record ADD CONSTRAINT proposed_name_record_subject_id_fk FOREIGN KEY (subject_id) REFERENCES proposed_registry_subject(subject_id) DEFERRABLE INITIALLY DEFERRED;
 ALTER TABLE proposed_name_record ADD CONSTRAINT proposed_name_record_name_kind_vocab_fk FOREIGN KEY (name_kind) REFERENCES vocab_name_kind(value) DEFERRABLE INITIALLY DEFERRED;
 ALTER TABLE proposed_name_record ADD CONSTRAINT proposed_name_record_name_status_vocab_fk FOREIGN KEY (name_status) REFERENCES vocab_name_status(value) DEFERRABLE INITIALLY DEFERRED;
 ALTER TABLE proposed_name_record ADD CONSTRAINT proposed_name_record_source_record_id_fk FOREIGN KEY (source_record_id) REFERENCES proposed_source_record(source_record_id) DEFERRABLE INITIALLY DEFERRED;
@@ -911,6 +957,8 @@ ALTER TABLE proposed_publication_release_item ADD CONSTRAINT proposed_publicatio
 ALTER TABLE proposed_publication_release_item ADD CONSTRAINT proposed_publication_release_item_location_record_version_id_fk FOREIGN KEY (location_record_version_id) REFERENCES proposed_location_record_version(location_record_version_id) DEFERRABLE INITIALLY DEFERRED;
 ALTER TABLE proposed_publication_release_item ADD CONSTRAINT proposed_publication_release_item_public_code_alias_id_fk FOREIGN KEY (public_code_alias_id) REFERENCES proposed_public_code_alias(public_code_alias_id) DEFERRABLE INITIALLY DEFERRED;
 ALTER TABLE proposed_publication_release_item ADD CONSTRAINT proposed_publication_release_item_projection_state_vocab_fk FOREIGN KEY (projection_state) REFERENCES vocab_publication_item_state(value) DEFERRABLE INITIALLY DEFERRED;
+ALTER TABLE proposed_registry_subject ADD CONSTRAINT proposed_registry_subject_subject_state_vocab_fk FOREIGN KEY (subject_state) REFERENCES vocab_subject_lifecycle(value) DEFERRABLE INITIALLY DEFERRED;
+ALTER TABLE proposed_registry_subject ADD CONSTRAINT proposed_registry_subject_delete_policy_vocab_fk FOREIGN KEY (delete_policy) REFERENCES vocab_delete_policy(value) DEFERRABLE INITIALLY DEFERRED;
 ALTER TABLE proposed_road ADD CONSTRAINT proposed_road_road_class_vocab_fk FOREIGN KEY (road_class) REFERENCES vocab_road_class(value) DEFERRABLE INITIALLY DEFERRED;
 ALTER TABLE proposed_road ADD CONSTRAINT proposed_road_lifecycle_state_vocab_fk FOREIGN KEY (lifecycle_state) REFERENCES vocab_reference_object_lifecycle(value) DEFERRABLE INITIALLY DEFERRED;
 ALTER TABLE proposed_road ADD CONSTRAINT proposed_road_source_authority_id_fk FOREIGN KEY (source_authority_id) REFERENCES proposed_source_authority(source_authority_id) DEFERRABLE INITIALLY DEFERRED;
@@ -932,10 +980,29 @@ ALTER TABLE proposed_unit ADD CONSTRAINT proposed_unit_unit_type_vocab_fk FOREIG
 ALTER TABLE proposed_unit ADD CONSTRAINT proposed_unit_lifecycle_state_vocab_fk FOREIGN KEY (lifecycle_state) REFERENCES vocab_reference_object_lifecycle(value) DEFERRABLE INITIALLY DEFERRED;
 ALTER TABLE proposed_unit ADD CONSTRAINT proposed_unit_classification_vocab_fk FOREIGN KEY (classification) REFERENCES vocab_classification(value) DEFERRABLE INITIALLY DEFERRED;
 ALTER TABLE proposed_unit ADD CONSTRAINT proposed_unit_effective_interval_ck CHECK (effective_to IS NULL OR effective_from < effective_to);
-CREATE OR REPLACE FUNCTION enforce_geometry_role_type() RETURNS trigger LANGUAGE plpgsql AS $$ BEGIN IF NEW.geom IS NOT NULL THEN IF NEW.geometry_role IN ('entrance-point','location-point','landmark-point','building-point') AND GeometryType(NEW.geom) <> 'POINT' THEN RAISE EXCEPTION 'invalid geometry type for role %', NEW.geometry_role; END IF; IF NEW.geometry_role IN ('road-centerline') AND GeometryType(NEW.geom) NOT IN ('LINESTRING','MULTILINESTRING') THEN RAISE EXCEPTION 'invalid geometry type for role %', NEW.geometry_role; END IF; IF NEW.geometry_role IN ('admin-boundary','operational-boundary','building-footprint','landmark-area','parcel-boundary') AND GeometryType(NEW.geom) NOT IN ('POLYGON','MULTIPOLYGON') THEN RAISE EXCEPTION 'invalid geometry type for role %', NEW.geometry_role; END IF; END IF; RETURN NEW; END $$;
-CREATE TRIGGER geometry_version_role_type_trg BEFORE INSERT OR UPDATE ON proposed_geometry_version FOR EACH ROW EXECUTE FUNCTION enforce_geometry_role_type();
+CREATE OR REPLACE FUNCTION enforce_registry_subject_link() RETURNS trigger LANGUAGE plpgsql AS $$ BEGIN IF NEW.subject_id IS NOT NULL AND NOT EXISTS (SELECT 1 FROM proposed_registry_subject s WHERE s.subject_id = NEW.subject_id AND s.subject_state IN ('active','retired','merged')) THEN RAISE EXCEPTION 'registry subject % missing or not linkable', NEW.subject_id; END IF; RETURN NEW; END $$;
+CREATE TRIGGER name_record_subject_trg BEFORE INSERT OR UPDATE ON proposed_name_record FOR EACH ROW EXECUTE FUNCTION enforce_registry_subject_link();
+CREATE TRIGGER object_link_subject_trg BEFORE INSERT OR UPDATE ON proposed_location_record_object_link FOR EACH ROW EXECUTE FUNCTION enforce_registry_subject_link();
+CREATE TRIGGER dispute_case_subject_trg BEFORE INSERT OR UPDATE ON proposed_dispute_case FOR EACH ROW EXECUTE FUNCTION enforce_registry_subject_link();
+CREATE TRIGGER geometry_version_subject_trg BEFORE INSERT OR UPDATE ON proposed_geometry_version FOR EACH ROW EXECUTE FUNCTION enforce_registry_subject_link();
+CREATE TRIGGER geometry_observation_subject_trg BEFORE INSERT OR UPDATE ON proposed_geometry_observation FOR EACH ROW EXECUTE FUNCTION enforce_registry_subject_link();
+CREATE OR REPLACE FUNCTION reject_subject_delete_with_dependents() RETURNS trigger LANGUAGE plpgsql AS $$ BEGIN IF EXISTS (SELECT 1 FROM proposed_name_record WHERE subject_id=OLD.subject_id) OR EXISTS (SELECT 1 FROM proposed_geometry_version WHERE subject_id=OLD.subject_id) OR EXISTS (SELECT 1 FROM proposed_dispute_case WHERE subject_id=OLD.subject_id) OR EXISTS (SELECT 1 FROM proposed_location_record_object_link WHERE subject_id=OLD.subject_id) THEN RAISE EXCEPTION 'subject % must be retired or merged, not deleted', OLD.subject_id; END IF; RETURN OLD; END $$;
+CREATE TRIGGER registry_subject_delete_policy_trg BEFORE DELETE ON proposed_registry_subject FOR EACH ROW EXECUTE FUNCTION reject_subject_delete_with_dependents();
+CREATE OR REPLACE FUNCTION enforce_object_role_cardinality() RETURNS trigger LANGUAGE plpgsql AS $$ BEGIN IF NEW.object_role='primary-subject' AND EXISTS (SELECT 1 FROM proposed_location_record_object_link l WHERE l.location_record_version_id=NEW.location_record_version_id AND l.object_role='primary-subject' AND l.link_id<>NEW.link_id AND (l.effective_to IS NULL OR l.effective_to > NEW.effective_from)) THEN RAISE EXCEPTION 'location record version already has a current primary object'; END IF; RETURN NEW; END $$;
+CREATE TRIGGER object_role_cardinality_trg BEFORE INSERT OR UPDATE ON proposed_location_record_object_link FOR EACH ROW EXECUTE FUNCTION enforce_object_role_cardinality();
+CREATE OR REPLACE FUNCTION enforce_current_official_name() RETURNS trigger LANGUAGE plpgsql AS $$ BEGIN IF NEW.name_kind='official-es' AND NEW.name_status='official-current' AND EXISTS (SELECT 1 FROM proposed_name_record n WHERE n.subject_id=NEW.subject_id AND n.language_code=NEW.language_code AND n.name_kind='official-es' AND n.name_status='official-current' AND n.name_record_id<>NEW.name_record_id AND (n.effective_to IS NULL OR n.effective_to > NEW.effective_from)) THEN RAISE EXCEPTION 'subject % already has current official Spanish name', NEW.subject_id; END IF; RETURN NEW; END $$;
+CREATE TRIGGER current_official_name_trg BEFORE INSERT OR UPDATE ON proposed_name_record FOR EACH ROW EXECUTE FUNCTION enforce_current_official_name();
+CREATE OR REPLACE FUNCTION enforce_geometry_semantics() RETURNS trigger LANGUAGE plpgsql AS $$ BEGIN IF NEW.superseded_by_geometry_version_id = NEW.geometry_version_id THEN RAISE EXCEPTION 'geometry version cannot supersede itself'; END IF; IF ST_NDims(NEW.geom) <> 2 THEN RAISE EXCEPTION 'geometry must be two-dimensional'; END IF; IF NEW.geometry_role IN ('entrance-point','location-point','landmark-point','building-point') AND GeometryType(NEW.geom) <> 'POINT' THEN RAISE EXCEPTION 'invalid geometry type for role %', NEW.geometry_role; END IF; IF NEW.geometry_role IN ('road-centerline') AND GeometryType(NEW.geom) NOT IN ('LINESTRING','MULTILINESTRING') THEN RAISE EXCEPTION 'invalid geometry type for role %', NEW.geometry_role; END IF; IF NEW.geometry_role IN ('admin-boundary','operational-boundary','building-footprint','landmark-area','parcel-boundary') AND GeometryType(NEW.geom) NOT IN ('POLYGON','MULTIPOLYGON') THEN RAISE EXCEPTION 'invalid geometry type for role %', NEW.geometry_role; END IF; RETURN NEW; END $$;
+CREATE TRIGGER geometry_version_semantics_trg BEFORE INSERT OR UPDATE ON proposed_geometry_version FOR EACH ROW EXECUTE FUNCTION enforce_geometry_semantics();
+CREATE OR REPLACE FUNCTION enforce_version_chain() RETURNS trigger LANGUAGE plpgsql AS $$ BEGIN IF NEW.predecessor_version_id = NEW.location_record_version_id OR NEW.successor_version_id = NEW.location_record_version_id THEN RAISE EXCEPTION 'version chain cannot self-reference'; END IF; IF NEW.predecessor_version_id IS NOT NULL AND NOT EXISTS (SELECT 1 FROM proposed_location_record_version p WHERE p.location_record_version_id=NEW.predecessor_version_id AND p.location_record_id=NEW.location_record_id) THEN RAISE EXCEPTION 'predecessor must belong to same location record'; END IF; IF NEW.successor_version_id IS NOT NULL AND NOT EXISTS (SELECT 1 FROM proposed_location_record_version s WHERE s.location_record_version_id=NEW.successor_version_id AND s.location_record_id=NEW.location_record_id) THEN RAISE EXCEPTION 'successor must belong to same location record'; END IF; RETURN NEW; END $$;
+CREATE TRIGGER location_record_version_chain_trg BEFORE INSERT OR UPDATE ON proposed_location_record_version FOR EACH ROW EXECUTE FUNCTION enforce_version_chain();
+ALTER TABLE proposed_location_record_version ADD CONSTRAINT proposed_location_record_version_recorded_excl EXCLUDE USING gist (location_record_id WITH =, tstzrange(recorded_at, COALESCE(recorded_to, 'infinity'::timestamptz), '[)') WITH &&) DEFERRABLE INITIALLY DEFERRED;
+ALTER TABLE proposed_location_record_version ADD CONSTRAINT proposed_location_record_version_effective_excl EXCLUDE USING gist (location_record_id WITH =, tstzrange(effective_from, COALESCE(effective_to, 'infinity'::timestamptz), '[)') WITH &&) DEFERRABLE INITIALLY DEFERRED;
+ALTER TABLE proposed_administrative_code_history ADD CONSTRAINT proposed_admin_code_history_effective_excl EXCLUDE USING gist (administrative_unit_id WITH =, code_scheme WITH =, tstzrange(effective_from, COALESCE(effective_to, 'infinity'::timestamptz), '[)') WITH &&) DEFERRABLE INITIALLY DEFERRED;
+ALTER TABLE proposed_geometry_version ADD CONSTRAINT proposed_geometry_version_effective_excl EXCLUDE USING gist (subject_id WITH =, geometry_role WITH =, tstzrange(effective_from, COALESCE(effective_to, 'infinity'::timestamptz), '[)') WITH &&) DEFERRABLE INITIALLY DEFERRED;
+ALTER TABLE proposed_location_record_object_link ADD CONSTRAINT proposed_object_link_contained_ck CHECK (effective_to IS NULL OR effective_from < effective_to);
 CREATE UNIQUE INDEX proposed_location_record_version_one_current ON proposed_location_record_version(location_record_id) WHERE recorded_to IS NULL;
-CREATE UNIQUE INDEX proposed_geometry_version_one_current ON proposed_geometry_version(subject_entity, subject_id, geometry_role) WHERE recorded_to IS NULL;
-CREATE UNIQUE INDEX proposed_name_record_one_current_official_es ON proposed_name_record(subject_entity, subject_id) WHERE name_kind='official-es' AND name_status='official-current';
+CREATE UNIQUE INDEX proposed_geometry_version_one_current ON proposed_geometry_version(subject_id, geometry_role) WHERE recorded_to IS NULL;
+CREATE UNIQUE INDEX proposed_name_record_one_current_official_es ON proposed_name_record(subject_id, language_code) WHERE name_kind='official-es' AND name_status='official-current';
 CREATE UNIQUE INDEX proposed_public_code_alias_one_current ON proposed_public_code_alias(location_record_id) WHERE successor_alias_id IS NULL AND code_state='active-public';
 CREATE UNIQUE INDEX proposed_admin_code_history_one_current ON proposed_administrative_code_history(administrative_unit_id, code_scheme) WHERE recorded_to IS NULL AND effective_to IS NULL;

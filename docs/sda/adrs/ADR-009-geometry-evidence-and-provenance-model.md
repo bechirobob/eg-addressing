@@ -1,65 +1,64 @@
-# ADR-009 — Geometry observations, approved versions and subject integrity
+# ADR-009 — Geometry observations, approved versions and subject-bound spatial integrity
 
 ## Status
 
-Proposed for SDA Review 04. NLI-WO-002B remains unauthorized.
+Proposed for SDA Review 05. NLI-WO-002B remains unauthorized.
+
+## Decision owner
+
+System Design Authority; implementation agent may only encode and test the selected design boundary.
 
 ## Context
 
-Review 03 required a real domain decision, not generated generic rationale. The decision affects schema identity, migration reversibility, privacy boundaries, performance, operations and future implementation safety.
+Review 04 rejected generated/template ADR rationale. This ADR is bound to explicit model identifiers and disposable-schema semantic tests.
 
-## Decision drivers
+## Model and constraint identifiers
 
-- Preserve official reconstruction without treating mutable codes or public aliases as identity.
-- Protect restricted evidence and identity values.
-- Keep target schema insertable and enforceable in PostgreSQL/PostGIS.
-- Support national-scale lookup, correction, dispute and publication workflows.
+geometry_observation.observed_geom, geometry_version.geom, geometry_version.geometry_role, geometry_version.subject_id, geometry_quality_assessment.check_result
 
 ## Decision
 
-Raw observations stay separate from approved versions; role/type/SRID/validity/source/licence/transformation/quality/dispute constraints are physical design requirements.
+Raw spatial captures are `geometry_observation`; approved operational geometry is `geometry_version`. Both link to `registry_subject`; role/type/SRID/dimensionality/current/supersession rules are enforced in disposable target SQL and tested by scenario fixtures.
 
 ## Alternatives considered
 
 | Alternative | Benefit | Cost / rejection reason |
 |---|---|---|
-| one geometry column per object | simple | loses observations/evidence |
-| observations + approved versions | preserves lineage | selected |
-| external GIS only | centralizes GIS | weak app-level integrity |
+| Single geometry column per object | Fast reads | Rejected: loses observations, licence, transformations and quality evidence. |
+| External GIS-only authority | Central GIS control | Rejected: app cannot enforce publication/registry constraints. |
+| Observation plus approved version | Lineage and enforceable current geometry | Selected with GiST indexes and role/type triggers. |
+
+## Implementation constraints
+
+SRID 4326, 2D validity, role-to-type matrix, subject FK, one current geometry per subject/role, no self supersession.
 
 ## Security and privacy implications
 
-- Restricted raw values are preserved in governed archives, never replaced by hashes alone.
-- Public projections require release items; database presence is not public authority.
-- Identity/crosswalk data is operator-only and auditable.
+- Restricted raw values remain in governed archives or evidence objects; hashes alone are not treated as archives.
+- Public release requires publication authority and release-item prerequisites.
+- Operator-only lineage, crosswalk and subject-link data is not projected publicly by default.
 
 ## Performance and operational trade-offs
 
-- Additional crosswalk, interval and subject indexes are required.
-- Writes pay validation cost; reads gain stable current indexes and release snapshots.
-- Bulk migration must batch by owner and exception threshold.
+- Write paths pay trigger/exclusion/index cost to prevent national-registry drift.
+- Current reads use partial indexes and release snapshots.
+- Bulk migration must batch by reviewed transformation unit and stop on exception thresholds.
 
 ## Migration consequences
 
-- Existing ids are preserved as legacy crosswalks, not reused as canonical authority.
-- Backfills are idempotent by legacy source key.
-- Exceptions are first-class records with owner/SLA.
+- NLI-WO-002B remains unauthorized; this ADR defines acceptance gates for later executable work.
+- Migration rows must use reviewed transformation decisions, crosswalk keys and source archives.
+- Failed semantic checks create owned exceptions, not silent coercions.
 
 ## Failure modes
 
-- Missing crosswalk creates duplicate canonical entities.
-- Weak subject validation creates orphan names/geometry/disputes.
-- Missing release prerequisites exposes unapproved data.
+Wrong geometry type rejects; missing subject rejects; self supersession rejects; overlapping current geometry rejects.
 
 ## Consequences
 
-- The selected model increases write-time validation and migration ceremony, but prevents silent identity, publication, geometry and evidence drift.
-- Operators receive stable current projections while the database retains historical reconstruction and crosswalk evidence.
-- WO-002B must implement the accepted constraints rather than inventing compatible-but-different semantics.
+- The selected model is stricter than the current pilot schema and requires a controlled expand-migrate-contract phase.
+- The stricter model prevents silent orphaning, duplicate authority, public leakage and impossible lifecycle states.
 
 ## Acceptance checks
 
-- Disposable target schema executes in PostGIS.
-- Machine-readable fixtures insert with FK/vocabulary/cardinality/geometry checks.
-- Catalog comparison matches typed model.
-- Review 04 semantic CI is green at the exact PR head.
+Positive fixtures cover admin boundary, operational boundary, road, building, entrance, location and landmark roles; negative geometry fixtures reject wrong type and self-supersession.

@@ -1,3 +1,3 @@
 # Representative Records
 
-Machine-readable fixtures live in `machine-readable-fixtures.json`. The Review 04 pipeline loads the fixture record set into the disposable target schema and validates FK, vocabulary, interval, geometry, cardinality and projection prerequisites.
+Machine-readable fixtures live in `machine-readable-fixtures.json`. Review 05 executes each positive scenario independently in a disposable target schema and executes negative semantic fixtures for cardinality, FK/subject reference, state transition, interval overlap, supersession, publication prerequisite and geometry role/type failures.

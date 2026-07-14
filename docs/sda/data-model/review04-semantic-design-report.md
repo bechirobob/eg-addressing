@@ -20,5 +20,5 @@ Errors: 0
 | current_fields | 237 |
 | operations | 105 |
 | registry_rows | 237 |
-| target_fields | 356 |
-| fixture_rows | 45 |
+| target_fields | 354 |
+| fixture_rows | 315 |

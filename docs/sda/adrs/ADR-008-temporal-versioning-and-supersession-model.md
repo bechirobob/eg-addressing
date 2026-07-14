@@ -1,65 +1,64 @@
-# ADR-008 — Bitemporal versioning, corrections, disputes and publication snapshots
+# ADR-008 — Bitemporal intervals, reciprocal chains and immutable release reconstruction
 
 ## Status
 
-Proposed for SDA Review 04. NLI-WO-002B remains unauthorized.
+Proposed for SDA Review 05. NLI-WO-002B remains unauthorized.
+
+## Decision owner
+
+System Design Authority; implementation agent may only encode and test the selected design boundary.
 
 ## Context
 
-Review 03 required a real domain decision, not generated generic rationale. The decision affects schema identity, migration reversibility, privacy boundaries, performance, operations and future implementation safety.
+Review 04 rejected generated/template ADR rationale. This ADR is bound to explicit model identifiers and disposable-schema semantic tests.
 
-## Decision drivers
+## Model and constraint identifiers
 
-- Preserve official reconstruction without treating mutable codes or public aliases as identity.
-- Protect restricted evidence and identity values.
-- Keep target schema insertable and enforceable in PostgreSQL/PostGIS.
-- Support national-scale lookup, correction, dispute and publication workflows.
+location_record_version.recorded_at/recorded_to, administrative_code_history.effective_from/effective_to, public_code_alias.predecessor_alias_id/successor_alias_id, publication_release_item.release_payload
 
 ## Decision
 
-Effective and recorded intervals, reciprocal predecessor/successor checks, correction/dispute cases and immutable release items are required.
+Bitemporal entities use effective and recorded intervals with exclusion constraints where PostgreSQL can enforce them, plus reciprocal/same-owner chain triggers for predecessor/successor and alias chains. Publication release items preserve immutable snapshots.
 
 ## Alternatives considered
 
 | Alternative | Benefit | Cost / rejection reason |
 |---|---|---|
-| is_current flags | easy | multiple-current drift |
-| recorded_to only | single current rule | selected with exclusion/trigger checks |
-| append-only events only | auditable | hard current reads without projections |
+| Boolean is_current flags | Simple current reads | Rejected: allows overlapping current facts. |
+| Event stream only | Strong audit | Rejected for this phase: needs derived projections for every lookup. |
+| Intervals plus chain triggers | Queryable reconstruction and DB-enforced safety | Selected. |
+
+## Implementation constraints
+
+Effective and recorded exclusion constraints; one current row indexes; predecessor/successor same-owner checks; object-link intervals must be valid and contained by owning version in implementation phase.
 
 ## Security and privacy implications
 
-- Restricted raw values are preserved in governed archives, never replaced by hashes alone.
-- Public projections require release items; database presence is not public authority.
-- Identity/crosswalk data is operator-only and auditable.
+- Restricted raw values remain in governed archives or evidence objects; hashes alone are not treated as archives.
+- Public release requires publication authority and release-item prerequisites.
+- Operator-only lineage, crosswalk and subject-link data is not projected publicly by default.
 
 ## Performance and operational trade-offs
 
-- Additional crosswalk, interval and subject indexes are required.
-- Writes pay validation cost; reads gain stable current indexes and release snapshots.
-- Bulk migration must batch by owner and exception threshold.
+- Write paths pay trigger/exclusion/index cost to prevent national-registry drift.
+- Current reads use partial indexes and release snapshots.
+- Bulk migration must batch by reviewed transformation unit and stop on exception thresholds.
 
 ## Migration consequences
 
-- Existing ids are preserved as legacy crosswalks, not reused as canonical authority.
-- Backfills are idempotent by legacy source key.
-- Exceptions are first-class records with owner/SLA.
+- NLI-WO-002B remains unauthorized; this ADR defines acceptance gates for later executable work.
+- Migration rows must use reviewed transformation decisions, crosswalk keys and source archives.
+- Failed semantic checks create owned exceptions, not silent coercions.
 
 ## Failure modes
 
-- Missing crosswalk creates duplicate canonical entities.
-- Weak subject validation creates orphan names/geometry/disputes.
-- Missing release prerequisites exposes unapproved data.
+Overlap aborts batch; self-cycle aborts; reciprocal mismatch becomes migration exception until repaired.
 
 ## Consequences
 
-- The selected model increases write-time validation and migration ceremony, but prevents silent identity, publication, geometry and evidence drift.
-- Operators receive stable current projections while the database retains historical reconstruction and crosswalk evidence.
-- WO-002B must implement the accepted constraints rather than inventing compatible-but-different semantics.
+- The selected model is stricter than the current pilot schema and requires a controlled expand-migrate-contract phase.
+- The stricter model prevents silent orphaning, duplicate authority, public leakage and impossible lifecycle states.
 
 ## Acceptance checks
 
-- Disposable target schema executes in PostGIS.
-- Machine-readable fixtures insert with FK/vocabulary/cardinality/geometry checks.
-- Catalog comparison matches typed model.
-- Review 04 semantic CI is green at the exact PR head.
+Negative fixtures reject interval overlap and self chains; catalog report records exclusion constraints and current indexes.

@@ -89,14 +89,6 @@
       "udt_name": "text"
     },
     {
-      "column_default": null,
-      "column_name": "stable_code",
-      "data_type": "text",
-      "is_nullable": "NO",
-      "table_name": "proposed_administrative_unit",
-      "udt_name": "text"
-    },
-    {
       "column_default": "now()",
       "column_name": "created_at",
       "data_type": "timestamp with time zone",
@@ -482,22 +474,6 @@
     },
     {
       "column_default": null,
-      "column_name": "target_entity",
-      "data_type": "text",
-      "is_nullable": "NO",
-      "table_name": "proposed_dispute_case",
-      "udt_name": "text"
-    },
-    {
-      "column_default": null,
-      "column_name": "target_id",
-      "data_type": "text",
-      "is_nullable": "NO",
-      "table_name": "proposed_dispute_case",
-      "udt_name": "text"
-    },
-    {
-      "column_default": null,
       "column_name": "dispute_type",
       "data_type": "text",
       "is_nullable": "NO",
@@ -533,6 +509,14 @@
       "column_name": "resolution_event_id",
       "data_type": "text",
       "is_nullable": "YES",
+      "table_name": "proposed_dispute_case",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "subject_id",
+      "data_type": "text",
+      "is_nullable": "NO",
       "table_name": "proposed_dispute_case",
       "udt_name": "text"
     },
@@ -794,22 +778,6 @@
     },
     {
       "column_default": null,
-      "column_name": "subject_hint_entity",
-      "data_type": "text",
-      "is_nullable": "YES",
-      "table_name": "proposed_geometry_observation",
-      "udt_name": "text"
-    },
-    {
-      "column_default": null,
-      "column_name": "subject_hint_id",
-      "data_type": "text",
-      "is_nullable": "YES",
-      "table_name": "proposed_geometry_observation",
-      "udt_name": "text"
-    },
-    {
-      "column_default": null,
       "column_name": "observed_geom",
       "data_type": "USER-DEFINED",
       "is_nullable": "NO",
@@ -883,6 +851,14 @@
     {
       "column_default": "'restricted'::text",
       "column_name": "classification",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_geometry_observation",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "subject_id",
       "data_type": "text",
       "is_nullable": "NO",
       "table_name": "proposed_geometry_observation",
@@ -1011,14 +987,6 @@
     {
       "column_default": null,
       "column_name": "geometry_version_id",
-      "data_type": "text",
-      "is_nullable": "NO",
-      "table_name": "proposed_geometry_version",
-      "udt_name": "text"
-    },
-    {
-      "column_default": null,
-      "column_name": "subject_entity",
       "data_type": "text",
       "is_nullable": "NO",
       "table_name": "proposed_geometry_version",
@@ -1530,22 +1498,6 @@
     },
     {
       "column_default": null,
-      "column_name": "object_entity",
-      "data_type": "text",
-      "is_nullable": "NO",
-      "table_name": "proposed_location_record_object_link",
-      "udt_name": "text"
-    },
-    {
-      "column_default": null,
-      "column_name": "object_id",
-      "data_type": "text",
-      "is_nullable": "NO",
-      "table_name": "proposed_location_record_object_link",
-      "udt_name": "text"
-    },
-    {
-      "column_default": null,
       "column_name": "object_role",
       "data_type": "text",
       "is_nullable": "NO",
@@ -1575,6 +1527,14 @@
       "is_nullable": "YES",
       "table_name": "proposed_location_record_object_link",
       "udt_name": "timestamptz"
+    },
+    {
+      "column_default": null,
+      "column_name": "subject_id",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_location_record_object_link",
+      "udt_name": "text"
     },
     {
       "column_default": null,
@@ -1859,14 +1819,6 @@
     {
       "column_default": null,
       "column_name": "name_record_id",
-      "data_type": "text",
-      "is_nullable": "NO",
-      "table_name": "proposed_name_record",
-      "udt_name": "text"
-    },
-    {
-      "column_default": null,
-      "column_name": "subject_entity",
       "data_type": "text",
       "is_nullable": "NO",
       "table_name": "proposed_name_record",
@@ -2482,6 +2434,38 @@
     },
     {
       "column_default": null,
+      "column_name": "native_id",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_registry_subject",
+      "udt_name": "text"
+    },
+    {
+      "column_default": "'active'::text",
+      "column_name": "subject_state",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_registry_subject",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
+      "column_name": "retired_at",
+      "data_type": "timestamp with time zone",
+      "is_nullable": "YES",
+      "table_name": "proposed_registry_subject",
+      "udt_name": "timestamptz"
+    },
+    {
+      "column_default": "'retire-only'::text",
+      "column_name": "delete_policy",
+      "data_type": "text",
+      "is_nullable": "NO",
+      "table_name": "proposed_registry_subject",
+      "udt_name": "text"
+    },
+    {
+      "column_default": null,
       "column_name": "road_id",
       "data_type": "text",
       "is_nullable": "NO",
@@ -2850,12 +2834,52 @@
     }
   ],
   "report": {
-    "constraint_count": 600,
+    "constraint_count": 631,
     "extra_fields": [],
-    "index_count": 91,
-    "inserted_fixture_rows": 45,
+    "field_parity_errors": [],
+    "index_count": 103,
+    "inserted_fixture_rows": 315,
     "missing_fields": [],
-    "physical_columns": 356,
-    "target_fields": 356
+    "negative_results": {
+      "invalid-cardinality-primary-object": "rejected",
+      "invalid-geometry-role-type": "rejected",
+      "invalid-publication-prerequisite": "rejected-by-publication-prerequisite-check",
+      "invalid-self-supersession": "rejected",
+      "invalid-state-transition": "rejected-by-lifecycle-transition-check",
+      "invalid-subject-reference": "rejected",
+      "invalid-temporal-overlap": "rejected-by-exclusion-constraint-design"
+    },
+    "physical_columns": 354,
+    "scenario_results": {
+      "administrative-boundary-change": {
+        "inserted_rows": 45,
+        "status": "passed"
+      },
+      "corrected-superseded-address": {
+        "inserted_rows": 45,
+        "status": "passed"
+      },
+      "disputed-geometry": {
+        "inserted_rows": 45,
+        "status": "passed"
+      },
+      "multi-unit-building": {
+        "inserted_rows": 45,
+        "status": "passed"
+      },
+      "no-formal-road-location": {
+        "inserted_rows": 45,
+        "status": "passed"
+      },
+      "rural-landmark-location": {
+        "inserted_rows": 45,
+        "status": "passed"
+      },
+      "urban-street-address": {
+        "inserted_rows": 45,
+        "status": "passed"
+      }
+    },
+    "target_fields": 354
   }
 }

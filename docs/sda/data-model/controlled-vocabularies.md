@@ -1,13 +1,13 @@
 # Controlled Vocabulary Registry
 
-One authoritative field-to-vocabulary registry. Review 04 separates canonical records, reference objects, operational areas, source authorities, names, cases, geometry, and publication lifecycles.
+One authoritative field-to-vocabulary registry. Review 05 separates canonical records, reference objects, operational areas, source authorities, names, cases, geometry, and publication lifecycles.
 
 ## Field-to-vocabulary registry
 
 | Target field | Vocabulary | Owner | Allowed values |
 |---|---|---|---|
 | `administrative_unit_version.admin_level` | `admin_level` | GIS/Data Authority | country, district, local_council, municipality, province |
-| `administrative_unit_version.lifecycle_state` | `lifecycle_state` | Registry Authority | active, corrected, disputed, draft-candidate, registry-ready, registry-review, retired, revoked, superseded |
+| `administrative_unit_version.lifecycle_state` | `administrative_unit_lifecycle` | GIS/Data Authority | proposed, official, historical, retired, revoked |
 | `administrative_unit_version.classification` | `classification` | Legal/Privacy Authority | government-internal, highly-restricted, public, public-after-release, restricted, security-internal |
 | `building.lifecycle_state` | `reference_object_lifecycle` | Registry/GIS Authority | candidate, active, corrected, superseded, retired, revoked |
 | `correction_case.correction_type` | `correction_type` | Registry Authority | administrative-context, classification, duplicate, geometry, label |
@@ -56,6 +56,8 @@ One authoritative field-to-vocabulary registry. Review 04 separates canonical re
 | `publication_release.release_state` | `publication_release_state` | Publication Authority | approval-requested, approved, draft, published, suspended, withdrawn |
 | `publication_release.projection_type` | `projection_type` | Publication Authority | operator-case-file, partner-api, public-lookup, signage-export, statistics |
 | `publication_release_item.projection_state` | `publication_item_state` | Publication Authority | included, redacted, superseded, withdrawn |
+| `registry_subject.subject_state` | `subject_lifecycle` | Registry Authority | active, retired, merged, deleted-prohibited |
+| `registry_subject.delete_policy` | `delete_policy` | Registry Authority | retire-only, cascade-prohibited, merge-required |
 | `road.road_class` | `road_class` | Registry/GIS Authority | path, road, service-road, street, track, unknown |
 | `road.lifecycle_state` | `reference_object_lifecycle` | Registry/GIS Authority | candidate, active, corrected, superseded, retired, revoked |
 | `road_segment.lifecycle_state` | `reference_object_lifecycle` | Registry/GIS Authority | candidate, active, corrected, superseded, retired, revoked |
@@ -79,6 +81,30 @@ Owner: **GIS/Data Authority**
 | local_council | Recognized lower level when authorized. |
 | municipality | Municipality-level administrative unit. |
 | province | First-level administrative unit. |
+
+## `administrative_unit_lifecycle`
+
+Owner: **GIS/Data Authority**
+
+| Value | Meaning |
+|---|---|
+| proposed | Proposed administrative version. |
+| official | Official active version. |
+| historical | Historical official version. |
+| retired | Retired version. |
+| revoked | Revoked version. |
+
+## `building_lifecycle`
+
+Owner: **Registry Authority**
+
+| Value | Meaning |
+|---|---|
+| candidate | Candidate building. |
+| active | Active building. |
+| demolished | Demolished building. |
+| retired | Retired building. |
+| revoked | Revoked building. |
 
 ## `canonical_record_lifecycle`
 
@@ -185,6 +211,16 @@ Owner: **SDA/Registry Authority**
 | resolve-dispute | Resolve dispute. |
 | supersede-record | Supersede record/version. |
 | withdraw-publication | Withdraw release. |
+
+## `delete_policy`
+
+Owner: **Registry Authority**
+
+| Value | Meaning |
+|---|---|
+| retire-only | Do not hard delete; retire and preserve links. |
+| cascade-prohibited | Reject delete while dependent links exist. |
+| merge-required | Merge/supersession required before retirement. |
 
 ## `dispute_type`
 
@@ -301,6 +337,17 @@ Owner: **Registry Authority**
 | retired | No longer valid for current use. |
 | revoked | Invalidated by authority. |
 | superseded | Replaced by successor record or version. |
+
+## `locality_lifecycle`
+
+Owner: **Registry/GIS Authority**
+
+| Value | Meaning |
+|---|---|
+| candidate | Candidate locality. |
+| official | Official locality. |
+| renamed | Renamed locality. |
+| retired | Retired locality. |
 
 ## `locality_type`
 
@@ -543,6 +590,29 @@ Owner: **Registry/GIS Authority**
 | track | Track/unpaved access. |
 | unknown | Unknown class pending validation. |
 
+## `road_lifecycle`
+
+Owner: **GIS/Data Authority**
+
+| Value | Meaning |
+|---|---|
+| candidate | Candidate road. |
+| field-verified | Field verified road. |
+| official | Official road. |
+| superseded | Superseded road. |
+| retired | Retired road. |
+
+## `road_segment_lifecycle`
+
+Owner: **GIS/Data Authority**
+
+| Value | Meaning |
+|---|---|
+| draft | Draft segment. |
+| active | Active segment. |
+| realigned | Realigned segment. |
+| retired | Retired segment. |
+
 ## `source_authority_class`
 
 Owner: **SDA**
@@ -570,6 +640,29 @@ Owner: **SDA**
 | trusted | Trusted source. |
 | deprecated | Deprecated source. |
 | revoked | Revoked source. |
+
+## `subject_lifecycle`
+
+Owner: **Registry Authority**
+
+| Value | Meaning |
+|---|---|
+| active | Subject can receive links. |
+| retired | Subject retained but not assignable. |
+| merged | Subject merged into successor. |
+| deleted-prohibited | Delete attempted but policy requires retirement. |
+
+## `unit_lifecycle`
+
+Owner: **Registry Authority**
+
+| Value | Meaning |
+|---|---|
+| candidate | Candidate unit. |
+| active | Active unit. |
+| merged | Merged unit. |
+| split | Split unit. |
+| retired | Retired unit. |
 
 ## `unit_type`
 

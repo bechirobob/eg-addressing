@@ -8,5 +8,5 @@ Warnings: 0
 - Current pg_catalog fields: 237
 - OpenAPI operations: 105
 - Transformation rows: 237
-- Target fields: 356
+- Target fields: 354
 - Fixture scenarios: 7

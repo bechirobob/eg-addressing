@@ -1,0 +1,1068 @@
+{
+  "administrative_unit_lifecycle": [
+    {
+      "actor": "authority-owner",
+      "appeal": "appeal/correction opens case record; terminal states do not silently reopen",
+      "event": "approve-administrative-version",
+      "evidence": "decision_event + evidence_record required",
+      "from": "proposed",
+      "invalid_behavior": "reject and audit; migration_exception only for legacy migration inputs",
+      "time_rule": "record effective time and recorded time",
+      "to": "official",
+      "visibility": "operator until release prerequisite permits public projection"
+    },
+    {
+      "actor": "authority-owner",
+      "appeal": "appeal/correction opens case record; terminal states do not silently reopen",
+      "event": "replace-by-new-official-version",
+      "evidence": "decision_event + evidence_record required",
+      "from": "official",
+      "invalid_behavior": "reject and audit; migration_exception only for legacy migration inputs",
+      "time_rule": "record effective time and recorded time",
+      "to": "historical",
+      "visibility": "operator until release prerequisite permits public projection"
+    },
+    {
+      "actor": "authority-owner",
+      "appeal": "appeal/correction opens case record; terminal states do not silently reopen",
+      "event": "retire-administrative-unit",
+      "evidence": "decision_event + evidence_record required",
+      "from": "official",
+      "invalid_behavior": "reject and audit; migration_exception only for legacy migration inputs",
+      "time_rule": "record effective time and recorded time",
+      "to": "retired",
+      "visibility": "operator until release prerequisite permits public projection"
+    },
+    {
+      "actor": "authority-owner",
+      "appeal": "appeal/correction opens case record; terminal states do not silently reopen",
+      "event": "reject-proposal",
+      "evidence": "decision_event + evidence_record required",
+      "from": "proposed",
+      "invalid_behavior": "reject and audit; migration_exception only for legacy migration inputs",
+      "time_rule": "record effective time and recorded time",
+      "to": "revoked",
+      "visibility": "operator until release prerequisite permits public projection"
+    }
+  ],
+  "building_lifecycle": [
+    {
+      "actor": "authority-owner",
+      "appeal": "appeal/correction opens case record; terminal states do not silently reopen",
+      "event": "approve-building",
+      "evidence": "decision_event + evidence_record required",
+      "from": "candidate",
+      "invalid_behavior": "reject and audit; migration_exception only for legacy migration inputs",
+      "time_rule": "record effective time and recorded time",
+      "to": "active",
+      "visibility": "operator until release prerequisite permits public projection"
+    },
+    {
+      "actor": "authority-owner",
+      "appeal": "appeal/correction opens case record; terminal states do not silently reopen",
+      "event": "record-demolition",
+      "evidence": "decision_event + evidence_record required",
+      "from": "active",
+      "invalid_behavior": "reject and audit; migration_exception only for legacy migration inputs",
+      "time_rule": "record effective time and recorded time",
+      "to": "demolished",
+      "visibility": "operator until release prerequisite permits public projection"
+    },
+    {
+      "actor": "authority-owner",
+      "appeal": "appeal/correction opens case record; terminal states do not silently reopen",
+      "event": "retire-building",
+      "evidence": "decision_event + evidence_record required",
+      "from": "active",
+      "invalid_behavior": "reject and audit; migration_exception only for legacy migration inputs",
+      "time_rule": "record effective time and recorded time",
+      "to": "retired",
+      "visibility": "operator until release prerequisite permits public projection"
+    },
+    {
+      "actor": "authority-owner",
+      "appeal": "appeal/correction opens case record; terminal states do not silently reopen",
+      "event": "reject-building",
+      "evidence": "decision_event + evidence_record required",
+      "from": "candidate",
+      "invalid_behavior": "reject and audit; migration_exception only for legacy migration inputs",
+      "time_rule": "record effective time and recorded time",
+      "to": "revoked",
+      "visibility": "operator until release prerequisite permits public projection"
+    }
+  ],
+  "canonical_record_lifecycle": [
+    {
+      "actor": "authority-owner",
+      "appeal": "appeal/correction opens case record; terminal states do not silently reopen",
+      "event": "submit-candidate",
+      "evidence": "decision_event + evidence_record required",
+      "from": "candidate",
+      "invalid_behavior": "reject and audit; migration_exception only for legacy migration inputs",
+      "time_rule": "record effective time and recorded time",
+      "to": "under-review",
+      "visibility": "operator until release prerequisite permits public projection"
+    },
+    {
+      "actor": "authority-owner",
+      "appeal": "appeal/correction opens case record; terminal states do not silently reopen",
+      "event": "approve-canonical",
+      "evidence": "decision_event + evidence_record required",
+      "from": "under-review",
+      "invalid_behavior": "reject and audit; migration_exception only for legacy migration inputs",
+      "time_rule": "record effective time and recorded time",
+      "to": "active",
+      "visibility": "operator until release prerequisite permits public projection"
+    },
+    {
+      "actor": "authority-owner",
+      "appeal": "appeal/correction opens case record; terminal states do not silently reopen",
+      "event": "open-dispute",
+      "evidence": "decision_event + evidence_record required",
+      "from": "under-review",
+      "invalid_behavior": "reject and audit; migration_exception only for legacy migration inputs",
+      "time_rule": "record effective time and recorded time",
+      "to": "disputed",
+      "visibility": "operator until release prerequisite permits public projection"
+    },
+    {
+      "actor": "authority-owner",
+      "appeal": "appeal/correction opens case record; terminal states do not silently reopen",
+      "event": "approve-correction",
+      "evidence": "decision_event + evidence_record required",
+      "from": "active",
+      "invalid_behavior": "reject and audit; migration_exception only for legacy migration inputs",
+      "time_rule": "record effective time and recorded time",
+      "to": "corrected",
+      "visibility": "operator until release prerequisite permits public projection"
+    },
+    {
+      "actor": "authority-owner",
+      "appeal": "appeal/correction opens case record; terminal states do not silently reopen",
+      "event": "approve-supersession",
+      "evidence": "decision_event + evidence_record required",
+      "from": "active",
+      "invalid_behavior": "reject and audit; migration_exception only for legacy migration inputs",
+      "time_rule": "record effective time and recorded time",
+      "to": "superseded",
+      "visibility": "operator until release prerequisite permits public projection"
+    },
+    {
+      "actor": "authority-owner",
+      "appeal": "appeal/correction opens case record; terminal states do not silently reopen",
+      "event": "open-dispute",
+      "evidence": "decision_event + evidence_record required",
+      "from": "active",
+      "invalid_behavior": "reject and audit; migration_exception only for legacy migration inputs",
+      "time_rule": "record effective time and recorded time",
+      "to": "disputed",
+      "visibility": "operator until release prerequisite permits public projection"
+    },
+    {
+      "actor": "authority-owner",
+      "appeal": "appeal/correction opens case record; terminal states do not silently reopen",
+      "event": "resolve-dispute-retain",
+      "evidence": "decision_event + evidence_record required",
+      "from": "disputed",
+      "invalid_behavior": "reject and audit; migration_exception only for legacy migration inputs",
+      "time_rule": "record effective time and recorded time",
+      "to": "active",
+      "visibility": "operator until release prerequisite permits public projection"
+    },
+    {
+      "actor": "authority-owner",
+      "appeal": "appeal/correction opens case record; terminal states do not silently reopen",
+      "event": "resolve-dispute-correct",
+      "evidence": "decision_event + evidence_record required",
+      "from": "disputed",
+      "invalid_behavior": "reject and audit; migration_exception only for legacy migration inputs",
+      "time_rule": "record effective time and recorded time",
+      "to": "corrected",
+      "visibility": "operator until release prerequisite permits public projection"
+    },
+    {
+      "actor": "authority-owner",
+      "appeal": "appeal/correction opens case record; terminal states do not silently reopen",
+      "event": "retire-record",
+      "evidence": "decision_event + evidence_record required",
+      "from": "active",
+      "invalid_behavior": "reject and audit; migration_exception only for legacy migration inputs",
+      "time_rule": "record effective time and recorded time",
+      "to": "retired",
+      "visibility": "operator until release prerequisite permits public projection"
+    },
+    {
+      "actor": "authority-owner",
+      "appeal": "appeal/correction opens case record; terminal states do not silently reopen",
+      "event": "reject-candidate",
+      "evidence": "decision_event + evidence_record required",
+      "from": "candidate",
+      "invalid_behavior": "reject and audit; migration_exception only for legacy migration inputs",
+      "time_rule": "record effective time and recorded time",
+      "to": "revoked",
+      "visibility": "operator until release prerequisite permits public projection"
+    }
+  ],
+  "case_lifecycle": [
+    {
+      "actor": "authority-owner",
+      "appeal": "appeal/correction opens case record; terminal states do not silently reopen",
+      "event": "triage-case",
+      "evidence": "decision_event + evidence_record required",
+      "from": "submitted",
+      "invalid_behavior": "reject and audit; migration_exception only for legacy migration inputs",
+      "time_rule": "record effective time and recorded time",
+      "to": "under-review",
+      "visibility": "operator until release prerequisite permits public projection"
+    },
+    {
+      "actor": "authority-owner",
+      "appeal": "appeal/correction opens case record; terminal states do not silently reopen",
+      "event": "request-evidence",
+      "evidence": "decision_event + evidence_record required",
+      "from": "under-review",
+      "invalid_behavior": "reject and audit; migration_exception only for legacy migration inputs",
+      "time_rule": "record effective time and recorded time",
+      "to": "needs-evidence",
+      "visibility": "operator until release prerequisite permits public projection"
+    },
+    {
+      "actor": "authority-owner",
+      "appeal": "appeal/correction opens case record; terminal states do not silently reopen",
+      "event": "evidence-received",
+      "evidence": "decision_event + evidence_record required",
+      "from": "needs-evidence",
+      "invalid_behavior": "reject and audit; migration_exception only for legacy migration inputs",
+      "time_rule": "record effective time and recorded time",
+      "to": "under-review",
+      "visibility": "operator until release prerequisite permits public projection"
+    },
+    {
+      "actor": "authority-owner",
+      "appeal": "appeal/correction opens case record; terminal states do not silently reopen",
+      "event": "approve-case",
+      "evidence": "decision_event + evidence_record required",
+      "from": "under-review",
+      "invalid_behavior": "reject and audit; migration_exception only for legacy migration inputs",
+      "time_rule": "record effective time and recorded time",
+      "to": "approved",
+      "visibility": "operator until release prerequisite permits public projection"
+    },
+    {
+      "actor": "authority-owner",
+      "appeal": "appeal/correction opens case record; terminal states do not silently reopen",
+      "event": "reject-case",
+      "evidence": "decision_event + evidence_record required",
+      "from": "under-review",
+      "invalid_behavior": "reject and audit; migration_exception only for legacy migration inputs",
+      "time_rule": "record effective time and recorded time",
+      "to": "rejected",
+      "visibility": "operator until release prerequisite permits public projection"
+    },
+    {
+      "actor": "authority-owner",
+      "appeal": "appeal/correction opens case record; terminal states do not silently reopen",
+      "event": "apply-decision",
+      "evidence": "decision_event + evidence_record required",
+      "from": "approved",
+      "invalid_behavior": "reject and audit; migration_exception only for legacy migration inputs",
+      "time_rule": "record effective time and recorded time",
+      "to": "resolved",
+      "visibility": "operator until release prerequisite permits public projection"
+    },
+    {
+      "actor": "authority-owner",
+      "appeal": "appeal/correction opens case record; terminal states do not silently reopen",
+      "event": "close-rejected-case",
+      "evidence": "decision_event + evidence_record required",
+      "from": "rejected",
+      "invalid_behavior": "reject and audit; migration_exception only for legacy migration inputs",
+      "time_rule": "record effective time and recorded time",
+      "to": "closed",
+      "visibility": "operator until release prerequisite permits public projection"
+    },
+    {
+      "actor": "authority-owner",
+      "appeal": "appeal/correction opens case record; terminal states do not silently reopen",
+      "event": "close-resolved-case",
+      "evidence": "decision_event + evidence_record required",
+      "from": "resolved",
+      "invalid_behavior": "reject and audit; migration_exception only for legacy migration inputs",
+      "time_rule": "record effective time and recorded time",
+      "to": "closed",
+      "visibility": "operator until release prerequisite permits public projection"
+    }
+  ],
+  "field_verification_state": [
+    {
+      "actor": "authority-owner",
+      "appeal": "appeal/correction opens case record; terminal states do not silently reopen",
+      "event": "start-field-task",
+      "evidence": "decision_event + evidence_record required",
+      "from": "assigned",
+      "invalid_behavior": "reject and audit; migration_exception only for legacy migration inputs",
+      "time_rule": "record effective time and recorded time",
+      "to": "in-progress",
+      "visibility": "operator until release prerequisite permits public projection"
+    },
+    {
+      "actor": "authority-owner",
+      "appeal": "appeal/correction opens case record; terminal states do not silently reopen",
+      "event": "capture-field-evidence",
+      "evidence": "decision_event + evidence_record required",
+      "from": "in-progress",
+      "invalid_behavior": "reject and audit; migration_exception only for legacy migration inputs",
+      "time_rule": "record effective time and recorded time",
+      "to": "field-captured",
+      "visibility": "operator until release prerequisite permits public projection"
+    },
+    {
+      "actor": "authority-owner",
+      "appeal": "appeal/correction opens case record; terminal states do not silently reopen",
+      "event": "submit-evidence-review",
+      "evidence": "decision_event + evidence_record required",
+      "from": "field-captured",
+      "invalid_behavior": "reject and audit; migration_exception only for legacy migration inputs",
+      "time_rule": "record effective time and recorded time",
+      "to": "evidence-under-review",
+      "visibility": "operator until release prerequisite permits public projection"
+    },
+    {
+      "actor": "authority-owner",
+      "appeal": "appeal/correction opens case record; terminal states do not silently reopen",
+      "event": "approve-evidence",
+      "evidence": "decision_event + evidence_record required",
+      "from": "evidence-under-review",
+      "invalid_behavior": "reject and audit; migration_exception only for legacy migration inputs",
+      "time_rule": "record effective time and recorded time",
+      "to": "evidence-approved",
+      "visibility": "operator until release prerequisite permits public projection"
+    },
+    {
+      "actor": "authority-owner",
+      "appeal": "appeal/correction opens case record; terminal states do not silently reopen",
+      "event": "reject-evidence",
+      "evidence": "decision_event + evidence_record required",
+      "from": "evidence-under-review",
+      "invalid_behavior": "reject and audit; migration_exception only for legacy migration inputs",
+      "time_rule": "record effective time and recorded time",
+      "to": "evidence-rejected",
+      "visibility": "operator until release prerequisite permits public projection"
+    },
+    {
+      "actor": "authority-owner",
+      "appeal": "appeal/correction opens case record; terminal states do not silently reopen",
+      "event": "request-recapture",
+      "evidence": "decision_event + evidence_record required",
+      "from": "evidence-rejected",
+      "invalid_behavior": "reject and audit; migration_exception only for legacy migration inputs",
+      "time_rule": "record effective time and recorded time",
+      "to": "needs-recapture",
+      "visibility": "operator until release prerequisite permits public projection"
+    },
+    {
+      "actor": "authority-owner",
+      "appeal": "appeal/correction opens case record; terminal states do not silently reopen",
+      "event": "restart-field-task",
+      "evidence": "decision_event + evidence_record required",
+      "from": "needs-recapture",
+      "invalid_behavior": "reject and audit; migration_exception only for legacy migration inputs",
+      "time_rule": "record effective time and recorded time",
+      "to": "in-progress",
+      "visibility": "operator until release prerequisite permits public projection"
+    },
+    {
+      "actor": "authority-owner",
+      "appeal": "appeal/correction opens case record; terminal states do not silently reopen",
+      "event": "link-approved-evidence",
+      "evidence": "decision_event + evidence_record required",
+      "from": "evidence-approved",
+      "invalid_behavior": "reject and audit; migration_exception only for legacy migration inputs",
+      "time_rule": "record effective time and recorded time",
+      "to": "linked-to-canonical",
+      "visibility": "operator until release prerequisite permits public projection"
+    },
+    {
+      "actor": "authority-owner",
+      "appeal": "appeal/correction opens case record; terminal states do not silently reopen",
+      "event": "cancel-field-task",
+      "evidence": "decision_event + evidence_record required",
+      "from": "assigned",
+      "invalid_behavior": "reject and audit; migration_exception only for legacy migration inputs",
+      "time_rule": "record effective time and recorded time",
+      "to": "cancelled",
+      "visibility": "operator until release prerequisite permits public projection"
+    }
+  ],
+  "geometry_quality_state": [
+    {
+      "actor": "authority-owner",
+      "appeal": "appeal/correction opens case record; terminal states do not silently reopen",
+      "event": "run-quality-check",
+      "evidence": "decision_event + evidence_record required",
+      "from": "observed",
+      "invalid_behavior": "reject and audit; migration_exception only for legacy migration inputs",
+      "time_rule": "record effective time and recorded time",
+      "to": "quality-checked",
+      "visibility": "operator until release prerequisite permits public projection"
+    },
+    {
+      "actor": "authority-owner",
+      "appeal": "appeal/correction opens case record; terminal states do not silently reopen",
+      "event": "review-quality-result",
+      "evidence": "decision_event + evidence_record required",
+      "from": "quality-checked",
+      "invalid_behavior": "reject and audit; migration_exception only for legacy migration inputs",
+      "time_rule": "record effective time and recorded time",
+      "to": "reviewed",
+      "visibility": "operator until release prerequisite permits public projection"
+    },
+    {
+      "actor": "authority-owner",
+      "appeal": "appeal/correction opens case record; terminal states do not silently reopen",
+      "event": "accept-canonical-geometry",
+      "evidence": "decision_event + evidence_record required",
+      "from": "reviewed",
+      "invalid_behavior": "reject and audit; migration_exception only for legacy migration inputs",
+      "time_rule": "record effective time and recorded time",
+      "to": "accepted-canonical",
+      "visibility": "operator until release prerequisite permits public projection"
+    },
+    {
+      "actor": "authority-owner",
+      "appeal": "appeal/correction opens case record; terminal states do not silently reopen",
+      "event": "accept-with-warning",
+      "evidence": "decision_event + evidence_record required",
+      "from": "reviewed",
+      "invalid_behavior": "reject and audit; migration_exception only for legacy migration inputs",
+      "time_rule": "record effective time and recorded time",
+      "to": "valid-with-warning",
+      "visibility": "operator until release prerequisite permits public projection"
+    },
+    {
+      "actor": "authority-owner",
+      "appeal": "appeal/correction opens case record; terminal states do not silently reopen",
+      "event": "reject-geometry",
+      "evidence": "decision_event + evidence_record required",
+      "from": "reviewed",
+      "invalid_behavior": "reject and audit; migration_exception only for legacy migration inputs",
+      "time_rule": "record effective time and recorded time",
+      "to": "rejected",
+      "visibility": "operator until release prerequisite permits public projection"
+    },
+    {
+      "actor": "authority-owner",
+      "appeal": "appeal/correction opens case record; terminal states do not silently reopen",
+      "event": "open-geometry-dispute-before-acceptance",
+      "evidence": "decision_event + evidence_record required",
+      "from": "reviewed",
+      "invalid_behavior": "reject and audit; migration_exception only for legacy migration inputs",
+      "time_rule": "record effective time and recorded time",
+      "to": "disputed",
+      "visibility": "operator until release prerequisite permits public projection"
+    },
+    {
+      "actor": "authority-owner",
+      "appeal": "appeal/correction opens case record; terminal states do not silently reopen",
+      "event": "replace-canonical-geometry",
+      "evidence": "decision_event + evidence_record required",
+      "from": "accepted-canonical",
+      "invalid_behavior": "reject and audit; migration_exception only for legacy migration inputs",
+      "time_rule": "record effective time and recorded time",
+      "to": "superseded",
+      "visibility": "operator until release prerequisite permits public projection"
+    },
+    {
+      "actor": "authority-owner",
+      "appeal": "appeal/correction opens case record; terminal states do not silently reopen",
+      "event": "resolve-geometry-dispute-for-review",
+      "evidence": "decision_event + evidence_record required",
+      "from": "disputed",
+      "invalid_behavior": "reject and audit; migration_exception only for legacy migration inputs",
+      "time_rule": "record effective time and recorded time",
+      "to": "reviewed",
+      "visibility": "operator until release prerequisite permits public projection"
+    }
+  ],
+  "intake_state": [
+    {
+      "actor": "authority-owner",
+      "appeal": "appeal/correction opens case record; terminal states do not silently reopen",
+      "event": "triage-intake",
+      "evidence": "decision_event + evidence_record required",
+      "from": "submitted",
+      "invalid_behavior": "reject and audit; migration_exception only for legacy migration inputs",
+      "time_rule": "record effective time and recorded time",
+      "to": "under-review",
+      "visibility": "operator until release prerequisite permits public projection"
+    },
+    {
+      "actor": "authority-owner",
+      "appeal": "appeal/correction opens case record; terminal states do not silently reopen",
+      "event": "detect-duplicate",
+      "evidence": "decision_event + evidence_record required",
+      "from": "under-review",
+      "invalid_behavior": "reject and audit; migration_exception only for legacy migration inputs",
+      "time_rule": "record effective time and recorded time",
+      "to": "duplicate-review",
+      "visibility": "operator until release prerequisite permits public projection"
+    },
+    {
+      "actor": "authority-owner",
+      "appeal": "appeal/correction opens case record; terminal states do not silently reopen",
+      "event": "send-field-check",
+      "evidence": "decision_event + evidence_record required",
+      "from": "under-review",
+      "invalid_behavior": "reject and audit; migration_exception only for legacy migration inputs",
+      "time_rule": "record effective time and recorded time",
+      "to": "needs-field-check",
+      "visibility": "operator until release prerequisite permits public projection"
+    },
+    {
+      "actor": "authority-owner",
+      "appeal": "appeal/correction opens case record; terminal states do not silently reopen",
+      "event": "field-check-returned",
+      "evidence": "decision_event + evidence_record required",
+      "from": "needs-field-check",
+      "invalid_behavior": "reject and audit; migration_exception only for legacy migration inputs",
+      "time_rule": "record effective time and recorded time",
+      "to": "under-review",
+      "visibility": "operator until release prerequisite permits public projection"
+    },
+    {
+      "actor": "authority-owner",
+      "appeal": "appeal/correction opens case record; terminal states do not silently reopen",
+      "event": "clear-duplicate",
+      "evidence": "decision_event + evidence_record required",
+      "from": "duplicate-review",
+      "invalid_behavior": "reject and audit; migration_exception only for legacy migration inputs",
+      "time_rule": "record effective time and recorded time",
+      "to": "under-review",
+      "visibility": "operator until release prerequisite permits public projection"
+    },
+    {
+      "actor": "authority-owner",
+      "appeal": "appeal/correction opens case record; terminal states do not silently reopen",
+      "event": "promote-to-canonical",
+      "evidence": "decision_event + evidence_record required",
+      "from": "under-review",
+      "invalid_behavior": "reject and audit; migration_exception only for legacy migration inputs",
+      "time_rule": "record effective time and recorded time",
+      "to": "promoted-to-canonical",
+      "visibility": "operator until release prerequisite permits public projection"
+    },
+    {
+      "actor": "authority-owner",
+      "appeal": "appeal/correction opens case record; terminal states do not silently reopen",
+      "event": "reject-intake",
+      "evidence": "decision_event + evidence_record required",
+      "from": "under-review",
+      "invalid_behavior": "reject and audit; migration_exception only for legacy migration inputs",
+      "time_rule": "record effective time and recorded time",
+      "to": "rejected",
+      "visibility": "operator until release prerequisite permits public projection"
+    },
+    {
+      "actor": "authority-owner",
+      "appeal": "appeal/correction opens case record; terminal states do not silently reopen",
+      "event": "close-promoted-intake",
+      "evidence": "decision_event + evidence_record required",
+      "from": "promoted-to-canonical",
+      "invalid_behavior": "reject and audit; migration_exception only for legacy migration inputs",
+      "time_rule": "record effective time and recorded time",
+      "to": "closed",
+      "visibility": "operator until release prerequisite permits public projection"
+    },
+    {
+      "actor": "authority-owner",
+      "appeal": "appeal/correction opens case record; terminal states do not silently reopen",
+      "event": "close-rejected-intake",
+      "evidence": "decision_event + evidence_record required",
+      "from": "rejected",
+      "invalid_behavior": "reject and audit; migration_exception only for legacy migration inputs",
+      "time_rule": "record effective time and recorded time",
+      "to": "closed",
+      "visibility": "operator until release prerequisite permits public projection"
+    }
+  ],
+  "locality_lifecycle": [
+    {
+      "actor": "authority-owner",
+      "appeal": "appeal/correction opens case record; terminal states do not silently reopen",
+      "event": "approve-locality",
+      "evidence": "decision_event + evidence_record required",
+      "from": "candidate",
+      "invalid_behavior": "reject and audit; migration_exception only for legacy migration inputs",
+      "time_rule": "record effective time and recorded time",
+      "to": "official",
+      "visibility": "operator until release prerequisite permits public projection"
+    },
+    {
+      "actor": "authority-owner",
+      "appeal": "appeal/correction opens case record; terminal states do not silently reopen",
+      "event": "approve-rename",
+      "evidence": "decision_event + evidence_record required",
+      "from": "official",
+      "invalid_behavior": "reject and audit; migration_exception only for legacy migration inputs",
+      "time_rule": "record effective time and recorded time",
+      "to": "renamed",
+      "visibility": "operator until release prerequisite permits public projection"
+    },
+    {
+      "actor": "authority-owner",
+      "appeal": "appeal/correction opens case record; terminal states do not silently reopen",
+      "event": "retire-locality",
+      "evidence": "decision_event + evidence_record required",
+      "from": "official",
+      "invalid_behavior": "reject and audit; migration_exception only for legacy migration inputs",
+      "time_rule": "record effective time and recorded time",
+      "to": "retired",
+      "visibility": "operator until release prerequisite permits public projection"
+    }
+  ],
+  "name_lifecycle": [
+    {
+      "actor": "authority-owner",
+      "appeal": "appeal/correction opens case record; terminal states do not silently reopen",
+      "event": "approve-official-name",
+      "evidence": "decision_event + evidence_record required",
+      "from": "candidate",
+      "invalid_behavior": "reject and audit; migration_exception only for legacy migration inputs",
+      "time_rule": "record effective time and recorded time",
+      "to": "official-current",
+      "visibility": "operator until release prerequisite permits public projection"
+    },
+    {
+      "actor": "authority-owner",
+      "appeal": "appeal/correction opens case record; terminal states do not silently reopen",
+      "event": "replace-official-name",
+      "evidence": "decision_event + evidence_record required",
+      "from": "official-current",
+      "invalid_behavior": "reject and audit; migration_exception only for legacy migration inputs",
+      "time_rule": "record effective time and recorded time",
+      "to": "official-historical",
+      "visibility": "operator until release prerequisite permits public projection"
+    },
+    {
+      "actor": "authority-owner",
+      "appeal": "appeal/correction opens case record; terminal states do not silently reopen",
+      "event": "approve-alternate",
+      "evidence": "decision_event + evidence_record required",
+      "from": "candidate",
+      "invalid_behavior": "reject and audit; migration_exception only for legacy migration inputs",
+      "time_rule": "record effective time and recorded time",
+      "to": "alternate",
+      "visibility": "operator until release prerequisite permits public projection"
+    },
+    {
+      "actor": "authority-owner",
+      "appeal": "appeal/correction opens case record; terminal states do not silently reopen",
+      "event": "open-name-dispute",
+      "evidence": "decision_event + evidence_record required",
+      "from": "official-current",
+      "invalid_behavior": "reject and audit; migration_exception only for legacy migration inputs",
+      "time_rule": "record effective time and recorded time",
+      "to": "disputed",
+      "visibility": "operator until release prerequisite permits public projection"
+    },
+    {
+      "actor": "authority-owner",
+      "appeal": "appeal/correction opens case record; terminal states do not silently reopen",
+      "event": "resolve-name-dispute-retain",
+      "evidence": "decision_event + evidence_record required",
+      "from": "disputed",
+      "invalid_behavior": "reject and audit; migration_exception only for legacy migration inputs",
+      "time_rule": "record effective time and recorded time",
+      "to": "official-current",
+      "visibility": "operator until release prerequisite permits public projection"
+    },
+    {
+      "actor": "authority-owner",
+      "appeal": "appeal/correction opens case record; terminal states do not silently reopen",
+      "event": "reject-name",
+      "evidence": "decision_event + evidence_record required",
+      "from": "candidate",
+      "invalid_behavior": "reject and audit; migration_exception only for legacy migration inputs",
+      "time_rule": "record effective time and recorded time",
+      "to": "rejected",
+      "visibility": "operator until release prerequisite permits public projection"
+    },
+    {
+      "actor": "authority-owner",
+      "appeal": "appeal/correction opens case record; terminal states do not silently reopen",
+      "event": "retire-alternate",
+      "evidence": "decision_event + evidence_record required",
+      "from": "alternate",
+      "invalid_behavior": "reject and audit; migration_exception only for legacy migration inputs",
+      "time_rule": "record effective time and recorded time",
+      "to": "retired",
+      "visibility": "operator until release prerequisite permits public projection"
+    }
+  ],
+  "operational_area_lifecycle": [
+    {
+      "actor": "authority-owner",
+      "appeal": "appeal/correction opens case record; terminal states do not silently reopen",
+      "event": "activate-area",
+      "evidence": "decision_event + evidence_record required",
+      "from": "planned",
+      "invalid_behavior": "reject and audit; migration_exception only for legacy migration inputs",
+      "time_rule": "record effective time and recorded time",
+      "to": "active",
+      "visibility": "operator until release prerequisite permits public projection"
+    },
+    {
+      "actor": "authority-owner",
+      "appeal": "appeal/correction opens case record; terminal states do not silently reopen",
+      "event": "suspend-area",
+      "evidence": "decision_event + evidence_record required",
+      "from": "active",
+      "invalid_behavior": "reject and audit; migration_exception only for legacy migration inputs",
+      "time_rule": "record effective time and recorded time",
+      "to": "suspended",
+      "visibility": "operator until release prerequisite permits public projection"
+    },
+    {
+      "actor": "authority-owner",
+      "appeal": "appeal/correction opens case record; terminal states do not silently reopen",
+      "event": "reactivate-area",
+      "evidence": "decision_event + evidence_record required",
+      "from": "suspended",
+      "invalid_behavior": "reject and audit; migration_exception only for legacy migration inputs",
+      "time_rule": "record effective time and recorded time",
+      "to": "active",
+      "visibility": "operator until release prerequisite permits public projection"
+    },
+    {
+      "actor": "authority-owner",
+      "appeal": "appeal/correction opens case record; terminal states do not silently reopen",
+      "event": "close-area",
+      "evidence": "decision_event + evidence_record required",
+      "from": "active",
+      "invalid_behavior": "reject and audit; migration_exception only for legacy migration inputs",
+      "time_rule": "record effective time and recorded time",
+      "to": "closed",
+      "visibility": "operator until release prerequisite permits public projection"
+    },
+    {
+      "actor": "authority-owner",
+      "appeal": "appeal/correction opens case record; terminal states do not silently reopen",
+      "event": "archive-area",
+      "evidence": "decision_event + evidence_record required",
+      "from": "closed",
+      "invalid_behavior": "reject and audit; migration_exception only for legacy migration inputs",
+      "time_rule": "record effective time and recorded time",
+      "to": "archived",
+      "visibility": "operator until release prerequisite permits public projection"
+    }
+  ],
+  "publication_lifecycle": [
+    {
+      "actor": "publication-authority",
+      "appeal": "appeal/correction opens case record; terminal states do not silently reopen",
+      "event": "request-publication-approval",
+      "evidence": "decision_event + evidence_record required",
+      "from": "draft",
+      "invalid_behavior": "reject and audit; migration_exception only for legacy migration inputs",
+      "time_rule": "record effective time and recorded time",
+      "to": "approval-requested",
+      "visibility": "operator until release prerequisite permits public projection"
+    },
+    {
+      "actor": "publication-authority",
+      "appeal": "appeal/correction opens case record; terminal states do not silently reopen",
+      "event": "approve-publication",
+      "evidence": "decision_event + evidence_record required",
+      "from": "approval-requested",
+      "invalid_behavior": "reject and audit; migration_exception only for legacy migration inputs",
+      "time_rule": "record effective time and recorded time",
+      "to": "approved",
+      "visibility": "operator until release prerequisite permits public projection"
+    },
+    {
+      "actor": "publication-authority",
+      "appeal": "appeal/correction opens case record; terminal states do not silently reopen",
+      "event": "withdraw-request",
+      "evidence": "decision_event + evidence_record required",
+      "from": "approval-requested",
+      "invalid_behavior": "reject and audit; migration_exception only for legacy migration inputs",
+      "time_rule": "record effective time and recorded time",
+      "to": "withdrawn",
+      "visibility": "operator until release prerequisite permits public projection"
+    },
+    {
+      "actor": "publication-authority",
+      "appeal": "appeal/correction opens case record; terminal states do not silently reopen",
+      "event": "publish-release",
+      "evidence": "decision_event + evidence_record required",
+      "from": "approved",
+      "invalid_behavior": "reject and audit; migration_exception only for legacy migration inputs",
+      "time_rule": "record effective time and recorded time",
+      "to": "published",
+      "visibility": "operator until release prerequisite permits public projection"
+    },
+    {
+      "actor": "publication-authority",
+      "appeal": "appeal/correction opens case record; terminal states do not silently reopen",
+      "event": "suspend-publication",
+      "evidence": "decision_event + evidence_record required",
+      "from": "published",
+      "invalid_behavior": "reject and audit; migration_exception only for legacy migration inputs",
+      "time_rule": "record effective time and recorded time",
+      "to": "suspended",
+      "visibility": "operator until release prerequisite permits public projection"
+    },
+    {
+      "actor": "publication-authority",
+      "appeal": "appeal/correction opens case record; terminal states do not silently reopen",
+      "event": "reinstate-publication",
+      "evidence": "decision_event + evidence_record required",
+      "from": "suspended",
+      "invalid_behavior": "reject and audit; migration_exception only for legacy migration inputs",
+      "time_rule": "record effective time and recorded time",
+      "to": "published",
+      "visibility": "operator until release prerequisite permits public projection"
+    },
+    {
+      "actor": "publication-authority",
+      "appeal": "appeal/correction opens case record; terminal states do not silently reopen",
+      "event": "withdraw-publication",
+      "evidence": "decision_event + evidence_record required",
+      "from": "published",
+      "invalid_behavior": "reject and audit; migration_exception only for legacy migration inputs",
+      "time_rule": "record effective time and recorded time",
+      "to": "withdrawn",
+      "visibility": "operator until release prerequisite permits public projection"
+    }
+  ],
+  "reference_object_lifecycle": [
+    {
+      "actor": "authority-owner",
+      "appeal": "appeal/correction opens case record; terminal states do not silently reopen",
+      "event": "approve-reference",
+      "evidence": "decision_event + evidence_record required",
+      "from": "candidate",
+      "invalid_behavior": "reject and audit; migration_exception only for legacy migration inputs",
+      "time_rule": "record effective time and recorded time",
+      "to": "active",
+      "visibility": "operator until release prerequisite permits public projection"
+    },
+    {
+      "actor": "authority-owner",
+      "appeal": "appeal/correction opens case record; terminal states do not silently reopen",
+      "event": "reject-reference",
+      "evidence": "decision_event + evidence_record required",
+      "from": "candidate",
+      "invalid_behavior": "reject and audit; migration_exception only for legacy migration inputs",
+      "time_rule": "record effective time and recorded time",
+      "to": "revoked",
+      "visibility": "operator until release prerequisite permits public projection"
+    },
+    {
+      "actor": "authority-owner",
+      "appeal": "appeal/correction opens case record; terminal states do not silently reopen",
+      "event": "approve-correction",
+      "evidence": "decision_event + evidence_record required",
+      "from": "active",
+      "invalid_behavior": "reject and audit; migration_exception only for legacy migration inputs",
+      "time_rule": "record effective time and recorded time",
+      "to": "corrected",
+      "visibility": "operator until release prerequisite permits public projection"
+    },
+    {
+      "actor": "authority-owner",
+      "appeal": "appeal/correction opens case record; terminal states do not silently reopen",
+      "event": "replace-reference",
+      "evidence": "decision_event + evidence_record required",
+      "from": "active",
+      "invalid_behavior": "reject and audit; migration_exception only for legacy migration inputs",
+      "time_rule": "record effective time and recorded time",
+      "to": "superseded",
+      "visibility": "operator until release prerequisite permits public projection"
+    },
+    {
+      "actor": "authority-owner",
+      "appeal": "appeal/correction opens case record; terminal states do not silently reopen",
+      "event": "retire-reference",
+      "evidence": "decision_event + evidence_record required",
+      "from": "active",
+      "invalid_behavior": "reject and audit; migration_exception only for legacy migration inputs",
+      "time_rule": "record effective time and recorded time",
+      "to": "retired",
+      "visibility": "operator until release prerequisite permits public projection"
+    }
+  ],
+  "road_lifecycle": [
+    {
+      "actor": "authority-owner",
+      "appeal": "appeal/correction opens case record; terminal states do not silently reopen",
+      "event": "field-verify-road",
+      "evidence": "decision_event + evidence_record required",
+      "from": "candidate",
+      "invalid_behavior": "reject and audit; migration_exception only for legacy migration inputs",
+      "time_rule": "record effective time and recorded time",
+      "to": "field-verified",
+      "visibility": "operator until release prerequisite permits public projection"
+    },
+    {
+      "actor": "authority-owner",
+      "appeal": "appeal/correction opens case record; terminal states do not silently reopen",
+      "event": "approve-road",
+      "evidence": "decision_event + evidence_record required",
+      "from": "field-verified",
+      "invalid_behavior": "reject and audit; migration_exception only for legacy migration inputs",
+      "time_rule": "record effective time and recorded time",
+      "to": "official",
+      "visibility": "operator until release prerequisite permits public projection"
+    },
+    {
+      "actor": "authority-owner",
+      "appeal": "appeal/correction opens case record; terminal states do not silently reopen",
+      "event": "replace-road",
+      "evidence": "decision_event + evidence_record required",
+      "from": "official",
+      "invalid_behavior": "reject and audit; migration_exception only for legacy migration inputs",
+      "time_rule": "record effective time and recorded time",
+      "to": "superseded",
+      "visibility": "operator until release prerequisite permits public projection"
+    },
+    {
+      "actor": "authority-owner",
+      "appeal": "appeal/correction opens case record; terminal states do not silently reopen",
+      "event": "retire-road",
+      "evidence": "decision_event + evidence_record required",
+      "from": "official",
+      "invalid_behavior": "reject and audit; migration_exception only for legacy migration inputs",
+      "time_rule": "record effective time and recorded time",
+      "to": "retired",
+      "visibility": "operator until release prerequisite permits public projection"
+    }
+  ],
+  "road_segment_lifecycle": [
+    {
+      "actor": "authority-owner",
+      "appeal": "appeal/correction opens case record; terminal states do not silently reopen",
+      "event": "approve-segment",
+      "evidence": "decision_event + evidence_record required",
+      "from": "draft",
+      "invalid_behavior": "reject and audit; migration_exception only for legacy migration inputs",
+      "time_rule": "record effective time and recorded time",
+      "to": "active",
+      "visibility": "operator until release prerequisite permits public projection"
+    },
+    {
+      "actor": "authority-owner",
+      "appeal": "appeal/correction opens case record; terminal states do not silently reopen",
+      "event": "approve-realignment",
+      "evidence": "decision_event + evidence_record required",
+      "from": "active",
+      "invalid_behavior": "reject and audit; migration_exception only for legacy migration inputs",
+      "time_rule": "record effective time and recorded time",
+      "to": "realigned",
+      "visibility": "operator until release prerequisite permits public projection"
+    },
+    {
+      "actor": "authority-owner",
+      "appeal": "appeal/correction opens case record; terminal states do not silently reopen",
+      "event": "retire-segment",
+      "evidence": "decision_event + evidence_record required",
+      "from": "active",
+      "invalid_behavior": "reject and audit; migration_exception only for legacy migration inputs",
+      "time_rule": "record effective time and recorded time",
+      "to": "retired",
+      "visibility": "operator until release prerequisite permits public projection"
+    }
+  ],
+  "source_authority_lifecycle": [
+    {
+      "actor": "authority-owner",
+      "appeal": "appeal/correction opens case record; terminal states do not silently reopen",
+      "event": "approve-source",
+      "evidence": "decision_event + evidence_record required",
+      "from": "candidate",
+      "invalid_behavior": "reject and audit; migration_exception only for legacy migration inputs",
+      "time_rule": "record effective time and recorded time",
+      "to": "trusted",
+      "visibility": "operator until release prerequisite permits public projection"
+    },
+    {
+      "actor": "authority-owner",
+      "appeal": "appeal/correction opens case record; terminal states do not silently reopen",
+      "event": "deprecate-source",
+      "evidence": "decision_event + evidence_record required",
+      "from": "trusted",
+      "invalid_behavior": "reject and audit; migration_exception only for legacy migration inputs",
+      "time_rule": "record effective time and recorded time",
+      "to": "deprecated",
+      "visibility": "operator until release prerequisite permits public projection"
+    },
+    {
+      "actor": "authority-owner",
+      "appeal": "appeal/correction opens case record; terminal states do not silently reopen",
+      "event": "revoke-source",
+      "evidence": "decision_event + evidence_record required",
+      "from": "trusted",
+      "invalid_behavior": "reject and audit; migration_exception only for legacy migration inputs",
+      "time_rule": "record effective time and recorded time",
+      "to": "revoked",
+      "visibility": "operator until release prerequisite permits public projection"
+    },
+    {
+      "actor": "authority-owner",
+      "appeal": "appeal/correction opens case record; terminal states do not silently reopen",
+      "event": "reject-source",
+      "evidence": "decision_event + evidence_record required",
+      "from": "candidate",
+      "invalid_behavior": "reject and audit; migration_exception only for legacy migration inputs",
+      "time_rule": "record effective time and recorded time",
+      "to": "revoked",
+      "visibility": "operator until release prerequisite permits public projection"
+    }
+  ],
+  "unit_lifecycle": [
+    {
+      "actor": "authority-owner",
+      "appeal": "appeal/correction opens case record; terminal states do not silently reopen",
+      "event": "approve-unit",
+      "evidence": "decision_event + evidence_record required",
+      "from": "candidate",
+      "invalid_behavior": "reject and audit; migration_exception only for legacy migration inputs",
+      "time_rule": "record effective time and recorded time",
+      "to": "active",
+      "visibility": "operator until release prerequisite permits public projection"
+    },
+    {
+      "actor": "authority-owner",
+      "appeal": "appeal/correction opens case record; terminal states do not silently reopen",
+      "event": "merge-unit",
+      "evidence": "decision_event + evidence_record required",
+      "from": "active",
+      "invalid_behavior": "reject and audit; migration_exception only for legacy migration inputs",
+      "time_rule": "record effective time and recorded time",
+      "to": "merged",
+      "visibility": "operator until release prerequisite permits public projection"
+    },
+    {
+      "actor": "authority-owner",
+      "appeal": "appeal/correction opens case record; terminal states do not silently reopen",
+      "event": "split-unit",
+      "evidence": "decision_event + evidence_record required",
+      "from": "active",
+      "invalid_behavior": "reject and audit; migration_exception only for legacy migration inputs",
+      "time_rule": "record effective time and recorded time",
+      "to": "split",
+      "visibility": "operator until release prerequisite permits public projection"
+    },
+    {
+      "actor": "authority-owner",
+      "appeal": "appeal/correction opens case record; terminal states do not silently reopen",
+      "event": "retire-unit",
+      "evidence": "decision_event + evidence_record required",
+      "from": "active",
+      "invalid_behavior": "reject and audit; migration_exception only for legacy migration inputs",
+      "time_rule": "record effective time and recorded time",
+      "to": "retired",
+      "visibility": "operator until release prerequisite permits public projection"
+    }
+  ]
+}

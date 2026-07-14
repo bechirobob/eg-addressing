@@ -26,7 +26,7 @@ from typing import Any
 ROOT = Path(__file__).resolve().parents[4]
 SDA = ROOT / "docs" / "sda"
 DM = SDA / "data-model"
-REVIEW = SDA / "reviews" / "NLI-WO-002-review-03.md"
+REVIEW = SDA / "reviews" / "NLI-WO-002-review-04.md"
 DATE = "2026-07-14"
 BRANCH = "nli/wo-002-canonical-location-model"
 FIXING_COMMIT_PLACEHOLDER = "bf4a203d24ac031a170f71480338f4ab4a1e4d90"
@@ -123,7 +123,7 @@ def apply_current_migrations() -> dict[str, Any]:
             cur.execute("SELECT version, filename, checksum, applied_at, execution_context FROM schema_migrations ORDER BY version")
             ledger = [dict(r) | {"applied_at": "<disposable-db-apply-time>", "execution_context": "<review04-design-pipeline>"} for r in cur.fetchall()]
             cur.execute("SELECT extname, extversion FROM pg_extension ORDER BY extname")
-            extensions = [dict(r) for r in cur.fetchall()]
+            extensions = [dict(r) for r in cur.fetchall() if r["extname"] != "btree_gist"]
     return {"migrations": events, "ledger": ledger, "extensions": extensions}
 
 
@@ -188,6 +188,7 @@ def current_catalog() -> dict[str, Any]:
             """
             SELECT f_table_name AS table_name, f_geometry_column AS column_name, type, srid, coord_dimension
             FROM geometry_columns
+            WHERE f_table_schema='public'
             ORDER BY f_table_name, f_geometry_column
             """
         )
@@ -318,6 +319,8 @@ def generate_openapi_inventory() -> dict[str, Any]:
                 responses.append({"status": code, "description": resp.get("description", ""), "fields": resp_fields})
             operations.append({"method": method.upper(), "path": path, "operation_id": opid, "policy": policy, "request_fields": req_fields, "responses": responses})
     write_json("docs/sda/data-model/current-openapi.json", spec)
+    expected_policies = {f"{op['method']} {op['path']}": op["policy"] for op in operations}
+    write_json("docs/sda/data-model/openapi-expected-route-policies.json", expected_policies)
     write_json("docs/sda/data-model/openapi-operation-inventory.json", {"operations": operations})
     render_openapi_matrix(operations)
     return {"spec": spec, "operations": operations}
@@ -335,30 +338,74 @@ def classify_api_field(field: str) -> str:
 
 
 def route_policy_from_source(text: str) -> dict[str, dict[str, Any]]:
-    lines = text.splitlines()
+    """Derive route policies from exact FastAPI function AST boundaries.
+
+    APIRoute dependency metadata is empty in the current app because auth is
+    enforced inside handlers. This AST pass inspects only each decorated
+    function body, avoiding Review 04's 80-line bleed into later handlers.
+    """
+    module = ast.parse(text)
     policies: dict[str, dict[str, Any]] = {}
-    decorator_re = re.compile(r"@app\.(get|post|patch|put|delete)\('([^']+)'")
-    for i, line in enumerate(lines):
-        m = decorator_re.search(line)
-        if not m:
+    source_lines = text.splitlines()
+
+    def literal(node: ast.AST) -> Any:
+        try:
+            return ast.literal_eval(node)
+        except Exception:
+            return None
+
+    for node in module.body:
+        if not isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
             continue
-        route = m.group(2)
-        j = i + 1
-        while j < len(lines) and not lines[j].startswith("def ") and not lines[j].startswith("async def "):
-            j += 1
-        func = ""
-        if j < len(lines):
-            func = re.search(r"def\s+([a-zA-Z0-9_]+)", lines[j]).group(1)  # type: ignore[union-attr]
-        body = "\n".join(lines[j : min(len(lines), j + 80)])
-        roles = sorted(set(re.findall(r"_require_role\([^,]+,\s*([^\)]*)\)", body)))
-        role_values: list[str] = []
-        for expr in roles:
-            role_values.extend(re.findall(r"'([^']+)'", expr))
-        auth = "authenticated" if "_current_user" in body or "_require_role" in body else "public"
-        if "_optional_current_user" in body:
+        routes: list[tuple[str, str]] = []
+        for dec in node.decorator_list:
+            call = dec if isinstance(dec, ast.Call) else None
+            if not call or not isinstance(call.func, ast.Attribute):
+                continue
+            if not isinstance(call.func.value, ast.Name) or call.func.value.id != "app":
+                continue
+            method = call.func.attr.lower()
+            if method not in {"get", "post", "put", "patch", "delete"} or not call.args:
+                continue
+            path = literal(call.args[0])
+            if isinstance(path, str):
+                routes.append((method.upper(), path))
+        if not routes:
+            continue
+        calls: list[ast.Call] = [n for n in ast.walk(node) if isinstance(n, ast.Call)]
+        call_names: list[str] = []
+        roles: set[str] = set()
+        for call in calls:
+            name = ""
+            if isinstance(call.func, ast.Name):
+                name = call.func.id
+            elif isinstance(call.func, ast.Attribute):
+                name = call.func.attr
+            if name:
+                call_names.append(name)
+            if name == "_require_role" and len(call.args) >= 2:
+                role_arg = call.args[1]
+                if isinstance(role_arg, (ast.Tuple, ast.List, ast.Set)):
+                    for item in role_arg.elts:
+                        val = literal(item)
+                        if isinstance(val, str):
+                            roles.add(val)
+                else:
+                    val = literal(role_arg)
+                    if isinstance(val, str):
+                        roles.add(val)
+        if "_optional_current_user" in call_names:
             auth = "optional-auth"
-        policies[func] = {"auth": auth, "roles": sorted(set(role_values)), "source": f"services/api/app/main.py:{i+1}", "route": route}
-        policies[route] = policies[func]
+        elif "_require_role" in call_names:
+            auth = "role-required"
+        elif "_current_user" in call_names:
+            auth = "authenticated"
+        else:
+            auth = "public"
+        for method, route in routes:
+            policy = {"auth": auth, "roles": sorted(roles), "source": f"services/api/app/main.py:{node.lineno}-{getattr(node, 'end_lineno', node.lineno)}", "route": route, "method": method, "function": node.name, "analysis": "function-ast-boundary"}
+            policies[node.name] = policy
+            policies[route] = policy
     return policies
 
 
@@ -404,7 +451,82 @@ def load_and_correct_model() -> dict[str, Any]:
         "name_lifecycle": {"owner": "Registry/GIS Authority", "values": {"candidate": "Candidate.", "official-current": "Current official.", "official-historical": "Historical official.", "alternate": "Alternate.", "disputed": "Disputed.", "retired": "Retired.", "rejected": "Rejected."}},
         "case_lifecycle": {"owner": "Registry Authority", "values": {"submitted": "Submitted.", "under-review": "Under review.", "needs-evidence": "Needs evidence.", "approved": "Approved.", "rejected": "Rejected.", "resolved": "Resolved.", "closed": "Closed."}},
         "publication_lifecycle": deepcopy(vocabs.get("publication_release_state", {"owner": "Publication Authority", "values": {}})),
+        "administrative_unit_lifecycle": {"owner": "GIS/Data Authority", "values": {"proposed": "Proposed administrative version.", "official": "Official active version.", "historical": "Historical official version.", "retired": "Retired version.", "revoked": "Revoked version."}},
+        "road_lifecycle": {"owner": "GIS/Data Authority", "values": {"candidate": "Candidate road.", "field-verified": "Field verified road.", "official": "Official road.", "superseded": "Superseded road.", "retired": "Retired road."}},
+        "road_segment_lifecycle": {"owner": "GIS/Data Authority", "values": {"draft": "Draft segment.", "active": "Active segment.", "realigned": "Realigned segment.", "retired": "Retired segment."}},
+        "building_lifecycle": {"owner": "Registry Authority", "values": {"candidate": "Candidate building.", "active": "Active building.", "demolished": "Demolished building.", "retired": "Retired building.", "revoked": "Revoked building."}},
+        "unit_lifecycle": {"owner": "Registry Authority", "values": {"candidate": "Candidate unit.", "active": "Active unit.", "merged": "Merged unit.", "split": "Split unit.", "retired": "Retired unit."}},
+        "locality_lifecycle": {"owner": "Registry/GIS Authority", "values": {"candidate": "Candidate locality.", "official": "Official locality.", "renamed": "Renamed locality.", "retired": "Retired locality."}},
+        "subject_lifecycle": {"owner": "Registry Authority", "values": {"active": "Subject can receive links.", "retired": "Subject retained but not assignable.", "merged": "Subject merged into successor.", "deleted-prohibited": "Delete attempted but policy requires retirement."}},
+        "delete_policy": {"owner": "Registry Authority", "values": {"retire-only": "Do not hard delete; retire and preserve links.", "cascade-prohibited": "Reject delete while dependent links exist.", "merge-required": "Merge/supersession required before retirement."}},
     })
+    entities = model.setdefault("entities", {})
+
+    def ensure_entity(entity: str, description: str) -> dict[str, Any]:
+        return entities.setdefault(entity, {"description": description, "fields": []})
+
+    def remove_field(entity: str, name: str) -> None:
+        if entity in entities:
+            entities[entity]["fields"] = [f for f in entities[entity].get("fields", []) if f.get("name") != name]
+
+    def upsert_field(entity: str, f: dict[str, Any]) -> None:
+        meta = ensure_entity(entity, f"{entity.replace('_',' ').title()}.")
+        fields = meta.setdefault("fields", [])
+        for i, existing in enumerate(fields):
+            if existing.get("name") == f["name"]:
+                fields[i] = {**existing, **f}
+                return
+        fields.append(f)
+
+    # Review 04 F03: effective-dated code history is the only administrative code authority.
+    remove_field("administrative_unit", "stable_code")
+    for entity, fname, vocab in [
+        ("administrative_unit_version", "lifecycle_state", "administrative_unit_lifecycle"),
+        ("road", "lifecycle_state", "road_lifecycle"),
+        ("road_segment", "lifecycle_state", "road_segment_lifecycle"),
+        ("building", "lifecycle_state", "building_lifecycle"),
+        ("unit", "lifecycle_state", "unit_lifecycle"),
+        ("locality", "lifecycle_state", "locality_lifecycle"),
+        ("operational_area", "lifecycle_state", "operational_area_lifecycle"),
+        ("source_authority", "authority_state", "source_authority_lifecycle"),
+        ("location_record_version", "lifecycle_state", "canonical_record_lifecycle"),
+    ]:
+        target_field = None
+        for f in entities.get(entity, {}).get("fields", []):
+            if f.get("name") == fname:
+                target_field = f
+                break
+        if target_field is not None:
+            target_field["vocabulary"] = vocab
+            base_definition = target_field.get("definition", fname).split(" Review 04 correction:", 1)[0].rstrip(".")
+            target_field["definition"] = f"{base_definition}. Review 04 correction: entity-specific lifecycle."
+
+    # Review 04 F04/F06: shared subject registry is the referential strategy.
+    upsert_field("registry_subject", fdef("subject_id", "text", False, "Registered subject identity.", constraints=["PRIMARY KEY"]))
+    upsert_field("registry_subject", fdef("subject_entity", "text", False, "Subject entity/type registered for polymorphic-safe links.", constraints=["CHECK subject_entity in allowed subject set"]))
+    upsert_field("registry_subject", fdef("native_id", "text", False, "Native target-table identifier represented by this subject."))
+    upsert_field("registry_subject", fdef("subject_state", "text", False, "Subject active/retired/delete policy state.", vocabulary="subject_lifecycle", default="'active'"))
+    upsert_field("registry_subject", fdef("retired_at", "timestamptz", True, "Retirement/deletion policy timestamp."))
+    upsert_field("registry_subject", fdef("delete_policy", "text", False, "Delete behavior for linked names/geometry/disputes/objects.", vocabulary="delete_policy", default="'retire-only'"))
+    for entity in ["name_record", "location_record_object_link", "dispute_case", "geometry_version", "geometry_observation"]:
+        upsert_field(entity, fdef("subject_id", "text", False, "Shared registry subject reference.", fk="registry_subject.subject_id", constraints=["subject must exist and be active or linked through retirement policy"]))
+    remove_field("name_record", "subject_entity")
+    remove_field("location_record_object_link", "object_entity")
+    remove_field("location_record_object_link", "object_id")
+    remove_field("dispute_case", "target_entity")
+    remove_field("dispute_case", "target_id")
+    remove_field("geometry_version", "subject_entity")
+    remove_field("geometry_observation", "subject_hint_entity")
+    remove_field("geometry_observation", "subject_hint_id")
+
+    # Review 04 F05/F06: explicit chain and interval metadata.
+    for entity in ["location_record_version", "administrative_unit_version", "administrative_code_history", "geometry_version", "name_record", "location_record_object_link", "public_code_alias"]:
+        meta = ensure_entity(entity, f"{entity.replace('_',' ').title()}.")
+        meta.setdefault("integrity_assertions", [])
+        for assertion in ["effective intervals do not overlap for owner/key", "recorded intervals do not overlap for owner/key", "current row is unique", "predecessor/successor links are reciprocal and acyclic"]:
+            if assertion not in meta["integrity_assertions"]:
+                meta["integrity_assertions"].append(assertion)
+
     entities = model.setdefault("entities", {})
     def field(entity: str, name: str) -> dict[str, Any] | None:
         for f in entities.get(entity, {}).get("fields", []):
@@ -629,26 +751,70 @@ def validation_sql_for(current: str, target: str, col: dict[str, Any]) -> str:
     return f"SELECT COUNT(*) FROM {table} WHERE {field} IS {'NOT ' if col['is_nullable']=='NO' else ''}NULL; -- reconcile with target/crosswalk counts"
 
 
+def authored_lifecycle_transitions() -> dict[str, list[dict[str, str]]]:
+    base = {
+        "actor": "role listed by authority owner",
+        "evidence": "decision_event + evidence_record required",
+        "time_rule": "record effective time and recorded time",
+        "visibility": "operator until release prerequisite permits public projection",
+        "appeal": "appeal/correction opens case record; terminal states do not silently reopen",
+        "invalid_behavior": "reject and audit; migration_exception only for legacy migration inputs",
+    }
+    def t(src: str, dst: str, event: str, actor: str = "authority-owner") -> dict[str, str]:
+        return {"from": src, "to": dst, "event": event, **base, "actor": actor}
+    return {
+        "canonical_record_lifecycle": [t("candidate","under-review","submit-candidate"), t("under-review","active","approve-canonical"), t("under-review","disputed","open-dispute"), t("active","corrected","approve-correction"), t("active","superseded","approve-supersession"), t("active","disputed","open-dispute"), t("disputed","active","resolve-dispute-retain"), t("disputed","corrected","resolve-dispute-correct"), t("active","retired","retire-record"), t("candidate","revoked","reject-candidate")],
+        "reference_object_lifecycle": [t("candidate","active","approve-reference"), t("candidate","revoked","reject-reference"), t("active","corrected","approve-correction"), t("active","superseded","replace-reference"), t("active","retired","retire-reference")],
+        "administrative_unit_lifecycle": [t("proposed","official","approve-administrative-version"), t("official","historical","replace-by-new-official-version"), t("official","retired","retire-administrative-unit"), t("proposed","revoked","reject-proposal")],
+        "road_lifecycle": [t("candidate","field-verified","field-verify-road"), t("field-verified","official","approve-road"), t("official","superseded","replace-road"), t("official","retired","retire-road")],
+        "road_segment_lifecycle": [t("draft","active","approve-segment"), t("active","realigned","approve-realignment"), t("active","retired","retire-segment")],
+        "building_lifecycle": [t("candidate","active","approve-building"), t("active","demolished","record-demolition"), t("active","retired","retire-building"), t("candidate","revoked","reject-building")],
+        "unit_lifecycle": [t("candidate","active","approve-unit"), t("active","merged","merge-unit"), t("active","split","split-unit"), t("active","retired","retire-unit")],
+        "locality_lifecycle": [t("candidate","official","approve-locality"), t("official","renamed","approve-rename"), t("official","retired","retire-locality")],
+        "operational_area_lifecycle": [t("planned","active","activate-area"), t("active","suspended","suspend-area"), t("suspended","active","reactivate-area"), t("active","closed","close-area"), t("closed","archived","archive-area")],
+        "source_authority_lifecycle": [t("candidate","trusted","approve-source"), t("trusted","deprecated","deprecate-source"), t("trusted","revoked","revoke-source"), t("candidate","revoked","reject-source")],
+        "name_lifecycle": [t("candidate","official-current","approve-official-name"), t("official-current","official-historical","replace-official-name"), t("candidate","alternate","approve-alternate"), t("official-current","disputed","open-name-dispute"), t("disputed","official-current","resolve-name-dispute-retain"), t("candidate","rejected","reject-name"), t("alternate","retired","retire-alternate")],
+        "case_lifecycle": [t("submitted","under-review","triage-case"), t("under-review","needs-evidence","request-evidence"), t("needs-evidence","under-review","evidence-received"), t("under-review","approved","approve-case"), t("under-review","rejected","reject-case"), t("approved","resolved","apply-decision"), t("rejected","closed","close-rejected-case"), t("resolved","closed","close-resolved-case")],
+        "geometry_quality_state": [t("observed","quality-checked","run-quality-check"), t("quality-checked","reviewed","review-quality-result"), t("reviewed","accepted-canonical","accept-canonical-geometry"), t("reviewed","valid-with-warning","accept-with-warning"), t("reviewed","rejected","reject-geometry"), t("reviewed","disputed","open-geometry-dispute-before-acceptance"), t("accepted-canonical","superseded","replace-canonical-geometry"), t("disputed","reviewed","resolve-geometry-dispute-for-review")],
+        "publication_lifecycle": [t("draft","approval-requested","request-publication-approval","publication-authority"), t("approval-requested","approved","approve-publication","publication-authority"), t("approval-requested","withdrawn","withdraw-request","publication-authority"), t("approved","published","publish-release","publication-authority"), t("published","suspended","suspend-publication","publication-authority"), t("suspended","published","reinstate-publication","publication-authority"), t("published","withdrawn","withdraw-publication","publication-authority")],
+        "intake_state": [t("submitted","under-review","triage-intake"), t("under-review","duplicate-review","detect-duplicate"), t("under-review","needs-field-check","send-field-check"), t("needs-field-check","under-review","field-check-returned"), t("duplicate-review","under-review","clear-duplicate"), t("under-review","promoted-to-canonical","promote-to-canonical"), t("under-review","rejected","reject-intake"), t("promoted-to-canonical","closed","close-promoted-intake"), t("rejected","closed","close-rejected-intake")],
+        "field_verification_state": [t("assigned","in-progress","start-field-task"), t("in-progress","field-captured","capture-field-evidence"), t("field-captured","evidence-under-review","submit-evidence-review"), t("evidence-under-review","evidence-approved","approve-evidence"), t("evidence-under-review","evidence-rejected","reject-evidence"), t("evidence-rejected","needs-recapture","request-recapture"), t("needs-recapture","in-progress","restart-field-task"), t("evidence-approved","linked-to-canonical","link-approved-evidence"), t("assigned","cancelled","cancel-field-task")],
+    }
+
+
 def render_vocab_and_lifecycle(model: dict[str, Any]) -> None:
     field_rows = []
     for e, meta in model["entities"].items():
         for f in meta.get("fields", []):
             if f.get("vocabulary"):
                 field_rows.append([f"`{e}.{f['name']}`", f"`{f['vocabulary']}`", model["vocabularies"][f["vocabulary"]]["owner"], ", ".join(model["vocabularies"][f["vocabulary"]]["values"].keys())])
-    vocab_sections = ["# Controlled Vocabulary Registry", "", "One authoritative field-to-vocabulary registry. Review 04 separates canonical records, reference objects, operational areas, source authorities, names, cases, geometry, and publication lifecycles.", "", "## Field-to-vocabulary registry", "", md_table(["Target field", "Vocabulary", "Owner", "Allowed values"], field_rows)]
+    vocab_sections = ["# Controlled Vocabulary Registry", "", "One authoritative field-to-vocabulary registry. Review 05 separates canonical records, reference objects, operational areas, source authorities, names, cases, geometry, and publication lifecycles.", "", "## Field-to-vocabulary registry", "", md_table(["Target field", "Vocabulary", "Owner", "Allowed values"], field_rows)]
     for name, meta in sorted(model["vocabularies"].items()):
         vocab_sections.append(f"\n## `{name}`\n\nOwner: **{meta['owner']}**\n\n" + md_table(["Value", "Meaning"], [[k, v] for k, v in meta["values"].items()]))
     write("docs/sda/data-model/controlled-vocabularies.md", "\n".join(vocab_sections))
-    stateful = ["canonical_record_lifecycle", "reference_object_lifecycle", "operational_area_lifecycle", "source_authority_lifecycle", "name_lifecycle", "case_lifecycle", "geometry_quality_state", "publication_lifecycle", "intake_state", "field_verification_state"]
-    parts = ["# Lifecycle State Machines", "", "Each lifecycle is separate. Every transition records actor/permission/scope, authority, evidence, effective time, recorded time, audit event, visibility, reversal/appeal, and invalid-transition behavior."]
-    for vocab in stateful:
-        vals = list(model["vocabularies"][vocab]["values"].keys())
-        rows = []
-        for i, v in enumerate(vals):
-            if i + 1 < len(vals):
-                rows.append([v, vals[i + 1], f"advance-{v}-to-{vals[i+1]}", model["vocabularies"][vocab]["owner"], "decision_event + evidence_record", "record effective_from/effective_to and recorded_at", "operator unless public release", "appeal creates case/correction", "reject; migration_exception"])
-        rows.append([vals[-1], "<terminal or authority-reopened>", "reopen/appeal only when listed by owner", model["vocabularies"][vocab]["owner"], "decision_event required", "new interval/version", "operator", "appeal path explicit", "reject"])
-        parts.append(f"\n## `{vocab}` transitions\n\n" + md_table(["From", "To", "Event", "Actor/permission/scope", "Authority/evidence", "Effective/recorded time", "Visibility", "Reversal/appeal", "Invalid transition"], rows))
+    transitions = authored_lifecycle_transitions()
+    errors = []
+    for vocab, edges in transitions.items():
+        if vocab not in model["vocabularies"]:
+            errors.append(f"transition graph references missing vocabulary {vocab}")
+            continue
+        values = set(model["vocabularies"][vocab]["values"])
+        for edge in edges:
+            if edge["from"] not in values or edge["to"] not in values:
+                errors.append(f"{vocab} transition {edge['from']}->{edge['to']} references value outside vocabulary")
+    forbidden = {("approved","rejected"), ("approved","draft"), ("closed","duplicate-review"), ("cancelled","evidence-approved"), ("accepted-canonical","disputed")}
+    for vocab, edges in transitions.items():
+        for edge in edges:
+            if (edge["from"], edge["to"]) in forbidden:
+                errors.append(f"forbidden generated-style transition present in {vocab}: {edge['from']}->{edge['to']}")
+    if errors:
+        raise SystemExit("authored lifecycle transition validation failed:\n- " + "\n- ".join(errors))
+    write_json("docs/sda/data-model/lifecycle-transitions.json", transitions)
+    parts = ["# Lifecycle State Machines", "", "Transitions are hand-authored. No transition is inferred from vocabulary order. Every transition records actor/permission/scope, authority, evidence, effective time, recorded time, audit event, visibility, reversal/appeal, and invalid-transition behavior."]
+    for vocab, edges in transitions.items():
+        rows = [[e["from"], e["to"], e["event"], e["actor"], e["evidence"], e["time_rule"], e["visibility"], e["appeal"], e["invalid_behavior"]] for e in edges]
+        terminals = sorted(set(model["vocabularies"][vocab]["values"]) - {e["from"] for e in edges})
+        parts.append(f"\n## `{vocab}` transitions\n\n" + md_table(["From", "To", "Event", "Actor/permission/scope", "Authority/evidence", "Effective/recorded time", "Visibility", "Reversal/appeal", "Invalid transition"], rows) + f"\n\nTerminal values: {', '.join(terminals) if terminals else 'none'}.")
     write("docs/sda/data-model/lifecycle-state-machines.md", "\n".join(parts))
 
 
@@ -714,13 +880,32 @@ def render_target_sql(model: dict[str, Any]) -> str:
             if f["pg_type"].lower().startswith("geometry"):
                 lines.append(f"ALTER TABLE proposed_{entity} ADD CONSTRAINT proposed_{entity}_{fname}_valid_ck CHECK ({fname} IS NULL OR (ST_IsValid({fname}) AND ST_SRID({fname}) = 4326));")
                 lines.append(f"CREATE INDEX proposed_{entity}_{fname}_gist ON proposed_{entity} USING GIST ({fname});")
-    # Review 03 physical-expression constraints/triggers (non-executable design but actually runnable).
+    # Review 05 physical-expression constraints/triggers (design SQL executed only in disposable validation DBs).
     lines += [
-        "CREATE OR REPLACE FUNCTION enforce_geometry_role_type() RETURNS trigger LANGUAGE plpgsql AS $$ BEGIN IF NEW.geom IS NOT NULL THEN IF NEW.geometry_role IN ('entrance-point','location-point','landmark-point','building-point') AND GeometryType(NEW.geom) <> 'POINT' THEN RAISE EXCEPTION 'invalid geometry type for role %', NEW.geometry_role; END IF; IF NEW.geometry_role IN ('road-centerline') AND GeometryType(NEW.geom) NOT IN ('LINESTRING','MULTILINESTRING') THEN RAISE EXCEPTION 'invalid geometry type for role %', NEW.geometry_role; END IF; IF NEW.geometry_role IN ('admin-boundary','operational-boundary','building-footprint','landmark-area','parcel-boundary') AND GeometryType(NEW.geom) NOT IN ('POLYGON','MULTIPOLYGON') THEN RAISE EXCEPTION 'invalid geometry type for role %', NEW.geometry_role; END IF; END IF; RETURN NEW; END $$;",
-        "CREATE TRIGGER geometry_version_role_type_trg BEFORE INSERT OR UPDATE ON proposed_geometry_version FOR EACH ROW EXECUTE FUNCTION enforce_geometry_role_type();",
+        "CREATE OR REPLACE FUNCTION enforce_registry_subject_link() RETURNS trigger LANGUAGE plpgsql AS $$ BEGIN IF NEW.subject_id IS NOT NULL AND NOT EXISTS (SELECT 1 FROM proposed_registry_subject s WHERE s.subject_id = NEW.subject_id AND s.subject_state IN ('active','retired','merged')) THEN RAISE EXCEPTION 'registry subject % missing or not linkable', NEW.subject_id; END IF; RETURN NEW; END $$;",
+        "CREATE TRIGGER name_record_subject_trg BEFORE INSERT OR UPDATE ON proposed_name_record FOR EACH ROW EXECUTE FUNCTION enforce_registry_subject_link();",
+        "CREATE TRIGGER object_link_subject_trg BEFORE INSERT OR UPDATE ON proposed_location_record_object_link FOR EACH ROW EXECUTE FUNCTION enforce_registry_subject_link();",
+        "CREATE TRIGGER dispute_case_subject_trg BEFORE INSERT OR UPDATE ON proposed_dispute_case FOR EACH ROW EXECUTE FUNCTION enforce_registry_subject_link();",
+        "CREATE TRIGGER geometry_version_subject_trg BEFORE INSERT OR UPDATE ON proposed_geometry_version FOR EACH ROW EXECUTE FUNCTION enforce_registry_subject_link();",
+        "CREATE TRIGGER geometry_observation_subject_trg BEFORE INSERT OR UPDATE ON proposed_geometry_observation FOR EACH ROW EXECUTE FUNCTION enforce_registry_subject_link();",
+        "CREATE OR REPLACE FUNCTION reject_subject_delete_with_dependents() RETURNS trigger LANGUAGE plpgsql AS $$ BEGIN IF EXISTS (SELECT 1 FROM proposed_name_record WHERE subject_id=OLD.subject_id) OR EXISTS (SELECT 1 FROM proposed_geometry_version WHERE subject_id=OLD.subject_id) OR EXISTS (SELECT 1 FROM proposed_dispute_case WHERE subject_id=OLD.subject_id) OR EXISTS (SELECT 1 FROM proposed_location_record_object_link WHERE subject_id=OLD.subject_id) THEN RAISE EXCEPTION 'subject % must be retired or merged, not deleted', OLD.subject_id; END IF; RETURN OLD; END $$;",
+        "CREATE TRIGGER registry_subject_delete_policy_trg BEFORE DELETE ON proposed_registry_subject FOR EACH ROW EXECUTE FUNCTION reject_subject_delete_with_dependents();",
+        "CREATE OR REPLACE FUNCTION enforce_object_role_cardinality() RETURNS trigger LANGUAGE plpgsql AS $$ BEGIN IF NEW.object_role='primary-subject' AND EXISTS (SELECT 1 FROM proposed_location_record_object_link l WHERE l.location_record_version_id=NEW.location_record_version_id AND l.object_role='primary-subject' AND l.link_id<>NEW.link_id AND (l.effective_to IS NULL OR l.effective_to > NEW.effective_from)) THEN RAISE EXCEPTION 'location record version already has a current primary object'; END IF; RETURN NEW; END $$;",
+        "CREATE TRIGGER object_role_cardinality_trg BEFORE INSERT OR UPDATE ON proposed_location_record_object_link FOR EACH ROW EXECUTE FUNCTION enforce_object_role_cardinality();",
+        "CREATE OR REPLACE FUNCTION enforce_current_official_name() RETURNS trigger LANGUAGE plpgsql AS $$ BEGIN IF NEW.name_kind='official-es' AND NEW.name_status='official-current' AND EXISTS (SELECT 1 FROM proposed_name_record n WHERE n.subject_id=NEW.subject_id AND n.language_code=NEW.language_code AND n.name_kind='official-es' AND n.name_status='official-current' AND n.name_record_id<>NEW.name_record_id AND (n.effective_to IS NULL OR n.effective_to > NEW.effective_from)) THEN RAISE EXCEPTION 'subject % already has current official Spanish name', NEW.subject_id; END IF; RETURN NEW; END $$;",
+        "CREATE TRIGGER current_official_name_trg BEFORE INSERT OR UPDATE ON proposed_name_record FOR EACH ROW EXECUTE FUNCTION enforce_current_official_name();",
+        "CREATE OR REPLACE FUNCTION enforce_geometry_semantics() RETURNS trigger LANGUAGE plpgsql AS $$ BEGIN IF NEW.superseded_by_geometry_version_id = NEW.geometry_version_id THEN RAISE EXCEPTION 'geometry version cannot supersede itself'; END IF; IF ST_NDims(NEW.geom) <> 2 THEN RAISE EXCEPTION 'geometry must be two-dimensional'; END IF; IF NEW.geometry_role IN ('entrance-point','location-point','landmark-point','building-point') AND GeometryType(NEW.geom) <> 'POINT' THEN RAISE EXCEPTION 'invalid geometry type for role %', NEW.geometry_role; END IF; IF NEW.geometry_role IN ('road-centerline') AND GeometryType(NEW.geom) NOT IN ('LINESTRING','MULTILINESTRING') THEN RAISE EXCEPTION 'invalid geometry type for role %', NEW.geometry_role; END IF; IF NEW.geometry_role IN ('admin-boundary','operational-boundary','building-footprint','landmark-area','parcel-boundary') AND GeometryType(NEW.geom) NOT IN ('POLYGON','MULTIPOLYGON') THEN RAISE EXCEPTION 'invalid geometry type for role %', NEW.geometry_role; END IF; RETURN NEW; END $$;",
+        "CREATE TRIGGER geometry_version_semantics_trg BEFORE INSERT OR UPDATE ON proposed_geometry_version FOR EACH ROW EXECUTE FUNCTION enforce_geometry_semantics();",
+        "CREATE OR REPLACE FUNCTION enforce_version_chain() RETURNS trigger LANGUAGE plpgsql AS $$ BEGIN IF NEW.predecessor_version_id = NEW.location_record_version_id OR NEW.successor_version_id = NEW.location_record_version_id THEN RAISE EXCEPTION 'version chain cannot self-reference'; END IF; IF NEW.predecessor_version_id IS NOT NULL AND NOT EXISTS (SELECT 1 FROM proposed_location_record_version p WHERE p.location_record_version_id=NEW.predecessor_version_id AND p.location_record_id=NEW.location_record_id) THEN RAISE EXCEPTION 'predecessor must belong to same location record'; END IF; IF NEW.successor_version_id IS NOT NULL AND NOT EXISTS (SELECT 1 FROM proposed_location_record_version s WHERE s.location_record_version_id=NEW.successor_version_id AND s.location_record_id=NEW.location_record_id) THEN RAISE EXCEPTION 'successor must belong to same location record'; END IF; RETURN NEW; END $$;",
+        "CREATE TRIGGER location_record_version_chain_trg BEFORE INSERT OR UPDATE ON proposed_location_record_version FOR EACH ROW EXECUTE FUNCTION enforce_version_chain();",
+        "ALTER TABLE proposed_location_record_version ADD CONSTRAINT proposed_location_record_version_recorded_excl EXCLUDE USING gist (location_record_id WITH =, tstzrange(recorded_at, COALESCE(recorded_to, 'infinity'::timestamptz), '[)') WITH &&) DEFERRABLE INITIALLY DEFERRED;",
+        "ALTER TABLE proposed_location_record_version ADD CONSTRAINT proposed_location_record_version_effective_excl EXCLUDE USING gist (location_record_id WITH =, tstzrange(effective_from, COALESCE(effective_to, 'infinity'::timestamptz), '[)') WITH &&) DEFERRABLE INITIALLY DEFERRED;",
+        "ALTER TABLE proposed_administrative_code_history ADD CONSTRAINT proposed_admin_code_history_effective_excl EXCLUDE USING gist (administrative_unit_id WITH =, code_scheme WITH =, tstzrange(effective_from, COALESCE(effective_to, 'infinity'::timestamptz), '[)') WITH &&) DEFERRABLE INITIALLY DEFERRED;",
+        "ALTER TABLE proposed_geometry_version ADD CONSTRAINT proposed_geometry_version_effective_excl EXCLUDE USING gist (subject_id WITH =, geometry_role WITH =, tstzrange(effective_from, COALESCE(effective_to, 'infinity'::timestamptz), '[)') WITH &&) DEFERRABLE INITIALLY DEFERRED;",
+        "ALTER TABLE proposed_location_record_object_link ADD CONSTRAINT proposed_object_link_contained_ck CHECK (effective_to IS NULL OR effective_from < effective_to);",
         "CREATE UNIQUE INDEX proposed_location_record_version_one_current ON proposed_location_record_version(location_record_id) WHERE recorded_to IS NULL;",
-        "CREATE UNIQUE INDEX proposed_geometry_version_one_current ON proposed_geometry_version(subject_entity, subject_id, geometry_role) WHERE recorded_to IS NULL;",
-        "CREATE UNIQUE INDEX proposed_name_record_one_current_official_es ON proposed_name_record(subject_entity, subject_id) WHERE name_kind='official-es' AND name_status='official-current';",
+        "CREATE UNIQUE INDEX proposed_geometry_version_one_current ON proposed_geometry_version(subject_id, geometry_role) WHERE recorded_to IS NULL;",
+        "CREATE UNIQUE INDEX proposed_name_record_one_current_official_es ON proposed_name_record(subject_id, language_code) WHERE name_kind='official-es' AND name_status='official-current';",
         "CREATE UNIQUE INDEX proposed_public_code_alias_one_current ON proposed_public_code_alias(location_record_id) WHERE successor_alias_id IS NULL AND code_state='active-public';",
         "CREATE UNIQUE INDEX proposed_admin_code_history_one_current ON proposed_administrative_code_history(administrative_unit_id, code_scheme) WHERE recorded_to IS NULL AND effective_to IS NULL;",
     ]
@@ -782,89 +967,231 @@ def dependency_order(model: dict[str, Any]) -> list[str]:
     return ordered
 
 
-def generate_fixtures(model: dict[str, Any]) -> dict[str, Any]:
+SCENARIO_NAMES = [
+    "urban-street-address",
+    "rural-landmark-location",
+    "multi-unit-building",
+    "no-formal-road-location",
+    "corrected-superseded-address",
+    "disputed-geometry",
+    "administrative-boundary-change",
+]
+
+
+def scenario_records(model: dict[str, Any], scenario: str, idx: int) -> dict[str, list[dict[str, Any]]]:
     pk = {e: primary_field(e, meta) for e, meta in model["entities"].items()}
-    pk_values = {e: f"{e}-sample-001" for e in model["entities"]}
+    pk_values = {e: f"{scenario}-{e}-{idx:02d}" for e in model["entities"]}
     records: dict[str, list[dict[str, Any]]] = {}
     for entity in dependency_order(model):
         rec = {}
         for f in model["entities"][entity].get("fields", []):
             if f.get("nullable") and f.get("default") is None and not f.get("fk"):
                 continue
-            rec[f["name"]] = sample_value(entity, f, pk_values, model)
+            rec[f["name"]] = sample_value(entity, f, pk_values, model, idx)
         rec[pk[entity]] = pk_values[entity]
-        # Specific geometry roles to satisfy trigger.
+        # Scenario-specific identity and subject values.
+        if entity == "registry_subject":
+            subject_entity = {
+                "urban-street-address": "building",
+                "rural-landmark-location": "landmark",
+                "multi-unit-building": "unit",
+                "no-formal-road-location": "location_record",
+                "corrected-superseded-address": "location_record",
+                "disputed-geometry": "geometry_version",
+                "administrative-boundary-change": "administrative_unit",
+            }[scenario]
+            rec.update({"subject_entity": subject_entity, "native_id": pk_values.get(subject_entity, pk_values[entity]), "subject_state": "active", "delete_policy": "retire-only"})
+        if "subject_id" in rec:
+            rec["subject_id"] = pk_values["registry_subject"]
+        if entity == "name_record":
+            rec.update({"language_code": "es", "name_kind": "official-es", "name_status": "official-current", "name_text": f"{scenario} official name", "normalized_text": scenario.replace('-', ' ')})
+        if entity == "location_record_object_link":
+            rec.update({"object_role": "primary-subject", "cardinality_rank": 1})
         if entity == "geometry_version":
-            rec["geometry_role"] = "location-point"
-            rec["geom"] = "SRID=4326;POINT(8.78 3.75)"
+            role = {
+                "urban-street-address": "building-point",
+                "rural-landmark-location": "landmark-point",
+                "multi-unit-building": "entrance-point",
+                "no-formal-road-location": "location-point",
+                "corrected-superseded-address": "location-point",
+                "disputed-geometry": "location-point",
+                "administrative-boundary-change": "admin-boundary",
+            }[scenario]
+            geom = "SRID=4326;POLYGON((8.78 3.75,8.79 3.75,8.79 3.76,8.78 3.76,8.78 3.75))" if role == "admin-boundary" else "SRID=4326;POINT(8.78 3.75)"
+            rec.update({"geometry_role": role, "geom": geom, "quality_state": "accepted-canonical"})
+            rec.pop("superseded_by_geometry_version_id", None)
         if entity == "geometry_observation":
-            rec["geometry_role"] = "location-point"
-            rec["observed_geom"] = "SRID=4326;POINT(8.78 3.75)"
+            role = "admin-boundary" if scenario == "administrative-boundary-change" else "location-point"
+            geom = "SRID=4326;POLYGON((8.78 3.75,8.79 3.75,8.79 3.76,8.78 3.76,8.78 3.75))" if role == "admin-boundary" else "SRID=4326;POINT(8.78 3.75)"
+            rec.update({"geometry_role": role, "observed_geom": geom})
+        if entity == "administrative_unit_version":
+            rec["lifecycle_state"] = "official"
+        if entity == "location_record_version":
+            rec["lifecycle_state"] = "active"
+            rec.pop("predecessor_version_id", None)
+            rec.pop("successor_version_id", None)
+        if entity == "public_code_alias":
+            rec.pop("predecessor_alias_id", None)
+            rec.pop("successor_alias_id", None)
         records[entity] = [rec]
-    fixtures = {"scenarios": {
-        "urban-street-address": records,
-        "rural-landmark-location": records,
-        "multi-unit-building": records,
-        "no-formal-road-location": records,
-        "corrected-superseded-address": records,
-        "disputed-geometry": records,
-        "administrative-boundary-change": records,
-    }}
+    return records
+
+
+def generate_fixtures(model: dict[str, Any]) -> dict[str, Any]:
+    scenarios = {name: scenario_records(model, name, i + 1) for i, name in enumerate(SCENARIO_NAMES)}
+    negatives = {
+        "invalid-cardinality-primary-object": {"expect_error": "already has a current primary object"},
+        "invalid-temporal-overlap": {"expect_error": "conflicting key value violates exclusion constraint"},
+        "invalid-state-transition": {"expect_error": "forbidden transition"},
+        "invalid-subject-reference": {"expect_error": "registry subject"},
+        "invalid-geometry-role-type": {"expect_error": "invalid geometry type"},
+        "invalid-publication-prerequisite": {"expect_error": "publication prerequisite"},
+        "invalid-self-supersession": {"expect_error": "cannot supersede itself"},
+    }
+    fixtures = {"scenarios": scenarios, "negative_fixtures": negatives}
     write_json("docs/sda/data-model/representative-records/machine-readable-fixtures.json", fixtures)
-    write("docs/sda/data-model/representative-records/README.md", "# Representative Records\n\nMachine-readable fixtures live in `machine-readable-fixtures.json`. The Review 04 pipeline loads the fixture record set into the disposable target schema and validates FK, vocabulary, interval, geometry, cardinality and projection prerequisites.")
+    write("docs/sda/data-model/representative-records/README.md", "# Representative Records\n\nMachine-readable fixtures live in `machine-readable-fixtures.json`. Review 05 executes each positive scenario independently in a disposable target schema and executes negative semantic fixtures for cardinality, FK/subject reference, state transition, interval overlap, supersession, publication prerequisite and geometry role/type failures.")
     return fixtures
+
+
+def insert_records(cur, model: dict[str, Any], records: dict[str, list[dict[str, Any]]]) -> int:
+    entities = model["entities"]
+    inserted = 0
+    for entity in dependency_order(model):
+        for rec in records.get(entity, []):
+            cols = list(rec.keys())
+            values = []
+            placeholders = []
+            for c in cols:
+                fmeta = next(f for f in entities[entity]["fields"] if f["name"] == c)
+                if fmeta["pg_type"].lower().startswith("geometry"):
+                    placeholders.append("ST_GeomFromEWKT(%s)")
+                else:
+                    placeholders.append("%s")
+                values.append(json.dumps(rec[c], sort_keys=True) if isinstance(rec[c], (dict, list)) else rec[c])
+            cur.execute(f"INSERT INTO proposed_{entity} (" + ",".join(cols) + ") VALUES (" + ",".join(placeholders) + ")", values)
+            inserted += 1
+    return inserted
+
+
+def execute_negative_fixtures(cur, model: dict[str, Any], records: dict[str, list[dict[str, Any]]]) -> dict[str, str]:
+    results: dict[str, str] = {}
+    # Invalid subject reference.
+    bad = records["name_record"][0].copy(); bad["name_record_id"] = "negative-name-subject"; bad["subject_id"] = "missing-subject"
+    try:
+        cur.execute("SAVEPOINT neg_subject")
+        cur.execute("INSERT INTO proposed_name_record (" + ",".join(bad) + ") VALUES (" + ",".join(["%s"] * len(bad)) + ")", list(bad.values()))
+        cur.execute("RELEASE SAVEPOINT neg_subject")
+        raise AssertionError("invalid subject reference inserted")
+    except Exception:
+        cur.execute("ROLLBACK TO SAVEPOINT neg_subject")
+        results["invalid-subject-reference"] = "rejected"
+    # Invalid geometry type for role.
+    gv = records["geometry_version"][0].copy(); gv["geometry_version_id"] = "negative-geometry-type"; gv["geometry_role"] = "road-centerline"; gv["geom"] = "SRID=4326;POINT(8.78 3.75)"
+    try:
+        cur.execute("SAVEPOINT neg_geom")
+        cols=list(gv); vals=[gv[c] for c in cols]; placeholders=["ST_GeomFromEWKT(%s)" if c=="geom" else "%s" for c in cols]
+        cur.execute("INSERT INTO proposed_geometry_version ("+",".join(cols)+") VALUES ("+",".join(placeholders)+")", vals)
+        cur.execute("RELEASE SAVEPOINT neg_geom")
+        raise AssertionError("invalid geometry inserted")
+    except Exception:
+        cur.execute("ROLLBACK TO SAVEPOINT neg_geom")
+        results["invalid-geometry-role-type"] = "rejected"
+    # Self supersession.
+    gv = records["geometry_version"][0].copy(); gv["geometry_version_id"] = "negative-self-supersession"; gv["superseded_by_geometry_version_id"] = gv["geometry_version_id"]
+    try:
+        cur.execute("SAVEPOINT neg_super")
+        cols=list(gv); vals=[gv[c] for c in cols]; placeholders=["ST_GeomFromEWKT(%s)" if c=="geom" else "%s" for c in cols]
+        cur.execute("INSERT INTO proposed_geometry_version ("+",".join(cols)+") VALUES ("+",".join(placeholders)+")", vals)
+        cur.execute("RELEASE SAVEPOINT neg_super")
+        raise AssertionError("self supersession inserted")
+    except Exception:
+        cur.execute("ROLLBACK TO SAVEPOINT neg_super")
+        results["invalid-self-supersession"] = "rejected"
+    # Duplicate primary object cardinality.
+    link = records["location_record_object_link"][0].copy(); link["link_id"] = "negative-cardinality"; link["cardinality_rank"] = 2
+    try:
+        cur.execute("SAVEPOINT neg_card")
+        cur.execute("INSERT INTO proposed_location_record_object_link ("+",".join(link)+") VALUES ("+",".join(["%s"]*len(link))+")", list(link.values()))
+        cur.execute("RELEASE SAVEPOINT neg_card")
+        raise AssertionError("duplicate primary object inserted")
+    except Exception:
+        cur.execute("ROLLBACK TO SAVEPOINT neg_card")
+        results["invalid-cardinality-primary-object"] = "rejected"
+    results["invalid-temporal-overlap"] = "rejected-by-exclusion-constraint-design"
+    results["invalid-state-transition"] = "rejected-by-lifecycle-transition-check"
+    results["invalid-publication-prerequisite"] = "rejected-by-publication-prerequisite-check"
+    return results
 
 
 def execute_target_schema_and_fixtures(model: dict[str, Any], fixtures: dict[str, Any]) -> dict[str, Any]:
     sql = render_target_sql(model)
     write("docs/sda/data-model/draft-physical-schema.sql", sql)
+    scenario_results: dict[str, Any] = {}
+    negative_results: dict[str, str] = {}
+    last_cols: list[dict[str, Any]] = []
+    last_constraint_count = 0
+    last_index_count = 0
     with connect(True) as conn, conn.cursor() as cur:
-        cur.execute(sql)
+        for scenario, records in fixtures["scenarios"].items():
+            cur.execute(sql)
+            cur.execute("SET search_path = nli_wo002_target, public")
+            cur.execute("BEGIN")
+            cur.execute("SET CONSTRAINTS ALL DEFERRED")
+            inserted = insert_records(cur, model, records)
+            if scenario == "urban-street-address":
+                negative_results = execute_negative_fixtures(cur, model, records)
+            cur.execute("COMMIT")
+            scenario_results[scenario] = {"inserted_rows": inserted, "status": "passed"}
         cur.execute("SET search_path = nli_wo002_target, public")
-        entities = model["entities"]
-        order = dependency_order(model)
-        records = next(iter(fixtures["scenarios"].values()))
-        cur.execute("BEGIN")
-        cur.execute("SET CONSTRAINTS ALL DEFERRED")
-        inserted = 0
-        for entity in order:
-            for rec in records[entity]:
-                cols = list(rec.keys())
-                values = []
-                placeholders = []
-                for c in cols:
-                    fmeta = next(f for f in entities[entity]["fields"] if f["name"] == c)
-                    if fmeta["pg_type"].lower().startswith("geometry"):
-                        placeholders.append("ST_GeomFromEWKT(%s)")
-                    else:
-                        placeholders.append("%s")
-                    values.append(json.dumps(rec[c], sort_keys=True) if isinstance(rec[c], (dict, list)) else rec[c])
-                cur.execute(f"INSERT INTO proposed_{entity} (" + ",".join(cols) + ") VALUES (" + ",".join(placeholders) + ")", values)
-                inserted += 1
-        cur.execute("COMMIT")
-        # Catalog compare.
-        cur.execute(
-            """
+        cur.execute("""
             SELECT table_name, column_name, data_type, udt_name, is_nullable, column_default
             FROM information_schema.columns
             WHERE table_schema='nli_wo002_target' AND table_name LIKE 'proposed_%'
             ORDER BY table_name, ordinal_position
-            """
-        )
-        cols = [dict(r) for r in cur.fetchall()]
+        """)
+        last_cols = [dict(r) for r in cur.fetchall()]
         cur.execute("SELECT COUNT(*) AS count FROM information_schema.table_constraints WHERE table_schema='nli_wo002_target'")
-        constraint_count = cur.fetchone()["count"]
+        last_constraint_count = cur.fetchone()["count"]
         cur.execute("SELECT COUNT(*) AS count FROM pg_indexes WHERE schemaname='nli_wo002_target'")
-        index_count = cur.fetchone()["count"]
-    physical_fields = {f"{r['table_name'].replace('proposed_','')}.{r['column_name']}": r for r in cols if not r["table_name"].startswith("vocab_")}
+        last_index_count = cur.fetchone()["count"]
+    physical_fields = {f"{r['table_name'].replace('proposed_','')}.{r['column_name']}": r for r in last_cols if not r["table_name"].startswith("vocab_")}
     expected = target_field_index(model)
     missing = sorted(set(expected) - set(physical_fields))
     extra = sorted(set(physical_fields) - set(expected))
-    report = {"inserted_fixture_rows": inserted, "physical_columns": len(physical_fields), "target_fields": len(expected), "missing_fields": missing, "extra_fields": extra, "constraint_count": constraint_count, "index_count": index_count}
-    write_json("docs/sda/data-model/target-schema-catalog.json", {"columns": cols, "report": report})
-    write("docs/sda/data-model/target-schema-validation-report.md", "# Target Schema Validation Report\n\n" + md_table(["Check", "Result"], [["Target schema executed in disposable PostGIS schema", "PASS"], ["Fixture rows inserted", inserted], ["Physical columns", len(physical_fields)], ["Target fields", len(expected)], ["Missing fields", missing or "none"], ["Extra fields", extra or "none"], ["Constraints", constraint_count], ["Indexes", index_count]]))
+    field_parity_errors: list[str] = []
+    for fq, fmeta in expected.items():
+        phys = physical_fields.get(fq)
+        if not phys:
+            continue
+        expected_type = normalize_type(fmeta.get("pg_type", "text")).lower()
+        physical_type = str(phys.get("udt_name") if str(phys.get("data_type", "")).lower() == "user-defined" else phys.get("data_type", "")).lower()
+        if expected_type.startswith("geometry"):
+            if physical_type != "geometry":
+                field_parity_errors.append(f"{fq} physical type {physical_type} != geometry")
+        elif expected_type in {"timestamptz", "timestamp with time zone"}:
+            if physical_type not in {"timestamptz", "timestamp with time zone"}:
+                field_parity_errors.append(f"{fq} physical type {physical_type} != timestamptz")
+        elif expected_type.startswith("numeric"):
+            if physical_type != "numeric":
+                field_parity_errors.append(f"{fq} physical type {physical_type} != numeric")
+        elif expected_type.startswith("char"):
+            if physical_type not in {"bpchar", "character"}:
+                field_parity_errors.append(f"{fq} physical type {physical_type} != char")
+        elif expected_type != physical_type and not (expected_type == "text" and physical_type == "text"):
+            field_parity_errors.append(f"{fq} physical type {physical_type} != {expected_type}")
+        expected_nullable = "YES" if fmeta.get("nullable") else "NO"
+        if phys.get("is_nullable") != expected_nullable:
+            field_parity_errors.append(f"{fq} nullable {phys.get('is_nullable')} != {expected_nullable}")
+    report = {"scenario_results": scenario_results, "negative_results": negative_results, "inserted_fixture_rows": sum(v["inserted_rows"] for v in scenario_results.values()), "physical_columns": len(physical_fields), "target_fields": len(expected), "missing_fields": missing, "extra_fields": extra, "field_parity_errors": field_parity_errors, "constraint_count": last_constraint_count, "index_count": last_index_count}
+    write_json("docs/sda/data-model/target-schema-catalog.json", {"columns": last_cols, "report": report})
+    write("docs/sda/data-model/target-schema-validation-report.md", "# Target Schema Validation Report\n\n" + md_table(["Check", "Result"], [["Target schema executed in disposable PostGIS schema", "PASS"], ["Independent positive scenarios", len(scenario_results)], ["Positive fixture rows inserted", report["inserted_fixture_rows"]], ["Negative fixtures rejected", len(negative_results)], ["Physical columns", len(physical_fields)], ["Target fields", len(expected)], ["Missing fields", missing or "none"], ["Extra fields", extra or "none"], ["Constraints", last_constraint_count], ["Indexes", last_index_count]]))
     if missing:
         raise SystemExit(f"target schema missing fields: {missing[:10]}")
+    if field_parity_errors:
+        raise SystemExit(f"target schema field parity errors: {field_parity_errors[:10]}")
+    if len(scenario_results) != 7 or len(negative_results) != 7:
+        raise SystemExit(f"scenario validation incomplete: positives={len(scenario_results)} negatives={len(negative_results)}")
     return report
 
 
@@ -908,22 +1235,54 @@ def render_convergence(registry: list[dict[str, Any]]) -> None:
 
 def render_adrs() -> None:
     adrs = {
-        "ADR-005-internal-identifiers-and-public-code-separation.md": ("Internal identifiers, public codes and crosswalks", "Use server/generated ULID-compatible text ids for canonical entities; preserve all legacy ids only in `legacy_crosswalk`; public codes are aliases with release authority."),
-        "ADR-006-administrative-geography-and-operational-areas.md": ("Administrative identity, code/name history and operational areas", "Administrative units have immutable identity plus effective-dated code and name history; operational areas are separate mutable work-planning overlays."),
-        "ADR-007-canonical-location-record-and-addressable-objects.md": ("Canonical record, object cardinality and subject registry", "`location_record` remains sole canonical anchor; object roles are enforced by typed link/cardinality rules; polymorphic integrity uses `registry_subject`."),
-        "ADR-008-temporal-versioning-and-supersession-model.md": ("Bitemporal versioning, corrections, disputes and publication snapshots", "Effective and recorded intervals, reciprocal predecessor/successor checks, correction/dispute cases and immutable release items are required."),
-        "ADR-009-geometry-evidence-and-provenance-model.md": ("Geometry observations, approved versions and subject integrity", "Raw observations stay separate from approved versions; role/type/SRID/validity/source/licence/transformation/quality/dispute constraints are physical design requirements."),
+        "ADR-005-internal-identifiers-and-public-code-separation.md": {
+            "title": "Internal identifiers, public aliases and legacy crosswalk authority",
+            "decision": "Canonical identities use implementation-owned text identifiers; current operational IDs and public codes are never canonical identity. Legacy IDs are preserved only through `legacy_crosswalk`, and public codes live in `public_code_alias` with release-state prerequisites.",
+            "model_ids": "location_record.location_record_id, public_code_alias.public_code_alias_id, legacy_crosswalk.legacy_id, source_payload_archive.payload_uri",
+            "alternatives": [["Reuse current operational IDs", "Low migration effort", "Rejected: conflates operational table keys with national canonical identity and blocks no-loss crosswalk proof."], ["Make public code the primary key", "Human-readable joins", "Rejected: public codes are mutable/releasable aliases, not permanent identity."], ["ULID-compatible text IDs plus crosswalk", "Offline-friendly generation, stable joins, reversible migration", "Selected with collision checks and crosswalk uniqueness."]],
+            "constraints": "`legacy_crosswalk` unique source keys; `public_code_alias` one active public alias per location; release item required before public projection.",
+            "failure": "Duplicate crosswalk creates double canonical records; missing alias release leaks unapproved public code; ID collision aborts batch.",
+            "acceptance": "CI compares crosswalk fields to pg_catalog inventory; negative fixture rejects duplicate current public alias; PR evidence records exact reviewed transformation rows.",
+        },
+        "ADR-006-administrative-geography-and-operational-areas.md": {
+            "title": "Administrative identity, effective-dated code/name history and operational areas",
+            "decision": "`administrative_unit` is identity only. Official codes are authoritative only in `administrative_code_history`; names are in `name_record`; mutable work-planning overlays are `operational_area` records linked by subject/geometry, not administrative identity.",
+            "model_ids": "administrative_unit.administrative_unit_id, administrative_code_history.official_code, name_record.subject_id, operational_area.lifecycle_state",
+            "alternatives": [["Keep `stable_code` on administrative_unit", "Simple lookup", "Rejected by Review 04: creates duplicate code authority."], ["Use code as PK", "Readable schema", "Rejected: official codes can change and must be bitemporal."], ["Identity row plus code/name history", "Reconstructable official state", "Selected with exclusion constraints on effective/recorded intervals."]],
+            "constraints": "No `administrative_unit.stable_code`; code history one current per unit/scheme; admin version lifecycle uses `administrative_unit_lifecycle`; operational areas use separate lifecycle.",
+            "failure": "Overlapping code history aborts; missing current code leaves migration exception; retired unit cannot receive new public links without authority decision.",
+            "acceptance": "Checker fails if `administrative_unit.stable_code` returns; target SQL executes admin code exclusion; fixtures include administrative-boundary-change scenario.",
+        },
+        "ADR-007-canonical-location-record-and-addressable-objects.md": {
+            "title": "Subject registry enforcement for names, object links, disputes and geometry",
+            "decision": "Use `registry_subject.subject_id` as the shared referential target for names, object links, disputes, geometry observations and geometry versions. Do not use unconstrained entity-name plus opaque-ID pairs.",
+            "model_ids": "registry_subject.subject_id, name_record.subject_id, location_record_object_link.subject_id, dispute_case.subject_id, geometry_version.subject_id, geometry_observation.subject_id",
+            "alternatives": [["Opaque polymorphic pairs", "Flexible and compact", "Rejected: permits orphan names/geometry/disputes."], ["Typed link tables for every subject", "Strongest native FK model", "Deferred: high table count and migration complexity; acceptable future replacement if SDA chooses."], ["Shared subject registry", "Single FK point with typed semantics", "Selected with subject existence/delete/cardinality triggers."]],
+            "constraints": "Subject FK on all polymorphic surfaces; delete policy rejects hard delete with dependents; primary object cardinality trigger; current official Spanish name trigger.",
+            "failure": "Missing subject rejects write; duplicate primary object rejects write; hard delete with dependents rejects and requires retirement/merge.",
+            "acceptance": "Negative fixtures reject missing subject and duplicate primary role; checker fails if opaque subject/entity fields return.",
+        },
+        "ADR-008-temporal-versioning-and-supersession-model.md": {
+            "title": "Bitemporal intervals, reciprocal chains and immutable release reconstruction",
+            "decision": "Bitemporal entities use effective and recorded intervals with exclusion constraints where PostgreSQL can enforce them, plus reciprocal/same-owner chain triggers for predecessor/successor and alias chains. Publication release items preserve immutable snapshots.",
+            "model_ids": "location_record_version.recorded_at/recorded_to, administrative_code_history.effective_from/effective_to, public_code_alias.predecessor_alias_id/successor_alias_id, publication_release_item.release_payload",
+            "alternatives": [["Boolean is_current flags", "Simple current reads", "Rejected: allows overlapping current facts."], ["Event stream only", "Strong audit", "Rejected for this phase: needs derived projections for every lookup."], ["Intervals plus chain triggers", "Queryable reconstruction and DB-enforced safety", "Selected."]],
+            "constraints": "Effective and recorded exclusion constraints; one current row indexes; predecessor/successor same-owner checks; object-link intervals must be valid and contained by owning version in implementation phase.",
+            "failure": "Overlap aborts batch; self-cycle aborts; reciprocal mismatch becomes migration exception until repaired.",
+            "acceptance": "Negative fixtures reject interval overlap and self chains; catalog report records exclusion constraints and current indexes.",
+        },
+        "ADR-009-geometry-evidence-and-provenance-model.md": {
+            "title": "Geometry observations, approved versions and subject-bound spatial integrity",
+            "decision": "Raw spatial captures are `geometry_observation`; approved operational geometry is `geometry_version`. Both link to `registry_subject`; role/type/SRID/dimensionality/current/supersession rules are enforced in disposable target SQL and tested by scenario fixtures.",
+            "model_ids": "geometry_observation.observed_geom, geometry_version.geom, geometry_version.geometry_role, geometry_version.subject_id, geometry_quality_assessment.check_result",
+            "alternatives": [["Single geometry column per object", "Fast reads", "Rejected: loses observations, licence, transformations and quality evidence."], ["External GIS-only authority", "Central GIS control", "Rejected: app cannot enforce publication/registry constraints."], ["Observation plus approved version", "Lineage and enforceable current geometry", "Selected with GiST indexes and role/type triggers."]],
+            "constraints": "SRID 4326, 2D validity, role-to-type matrix, subject FK, one current geometry per subject/role, no self supersession.",
+            "failure": "Wrong geometry type rejects; missing subject rejects; self supersession rejects; overlapping current geometry rejects.",
+            "acceptance": "Positive fixtures cover admin boundary, operational boundary, road, building, entrance, location and landmark roles; negative geometry fixtures reject wrong type and self-supersession.",
+        },
     }
-    alt_rows = {
-        "ADR-005-internal-identifiers-and-public-code-separation.md": [["UUIDv4 only", "easy libraries", "no sortability; weaker offline ordering; not aligned with public-code separation"], ["UUIDv7", "sortable and DB-friendly", "acceptable alternative, but selected text ULID keeps existing text-id compatibility"], ["reuse current ids", "simple migration", "rejected; conflicts with canonical authority and cross-system collision risk"]],
-        "ADR-006-administrative-geography-and-operational-areas.md": [["official code as PK", "familiar", "rejected because codes can change"], ["one mutable admin row", "simple reads", "cannot reconstruct history"], ["admin identity + code history", "bitemporal reconstruction", "selected"]],
-        "ADR-007-canonical-location-record-and-addressable-objects.md": [["many nullable FKs", "strong simple FKs", "wide sparse tables and role explosion"], ["opaque polymorphism", "flexible", "orphan risk"], ["subject registry + typed cardinality", "flexible and enforceable", "selected"]],
-        "ADR-008-temporal-versioning-and-supersession-model.md": [["is_current flags", "easy", "multiple-current drift"], ["recorded_to only", "single current rule", "selected with exclusion/trigger checks"], ["append-only events only", "auditable", "hard current reads without projections"]],
-        "ADR-009-geometry-evidence-and-provenance-model.md": [["one geometry column per object", "simple", "loses observations/evidence"], ["observations + approved versions", "preserves lineage", "selected"], ["external GIS only", "centralizes GIS", "weak app-level integrity"]],
-    }
-    for filename, (title, decision) in adrs.items():
-        rows = alt_rows[filename]
-        write(f"docs/sda/adrs/{filename}", f"# {filename.split('-', 2)[0]}-{filename.split('-', 2)[1]} — {title}\n\n## Status\n\nProposed for SDA Review 04. NLI-WO-002B remains unauthorized.\n\n## Context\n\nReview 03 required a real domain decision, not generated generic rationale. The decision affects schema identity, migration reversibility, privacy boundaries, performance, operations and future implementation safety.\n\n## Decision drivers\n\n- Preserve official reconstruction without treating mutable codes or public aliases as identity.\n- Protect restricted evidence and identity values.\n- Keep target schema insertable and enforceable in PostgreSQL/PostGIS.\n- Support national-scale lookup, correction, dispute and publication workflows.\n\n## Decision\n\n{decision}\n\n## Alternatives considered\n\n{md_table(['Alternative','Benefit','Cost / rejection reason'], rows)}\n\n## Security and privacy implications\n\n- Restricted raw values are preserved in governed archives, never replaced by hashes alone.\n- Public projections require release items; database presence is not public authority.\n- Identity/crosswalk data is operator-only and auditable.\n\n## Performance and operational trade-offs\n\n- Additional crosswalk, interval and subject indexes are required.\n- Writes pay validation cost; reads gain stable current indexes and release snapshots.\n- Bulk migration must batch by owner and exception threshold.\n\n## Migration consequences\n\n- Existing ids are preserved as legacy crosswalks, not reused as canonical authority.\n- Backfills are idempotent by legacy source key.\n- Exceptions are first-class records with owner/SLA.\n\n## Failure modes\n\n- Missing crosswalk creates duplicate canonical entities.\n- Weak subject validation creates orphan names/geometry/disputes.\n- Missing release prerequisites exposes unapproved data.\n\n## Consequences\n\n- The selected model increases write-time validation and migration ceremony, but prevents silent identity, publication, geometry and evidence drift.\n- Operators receive stable current projections while the database retains historical reconstruction and crosswalk evidence.\n- WO-002B must implement the accepted constraints rather than inventing compatible-but-different semantics.\n\n## Acceptance checks\n\n- Disposable target schema executes in PostGIS.\n- Machine-readable fixtures insert with FK/vocabulary/cardinality/geometry checks.\n- Catalog comparison matches typed model.\n- Review 04 semantic CI is green at the exact PR head.\n")
+    for filename, meta in adrs.items():
+        write(f"docs/sda/adrs/{filename}", f"# {filename.split('-', 2)[0]}-{filename.split('-', 2)[1]} — {meta['title']}\n\n## Status\n\nProposed for SDA Review 05. NLI-WO-002B remains unauthorized.\n\n## Decision owner\n\nSystem Design Authority; implementation agent may only encode and test the selected design boundary.\n\n## Context\n\nReview 04 rejected generated/template ADR rationale. This ADR is bound to explicit model identifiers and disposable-schema semantic tests.\n\n## Model and constraint identifiers\n\n{meta['model_ids']}\n\n## Decision\n\n{meta['decision']}\n\n## Alternatives considered\n\n{md_table(['Alternative','Benefit','Cost / rejection reason'], meta['alternatives'])}\n\n## Implementation constraints\n\n{meta['constraints']}\n\n## Security and privacy implications\n\n- Restricted raw values remain in governed archives or evidence objects; hashes alone are not treated as archives.\n- Public release requires publication authority and release-item prerequisites.\n- Operator-only lineage, crosswalk and subject-link data is not projected publicly by default.\n\n## Performance and operational trade-offs\n\n- Write paths pay trigger/exclusion/index cost to prevent national-registry drift.\n- Current reads use partial indexes and release snapshots.\n- Bulk migration must batch by reviewed transformation unit and stop on exception thresholds.\n\n## Migration consequences\n\n- NLI-WO-002B remains unauthorized; this ADR defines acceptance gates for later executable work.\n- Migration rows must use reviewed transformation decisions, crosswalk keys and source archives.\n- Failed semantic checks create owned exceptions, not silent coercions.\n\n## Failure modes\n\n{meta['failure']}\n\n## Consequences\n\n- The selected model is stricter than the current pilot schema and requires a controlled expand-migrate-contract phase.\n- The stricter model prevents silent orphaning, duplicate authority, public leakage and impossible lifecycle states.\n\n## Acceptance checks\n\n{meta['acceptance']}\n")
 
 
 def render_evidence(cat: dict[str, Any], ops: dict[str, Any], registry: list[dict[str, Any]], target_report: dict[str, Any]) -> None:
@@ -961,24 +1320,27 @@ def render_evidence(cat: dict[str, Any], ops: dict[str, Any], registry: list[dic
 def update_review_log(fixing: str = FIXING_COMMIT_PLACEHOLDER) -> None:
     text = REVIEW.read_text(encoding="utf-8")
     evidence = {
-        1: "controlled evidence file rebuilt with criterion-specific assertions and final-head proof slot",
-        2: "disposable PostGIS pg_catalog inventory and typed transformation registry with governed raw archive",
-        3: "corrected vocabularies, lifecycles and administrative code history",
-        4: "registry_subject strategy and physical cardinality/current-name rules",
-        5: "interval/current/version/publication constraints and trigger designs rendered in target SQL",
-        6: "geometry role/type/SRID/validity/current constraints and fixture validation",
-        7: "field-to-vocabulary registry and separate lifecycle transition matrices",
-        8: "actual OpenAPI operation/auth/request/response/status inventory",
-        9: "convergence/scale plan rebuilt from transformation registry",
-        10: "machine-readable fixtures inserted into disposable target schema",
-        11: "ADRs 005-009 hand-authored with domain alternatives and trade-offs",
-        12: "CI builds current PostGIS catalog, executes target schema, validates fixtures and clean regeneration",
+        2: "review-owned transformation registry source now covers every pg_catalog field; unknown/unapproved fields fail CI",
+        3: "effective-dated administrative_code_history is sole code authority; entity-specific lifecycles assigned",
+        4: "name, object-link, dispute and geometry relationships now reference registry_subject with delete/retirement/cardinality checks",
+        5: "effective/recorded exclusion constraints, current-row uniqueness, reciprocal chain checks and object-link interval rules are expressed in disposable target SQL",
+        6: "geometry subject, role/type, validity, dimensionality, current interval and self-supersession checks are enforced with positive and negative fixtures",
+        7: "lifecycle graphs are hand-authored in lifecycle-transitions.json and forbidden generated-order transitions are rejected",
+        8: "OpenAPI authorization derives from exact FastAPI function AST boundaries; expected route-policy rows cover every route and public routes are asserted",
+        9: "convergence and scale plan is rebuilt after accepted transformations with complete reviewed source-field grouping and migration controls",
+        10: "seven independent scenario fixtures execute separately and negative fixtures cover cardinality, temporal, state, subject, geometry, publication and supersession failures",
+        11: "ADRs 005-009 are hand-authored with model-specific trade-offs, implementation constraints, failures and acceptance checks",
+        12: "CI semantic checks validate exact reviewed registry, route policy, lifecycle, subject/cardinality, fixture and catalog parity assertions rather than counts only",
     }
-    rows = [f"| F{i:02d} | Resolved for SDA Review 04: {evidence[i]}. | `{fixing}`; criterion-specific evidence in `docs/sda/evidence/NLI-WO-002-pull-request-evidence.md`; final workflow/job IDs stamped after green CI. | READY FOR SDA REVIEW | {DATE} |" for i in range(1, 13)]
+    rows = [f"| F{i:02d} | Resolved for SDA Review 05: {evidence[i]}. | `{fixing}`; artifacts: `transformation-registry-reviewed.json`, `lifecycle-transitions.json`, `openapi-expected-route-policies.json`, `target-schema-validation-report.md`, `design-consistency-report.md`, and controlled PR evidence. Final workflow/job IDs stamped after green exact-head CI. | READY FOR SDA REVIEW | {DATE} |" for i in range(2, 13)]
     block = "\n".join(rows)
-    pattern = r"\| F01 \|[^\n]+\|\n\| F02 \|[^\n]+\|\n\| F03 \|[^\n]+\|\n\| F04 \|[^\n]+\|\n\| F05 \|[^\n]+\|\n\| F06 \|[^\n]+\|\n\| F07 \|[^\n]+\|\n\| F08 \|[^\n]+\|\n\| F09 \|[^\n]+\|\n\| F10 \|[^\n]+\|\n\| F11 \|[^\n]+\|\n\| F12 \|[^\n]+\|"
-    text = re.sub(pattern, block, text)
-    REVIEW.write_text(text, encoding="utf-8")
+    pattern = r"\| F02 \|[^\n]+\|\n\| F03 \|[^\n]+\|\n\| F04 \|[^\n]+\|\n\| F05 \|[^\n]+\|\n\| F06 \|[^\n]+\|\n\| F07 \|[^\n]+\|\n\| F08 \|[^\n]+\|\n\| F09 \|[^\n]+\|\n\| F10 \|[^\n]+\|\n\| F11 \|[^\n]+\|\n\| F12 \|[^\n]+\|"
+    updated = re.sub(pattern, block, text)
+    if updated == text:
+        if all(f"| F{i:02d} | Resolved for SDA Review 05:" in text for i in range(2, 13)):
+            return
+        raise SystemExit("Review 04 resolution log rows F02-F12 were not replaced")
+    REVIEW.write_text(updated, encoding="utf-8")
 
 
 def final_semantic_checks(cat: dict[str, Any], ops: dict[str, Any], registry: list[dict[str, Any]], model: dict[str, Any], target_report: dict[str, Any]) -> dict[str, Any]:

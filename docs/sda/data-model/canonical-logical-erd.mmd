@@ -13,7 +13,6 @@ erDiagram
   administrative_unit {
     text administrative_unit_id
     text country_id
-    text stable_code
     timestamptz created_at
     timestamptz retired_at
   }
@@ -76,13 +75,12 @@ erDiagram
   }
   dispute_case {
     text dispute_case_id
-    text target_entity
-    text target_id
     text dispute_type
     text case_state
     timestamptz opened_at
     timestamptz resolved_at
     text resolution_event_id
+    text subject_id
   }
   entrance {
     text entrance_id
@@ -125,8 +123,6 @@ erDiagram
   }
   geometry_observation {
     text geometry_observation_id
-    text subject_hint_entity
-    text subject_hint_id
     geometry_Geometry_4326_ observed_geom
     text geometry_role
     text capture_method
@@ -137,6 +133,7 @@ erDiagram
     timestamptz observed_at
     timestamptz recorded_at
     text classification
+    text subject_id
   }
   geometry_quality_assessment {
     text quality_assessment_id
@@ -159,7 +156,6 @@ erDiagram
   }
   geometry_version {
     text geometry_version_id
-    text subject_entity
     text subject_id
     text geometry_role
     geometry_Geometry_4326_ geom
@@ -239,12 +235,11 @@ erDiagram
   location_record_object_link {
     text link_id
     text location_record_version_id
-    text object_entity
-    text object_id
     text object_role
     integer cardinality_rank
     timestamptz effective_from
     timestamptz effective_to
+    text subject_id
   }
   location_record_relationship {
     text relationship_id
@@ -289,7 +284,6 @@ erDiagram
   }
   name_record {
     text name_record_id
-    text subject_entity
     text subject_id
     text language_code
     text name_kind
@@ -384,6 +378,10 @@ erDiagram
     text subject_entity
     text subject_native_id
     timestamptz created_at
+    text native_id
+    text subject_state
+    timestamptz retired_at
+    text delete_policy
   }
   road {
     text road_id
@@ -459,6 +457,7 @@ erDiagram
   source_authority ||--o{ country : source_authority_id
   source_authority ||--o{ decision_event : authority_id
   decision_event ||--o{ dispute_case : resolution_event_id
+  registry_subject ||--o{ dispute_case : subject_id
   building ||--o{ entrance : building_id
   source_record ||--o{ evidence_object : source_record_id
   operational_area ||--o{ field_assignment : operational_area_id
@@ -469,7 +468,9 @@ erDiagram
   source_record ||--o{ geometry_observation : source_record_id
   evidence_object ||--o{ geometry_observation : evidence_object_id
   licence ||--o{ geometry_observation : licence_id
+  registry_subject ||--o{ geometry_observation : subject_id
   geometry_version ||--o{ geometry_quality_assessment : geometry_version_id
+  registry_subject ||--o{ geometry_version : subject_id
   geometry_observation ||--o{ geometry_version : source_observation_id
   geometry_transformation ||--o{ geometry_version : transformation_id
   geometry_version ||--o{ geometry_version : superseded_by_geometry_version_id
@@ -483,6 +484,7 @@ erDiagram
   evidence_object ||--o{ location_record_assertion : evidence_object_id
   decision_event ||--o{ location_record_assertion : decision_event_id
   location_record_version ||--o{ location_record_object_link : location_record_version_id
+  registry_subject ||--o{ location_record_object_link : subject_id
   location_record ||--o{ location_record_relationship : from_location_record_id
   location_record ||--o{ location_record_relationship : to_location_record_id
   decision_event ||--o{ location_record_relationship : source_decision_event_id
@@ -493,6 +495,7 @@ erDiagram
   location_record_version ||--o{ location_record_version : successor_version_id
   correction_case ||--o{ location_record_version : correction_case_id
   decision_event ||--o{ location_record_version : source_decision_event_id
+  registry_subject ||--o{ name_record : subject_id
   source_record ||--o{ name_record : source_record_id
   source_authority ||--o{ non_building_object : source_authority_id
   name_record ||--o{ operational_area : name_record_id

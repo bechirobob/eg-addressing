@@ -168,6 +168,12 @@
           "temporal_behavior": "recorded-time governed",
           "vocabulary": null
         }
+      ],
+      "integrity_assertions": [
+        "effective intervals do not overlap for owner/key",
+        "recorded intervals do not overlap for owner/key",
+        "current row is unique",
+        "predecessor/successor links are reciprocal and acyclic"
       ]
     },
     "administrative_unit": {
@@ -196,22 +202,6 @@
           "definition": "Owning country.",
           "fk": "country.country_id",
           "name": "country_id",
-          "nullable": false,
-          "pg_type": "text",
-          "projection": "operator",
-          "temporal_behavior": "current fact",
-          "vocabulary": null
-        },
-        {
-          "authority_owner": "Registry Authority",
-          "classification": "government-internal",
-          "constraints": [
-            "UNIQUE within country and authority package"
-          ],
-          "default": null,
-          "definition": "Stable official or provisional administrative code.",
-          "fk": null,
-          "name": "stable_code",
           "nullable": false,
           "pg_type": "text",
           "projection": "operator",
@@ -314,14 +304,14 @@
           "classification": "government-internal",
           "constraints": [],
           "default": "'active'",
-          "definition": "Version lifecycle state.",
+          "definition": "Version lifecycle state. Review 04 correction: entity-specific lifecycle.",
           "fk": null,
           "name": "lifecycle_state",
           "nullable": false,
           "pg_type": "text",
           "projection": "operator",
           "temporal_behavior": "current fact",
-          "vocabulary": "lifecycle_state"
+          "vocabulary": "administrative_unit_lifecycle"
         },
         {
           "authority_owner": "Registry Authority",
@@ -410,6 +400,12 @@
           "vocabulary": "classification"
         }
       ],
+      "integrity_assertions": [
+        "effective intervals do not overlap for owner/key",
+        "recorded intervals do not overlap for owner/key",
+        "current row is unique",
+        "predecessor/successor links are reciprocal and acyclic"
+      ],
       "owner": "GIS/Data Authority"
     },
     "building": {
@@ -449,7 +445,7 @@
           "classification": "government-internal",
           "constraints": [],
           "default": null,
-          "definition": "Building lifecycle.",
+          "definition": "Building lifecycle. Review 04 correction: entity-specific lifecycle.",
           "fk": null,
           "name": "lifecycle_state",
           "nullable": false,
@@ -951,34 +947,6 @@
           "classification": "government-internal",
           "constraints": [],
           "default": null,
-          "definition": "Target entity.",
-          "fk": null,
-          "name": "target_entity",
-          "nullable": false,
-          "pg_type": "text",
-          "projection": "operator",
-          "temporal_behavior": "current fact",
-          "vocabulary": null
-        },
-        {
-          "authority_owner": "Registry Authority",
-          "classification": "government-internal",
-          "constraints": [],
-          "default": null,
-          "definition": "Target ID.",
-          "fk": null,
-          "name": "target_id",
-          "nullable": false,
-          "pg_type": "text",
-          "projection": "operator",
-          "temporal_behavior": "current fact",
-          "vocabulary": null
-        },
-        {
-          "authority_owner": "Registry Authority",
-          "classification": "government-internal",
-          "constraints": [],
-          "default": null,
           "definition": "Dispute type.",
           "fk": null,
           "name": "dispute_type",
@@ -1042,6 +1010,25 @@
           "pg_type": "text",
           "projection": "operator",
           "temporal_behavior": "current fact",
+          "vocabulary": null
+        },
+        {
+          "authority_owner": "SDA/Registry Authority",
+          "classification": "government-internal",
+          "constraints": [
+            "subject must exist and be active or linked through retirement policy"
+          ],
+          "default": null,
+          "definition": "Shared registry subject reference.",
+          "fk": "registry_subject.subject_id",
+          "name": "subject_id",
+          "nullable": false,
+          "pg_type": "text",
+          "projection": {
+            "operator": "allowed by role",
+            "public": "never unless released"
+          },
+          "temporal_behavior": "recorded-time governed",
           "vocabulary": null
         }
       ],
@@ -1530,34 +1517,6 @@
         {
           "authority_owner": "Registry Authority",
           "classification": "government-internal",
-          "constraints": [],
-          "default": null,
-          "definition": "Optional intended subject entity before approval.",
-          "fk": null,
-          "name": "subject_hint_entity",
-          "nullable": true,
-          "pg_type": "text",
-          "projection": "operator",
-          "temporal_behavior": "current fact",
-          "vocabulary": null
-        },
-        {
-          "authority_owner": "Registry Authority",
-          "classification": "government-internal",
-          "constraints": [],
-          "default": null,
-          "definition": "Optional intended subject ID before approval.",
-          "fk": null,
-          "name": "subject_hint_id",
-          "nullable": true,
-          "pg_type": "text",
-          "projection": "operator",
-          "temporal_behavior": "current fact",
-          "vocabulary": null
-        },
-        {
-          "authority_owner": "Registry Authority",
-          "classification": "government-internal",
           "constraints": [
             "CHECK ST_SRID(observed_geom)=4326",
             "CHECK ST_IsValid(observed_geom)"
@@ -1697,6 +1656,25 @@
           "projection": "operator",
           "temporal_behavior": "current fact",
           "vocabulary": "classification"
+        },
+        {
+          "authority_owner": "SDA/Registry Authority",
+          "classification": "government-internal",
+          "constraints": [
+            "subject must exist and be active or linked through retirement policy"
+          ],
+          "default": null,
+          "definition": "Shared registry subject reference.",
+          "fk": "registry_subject.subject_id",
+          "name": "subject_id",
+          "nullable": false,
+          "pg_type": "text",
+          "projection": {
+            "operator": "allowed by role",
+            "public": "never unless released"
+          },
+          "temporal_behavior": "recorded-time governed",
+          "vocabulary": null
         }
       ],
       "owner": "GIS/Data Authority"
@@ -1944,33 +1922,22 @@
           "vocabulary": null
         },
         {
-          "authority_owner": "Registry Authority",
+          "authority_owner": "SDA/Registry Authority",
           "classification": "government-internal",
           "constraints": [
-            "CHECK subject_entity allowed for geometry_role"
+            "subject must exist and be active or linked through retirement policy"
           ],
           "default": null,
-          "definition": "Approved subject table.",
-          "fk": null,
-          "name": "subject_entity",
-          "nullable": false,
-          "pg_type": "text",
-          "projection": "operator",
-          "temporal_behavior": "current fact",
-          "vocabulary": null
-        },
-        {
-          "authority_owner": "Registry Authority",
-          "classification": "government-internal",
-          "constraints": [],
-          "default": null,
-          "definition": "Approved subject ID validated by subject_entity rule.",
-          "fk": null,
+          "definition": "Shared registry subject reference.",
+          "fk": "registry_subject.subject_id",
           "name": "subject_id",
           "nullable": false,
           "pg_type": "text",
-          "projection": "operator",
-          "temporal_behavior": "current fact",
+          "projection": {
+            "operator": "allowed by role",
+            "public": "never unless released"
+          },
+          "temporal_behavior": "recorded-time governed",
           "vocabulary": null
         },
         {
@@ -2175,6 +2142,12 @@
           "temporal_behavior": "current fact",
           "vocabulary": "classification"
         }
+      ],
+      "integrity_assertions": [
+        "effective intervals do not overlap for owner/key",
+        "recorded intervals do not overlap for owner/key",
+        "current row is unique",
+        "predecessor/successor links are reciprocal and acyclic"
       ],
       "owner": "GIS/Data Authority"
     },
@@ -2628,7 +2601,7 @@
           "classification": "government-internal",
           "constraints": [],
           "default": null,
-          "definition": "Locality lifecycle.",
+          "definition": "Locality lifecycle. Review 04 correction: entity-specific lifecycle.",
           "fk": null,
           "name": "lifecycle_state",
           "nullable": false,
@@ -2927,38 +2900,6 @@
         {
           "authority_owner": "Registry Authority",
           "classification": "government-internal",
-          "constraints": [
-            "CHECK object_entity in allowed object subjects"
-          ],
-          "default": null,
-          "definition": "Linked object table.",
-          "fk": null,
-          "name": "object_entity",
-          "nullable": false,
-          "pg_type": "text",
-          "projection": "operator",
-          "temporal_behavior": "current fact",
-          "vocabulary": null
-        },
-        {
-          "authority_owner": "Registry Authority",
-          "classification": "government-internal",
-          "constraints": [
-            "validated by object_entity-specific rule"
-          ],
-          "default": null,
-          "definition": "Linked object ID; checked by object-role validation.",
-          "fk": null,
-          "name": "object_id",
-          "nullable": false,
-          "pg_type": "text",
-          "projection": "operator",
-          "temporal_behavior": "current fact",
-          "vocabulary": null
-        },
-        {
-          "authority_owner": "Registry Authority",
-          "classification": "government-internal",
           "constraints": [],
           "default": null,
           "definition": "Role of object for this record version.",
@@ -3013,7 +2954,32 @@
           "projection": "operator",
           "temporal_behavior": "effective time",
           "vocabulary": null
+        },
+        {
+          "authority_owner": "SDA/Registry Authority",
+          "classification": "government-internal",
+          "constraints": [
+            "subject must exist and be active or linked through retirement policy"
+          ],
+          "default": null,
+          "definition": "Shared registry subject reference.",
+          "fk": "registry_subject.subject_id",
+          "name": "subject_id",
+          "nullable": false,
+          "pg_type": "text",
+          "projection": {
+            "operator": "allowed by role",
+            "public": "never unless released"
+          },
+          "temporal_behavior": "recorded-time governed",
+          "vocabulary": null
         }
+      ],
+      "integrity_assertions": [
+        "effective intervals do not overlap for owner/key",
+        "recorded intervals do not overlap for owner/key",
+        "current row is unique",
+        "predecessor/successor links are reciprocal and acyclic"
       ],
       "owner": "Registry Authority"
     },
@@ -3175,7 +3141,7 @@
           "classification": "government-internal",
           "constraints": [],
           "default": null,
-          "definition": "Registry lifecycle state for this version.",
+          "definition": "Registry lifecycle state for this version. Review 04 correction: entity-specific lifecycle.",
           "fk": null,
           "name": "lifecycle_state",
           "nullable": false,
@@ -3369,6 +3335,12 @@
           "vocabulary": null
         }
       ],
+      "integrity_assertions": [
+        "effective intervals do not overlap for owner/key",
+        "recorded intervals do not overlap for owner/key",
+        "current row is unique",
+        "predecessor/successor links are reciprocal and acyclic"
+      ],
       "owner": "Registry Authority"
     },
     "migration_exception": {
@@ -3551,33 +3523,22 @@
           "vocabulary": null
         },
         {
-          "authority_owner": "Registry Authority",
+          "authority_owner": "SDA/Registry Authority",
           "classification": "government-internal",
           "constraints": [
-            "CHECK subject_entity in configured named subjects"
+            "subject must exist and be active or linked through retirement policy"
           ],
           "default": null,
-          "definition": "Named entity table.",
-          "fk": null,
-          "name": "subject_entity",
-          "nullable": false,
-          "pg_type": "text",
-          "projection": "operator",
-          "temporal_behavior": "current fact",
-          "vocabulary": null
-        },
-        {
-          "authority_owner": "Registry Authority",
-          "classification": "government-internal",
-          "constraints": [],
-          "default": null,
-          "definition": "Named entity ID; validated by subject registry/checks in WO-002B.",
-          "fk": null,
+          "definition": "Shared registry subject reference.",
+          "fk": "registry_subject.subject_id",
           "name": "subject_id",
           "nullable": false,
           "pg_type": "text",
-          "projection": "operator",
-          "temporal_behavior": "current fact",
+          "projection": {
+            "operator": "allowed by role",
+            "public": "never unless released"
+          },
+          "temporal_behavior": "recorded-time governed",
           "vocabulary": null
         },
         {
@@ -3694,6 +3655,12 @@
           "temporal_behavior": "effective time",
           "vocabulary": null
         }
+      ],
+      "integrity_assertions": [
+        "effective intervals do not overlap for owner/key",
+        "recorded intervals do not overlap for owner/key",
+        "current row is unique",
+        "predecessor/successor links are reciprocal and acyclic"
       ],
       "owner": "Registry/GIS Authority"
     },
@@ -3853,7 +3820,7 @@
           "classification": "government-internal",
           "constraints": [],
           "default": null,
-          "definition": "Operational area lifecycle.",
+          "definition": "Operational area lifecycle. Review 04 correction: entity-specific lifecycle.",
           "fk": null,
           "name": "lifecycle_state",
           "nullable": false,
@@ -4356,6 +4323,12 @@
           "vocabulary": null
         }
       ],
+      "integrity_assertions": [
+        "effective intervals do not overlap for owner/key",
+        "recorded intervals do not overlap for owner/key",
+        "current row is unique",
+        "predecessor/successor links are reciprocal and acyclic"
+      ],
       "owner": "Registry Authority"
     },
     "publication_release": {
@@ -4645,11 +4618,10 @@
           "authority_owner": "SDA/Registry Authority",
           "classification": "government-internal",
           "constraints": [
-            "PRIMARY KEY",
-            "ULID-compatible"
+            "PRIMARY KEY"
           ],
           "default": null,
-          "definition": "Stable ULID-compatible subject identifier.",
+          "definition": "Registered subject identity.",
           "fk": null,
           "name": "subject_id",
           "nullable": false,
@@ -4668,7 +4640,7 @@
             "CHECK subject_entity in allowed subject set"
           ],
           "default": null,
-          "definition": "Allowed target entity name.",
+          "definition": "Subject entity/type registered for polymorphic-safe links.",
           "fk": null,
           "name": "subject_entity",
           "nullable": false,
@@ -4715,6 +4687,74 @@
           },
           "temporal_behavior": "recorded-time governed",
           "vocabulary": null
+        },
+        {
+          "authority_owner": "SDA/Registry Authority",
+          "classification": "government-internal",
+          "constraints": [],
+          "default": null,
+          "definition": "Native target-table identifier represented by this subject.",
+          "fk": null,
+          "name": "native_id",
+          "nullable": false,
+          "pg_type": "text",
+          "projection": {
+            "operator": "allowed by role",
+            "public": "never unless released"
+          },
+          "temporal_behavior": "recorded-time governed",
+          "vocabulary": null
+        },
+        {
+          "authority_owner": "SDA/Registry Authority",
+          "classification": "government-internal",
+          "constraints": [],
+          "default": "'active'",
+          "definition": "Subject active/retired/delete policy state.",
+          "fk": null,
+          "name": "subject_state",
+          "nullable": false,
+          "pg_type": "text",
+          "projection": {
+            "operator": "allowed by role",
+            "public": "never unless released"
+          },
+          "temporal_behavior": "recorded-time governed",
+          "vocabulary": "subject_lifecycle"
+        },
+        {
+          "authority_owner": "SDA/Registry Authority",
+          "classification": "government-internal",
+          "constraints": [],
+          "default": null,
+          "definition": "Retirement/deletion policy timestamp.",
+          "fk": null,
+          "name": "retired_at",
+          "nullable": true,
+          "pg_type": "timestamptz",
+          "projection": {
+            "operator": "allowed by role",
+            "public": "never unless released"
+          },
+          "temporal_behavior": "recorded-time governed",
+          "vocabulary": null
+        },
+        {
+          "authority_owner": "SDA/Registry Authority",
+          "classification": "government-internal",
+          "constraints": [],
+          "default": "'retire-only'",
+          "definition": "Delete behavior for linked names/geometry/disputes/objects.",
+          "fk": null,
+          "name": "delete_policy",
+          "nullable": false,
+          "pg_type": "text",
+          "projection": {
+            "operator": "allowed by role",
+            "public": "never unless released"
+          },
+          "temporal_behavior": "recorded-time governed",
+          "vocabulary": "delete_policy"
         }
       ]
     },
@@ -4755,7 +4795,7 @@
           "classification": "government-internal",
           "constraints": [],
           "default": null,
-          "definition": "Road lifecycle.",
+          "definition": "Road lifecycle. Review 04 correction: entity-specific lifecycle.",
           "fk": null,
           "name": "lifecycle_state",
           "nullable": false,
@@ -4860,7 +4900,7 @@
           "classification": "government-internal",
           "constraints": [],
           "default": null,
-          "definition": "Segment lifecycle.",
+          "definition": "Segment lifecycle. Review 04 correction: entity-specific lifecycle.",
           "fk": null,
           "name": "lifecycle_state",
           "nullable": false,
@@ -5378,7 +5418,7 @@
           "classification": "government-internal",
           "constraints": [],
           "default": null,
-          "definition": "Unit lifecycle.",
+          "definition": "Unit lifecycle. Review 04 correction: entity-specific lifecycle.",
           "fk": null,
           "name": "lifecycle_state",
           "nullable": false,
@@ -5703,6 +5743,26 @@
         "province": "First-level administrative unit."
       }
     },
+    "administrative_unit_lifecycle": {
+      "owner": "GIS/Data Authority",
+      "values": {
+        "historical": "Historical official version.",
+        "official": "Official active version.",
+        "proposed": "Proposed administrative version.",
+        "retired": "Retired version.",
+        "revoked": "Revoked version."
+      }
+    },
+    "building_lifecycle": {
+      "owner": "Registry Authority",
+      "values": {
+        "active": "Active building.",
+        "candidate": "Candidate building.",
+        "demolished": "Demolished building.",
+        "retired": "Retired building.",
+        "revoked": "Revoked building."
+      }
+    },
     "canonical_record_lifecycle": {
       "owner": "Registry Authority",
       "values": {
@@ -5791,6 +5851,14 @@
         "resolve-dispute": "Resolve dispute.",
         "supersede-record": "Supersede record/version.",
         "withdraw-publication": "Withdraw release."
+      }
+    },
+    "delete_policy": {
+      "owner": "Registry Authority",
+      "values": {
+        "cascade-prohibited": "Reject delete while dependent links exist.",
+        "merge-required": "Merge/supersession required before retirement.",
+        "retire-only": "Do not hard delete; retire and preserve links."
       }
     },
     "dispute_type": {
@@ -5891,6 +5959,15 @@
         "retired": "No longer valid for current use.",
         "revoked": "Invalidated by authority.",
         "superseded": "Replaced by successor record or version."
+      }
+    },
+    "locality_lifecycle": {
+      "owner": "Registry/GIS Authority",
+      "values": {
+        "candidate": "Candidate locality.",
+        "official": "Official locality.",
+        "renamed": "Renamed locality.",
+        "retired": "Retired locality."
       }
     },
     "locality_type": {
@@ -6096,6 +6173,25 @@
         "unknown": "Unknown class pending validation."
       }
     },
+    "road_lifecycle": {
+      "owner": "GIS/Data Authority",
+      "values": {
+        "candidate": "Candidate road.",
+        "field-verified": "Field verified road.",
+        "official": "Official road.",
+        "retired": "Retired road.",
+        "superseded": "Superseded road."
+      }
+    },
+    "road_segment_lifecycle": {
+      "owner": "GIS/Data Authority",
+      "values": {
+        "active": "Active segment.",
+        "draft": "Draft segment.",
+        "realigned": "Realigned segment.",
+        "retired": "Retired segment."
+      }
+    },
     "source_authority_class": {
       "owner": "SDA",
       "values": {
@@ -6118,6 +6214,25 @@
         "deprecated": "Deprecated source.",
         "revoked": "Revoked source.",
         "trusted": "Trusted source."
+      }
+    },
+    "subject_lifecycle": {
+      "owner": "Registry Authority",
+      "values": {
+        "active": "Subject can receive links.",
+        "deleted-prohibited": "Delete attempted but policy requires retirement.",
+        "merged": "Subject merged into successor.",
+        "retired": "Subject retained but not assignable."
+      }
+    },
+    "unit_lifecycle": {
+      "owner": "Registry Authority",
+      "values": {
+        "active": "Active unit.",
+        "candidate": "Candidate unit.",
+        "merged": "Merged unit.",
+        "retired": "Retired unit.",
+        "split": "Split unit."
       }
     },
     "unit_type": {

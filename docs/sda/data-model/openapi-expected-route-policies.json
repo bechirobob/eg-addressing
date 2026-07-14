@@ -1,0 +1,1115 @@
+{
+  "DELETE /api/v1/addresses/{address_id}": {
+    "analysis": "function-ast-boundary",
+    "auth": "role-required",
+    "function": "archive_address_endpoint",
+    "method": "DELETE",
+    "roles": [
+      "admin"
+    ],
+    "route": "/api/v1/addresses/{address_id}",
+    "source": "services/api/app/main.py:1507-1513"
+  },
+  "DELETE /api/v1/buildings/{building_id}": {
+    "analysis": "function-ast-boundary",
+    "auth": "role-required",
+    "function": "archive_building_endpoint",
+    "method": "DELETE",
+    "roles": [
+      "admin"
+    ],
+    "route": "/api/v1/buildings/{building_id}",
+    "source": "services/api/app/main.py:1454-1460"
+  },
+  "DELETE /api/v1/roads/{road_id}": {
+    "analysis": "function-ast-boundary",
+    "auth": "role-required",
+    "function": "archive_road_endpoint",
+    "method": "DELETE",
+    "roles": [
+      "admin"
+    ],
+    "route": "/api/v1/roads/{road_id}",
+    "source": "services/api/app/main.py:1401-1407"
+  },
+  "DELETE /api/v1/territories/{territory_id}": {
+    "analysis": "function-ast-boundary",
+    "auth": "role-required",
+    "function": "archive_territory_endpoint",
+    "method": "DELETE",
+    "roles": [
+      "admin"
+    ],
+    "route": "/api/v1/territories/{territory_id}",
+    "source": "services/api/app/main.py:1342-1348"
+  },
+  "GET /": {
+    "analysis": "function-ast-boundary",
+    "auth": "public",
+    "function": "root",
+    "method": "GET",
+    "roles": [],
+    "route": "/",
+    "source": "services/api/app/main.py:1092-1093"
+  },
+  "GET /api/v1/address-corrections": {
+    "analysis": "function-ast-boundary",
+    "auth": "role-required",
+    "function": "address_corrections",
+    "method": "GET",
+    "roles": [
+      "editor"
+    ],
+    "route": "/api/v1/address-corrections",
+    "source": "services/api/app/main.py:2132-2135"
+  },
+  "GET /api/v1/address-records/export": {
+    "analysis": "function-ast-boundary",
+    "auth": "role-required",
+    "function": "address_records_export_endpoint",
+    "method": "GET",
+    "roles": [
+      "viewer"
+    ],
+    "route": "/api/v1/address-records/export",
+    "source": "services/api/app/main.py:1906-1909"
+  },
+  "GET /api/v1/address-records/holds": {
+    "analysis": "function-ast-boundary",
+    "auth": "role-required",
+    "function": "address_record_holds_endpoint",
+    "method": "GET",
+    "roles": [
+      "viewer"
+    ],
+    "route": "/api/v1/address-records/holds",
+    "source": "services/api/app/main.py:1931-1940"
+  },
+  "GET /api/v1/address-records/nearby": {
+    "analysis": "function-ast-boundary",
+    "auth": "role-required",
+    "function": "address_records_nearby_endpoint",
+    "method": "GET",
+    "roles": [
+      "viewer"
+    ],
+    "route": "/api/v1/address-records/nearby",
+    "source": "services/api/app/main.py:1913-1927"
+  },
+  "GET /api/v1/address-records/search": {
+    "analysis": "function-ast-boundary",
+    "auth": "role-required",
+    "function": "address_record_search",
+    "method": "GET",
+    "roles": [
+      "viewer"
+    ],
+    "route": "/api/v1/address-records/search",
+    "source": "services/api/app/main.py:1892-1901"
+  },
+  "GET /api/v1/address-records/{address_code}": {
+    "analysis": "function-ast-boundary",
+    "auth": "role-required",
+    "function": "address_record_case_file",
+    "method": "GET",
+    "roles": [
+      "viewer"
+    ],
+    "route": "/api/v1/address-records/{address_code}",
+    "source": "services/api/app/main.py:1944-1950"
+  },
+  "GET /api/v1/address-records/{address_code}/certificate": {
+    "analysis": "function-ast-boundary",
+    "auth": "role-required",
+    "function": "address_record_certificate_endpoint",
+    "method": "GET",
+    "roles": [
+      "viewer"
+    ],
+    "route": "/api/v1/address-records/{address_code}/certificate",
+    "source": "services/api/app/main.py:1954-1962"
+  },
+  "GET /api/v1/addresses": {
+    "analysis": "function-ast-boundary",
+    "auth": "role-required",
+    "function": "create_address_endpoint",
+    "method": "POST",
+    "roles": [
+      "editor"
+    ],
+    "route": "/api/v1/addresses",
+    "source": "services/api/app/main.py:1481-1489"
+  },
+  "GET /api/v1/addresses/{address_id}": {
+    "analysis": "function-ast-boundary",
+    "auth": "role-required",
+    "function": "archive_address_endpoint",
+    "method": "DELETE",
+    "roles": [
+      "admin"
+    ],
+    "route": "/api/v1/addresses/{address_id}",
+    "source": "services/api/app/main.py:1507-1513"
+  },
+  "GET /api/v1/admin-units": {
+    "analysis": "function-ast-boundary",
+    "auth": "public",
+    "function": "admin_units",
+    "method": "GET",
+    "roles": [],
+    "route": "/api/v1/admin-units",
+    "source": "services/api/app/main.py:1234-1239"
+  },
+  "GET /api/v1/admin/users": {
+    "analysis": "function-ast-boundary",
+    "auth": "role-required",
+    "function": "admin_create_user",
+    "method": "POST",
+    "roles": [
+      "admin"
+    ],
+    "route": "/api/v1/admin/users",
+    "source": "services/api/app/main.py:1168-1176"
+  },
+  "GET /api/v1/audit-logs": {
+    "analysis": "function-ast-boundary",
+    "auth": "role-required",
+    "function": "audit_logs",
+    "method": "GET",
+    "roles": [
+      "admin"
+    ],
+    "route": "/api/v1/audit-logs",
+    "source": "services/api/app/main.py:1352-1355"
+  },
+  "GET /api/v1/auth/me": {
+    "analysis": "function-ast-boundary",
+    "auth": "authenticated",
+    "function": "auth_me",
+    "method": "GET",
+    "roles": [],
+    "route": "/api/v1/auth/me",
+    "source": "services/api/app/main.py:1145-1146"
+  },
+  "GET /api/v1/buildings": {
+    "analysis": "function-ast-boundary",
+    "auth": "role-required",
+    "function": "create_building_endpoint",
+    "method": "POST",
+    "roles": [
+      "editor"
+    ],
+    "route": "/api/v1/buildings",
+    "source": "services/api/app/main.py:1428-1436"
+  },
+  "GET /api/v1/buildings/{building_id}": {
+    "analysis": "function-ast-boundary",
+    "auth": "role-required",
+    "function": "archive_building_endpoint",
+    "method": "DELETE",
+    "roles": [
+      "admin"
+    ],
+    "route": "/api/v1/buildings/{building_id}",
+    "source": "services/api/app/main.py:1454-1460"
+  },
+  "GET /api/v1/field/assignments": {
+    "analysis": "function-ast-boundary",
+    "auth": "role-required",
+    "function": "field_assignments",
+    "method": "GET",
+    "roles": [
+      "viewer"
+    ],
+    "route": "/api/v1/field/assignments",
+    "source": "services/api/app/main.py:1517-1520"
+  },
+  "GET /api/v1/field/geotag-tasks": {
+    "analysis": "function-ast-boundary",
+    "auth": "role-required",
+    "function": "field_geotag_tasks",
+    "method": "GET",
+    "roles": [
+      "viewer"
+    ],
+    "route": "/api/v1/field/geotag-tasks",
+    "source": "services/api/app/main.py:1524-1527"
+  },
+  "GET /api/v1/field/submissions": {
+    "analysis": "function-ast-boundary",
+    "auth": "role-required",
+    "function": "create_field_submission_endpoint",
+    "method": "POST",
+    "roles": [
+      "editor"
+    ],
+    "route": "/api/v1/field/submissions",
+    "source": "services/api/app/main.py:1571-1579"
+  },
+  "GET /api/v1/field/submissions/{submission_id}/evidence-files/{file_id}": {
+    "analysis": "function-ast-boundary",
+    "auth": "role-required",
+    "function": "download_field_submission_evidence_file",
+    "method": "GET",
+    "roles": [
+      "viewer"
+    ],
+    "route": "/api/v1/field/submissions/{submission_id}/evidence-files/{file_id}",
+    "source": "services/api/app/main.py:1677-1690"
+  },
+  "GET /api/v1/field/submissions/{submission_id}/evidence-history": {
+    "analysis": "function-ast-boundary",
+    "auth": "role-required",
+    "function": "field_submission_evidence_history",
+    "method": "GET",
+    "roles": [
+      "viewer"
+    ],
+    "route": "/api/v1/field/submissions/{submission_id}/evidence-history",
+    "source": "services/api/app/main.py:1653-1659"
+  },
+  "GET /api/v1/geotag-submissions": {
+    "analysis": "function-ast-boundary",
+    "auth": "role-required",
+    "function": "geotag_submissions",
+    "method": "GET",
+    "roles": [
+      "viewer"
+    ],
+    "route": "/api/v1/geotag-submissions",
+    "source": "services/api/app/main.py:1966-1969"
+  },
+  "GET /api/v1/geotag-submissions/automation/sla-drilldown": {
+    "analysis": "function-ast-boundary",
+    "auth": "role-required",
+    "function": "geotag_sla_drilldown",
+    "method": "GET",
+    "roles": [
+      "viewer"
+    ],
+    "route": "/api/v1/geotag-submissions/automation/sla-drilldown",
+    "source": "services/api/app/main.py:1981-1985"
+  },
+  "GET /api/v1/geotag-submissions/automation/summary": {
+    "analysis": "function-ast-boundary",
+    "auth": "role-required",
+    "function": "geotag_automation_summary",
+    "method": "GET",
+    "roles": [
+      "viewer"
+    ],
+    "route": "/api/v1/geotag-submissions/automation/summary",
+    "source": "services/api/app/main.py:1973-1977"
+  },
+  "GET /api/v1/geotag-submissions/duplicates/summary": {
+    "analysis": "function-ast-boundary",
+    "auth": "role-required",
+    "function": "geotag_duplicates_summary",
+    "method": "GET",
+    "roles": [
+      "viewer"
+    ],
+    "route": "/api/v1/geotag-submissions/duplicates/summary",
+    "source": "services/api/app/main.py:1989-1992"
+  },
+  "GET /api/v1/geotag-submissions/{submission_id}/certificate": {
+    "analysis": "function-ast-boundary",
+    "auth": "role-required",
+    "function": "geotag_certificate",
+    "method": "GET",
+    "roles": [
+      "viewer"
+    ],
+    "route": "/api/v1/geotag-submissions/{submission_id}/certificate",
+    "source": "services/api/app/main.py:1996-2004"
+  },
+  "GET /api/v1/geotag-submissions/{submission_id}/history": {
+    "analysis": "function-ast-boundary",
+    "auth": "role-required",
+    "function": "geotag_submission_history",
+    "method": "GET",
+    "roles": [
+      "viewer"
+    ],
+    "route": "/api/v1/geotag-submissions/{submission_id}/history",
+    "source": "services/api/app/main.py:2008-2011"
+  },
+  "GET /api/v1/health": {
+    "analysis": "function-ast-boundary",
+    "auth": "public",
+    "function": "health",
+    "method": "GET",
+    "roles": [],
+    "route": "/api/v1/health",
+    "source": "services/api/app/main.py:1097-1098"
+  },
+  "GET /api/v1/imports/jobs": {
+    "analysis": "function-ast-boundary",
+    "auth": "role-required",
+    "function": "create_import_job_endpoint",
+    "method": "POST",
+    "roles": [
+      "editor"
+    ],
+    "route": "/api/v1/imports/jobs",
+    "source": "services/api/app/main.py:2189-2197"
+  },
+  "GET /api/v1/imports/jobs/{job_id}/rows": {
+    "analysis": "function-ast-boundary",
+    "auth": "role-required",
+    "function": "import_rows",
+    "method": "GET",
+    "roles": [
+      "viewer"
+    ],
+    "route": "/api/v1/imports/jobs/{job_id}/rows",
+    "source": "services/api/app/main.py:2179-2185"
+  },
+  "GET /api/v1/meta": {
+    "analysis": "function-ast-boundary",
+    "auth": "public",
+    "function": "meta",
+    "method": "GET",
+    "roles": [],
+    "route": "/api/v1/meta",
+    "source": "services/api/app/main.py:1102-1108"
+  },
+  "GET /api/v1/operator/command-center": {
+    "analysis": "function-ast-boundary",
+    "auth": "role-required",
+    "function": "operator_command_center",
+    "method": "GET",
+    "roles": [
+      "viewer"
+    ],
+    "route": "/api/v1/operator/command-center",
+    "source": "services/api/app/main.py:2298-2335"
+  },
+  "GET /api/v1/operator/demo-fixtures/status": {
+    "analysis": "function-ast-boundary",
+    "auth": "role-required",
+    "function": "operator_demo_fixture_status",
+    "method": "GET",
+    "roles": [
+      "viewer"
+    ],
+    "route": "/api/v1/operator/demo-fixtures/status",
+    "source": "services/api/app/main.py:2361-2364"
+  },
+  "GET /api/v1/operator/migrations/status": {
+    "analysis": "function-ast-boundary",
+    "auth": "role-required",
+    "function": "operator_migration_status",
+    "method": "GET",
+    "roles": [
+      "viewer"
+    ],
+    "route": "/api/v1/operator/migrations/status",
+    "source": "services/api/app/main.py:2347-2350"
+  },
+  "GET /api/v1/operator/postgis/readiness": {
+    "analysis": "function-ast-boundary",
+    "auth": "role-required",
+    "function": "operator_postgis_readiness",
+    "method": "GET",
+    "roles": [
+      "viewer"
+    ],
+    "route": "/api/v1/operator/postgis/readiness",
+    "source": "services/api/app/main.py:2340-2343"
+  },
+  "GET /api/v1/operator/production-readiness": {
+    "analysis": "function-ast-boundary",
+    "auth": "role-required",
+    "function": "operator_production_readiness",
+    "method": "GET",
+    "roles": [
+      "viewer"
+    ],
+    "route": "/api/v1/operator/production-readiness",
+    "source": "services/api/app/main.py:2354-2357"
+  },
+  "GET /api/v1/operator/restore-drill/latest": {
+    "analysis": "function-ast-boundary",
+    "auth": "role-required",
+    "function": "operator_restore_drill_latest",
+    "method": "GET",
+    "roles": [
+      "viewer"
+    ],
+    "route": "/api/v1/operator/restore-drill/latest",
+    "source": "services/api/app/main.py:2375-2378"
+  },
+  "GET /api/v1/pilot-readiness/summary": {
+    "analysis": "function-ast-boundary",
+    "auth": "role-required",
+    "function": "pilot_readiness_summary_endpoint",
+    "method": "GET",
+    "roles": [
+      "viewer"
+    ],
+    "route": "/api/v1/pilot-readiness/summary",
+    "source": "services/api/app/main.py:2404-2407"
+  },
+  "GET /api/v1/provinces": {
+    "analysis": "function-ast-boundary",
+    "auth": "public",
+    "function": "list_public_provinces",
+    "method": "GET",
+    "roles": [],
+    "route": "/api/v1/provinces",
+    "source": "services/api/app/main.py:1229-1230"
+  },
+  "GET /api/v1/public/address-code/{code}": {
+    "analysis": "function-ast-boundary",
+    "auth": "public",
+    "function": "public_address_code_lookup",
+    "method": "GET",
+    "roles": [],
+    "route": "/api/v1/public/address-code/{code}",
+    "source": "services/api/app/main.py:1786-1788"
+  },
+  "GET /api/v1/public/address-code/{code}/record": {
+    "analysis": "function-ast-boundary",
+    "auth": "public",
+    "function": "public_address_code_record",
+    "method": "GET",
+    "roles": [],
+    "route": "/api/v1/public/address-code/{code}/record",
+    "source": "services/api/app/main.py:1811-1813"
+  },
+  "GET /api/v1/public/geotag-submissions/{submission_id}/tracking": {
+    "analysis": "function-ast-boundary",
+    "auth": "public",
+    "function": "public_geotag_submission_tracking",
+    "method": "GET",
+    "roles": [],
+    "route": "/api/v1/public/geotag-submissions/{submission_id}/tracking",
+    "source": "services/api/app/main.py:1856-1861"
+  },
+  "GET /api/v1/public/issuance/{query}": {
+    "analysis": "function-ast-boundary",
+    "auth": "public",
+    "function": "public_issuance_lookup",
+    "method": "GET",
+    "roles": [],
+    "route": "/api/v1/public/issuance/{query}",
+    "source": "services/api/app/main.py:1780-1782"
+  },
+  "GET /api/v1/public/territory-options": {
+    "analysis": "function-ast-boundary",
+    "auth": "public",
+    "function": "public_territory_options",
+    "method": "GET",
+    "roles": [],
+    "route": "/api/v1/public/territory-options",
+    "source": "services/api/app/main.py:1281-1287"
+  },
+  "GET /api/v1/public/tracking/{lookup_code}": {
+    "analysis": "function-ast-boundary",
+    "auth": "public",
+    "function": "public_tracking_lookup",
+    "method": "GET",
+    "roles": [],
+    "route": "/api/v1/public/tracking/{lookup_code}",
+    "source": "services/api/app/main.py:1865-1888"
+  },
+  "GET /api/v1/public/verification/{query}": {
+    "analysis": "function-ast-boundary",
+    "auth": "public",
+    "function": "public_verification_lookup",
+    "method": "GET",
+    "roles": [],
+    "route": "/api/v1/public/verification/{query}",
+    "source": "services/api/app/main.py:1774-1776"
+  },
+  "GET /api/v1/publication/packs": {
+    "analysis": "function-ast-boundary",
+    "auth": "role-required",
+    "function": "create_publication_pack_endpoint",
+    "method": "POST",
+    "roles": [
+      "editor"
+    ],
+    "route": "/api/v1/publication/packs",
+    "source": "services/api/app/main.py:2220-2230"
+  },
+  "GET /api/v1/reporting/summary": {
+    "analysis": "function-ast-boundary",
+    "auth": "role-required",
+    "function": "reporting_summary_endpoint",
+    "method": "GET",
+    "roles": [
+      "viewer"
+    ],
+    "route": "/api/v1/reporting/summary",
+    "source": "services/api/app/main.py:2382-2400"
+  },
+  "GET /api/v1/roads": {
+    "analysis": "function-ast-boundary",
+    "auth": "role-required",
+    "function": "create_road_endpoint",
+    "method": "POST",
+    "roles": [
+      "editor"
+    ],
+    "route": "/api/v1/roads",
+    "source": "services/api/app/main.py:1376-1384"
+  },
+  "GET /api/v1/roads/{road_id}": {
+    "analysis": "function-ast-boundary",
+    "auth": "role-required",
+    "function": "archive_road_endpoint",
+    "method": "DELETE",
+    "roles": [
+      "admin"
+    ],
+    "route": "/api/v1/roads/{road_id}",
+    "source": "services/api/app/main.py:1401-1407"
+  },
+  "GET /api/v1/signage/export": {
+    "analysis": "function-ast-boundary",
+    "auth": "role-required",
+    "function": "signage_export_endpoint",
+    "method": "GET",
+    "roles": [
+      "viewer"
+    ],
+    "route": "/api/v1/signage/export",
+    "source": "services/api/app/main.py:2118-2121"
+  },
+  "GET /api/v1/signage/pack": {
+    "analysis": "function-ast-boundary",
+    "auth": "role-required",
+    "function": "signage_pack_endpoint",
+    "method": "GET",
+    "roles": [
+      "viewer"
+    ],
+    "route": "/api/v1/signage/pack",
+    "source": "services/api/app/main.py:2125-2128"
+  },
+  "GET /api/v1/territories": {
+    "analysis": "function-ast-boundary",
+    "auth": "role-required",
+    "function": "create_territory_endpoint",
+    "method": "POST",
+    "roles": [
+      "editor"
+    ],
+    "route": "/api/v1/territories",
+    "source": "services/api/app/main.py:1316-1324"
+  },
+  "GET /api/v1/territories/provinces": {
+    "analysis": "function-ast-boundary",
+    "auth": "public",
+    "function": "list_provinces",
+    "method": "GET",
+    "roles": [],
+    "route": "/api/v1/territories/provinces",
+    "source": "services/api/app/main.py:1224-1225"
+  },
+  "GET /api/v1/territories/{territory_id}": {
+    "analysis": "function-ast-boundary",
+    "auth": "role-required",
+    "function": "archive_territory_endpoint",
+    "method": "DELETE",
+    "roles": [
+      "admin"
+    ],
+    "route": "/api/v1/territories/{territory_id}",
+    "source": "services/api/app/main.py:1342-1348"
+  },
+  "GET /api/v1/verification/lookup": {
+    "analysis": "function-ast-boundary",
+    "auth": "public",
+    "function": "verification_lookup",
+    "method": "GET",
+    "roles": [],
+    "route": "/api/v1/verification/lookup",
+    "source": "services/api/app/main.py:1757-1770"
+  },
+  "PATCH /api/v1/addresses/{address_id}": {
+    "analysis": "function-ast-boundary",
+    "auth": "role-required",
+    "function": "archive_address_endpoint",
+    "method": "DELETE",
+    "roles": [
+      "admin"
+    ],
+    "route": "/api/v1/addresses/{address_id}",
+    "source": "services/api/app/main.py:1507-1513"
+  },
+  "PATCH /api/v1/admin/users/{user_id}": {
+    "analysis": "function-ast-boundary",
+    "auth": "role-required",
+    "function": "admin_update_user",
+    "method": "PATCH",
+    "roles": [
+      "admin"
+    ],
+    "route": "/api/v1/admin/users/{user_id}",
+    "source": "services/api/app/main.py:1180-1191"
+  },
+  "PATCH /api/v1/buildings/{building_id}": {
+    "analysis": "function-ast-boundary",
+    "auth": "role-required",
+    "function": "archive_building_endpoint",
+    "method": "DELETE",
+    "roles": [
+      "admin"
+    ],
+    "route": "/api/v1/buildings/{building_id}",
+    "source": "services/api/app/main.py:1454-1460"
+  },
+  "PATCH /api/v1/roads/{road_id}": {
+    "analysis": "function-ast-boundary",
+    "auth": "role-required",
+    "function": "archive_road_endpoint",
+    "method": "DELETE",
+    "roles": [
+      "admin"
+    ],
+    "route": "/api/v1/roads/{road_id}",
+    "source": "services/api/app/main.py:1401-1407"
+  },
+  "PATCH /api/v1/territories/{territory_id}": {
+    "analysis": "function-ast-boundary",
+    "auth": "role-required",
+    "function": "archive_territory_endpoint",
+    "method": "DELETE",
+    "roles": [
+      "admin"
+    ],
+    "route": "/api/v1/territories/{territory_id}",
+    "source": "services/api/app/main.py:1342-1348"
+  },
+  "POST /api/v1/address-corrections/{correction_id}/reject": {
+    "analysis": "function-ast-boundary",
+    "auth": "role-required",
+    "function": "reject_address_correction",
+    "method": "POST",
+    "roles": [
+      "editor"
+    ],
+    "route": "/api/v1/address-corrections/{correction_id}/reject",
+    "source": "services/api/app/main.py:2161-2168"
+  },
+  "POST /api/v1/address-corrections/{correction_id}/resolve": {
+    "analysis": "function-ast-boundary",
+    "auth": "role-required",
+    "function": "resolve_address_correction",
+    "method": "POST",
+    "roles": [
+      "editor"
+    ],
+    "route": "/api/v1/address-corrections/{correction_id}/resolve",
+    "source": "services/api/app/main.py:2150-2157"
+  },
+  "POST /api/v1/address-corrections/{correction_id}/under-review": {
+    "analysis": "function-ast-boundary",
+    "auth": "role-required",
+    "function": "mark_address_correction_under_review",
+    "method": "POST",
+    "roles": [
+      "editor"
+    ],
+    "route": "/api/v1/address-corrections/{correction_id}/under-review",
+    "source": "services/api/app/main.py:2139-2146"
+  },
+  "POST /api/v1/addresses": {
+    "analysis": "function-ast-boundary",
+    "auth": "role-required",
+    "function": "create_address_endpoint",
+    "method": "POST",
+    "roles": [
+      "editor"
+    ],
+    "route": "/api/v1/addresses",
+    "source": "services/api/app/main.py:1481-1489"
+  },
+  "POST /api/v1/admin/users": {
+    "analysis": "function-ast-boundary",
+    "auth": "role-required",
+    "function": "admin_create_user",
+    "method": "POST",
+    "roles": [
+      "admin"
+    ],
+    "route": "/api/v1/admin/users",
+    "source": "services/api/app/main.py:1168-1176"
+  },
+  "POST /api/v1/admin/users/{user_id}/disable": {
+    "analysis": "function-ast-boundary",
+    "auth": "role-required",
+    "function": "admin_disable_user",
+    "method": "POST",
+    "roles": [
+      "admin"
+    ],
+    "route": "/api/v1/admin/users/{user_id}/disable",
+    "source": "services/api/app/main.py:1195-1205"
+  },
+  "POST /api/v1/admin/users/{user_id}/revoke-sessions": {
+    "analysis": "function-ast-boundary",
+    "auth": "role-required",
+    "function": "admin_revoke_user_sessions",
+    "method": "POST",
+    "roles": [
+      "admin"
+    ],
+    "route": "/api/v1/admin/users/{user_id}/revoke-sessions",
+    "source": "services/api/app/main.py:1209-1219"
+  },
+  "POST /api/v1/auth/login": {
+    "analysis": "function-ast-boundary",
+    "auth": "public",
+    "function": "login",
+    "method": "POST",
+    "roles": [],
+    "route": "/api/v1/auth/login",
+    "source": "services/api/app/main.py:1112-1141"
+  },
+  "POST /api/v1/auth/logout": {
+    "analysis": "function-ast-boundary",
+    "auth": "public",
+    "function": "auth_logout",
+    "method": "POST",
+    "roles": [],
+    "route": "/api/v1/auth/logout",
+    "source": "services/api/app/main.py:1150-1157"
+  },
+  "POST /api/v1/buildings": {
+    "analysis": "function-ast-boundary",
+    "auth": "role-required",
+    "function": "create_building_endpoint",
+    "method": "POST",
+    "roles": [
+      "editor"
+    ],
+    "route": "/api/v1/buildings",
+    "source": "services/api/app/main.py:1428-1436"
+  },
+  "POST /api/v1/field/geotag-tasks/{submission_id}/evidence": {
+    "analysis": "function-ast-boundary",
+    "auth": "role-required",
+    "function": "record_field_geotag_task_evidence",
+    "method": "POST",
+    "roles": [
+      "editor"
+    ],
+    "route": "/api/v1/field/geotag-tasks/{submission_id}/evidence",
+    "source": "services/api/app/main.py:1542-1549"
+  },
+  "POST /api/v1/field/geotag-tasks/{submission_id}/status": {
+    "analysis": "function-ast-boundary",
+    "auth": "role-required",
+    "function": "update_field_geotag_task_status",
+    "method": "POST",
+    "roles": [
+      "editor"
+    ],
+    "route": "/api/v1/field/geotag-tasks/{submission_id}/status",
+    "source": "services/api/app/main.py:1531-1538"
+  },
+  "POST /api/v1/field/spatial-evidence/enrich": {
+    "analysis": "function-ast-boundary",
+    "auth": "role-required",
+    "function": "enrich_field_spatial_evidence_endpoint",
+    "method": "POST",
+    "roles": [
+      "editor"
+    ],
+    "route": "/api/v1/field/spatial-evidence/enrich",
+    "source": "services/api/app/main.py:1561-1568"
+  },
+  "POST /api/v1/field/submissions": {
+    "analysis": "function-ast-boundary",
+    "auth": "role-required",
+    "function": "create_field_submission_endpoint",
+    "method": "POST",
+    "roles": [
+      "editor"
+    ],
+    "route": "/api/v1/field/submissions",
+    "source": "services/api/app/main.py:1571-1579"
+  },
+  "POST /api/v1/field/submissions/{submission_id}/approve": {
+    "analysis": "function-ast-boundary",
+    "auth": "role-required",
+    "function": "approve_submission_endpoint",
+    "method": "POST",
+    "roles": [
+      "editor"
+    ],
+    "route": "/api/v1/field/submissions/{submission_id}/approve",
+    "source": "services/api/app/main.py:1705-1717"
+  },
+  "POST /api/v1/field/submissions/{submission_id}/evidence-files": {
+    "analysis": "function-ast-boundary",
+    "auth": "role-required",
+    "function": "upload_field_submission_evidence_file",
+    "method": "POST",
+    "roles": [
+      "editor"
+    ],
+    "route": "/api/v1/field/submissions/{submission_id}/evidence-files",
+    "source": "services/api/app/main.py:1614-1649"
+  },
+  "POST /api/v1/field/submissions/{submission_id}/evidence-review": {
+    "analysis": "function-ast-boundary",
+    "auth": "role-required",
+    "function": "review_field_submission_evidence_endpoint",
+    "method": "POST",
+    "roles": [
+      "editor"
+    ],
+    "route": "/api/v1/field/submissions/{submission_id}/evidence-review",
+    "source": "services/api/app/main.py:1663-1673"
+  },
+  "POST /api/v1/field/submissions/{submission_id}/reject": {
+    "analysis": "function-ast-boundary",
+    "auth": "role-required",
+    "function": "reject_submission_endpoint",
+    "method": "POST",
+    "roles": [
+      "editor"
+    ],
+    "route": "/api/v1/field/submissions/{submission_id}/reject",
+    "source": "services/api/app/main.py:1721-1728"
+  },
+  "POST /api/v1/field/submissions/{submission_id}/rework": {
+    "analysis": "function-ast-boundary",
+    "auth": "role-required",
+    "function": "rework_submission_endpoint",
+    "method": "POST",
+    "roles": [
+      "editor"
+    ],
+    "route": "/api/v1/field/submissions/{submission_id}/rework",
+    "source": "services/api/app/main.py:1732-1739"
+  },
+  "POST /api/v1/field/submissions/{submission_id}/under-review": {
+    "analysis": "function-ast-boundary",
+    "auth": "role-required",
+    "function": "mark_submission_under_review",
+    "method": "POST",
+    "roles": [
+      "editor"
+    ],
+    "route": "/api/v1/field/submissions/{submission_id}/under-review",
+    "source": "services/api/app/main.py:1694-1701"
+  },
+  "POST /api/v1/geotag-submissions/{submission_id}/duplicate-decision": {
+    "analysis": "function-ast-boundary",
+    "auth": "role-required",
+    "function": "geotag_duplicate_decision",
+    "method": "POST",
+    "roles": [
+      "editor"
+    ],
+    "route": "/api/v1/geotag-submissions/{submission_id}/duplicate-decision",
+    "source": "services/api/app/main.py:2096-2103"
+  },
+  "POST /api/v1/geotag-submissions/{submission_id}/field-check": {
+    "analysis": "function-ast-boundary",
+    "auth": "role-required",
+    "function": "send_geotag_to_field_check",
+    "method": "POST",
+    "roles": [
+      "editor"
+    ],
+    "route": "/api/v1/geotag-submissions/{submission_id}/field-check",
+    "source": "services/api/app/main.py:2037-2044"
+  },
+  "POST /api/v1/geotag-submissions/{submission_id}/identity": {
+    "analysis": "function-ast-boundary",
+    "auth": "role-required",
+    "function": "geotag_identity_review",
+    "method": "POST",
+    "roles": [
+      "editor"
+    ],
+    "route": "/api/v1/geotag-submissions/{submission_id}/identity",
+    "source": "services/api/app/main.py:2015-2022"
+  },
+  "POST /api/v1/geotag-submissions/{submission_id}/publication-simulation": {
+    "analysis": "function-ast-boundary",
+    "auth": "role-required",
+    "function": "simulate_geotag_publication",
+    "method": "POST",
+    "roles": [
+      "editor"
+    ],
+    "route": "/api/v1/geotag-submissions/{submission_id}/publication-simulation",
+    "source": "services/api/app/main.py:2061-2068"
+  },
+  "POST /api/v1/geotag-submissions/{submission_id}/publish": {
+    "analysis": "function-ast-boundary",
+    "auth": "role-required",
+    "function": "publish_geotag_case_file",
+    "method": "POST",
+    "roles": [
+      "admin"
+    ],
+    "route": "/api/v1/geotag-submissions/{submission_id}/publish",
+    "source": "services/api/app/main.py:2072-2081"
+  },
+  "POST /api/v1/geotag-submissions/{submission_id}/registry-ready": {
+    "analysis": "function-ast-boundary",
+    "auth": "role-required",
+    "function": "mark_geotag_registry_ready",
+    "method": "POST",
+    "roles": [
+      "editor"
+    ],
+    "route": "/api/v1/geotag-submissions/{submission_id}/registry-ready",
+    "source": "services/api/app/main.py:2048-2057"
+  },
+  "POST /api/v1/geotag-submissions/{submission_id}/reject": {
+    "analysis": "function-ast-boundary",
+    "auth": "role-required",
+    "function": "reject_geotag_submission",
+    "method": "POST",
+    "roles": [
+      "editor"
+    ],
+    "route": "/api/v1/geotag-submissions/{submission_id}/reject",
+    "source": "services/api/app/main.py:2085-2092"
+  },
+  "POST /api/v1/geotag-submissions/{submission_id}/road-suggestion": {
+    "analysis": "function-ast-boundary",
+    "auth": "role-required",
+    "function": "geotag_road_suggestion_review",
+    "method": "POST",
+    "roles": [
+      "editor"
+    ],
+    "route": "/api/v1/geotag-submissions/{submission_id}/road-suggestion",
+    "source": "services/api/app/main.py:2107-2114"
+  },
+  "POST /api/v1/geotag-submissions/{submission_id}/under-review": {
+    "analysis": "function-ast-boundary",
+    "auth": "role-required",
+    "function": "mark_geotag_under_review",
+    "method": "POST",
+    "roles": [
+      "editor"
+    ],
+    "route": "/api/v1/geotag-submissions/{submission_id}/under-review",
+    "source": "services/api/app/main.py:2026-2033"
+  },
+  "POST /api/v1/imports/jobs": {
+    "analysis": "function-ast-boundary",
+    "auth": "role-required",
+    "function": "create_import_job_endpoint",
+    "method": "POST",
+    "roles": [
+      "editor"
+    ],
+    "route": "/api/v1/imports/jobs",
+    "source": "services/api/app/main.py:2189-2197"
+  },
+  "POST /api/v1/imports/jobs/{job_id}/commit": {
+    "analysis": "function-ast-boundary",
+    "auth": "role-required",
+    "function": "commit_import_job_endpoint",
+    "method": "POST",
+    "roles": [
+      "editor"
+    ],
+    "route": "/api/v1/imports/jobs/{job_id}/commit",
+    "source": "services/api/app/main.py:2201-2209"
+  },
+  "POST /api/v1/operator/demo-fixtures/cleanup": {
+    "analysis": "function-ast-boundary",
+    "auth": "role-required",
+    "function": "operator_demo_fixture_cleanup",
+    "method": "POST",
+    "roles": [
+      "admin"
+    ],
+    "route": "/api/v1/operator/demo-fixtures/cleanup",
+    "source": "services/api/app/main.py:2368-2371"
+  },
+  "POST /api/v1/public/corrections": {
+    "analysis": "function-ast-boundary",
+    "auth": "public",
+    "function": "create_public_correction",
+    "method": "POST",
+    "roles": [],
+    "route": "/api/v1/public/corrections",
+    "source": "services/api/app/main.py:1817-1824"
+  },
+  "POST /api/v1/public/geotag-submissions": {
+    "analysis": "function-ast-boundary",
+    "auth": "public",
+    "function": "create_public_geotag_submission",
+    "method": "POST",
+    "roles": [],
+    "route": "/api/v1/public/geotag-submissions",
+    "source": "services/api/app/main.py:1843-1852"
+  },
+  "POST /api/v1/public/geotag/preview": {
+    "analysis": "function-ast-boundary",
+    "auth": "public",
+    "function": "public_geotag_preview",
+    "method": "POST",
+    "roles": [],
+    "route": "/api/v1/public/geotag/preview",
+    "source": "services/api/app/main.py:1828-1833"
+  },
+  "POST /api/v1/public/geotag/road-suggestion": {
+    "analysis": "function-ast-boundary",
+    "auth": "public",
+    "function": "public_road_suggestion",
+    "method": "POST",
+    "roles": [],
+    "route": "/api/v1/public/geotag/road-suggestion",
+    "source": "services/api/app/main.py:1837-1839"
+  },
+  "POST /api/v1/publication/packs": {
+    "analysis": "function-ast-boundary",
+    "auth": "role-required",
+    "function": "create_publication_pack_endpoint",
+    "method": "POST",
+    "roles": [
+      "editor"
+    ],
+    "route": "/api/v1/publication/packs",
+    "source": "services/api/app/main.py:2220-2230"
+  },
+  "POST /api/v1/publication/packs/{pack_id}/publish": {
+    "analysis": "function-ast-boundary",
+    "auth": "role-required",
+    "function": "publish_publication_pack_endpoint",
+    "method": "POST",
+    "roles": [
+      "admin"
+    ],
+    "route": "/api/v1/publication/packs/{pack_id}/publish",
+    "source": "services/api/app/main.py:2234-2242"
+  },
+  "POST /api/v1/roads": {
+    "analysis": "function-ast-boundary",
+    "auth": "role-required",
+    "function": "create_road_endpoint",
+    "method": "POST",
+    "roles": [
+      "editor"
+    ],
+    "route": "/api/v1/roads",
+    "source": "services/api/app/main.py:1376-1384"
+  },
+  "POST /api/v1/territories": {
+    "analysis": "function-ast-boundary",
+    "auth": "role-required",
+    "function": "create_territory_endpoint",
+    "method": "POST",
+    "roles": [
+      "editor"
+    ],
+    "route": "/api/v1/territories",
+    "source": "services/api/app/main.py:1316-1324"
+  }
+}

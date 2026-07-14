@@ -6,111 +6,111 @@ Generated from the actual FastAPI OpenAPI document plus source authorization cal
 
 | Method | Path | Operation | Auth policy | Roles | Statuses/errors | Policy source |
 |---|---|---|---|---|---|---|
-| GET | `/` | `root__get` | authenticated | admin | 200 | services/api/app/main.py:1091 |
-| GET | `/api/v1/address-corrections` | `address_corrections_api_v1_address_corrections_get` | authenticated | admin, editor, viewer | 200, 422 | services/api/app/main.py:2131 |
-| POST | `/api/v1/address-corrections/{correction_id}/reject` | `reject_address_correction_api_v1_address_corrections__correction_id__reject_post` | authenticated | admin, editor, viewer | 200, 422 | services/api/app/main.py:2160 |
-| POST | `/api/v1/address-corrections/{correction_id}/resolve` | `resolve_address_correction_api_v1_address_corrections__correction_id__resolve_post` | authenticated | admin, editor, viewer | 200, 422 | services/api/app/main.py:2149 |
-| POST | `/api/v1/address-corrections/{correction_id}/under-review` | `mark_address_correction_under_review_api_v1_address_corrections__correction_id__under_review_post` | authenticated | admin, editor, viewer | 200, 422 | services/api/app/main.py:2138 |
-| GET | `/api/v1/address-records/export` | `address_records_export_endpoint_api_v1_address_records_export_get` | authenticated | admin, editor, viewer | 200, 422 | services/api/app/main.py:1905 |
-| GET | `/api/v1/address-records/holds` | `address_record_holds_endpoint_api_v1_address_records_holds_get` | authenticated | admin, editor, viewer | 200, 422 | services/api/app/main.py:1930 |
-| GET | `/api/v1/address-records/nearby` | `address_records_nearby_endpoint_api_v1_address_records_nearby_get` | authenticated | admin, editor, viewer | 200, 422 | services/api/app/main.py:1912 |
-| GET | `/api/v1/address-records/search` | `address_record_search_api_v1_address_records_search_get` | authenticated | admin, editor, viewer | 200, 422 | services/api/app/main.py:1891 |
-| GET | `/api/v1/address-records/{address_code}` | `address_record_case_file_api_v1_address_records__address_code__get` | authenticated | admin, editor, viewer | 200, 422 | services/api/app/main.py:1943 |
-| GET | `/api/v1/address-records/{address_code}/certificate` | `address_record_certificate_endpoint_api_v1_address_records__address_code__certificate_get` | authenticated | admin, editor, viewer | 200, 422 | services/api/app/main.py:1953 |
-| GET | `/api/v1/addresses` | `list_addresses_api_v1_addresses_get` | authenticated | admin, editor, viewer | 200, 422 | services/api/app/main.py:1480 |
-| POST | `/api/v1/addresses` | `create_address_endpoint_api_v1_addresses_post` | authenticated | admin, editor, viewer | 201, 422 | services/api/app/main.py:1480 |
-| DELETE | `/api/v1/addresses/{address_id}` | `archive_address_endpoint_api_v1_addresses__address_id__delete` | authenticated | admin, editor, viewer | 200, 422 | services/api/app/main.py:1506 |
-| GET | `/api/v1/addresses/{address_id}` | `address_detail_api_v1_addresses__address_id__get` | authenticated | admin, editor, viewer | 200, 422 | services/api/app/main.py:1506 |
-| PATCH | `/api/v1/addresses/{address_id}` | `update_address_endpoint_api_v1_addresses__address_id__patch` | authenticated | admin, editor, viewer | 200, 422 | services/api/app/main.py:1506 |
-| GET | `/api/v1/admin-units` | `admin_units_api_v1_admin_units_get` | authenticated | admin, editor, viewer | 200, 422 | services/api/app/main.py:1233 |
-| GET | `/api/v1/admin/users` | `admin_list_users_api_v1_admin_users_get` | authenticated | admin | 200, 422 | services/api/app/main.py:1167 |
-| POST | `/api/v1/admin/users` | `admin_create_user_api_v1_admin_users_post` | authenticated | admin | 201, 422 | services/api/app/main.py:1167 |
-| PATCH | `/api/v1/admin/users/{user_id}` | `admin_update_user_api_v1_admin_users__user_id__patch` | authenticated | admin | 200, 422 | services/api/app/main.py:1179 |
-| POST | `/api/v1/admin/users/{user_id}/disable` | `admin_disable_user_api_v1_admin_users__user_id__disable_post` | authenticated | admin | 200, 422 | services/api/app/main.py:1194 |
-| POST | `/api/v1/admin/users/{user_id}/revoke-sessions` | `admin_revoke_user_sessions_api_v1_admin_users__user_id__revoke_sessions_post` | authenticated | admin | 200, 422 | services/api/app/main.py:1208 |
-| GET | `/api/v1/audit-logs` | `audit_logs_api_v1_audit_logs_get` | authenticated | admin, editor, viewer | 200, 422 | services/api/app/main.py:1351 |
-| POST | `/api/v1/auth/login` | `login_api_v1_auth_login_post` | authenticated | admin | 200, 422 | services/api/app/main.py:1111 |
-| POST | `/api/v1/auth/logout` | `auth_logout_api_v1_auth_logout_post` | authenticated | admin | 204, 422 | services/api/app/main.py:1149 |
-| GET | `/api/v1/auth/me` | `auth_me_api_v1_auth_me_get` | authenticated | admin | 200, 422 | services/api/app/main.py:1144 |
-| GET | `/api/v1/buildings` | `list_buildings_api_v1_buildings_get` | authenticated | admin, editor, viewer | 200, 422 | services/api/app/main.py:1427 |
-| POST | `/api/v1/buildings` | `create_building_endpoint_api_v1_buildings_post` | authenticated | admin, editor, viewer | 201, 422 | services/api/app/main.py:1427 |
-| DELETE | `/api/v1/buildings/{building_id}` | `archive_building_endpoint_api_v1_buildings__building_id__delete` | authenticated | admin, editor, viewer | 200, 422 | services/api/app/main.py:1453 |
-| GET | `/api/v1/buildings/{building_id}` | `building_detail_api_v1_buildings__building_id__get` | authenticated | admin, editor, viewer | 200, 422 | services/api/app/main.py:1453 |
-| PATCH | `/api/v1/buildings/{building_id}` | `update_building_endpoint_api_v1_buildings__building_id__patch` | authenticated | admin, editor, viewer | 200, 422 | services/api/app/main.py:1453 |
-| GET | `/api/v1/field/assignments` | `field_assignments_api_v1_field_assignments_get` | authenticated | admin, editor, viewer | 200, 422 | services/api/app/main.py:1516 |
-| GET | `/api/v1/field/geotag-tasks` | `field_geotag_tasks_api_v1_field_geotag_tasks_get` | authenticated | admin, editor, viewer | 200, 422 | services/api/app/main.py:1523 |
-| POST | `/api/v1/field/geotag-tasks/{submission_id}/evidence` | `record_field_geotag_task_evidence_api_v1_field_geotag_tasks__submission_id__evidence_post` | authenticated | admin, editor, viewer | 200, 422 | services/api/app/main.py:1541 |
-| POST | `/api/v1/field/geotag-tasks/{submission_id}/status` | `update_field_geotag_task_status_api_v1_field_geotag_tasks__submission_id__status_post` | authenticated | admin, editor, viewer | 200, 422 | services/api/app/main.py:1530 |
-| POST | `/api/v1/field/spatial-evidence/enrich` | `enrich_field_spatial_evidence_endpoint_api_v1_field_spatial_evidence_enrich_post` | authenticated | admin, editor | 200, 422 | services/api/app/main.py:1560 |
-| GET | `/api/v1/field/submissions` | `field_submissions_api_v1_field_submissions_get` | authenticated | admin, editor | 200, 422 | services/api/app/main.py:1570 |
-| POST | `/api/v1/field/submissions` | `create_field_submission_endpoint_api_v1_field_submissions_post` | authenticated | admin, editor | 201, 422 | services/api/app/main.py:1570 |
-| POST | `/api/v1/field/submissions/{submission_id}/approve` | `approve_submission_endpoint_api_v1_field_submissions__submission_id__approve_post` | authenticated | admin, editor | 200, 422 | services/api/app/main.py:1704 |
-| POST | `/api/v1/field/submissions/{submission_id}/evidence-files` | `upload_field_submission_evidence_file_api_v1_field_submissions__submission_id__evidence_files_post` | authenticated | admin, editor, viewer | 201, 422 | services/api/app/main.py:1613 |
-| GET | `/api/v1/field/submissions/{submission_id}/evidence-files/{file_id}` | `download_field_submission_evidence_file_api_v1_field_submissions__submission_id__evidence_files__file_id__get` | authenticated | admin, editor, viewer | 200, 422 | services/api/app/main.py:1676 |
-| GET | `/api/v1/field/submissions/{submission_id}/evidence-history` | `field_submission_evidence_history_api_v1_field_submissions__submission_id__evidence_history_get` | authenticated | admin, editor, viewer | 200, 422 | services/api/app/main.py:1652 |
-| POST | `/api/v1/field/submissions/{submission_id}/evidence-review` | `review_field_submission_evidence_endpoint_api_v1_field_submissions__submission_id__evidence_review_post` | authenticated | admin, editor, viewer | 200, 422 | services/api/app/main.py:1662 |
-| POST | `/api/v1/field/submissions/{submission_id}/reject` | `reject_submission_endpoint_api_v1_field_submissions__submission_id__reject_post` | authenticated | admin, editor | 200, 422 | services/api/app/main.py:1720 |
-| POST | `/api/v1/field/submissions/{submission_id}/rework` | `rework_submission_endpoint_api_v1_field_submissions__submission_id__rework_post` | authenticated | admin, editor | 200, 422 | services/api/app/main.py:1731 |
-| POST | `/api/v1/field/submissions/{submission_id}/under-review` | `mark_submission_under_review_api_v1_field_submissions__submission_id__under_review_post` | authenticated | admin, editor | 200, 422 | services/api/app/main.py:1693 |
-| GET | `/api/v1/geotag-submissions` | `geotag_submissions_api_v1_geotag_submissions_get` | authenticated | admin, editor, viewer | 200, 422 | services/api/app/main.py:1965 |
-| GET | `/api/v1/geotag-submissions/automation/sla-drilldown` | `geotag_sla_drilldown_api_v1_geotag_submissions_automation_sla_drilldown_get` | authenticated | admin, editor, viewer | 200, 422 | services/api/app/main.py:1980 |
-| GET | `/api/v1/geotag-submissions/automation/summary` | `geotag_automation_summary_api_v1_geotag_submissions_automation_summary_get` | authenticated | admin, editor, viewer | 200, 422 | services/api/app/main.py:1972 |
-| GET | `/api/v1/geotag-submissions/duplicates/summary` | `geotag_duplicates_summary_api_v1_geotag_submissions_duplicates_summary_get` | authenticated | admin, editor, viewer | 200, 422 | services/api/app/main.py:1988 |
-| GET | `/api/v1/geotag-submissions/{submission_id}/certificate` | `geotag_certificate_api_v1_geotag_submissions__submission_id__certificate_get` | authenticated | admin, editor, viewer | 200, 422 | services/api/app/main.py:1995 |
-| POST | `/api/v1/geotag-submissions/{submission_id}/duplicate-decision` | `geotag_duplicate_decision_api_v1_geotag_submissions__submission_id__duplicate_decision_post` | authenticated | admin, agency_viewer, editor, viewer | 200, 422 | services/api/app/main.py:2095 |
-| POST | `/api/v1/geotag-submissions/{submission_id}/field-check` | `send_geotag_to_field_check_api_v1_geotag_submissions__submission_id__field_check_post` | authenticated | admin, editor | 200, 422 | services/api/app/main.py:2036 |
-| GET | `/api/v1/geotag-submissions/{submission_id}/history` | `geotag_submission_history_api_v1_geotag_submissions__submission_id__history_get` | authenticated | admin, editor, viewer | 200, 422 | services/api/app/main.py:2007 |
-| POST | `/api/v1/geotag-submissions/{submission_id}/identity` | `geotag_identity_review_api_v1_geotag_submissions__submission_id__identity_post` | authenticated | admin, editor | 200, 422 | services/api/app/main.py:2014 |
-| POST | `/api/v1/geotag-submissions/{submission_id}/publication-simulation` | `simulate_geotag_publication_api_v1_geotag_submissions__submission_id__publication_simulation_post` | authenticated | admin, agency_viewer, editor, viewer | 200, 422 | services/api/app/main.py:2060 |
-| POST | `/api/v1/geotag-submissions/{submission_id}/publish` | `publish_geotag_case_file_api_v1_geotag_submissions__submission_id__publish_post` | authenticated | admin, agency_viewer, editor, viewer | 200, 422 | services/api/app/main.py:2071 |
-| POST | `/api/v1/geotag-submissions/{submission_id}/registry-ready` | `mark_geotag_registry_ready_api_v1_geotag_submissions__submission_id__registry_ready_post` | authenticated | admin, agency_viewer, editor, viewer | 200, 422 | services/api/app/main.py:2047 |
-| POST | `/api/v1/geotag-submissions/{submission_id}/reject` | `reject_geotag_submission_api_v1_geotag_submissions__submission_id__reject_post` | authenticated | admin, agency_viewer, editor, viewer | 200, 422 | services/api/app/main.py:2084 |
-| POST | `/api/v1/geotag-submissions/{submission_id}/road-suggestion` | `geotag_road_suggestion_review_api_v1_geotag_submissions__submission_id__road_suggestion_post` | authenticated | admin, agency_viewer, editor, viewer | 200, 422 | services/api/app/main.py:2106 |
-| POST | `/api/v1/geotag-submissions/{submission_id}/under-review` | `mark_geotag_under_review_api_v1_geotag_submissions__submission_id__under_review_post` | authenticated | admin, editor | 200, 422 | services/api/app/main.py:2025 |
-| GET | `/api/v1/health` | `health_api_v1_health_get` | authenticated | admin | 200 | services/api/app/main.py:1096 |
-| GET | `/api/v1/imports/jobs` | `import_jobs_api_v1_imports_jobs_get` | authenticated | admin, editor, viewer | 200, 422 | services/api/app/main.py:2188 |
-| POST | `/api/v1/imports/jobs` | `create_import_job_endpoint_api_v1_imports_jobs_post` | authenticated | admin, editor, viewer | 201, 422 | services/api/app/main.py:2188 |
-| POST | `/api/v1/imports/jobs/{job_id}/commit` | `commit_import_job_endpoint_api_v1_imports_jobs__job_id__commit_post` | authenticated | admin, editor, viewer | 200, 422 | services/api/app/main.py:2200 |
-| GET | `/api/v1/imports/jobs/{job_id}/rows` | `import_rows_api_v1_imports_jobs__job_id__rows_get` | authenticated | admin, editor, viewer | 200, 422 | services/api/app/main.py:2178 |
-| GET | `/api/v1/meta` | `meta_api_v1_meta_get` | authenticated | admin | 200 | services/api/app/main.py:1101 |
-| GET | `/api/v1/operator/command-center` | `operator_command_center_api_v1_operator_command_center_get` | authenticated | admin, editor, viewer | 200, 422 | services/api/app/main.py:2297 |
-| POST | `/api/v1/operator/demo-fixtures/cleanup` | `operator_demo_fixture_cleanup_api_v1_operator_demo_fixtures_cleanup_post` | authenticated | admin, agency_viewer, editor, viewer | 200, 422 | services/api/app/main.py:2367 |
-| GET | `/api/v1/operator/demo-fixtures/status` | `operator_demo_fixture_status_api_v1_operator_demo_fixtures_status_get` | authenticated | admin, agency_viewer, editor, viewer | 200, 422 | services/api/app/main.py:2360 |
-| GET | `/api/v1/operator/migrations/status` | `operator_migration_status_api_v1_operator_migrations_status_get` | authenticated | admin, agency_viewer, editor, viewer | 200, 422 | services/api/app/main.py:2346 |
-| GET | `/api/v1/operator/postgis/readiness` | `operator_postgis_readiness_api_v1_operator_postgis_readiness_get` | authenticated | admin, agency_viewer, editor, viewer | 200, 422 | services/api/app/main.py:2339 |
-| GET | `/api/v1/operator/production-readiness` | `operator_production_readiness_api_v1_operator_production_readiness_get` | authenticated | admin, agency_viewer, editor, viewer | 200, 422 | services/api/app/main.py:2353 |
-| GET | `/api/v1/operator/restore-drill/latest` | `operator_restore_drill_latest_api_v1_operator_restore_drill_latest_get` | authenticated | admin, agency_viewer, editor, viewer | 200, 422 | services/api/app/main.py:2374 |
-| GET | `/api/v1/pilot-readiness/summary` | `pilot_readiness_summary_endpoint_api_v1_pilot_readiness_summary_get` | authenticated | admin, agency_viewer, editor, viewer | 200, 422 | services/api/app/main.py:2403 |
-| GET | `/api/v1/provinces` | `list_public_provinces_api_v1_provinces_get` | authenticated | admin, editor, viewer | 200 | services/api/app/main.py:1228 |
-| GET | `/api/v1/public/address-code/{code}` | `public_address_code_lookup_api_v1_public_address_code__code__get` | public | — | 200, 422 | services/api/app/main.py:1785 |
-| GET | `/api/v1/public/address-code/{code}/record` | `public_address_code_record_api_v1_public_address_code__code__record_get` | public | — | 200, 422 | services/api/app/main.py:1810 |
-| POST | `/api/v1/public/corrections` | `create_public_correction_api_v1_public_corrections_post` | public | — | 201, 422 | services/api/app/main.py:1816 |
-| POST | `/api/v1/public/geotag-submissions` | `create_public_geotag_submission_api_v1_public_geotag_submissions_post` | authenticated | admin, editor, viewer | 201, 422 | services/api/app/main.py:1842 |
-| GET | `/api/v1/public/geotag-submissions/{submission_id}/tracking` | `public_geotag_submission_tracking_api_v1_public_geotag_submissions__submission_id__tracking_get` | authenticated | admin, editor, viewer | 200, 422 | services/api/app/main.py:1855 |
-| POST | `/api/v1/public/geotag/preview` | `public_geotag_preview_api_v1_public_geotag_preview_post` | authenticated | admin, editor, viewer | 200, 422 | services/api/app/main.py:1827 |
-| POST | `/api/v1/public/geotag/road-suggestion` | `public_road_suggestion_api_v1_public_geotag_road_suggestion_post` | authenticated | admin, editor, viewer | 200, 422 | services/api/app/main.py:1836 |
-| GET | `/api/v1/public/issuance/{query}` | `public_issuance_lookup_api_v1_public_issuance__query__get` | public | — | 200, 422 | services/api/app/main.py:1779 |
-| GET | `/api/v1/public/territory-options` | `public_territory_options_api_v1_public_territory_options_get` | authenticated | admin, editor, viewer | 200, 422 | services/api/app/main.py:1280 |
-| GET | `/api/v1/public/tracking/{lookup_code}` | `public_tracking_lookup_api_v1_public_tracking__lookup_code__get` | authenticated | admin, editor, viewer | 200, 422 | services/api/app/main.py:1864 |
-| GET | `/api/v1/public/verification/{query}` | `public_verification_lookup_api_v1_public_verification__query__get` | public | — | 200, 422 | services/api/app/main.py:1773 |
-| GET | `/api/v1/publication/packs` | `publication_packs_api_v1_publication_packs_get` | authenticated | admin, editor | 200, 422 | services/api/app/main.py:2219 |
-| POST | `/api/v1/publication/packs` | `create_publication_pack_endpoint_api_v1_publication_packs_post` | authenticated | admin, editor | 201, 422 | services/api/app/main.py:2219 |
-| POST | `/api/v1/publication/packs/{pack_id}/publish` | `publish_publication_pack_endpoint_api_v1_publication_packs__pack_id__publish_post` | authenticated | admin, editor, viewer | 200, 422 | services/api/app/main.py:2233 |
-| GET | `/api/v1/reporting/summary` | `reporting_summary_endpoint_api_v1_reporting_summary_get` | authenticated | admin, agency_viewer, editor, viewer | 200, 422 | services/api/app/main.py:2381 |
-| GET | `/api/v1/roads` | `list_roads_api_v1_roads_get` | authenticated | admin, editor, viewer | 200, 422 | services/api/app/main.py:1375 |
-| POST | `/api/v1/roads` | `create_road_endpoint_api_v1_roads_post` | authenticated | admin, editor, viewer | 201, 422 | services/api/app/main.py:1375 |
-| DELETE | `/api/v1/roads/{road_id}` | `archive_road_endpoint_api_v1_roads__road_id__delete` | authenticated | admin, editor, viewer | 200, 422 | services/api/app/main.py:1400 |
-| GET | `/api/v1/roads/{road_id}` | `road_detail_api_v1_roads__road_id__get` | authenticated | admin, editor, viewer | 200, 422 | services/api/app/main.py:1400 |
-| PATCH | `/api/v1/roads/{road_id}` | `update_road_endpoint_api_v1_roads__road_id__patch` | authenticated | admin, editor, viewer | 200, 422 | services/api/app/main.py:1400 |
-| GET | `/api/v1/signage/export` | `signage_export_endpoint_api_v1_signage_export_get` | authenticated | admin, agency_viewer, editor, viewer | 200, 422 | services/api/app/main.py:2117 |
-| GET | `/api/v1/signage/pack` | `signage_pack_endpoint_api_v1_signage_pack_get` | authenticated | admin, editor, viewer | 200, 422 | services/api/app/main.py:2124 |
-| GET | `/api/v1/territories` | `list_territories_api_v1_territories_get` | authenticated | admin, editor, viewer | 200, 422 | services/api/app/main.py:1315 |
-| POST | `/api/v1/territories` | `create_territory_endpoint_api_v1_territories_post` | authenticated | admin, editor, viewer | 201, 422 | services/api/app/main.py:1315 |
-| GET | `/api/v1/territories/provinces` | `list_provinces_api_v1_territories_provinces_get` | authenticated | admin, editor, viewer | 200 | services/api/app/main.py:1223 |
-| DELETE | `/api/v1/territories/{territory_id}` | `archive_territory_endpoint_api_v1_territories__territory_id__delete` | authenticated | admin, editor, viewer | 200, 422 | services/api/app/main.py:1341 |
-| GET | `/api/v1/territories/{territory_id}` | `territory_detail_api_v1_territories__territory_id__get` | authenticated | admin, editor, viewer | 200, 422 | services/api/app/main.py:1341 |
-| PATCH | `/api/v1/territories/{territory_id}` | `update_territory_endpoint_api_v1_territories__territory_id__patch` | authenticated | admin, editor, viewer | 200, 422 | services/api/app/main.py:1341 |
-| GET | `/api/v1/verification/lookup` | `verification_lookup_api_v1_verification_lookup_get` | public | — | 200, 422 | services/api/app/main.py:1756 |
+| GET | `/` | `root__get` | public | — | 200 | services/api/app/main.py:1092-1093 |
+| GET | `/api/v1/address-corrections` | `address_corrections_api_v1_address_corrections_get` | role-required | editor | 200, 422 | services/api/app/main.py:2132-2135 |
+| POST | `/api/v1/address-corrections/{correction_id}/reject` | `reject_address_correction_api_v1_address_corrections__correction_id__reject_post` | role-required | editor | 200, 422 | services/api/app/main.py:2161-2168 |
+| POST | `/api/v1/address-corrections/{correction_id}/resolve` | `resolve_address_correction_api_v1_address_corrections__correction_id__resolve_post` | role-required | editor | 200, 422 | services/api/app/main.py:2150-2157 |
+| POST | `/api/v1/address-corrections/{correction_id}/under-review` | `mark_address_correction_under_review_api_v1_address_corrections__correction_id__under_review_post` | role-required | editor | 200, 422 | services/api/app/main.py:2139-2146 |
+| GET | `/api/v1/address-records/export` | `address_records_export_endpoint_api_v1_address_records_export_get` | role-required | viewer | 200, 422 | services/api/app/main.py:1906-1909 |
+| GET | `/api/v1/address-records/holds` | `address_record_holds_endpoint_api_v1_address_records_holds_get` | role-required | viewer | 200, 422 | services/api/app/main.py:1931-1940 |
+| GET | `/api/v1/address-records/nearby` | `address_records_nearby_endpoint_api_v1_address_records_nearby_get` | role-required | viewer | 200, 422 | services/api/app/main.py:1913-1927 |
+| GET | `/api/v1/address-records/search` | `address_record_search_api_v1_address_records_search_get` | role-required | viewer | 200, 422 | services/api/app/main.py:1892-1901 |
+| GET | `/api/v1/address-records/{address_code}` | `address_record_case_file_api_v1_address_records__address_code__get` | role-required | viewer | 200, 422 | services/api/app/main.py:1944-1950 |
+| GET | `/api/v1/address-records/{address_code}/certificate` | `address_record_certificate_endpoint_api_v1_address_records__address_code__certificate_get` | role-required | viewer | 200, 422 | services/api/app/main.py:1954-1962 |
+| GET | `/api/v1/addresses` | `list_addresses_api_v1_addresses_get` | role-required | editor | 200, 422 | services/api/app/main.py:1481-1489 |
+| POST | `/api/v1/addresses` | `create_address_endpoint_api_v1_addresses_post` | role-required | editor | 201, 422 | services/api/app/main.py:1481-1489 |
+| DELETE | `/api/v1/addresses/{address_id}` | `archive_address_endpoint_api_v1_addresses__address_id__delete` | role-required | admin | 200, 422 | services/api/app/main.py:1507-1513 |
+| GET | `/api/v1/addresses/{address_id}` | `address_detail_api_v1_addresses__address_id__get` | role-required | admin | 200, 422 | services/api/app/main.py:1507-1513 |
+| PATCH | `/api/v1/addresses/{address_id}` | `update_address_endpoint_api_v1_addresses__address_id__patch` | role-required | admin | 200, 422 | services/api/app/main.py:1507-1513 |
+| GET | `/api/v1/admin-units` | `admin_units_api_v1_admin_units_get` | public | — | 200, 422 | services/api/app/main.py:1234-1239 |
+| GET | `/api/v1/admin/users` | `admin_list_users_api_v1_admin_users_get` | role-required | admin | 200, 422 | services/api/app/main.py:1168-1176 |
+| POST | `/api/v1/admin/users` | `admin_create_user_api_v1_admin_users_post` | role-required | admin | 201, 422 | services/api/app/main.py:1168-1176 |
+| PATCH | `/api/v1/admin/users/{user_id}` | `admin_update_user_api_v1_admin_users__user_id__patch` | role-required | admin | 200, 422 | services/api/app/main.py:1180-1191 |
+| POST | `/api/v1/admin/users/{user_id}/disable` | `admin_disable_user_api_v1_admin_users__user_id__disable_post` | role-required | admin | 200, 422 | services/api/app/main.py:1195-1205 |
+| POST | `/api/v1/admin/users/{user_id}/revoke-sessions` | `admin_revoke_user_sessions_api_v1_admin_users__user_id__revoke_sessions_post` | role-required | admin | 200, 422 | services/api/app/main.py:1209-1219 |
+| GET | `/api/v1/audit-logs` | `audit_logs_api_v1_audit_logs_get` | role-required | admin | 200, 422 | services/api/app/main.py:1352-1355 |
+| POST | `/api/v1/auth/login` | `login_api_v1_auth_login_post` | public | — | 200, 422 | services/api/app/main.py:1112-1141 |
+| POST | `/api/v1/auth/logout` | `auth_logout_api_v1_auth_logout_post` | public | — | 204, 422 | services/api/app/main.py:1150-1157 |
+| GET | `/api/v1/auth/me` | `auth_me_api_v1_auth_me_get` | authenticated | — | 200, 422 | services/api/app/main.py:1145-1146 |
+| GET | `/api/v1/buildings` | `list_buildings_api_v1_buildings_get` | role-required | editor | 200, 422 | services/api/app/main.py:1428-1436 |
+| POST | `/api/v1/buildings` | `create_building_endpoint_api_v1_buildings_post` | role-required | editor | 201, 422 | services/api/app/main.py:1428-1436 |
+| DELETE | `/api/v1/buildings/{building_id}` | `archive_building_endpoint_api_v1_buildings__building_id__delete` | role-required | admin | 200, 422 | services/api/app/main.py:1454-1460 |
+| GET | `/api/v1/buildings/{building_id}` | `building_detail_api_v1_buildings__building_id__get` | role-required | admin | 200, 422 | services/api/app/main.py:1454-1460 |
+| PATCH | `/api/v1/buildings/{building_id}` | `update_building_endpoint_api_v1_buildings__building_id__patch` | role-required | admin | 200, 422 | services/api/app/main.py:1454-1460 |
+| GET | `/api/v1/field/assignments` | `field_assignments_api_v1_field_assignments_get` | role-required | viewer | 200, 422 | services/api/app/main.py:1517-1520 |
+| GET | `/api/v1/field/geotag-tasks` | `field_geotag_tasks_api_v1_field_geotag_tasks_get` | role-required | viewer | 200, 422 | services/api/app/main.py:1524-1527 |
+| POST | `/api/v1/field/geotag-tasks/{submission_id}/evidence` | `record_field_geotag_task_evidence_api_v1_field_geotag_tasks__submission_id__evidence_post` | role-required | editor | 200, 422 | services/api/app/main.py:1542-1549 |
+| POST | `/api/v1/field/geotag-tasks/{submission_id}/status` | `update_field_geotag_task_status_api_v1_field_geotag_tasks__submission_id__status_post` | role-required | editor | 200, 422 | services/api/app/main.py:1531-1538 |
+| POST | `/api/v1/field/spatial-evidence/enrich` | `enrich_field_spatial_evidence_endpoint_api_v1_field_spatial_evidence_enrich_post` | role-required | editor | 200, 422 | services/api/app/main.py:1561-1568 |
+| GET | `/api/v1/field/submissions` | `field_submissions_api_v1_field_submissions_get` | role-required | editor | 200, 422 | services/api/app/main.py:1571-1579 |
+| POST | `/api/v1/field/submissions` | `create_field_submission_endpoint_api_v1_field_submissions_post` | role-required | editor | 201, 422 | services/api/app/main.py:1571-1579 |
+| POST | `/api/v1/field/submissions/{submission_id}/approve` | `approve_submission_endpoint_api_v1_field_submissions__submission_id__approve_post` | role-required | editor | 200, 422 | services/api/app/main.py:1705-1717 |
+| POST | `/api/v1/field/submissions/{submission_id}/evidence-files` | `upload_field_submission_evidence_file_api_v1_field_submissions__submission_id__evidence_files_post` | role-required | editor | 201, 422 | services/api/app/main.py:1614-1649 |
+| GET | `/api/v1/field/submissions/{submission_id}/evidence-files/{file_id}` | `download_field_submission_evidence_file_api_v1_field_submissions__submission_id__evidence_files__file_id__get` | role-required | viewer | 200, 422 | services/api/app/main.py:1677-1690 |
+| GET | `/api/v1/field/submissions/{submission_id}/evidence-history` | `field_submission_evidence_history_api_v1_field_submissions__submission_id__evidence_history_get` | role-required | viewer | 200, 422 | services/api/app/main.py:1653-1659 |
+| POST | `/api/v1/field/submissions/{submission_id}/evidence-review` | `review_field_submission_evidence_endpoint_api_v1_field_submissions__submission_id__evidence_review_post` | role-required | editor | 200, 422 | services/api/app/main.py:1663-1673 |
+| POST | `/api/v1/field/submissions/{submission_id}/reject` | `reject_submission_endpoint_api_v1_field_submissions__submission_id__reject_post` | role-required | editor | 200, 422 | services/api/app/main.py:1721-1728 |
+| POST | `/api/v1/field/submissions/{submission_id}/rework` | `rework_submission_endpoint_api_v1_field_submissions__submission_id__rework_post` | role-required | editor | 200, 422 | services/api/app/main.py:1732-1739 |
+| POST | `/api/v1/field/submissions/{submission_id}/under-review` | `mark_submission_under_review_api_v1_field_submissions__submission_id__under_review_post` | role-required | editor | 200, 422 | services/api/app/main.py:1694-1701 |
+| GET | `/api/v1/geotag-submissions` | `geotag_submissions_api_v1_geotag_submissions_get` | role-required | viewer | 200, 422 | services/api/app/main.py:1966-1969 |
+| GET | `/api/v1/geotag-submissions/automation/sla-drilldown` | `geotag_sla_drilldown_api_v1_geotag_submissions_automation_sla_drilldown_get` | role-required | viewer | 200, 422 | services/api/app/main.py:1981-1985 |
+| GET | `/api/v1/geotag-submissions/automation/summary` | `geotag_automation_summary_api_v1_geotag_submissions_automation_summary_get` | role-required | viewer | 200, 422 | services/api/app/main.py:1973-1977 |
+| GET | `/api/v1/geotag-submissions/duplicates/summary` | `geotag_duplicates_summary_api_v1_geotag_submissions_duplicates_summary_get` | role-required | viewer | 200, 422 | services/api/app/main.py:1989-1992 |
+| GET | `/api/v1/geotag-submissions/{submission_id}/certificate` | `geotag_certificate_api_v1_geotag_submissions__submission_id__certificate_get` | role-required | viewer | 200, 422 | services/api/app/main.py:1996-2004 |
+| POST | `/api/v1/geotag-submissions/{submission_id}/duplicate-decision` | `geotag_duplicate_decision_api_v1_geotag_submissions__submission_id__duplicate_decision_post` | role-required | editor | 200, 422 | services/api/app/main.py:2096-2103 |
+| POST | `/api/v1/geotag-submissions/{submission_id}/field-check` | `send_geotag_to_field_check_api_v1_geotag_submissions__submission_id__field_check_post` | role-required | editor | 200, 422 | services/api/app/main.py:2037-2044 |
+| GET | `/api/v1/geotag-submissions/{submission_id}/history` | `geotag_submission_history_api_v1_geotag_submissions__submission_id__history_get` | role-required | viewer | 200, 422 | services/api/app/main.py:2008-2011 |
+| POST | `/api/v1/geotag-submissions/{submission_id}/identity` | `geotag_identity_review_api_v1_geotag_submissions__submission_id__identity_post` | role-required | editor | 200, 422 | services/api/app/main.py:2015-2022 |
+| POST | `/api/v1/geotag-submissions/{submission_id}/publication-simulation` | `simulate_geotag_publication_api_v1_geotag_submissions__submission_id__publication_simulation_post` | role-required | editor | 200, 422 | services/api/app/main.py:2061-2068 |
+| POST | `/api/v1/geotag-submissions/{submission_id}/publish` | `publish_geotag_case_file_api_v1_geotag_submissions__submission_id__publish_post` | role-required | admin | 200, 422 | services/api/app/main.py:2072-2081 |
+| POST | `/api/v1/geotag-submissions/{submission_id}/registry-ready` | `mark_geotag_registry_ready_api_v1_geotag_submissions__submission_id__registry_ready_post` | role-required | editor | 200, 422 | services/api/app/main.py:2048-2057 |
+| POST | `/api/v1/geotag-submissions/{submission_id}/reject` | `reject_geotag_submission_api_v1_geotag_submissions__submission_id__reject_post` | role-required | editor | 200, 422 | services/api/app/main.py:2085-2092 |
+| POST | `/api/v1/geotag-submissions/{submission_id}/road-suggestion` | `geotag_road_suggestion_review_api_v1_geotag_submissions__submission_id__road_suggestion_post` | role-required | editor | 200, 422 | services/api/app/main.py:2107-2114 |
+| POST | `/api/v1/geotag-submissions/{submission_id}/under-review` | `mark_geotag_under_review_api_v1_geotag_submissions__submission_id__under_review_post` | role-required | editor | 200, 422 | services/api/app/main.py:2026-2033 |
+| GET | `/api/v1/health` | `health_api_v1_health_get` | public | — | 200 | services/api/app/main.py:1097-1098 |
+| GET | `/api/v1/imports/jobs` | `import_jobs_api_v1_imports_jobs_get` | role-required | editor | 200, 422 | services/api/app/main.py:2189-2197 |
+| POST | `/api/v1/imports/jobs` | `create_import_job_endpoint_api_v1_imports_jobs_post` | role-required | editor | 201, 422 | services/api/app/main.py:2189-2197 |
+| POST | `/api/v1/imports/jobs/{job_id}/commit` | `commit_import_job_endpoint_api_v1_imports_jobs__job_id__commit_post` | role-required | editor | 200, 422 | services/api/app/main.py:2201-2209 |
+| GET | `/api/v1/imports/jobs/{job_id}/rows` | `import_rows_api_v1_imports_jobs__job_id__rows_get` | role-required | viewer | 200, 422 | services/api/app/main.py:2179-2185 |
+| GET | `/api/v1/meta` | `meta_api_v1_meta_get` | public | — | 200 | services/api/app/main.py:1102-1108 |
+| GET | `/api/v1/operator/command-center` | `operator_command_center_api_v1_operator_command_center_get` | role-required | viewer | 200, 422 | services/api/app/main.py:2298-2335 |
+| POST | `/api/v1/operator/demo-fixtures/cleanup` | `operator_demo_fixture_cleanup_api_v1_operator_demo_fixtures_cleanup_post` | role-required | admin | 200, 422 | services/api/app/main.py:2368-2371 |
+| GET | `/api/v1/operator/demo-fixtures/status` | `operator_demo_fixture_status_api_v1_operator_demo_fixtures_status_get` | role-required | viewer | 200, 422 | services/api/app/main.py:2361-2364 |
+| GET | `/api/v1/operator/migrations/status` | `operator_migration_status_api_v1_operator_migrations_status_get` | role-required | viewer | 200, 422 | services/api/app/main.py:2347-2350 |
+| GET | `/api/v1/operator/postgis/readiness` | `operator_postgis_readiness_api_v1_operator_postgis_readiness_get` | role-required | viewer | 200, 422 | services/api/app/main.py:2340-2343 |
+| GET | `/api/v1/operator/production-readiness` | `operator_production_readiness_api_v1_operator_production_readiness_get` | role-required | viewer | 200, 422 | services/api/app/main.py:2354-2357 |
+| GET | `/api/v1/operator/restore-drill/latest` | `operator_restore_drill_latest_api_v1_operator_restore_drill_latest_get` | role-required | viewer | 200, 422 | services/api/app/main.py:2375-2378 |
+| GET | `/api/v1/pilot-readiness/summary` | `pilot_readiness_summary_endpoint_api_v1_pilot_readiness_summary_get` | role-required | viewer | 200, 422 | services/api/app/main.py:2404-2407 |
+| GET | `/api/v1/provinces` | `list_public_provinces_api_v1_provinces_get` | public | — | 200 | services/api/app/main.py:1229-1230 |
+| GET | `/api/v1/public/address-code/{code}` | `public_address_code_lookup_api_v1_public_address_code__code__get` | public | — | 200, 422 | services/api/app/main.py:1786-1788 |
+| GET | `/api/v1/public/address-code/{code}/record` | `public_address_code_record_api_v1_public_address_code__code__record_get` | public | — | 200, 422 | services/api/app/main.py:1811-1813 |
+| POST | `/api/v1/public/corrections` | `create_public_correction_api_v1_public_corrections_post` | public | — | 201, 422 | services/api/app/main.py:1817-1824 |
+| POST | `/api/v1/public/geotag-submissions` | `create_public_geotag_submission_api_v1_public_geotag_submissions_post` | public | — | 201, 422 | services/api/app/main.py:1843-1852 |
+| GET | `/api/v1/public/geotag-submissions/{submission_id}/tracking` | `public_geotag_submission_tracking_api_v1_public_geotag_submissions__submission_id__tracking_get` | public | — | 200, 422 | services/api/app/main.py:1856-1861 |
+| POST | `/api/v1/public/geotag/preview` | `public_geotag_preview_api_v1_public_geotag_preview_post` | public | — | 200, 422 | services/api/app/main.py:1828-1833 |
+| POST | `/api/v1/public/geotag/road-suggestion` | `public_road_suggestion_api_v1_public_geotag_road_suggestion_post` | public | — | 200, 422 | services/api/app/main.py:1837-1839 |
+| GET | `/api/v1/public/issuance/{query}` | `public_issuance_lookup_api_v1_public_issuance__query__get` | public | — | 200, 422 | services/api/app/main.py:1780-1782 |
+| GET | `/api/v1/public/territory-options` | `public_territory_options_api_v1_public_territory_options_get` | public | — | 200, 422 | services/api/app/main.py:1281-1287 |
+| GET | `/api/v1/public/tracking/{lookup_code}` | `public_tracking_lookup_api_v1_public_tracking__lookup_code__get` | public | — | 200, 422 | services/api/app/main.py:1865-1888 |
+| GET | `/api/v1/public/verification/{query}` | `public_verification_lookup_api_v1_public_verification__query__get` | public | — | 200, 422 | services/api/app/main.py:1774-1776 |
+| GET | `/api/v1/publication/packs` | `publication_packs_api_v1_publication_packs_get` | role-required | editor | 200, 422 | services/api/app/main.py:2220-2230 |
+| POST | `/api/v1/publication/packs` | `create_publication_pack_endpoint_api_v1_publication_packs_post` | role-required | editor | 201, 422 | services/api/app/main.py:2220-2230 |
+| POST | `/api/v1/publication/packs/{pack_id}/publish` | `publish_publication_pack_endpoint_api_v1_publication_packs__pack_id__publish_post` | role-required | admin | 200, 422 | services/api/app/main.py:2234-2242 |
+| GET | `/api/v1/reporting/summary` | `reporting_summary_endpoint_api_v1_reporting_summary_get` | role-required | viewer | 200, 422 | services/api/app/main.py:2382-2400 |
+| GET | `/api/v1/roads` | `list_roads_api_v1_roads_get` | role-required | editor | 200, 422 | services/api/app/main.py:1376-1384 |
+| POST | `/api/v1/roads` | `create_road_endpoint_api_v1_roads_post` | role-required | editor | 201, 422 | services/api/app/main.py:1376-1384 |
+| DELETE | `/api/v1/roads/{road_id}` | `archive_road_endpoint_api_v1_roads__road_id__delete` | role-required | admin | 200, 422 | services/api/app/main.py:1401-1407 |
+| GET | `/api/v1/roads/{road_id}` | `road_detail_api_v1_roads__road_id__get` | role-required | admin | 200, 422 | services/api/app/main.py:1401-1407 |
+| PATCH | `/api/v1/roads/{road_id}` | `update_road_endpoint_api_v1_roads__road_id__patch` | role-required | admin | 200, 422 | services/api/app/main.py:1401-1407 |
+| GET | `/api/v1/signage/export` | `signage_export_endpoint_api_v1_signage_export_get` | role-required | viewer | 200, 422 | services/api/app/main.py:2118-2121 |
+| GET | `/api/v1/signage/pack` | `signage_pack_endpoint_api_v1_signage_pack_get` | role-required | viewer | 200, 422 | services/api/app/main.py:2125-2128 |
+| GET | `/api/v1/territories` | `list_territories_api_v1_territories_get` | role-required | editor | 200, 422 | services/api/app/main.py:1316-1324 |
+| POST | `/api/v1/territories` | `create_territory_endpoint_api_v1_territories_post` | role-required | editor | 201, 422 | services/api/app/main.py:1316-1324 |
+| GET | `/api/v1/territories/provinces` | `list_provinces_api_v1_territories_provinces_get` | public | — | 200 | services/api/app/main.py:1224-1225 |
+| DELETE | `/api/v1/territories/{territory_id}` | `archive_territory_endpoint_api_v1_territories__territory_id__delete` | role-required | admin | 200, 422 | services/api/app/main.py:1342-1348 |
+| GET | `/api/v1/territories/{territory_id}` | `territory_detail_api_v1_territories__territory_id__get` | role-required | admin | 200, 422 | services/api/app/main.py:1342-1348 |
+| PATCH | `/api/v1/territories/{territory_id}` | `update_territory_endpoint_api_v1_territories__territory_id__patch` | role-required | admin | 200, 422 | services/api/app/main.py:1342-1348 |
+| GET | `/api/v1/verification/lookup` | `verification_lookup_api_v1_verification_lookup_get` | public | — | 200, 422 | services/api/app/main.py:1757-1770 |
 
 ## Request/response field projection inventory
 
