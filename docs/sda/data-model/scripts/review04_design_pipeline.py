@@ -1335,12 +1335,16 @@ def update_review_log(fixing: str = FIXING_COMMIT_PLACEHOLDER) -> None:
     rows = [f"| F{i:02d} | Resolved for SDA Review 05: {evidence[i]}. | `{fixing}`; artifacts: `transformation-registry-reviewed.json`, `lifecycle-transitions.json`, `openapi-expected-route-policies.json`, `target-schema-validation-report.md`, `design-consistency-report.md`, and controlled PR evidence. Final workflow/job IDs stamped after green exact-head CI. | READY FOR SDA REVIEW | {DATE} |" for i in range(2, 13)]
     block = "\n".join(rows)
     pattern = r"\| F02 \|[^\n]+\|\n\| F03 \|[^\n]+\|\n\| F04 \|[^\n]+\|\n\| F05 \|[^\n]+\|\n\| F06 \|[^\n]+\|\n\| F07 \|[^\n]+\|\n\| F08 \|[^\n]+\|\n\| F09 \|[^\n]+\|\n\| F10 \|[^\n]+\|\n\| F11 \|[^\n]+\|\n\| F12 \|[^\n]+\|"
-    updated = re.sub(pattern, block, text)
-    if updated == text:
-        if all(f"| F{i:02d} | Resolved for SDA Review 05:" in text for i in range(2, 13)):
+    section = "## 9. Review 04 resolution log"
+    if section not in text:
+        raise SystemExit("Review 04 resolution log section missing")
+    before, tail = text.split(section, 1)
+    updated_tail = re.sub(pattern, block, tail)
+    if updated_tail == tail:
+        if all(f"| F{i:02d} | Resolved for SDA Review 05:" in tail for i in range(2, 13)):
             return
         raise SystemExit("Review 04 resolution log rows F02-F12 were not replaced")
-    REVIEW.write_text(updated, encoding="utf-8")
+    REVIEW.write_text(before + section + updated_tail, encoding="utf-8")
 
 
 def final_semantic_checks(cat: dict[str, Any], ops: dict[str, Any], registry: list[dict[str, Any]], model: dict[str, Any], target_report: dict[str, Any]) -> dict[str, Any]:
