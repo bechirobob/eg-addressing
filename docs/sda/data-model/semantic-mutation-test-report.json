@@ -1,0 +1,50 @@
+{
+  "results": [
+    {
+      "evidence": "legacy crosswalk final FK regression detected",
+      "mutation": "incorrect-transformation-final-fk-output",
+      "status": "passed"
+    },
+    {
+      "evidence": "required trigger removal detected",
+      "mutation": "missing-required-semantic-trigger",
+      "status": "passed"
+    },
+    {
+      "evidence": "non-reviewed route policy source detected",
+      "mutation": "wrong-route-policy-source",
+      "status": "passed"
+    },
+    {
+      "evidence": "authorization business-data migration detected",
+      "mutation": "credential-projection-business-archive",
+      "status": "passed"
+    },
+    {
+      "evidence": "missing second canonical unit detected",
+      "mutation": "invalid-multi-unit-scenario",
+      "status": "passed"
+    },
+    {
+      "evidence": "missing reciprocal temporal chain detected",
+      "mutation": "temporal-chain-reciprocity-break",
+      "status": "passed"
+    },
+    {
+      "evidence": "negative harness regression absence detected",
+      "mutation": "unexpected-negative-operation-success",
+      "status": "passed"
+    },
+    {
+      "evidence": "geometry permission binding removal detected",
+      "mutation": "geometry-permission-binding-removed",
+      "status": "passed"
+    }
+  ],
+  "summary": {
+    "caught": 8,
+    "failed": 0,
+    "mutations": 8,
+    "status": "passed"
+  }
+}

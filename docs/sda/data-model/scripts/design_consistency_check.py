@@ -64,6 +64,7 @@ route_policies = load_json("docs/sda/data-model/openapi-expected-route-policies.
 reviewed_route_policies = load_json("docs/sda/data-model/openapi-reviewed-route-policies.json")
 projection_contracts = load_json("docs/sda/data-model/openapi-reviewed-projection-contracts.json")
 api_projection_assertions = load_json("docs/sda/data-model/openapi-policy-projection-assertions.json")
+semantic_mutation_report = load_json("docs/sda/data-model/semantic-mutation-test-report.json")
 adr_matrix_text = read("docs/sda/data-model/adr-005-009-evidence-matrix.md")
 target_catalog = load_json("docs/sda/data-model/target-schema-catalog.json")
 fixtures = load_json("docs/sda/data-model/representative-records/machine-readable-fixtures.json")
@@ -485,6 +486,13 @@ if "lifecycle_transition_policy" not in catalog_tables_seen:
     err("target schema does not include executable lifecycle_transition_policy table")
 
 # ADR Review 07 reconciliation must cite named assertions, not aggregate-only evidence.
+mutation_summary = semantic_mutation_report.get("summary", {}) if isinstance(semantic_mutation_report, dict) else {}
+gate("F12-semantic-mutation-suite-passed", "F12", mutation_summary.get("status") == "passed" and mutation_summary.get("mutations", 0) >= 8 and mutation_summary.get("failed") == 0, "semantic mutation suite must catch all required defect classes", "docs/sda/data-model/semantic-mutation-test-report.json")
+mutation_names = {r.get("mutation") for r in semantic_mutation_report.get("results", [])} if isinstance(semantic_mutation_report, dict) else set()
+for required_mutation in ["incorrect-transformation-final-fk-output", "missing-required-semantic-trigger", "wrong-route-policy-source", "credential-projection-business-archive", "invalid-multi-unit-scenario", "temporal-chain-reciprocity-break", "unexpected-negative-operation-success", "geometry-permission-binding-removed"]:
+    gate(f"F12-mutation-{required_mutation}", "F12", required_mutation in mutation_names, f"semantic mutation report missing {required_mutation}", "docs/sda/data-model/semantic-mutation-test-report.json")
+
+# ADR Review 07 reconciliation must cite named assertions, not aggregate-only evidence.
 if "Generated checks: 41" in adr_matrix_text or "Errors: 0`" in adr_matrix_text:
     err("ADR evidence matrix must not cite stale aggregate check counts as acceptance evidence")
 for adr_id in ["ADR-005", "ADR-006", "ADR-007", "ADR-008", "ADR-009"]:
@@ -542,6 +550,7 @@ else:
         f"- F04/F05/F10 scenario assertions: {len(review07_scenario_assertions) if isinstance(review07_scenario_assertions, dict) else 0}",
         f"- F06 geometry authority negatives: {len(required_f06_negatives & set(negative_results)) if isinstance(negative_results, dict) else 0}",
         f"- F08 API projection assertions: {api_projection_assertions.get('summary', {}).get('assertions', 0) if isinstance(api_projection_assertions, dict) else 0}",
+        f"- F12 semantic mutations caught: {mutation_summary.get('caught', 0) if isinstance(mutation_summary, dict) else 0}",
     ])
 report = "\n".join(report_lines) + "\n"
 (DM / "design-consistency-report.md").write_text(report, encoding="utf-8")
