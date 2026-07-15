@@ -1,0 +1,100 @@
+{
+  "control_id": "NLI-WO-002-PA-GEO-01-C1",
+  "control_status": "reviewer-owned-correction-oracle",
+  "implementation_must_not_modify": true,
+  "parent_control_id": "NLI-WO-002-PA-GEO-01",
+  "parent_oracle_sha256": "cf699de04e0ca500c3a7826f257e190d24835356ef96db1650160d7d438edaea",
+  "reviewed_implementation_head": "eff62b263abb3f5ea2ab24675afc05449e97b5cb",
+  "scope": "Corrections to the same address_points geometry vertical slice only; no additional transform group is authorized",
+  "required_spec_binding": {
+    "transform_group_id": "WO002-R06-geometry-observation-address_points",
+    "implementation_unit": "impl_wo002_r06_geometry_observation_address_points",
+    "callable": "transform_address_points_geometry",
+    "covered_source_fields": [
+      "address_points.accuracy_meters",
+      "address_points.latitude",
+      "address_points.longitude"
+    ],
+    "required_context_fields": [
+      "address_points.id",
+      "address_points.address_id",
+      "address_points.source_method",
+      "address_points.created_at"
+    ],
+    "validation": "The running checkpoint must load the reviewed transform specification and fail if the group, implementation unit, callable binding, covered fields, context fields or target entity differ"
+  },
+  "required_lineage_resolution": {
+    "source_record_lookup": "Resolve proposed_source_record from source_key='address_points:' || current_source.address_points.id; do not hard-code the source_record_id",
+    "evidence_lookup": "Resolve exactly one proposed_evidence_object through the resolved source_record_id; do not hard-code the evidence_object_id",
+    "exception_source_key": "Derive the migration-exception source_key from the queried source row"
+  },
+  "precision_case": {
+    "source_values": {
+      "latitude": 3.7523456,
+      "longitude": 8.7834567,
+      "accuracy_meters": 4.5
+    },
+    "expected_wkt": "POINT(8.7834567 3.7523456)",
+    "expected_srid": 4326,
+    "rule": "Do not round or format source coordinates to a fixed number of decimal places before PostGIS insertion"
+  },
+  "required_comparator_boundary": {
+    "separate_connection": true,
+    "read_only_transaction": true,
+    "target_write_privilege_during_comparison": false,
+    "exact_set_comparison": true,
+    "unexpected_geometry_observation_fails": true,
+    "unexpected_migration_exception_fails": true,
+    "rule": "The comparator must query all rows attributable to this source slice and compare expected and observed sets in both directions"
+  },
+  "required_failure_state_proof": {
+    "same_database_before_reset": true,
+    "same_schema_before_reset": true,
+    "query_state_immediately_after_failure": true,
+    "rule": "Do not reset or recreate the database before proving the failed test left authoritative target state unchanged"
+  },
+  "required_tests": [
+    {
+      "test_id": "transform-spec-binding-drift",
+      "mutation": "Change the reviewed group implementation_unit or covered fields in a temporary copy",
+      "expected_error": "address_points geometry transform specification binding mismatch"
+    },
+    {
+      "test_id": "precision-preservation",
+      "mutation": "Update the current_source row to the precision_case coordinates and run the normal transform/comparison path",
+      "expected": "The queried PostGIS WKT exactly matches POINT(8.7834567 3.7523456)"
+    },
+    {
+      "test_id": "wrong-longitude-transform-implementation",
+      "mutation": "Mutate the transform calculation after the source row has been queried; do not alter the source row",
+      "expected_error": "geometry observation does not match reviewer-owned expected WKT"
+    },
+    {
+      "test_id": "invalid-coordinate-current-source",
+      "mutation": "Write an invalid coordinate into current_source.address_points and invoke the normal source query and transform path",
+      "expected_error": "coordinate out of range"
+    },
+    {
+      "test_id": "unexpected-extra-target-row",
+      "mutation": "Make the transform create one additional geometry observation or migration exception for this source slice",
+      "expected_error": "unexpected address_points geometry slice target row"
+    },
+    {
+      "test_id": "same-database-rollback-proof",
+      "mutation": "Run any failing normal-path mutation",
+      "expected": "Immediately after rollback and before reset, the same target schema has the exact pre-test row set and hash"
+    },
+    {
+      "test_id": "lineage-derived-not-hardcoded",
+      "mutation": "Use a temporary source record with a different address_points id and corresponding source/evidence lineage",
+      "expected": "The transform resolves and writes the derived source_record_id, evidence_object_id, geometry id and exception source_key without code changes"
+    }
+  ],
+  "prohibited": [
+    "Modifying either reviewer-owned oracle",
+    "Implementing or modifying any of the other 89 transform groups",
+    "Requesting broad Phase A reassessment or SDA Review 12",
+    "Modifying F04-F12",
+    "Modifying runtime application code, executable migrations, the migration runner, Docker runtime configuration, production or pilot data, secrets, .env files or PR #8"
+  ]
+}
