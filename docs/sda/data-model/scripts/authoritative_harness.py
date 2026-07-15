@@ -782,7 +782,9 @@ def cleanup_recreate() -> dict[str,Any]:
 
 ACCEPTANCE = ROOT / 'docs' / 'sda' / 'acceptance'
 ADDRESS_POINTS_ORACLE = ACCEPTANCE / 'NLI-WO-002-phase-a-address-points-geometry-expected.json'
+ADDRESS_POINTS_CORRECTION_ORACLE = ACCEPTANCE / 'NLI-WO-002-phase-a-address-points-geometry-correction-oracle.json'
 ADDRESS_POINTS_ORACLE_BASELINE_SHA256 = 'cf699de04e0ca500c3a7826f257e190d24835356ef96db1650160d7d438edaea'
+ADDRESS_POINTS_CORRECTION_ORACLE_BASELINE_SHA256 = '12214d3967c6561eaa30c4577d9ab445a9b90d14b6d5c3374a842868e4e62bea'
 ADDRESS_POINTS_GROUP_ID = 'WO002-R06-geometry-observation-address_points'
 ADDRESS_POINTS_IMPL_UNIT = 'impl_wo002_r06_geometry_observation_address_points'
 ADDRESS_POINTS_FUNCTION = 'transform_address_points_geometry'
@@ -790,8 +792,16 @@ ADDRESS_POINTS_FUNCTION = 'transform_address_points_geometry'
 ADDRESS_POINTS_GEOMETRY_IMPLEMENTATIONS: dict[str, Callable[..., dict[str, Any]]] = {}
 
 
+def file_sha256(path: Path) -> str:
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
 def address_points_oracle_hash() -> str:
-    return hashlib.sha256(ADDRESS_POINTS_ORACLE.read_bytes()).hexdigest()
+    return file_sha256(ADDRESS_POINTS_ORACLE)
+
+
+def address_points_correction_oracle_hash() -> str:
+    return file_sha256(ADDRESS_POINTS_CORRECTION_ORACLE)
 
 
 def load_address_points_oracle(allowed: bool) -> dict[str, Any]:
@@ -800,11 +810,24 @@ def load_address_points_oracle(allowed: bool) -> dict[str, Any]:
     return json.loads(ADDRESS_POINTS_ORACLE.read_text())
 
 
-def select_address_points_record(records: list[dict[str, Any]]) -> dict[str, Any]:
+def load_address_points_correction_oracle() -> dict[str, Any]:
+    return json.loads(ADDRESS_POINTS_CORRECTION_ORACLE.read_text())
+
+
+def select_address_points_record(records: list[dict[str, Any]], source_id: str = 'phase-a-address-points-id') -> dict[str, Any]:
     for rec in records:
-        if rec['source_table'] == 'address_points' and rec['values'].get('id') == 'phase-a-address-points-id':
+        if rec['source_table'] == 'address_points' and rec['values'].get('id') == source_id:
             return rec
-    raise HarnessError('address_points fixture metadata not found')
+    raise HarnessError(f'address_points fixture metadata not found for {source_id}')
+
+
+def make_address_points_record(source_id: str = 'phase-a-address-points-id') -> dict[str, Any]:
+    rec = copy.deepcopy(select_address_points_record(fixture_records()))
+    rec['values']['id'] = source_id
+    rec['source_key'] = f'address_points:{source_id}'
+    if source_id != 'phase-a-address-points-id':
+        rec['source_record_id'] = f'phase-a-source-record-address-points-{source_id.rsplit("-", 1)[-1]}'
+    return rec
 
 
 def setup_address_points_geometry_database() -> None:
@@ -813,39 +836,52 @@ def setup_address_points_geometry_database() -> None:
     topology_check()
 
 
+def address_points_source_key(source_row: dict[str, Any]) -> str:
+    return f"address_points:{source_row['id']}"
+
+
+def address_points_geometry_id(source_row: dict[str, Any]) -> str:
+    return f"phase-a-geometry-address-points-{source_row['id']}"
+
+
+def address_points_exception_id(source_row: dict[str, Any]) -> str:
+    return f"phase-a-exception-geometry-authority-address-points-{source_row['id']}"
+
+
 def ensure_address_points_preconditions(cur, rec: dict[str, Any], mutation: dict[str, Any] | None = None) -> None:
     mutation = mutation or {}
     rows = base_target_rows()
     add_source_records_and_evidence(rows, [rec])
+    rec_values = normalize_current_fixture_values('address_points', rec['values'])
+    if rec_values['id'] != 'phase-a-address-points-id':
+        for evidence in rows.get('proposed_evidence_object', []):
+            if evidence.get('source_record_id') == rec['source_record_id']:
+                evidence['evidence_object_id'] = f'phase-a-evidence-address-points-{slug(rec_values["id"])}'
     if not mutation.get('missing_address_crosswalk'):
         add_unique(rows, 'proposed_legacy_crosswalk', {
-            'legacy_crosswalk_id': 'phase-a-crosswalk-addresses-id-to-location-record',
+            'legacy_crosswalk_id': f'phase-a-crosswalk-addresses-id-to-location-record-{slug(rec_values["id"])}',
             'source_table': 'addresses',
             'source_field': 'id',
-            'legacy_id': 'phase-a-addresses-id',
+            'legacy_id': rec_values['address_id'],
             'target_entity': 'location_record',
             'target_id': 'phase-a-location-address-reference',
             'created_at': TS,
         })
     if mutation.get('missing_evidence_object'):
-        rows['proposed_evidence_object'] = [r for r in rows.get('proposed_evidence_object', []) if r.get('evidence_object_id') != 'phase-a-evidence-address-points']
+        wanted_source_record = rec['source_record_id']
+        rows['proposed_evidence_object'] = [r for r in rows.get('proposed_evidence_object', []) if r.get('source_record_id') != wanted_source_record]
     apply_target_rows(cur, rows)
     cur.execute('SET CONSTRAINTS ALL IMMEDIATE')
 
 
-def query_complete_address_points_row(cur, mutation: dict[str, Any] | None = None) -> tuple[dict[str, Any], dict[str, Any]]:
-    mutation = mutation or {}
+def query_complete_address_points_row(cur, source_id: str = 'phase-a-address-points-id') -> tuple[dict[str, Any], dict[str, Any]]:
     sql = "SELECT id,address_id,latitude,longitude,accuracy_meters,source_method,is_active,created_at,updated_at FROM current_source.address_points WHERE id = %s"
-    params = ('phase-a-address-points-id',)
+    params = (source_id,)
     cur.execute(sql, params)
     row = cur.fetchone()
     if not row:
         raise HarnessError('address_points source row not found')
     row = dict(row)
-    if mutation.get('wrong_longitude'):
-        row['longitude'] = float(row['longitude']) + 1.0
-    if mutation.get('invalid_coordinate'):
-        row['latitude'] = 91.0
     return row, {'sql': sql, 'params': list(params), 'row': norm_row(row)}
 
 
@@ -860,28 +896,44 @@ def resolve_address_points_target_identity(cur, address_id: str) -> dict[str, An
           AND cw.source_field = 'id'
           AND cw.legacy_id = %s
           AND cw.target_entity = 'location_record'
+        ORDER BY cw.legacy_crosswalk_id
     """
     cur.execute(sql, (address_id,))
-    row = cur.fetchone()
-    if not row:
+    rows = cur.fetchall()
+    if not rows:
         raise HarnessError('address_points.address_id cannot resolve target location record')
-    return {'sql': ' '.join(sql.split()), 'params': [address_id], 'row': norm_row(dict(row))}
+    if len(rows) != 1:
+        raise HarnessError(f'address_points.address_id resolved multiple target location records: {len(rows)}')
+    return {'sql': ' '.join(sql.split()), 'params': [address_id], 'row': norm_row(dict(rows[0]))}
 
 
-def require_address_points_lineage(cur) -> dict[str, Any]:
-    source_sql = "SELECT source_record_id, source_key FROM canonical_target.proposed_source_record WHERE source_record_id = %s"
-    cur.execute(source_sql, ('phase-a-source-record-address-points-001',))
-    source = cur.fetchone()
-    if not source:
+def require_address_points_lineage(cur, source_row: dict[str, Any]) -> dict[str, Any]:
+    derived_source_key = address_points_source_key(source_row)
+    source_sql = "SELECT source_record_id, source_key FROM canonical_target.proposed_source_record WHERE source_key = %s"
+    cur.execute(source_sql, (derived_source_key,))
+    source_rows = cur.fetchall()
+    if not source_rows:
         raise HarnessError('address_points source record lineage not found')
-    evidence_sql = "SELECT evidence_object_id, source_record_id FROM canonical_target.proposed_evidence_object WHERE evidence_object_id = %s"
-    cur.execute(evidence_sql, ('phase-a-evidence-address-points',))
-    evidence = cur.fetchone()
-    if not evidence:
+    if len(source_rows) != 1:
+        raise HarnessError(f'address_points source key resolves multiple source records: {derived_source_key}')
+    source = dict(source_rows[0])
+    evidence_sql = "SELECT evidence_object_id, source_record_id FROM canonical_target.proposed_evidence_object WHERE source_record_id = %s ORDER BY evidence_object_id"
+    cur.execute(evidence_sql, (source['source_record_id'],))
+    evidence_rows = cur.fetchall()
+    if not evidence_rows:
         raise HarnessError('address_points evidence object not found')
-    if evidence['source_record_id'] != 'phase-a-source-record-address-points-001':
-        raise HarnessError('address_points evidence object does not link to source record')
-    return {'source_query': source_sql, 'source_row': norm_row(dict(source)), 'evidence_query': evidence_sql, 'evidence_row': norm_row(dict(evidence))}
+    if len(evidence_rows) != 1:
+        raise HarnessError(f'address_points evidence object resolution is not exactly one: {len(evidence_rows)}')
+    evidence = dict(evidence_rows[0])
+    return {
+        'derived_source_key': derived_source_key,
+        'source_query': source_sql,
+        'source_params': [derived_source_key],
+        'source_row': norm_row(source),
+        'evidence_query': evidence_sql,
+        'evidence_params': [source['source_record_id']],
+        'evidence_row': norm_row(evidence),
+    }
 
 
 def validate_coordinate_range(row: dict[str, Any]) -> None:
@@ -891,29 +943,89 @@ def validate_coordinate_range(row: dict[str, Any]) -> None:
         raise HarnessError('coordinate out of range')
 
 
-def transform_address_points_geometry(cur, *, mutation: dict[str, Any] | None = None) -> dict[str, Any]:
+def reviewed_address_points_transform_spec(spec_mutation: dict[str, Any] | None = None) -> dict[str, Any]:
+    correction = load_address_points_correction_oracle()['required_spec_binding']
+    groups = copy.deepcopy(registry_groups())
+    group = next((g for g in groups if g['transform_group_id'] == ADDRESS_POINTS_GROUP_ID), None)
+    if not group:
+        raise HarnessError('address_points geometry transform specification binding mismatch: reviewed group missing')
+    if spec_mutation:
+        if spec_mutation.get('implementation_unit'):
+            group['implementation_unit'] = spec_mutation['implementation_unit']
+        if spec_mutation.get('covered_source_fields'):
+            group['covered_source_fields'] = spec_mutation['covered_source_fields']
+        if spec_mutation.get('target_entities'):
+            group['target_entities'] = spec_mutation['target_entities']
+    context_fields = list(correction['required_context_fields'])
+    checks = {
+        'transform_group_id': group.get('transform_group_id') == correction['transform_group_id'],
+        'implementation_unit': group.get('implementation_unit') == correction['implementation_unit'],
+        'callable': ADDRESS_POINTS_GEOMETRY_IMPLEMENTATIONS.get(group.get('implementation_unit')) is transform_address_points_geometry and correction['callable'] == ADDRESS_POINTS_FUNCTION,
+        'covered_source_fields': sorted(group.get('covered_source_fields', [])) == sorted(correction['covered_source_fields']),
+        'required_context_fields': context_fields == correction['required_context_fields'],
+        'target_entity': group.get('target_entities') == ['geometry_observation'],
+    }
+    if not all(checks.values()):
+        raise HarnessError(f'address_points geometry transform specification binding mismatch: {checks}')
+    return {'group': group, 'required_context_fields': context_fields, 'validation': checks}
+
+
+def insert_row(cur, table: str, row: dict[str,Any]) -> str:
+    pk=primary_key(row,table); where=' AND '.join([f'{k}=%s' for k in pk])
+    cur.execute(f'SELECT * FROM canonical_target.{table} WHERE {where}', list(pk.values()))
+    existing=cur.fetchone()
+    if existing:
+        existing_dict = dict(existing)
+        if table == 'proposed_geometry_observation' and existing_dict.get('observed_geom') is not None:
+            cur.execute('SELECT ST_AsText(%s::geometry) AS wkt', (existing_dict['observed_geom'],))
+            existing_dict['observed_geom'] = cur.fetchone()['wkt']
+        existing_norm={k:normalize(v) for k,v in existing_dict.items() if k in row}
+        desired_norm={k:normalize(v) for k,v in row.items()}
+        if isinstance(desired_norm.get('observed_geom'), dict):
+            desired_norm = dict(desired_norm)
+            desired_norm['observed_geom'] = f"POINT({desired_norm['observed_geom']['longitude']} {desired_norm['observed_geom']['latitude']})"
+        if existing_norm != desired_norm:
+            diff={'existing':existing_norm,'desired':desired_norm}
+            raise HarnessError(f'existing correct target row changed for {table} {pk}: {diff}')
+        return 'unchanged'
+    cols=list(row); placeholders=[]; params=[]
+    for c in cols:
+        ph,val=adapt_target_insert(c,row[c]); placeholders.append(ph)
+        if isinstance(val, tuple): params.extend(val)
+        else: params.append(val)
+    cur.execute(f'INSERT INTO canonical_target.{table} ({",".join(cols)}) VALUES ({",".join(placeholders)})', params)
+    return 'inserted'
+
+
+def transform_address_points_geometry(cur, *, source_id: str = 'phase-a-address-points-id', mutation: dict[str, Any] | None = None, spec_validation: dict[str, Any] | None = None) -> dict[str, Any]:
     mutation = mutation or {}
-    source_row, source_query = query_complete_address_points_row(cur, mutation)
+    spec_validation = spec_validation or reviewed_address_points_transform_spec()
+    source_row, source_query = query_complete_address_points_row(cur, source_id)
     validate_coordinate_range(source_row)
     identity = resolve_address_points_target_identity(cur, source_row['address_id'])
-    lineage = require_address_points_lineage(cur)
-    capture_map = {'phase-a address_points source_method': 'derived-from-source'}
+    lineage = require_address_points_lineage(cur, source_row)
+    parent_oracle = load_address_points_oracle(True)
+    capture_map = parent_oracle['reviewed_transform']['source_method_translation']
     capture_method = capture_map.get(source_row['source_method'])
     if not capture_method:
         raise HarnessError('address_points.source_method has no reviewed capture-method translation')
-    geom_id = f"phase-a-geometry-address-points-{source_row['id']}"
-    exception_id = f"phase-a-exception-geometry-authority-address-points-{source_row['id']}"
-    observed_geom = f"POINT({float(source_row['longitude']):.3f} {float(source_row['latitude']):.3f})"
+    lon = source_row['longitude']
+    lat = source_row['latitude']
+    if mutation.get('wrong_longitude_implementation'):
+        lon = float(lon) + 1.0
+    geom_id = address_points_geometry_id(source_row)
+    exception_id = address_points_exception_id(source_row)
+    source_key = address_points_source_key(source_row)
     rows = {
         'proposed_geometry_observation': [{
             'geometry_observation_id': geom_id,
             'subject_id': identity['row']['subject_id'],
             'geometry_role': 'location-point',
-            'observed_geom': observed_geom,
+            'observed_geom': {'longitude': lon, 'latitude': lat},
             'capture_method': capture_method,
             'horizontal_accuracy_m': source_row['accuracy_meters'],
-            'source_record_id': 'phase-a-source-record-address-points-001',
-            'evidence_object_id': 'phase-a-evidence-address-points',
+            'source_record_id': lineage['source_row']['source_record_id'],
+            'evidence_object_id': lineage['evidence_row']['evidence_object_id'],
             'licence_id': None,
             'observed_at': source_row['created_at'],
             'recorded_at': TS,
@@ -924,7 +1036,7 @@ def transform_address_points_geometry(cur, *, mutation: dict[str, Any] | None = 
             'batch_id': 'phase-a-address-points-geometry-slice',
             'source_table': 'address_points',
             'source_field': None,
-            'source_key': 'address_points:phase-a-address-points-001',
+            'source_key': source_key,
             'exception_type': 'authority-rfi',
             'severity': 'medium',
             'owner': 'SDA',
@@ -939,6 +1051,8 @@ def transform_address_points_geometry(cur, *, mutation: dict[str, Any] | None = 
             },
         }],
     }
+    if mutation.get('unexpected_extra_target_row'):
+        rows['proposed_geometry_observation'].append({**rows['proposed_geometry_observation'][0], 'geometry_observation_id': geom_id + '-extra'})
     stats1 = apply_target_rows(cur, rows)
     cur.execute('SET CONSTRAINTS ALL IMMEDIATE')
     stats2 = apply_target_rows(cur, rows)
@@ -949,41 +1063,27 @@ def transform_address_points_geometry(cur, *, mutation: dict[str, Any] | None = 
         'transform_group_id': ADDRESS_POINTS_GROUP_ID,
         'generic_transform_group_used': False,
         'source_row_query': source_query,
-        'fields_consumed': ['address_points.id', 'address_points.address_id', 'address_points.latitude', 'address_points.longitude', 'address_points.accuracy_meters', 'address_points.source_method', 'address_points.created_at'],
+        'fields_consumed': spec_validation['group']['covered_source_fields'] + spec_validation['required_context_fields'],
         'target_identity_resolution': identity,
         'lineage': lineage,
         'insert_stats_first': stats1,
         'insert_stats_second': stats2,
+        'spec_validation': spec_validation,
+        'derived_ids': {'geometry_observation_id': geom_id, 'migration_exception_id': exception_id, 'source_key': source_key},
     }
 
 
 ADDRESS_POINTS_GEOMETRY_IMPLEMENTATIONS[ADDRESS_POINTS_IMPL_UNIT] = transform_address_points_geometry
 
 
-def address_points_slice_target_rows(cur) -> list[dict[str, Any]]:
-    rows: list[dict[str, Any]] = []
-    cur.execute("""
-        SELECT geometry_observation_id, subject_id, geometry_role, ST_AsText(observed_geom) AS observed_geom_wkt,
-               ST_SRID(observed_geom) AS observed_geom_srid, capture_method,
-               horizontal_accuracy_m::numeric(10,2)::text AS horizontal_accuracy_m,
-               source_record_id, evidence_object_id, licence_id, observed_at, recorded_at, classification
-        FROM canonical_target.proposed_geometry_observation
-        WHERE geometry_observation_id = 'phase-a-geometry-address-points-phase-a-address-points-id'
-    """)
-    geom = cur.fetchone()
-    if geom:
-        rows.append({'table': 'proposed_geometry_observation', 'primary_key': {'geometry_observation_id': geom['geometry_observation_id']}, 'values': norm_row(dict(geom))})
-    cur.execute("""
-        SELECT migration_exception_id, batch_id, source_table, source_field, source_key, exception_type,
-               severity, owner, created_at, resolved_at, details_json
-        FROM canonical_target.proposed_migration_exception
-        WHERE migration_exception_id = 'phase-a-exception-geometry-authority-address-points-phase-a-address-points-id'
-    """)
-    exc = cur.fetchone()
-    if exc:
-        d = norm_row(dict(exc)); d['details_json'] = normalize_json(d['details_json'])
-        rows.append({'table': 'proposed_migration_exception', 'primary_key': {'migration_exception_id': exc['migration_exception_id']}, 'values': d})
-    return sorted(rows, key=lambda r: r['table'])
+def adapt_target_insert(col: str, value: Any) -> tuple[str, Any]:
+    if col == 'observed_geom' and isinstance(value, dict):
+        return 'ST_SetSRID(ST_MakePoint(%s,%s),4326)', (value['longitude'], value['latitude'])
+    if col == 'observed_geom' and isinstance(value, str) and value.startswith('POINT'):
+        return 'ST_SetSRID(ST_GeomFromText(%s),4326)', value
+    if isinstance(value, (dict,list)):
+        return '%s', Jsonb(value)
+    return '%s', value
 
 
 def normalize_json(value: Any) -> Any:
@@ -995,8 +1095,44 @@ def normalize_json(value: Any) -> Any:
     return value
 
 
-def expected_address_points_rows(oracle: dict[str, Any]) -> list[dict[str, Any]]:
-    return sorted(oracle['expected_inserted_rows'], key=lambda r: r['table'])
+def address_points_complete_target_rows(cur, source_key: str = 'address_points:phase-a-address-points-id') -> list[dict[str, Any]]:
+    rows: list[dict[str, Any]] = []
+    cur.execute("""
+        SELECT g.geometry_observation_id, g.subject_id, g.geometry_role, ST_AsText(g.observed_geom) AS observed_geom_wkt,
+               ST_SRID(g.observed_geom) AS observed_geom_srid, g.capture_method,
+               g.horizontal_accuracy_m::numeric(10,2)::text AS horizontal_accuracy_m,
+               g.source_record_id, g.evidence_object_id, g.licence_id, g.observed_at, g.recorded_at, g.classification
+        FROM canonical_target.proposed_geometry_observation g
+        JOIN canonical_target.proposed_source_record sr ON sr.source_record_id = g.source_record_id
+        WHERE sr.source_key = %s
+        ORDER BY g.geometry_observation_id
+    """, (source_key,))
+    for geom in cur.fetchall():
+        rows.append({'table': 'proposed_geometry_observation', 'primary_key': {'geometry_observation_id': geom['geometry_observation_id']}, 'values': norm_row(dict(geom))})
+    cur.execute("""
+        SELECT migration_exception_id, batch_id, source_table, source_field, source_key, exception_type,
+               severity, owner, created_at, resolved_at, details_json
+        FROM canonical_target.proposed_migration_exception
+        WHERE source_table = 'address_points' AND source_key = %s
+        ORDER BY migration_exception_id
+    """, (source_key,))
+    for exc in cur.fetchall():
+        d = norm_row(dict(exc)); d['details_json'] = normalize_json(d['details_json'])
+        rows.append({'table': 'proposed_migration_exception', 'primary_key': {'migration_exception_id': exc['migration_exception_id']}, 'values': d})
+    return sorted(rows, key=lambda r: (r['table'], json.dumps(r['primary_key'], sort_keys=True)))
+
+
+def target_slice_hash(cur, source_key: str = 'address_points:phase-a-address-points-id') -> dict[str, Any]:
+    rows = address_points_complete_target_rows(cur, source_key)
+    return {'rows': rows, 'hash': sha(rows)}
+
+
+def expected_address_points_rows(oracle: dict[str, Any], source_key: str = 'address_points:phase-a-address-points-id') -> list[dict[str, Any]]:
+    rows = copy.deepcopy(oracle['expected_inserted_rows'])
+    for row in rows:
+        if row['table'] == 'proposed_migration_exception':
+            row['values']['source_key'] = source_key
+    return sorted(rows, key=lambda r: (r['table'], json.dumps(r['primary_key'], sort_keys=True)))
 
 
 def expected_absent_address_points_rows(cur, oracle: dict[str, Any]) -> list[dict[str, Any]]:
@@ -1015,116 +1151,238 @@ def expected_absent_address_points_rows(cur, oracle: dict[str, Any]) -> list[dic
     return results
 
 
-def compare_address_points_oracle(cur, *, expected_mutation: dict[str, Any] | None = None) -> dict[str, Any]:
-    oracle = load_address_points_oracle(True)
-    if expected_mutation and expected_mutation.get('wrong_expected_geometry'):
-        oracle = copy.deepcopy(oracle)
-        oracle['expected_inserted_rows'][0]['values']['observed_geom_wkt'] = 'POINT(0 0)'
-    actual = address_points_slice_target_rows(cur)
-    expected = expected_address_points_rows(oracle)
-    if len(actual) != len(expected):
-        raise HarnessError(f'geometry slice expected {len(expected)} rows, observed {len(actual)}')
-    if actual != expected:
-        actual_geom = next((r['values'].get('observed_geom_wkt') for r in actual if r['table']=='proposed_geometry_observation'), None)
-        expected_geom = next((r['values'].get('observed_geom_wkt') for r in expected if r['table']=='proposed_geometry_observation'), None)
-        if actual_geom != expected_geom:
-            if expected_mutation and expected_mutation.get('wrong_expected_geometry'):
-                raise HarnessError('observed geometry differs from reviewer-owned expected geometry')
-            raise HarnessError('geometry observation does not match reviewer-owned expected WKT')
-        raise HarnessError(f'geometry slice observed rows differ from reviewer-owned oracle: actual={actual} expected={expected}')
-    absent = expected_absent_address_points_rows(cur, oracle)
-    cur.execute("SELECT COUNT(*)::int AS c FROM canonical_target.proposed_geometry_observation WHERE geometry_observation_id = 'phase-a-geometry-address-points-phase-a-address-points-id'")
-    geometry_count = cur.fetchone()['c']
-    cur.execute("""
-        SELECT geometry_observation_id, COUNT(*)::int AS c
-        FROM canonical_target.proposed_geometry_observation
-        GROUP BY geometry_observation_id HAVING COUNT(*) > 1
-    """)
-    duplicates=[dict(r) for r in cur.fetchall()]
-    if duplicates:
-        raise HarnessError(f'geometry-observation duplicates: {duplicates}')
-    return {'expected_rows': len(expected), 'actual_rows': len(actual), 'expected_absent_rows': absent, 'geometry_observation_count': geometry_count, 'geometry_observation_duplicates': duplicates, 'actual_rows_detail': actual}
+def comparator_read_only_proof() -> dict[str, Any]:
+    with connect(options='-c search_path=canonical_target,public') as conn, conn.cursor() as cur:
+        cur.execute('BEGIN READ ONLY')
+        cur.execute('SHOW transaction_read_only')
+        read_only = cur.fetchone()['transaction_read_only']
+        try:
+            cur.execute("INSERT INTO canonical_target.proposed_migration_exception (migration_exception_id,batch_id,source_table,source_key,exception_type,severity,owner,created_at,details_json) VALUES ('phase-a-readonly-proof','proof','address_points','proof','authority-rfi','low','SDA',%s,'{}'::jsonb)", (TS,))
+        except Exception as exc:
+            message = str(exc)
+            conn.rollback()
+            return {'separate_connection': True, 'transaction_read_only': read_only, 'target_write_blocked': True, 'write_error': message.split('\n')[0]}
+        conn.rollback()
+        raise HarnessError('read-only comparator accepted target write')
 
 
-def run_address_points_slice_once(*, mutation: dict[str, Any] | None = None, compare_expected: bool = True) -> dict[str, Any]:
+def compare_address_points_oracle_read_only(*, source_key: str = 'address_points:phase-a-address-points-id', expected_mutation: dict[str, Any] | None = None) -> dict[str, Any]:
+    proof = comparator_read_only_proof()
+    with connect(options='-c search_path=canonical_target,public') as conn, conn.cursor() as cur:
+        cur.execute('BEGIN READ ONLY')
+        cur.execute('SHOW transaction_read_only')
+        comparator_read_only = cur.fetchone()['transaction_read_only']
+        oracle = load_address_points_oracle(True)
+        if expected_mutation and expected_mutation.get('wrong_expected_geometry'):
+            oracle = copy.deepcopy(oracle)
+            oracle['expected_inserted_rows'][0]['values']['observed_geom_wkt'] = 'POINT(0 0)'
+        if expected_mutation and expected_mutation.get('precision_expected'):
+            correction = load_address_points_correction_oracle()['precision_case']
+            oracle = copy.deepcopy(oracle)
+            oracle['expected_inserted_rows'][0]['values']['observed_geom_wkt'] = correction['expected_wkt']
+            oracle['expected_inserted_rows'][0]['values']['observed_geom_srid'] = correction['expected_srid']
+        actual = address_points_complete_target_rows(cur, source_key)
+        expected = expected_address_points_rows(oracle, source_key)
+        if len(actual) != len(expected):
+            raise HarnessError(f'unexpected address_points geometry slice target row: expected {len(expected)} rows, observed {len(actual)}')
+        exp_keys={(r['table'], tuple(sorted(r['primary_key'].items()))) for r in expected}
+        act_keys={(r['table'], tuple(sorted(r['primary_key'].items()))) for r in actual}
+        if act_keys - exp_keys:
+            raise HarnessError(f'unexpected address_points geometry slice target row: {sorted(act_keys-exp_keys)}')
+        if exp_keys - act_keys:
+            raise HarnessError(f'missing address_points geometry slice target row: {sorted(exp_keys-act_keys)}')
+        if actual != expected:
+            actual_geom = next((r['values'].get('observed_geom_wkt') for r in actual if r['table']=='proposed_geometry_observation'), None)
+            expected_geom = next((r['values'].get('observed_geom_wkt') for r in expected if r['table']=='proposed_geometry_observation'), None)
+            if actual_geom != expected_geom:
+                if expected_mutation and expected_mutation.get('wrong_expected_geometry'):
+                    raise HarnessError('observed geometry differs from reviewer-owned expected geometry')
+                raise HarnessError('geometry observation does not match reviewer-owned expected WKT')
+            raise HarnessError(f'geometry slice observed rows differ from reviewer-owned oracle: actual={actual} expected={expected}')
+        absent = expected_absent_address_points_rows(cur, oracle)
+        cur.execute("""
+            SELECT geometry_observation_id, COUNT(*)::int AS c
+            FROM canonical_target.proposed_geometry_observation
+            GROUP BY geometry_observation_id HAVING COUNT(*) > 1
+        """)
+        duplicates=[dict(r) for r in cur.fetchall()]
+        if duplicates:
+            raise HarnessError(f'geometry-observation duplicates: {duplicates}')
+        conn.rollback()
+    return {'expected_rows': len(expected), 'actual_rows': len(actual), 'expected_absent_rows': absent, 'geometry_observation_count': sum(1 for r in actual if r['table']=='proposed_geometry_observation'), 'geometry_observation_duplicates': duplicates, 'actual_rows_detail': actual, 'comparator_connection': {'separate_connection': True, 'transaction_read_only': comparator_read_only}, 'comparator_read_only_proof': proof, 'complete_target_set_query': {'source_key': source_key, 'tables': ['proposed_geometry_observation', 'proposed_migration_exception']}}
+
+
+def run_address_points_slice_once(*, mutation: dict[str, Any] | None = None, compare_expected: bool = True, source_id: str = 'phase-a-address-points-id') -> dict[str, Any]:
     mutation = mutation or {}
     records = fixture_records()
-    rec = select_address_points_record(records)
-    if mutation.get('missing_source'):
-        records = [r for r in records if r is not rec]
+    rec = make_address_points_record(source_id)
+    records = [r for r in records if not (r['source_table'] == 'address_points')]
+    if not mutation.get('missing_source'):
+        records.append(rec)
     with connect(options='-c search_path=canonical_target,public') as conn, conn.cursor() as cur:
         source_report = insert_current_fixture_rows(cur, records)
-        if mutation.get('missing_source'):
-            # Preconditions can exist, but the transform must fail from the DB source query.
-            ensure_address_points_preconditions(cur, rec, mutation)
-        else:
-            ensure_address_points_preconditions(cur, rec, mutation)
+        ensure_address_points_preconditions(cur, rec, mutation)
+        if mutation.get('invalid_coordinate_current_source'):
+            cur.execute("UPDATE current_source.address_points SET latitude = 91.0 WHERE id = %s", (source_id,))
+        if mutation.get('precision_case'):
+            values = load_address_points_correction_oracle()['precision_case']['source_values']
+            cur.execute("UPDATE current_source.address_points SET latitude=%s, longitude=%s, accuracy_meters=%s WHERE id=%s", (values['latitude'], values['longitude'], values['accuracy_meters'], source_id))
+        spec_validation = reviewed_address_points_transform_spec(mutation.get('spec_drift'))
         impl = ADDRESS_POINTS_GEOMETRY_IMPLEMENTATIONS.get(ADDRESS_POINTS_IMPL_UNIT)
         if impl is not transform_address_points_geometry:
             raise HarnessError('explicit address_points geometry implementation binding missing')
-        transform_result = impl(cur, mutation=mutation)
-        comparison = compare_address_points_oracle(cur, expected_mutation=mutation if compare_expected else None) if compare_expected else None
-        report = {
-            'source_report': source_report,
-            'transform': transform_result,
-            'comparison': comparison,
-        }
-        return report
+        transform_result = impl(cur, source_id=source_id, mutation=mutation, spec_validation=spec_validation)
+        conn.commit()
+    source_key = f'address_points:{source_id}'
+    expected_mutation = mutation if compare_expected else None
+    comparison = compare_address_points_oracle_read_only(source_key=source_key, expected_mutation=expected_mutation) if compare_expected else None
+    return {'source_report': source_report, 'transform': transform_result, 'comparison': comparison}
 
 
-def address_points_state_hash() -> str:
-    with connect() as conn, conn.cursor() as cur:
-        return sha(address_points_slice_target_rows(cur))
+def prepare_address_points_slice_state(cur, *, source_id: str = 'phase-a-address-points-id', mutation: dict[str, Any] | None = None) -> dict[str, Any]:
+    mutation = mutation or {}
+    records = fixture_records()
+    rec = make_address_points_record(source_id)
+    records = [r for r in records if not (r['source_table'] == 'address_points')]
+    if not mutation.get('missing_source'):
+        records.append(rec)
+    source_report = insert_current_fixture_rows(cur, records)
+    ensure_address_points_preconditions(cur, rec, mutation)
+    return {'source_report': source_report, 'record': rec}
 
 
-def run_address_points_negative_probe(probe_id: str, expected_error: str, mutation: dict[str, Any], baseline_hash: str) -> dict[str, Any]:
+def run_address_points_negative_probe(probe_id: str, expected_error: str, mutation: dict[str, Any]) -> dict[str, Any]:
     setup_address_points_geometry_database()
-    try:
-        run_address_points_slice_once(mutation=mutation, compare_expected=True)
-    except Exception as exc:
-        observed = str(exc)
-        if expected_error not in observed:
-            raise HarnessError(f'{probe_id} failed for wrong reason: expected {expected_error!r}, got {observed!r}')
-        setup_address_points_geometry_database()
-        clean = run_address_points_slice_once(compare_expected=True)
-        clean_hash = clean['comparison']['actual_rows_detail']
-        if sha(clean_hash) != baseline_hash:
-            raise HarnessError(f'failed-test state unchanged check failed for {probe_id}')
-        return {'test_id': probe_id, 'expected_error': expected_error, 'observed_error': observed, 'state_unchanged': True, 'status': 'passed'}
-    raise HarnessError(f'{probe_id} unexpectedly passed')
+    source_key = 'address_points:phase-a-address-points-id'
+    with connect(options='-c search_path=canonical_target,public') as conn, conn.cursor() as cur:
+        prepare_address_points_slice_state(cur, mutation=mutation)
+        conn.commit()
+        before = target_slice_hash(cur, source_key)
+        cur.execute('BEGIN')
+        try:
+            spec_validation = reviewed_address_points_transform_spec(mutation.get('spec_drift'))
+            if mutation.get('invalid_coordinate_current_source'):
+                cur.execute("UPDATE current_source.address_points SET latitude = 91.0 WHERE id = %s", ('phase-a-address-points-id',))
+            transform_address_points_geometry(cur, source_id='phase-a-address-points-id', mutation=mutation, spec_validation=spec_validation)
+            if mutation.get('wrong_expected_geometry') or mutation.get('unexpected_extra_target_row') or mutation.get('wrong_longitude_implementation'):
+                actual = address_points_complete_target_rows(cur, source_key)
+                oracle = load_address_points_oracle(True)
+                if mutation.get('wrong_expected_geometry'):
+                    oracle = copy.deepcopy(oracle); oracle['expected_inserted_rows'][0]['values']['observed_geom_wkt'] = 'POINT(0 0)'
+                expected = expected_address_points_rows(oracle, source_key)
+                if len(actual) != len(expected):
+                    raise HarnessError('unexpected address_points geometry slice target row')
+                if actual != expected:
+                    actual_geom = next((r['values'].get('observed_geom_wkt') for r in actual if r['table']=='proposed_geometry_observation'), None)
+                    expected_geom = next((r['values'].get('observed_geom_wkt') for r in expected if r['table']=='proposed_geometry_observation'), None)
+                    if actual_geom != expected_geom:
+                        if mutation.get('wrong_expected_geometry'):
+                            raise HarnessError('observed geometry differs from reviewer-owned expected geometry')
+                        raise HarnessError('geometry observation does not match reviewer-owned expected WKT')
+                    raise HarnessError('unexpected address_points geometry slice target row')
+            raise HarnessError(f'{probe_id} unexpectedly passed')
+        except Exception as exc:
+            observed = str(exc)
+            if expected_error not in observed:
+                conn.rollback()
+                raise HarnessError(f'{probe_id} failed for wrong reason: expected {expected_error!r}, got {observed!r}')
+            conn.rollback()
+            with conn.cursor() as check_cur:
+                after = target_slice_hash(check_cur, source_key)
+            if before != after:
+                raise HarnessError(f'same-database rollback proof failed for {probe_id}: before={before["hash"]} after={after["hash"]}')
+            return {'test_id': probe_id, 'expected_error': expected_error, 'observed_error': observed, 'same_database_pre_test_hash': before['hash'], 'same_database_post_failure_hash': after['hash'], 'rollback_equality': True, 'state_unchanged': True, 'status': 'passed'}
+
+def run_second_source_identity_test() -> dict[str, Any]:
+    setup_address_points_geometry_database()
+    second_id = 'phase-a-address-points-002'
+    report = run_address_points_slice_once(compare_expected=False, source_id=second_id)
+    source_key = f'address_points:{second_id}'
+    with connect() as conn, conn.cursor() as cur:
+        rows = address_points_complete_target_rows(cur, source_key)
+    geom = next(r for r in rows if r['table'] == 'proposed_geometry_observation')
+    exc = next(r for r in rows if r['table'] == 'proposed_migration_exception')
+    checks = {
+        'source_key': report['transform']['lineage']['derived_source_key'] == source_key,
+        'source_record_id': report['transform']['lineage']['source_row']['source_record_id'] == 'phase-a-source-record-address-points-002',
+        'evidence_object_resolved': report['transform']['lineage']['evidence_row']['source_record_id'] == 'phase-a-source-record-address-points-002',
+        'geometry_id': geom['primary_key']['geometry_observation_id'] == 'phase-a-geometry-address-points-phase-a-address-points-002',
+        'exception_source_key': exc['values']['source_key'] == source_key,
+    }
+    if not all(checks.values()):
+        raise HarnessError(f'second-source-identity test failed: {checks}')
+    return {'test_id': 'lineage-derived-not-hardcoded', 'status': 'passed', 'source_id': second_id, 'checks': checks, 'geometry_row': geom, 'exception_row': exc}
+
+
+def run_precision_test() -> dict[str, Any]:
+    setup_address_points_geometry_database()
+    report = run_address_points_slice_once(mutation={'precision_case': True, 'precision_expected': True}, compare_expected=True)
+    geom = next(r for r in report['comparison']['actual_rows_detail'] if r['table'] == 'proposed_geometry_observation')
+    expected = load_address_points_correction_oracle()['precision_case']
+    if geom['values']['observed_geom_wkt'] != expected['expected_wkt'] or geom['values']['observed_geom_srid'] != expected['expected_srid']:
+        raise HarnessError(f'precision-preservation failed: {geom}')
+    return {'test_id': 'precision-preservation', 'status': 'passed', 'wkt': geom['values']['observed_geom_wkt'], 'srid': geom['values']['observed_geom_srid']}
 
 
 def run_address_points_geometry_slice() -> dict[str, Any]:
     if address_points_oracle_hash() != ADDRESS_POINTS_ORACLE_BASELINE_SHA256:
-        raise HarnessError('reviewer-owned oracle changed')
+        raise HarnessError('reviewer-owned parent oracle changed')
+    if address_points_correction_oracle_hash() != ADDRESS_POINTS_CORRECTION_ORACLE_BASELINE_SHA256:
+        raise HarnessError('reviewer-owned correction oracle changed')
     setup_address_points_geometry_database()
     positive = run_address_points_slice_once(compare_expected=True)
-    baseline_hash = sha(positive['comparison']['actual_rows_detail'])
     test_results = [{'test_id': 'positive-authoritative-slice', 'status': 'passed'}]
     test_results.append({'test_id': 'second-run-idempotency', 'status': 'passed', 'first_run_inserts': positive['transform']['insert_stats_first']['inserted'], 'second_run_inserts': positive['transform']['insert_stats_second']['inserted'], 'second_run_updates': 0, 'geometry_observation_count': positive['comparison']['geometry_observation_count']})
+    precision = run_precision_test(); test_results.append(precision)
+    second_identity = run_second_source_identity_test(); test_results.append(second_identity)
     probes = [
-        ('wrong-longitude-implementation', 'geometry observation does not match reviewer-owned expected WKT', {'wrong_longitude': True}),
-        ('invalid-coordinate-source', 'coordinate out of range', {'invalid_coordinate': True}),
+        ('transform-spec-binding-drift', 'address_points geometry transform specification binding mismatch', {'spec_drift': {'implementation_unit': 'impl_wrong'}}),
+        ('wrong-longitude-transform-implementation', 'geometry observation does not match reviewer-owned expected WKT', {'wrong_longitude_implementation': True}),
+        ('invalid-coordinate-current-source', 'coordinate out of range', {'invalid_coordinate_current_source': True}),
+        ('unexpected-extra-target-row', 'unexpected address_points geometry slice target row', {'unexpected_extra_target_row': True}),
         ('missing-source-record', 'address_points source row not found', {'missing_source': True}),
         ('missing-address-crosswalk', 'address_points.address_id cannot resolve target location record', {'missing_address_crosswalk': True}),
         ('missing-evidence-object', 'address_points evidence object not found', {'missing_evidence_object': True}),
         ('wrong-independent-expected-geometry', 'observed geometry differs from reviewer-owned expected geometry', {'wrong_expected_geometry': True}),
     ]
     for pid, reason, mutation in probes:
-        test_results.append(run_address_points_negative_probe(pid, reason, mutation, baseline_hash))
+        if mutation.get('missing_source'):
+            setup_address_points_geometry_database()
+            try:
+                run_address_points_slice_once(mutation=mutation, compare_expected=True)
+            except Exception as exc:
+                observed = str(exc)
+                if reason not in observed:
+                    raise HarnessError(f'{pid} failed for wrong reason: expected {reason!r}, got {observed!r}')
+                test_results.append({'test_id': pid, 'expected_error': reason, 'observed_error': observed, 'status': 'passed', 'state_unchanged': True})
+            else:
+                raise HarnessError(f'{pid} unexpectedly passed')
+        else:
+            test_results.append(run_address_points_negative_probe(pid, reason, mutation))
     geom = next(r for r in positive['comparison']['actual_rows_detail'] if r['table'] == 'proposed_geometry_observation')
     exc = next(r for r in positive['comparison']['actual_rows_detail'] if r['table'] == 'proposed_migration_exception')
+    rollback_hashes = [t for t in test_results if 'same_database_pre_test_hash' in t]
     report = {
         'command': 'address-points-geometry-slice',
         'status': 'passed',
         'reviewer_owned_oracle_sha256': address_points_oracle_hash(),
         'reviewer_owned_oracle_changed': False,
+        'reviewer_owned_correction_oracle_sha256': address_points_correction_oracle_hash(),
+        'reviewer_owned_correction_oracle_changed': False,
         'exact_function_implemented': ADDRESS_POINTS_FUNCTION,
         'exact_registry_binding': {ADDRESS_POINTS_IMPL_UNIT: ADDRESS_POINTS_FUNCTION},
         'generic_transform_group_used_for_slice': False,
+        'coordinate_insertion_method': 'typed numeric parameters via ST_SetSRID(ST_MakePoint(%s,%s),4326); no fixed-decimal WKT formatting before insertion',
+        'precision_test_wkt_srid': {'wkt': precision['wkt'], 'srid': precision['srid']},
         'source_row_query': positive['transform']['source_row_query']['sql'],
         'source_row_returned': positive['transform']['source_row_query']['row'],
         'fields_consumed': positive['transform']['fields_consumed'],
+        'source_key_derivation': {'rule': "address_points:<queried source id>", 'value': positive['transform']['lineage']['derived_source_key']},
+        'source_record_resolution': positive['transform']['lineage']['source_row'],
+        'evidence_resolution': positive['transform']['lineage']['evidence_row'],
+        'second_source_identity_test': second_identity,
+        'reviewed_transform_spec_row': positive['transform']['spec_validation']['group'],
+        'binding_validation': positive['transform']['spec_validation']['validation'],
         'target_identity_resolution': positive['transform']['target_identity_resolution'],
         'geometry_observation_row': geom,
         'geometry_wkt_srid': {'wkt': geom['values']['observed_geom_wkt'], 'srid': geom['values']['observed_geom_srid']},
@@ -1132,11 +1390,15 @@ def run_address_points_geometry_slice() -> dict[str, Any]:
         'source_evidence_lineage': positive['transform']['lineage'],
         'conditional_exception_row': exc,
         'expected_absent_rows_verified': positive['comparison']['expected_absent_rows'],
+        'comparator_connection': positive['comparison']['comparator_connection'],
+        'comparator_read_only_proof': positive['comparison']['comparator_read_only_proof'],
+        'complete_target_set_query': positive['comparison']['complete_target_set_query'],
         'first_run_inserts': positive['transform']['insert_stats_first']['inserted'],
         'second_run_inserts': positive['transform']['insert_stats_second']['inserted'],
         'second_run_updates': 0,
         'geometry_observation_duplicates': positive['comparison']['geometry_observation_duplicates'],
         'tests': test_results,
+        'same_database_rollback_proofs': rollback_hashes,
         'failed_test_state_unchanged': all(t.get('state_unchanged', True) for t in test_results),
     }
     write_json(DM / 'phase-a-address-points-geometry-slice-report.json', report)

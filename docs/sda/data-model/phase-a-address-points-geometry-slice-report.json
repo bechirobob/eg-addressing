@@ -3,7 +3,32 @@
     "capture_method": "derived-from-source",
     "horizontal_accuracy_m": "4.50"
   },
+  "binding_validation": {
+    "callable": true,
+    "covered_source_fields": true,
+    "implementation_unit": true,
+    "required_context_fields": true,
+    "target_entity": true,
+    "transform_group_id": true
+  },
   "command": "address-points-geometry-slice",
+  "comparator_connection": {
+    "separate_connection": true,
+    "transaction_read_only": "on"
+  },
+  "comparator_read_only_proof": {
+    "separate_connection": true,
+    "target_write_blocked": true,
+    "transaction_read_only": "on",
+    "write_error": "cannot execute INSERT in a read-only transaction"
+  },
+  "complete_target_set_query": {
+    "source_key": "address_points:phase-a-address-points-id",
+    "tables": [
+      "proposed_geometry_observation",
+      "proposed_migration_exception"
+    ]
+  },
   "conditional_exception_row": {
     "primary_key": {
       "migration_exception_id": "phase-a-exception-geometry-authority-address-points-phase-a-address-points-id"
@@ -25,9 +50,14 @@
       "resolved_at": null,
       "severity": "medium",
       "source_field": null,
-      "source_key": "address_points:phase-a-address-points-001",
+      "source_key": "address_points:phase-a-address-points-id",
       "source_table": "address_points"
     }
+  },
+  "coordinate_insertion_method": "typed numeric parameters via ST_SetSRID(ST_MakePoint(%s,%s),4326); no fixed-decimal WKT formatting before insertion",
+  "evidence_resolution": {
+    "evidence_object_id": "phase-a-evidence-address-points",
+    "source_record_id": "phase-a-source-record-address-points-001"
   },
   "exact_function_implemented": "transform_address_points_geometry",
   "exact_registry_binding": {
@@ -61,11 +91,11 @@
   ],
   "failed_test_state_unchanged": true,
   "fields_consumed": [
-    "address_points.id",
-    "address_points.address_id",
+    "address_points.accuracy_meters",
     "address_points.latitude",
     "address_points.longitude",
-    "address_points.accuracy_meters",
+    "address_points.id",
+    "address_points.address_id",
     "address_points.source_method",
     "address_points.created_at"
   ],
@@ -97,21 +127,201 @@
     "srid": 4326,
     "wkt": "POINT(8.783 3.752)"
   },
+  "precision_test_wkt_srid": {
+    "srid": 4326,
+    "wkt": "POINT(8.7834567 3.7523456)"
+  },
+  "reviewed_transform_spec_row": {
+    "archive_behavior": "archive required when registry target/archive_object requires source_payload_archive; operational-control records retain typed disposition otherwise",
+    "conditional_authority_rfi_status": [
+      "none"
+    ],
+    "covered_source_fields": [
+      "address_points.accuracy_meters",
+      "address_points.latitude",
+      "address_points.longitude"
+    ],
+    "crosswalk_algorithm": "source table + source key + target entity -> proposed_legacy_crosswalk when registry declares identity/crosswalk target",
+    "dispositions": [
+      "structured-transform"
+    ],
+    "exception_behavior": "owned exception required for RFI/conditional/unresolved authority or unresolved reference dispositions",
+    "id_algorithm": "phase-a deterministic slug(source table/group/current field)",
+    "idempotency_key": "address_points.phase-a-address-points-001::WO002-R06-geometry-observation-address_points",
+    "implementation_unit": "impl_wo002_r06_geometry_observation_address_points",
+    "operation": "registry-disposition-to-canonical-target-evidence",
+    "source_record_key": "address_points:phase-a-address-points-001",
+    "source_table": "address_points",
+    "target_entities": [
+      "geometry_observation"
+    ],
+    "target_fields": [
+      "geometry_observation.observed_geom"
+    ],
+    "transform_group_id": "WO002-R06-geometry-observation-address_points"
+  },
+  "reviewer_owned_correction_oracle_changed": false,
+  "reviewer_owned_correction_oracle_sha256": "12214d3967c6561eaa30c4577d9ab445a9b90d14b6d5c3374a842868e4e62bea",
   "reviewer_owned_oracle_changed": false,
   "reviewer_owned_oracle_sha256": "cf699de04e0ca500c3a7826f257e190d24835356ef96db1650160d7d438edaea",
+  "same_database_rollback_proofs": [
+    {
+      "expected_error": "address_points geometry transform specification binding mismatch",
+      "observed_error": "address_points geometry transform specification binding mismatch: {'transform_group_id': True, 'implementation_unit': False, 'callable': False, 'covered_source_fields': True, 'required_context_fields': True, 'target_entity': True}",
+      "rollback_equality": true,
+      "same_database_post_failure_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_pre_test_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "state_unchanged": true,
+      "status": "passed",
+      "test_id": "transform-spec-binding-drift"
+    },
+    {
+      "expected_error": "geometry observation does not match reviewer-owned expected WKT",
+      "observed_error": "geometry observation does not match reviewer-owned expected WKT",
+      "rollback_equality": true,
+      "same_database_post_failure_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_pre_test_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "state_unchanged": true,
+      "status": "passed",
+      "test_id": "wrong-longitude-transform-implementation"
+    },
+    {
+      "expected_error": "coordinate out of range",
+      "observed_error": "coordinate out of range",
+      "rollback_equality": true,
+      "same_database_post_failure_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_pre_test_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "state_unchanged": true,
+      "status": "passed",
+      "test_id": "invalid-coordinate-current-source"
+    },
+    {
+      "expected_error": "unexpected address_points geometry slice target row",
+      "observed_error": "unexpected address_points geometry slice target row",
+      "rollback_equality": true,
+      "same_database_post_failure_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_pre_test_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "state_unchanged": true,
+      "status": "passed",
+      "test_id": "unexpected-extra-target-row"
+    },
+    {
+      "expected_error": "address_points.address_id cannot resolve target location record",
+      "observed_error": "address_points.address_id cannot resolve target location record",
+      "rollback_equality": true,
+      "same_database_post_failure_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_pre_test_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "state_unchanged": true,
+      "status": "passed",
+      "test_id": "missing-address-crosswalk"
+    },
+    {
+      "expected_error": "address_points evidence object not found",
+      "observed_error": "address_points evidence object not found",
+      "rollback_equality": true,
+      "same_database_post_failure_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_pre_test_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "state_unchanged": true,
+      "status": "passed",
+      "test_id": "missing-evidence-object"
+    },
+    {
+      "expected_error": "observed geometry differs from reviewer-owned expected geometry",
+      "observed_error": "observed geometry differs from reviewer-owned expected geometry",
+      "rollback_equality": true,
+      "same_database_post_failure_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_pre_test_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "state_unchanged": true,
+      "status": "passed",
+      "test_id": "wrong-independent-expected-geometry"
+    }
+  ],
   "second_run_inserts": 0,
   "second_run_updates": 0,
+  "second_source_identity_test": {
+    "checks": {
+      "evidence_object_resolved": true,
+      "exception_source_key": true,
+      "geometry_id": true,
+      "source_key": true,
+      "source_record_id": true
+    },
+    "exception_row": {
+      "primary_key": {
+        "migration_exception_id": "phase-a-exception-geometry-authority-address-points-phase-a-address-points-002"
+      },
+      "table": "proposed_migration_exception",
+      "values": {
+        "batch_id": "phase-a-address-points-geometry-slice",
+        "created_at": "2026-07-15T00:00:00Z",
+        "details_json": {
+          "non_official": true,
+          "open_authority_rfi": "geometry-promotion-authority",
+          "reason": "Canonical geometry promotion authority unresolved; observation preserved without canonical promotion",
+          "target_entity": "geometry_observation",
+          "target_id": "phase-a-geometry-address-points-phase-a-address-points-002"
+        },
+        "exception_type": "authority-rfi",
+        "migration_exception_id": "phase-a-exception-geometry-authority-address-points-phase-a-address-points-002",
+        "owner": "SDA",
+        "resolved_at": null,
+        "severity": "medium",
+        "source_field": null,
+        "source_key": "address_points:phase-a-address-points-002",
+        "source_table": "address_points"
+      }
+    },
+    "geometry_row": {
+      "primary_key": {
+        "geometry_observation_id": "phase-a-geometry-address-points-phase-a-address-points-002"
+      },
+      "table": "proposed_geometry_observation",
+      "values": {
+        "capture_method": "derived-from-source",
+        "classification": "restricted",
+        "evidence_object_id": "phase-a-evidence-address-points-phase-a-address-points-002",
+        "geometry_observation_id": "phase-a-geometry-address-points-phase-a-address-points-002",
+        "geometry_role": "location-point",
+        "horizontal_accuracy_m": "4.50",
+        "licence_id": null,
+        "observed_at": "2026-07-15T00:00:00Z",
+        "observed_geom_srid": 4326,
+        "observed_geom_wkt": "POINT(8.783 3.752)",
+        "recorded_at": "2026-07-15T00:00:00Z",
+        "source_record_id": "phase-a-source-record-address-points-002",
+        "subject_id": "phase-a-subject-phase-a-location-address-reference"
+      }
+    },
+    "source_id": "phase-a-address-points-002",
+    "status": "passed",
+    "test_id": "lineage-derived-not-hardcoded"
+  },
   "source_evidence_lineage": {
-    "evidence_query": "SELECT evidence_object_id, source_record_id FROM canonical_target.proposed_evidence_object WHERE evidence_object_id = %s",
+    "derived_source_key": "address_points:phase-a-address-points-id",
+    "evidence_params": [
+      "phase-a-source-record-address-points-001"
+    ],
+    "evidence_query": "SELECT evidence_object_id, source_record_id FROM canonical_target.proposed_evidence_object WHERE source_record_id = %s ORDER BY evidence_object_id",
     "evidence_row": {
       "evidence_object_id": "phase-a-evidence-address-points",
       "source_record_id": "phase-a-source-record-address-points-001"
     },
-    "source_query": "SELECT source_record_id, source_key FROM canonical_target.proposed_source_record WHERE source_record_id = %s",
+    "source_params": [
+      "address_points:phase-a-address-points-id"
+    ],
+    "source_query": "SELECT source_record_id, source_key FROM canonical_target.proposed_source_record WHERE source_key = %s",
     "source_row": {
-      "source_key": "address_points:phase-a-address-points-001",
+      "source_key": "address_points:phase-a-address-points-id",
       "source_record_id": "phase-a-source-record-address-points-001"
     }
+  },
+  "source_key_derivation": {
+    "rule": "address_points:<queried source id>",
+    "value": "address_points:phase-a-address-points-id"
+  },
+  "source_record_resolution": {
+    "source_key": "address_points:phase-a-address-points-id",
+    "source_record_id": "phase-a-source-record-address-points-001"
   },
   "source_row_query": "SELECT id,address_id,latitude,longitude,accuracy_meters,source_method,is_active,created_at,updated_at FROM current_source.address_points WHERE id = %s",
   "source_row_returned": {
@@ -131,7 +341,7 @@
       "phase-a-addresses-id"
     ],
     "row": {
-      "legacy_crosswalk_id": "phase-a-crosswalk-addresses-id-to-location-record",
+      "legacy_crosswalk_id": "phase-a-crosswalk-addresses-id-to-location-record-phase-a-address-points-id",
       "native_id": "phase-a-location-address-reference",
       "subject_entity": "location_record",
       "subject_id": "phase-a-subject-phase-a-location-address-reference",
@@ -139,7 +349,7 @@
       "target_entity": "location_record",
       "target_id": "phase-a-location-address-reference"
     },
-    "sql": "SELECT cw.legacy_crosswalk_id, cw.target_entity, cw.target_id, rs.subject_id, rs.native_id, rs.subject_entity, rs.subject_state FROM canonical_target.proposed_legacy_crosswalk cw JOIN canonical_target.proposed_registry_subject rs ON rs.native_id = cw.target_id AND rs.subject_entity = cw.target_entity WHERE cw.source_table = 'addresses' AND cw.source_field = 'id' AND cw.legacy_id = %s AND cw.target_entity = 'location_record'"
+    "sql": "SELECT cw.legacy_crosswalk_id, cw.target_entity, cw.target_id, rs.subject_id, rs.native_id, rs.subject_entity, rs.subject_state FROM canonical_target.proposed_legacy_crosswalk cw JOIN canonical_target.proposed_registry_subject rs ON rs.native_id = cw.target_id AND rs.subject_entity = cw.target_entity WHERE cw.source_table = 'addresses' AND cw.source_field = 'id' AND cw.legacy_id = %s AND cw.target_entity = 'location_record' ORDER BY cw.legacy_crosswalk_id"
   },
   "tests": [
     {
@@ -155,18 +365,108 @@
       "test_id": "second-run-idempotency"
     },
     {
-      "expected_error": "geometry observation does not match reviewer-owned expected WKT",
-      "observed_error": "geometry observation does not match reviewer-owned expected WKT",
+      "srid": 4326,
+      "status": "passed",
+      "test_id": "precision-preservation",
+      "wkt": "POINT(8.7834567 3.7523456)"
+    },
+    {
+      "checks": {
+        "evidence_object_resolved": true,
+        "exception_source_key": true,
+        "geometry_id": true,
+        "source_key": true,
+        "source_record_id": true
+      },
+      "exception_row": {
+        "primary_key": {
+          "migration_exception_id": "phase-a-exception-geometry-authority-address-points-phase-a-address-points-002"
+        },
+        "table": "proposed_migration_exception",
+        "values": {
+          "batch_id": "phase-a-address-points-geometry-slice",
+          "created_at": "2026-07-15T00:00:00Z",
+          "details_json": {
+            "non_official": true,
+            "open_authority_rfi": "geometry-promotion-authority",
+            "reason": "Canonical geometry promotion authority unresolved; observation preserved without canonical promotion",
+            "target_entity": "geometry_observation",
+            "target_id": "phase-a-geometry-address-points-phase-a-address-points-002"
+          },
+          "exception_type": "authority-rfi",
+          "migration_exception_id": "phase-a-exception-geometry-authority-address-points-phase-a-address-points-002",
+          "owner": "SDA",
+          "resolved_at": null,
+          "severity": "medium",
+          "source_field": null,
+          "source_key": "address_points:phase-a-address-points-002",
+          "source_table": "address_points"
+        }
+      },
+      "geometry_row": {
+        "primary_key": {
+          "geometry_observation_id": "phase-a-geometry-address-points-phase-a-address-points-002"
+        },
+        "table": "proposed_geometry_observation",
+        "values": {
+          "capture_method": "derived-from-source",
+          "classification": "restricted",
+          "evidence_object_id": "phase-a-evidence-address-points-phase-a-address-points-002",
+          "geometry_observation_id": "phase-a-geometry-address-points-phase-a-address-points-002",
+          "geometry_role": "location-point",
+          "horizontal_accuracy_m": "4.50",
+          "licence_id": null,
+          "observed_at": "2026-07-15T00:00:00Z",
+          "observed_geom_srid": 4326,
+          "observed_geom_wkt": "POINT(8.783 3.752)",
+          "recorded_at": "2026-07-15T00:00:00Z",
+          "source_record_id": "phase-a-source-record-address-points-002",
+          "subject_id": "phase-a-subject-phase-a-location-address-reference"
+        }
+      },
+      "source_id": "phase-a-address-points-002",
+      "status": "passed",
+      "test_id": "lineage-derived-not-hardcoded"
+    },
+    {
+      "expected_error": "address_points geometry transform specification binding mismatch",
+      "observed_error": "address_points geometry transform specification binding mismatch: {'transform_group_id': True, 'implementation_unit': False, 'callable': False, 'covered_source_fields': True, 'required_context_fields': True, 'target_entity': True}",
+      "rollback_equality": true,
+      "same_database_post_failure_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_pre_test_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
       "state_unchanged": true,
       "status": "passed",
-      "test_id": "wrong-longitude-implementation"
+      "test_id": "transform-spec-binding-drift"
+    },
+    {
+      "expected_error": "geometry observation does not match reviewer-owned expected WKT",
+      "observed_error": "geometry observation does not match reviewer-owned expected WKT",
+      "rollback_equality": true,
+      "same_database_post_failure_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_pre_test_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "state_unchanged": true,
+      "status": "passed",
+      "test_id": "wrong-longitude-transform-implementation"
     },
     {
       "expected_error": "coordinate out of range",
       "observed_error": "coordinate out of range",
+      "rollback_equality": true,
+      "same_database_post_failure_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_pre_test_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
       "state_unchanged": true,
       "status": "passed",
-      "test_id": "invalid-coordinate-source"
+      "test_id": "invalid-coordinate-current-source"
+    },
+    {
+      "expected_error": "unexpected address_points geometry slice target row",
+      "observed_error": "unexpected address_points geometry slice target row",
+      "rollback_equality": true,
+      "same_database_post_failure_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_pre_test_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "state_unchanged": true,
+      "status": "passed",
+      "test_id": "unexpected-extra-target-row"
     },
     {
       "expected_error": "address_points source row not found",
@@ -178,6 +478,9 @@
     {
       "expected_error": "address_points.address_id cannot resolve target location record",
       "observed_error": "address_points.address_id cannot resolve target location record",
+      "rollback_equality": true,
+      "same_database_post_failure_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_pre_test_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
       "state_unchanged": true,
       "status": "passed",
       "test_id": "missing-address-crosswalk"
@@ -185,6 +488,9 @@
     {
       "expected_error": "address_points evidence object not found",
       "observed_error": "address_points evidence object not found",
+      "rollback_equality": true,
+      "same_database_post_failure_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_pre_test_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
       "state_unchanged": true,
       "status": "passed",
       "test_id": "missing-evidence-object"
@@ -192,6 +498,9 @@
     {
       "expected_error": "observed geometry differs from reviewer-owned expected geometry",
       "observed_error": "observed geometry differs from reviewer-owned expected geometry",
+      "rollback_equality": true,
+      "same_database_post_failure_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_pre_test_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
       "state_unchanged": true,
       "status": "passed",
       "test_id": "wrong-independent-expected-geometry"
