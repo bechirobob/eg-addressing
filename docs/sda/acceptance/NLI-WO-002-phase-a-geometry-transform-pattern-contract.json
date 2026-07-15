@@ -1,0 +1,58 @@
+{
+  "control_id": "NLI-WO-002-PA-GEO-PATTERN-01",
+  "control_status": "reviewer-owned-accepted-pattern-contract",
+  "implementation_must_not_modify": true,
+  "accepted_implementation_commit": "2f9373ef0481af498638810d43a8008986c4697b",
+  "accepted_transform_file_blob_sha": "78bf29cebd030e745212c935db9536f7dd8fa81b",
+  "accepted_transform_spec_file_blob_sha": "c0fe2fde4af9a3ecdf0546c0c8f38ae67b9b80b3",
+  "reviewer_oracles": {
+    "parent_sha256": "cf699de04e0ca500c3a7826f257e190d24835356ef96db1650160d7d438edaea",
+    "correction_sha256": "12214d3967c6561eaa30c4577d9ab445a9b90d14b6d5c3374a842868e4e62bea",
+    "final_correction_sha256": "187d940235cdf1ef0976c423151f11ab5a378f1761e30b0007942d9aa4bd9278"
+  },
+  "accepted_slice": {
+    "transform_group_id": "WO002-R06-geometry-observation-address_points",
+    "implementation_unit": "impl_wo002_r06_geometry_observation_address_points",
+    "callable": "transform_address_points_geometry",
+    "source_table": "address_points",
+    "covered_source_fields": [
+      "address_points.accuracy_meters",
+      "address_points.latitude",
+      "address_points.longitude"
+    ],
+    "required_context_fields": [
+      "address_points.id",
+      "address_points.address_id",
+      "address_points.source_method",
+      "address_points.created_at"
+    ],
+    "source_method_translation": {
+      "phase-a address_points source_method": "derived-from-source"
+    },
+    "target_entities": [
+      "geometry_observation"
+    ]
+  },
+  "accepted_behavior": [
+    "Query one complete current_source.address_points row by source identity",
+    "Resolve the referenced address through exactly one reviewed address identity crosswalk",
+    "Resolve source_record and exactly one evidence object from the derived source key",
+    "Construct a typed PostGIS point without source-precision truncation",
+    "Create one proposed_geometry_observation and one owned conditional authority exception",
+    "Create no canonical geometry version, quality approval, CRS transformation or per-field geometry assertions",
+    "Compare all source-attributable target rows through a separate read-only connection",
+    "Fail on missing or unexpected rows in either direction",
+    "Produce zero inserts and zero updates on the second execution",
+    "Prove failing mutations roll back in the same database before reset"
+  ],
+  "recorded_conditions": [
+    "Acceptance is bound to the exact implementation commit, transform-spec row and reviewer-oracle hashes above; changing any of them invalidates pattern acceptance until SDA review",
+    "The process-level oracle gate is accepted for this deterministic single-thread design harness, but it is not an identity or security boundary",
+    "Observed-output code must remain free of acceptance-oracle reads; acceptance oracles remain comparator/test authority only",
+    "The address identity crosswalk is a prerequisite owned by the identity/crosswalk transform, not an output owned by the geometry transform",
+    "Every replicated transform group requires its own reviewer-owned expected-result oracle before implementation",
+    "Every replicated group requires an explicit callable and binding; the generic all-groups transform is not accepted as evidence",
+    "This contract accepts a transformation pattern only and does not close F02, F14, Phase A, NLI-WO-002 or NLI-WO-002B"
+  ],
+  "replication_rule": "No additional transform group may be implemented until the SDA publishes a group-specific reviewer oracle or explicitly authorizes a bounded batch containing such oracles."
+}
