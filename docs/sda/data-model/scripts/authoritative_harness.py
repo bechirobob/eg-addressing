@@ -1337,7 +1337,7 @@ def run_address_points_negative_probe(probe_id: str, expected_error: str, mutati
             if mutation.get('invalid_coordinate_current_source'):
                 cur.execute("UPDATE current_source.address_points SET latitude = 91.0 WHERE id = %s", ('phase-a-address-points-id',))
             transform_address_points_geometry(cur, source_id='phase-a-address-points-id', mutation=mutation, spec_validation=spec_validation)
-            if mutation.get('wrong_expected_geometry') or mutation.get('unexpected_extra_target_row') or mutation.get('wrong_longitude_implementation'):
+            if mutation.get('wrong_expected_geometry') or mutation.get('unexpected_extra_target_row') or mutation.get('wrong_longitude_implementation') or mutation.get('swap_timing_implementation'):
                 actual = address_points_complete_target_rows(cur, source_key)
                 with address_points_oracle_access(True):
                     oracle = load_address_points_oracle()
@@ -1587,6 +1587,8 @@ def run_address_points_geometry_slice() -> dict[str, Any]:
 # ---- Address records geometry one-slice checkpoint ----
 ADDRESS_RECORDS_ORACLE = ACCEPTANCE / 'NLI-WO-002-phase-a-address-records-geometry-expected.json'
 ADDRESS_RECORDS_ORACLE_BASELINE_SHA256 = '7a5e68c4639fe290fd46c38d41c754ae25737bee8b260278817970e7758d20e2'
+ADDRESS_RECORDS_CORRECTION_ORACLE = ACCEPTANCE / 'NLI-WO-002-phase-a-address-records-geometry-correction-oracle.json'
+ADDRESS_RECORDS_CORRECTION_ORACLE_BASELINE_SHA256 = 'ed5afa99495234a609762117c102793644529b5b1dfcdf784528a67a3c2ddee2'
 ADDRESS_RECORDS_ORACLE_ACCESS_ALLOWED = False
 ADDRESS_RECORDS_GROUP_ID = 'WO002-R06-geometry-observation-address_records'
 ADDRESS_RECORDS_IMPL_UNIT = 'impl_wo002_r06_geometry_observation_address_records'
@@ -1596,6 +1598,16 @@ ADDRESS_RECORDS_GEOMETRY_IMPLEMENTATIONS: dict[str, Callable[..., dict[str, Any]
 
 def address_records_oracle_hash() -> str:
     return file_sha256(ADDRESS_RECORDS_ORACLE)
+
+
+def address_records_correction_oracle_hash() -> str:
+    return file_sha256(ADDRESS_RECORDS_CORRECTION_ORACLE)
+
+
+def load_address_records_correction_oracle() -> dict[str, Any]:
+    if not ADDRESS_RECORDS_ORACLE_ACCESS_ALLOWED:
+        raise HarnessError('reviewer-owned address_records correction oracle access is disabled outside the read-only comparator')
+    return json.loads(ADDRESS_RECORDS_CORRECTION_ORACLE.read_text())
 
 
 def load_address_records_oracle() -> dict[str, Any]:
@@ -1669,16 +1681,9 @@ def address_records_crosswalk_id(source_id: str) -> str:
     return f'phase-a-crosswalk-address-records-{source_id.rsplit("-", 1)[-1]}-to-location-record'
 
 
-def ensure_address_records_capture_method_vocab(cur) -> None:
-    cur.execute(
-        "INSERT INTO canonical_target.vocab_capture_method (value, meaning) VALUES (%s, %s) ON CONFLICT (value) DO NOTHING",
-        ('address-record-derived', 'Derived from address_records numeric coordinates after geom parity check.'),
-    )
-
 
 def ensure_address_records_preconditions(cur, rec: dict[str, Any], mutation: dict[str, Any] | None = None) -> None:
     mutation = mutation or {}
-    ensure_address_records_capture_method_vocab(cur)
     rows = base_target_rows()
     add_source_records_and_evidence(rows, [rec])
     rec_values = normalize_current_fixture_values('address_records', rec['values'])
@@ -1726,7 +1731,6 @@ def ensure_address_records_preconditions(cur, rec: dict[str, Any], mutation: dic
 
 
 def ensure_address_records_multi_preconditions(cur, records: list[dict[str, Any]]) -> None:
-    ensure_address_records_capture_method_vocab(cur)
     rows = base_target_rows()
     add_source_records_and_evidence(rows, records)
     for rec in records:
@@ -1852,7 +1856,7 @@ def reviewed_address_records_transform_spec(spec_mutation: dict[str, Any] | None
         'covered_source_fields': ['address_records.accuracy_meters','address_records.latitude','address_records.longitude'],
         'required_context_fields': ['address_records.id','address_records.source_submission_id','address_records.created_at','address_records.updated_at','address_records.status','address_records.publication_state','address_records.geom'],
         'coordinate_authority': {'primary':['address_records.longitude','address_records.latitude'],'geom_role':'derived-parity-check','required_geom_srid':4326,'source_crs':'EPSG:4326','mismatch_behavior':'fail closed before target writes with address_records geom does not match latitude/longitude'},
-        'capture_method_rule': {'type':'reviewed-constant-after-source-parity','value':'address-record-derived'},
+        'capture_method_rule': {'type':'reviewed-constant-after-source-parity','value':'derived-from-source'},
         'observed_at_rule': 'address_records.created_at',
         'recorded_at_rule': 'address_records.updated_at',
         'classification_rule': 'restricted',
@@ -1889,9 +1893,6 @@ def transform_address_records_geometry(cur, *, source_id: str = 'phase-a-address
     mutation = mutation or {}
     spec_validation = spec_validation or reviewed_address_records_transform_spec()
     source_row, source_query = query_complete_address_records_row(cur, source_id)
-    if mutation.get('invalid_coordinate_current_source'):
-        source_row = dict(source_row)
-        source_row['latitude'] = 91.0
     parity = validate_address_records_geom_parity(cur, source_row)
     identity = resolve_address_records_target_identity(cur, source_row['id'])
     lineage = require_address_records_lineage(cur, source_row)
@@ -1914,8 +1915,8 @@ def transform_address_records_geometry(cur, *, source_id: str = 'phase-a-address
             'source_record_id': lineage['source_row']['source_record_id'],
             'evidence_object_id': lineage['evidence_row']['evidence_object_id'],
             'licence_id': None,
-            'observed_at': source_row['created_at'],
-            'recorded_at': source_row['updated_at'],
+            'observed_at': source_row['updated_at'] if mutation.get('swap_timing_implementation') else source_row['created_at'],
+            'recorded_at': source_row['created_at'] if mutation.get('swap_timing_implementation') else source_row['updated_at'],
             'classification': spec_validation['group']['classification_rule'],
         }],
         'proposed_migration_exception': [{
@@ -1982,13 +1983,25 @@ def address_records_target_slice_hash(cur, source_key: str = 'address_records:ph
     return {'rows': rows, 'hash': sha(rows)}
 
 
-def expected_address_records_rows(oracle: dict[str, Any], source_key: str = 'address_records:phase-a-address-records-id') -> list[dict[str, Any]]:
+def expected_address_records_rows(oracle: dict[str, Any], source_key: str = 'address_records:phase-a-address-records-id', correction: dict[str, Any] | None = None, expected_mutation: dict[str, Any] | None = None) -> list[dict[str, Any]]:
     rows = copy.deepcopy(oracle['expected_inserted_rows'])
+    capture_method = None
+    if correction:
+        capture_method = correction['required_corrections']['C12_authoritative_capture_method']['expected_observed_value']
     for row in rows:
         if row['table'] == 'proposed_migration_exception':
             row['values']['source_key'] = source_key
+        if row['table'] == 'proposed_geometry_observation':
+            if capture_method:
+                row['values']['capture_method'] = capture_method
+            if expected_mutation and expected_mutation.get('precision_expected'):
+                row['values']['observed_geom_wkt'] = 'POINT(8.7834567 3.7523456)'
+            if expected_mutation and expected_mutation.get('wrong_expected_geometry'):
+                row['values']['observed_geom_wkt'] = 'POINT(0 0)'
+            if expected_mutation and expected_mutation.get('distinct_timing_expected'):
+                row['values']['observed_at'] = '2026-07-15T00:00:00Z'
+                row['values']['recorded_at'] = '2026-07-15T01:23:45Z'
     return sorted(rows, key=lambda r: (r['table'], json.dumps(r['primary_key'], sort_keys=True)))
-
 
 def expected_absent_address_records_rows(cur, oracle: dict[str, Any]) -> list[dict[str, Any]]:
     results=[]
@@ -2013,14 +2026,9 @@ def compare_address_records_oracle_read_only(*, source_key: str = 'address_recor
         comparator_read_only = cur.fetchone()['transaction_read_only']
         with address_records_oracle_access(True):
             oracle = load_address_records_oracle()
-        if expected_mutation and expected_mutation.get('wrong_expected_geometry'):
-            oracle = copy.deepcopy(oracle)
-            oracle['expected_inserted_rows'][0]['values']['observed_geom_wkt'] = 'POINT(0 0)'
-        if expected_mutation and expected_mutation.get('precision_expected'):
-            oracle = copy.deepcopy(oracle)
-            oracle['expected_inserted_rows'][0]['values']['observed_geom_wkt'] = 'POINT(8.7834567 3.7523456)'
+            correction = load_address_records_correction_oracle()
         actual = address_records_complete_target_rows(cur, source_key)
-        expected = expected_address_records_rows(oracle, source_key)
+        expected = expected_address_records_rows(oracle, source_key, correction, expected_mutation)
         if len(actual) != len(expected):
             raise HarnessError(f'unexpected address_records geometry slice target row: expected {len(expected)} rows, observed {len(actual)}')
         exp_keys={(r['table'], tuple(sorted(r['primary_key'].items()))) for r in expected}
@@ -2036,6 +2044,10 @@ def compare_address_records_oracle_read_only(*, source_key: str = 'address_recor
                 if expected_mutation and expected_mutation.get('wrong_expected_geometry'):
                     raise HarnessError('observed geometry differs from reviewer-owned expected geometry')
                 raise HarnessError('geometry observation does not match reviewer-owned expected WKT')
+            actual_timing = next(((r['values'].get('observed_at'), r['values'].get('recorded_at')) for r in actual if r['table']=='proposed_geometry_observation'), None)
+            expected_timing = next(((r['values'].get('observed_at'), r['values'].get('recorded_at')) for r in expected if r['table']=='proposed_geometry_observation'), None)
+            if actual_timing != expected_timing:
+                raise HarnessError('address_records geometry slice observed rows differ from reviewer-owned timing expectation')
             raise HarnessError(f'address_records geometry slice observed rows differ from reviewer-owned oracle: actual={actual} expected={expected}')
         absent = expected_absent_address_records_rows(cur, oracle)
         cur.execute("""
@@ -2063,6 +2075,8 @@ def run_address_records_slice_once(*, mutation: dict[str, Any] | None = None, co
             cur.execute("UPDATE current_source.address_records SET geom = ST_SetSRID(ST_MakePoint(0,0),4326)::geography WHERE id = %s", (source_id,))
         if mutation.get('precision_case'):
             cur.execute("UPDATE current_source.address_records SET latitude=%s, longitude=%s, accuracy_meters=%s, geom=ST_SetSRID(ST_MakePoint(%s,%s),4326)::geography WHERE id=%s", (3.7523456, 8.7834567, 4.5, 8.7834567, 3.7523456, source_id))
+        if mutation.get('distinct_timing_case'):
+            cur.execute("UPDATE current_source.address_records SET created_at=%s, updated_at=%s WHERE id=%s", ('2026-07-15T00:00:00Z', '2026-07-15T01:23:45Z', source_id))
         spec_validation = reviewed_address_records_transform_spec(mutation.get('spec_drift'))
         impl = ADDRESS_RECORDS_GEOMETRY_IMPLEMENTATIONS.get(ADDRESS_RECORDS_IMPL_UNIT)
         if impl is not transform_address_records_geometry:
@@ -2095,17 +2109,23 @@ def run_address_records_negative_probe(probe_id: str, expected_error: str, mutat
         cur.execute('BEGIN')
         try:
             spec_validation = reviewed_address_records_transform_spec(mutation.get('spec_drift'))
+            if mutation.get('invalid_coordinate_current_source'):
+                cur.execute("ALTER TABLE current_source.address_records DROP CONSTRAINT IF EXISTS address_records_latitude_valid")
+                cur.execute("UPDATE current_source.address_records SET latitude = 91.0 WHERE id = %s", ('phase-a-address-records-id',))
             if mutation.get('geom_numeric_mismatch'):
                 cur.execute("UPDATE current_source.address_records SET geom = ST_SetSRID(ST_MakePoint(0,0),4326)::geography WHERE id = %s", ('phase-a-address-records-id',))
             transform_address_records_geometry(cur, source_id='phase-a-address-records-id', mutation=mutation, spec_validation=spec_validation)
-            if mutation.get('wrong_expected_geometry') or mutation.get('unexpected_extra_target_row') or mutation.get('wrong_longitude_implementation'):
+            if mutation.get('wrong_expected_geometry') or mutation.get('unexpected_extra_target_row') or mutation.get('wrong_longitude_implementation') or mutation.get('swap_timing_implementation'):
                 actual = address_records_complete_target_rows(cur, source_key)
                 with address_records_oracle_access(True):
                     oracle = load_address_records_oracle()
-                if mutation.get('wrong_expected_geometry'):
-                    oracle = copy.deepcopy(oracle); oracle['expected_inserted_rows'][0]['values']['observed_geom_wkt'] = 'POINT(0 0)'
-                expected = expected_address_records_rows(oracle, source_key)
+                    correction = load_address_records_correction_oracle()
+                expected = expected_address_records_rows(oracle, source_key, correction, mutation)
                 if len(actual) != len(expected):
+                    actual_timing = next(((r['values'].get('observed_at'), r['values'].get('recorded_at')) for r in actual if r['table']=='proposed_geometry_observation'), None)
+                    expected_timing = next(((r['values'].get('observed_at'), r['values'].get('recorded_at')) for r in expected if r['table']=='proposed_geometry_observation'), None)
+                    if actual_timing != expected_timing:
+                        raise HarnessError('address_records geometry slice observed rows differ from reviewer-owned timing expectation')
                     raise HarnessError('unexpected address_records geometry slice target row')
                 if actual != expected:
                     actual_geom = next((r['values'].get('observed_geom_wkt') for r in actual if r['table']=='proposed_geometry_observation'), None)
@@ -2114,6 +2134,10 @@ def run_address_records_negative_probe(probe_id: str, expected_error: str, mutat
                         if mutation.get('wrong_expected_geometry'):
                             raise HarnessError('observed geometry differs from reviewer-owned expected geometry')
                         raise HarnessError('geometry observation does not match reviewer-owned expected WKT')
+                    actual_timing = next(((r['values'].get('observed_at'), r['values'].get('recorded_at')) for r in actual if r['table']=='proposed_geometry_observation'), None)
+                    expected_timing = next(((r['values'].get('observed_at'), r['values'].get('recorded_at')) for r in expected if r['table']=='proposed_geometry_observation'), None)
+                    if actual_timing != expected_timing:
+                        raise HarnessError('address_records geometry slice observed rows differ from reviewer-owned timing expectation')
                     raise HarnessError('unexpected address_records geometry slice target row')
             raise HarnessError(f'{probe_id} unexpectedly passed')
         except Exception as exc:
@@ -2194,17 +2218,53 @@ def run_address_records_geom_parity_test() -> dict[str, Any]:
     return {'test_id':'geom-parity-positive','status':'passed','parity':report['transform']['numeric_geom_parity']}
 
 
+
+def run_address_records_authoritative_capture_method_test() -> dict[str, Any]:
+    setup_address_records_geometry_database()
+    with connect(options='-c search_path=canonical_target,public') as conn, conn.cursor() as cur:
+        cur.execute("SELECT value FROM canonical_target.vocab_capture_method WHERE value = %s", ('derived-from-source',))
+        existed_after_apply_target = cur.fetchone() is not None
+        cur.execute("SELECT value FROM canonical_target.vocab_capture_method WHERE value = %s", ('address-record-derived',))
+        prohibited_value_absent_before_preconditions = cur.fetchone() is None
+        rec = make_address_records_record('phase-a-address-records-id')
+        ensure_address_records_preconditions(cur, rec, {})
+        cur.execute("SELECT value FROM canonical_target.vocab_capture_method WHERE value = %s", ('derived-from-source',))
+        existed_after_preconditions = cur.fetchone() is not None
+        cur.execute("SELECT value FROM canonical_target.vocab_capture_method WHERE value = %s", ('address-record-derived',))
+        harness_inserted_old_value = cur.fetchone() is not None
+        conn.rollback()
+    if not existed_after_apply_target or not existed_after_preconditions or harness_inserted_old_value or not prohibited_value_absent_before_preconditions:
+        raise HarnessError('authoritative capture-method vocabulary control failed')
+    report = run_address_records_slice_once(compare_expected=True)
+    geom = next(r for r in report['comparison']['actual_rows_detail'] if r['table']=='proposed_geometry_observation')
+    if geom['values']['capture_method'] != 'derived-from-source':
+        raise HarnessError(f'address_records geometry observation used wrong capture method: {geom["values"]["capture_method"]}')
+    return {'test_id':'capture-method-resolves-from-authoritative-target-vocabulary','status':'passed','value_existed_immediately_after_apply_target':existed_after_apply_target,'value_existed_before_address_record_preconditions':existed_after_apply_target,'harness_inserted_or_repaired_vocab':False,'prohibited_address_record_derived_absent':prohibited_value_absent_before_preconditions and not harness_inserted_old_value,'geometry_observation_capture_method':geom['values']['capture_method'],'fk_accepted_naturally':True}
+
+
+def run_address_records_distinct_timing_test() -> dict[str, Any]:
+    setup_address_records_geometry_database()
+    report = run_address_records_slice_once(mutation={'distinct_timing_case': True, 'distinct_timing_expected': True}, compare_expected=True)
+    geom = next(r for r in report['comparison']['actual_rows_detail'] if r['table']=='proposed_geometry_observation')
+    if geom['values']['observed_at'] != '2026-07-15T00:00:00Z' or geom['values']['recorded_at'] != '2026-07-15T01:23:45Z':
+        raise HarnessError(f'address_records distinct timing failed: {geom}')
+    return {'test_id':'distinct-created-updated-timing','status':'passed','created_at':'2026-07-15T00:00:00Z','updated_at':'2026-07-15T01:23:45Z','observed_at':geom['values']['observed_at'],'recorded_at':geom['values']['recorded_at']}
+
 def run_address_records_geometry_slice() -> dict[str, Any]:
     broad_report_path = DM / 'phase-a-current-source-execution-report.json'
     broad_report_original = broad_report_path.read_text() if broad_report_path.exists() else None
     if address_records_oracle_hash() != ADDRESS_RECORDS_ORACLE_BASELINE_SHA256:
         raise HarnessError('reviewer-owned address_records oracle changed')
+    if address_records_correction_oracle_hash() != ADDRESS_RECORDS_CORRECTION_ORACLE_BASELINE_SHA256:
+        raise HarnessError('reviewer-owned address_records correction oracle changed')
+    capture_method_test=run_address_records_authoritative_capture_method_test()
     setup_address_records_geometry_database()
     positive=run_address_records_slice_once(compare_expected=True)
-    test_results=[{'test_id':'positive-authoritative-slice','status':'passed'}]
+    test_results=[{'test_id':'positive-authoritative-slice','status':'passed'}, capture_method_test]
     test_results.append({'test_id':'second-run-idempotency','status':'passed','first_run_inserts':positive['transform']['insert_stats_first']['inserted'],'second_run_inserts':positive['transform']['insert_stats_second']['inserted'],'second_run_updates':0,'geometry_observation_count':positive['comparison']['geometry_observation_count']})
     precision=run_address_records_precision_test(); test_results.append(precision)
     geom_parity=run_address_records_geom_parity_test(); test_results.append(geom_parity)
+    distinct_timing=run_address_records_distinct_timing_test(); test_results.append(distinct_timing)
     second_identity=run_address_records_second_source_identity_test(); test_results.append(second_identity)
     probes=[
         ('geom-numeric-mismatch','address_records geom does not match latitude/longitude',{'geom_numeric_mismatch':True}),
@@ -2217,13 +2277,14 @@ def run_address_records_geometry_slice() -> dict[str, Any]:
         ('wrong-independent-expected-geometry','observed geometry differs from reviewer-owned expected geometry',{'wrong_expected_geometry':True}),
         ('unexpected-extra-target-row','unexpected address_records geometry slice target row',{'unexpected_extra_target_row':True}),
         ('transform-spec-binding-drift','address_records geometry transform specification binding mismatch',{'spec_drift': {'implementation_unit':'impl_wrong'}}),
+        ('swapped-timing-transform-implementation','address_records geometry slice observed rows differ from reviewer-owned timing expectation',{'distinct_timing_case': True, 'distinct_timing_expected': True, 'swap_timing_implementation': True}),
     ]
     for pid, reason, mutation in probes:
         test_results.append(run_address_records_negative_probe(pid, reason, mutation))
     geom=next(r for r in positive['comparison']['actual_rows_detail'] if r['table']=='proposed_geometry_observation')
     exc=next(r for r in positive['comparison']['actual_rows_detail'] if r['table']=='proposed_migration_exception')
     rollback_hashes=[t for t in test_results if 'same_database_pre_test_hash' in t]
-    report={'command':'address-records-geometry-slice','status':'passed','reviewer_owned_oracle_sha256':address_records_oracle_hash(),'reviewer_owned_oracle_changed':False,'accepted_address_points_controls_changed':False,'exact_function_implemented':ADDRESS_RECORDS_FUNCTION,'exact_registry_binding':{ADDRESS_RECORDS_IMPL_UNIT:ADDRESS_RECORDS_FUNCTION},'generic_transform_group_used_for_slice':False,'transform_reads_expected_oracle':False,'source_row_query':positive['transform']['source_row_query']['sql'],'source_row_returned':positive['transform']['source_row_query']['row'],'fields_consumed':positive['transform']['fields_consumed'],'source_geom_wkt_srid':positive['transform']['source_geom'],'numeric_geom_parity':positive['transform']['numeric_geom_parity'],'address_record_identity_crosswalk':positive['transform']['target_identity_resolution']['row']['legacy_crosswalk_id'],'target_location_record':positive['transform']['target_identity_resolution']['row']['target_id'],'target_registry_subject':positive['transform']['target_identity_resolution']['row']['subject_id'],'source_submission_id_used_as_subject':positive['transform']['source_submission_id_used_as_subject'],'source_key_derivation':{'rule':'address_records:<queried address_records.id>','value':positive['transform']['lineage']['derived_source_key']},'source_record_resolution':positive['transform']['lineage']['source_row'],'evidence_resolution':positive['transform']['lineage']['evidence_row'],'reviewed_transform_spec_row':positive['transform']['spec_validation']['group'],'binding_validation':positive['transform']['spec_validation']['validation'],'geometry_observation_row':geom,'conditional_exception_row':exc,'expected_absent_rows_verified':positive['comparison']['expected_absent_rows'],'first_run_inserts':positive['transform']['insert_stats_first']['inserted'],'second_run_inserts':positive['transform']['insert_stats_second']['inserted'],'second_run_updates':0,'geometry_observation_duplicates':positive['comparison']['geometry_observation_duplicates'],'precision_test_wkt_srid':{'wkt':precision['wkt'],'srid':precision['srid']},'geom_parity_test':geom_parity,'second_source_identity_test':second_identity,'source_records_second_source':second_identity['source_records'],'geometry_observations_second_source':second_identity['geometry_observations'],'authority_exceptions_second_source':second_identity['authority_exceptions'],'address_record_identity_crosswalks_second_source':second_identity['address_record_identity_crosswalks'],'duplicate_crosswalks_second_source':second_identity['duplicate_crosswalks'],'multiple_subject_resolution_second_source':second_identity['multiple_subject_resolution'],'tests':test_results,'same_database_rollback_proofs':rollback_hashes,'rollback_equality':all(t.get('rollback_equality', True) for t in test_results),'failed_test_state_unchanged':all(t.get('state_unchanged', True) for t in test_results)}
+    report={'command':'address-records-geometry-slice','status':'passed','reviewer_owned_oracle_sha256':address_records_oracle_hash(),'reviewer_owned_correction_oracle_sha256':address_records_correction_oracle_hash(),'reviewer_owned_oracle_changed':False,'reviewer_owned_correction_oracle_changed':False,'accepted_address_points_controls_changed':False,'exact_function_implemented':ADDRESS_RECORDS_FUNCTION,'exact_registry_binding':{ADDRESS_RECORDS_IMPL_UNIT:ADDRESS_RECORDS_FUNCTION},'generic_transform_group_used_for_slice':False,'transform_reads_expected_oracle':False,'source_row_query':positive['transform']['source_row_query']['sql'],'source_row_returned':positive['transform']['source_row_query']['row'],'fields_consumed':positive['transform']['fields_consumed'],'source_geom_wkt_srid':positive['transform']['source_geom'],'numeric_geom_parity':positive['transform']['numeric_geom_parity'],'address_record_identity_crosswalk':positive['transform']['target_identity_resolution']['row']['legacy_crosswalk_id'],'target_location_record':positive['transform']['target_identity_resolution']['row']['target_id'],'target_registry_subject':positive['transform']['target_identity_resolution']['row']['subject_id'],'source_submission_id_used_as_subject':positive['transform']['source_submission_id_used_as_subject'],'source_key_derivation':{'rule':'address_records:<queried address_records.id>','value':positive['transform']['lineage']['derived_source_key']},'source_record_resolution':positive['transform']['lineage']['source_row'],'evidence_resolution':positive['transform']['lineage']['evidence_row'],'reviewed_transform_spec_row':positive['transform']['spec_validation']['group'],'binding_validation':positive['transform']['spec_validation']['validation'],'geometry_observation_row':geom,'conditional_exception_row':exc,'expected_absent_rows_verified':positive['comparison']['expected_absent_rows'],'first_run_inserts':positive['transform']['insert_stats_first']['inserted'],'second_run_inserts':positive['transform']['insert_stats_second']['inserted'],'second_run_updates':0,'geometry_observation_duplicates':positive['comparison']['geometry_observation_duplicates'],'authoritative_capture_method_test':capture_method_test,'distinct_timing_test':distinct_timing,'precision_test_wkt_srid':{'wkt':precision['wkt'],'srid':precision['srid']},'geom_parity_test':geom_parity,'second_source_identity_test':second_identity,'source_records_second_source':second_identity['source_records'],'geometry_observations_second_source':second_identity['geometry_observations'],'authority_exceptions_second_source':second_identity['authority_exceptions'],'address_record_identity_crosswalks_second_source':second_identity['address_record_identity_crosswalks'],'duplicate_crosswalks_second_source':second_identity['duplicate_crosswalks'],'multiple_subject_resolution_second_source':second_identity['multiple_subject_resolution'],'tests':test_results,'same_database_rollback_proofs':rollback_hashes,'rollback_equality':all(t.get('rollback_equality', True) for t in test_results),'failed_test_state_unchanged':all(t.get('state_unchanged', True) for t in test_results)}
     write_json(DM / 'phase-a-address-records-geometry-slice-report.json', report)
     if broad_report_original is not None:
         broad_report_path.write_text(broad_report_original)

@@ -2,6 +2,16 @@
   "accepted_address_points_controls_changed": false,
   "address_record_identity_crosswalk": "phase-a-crosswalk-address-records-id-to-location-record",
   "address_record_identity_crosswalks_second_source": 2,
+  "authoritative_capture_method_test": {
+    "fk_accepted_naturally": true,
+    "geometry_observation_capture_method": "derived-from-source",
+    "harness_inserted_or_repaired_vocab": false,
+    "prohibited_address_record_derived_absent": true,
+    "status": "passed",
+    "test_id": "capture-method-resolves-from-authoritative-target-vocabulary",
+    "value_existed_before_address_record_preconditions": true,
+    "value_existed_immediately_after_apply_target": true
+  },
   "authority_exceptions_second_source": 2,
   "binding_validation": {
     "callable": true,
@@ -42,6 +52,14 @@
       "source_key": "address_records:phase-a-address-records-id",
       "source_table": "address_records"
     }
+  },
+  "distinct_timing_test": {
+    "created_at": "2026-07-15T00:00:00Z",
+    "observed_at": "2026-07-15T00:00:00Z",
+    "recorded_at": "2026-07-15T01:23:45Z",
+    "status": "passed",
+    "test_id": "distinct-created-updated-timing",
+    "updated_at": "2026-07-15T01:23:45Z"
   },
   "duplicate_crosswalks_second_source": 0,
   "evidence_resolution": {
@@ -116,7 +134,7 @@
     },
     "table": "proposed_geometry_observation",
     "values": {
-      "capture_method": "address-record-derived",
+      "capture_method": "derived-from-source",
       "classification": "restricted",
       "evidence_object_id": "phase-a-evidence-address-records",
       "geometry_observation_id": "phase-a-geometry-address-records-phase-a-address-records-id",
@@ -147,7 +165,7 @@
     "archive_behavior": "archive required when registry target/archive_object requires source_payload_archive; operational-control records retain typed disposition otherwise",
     "capture_method_rule": {
       "type": "reviewed-constant-after-source-parity",
-      "value": "address-record-derived"
+      "value": "derived-from-source"
     },
     "classification_rule": "restricted",
     "conditional_authority_rfi_status": [
@@ -199,6 +217,8 @@
     ],
     "transform_group_id": "WO002-R06-geometry-observation-address_records"
   },
+  "reviewer_owned_correction_oracle_changed": false,
+  "reviewer_owned_correction_oracle_sha256": "ed5afa99495234a609762117c102793644529b5b1dfcdf784528a67a3c2ddee2",
   "reviewer_owned_oracle_changed": false,
   "reviewer_owned_oracle_sha256": "7a5e68c4639fe290fd46c38d41c754ae25737bee8b260278817970e7758d20e2",
   "rollback_equality": true,
@@ -322,6 +342,18 @@
       "state_unchanged": true,
       "status": "passed",
       "test_id": "transform-spec-binding-drift"
+    },
+    {
+      "expected_error": "address_records geometry slice observed rows differ from reviewer-owned timing expectation",
+      "observed_error": "address_records geometry slice observed rows differ from reviewer-owned timing expectation",
+      "rollback_equality": true,
+      "same_database_post_failure_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_post_failure_rows": [],
+      "same_database_pre_test_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_pre_test_rows": [],
+      "state_unchanged": true,
+      "status": "passed",
+      "test_id": "swapped-timing-transform-implementation"
     }
   ],
   "second_run_inserts": 0,
@@ -372,7 +404,7 @@
         },
         "table": "proposed_geometry_observation",
         "values": {
-          "capture_method": "address-record-derived",
+          "capture_method": "derived-from-source",
           "classification": "restricted",
           "evidence_object_id": "phase-a-evidence-address-records",
           "geometry_observation_id": "phase-a-geometry-address-records-phase-a-address-records-id",
@@ -441,7 +473,7 @@
         },
         "table": "proposed_geometry_observation",
         "values": {
-          "capture_method": "address-record-derived",
+          "capture_method": "derived-from-source",
           "classification": "restricted",
           "evidence_object_id": "phase-a-evidence-address-records-002",
           "geometry_observation_id": "phase-a-geometry-address-records-phase-a-address-records-002",
@@ -551,6 +583,16 @@
       "test_id": "positive-authoritative-slice"
     },
     {
+      "fk_accepted_naturally": true,
+      "geometry_observation_capture_method": "derived-from-source",
+      "harness_inserted_or_repaired_vocab": false,
+      "prohibited_address_record_derived_absent": true,
+      "status": "passed",
+      "test_id": "capture-method-resolves-from-authoritative-target-vocabulary",
+      "value_existed_before_address_record_preconditions": true,
+      "value_existed_immediately_after_apply_target": true
+    },
+    {
       "first_run_inserts": 2,
       "geometry_observation_count": 1,
       "second_run_inserts": 0,
@@ -573,6 +615,14 @@
       },
       "status": "passed",
       "test_id": "geom-parity-positive"
+    },
+    {
+      "created_at": "2026-07-15T00:00:00Z",
+      "observed_at": "2026-07-15T00:00:00Z",
+      "recorded_at": "2026-07-15T01:23:45Z",
+      "status": "passed",
+      "test_id": "distinct-created-updated-timing",
+      "updated_at": "2026-07-15T01:23:45Z"
     },
     {
       "address_record_identity_crosswalks": 2,
@@ -620,7 +670,7 @@
           },
           "table": "proposed_geometry_observation",
           "values": {
-            "capture_method": "address-record-derived",
+            "capture_method": "derived-from-source",
             "classification": "restricted",
             "evidence_object_id": "phase-a-evidence-address-records",
             "geometry_observation_id": "phase-a-geometry-address-records-phase-a-address-records-id",
@@ -689,7 +739,7 @@
           },
           "table": "proposed_geometry_observation",
           "values": {
-            "capture_method": "address-record-derived",
+            "capture_method": "derived-from-source",
             "classification": "restricted",
             "evidence_object_id": "phase-a-evidence-address-records-002",
             "geometry_observation_id": "phase-a-geometry-address-records-phase-a-address-records-002",
@@ -872,6 +922,18 @@
       "state_unchanged": true,
       "status": "passed",
       "test_id": "transform-spec-binding-drift"
+    },
+    {
+      "expected_error": "address_records geometry slice observed rows differ from reviewer-owned timing expectation",
+      "observed_error": "address_records geometry slice observed rows differ from reviewer-owned timing expectation",
+      "rollback_equality": true,
+      "same_database_post_failure_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_post_failure_rows": [],
+      "same_database_pre_test_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_pre_test_rows": [],
+      "state_unchanged": true,
+      "status": "passed",
+      "test_id": "swapped-timing-transform-implementation"
     }
   ],
   "transform_reads_expected_oracle": false

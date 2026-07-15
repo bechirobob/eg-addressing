@@ -107,7 +107,7 @@
       "archive_behavior": "archive required when registry target/archive_object requires source_payload_archive; operational-control records retain typed disposition otherwise",
       "capture_method_rule": {
         "type": "reviewed-constant-after-source-parity",
-        "value": "address-record-derived"
+        "value": "derived-from-source"
       },
       "classification_rule": "restricted",
       "conditional_authority_rfi_status": [

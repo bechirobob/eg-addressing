@@ -26,3 +26,10 @@ Implement the address_records geometry vertical slice only. `citizen_geotag_subm
 ## Boundary
 
 No other transform group, accepted address_points controls, citizen-geotag spec/implementation, runtime code, executable migrations, Docker runtime, production/pilot data, secrets, `.env*`, F04-F12, PR #8, broad Phase A reassessment, or SDA Review 12.
+
+
+## C12-C14 correction checkpoint
+
+- C12: capture method now uses authoritative target vocabulary value `derived-from-source`; harness vocabulary insertion is prohibited.
+- C13: invalid-coordinate probe mutates the actual `current_source.address_records` row inside the isolated test transaction and proves same-database rollback.
+- C14: distinct created/updated timing proves `observed_at <- created_at` and `recorded_at <- updated_at`; swapped implementation mutation must fail independent timing comparison.
