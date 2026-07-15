@@ -1,0 +1,12 @@
+{
+  "control_id": "NLI-WO-002-PA-ID-01-C1",
+  "reviewed_head": "5bce5707f21f6d5ed3098c1a5a7158557ae7f492",
+  "parent_oracle_sha256": "518af277e96c94c55808f9ac1e7992059c371bd225d906cf77156c478b0497cd",
+  "required": [
+    "Separate the paused broad generic transform specification from the live narrow specification.",
+    "Use the transform specification at b303a85ce55f8d50c43369c983ad5a8d67e5fcc4 as the frozen broad baseline.",
+    "Add surplus location-record and registry-subject mutations to the read-only comparator.",
+    "Run addresses-identity-slice in exact-head SDA CI on a fresh disposable database.",
+    "Do not change broad expected-target fixtures or implement another group."
+  ]
+}
