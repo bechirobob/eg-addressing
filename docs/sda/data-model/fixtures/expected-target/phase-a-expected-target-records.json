@@ -1,0 +1,28 @@
+{
+  "fixture_authority": "SDA Review 11 Phase A expected-target authority",
+  "review_status": "phase-a-independent-expected-target-fixture",
+  "expected_counts": {
+    "target_entities": 14,
+    "target_child_rows": 2,
+    "target_relationships": 1,
+    "crosswalks": 1,
+    "archives": 1,
+    "exceptions": 1
+  },
+  "expected_hashes": {
+    "target_state_hash": "f7aa46cebe5881ec2a70d3b76973822215aca51b862d2b5acfae68f049f3916e"
+  },
+  "expected_real_fk_edges": [
+    ["proposed_source_package.source_authority_id", "proposed_source_authority.source_authority_id"],
+    ["proposed_source_record.source_package_id", "proposed_source_package.source_package_id"],
+    ["proposed_source_payload_archive.source_record_id", "proposed_source_record.source_record_id"],
+    ["proposed_location_record_version.location_record_id", "proposed_location_record.location_record_id"],
+    ["proposed_location_record_version.administrative_unit_version_id", "proposed_administrative_unit_version.administrative_unit_version_id"],
+    ["proposed_public_code_alias.location_record_id", "proposed_location_record.location_record_id"],
+    ["proposed_location_record_assertion.location_record_version_id", "proposed_location_record_version.location_record_version_id"],
+    ["proposed_location_record_assertion.source_record_id", "proposed_source_record.source_record_id"],
+    ["proposed_location_record_object_link.subject_id", "proposed_registry_subject.subject_id"],
+    ["proposed_location_record_relationship.from_location_record_id", "proposed_location_record.location_record_id"],
+    ["proposed_location_record_relationship.to_location_record_id", "proposed_location_record.location_record_id"]
+  ]
+}

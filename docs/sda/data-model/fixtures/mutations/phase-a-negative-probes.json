@@ -1,0 +1,16 @@
+{
+  "fixture_authority": "SDA Review 11 Phase A strict negative-probe authority",
+  "review_status": "phase-a-independent-negative-probe-fixture",
+  "probes": [
+    {"probe_id": "phase-a-neg-wrong-transform-operation", "expected_reason": "invalid controlled translation", "mutation": {"wrong_transform_operation": "invalid_controlled_translation"}},
+    {"probe_id": "phase-a-neg-wrong-independent-expected-value", "expected_reason": "mismatched typed hash", "mutation": {"wrong_expected_value": true}},
+    {"probe_id": "phase-a-neg-invalid-controlled-translation", "expected_reason": "invalid controlled translation", "mutation": {"wrong_transform_operation": "invalid_controlled_translation"}},
+    {"probe_id": "phase-a-neg-missing-real-target-identity", "expected_reason": "missing real target identity", "mutation": {"missing_target_identity": true}},
+    {"probe_id": "phase-a-neg-unresolved-real-target-fk", "expected_reason": "violates foreign key constraint", "mutation": {"unresolved_real_target_fk": true}},
+    {"probe_id": "phase-a-neg-missing-archive", "expected_reason": "missing archive", "mutation": {"missing_archive": true}},
+    {"probe_id": "phase-a-neg-missing-exception", "expected_reason": "missing exception", "mutation": {"missing_exception": true}},
+    {"probe_id": "phase-a-neg-duplicate-target-output", "expected_reason": "duplicate target output", "mutation": {"wrong_transform_operation": "duplicate_target_output"}},
+    {"probe_id": "phase-a-neg-lost-relationship", "expected_reason": "expected count mismatch", "mutation": {"wrong_transform_operation": "lost_relationship"}},
+    {"probe_id": "phase-a-neg-mismatched-typed-hash", "expected_reason": "mismatched typed hash", "mutation": {"wrong_expected_value": true}}
+  ]
+}

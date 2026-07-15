@@ -1,0 +1,53 @@
+{
+  "assertions": [
+    {
+      "name": "complete-source-records-read-from-current-source",
+      "status": "passed"
+    },
+    {
+      "name": "target-rows-inserted-into-canonical-target",
+      "status": "passed"
+    },
+    {
+      "name": "real-target-fks-used",
+      "status": "passed"
+    },
+    {
+      "count": 1,
+      "name": "crosswalks-created",
+      "status": "passed"
+    },
+    {
+      "count": 1,
+      "name": "archives-created",
+      "status": "passed"
+    },
+    {
+      "count": 1,
+      "name": "exceptions-created",
+      "status": "passed"
+    },
+    {
+      "name": "idempotent-second-run",
+      "status": "passed"
+    }
+  ],
+  "current_fields_covered": 22,
+  "current_source_records": 2,
+  "duplicate_count": 0,
+  "execution_mode": "phase-a-authoritative-f02-transforms",
+  "first_run_inserts": 20,
+  "legacy_guardrail_distinction": "authoritative Phase A F02 uses current_source complete records and canonical_target proposed_* tables; Review 04-10 checks remain legacy guardrails.",
+  "second_run_inserts": 0,
+  "second_run_unchanged_existing": 20,
+  "second_run_updates": 0,
+  "target_counts": {
+    "archives": 1,
+    "crosswalks": 1,
+    "exceptions": 1,
+    "target_child_rows": 2,
+    "target_entities": 14,
+    "target_relationships": 1
+  },
+  "target_state_hash": "f7aa46cebe5881ec2a70d3b76973822215aca51b862d2b5acfae68f049f3916e"
+}

@@ -1,0 +1,48 @@
+{
+  "fixture_authority": "SDA Review 11 Phase A transform-spec authority",
+  "review_status": "phase-a-independent-transform-spec",
+  "transform_groups": [
+    {
+      "transform_group_id": "phase-a-geotag-complete-record-to-location-record",
+      "source_table": "citizen_geotag_submissions",
+      "source_record_key": "citizen_geotag_submissions:phase-a-geotag-001",
+      "operation": "create-location-record-from-complete-geotag",
+      "target_entities": [
+        "proposed_source_record",
+        "proposed_registry_subject",
+        "proposed_location_record",
+        "proposed_location_record_version",
+        "proposed_public_code_alias"
+      ],
+      "child_rows": [
+        "proposed_location_record_assertion",
+        "proposed_location_record_object_link"
+      ],
+      "relationships": [
+        "proposed_location_record_relationship"
+      ],
+      "crosswalks": [
+        "proposed_legacy_crosswalk"
+      ],
+      "archive_required": false,
+      "exception_required": false,
+      "idempotency_key": "citizen_geotag_submissions.id"
+    },
+    {
+      "transform_group_id": "phase-a-correction-complete-record-to-correction-case",
+      "source_table": "address_corrections",
+      "source_record_key": "address_corrections:phase-a-correction-001",
+      "operation": "create-correction-case-archive-exception-from-complete-correction",
+      "target_entities": [
+        "proposed_source_record",
+        "proposed_correction_case"
+      ],
+      "child_rows": [],
+      "relationships": [],
+      "crosswalks": [],
+      "archive_required": true,
+      "exception_required": true,
+      "idempotency_key": "address_corrections.id"
+    }
+  ]
+}
