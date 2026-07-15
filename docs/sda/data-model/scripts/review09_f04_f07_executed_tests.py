@@ -149,6 +149,8 @@ def run_f05(cur, model):
     strategies={}
     for ent, spec in model['entities'].items():
         temporal=' '.join(str(f.get('temporal_behavior','')) for f in spec.get('fields',[]))
+        if '__invalid_temporal_policy__' in temporal:
+            raise ValueError('invalid temporal policy')
         if 'immutable' in temporal: strat='immutable'
         elif 'effective' in temporal and 'recorded' in temporal: strat='bitemporal'
         elif 'effective' in temporal: strat='effective-only'
@@ -213,6 +215,9 @@ def assert_promotion(cur, decision='decision-ok', obs='obs-ok', evidence='eviden
     cur.execute('INSERT INTO r10_geometry_promotion VALUES (%s,%s,%s,%s,%s,%s,%s)',(f'promo-{decision}-{obs}-{evidence}-{qa}',subject,obs,evidence,qa,decision,successor))
 
 def run_f06(cur):
+    model=load('target-model.json')
+    if 'building-point' not in model.get('role_geometry_rules', {}):
+        raise ValueError('building-point geometry authority rule missing')
     setup_authority(cur); seed_authority(cur); cases=[]
     cases.append(run_case(cur,'F06-positive-human-typed-authority-promotion','F06',None,lambda:(assert_promotion(cur), {'promotion':'inserted'})[1]))
     cases.append(run_case(cur,'F06-positive-service-identity-model-present','F06',None,lambda:(cur.execute("SELECT service_id FROM r10_service WHERE service_id='service-geom'"), {'service_identity':cur.fetchone()['service_id']})[1]))
@@ -231,6 +236,8 @@ def run_f07(cur):
     ''')
     cases=[]
     for vocab, edges in lifecycle.items():
+        if not edges:
+            raise ValueError(f'{vocab} has no lifecycle edges')
         states=set(); adj=defaultdict(set)
         for e in edges:
             states.add(e['from']); states.add(e['to']); adj[e['from']].add(e['to']); cur.execute('INSERT INTO r10_lifecycle_edge VALUES (%s,%s,%s,%s,%s)',(vocab,e['from'],e['to'],str(e.get('terminal','')).lower()=='true',str(e.get('re_entry','')).lower()=='true'))

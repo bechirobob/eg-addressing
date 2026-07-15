@@ -2,14 +2,14 @@
 
 | Mutation | Status | Expected reason |
 | --- | --- | --- |
-| wrong-transformation-logic | passed | target-value |
+| wrong-transformation-logic | passed | target-structure |
 | expected-versus-observed-transform-mismatch | passed | target-value |
 | missing-archive-or-real-fk | passed | archive-created |
-| wrong-classification | passed | classification owner |
-| cardinality-source-defect | passed | integrity report |
-| temporal-cycle-owner-overlap-backdated-defect | passed | F05 |
-| weakened-typed-geometry-authority | passed | F06 |
-| lifecycle-graph-contextual-authorization-defect | passed | F07 |
-| observed-versus-expected-api-drift | passed | missing observed handler response fixture |
-| incorrect-scenario-projection-history | passed | entity_counts |
-| negative-harness-false-pass-regression | passed | negative harness |
+| wrong-classification-owner | passed | field projection must include |
+| cardinality-policy-defect | passed | maximum count |
+| temporal-policy-defect | passed | invalid temporal policy |
+| weakened-typed-geometry-authority | passed | building-point geometry authority rule missing |
+| lifecycle-graph-contextual-authorization-defect | passed | has no lifecycle edges |
+| observed-versus-expected-api-drift | passed | type mismatch |
+| incorrect-scenario-projection-history | passed | label |
+| negative-harness-false-pass-regression | passed | __wrong_negative_harness_reason__ |

@@ -931,10 +931,10 @@ def execute_transformation_fixtures(registry: list[dict[str, Any]], semantics: d
     subprocess.run([sys.executable, str(helper)], cwd=ROOT, env=env, check=True)
     report = json.loads((ROOT / "docs/sda/data-model/transformation-fixture-report.json").read_text(encoding="utf-8"))
     summary = report.get("summary", {}) if isinstance(report, dict) else {}
-    if summary.get("execution_mode") != "review09-independent-source-expected-transform-execution":
-        raise SystemExit("Review 09 F02 helper did not produce independent execution evidence")
+    if summary.get("execution_mode") != "review10-independent-source-expected-transform-execution":
+        raise SystemExit("Review 10 F02 helper did not produce independent execution evidence")
     if summary.get("idempotency_status") != "passed" or any(summary.get("second_run_inserts", {}).values()):
-        raise SystemExit("Review 09 F02 idempotency requires zero second-run inserts")
+        raise SystemExit("Review 10 F02 idempotency requires zero second-run inserts")
     if summary.get("failure_tests_caught") != summary.get("failure_tests"):
         raise SystemExit("Review 09 F02 failure probes did not all fail as expected")
     if summary.get("errors"):
