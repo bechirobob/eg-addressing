@@ -240,19 +240,26 @@
         "none"
       ],
       "covered_source_fields": [
-        "address_points.address_id",
         "address_points.id"
       ],
       "crosswalk_algorithm": "source table + source key + target entity -> proposed_legacy_crosswalk when registry declares identity/crosswalk target",
+      "crosswalk_target_entity": "geometry_observation",
       "dispositions": [
         "structured-transform"
       ],
       "exception_behavior": "owned exception required for RFI/conditional/unresolved authority or unresolved reference dispositions",
       "id_algorithm": "phase-a deterministic slug(source table/group/current field)",
-      "idempotency_key": "address_points.phase-a-address-points-001::WO002-R06-identity-crosswalk-address_points",
+      "idempotency_key": "address_points.phase-a-address-points-id::WO002-R06-identity-crosswalk-address_points",
+      "identity_rule": "address_points.id is an observation identity only; address_points.address_id resolves the separate address location subject",
       "implementation_unit": "impl_wo002_r06_identity_crosswalk_address_points",
       "operation": "registry-disposition-to-canonical-target-evidence",
-      "source_record_key": "address_points:phase-a-address-points-001",
+      "required_context_fields": [
+        "address_points.address_id",
+        "address_points.is_active",
+        "address_points.created_at",
+        "address_points.updated_at"
+      ],
+      "source_record_key": "address_points:phase-a-address-points-id",
       "source_table": "address_points",
       "target_entities": [
         "legacy_crosswalk"
@@ -260,6 +267,14 @@
       "target_fields": [
         "legacy_crosswalk.legacy_id"
       ],
+      "target_identity_rule": {
+        "primary_fixture": {
+          "legacy_crosswalk_id": "phase-a-crosswalk-address-points-id-to-geometry-observation",
+          "source_id": "phase-a-address-points-id",
+          "target_id": "phase-a-geometry-address-points-phase-a-address-points-id"
+        },
+        "second_fixture_rule": "For source id phase-a-address-points-<suffix>, target phase-a-geometry-address-points-phase-a-address-points-<suffix> with crosswalk phase-a-crosswalk-address-points-<suffix>-id-to-geometry-observation. This is a design-harness rule only."
+      },
       "transform_group_id": "WO002-R06-identity-crosswalk-address_points"
     },
     {

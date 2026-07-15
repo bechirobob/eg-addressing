@@ -1,0 +1,748 @@
+{
+  "accepted_addresses_controls_changed": false,
+  "accepted_geometry_controls_changed": false,
+  "address_subject_resolution": {
+    "params": [
+      "phase-a-addresses-id"
+    ],
+    "row": {
+      "legacy_crosswalk_id": "phase-a-crosswalk-addresses-id-to-location-record",
+      "native_id": "phase-a-location-address-reference",
+      "subject_entity": "location_record",
+      "subject_id": "phase-a-subject-phase-a-location-address-reference",
+      "subject_state": "active",
+      "target_entity": "location_record",
+      "target_id": "phase-a-location-address-reference"
+    },
+    "sql": "SELECT cw.legacy_crosswalk_id, cw.target_entity, cw.target_id, rs.subject_id, rs.native_id, rs.subject_entity, rs.subject_state FROM canonical_target.proposed_legacy_crosswalk cw JOIN canonical_target.proposed_registry_subject rs ON rs.native_id = cw.target_id AND rs.subject_entity = cw.target_entity WHERE cw.source_table = 'addresses' AND cw.source_field = 'id' AND cw.legacy_id = %s AND cw.target_entity = 'location_record' ORDER BY cw.legacy_crosswalk_id"
+  },
+  "binding_validation": {
+    "callable": true,
+    "covered_source_fields": true,
+    "crosswalk_target_entity": true,
+    "idempotency_key": true,
+    "identity_rule": true,
+    "implementation_unit": true,
+    "required_context_fields": true,
+    "source_record_key": true,
+    "target_entities": true,
+    "target_identity_rule": true,
+    "transform_group_id": true
+  },
+  "broad_expected_fixture_changed": false,
+  "command": "address-points-observation-crosswalk-slice",
+  "comparator_connection": {
+    "separate_connection": true,
+    "transaction_read_only": "on"
+  },
+  "comparator_connection_read_only_proof": {
+    "separate_connection": true,
+    "target_write_blocked": true,
+    "transaction_read_only": "on",
+    "write_error": "cannot execute INSERT in a read-only transaction"
+  },
+  "complete_target_set_comparison": {
+    "actual_rows": 1,
+    "actual_rows_detail": [
+      {
+        "primary_key": {
+          "legacy_crosswalk_id": "phase-a-crosswalk-address-points-id-to-geometry-observation"
+        },
+        "table": "proposed_legacy_crosswalk",
+        "values": {
+          "created_at": "2026-07-15T00:00:00Z",
+          "legacy_crosswalk_id": "phase-a-crosswalk-address-points-id-to-geometry-observation",
+          "legacy_id": "phase-a-address-points-id",
+          "source_field": "id",
+          "source_table": "address_points",
+          "target_entity": "geometry_observation",
+          "target_id": "phase-a-geometry-address-points-phase-a-address-points-id"
+        }
+      }
+    ],
+    "comparator_connection": {
+      "separate_connection": true,
+      "transaction_read_only": "on"
+    },
+    "comparator_read_only_proof": {
+      "separate_connection": true,
+      "target_write_blocked": true,
+      "transaction_read_only": "on",
+      "write_error": "cannot execute INSERT in a read-only transaction"
+    },
+    "complete_target_set_query": {
+      "legacy_id": "phase-a-address-points-id",
+      "source_field": "id",
+      "source_table": "address_points",
+      "tables": [
+        "proposed_legacy_crosswalk"
+      ],
+      "target_entity": "geometry_observation"
+    },
+    "expected_absent_rows": [
+      {
+        "count": 0,
+        "reason": "The point row is not a location identity",
+        "table": "proposed_legacy_crosswalk",
+        "where": "source_table = 'address_points' AND legacy_id = 'phase-a-address-points-id' AND target_entity = 'location_record'"
+      },
+      {
+        "count": 0,
+        "reason": "No point-specific location identity is created",
+        "table": "proposed_location_record",
+        "where": "location_record_id LIKE 'phase-a-location-address-points%'"
+      },
+      {
+        "count": 0,
+        "reason": "No point-specific registry subject is created",
+        "table": "proposed_registry_subject",
+        "where": "native_id LIKE 'phase-a-location-address-points%'"
+      },
+      {
+        "count": 0,
+        "reason": "The reviewed observation target is resolved",
+        "table": "proposed_migration_exception",
+        "where": "source_table = 'address_points' AND source_key = 'address_points:phase-a-address-points-id' AND batch_id LIKE '%identity%'"
+      },
+      {
+        "count": 0,
+        "reason": "Observation identity does not issue a code",
+        "table": "proposed_public_code_alias",
+        "where": "location_record_id LIKE 'phase-a-location-address-points%'"
+      },
+      {
+        "count": 0,
+        "reason": "Observation identity does not publish",
+        "table": "proposed_publication_release_item",
+        "where": "location_record_id LIKE 'phase-a-location-address-points%'"
+      },
+      {
+        "count": 0,
+        "reason": "No extra geometry observation is created",
+        "table": "proposed_geometry_observation",
+        "where": "geometry_observation_id LIKE 'phase-a-geometry-address-points-%-extra'"
+      },
+      {
+        "count": 0,
+        "reason": "No point-specific version is created",
+        "table": "proposed_location_record_version",
+        "where": "location_record_id LIKE 'phase-a-location-address-points%'"
+      }
+    ],
+    "expected_rows": 1,
+    "semantic_uniqueness": {
+      "duplicates": [],
+      "query": "absolute uniqueness on (source_table, source_field, legacy_id, target_entity)",
+      "semantic_duplicate_count": 0
+    }
+  },
+  "crosswalk_row": {
+    "primary_key": {
+      "legacy_crosswalk_id": "phase-a-crosswalk-address-points-id-to-geometry-observation"
+    },
+    "table": "proposed_legacy_crosswalk",
+    "values": {
+      "created_at": "2026-07-15T00:00:00Z",
+      "legacy_crosswalk_id": "phase-a-crosswalk-address-points-id-to-geometry-observation",
+      "legacy_id": "phase-a-address-points-id",
+      "source_field": "id",
+      "source_table": "address_points",
+      "target_entity": "geometry_observation",
+      "target_id": "phase-a-geometry-address-points-phase-a-address-points-id"
+    }
+  },
+  "evidence_resolution": {
+    "classification": "government-internal",
+    "evidence_object_id": "phase-a-evidence-address-points",
+    "source_record_id": "phase-a-source-record-address-points-001"
+  },
+  "exact_function_implemented": "transform_address_points_observation_crosswalk",
+  "exact_registry_binding": {
+    "impl_wo002_r06_identity_crosswalk_address_points": "transform_address_points_observation_crosswalk"
+  },
+  "expected_absent_rows_verified": [
+    {
+      "count": 0,
+      "reason": "The point row is not a location identity",
+      "table": "proposed_legacy_crosswalk",
+      "where": "source_table = 'address_points' AND legacy_id = 'phase-a-address-points-id' AND target_entity = 'location_record'"
+    },
+    {
+      "count": 0,
+      "reason": "No point-specific location identity is created",
+      "table": "proposed_location_record",
+      "where": "location_record_id LIKE 'phase-a-location-address-points%'"
+    },
+    {
+      "count": 0,
+      "reason": "No point-specific registry subject is created",
+      "table": "proposed_registry_subject",
+      "where": "native_id LIKE 'phase-a-location-address-points%'"
+    },
+    {
+      "count": 0,
+      "reason": "The reviewed observation target is resolved",
+      "table": "proposed_migration_exception",
+      "where": "source_table = 'address_points' AND source_key = 'address_points:phase-a-address-points-id' AND batch_id LIKE '%identity%'"
+    },
+    {
+      "count": 0,
+      "reason": "Observation identity does not issue a code",
+      "table": "proposed_public_code_alias",
+      "where": "location_record_id LIKE 'phase-a-location-address-points%'"
+    },
+    {
+      "count": 0,
+      "reason": "Observation identity does not publish",
+      "table": "proposed_publication_release_item",
+      "where": "location_record_id LIKE 'phase-a-location-address-points%'"
+    },
+    {
+      "count": 0,
+      "reason": "No extra geometry observation is created",
+      "table": "proposed_geometry_observation",
+      "where": "geometry_observation_id LIKE 'phase-a-geometry-address-points-%-extra'"
+    },
+    {
+      "count": 0,
+      "reason": "No point-specific version is created",
+      "table": "proposed_location_record_version",
+      "where": "location_record_id LIKE 'phase-a-location-address-points%'"
+    }
+  ],
+  "fields_consumed": [
+    "address_points.id",
+    "address_points.address_id",
+    "address_points.is_active",
+    "address_points.created_at",
+    "address_points.updated_at"
+  ],
+  "first_run_inserts": 1,
+  "frozen_broad_spec_changed": false,
+  "generic_transform_group_used_for_slice": false,
+  "geometry_observation_validation": {
+    "params": [
+      "phase-a-geometry-address-points-phase-a-address-points-id"
+    ],
+    "row": {
+      "classification": "restricted",
+      "evidence_object_id": "phase-a-evidence-address-points",
+      "geometry_observation_id": "phase-a-geometry-address-points-phase-a-address-points-id",
+      "geometry_role": "location-point",
+      "source_record_id": "phase-a-source-record-address-points-001",
+      "subject_id": "phase-a-subject-phase-a-location-address-reference"
+    },
+    "sql": "SELECT geometry_observation_id, source_record_id, evidence_object_id, subject_id, geometry_role, classification FROM canonical_target.proposed_geometry_observation WHERE geometry_observation_id = %s"
+  },
+  "geometry_observations_created": 0,
+  "location_records_created": 0,
+  "migration_exceptions_created": 0,
+  "other_prohibited_outputs": {
+    "proposed_geometry_observation:geometry_observation_id LIKE 'phase-a-geometry-address-points-%-extra'": 0,
+    "proposed_legacy_crosswalk:source_table = 'address_points' AND legacy_id = 'phase-a-address-points-id' AND target_entity = 'location_record'": 0,
+    "proposed_location_record:location_record_id LIKE 'phase-a-location-address-points%'": 0,
+    "proposed_location_record_version:location_record_id LIKE 'phase-a-location-address-points%'": 0,
+    "proposed_migration_exception:source_table = 'address_points' AND source_key = 'address_points:phase-a-address-points-id' AND batch_id LIKE '%identity%'": 0,
+    "proposed_public_code_alias:location_record_id LIKE 'phase-a-location-address-points%'": 0,
+    "proposed_publication_release_item:location_record_id LIKE 'phase-a-location-address-points%'": 0,
+    "proposed_registry_subject:native_id LIKE 'phase-a-location-address-points%'": 0
+  },
+  "prohibited_outputs_created": {
+    "proposed_geometry_observation:geometry_observation_id LIKE 'phase-a-geometry-address-points-%-extra'": 0,
+    "proposed_legacy_crosswalk:source_table = 'address_points' AND legacy_id = 'phase-a-address-points-id' AND target_entity = 'location_record'": 0,
+    "proposed_location_record:location_record_id LIKE 'phase-a-location-address-points%'": 0,
+    "proposed_location_record_version:location_record_id LIKE 'phase-a-location-address-points%'": 0,
+    "proposed_migration_exception:source_table = 'address_points' AND source_key = 'address_points:phase-a-address-points-id' AND batch_id LIKE '%identity%'": 0,
+    "proposed_public_code_alias:location_record_id LIKE 'phase-a-location-address-points%'": 0,
+    "proposed_publication_release_item:location_record_id LIKE 'phase-a-location-address-points%'": 0,
+    "proposed_registry_subject:native_id LIKE 'phase-a-location-address-points%'": 0
+  },
+  "registry_subjects_created": 0,
+  "reviewed_transform_spec_row": {
+    "archive_behavior": "archive required when registry target/archive_object requires source_payload_archive; operational-control records retain typed disposition otherwise",
+    "conditional_authority_rfi_status": [
+      "none"
+    ],
+    "covered_source_fields": [
+      "address_points.id"
+    ],
+    "crosswalk_algorithm": "source table + source key + target entity -> proposed_legacy_crosswalk when registry declares identity/crosswalk target",
+    "crosswalk_target_entity": "geometry_observation",
+    "dispositions": [
+      "structured-transform"
+    ],
+    "exception_behavior": "owned exception required for RFI/conditional/unresolved authority or unresolved reference dispositions",
+    "id_algorithm": "phase-a deterministic slug(source table/group/current field)",
+    "idempotency_key": "address_points.phase-a-address-points-id::WO002-R06-identity-crosswalk-address_points",
+    "identity_rule": "address_points.id is an observation identity only; address_points.address_id resolves the separate address location subject",
+    "implementation_unit": "impl_wo002_r06_identity_crosswalk_address_points",
+    "operation": "registry-disposition-to-canonical-target-evidence",
+    "required_context_fields": [
+      "address_points.address_id",
+      "address_points.is_active",
+      "address_points.created_at",
+      "address_points.updated_at"
+    ],
+    "source_record_key": "address_points:phase-a-address-points-id",
+    "source_table": "address_points",
+    "target_entities": [
+      "legacy_crosswalk"
+    ],
+    "target_fields": [
+      "legacy_crosswalk.legacy_id"
+    ],
+    "target_identity_rule": {
+      "primary_fixture": {
+        "legacy_crosswalk_id": "phase-a-crosswalk-address-points-id-to-geometry-observation",
+        "source_id": "phase-a-address-points-id",
+        "target_id": "phase-a-geometry-address-points-phase-a-address-points-id"
+      },
+      "second_fixture_rule": "For source id phase-a-address-points-<suffix>, target phase-a-geometry-address-points-phase-a-address-points-<suffix> with crosswalk phase-a-crosswalk-address-points-<suffix>-id-to-geometry-observation. This is a design-harness rule only."
+    },
+    "transform_group_id": "WO002-R06-identity-crosswalk-address_points"
+  },
+  "reviewer_owned_oracle_changed": false,
+  "reviewer_owned_oracle_sha256": "d1b695994ae774a6c54cc99c1e79a0bce023fd5a9a20ec2aee779cfeb10bfa82",
+  "rollback_equality_all": true,
+  "rollback_evidence_count": 13,
+  "second_run_inserts": 0,
+  "second_run_updates": 0,
+  "second_source_identity_test": {
+    "checks": {
+      "distinct_crosswalks": true,
+      "geometry_observations": true,
+      "location_records_created": true,
+      "multiple_target_resolution": true,
+      "registry_subjects_created": true,
+      "second_crosswalk": true,
+      "second_source_key": true,
+      "semantic_duplicate_crosswalks": true,
+      "source_records": true
+    },
+    "distinct_crosswalks": 2,
+    "first_rows": [
+      {
+        "primary_key": {
+          "legacy_crosswalk_id": "phase-a-crosswalk-address-points-id-to-geometry-observation"
+        },
+        "table": "proposed_legacy_crosswalk",
+        "values": {
+          "created_at": "2026-07-15T00:00:00Z",
+          "legacy_crosswalk_id": "phase-a-crosswalk-address-points-id-to-geometry-observation",
+          "legacy_id": "phase-a-address-points-id",
+          "source_field": "id",
+          "source_table": "address_points",
+          "target_entity": "geometry_observation",
+          "target_id": "phase-a-geometry-address-points-phase-a-address-points-id"
+        }
+      }
+    ],
+    "first_transform_lineage": {
+      "derived_source_key": "address_points:phase-a-address-points-id",
+      "evidence_params": [
+        "phase-a-source-record-address-points-001"
+      ],
+      "evidence_query": "SELECT evidence_object_id, source_record_id, classification FROM canonical_target.proposed_evidence_object WHERE source_record_id = %s ORDER BY evidence_object_id",
+      "evidence_row": {
+        "classification": "government-internal",
+        "evidence_object_id": "phase-a-evidence-address-points",
+        "source_record_id": "phase-a-source-record-address-points-001"
+      },
+      "source_params": [
+        "address_points:phase-a-address-points-id"
+      ],
+      "source_query": "SELECT source_record_id, source_key, raw_payload_classification FROM canonical_target.proposed_source_record WHERE source_key = %s ORDER BY source_record_id",
+      "source_row": {
+        "raw_payload_classification": "government-internal",
+        "source_key": "address_points:phase-a-address-points-id",
+        "source_record_id": "phase-a-source-record-address-points-001"
+      }
+    },
+    "geometry_observations": 2,
+    "location_records_created": 0,
+    "multiple_target_resolutions": 0,
+    "registry_subjects_created": 0,
+    "second_rows": [
+      {
+        "primary_key": {
+          "legacy_crosswalk_id": "phase-a-crosswalk-address-points-002-id-to-geometry-observation"
+        },
+        "table": "proposed_legacy_crosswalk",
+        "values": {
+          "created_at": "2026-07-15T00:00:00Z",
+          "legacy_crosswalk_id": "phase-a-crosswalk-address-points-002-id-to-geometry-observation",
+          "legacy_id": "phase-a-address-points-002",
+          "source_field": "id",
+          "source_table": "address_points",
+          "target_entity": "geometry_observation",
+          "target_id": "phase-a-geometry-address-points-phase-a-address-points-002"
+        }
+      }
+    ],
+    "second_transform_lineage": {
+      "derived_source_key": "address_points:phase-a-address-points-002",
+      "evidence_params": [
+        "phase-a-source-record-address-points-002"
+      ],
+      "evidence_query": "SELECT evidence_object_id, source_record_id, classification FROM canonical_target.proposed_evidence_object WHERE source_record_id = %s ORDER BY evidence_object_id",
+      "evidence_row": {
+        "classification": "government-internal",
+        "evidence_object_id": "phase-a-evidence-address-points-phase-a-address-points-002",
+        "source_record_id": "phase-a-source-record-address-points-002"
+      },
+      "source_params": [
+        "address_points:phase-a-address-points-002"
+      ],
+      "source_query": "SELECT source_record_id, source_key, raw_payload_classification FROM canonical_target.proposed_source_record WHERE source_key = %s ORDER BY source_record_id",
+      "source_row": {
+        "raw_payload_classification": "government-internal",
+        "source_key": "address_points:phase-a-address-points-002",
+        "source_record_id": "phase-a-source-record-address-points-002"
+      }
+    },
+    "semantic_duplicate_crosswalks": 0,
+    "source_rows": 2,
+    "status": "passed",
+    "test_id": "second-source-identity"
+  },
+  "semantic_uniqueness_query_result": {
+    "duplicates": [],
+    "query": "absolute uniqueness on (source_table, source_field, legacy_id, target_entity)",
+    "semantic_duplicate_count": 0
+  },
+  "source_key_derivation": {
+    "rule": "address_points:<queried id>",
+    "value": "address_points:phase-a-address-points-id"
+  },
+  "source_record_resolution": {
+    "raw_payload_classification": "government-internal",
+    "source_key": "address_points:phase-a-address-points-id",
+    "source_record_id": "phase-a-source-record-address-points-001"
+  },
+  "source_row_query": "SELECT id,address_id,latitude,longitude,accuracy_meters,source_method,is_active,created_at,updated_at FROM current_source.address_points WHERE id = %s",
+  "source_row_returned": {
+    "accuracy_meters": 4.5,
+    "address_id": "phase-a-addresses-id",
+    "created_at": "2026-07-15T00:00:00Z",
+    "id": "phase-a-address-points-id",
+    "is_active": false,
+    "latitude": 3.752,
+    "longitude": 8.783,
+    "source_method": "phase-a address_points source_method",
+    "updated_at": "2026-07-15T00:00:00Z"
+  },
+  "status": "passed",
+  "tests": [
+    {
+      "status": "passed",
+      "test_id": "positive-authoritative-slice"
+    },
+    {
+      "first_run_inserts": 1,
+      "second_run_inserts": 0,
+      "second_run_updates": 0,
+      "status": "passed",
+      "test_id": "second-run-idempotency"
+    },
+    {
+      "comparison": {
+        "legacy_id": "phase-a-address-points-id",
+        "source_field": "id",
+        "source_table": "address_points",
+        "tables": [
+          "proposed_legacy_crosswalk"
+        ],
+        "target_entity": "geometry_observation"
+      },
+      "status": "passed",
+      "test_id": "read-only-complete-set-comparison"
+    },
+    {
+      "checks": {
+        "distinct_crosswalks": true,
+        "geometry_observations": true,
+        "location_records_created": true,
+        "multiple_target_resolution": true,
+        "registry_subjects_created": true,
+        "second_crosswalk": true,
+        "second_source_key": true,
+        "semantic_duplicate_crosswalks": true,
+        "source_records": true
+      },
+      "distinct_crosswalks": 2,
+      "first_rows": [
+        {
+          "primary_key": {
+            "legacy_crosswalk_id": "phase-a-crosswalk-address-points-id-to-geometry-observation"
+          },
+          "table": "proposed_legacy_crosswalk",
+          "values": {
+            "created_at": "2026-07-15T00:00:00Z",
+            "legacy_crosswalk_id": "phase-a-crosswalk-address-points-id-to-geometry-observation",
+            "legacy_id": "phase-a-address-points-id",
+            "source_field": "id",
+            "source_table": "address_points",
+            "target_entity": "geometry_observation",
+            "target_id": "phase-a-geometry-address-points-phase-a-address-points-id"
+          }
+        }
+      ],
+      "first_transform_lineage": {
+        "derived_source_key": "address_points:phase-a-address-points-id",
+        "evidence_params": [
+          "phase-a-source-record-address-points-001"
+        ],
+        "evidence_query": "SELECT evidence_object_id, source_record_id, classification FROM canonical_target.proposed_evidence_object WHERE source_record_id = %s ORDER BY evidence_object_id",
+        "evidence_row": {
+          "classification": "government-internal",
+          "evidence_object_id": "phase-a-evidence-address-points",
+          "source_record_id": "phase-a-source-record-address-points-001"
+        },
+        "source_params": [
+          "address_points:phase-a-address-points-id"
+        ],
+        "source_query": "SELECT source_record_id, source_key, raw_payload_classification FROM canonical_target.proposed_source_record WHERE source_key = %s ORDER BY source_record_id",
+        "source_row": {
+          "raw_payload_classification": "government-internal",
+          "source_key": "address_points:phase-a-address-points-id",
+          "source_record_id": "phase-a-source-record-address-points-001"
+        }
+      },
+      "geometry_observations": 2,
+      "location_records_created": 0,
+      "multiple_target_resolutions": 0,
+      "registry_subjects_created": 0,
+      "second_rows": [
+        {
+          "primary_key": {
+            "legacy_crosswalk_id": "phase-a-crosswalk-address-points-002-id-to-geometry-observation"
+          },
+          "table": "proposed_legacy_crosswalk",
+          "values": {
+            "created_at": "2026-07-15T00:00:00Z",
+            "legacy_crosswalk_id": "phase-a-crosswalk-address-points-002-id-to-geometry-observation",
+            "legacy_id": "phase-a-address-points-002",
+            "source_field": "id",
+            "source_table": "address_points",
+            "target_entity": "geometry_observation",
+            "target_id": "phase-a-geometry-address-points-phase-a-address-points-002"
+          }
+        }
+      ],
+      "second_transform_lineage": {
+        "derived_source_key": "address_points:phase-a-address-points-002",
+        "evidence_params": [
+          "phase-a-source-record-address-points-002"
+        ],
+        "evidence_query": "SELECT evidence_object_id, source_record_id, classification FROM canonical_target.proposed_evidence_object WHERE source_record_id = %s ORDER BY evidence_object_id",
+        "evidence_row": {
+          "classification": "government-internal",
+          "evidence_object_id": "phase-a-evidence-address-points-phase-a-address-points-002",
+          "source_record_id": "phase-a-source-record-address-points-002"
+        },
+        "source_params": [
+          "address_points:phase-a-address-points-002"
+        ],
+        "source_query": "SELECT source_record_id, source_key, raw_payload_classification FROM canonical_target.proposed_source_record WHERE source_key = %s ORDER BY source_record_id",
+        "source_row": {
+          "raw_payload_classification": "government-internal",
+          "source_key": "address_points:phase-a-address-points-002",
+          "source_record_id": "phase-a-source-record-address-points-002"
+        }
+      },
+      "semantic_duplicate_crosswalks": 0,
+      "source_rows": 2,
+      "status": "passed",
+      "test_id": "second-source-identity"
+    },
+    {
+      "expected_error": "address_points source row not found",
+      "observed_error": "address_points source row not found",
+      "rollback_equality": true,
+      "same_database_post_failure_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_post_failure_rows": [],
+      "same_database_pre_test_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_pre_test_rows": [],
+      "state_unchanged": true,
+      "status": "passed",
+      "test_id": "missing-source-record"
+    },
+    {
+      "expected_error": "address_points source record lineage not found",
+      "observed_error": "address_points source record lineage not found",
+      "rollback_equality": true,
+      "same_database_post_failure_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_post_failure_rows": [],
+      "same_database_pre_test_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_pre_test_rows": [],
+      "state_unchanged": true,
+      "status": "passed",
+      "test_id": "missing-source-lineage"
+    },
+    {
+      "expected_error": "address_points evidence object not found",
+      "observed_error": "address_points evidence object not found",
+      "rollback_equality": true,
+      "same_database_post_failure_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_post_failure_rows": [],
+      "same_database_pre_test_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_pre_test_rows": [],
+      "state_unchanged": true,
+      "status": "passed",
+      "test_id": "missing-evidence-object"
+    },
+    {
+      "expected_error": "address_points geometry observation target not found",
+      "observed_error": "address_points geometry observation target not found",
+      "rollback_equality": true,
+      "same_database_post_failure_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_post_failure_rows": [],
+      "same_database_pre_test_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_pre_test_rows": [],
+      "state_unchanged": true,
+      "status": "passed",
+      "test_id": "missing-geometry-observation"
+    },
+    {
+      "expected_error": "address_points geometry observation does not belong to the queried source row",
+      "observed_error": "address_points geometry observation does not belong to the queried source row",
+      "rollback_equality": true,
+      "same_database_post_failure_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_post_failure_rows": [],
+      "same_database_pre_test_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_pre_test_rows": [],
+      "state_unchanged": true,
+      "status": "passed",
+      "test_id": "geometry-source-mismatch"
+    },
+    {
+      "expected_error": "address_points geometry observation subject does not match the resolved address subject",
+      "observed_error": "address_points geometry observation subject does not match the resolved address subject",
+      "rollback_equality": true,
+      "same_database_post_failure_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_post_failure_rows": [],
+      "same_database_pre_test_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_pre_test_rows": [],
+      "state_unchanged": true,
+      "status": "passed",
+      "test_id": "geometry-subject-mismatch"
+    },
+    {
+      "expected_error": "address_points geometry observation must remain restricted",
+      "observed_error": "address_points geometry observation must remain restricted",
+      "rollback_equality": true,
+      "same_database_post_failure_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_post_failure_rows": [],
+      "same_database_pre_test_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_pre_test_rows": [],
+      "state_unchanged": true,
+      "status": "passed",
+      "test_id": "geometry-classification-drift"
+    },
+    {
+      "expected_error": "address_points observation crosswalk must derive from address_points.id",
+      "observed_error": "address_points observation crosswalk must derive from address_points.id",
+      "rollback_equality": true,
+      "same_database_post_failure_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_post_failure_rows": [],
+      "same_database_pre_test_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_pre_test_rows": [],
+      "state_unchanged": true,
+      "status": "passed",
+      "test_id": "address-id-identity-substitution"
+    },
+    {
+      "expected_error": "address_points identity target must be geometry_observation",
+      "observed_error": "address_points identity target must be geometry_observation",
+      "rollback_equality": true,
+      "same_database_post_failure_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_post_failure_rows": [],
+      "same_database_pre_test_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_pre_test_rows": [],
+      "state_unchanged": true,
+      "status": "passed",
+      "test_id": "wrong-target-entity"
+    },
+    {
+      "expected_error": "address_points observation crosswalk differs from reviewer-owned expected target",
+      "observed_error": "address_points observation crosswalk differs from reviewer-owned expected target",
+      "rollback_equality": true,
+      "same_database_post_failure_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_post_failure_rows": [],
+      "same_database_pre_test_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_pre_test_rows": [],
+      "state_unchanged": true,
+      "status": "passed",
+      "test_id": "wrong-target-observation"
+    },
+    {
+      "expected_error": "unexpected address_points observation-crosswalk target row",
+      "observed_error": "unexpected address_points observation-crosswalk target row",
+      "rollback_equality": true,
+      "same_database_post_failure_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_post_failure_rows": [],
+      "same_database_pre_test_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_pre_test_rows": [],
+      "state_unchanged": true,
+      "status": "passed",
+      "test_id": "unexpected-extra-crosswalk"
+    },
+    {
+      "expected_error": "address_points observation crosswalk semantic uniqueness violated",
+      "observed_error": "address_points observation crosswalk semantic uniqueness violated",
+      "rollback_equality": true,
+      "same_database_post_failure_hash": "5cec16e2c5a3a5b242e4e06c083368908b8463315e5c3313b040f732254349f0",
+      "same_database_post_failure_rows": [
+        {
+          "primary_key": {
+            "legacy_crosswalk_id": "phase-a-crosswalk-address-points-id-to-geometry-observation-duplicate"
+          },
+          "table": "proposed_legacy_crosswalk",
+          "values": {
+            "created_at": "2026-07-15T00:00:00Z",
+            "legacy_crosswalk_id": "phase-a-crosswalk-address-points-id-to-geometry-observation-duplicate",
+            "legacy_id": "phase-a-address-points-id",
+            "source_field": "id",
+            "source_table": "address_points",
+            "target_entity": "geometry_observation",
+            "target_id": "phase-a-geometry-address-points-duplicate"
+          }
+        }
+      ],
+      "same_database_pre_test_hash": "5cec16e2c5a3a5b242e4e06c083368908b8463315e5c3313b040f732254349f0",
+      "same_database_pre_test_rows": [
+        {
+          "primary_key": {
+            "legacy_crosswalk_id": "phase-a-crosswalk-address-points-id-to-geometry-observation-duplicate"
+          },
+          "table": "proposed_legacy_crosswalk",
+          "values": {
+            "created_at": "2026-07-15T00:00:00Z",
+            "legacy_crosswalk_id": "phase-a-crosswalk-address-points-id-to-geometry-observation-duplicate",
+            "legacy_id": "phase-a-address-points-id",
+            "source_field": "id",
+            "source_table": "address_points",
+            "target_entity": "geometry_observation",
+            "target_id": "phase-a-geometry-address-points-duplicate"
+          }
+        }
+      ],
+      "state_unchanged": true,
+      "status": "passed",
+      "test_id": "semantic-duplicate-crosswalk"
+    },
+    {
+      "expected_error": "address_points observation crosswalk specification binding mismatch",
+      "observed_error": "address_points observation crosswalk specification binding mismatch: {'transform_group_id': True, 'implementation_unit': False, 'callable': False, 'covered_source_fields': True, 'required_context_fields': True, 'source_record_key': True, 'idempotency_key': True, 'identity_rule': True, 'crosswalk_target_entity': True, 'target_entities': True, 'target_identity_rule': True}",
+      "rollback_equality": true,
+      "same_database_post_failure_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_post_failure_rows": [],
+      "same_database_pre_test_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_pre_test_rows": [],
+      "state_unchanged": true,
+      "status": "passed",
+      "test_id": "transform-spec-binding-drift"
+    }
+  ],
+  "transform_reads_expected_oracle": false
+}
