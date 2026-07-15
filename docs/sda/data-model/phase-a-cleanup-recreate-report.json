@@ -27,11 +27,10 @@
       "test_control"
     ]
   },
-  "execution_mode": "phase-a-cleanup-recreate-proof",
-  "expected_hash": "0c16ff30de8f744de068edf4fe65110e42ca6412c705f76af23b92238d57e2ed",
+  "execution_mode": "phase-a-cleanup-recreate-proof-real-transform",
+  "expected_hash": "1e9d364c62cc19648dfc72a0948c69bebd357c267b5578e87254ef3958298051",
   "failure_seen": true,
-  "first_recreate_hash": "0c16ff30de8f744de068edf4fe65110e42ca6412c705f76af23b92238d57e2ed",
-  "recreated_catalog_table_count": 100,
-  "second_recreate_hash": "0c16ff30de8f744de068edf4fe65110e42ca6412c705f76af23b92238d57e2ed",
+  "first_recreate_hash": "1e9d364c62cc19648dfc72a0948c69bebd357c267b5578e87254ef3958298051",
+  "second_recreate_hash": "1e9d364c62cc19648dfc72a0948c69bebd357c267b5578e87254ef3958298051",
   "status": "passed"
 }

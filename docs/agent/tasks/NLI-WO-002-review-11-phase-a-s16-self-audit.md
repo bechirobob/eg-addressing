@@ -1,73 +1,72 @@
-# NLI-WO-002 Review 11 Phase A Correction S16 Self-Audit
+# NLI-WO-002 Review 11 Phase A Execution Correction S16 Self-Audit
 
 ## Authority
 
 | Item | Value |
 |---|---|
-| Phase A assessment | `docs/sda/reviews/NLI-WO-002-review-11-phase-a-assessment.md` |
-| Reviewer-owned start head | `2671ee9dfd6fa6312dadbb4033834bd3a2c5900d` |
-| Reviewed Phase A implementation | `25de8fb258ee0b45c18eced979e39d6d54df99ac` |
+| Reassessment | `docs/sda/reviews/NLI-WO-002-review-11-phase-a-reassessment.md` |
+| Reviewer-owned start head | `62ba492f05adb233f57f52138c7ba7393c9bd445` |
+| Reviewed corrected implementation | `882a0f08758d8ec714c1d8b2c62628f986b8fd5d` |
 | Decision | `PHASE A CORRECTION REQUIRED` |
-| Corrected scope | A2 independent fixture authority and A3 authoritative F02 execution only |
+| Corrected scope | Real `current_source -> transform dispatcher -> canonical_target` execution for A2/A3 only |
 | Agent status for F02/F14 | `READY FOR SDA PHASE A REASSESSMENT` |
 | SDA disposition | unchanged: OPEN / REWORK REQUIRED |
 
-## Scope checks
+## Boundary checks
 
-- A1 topology preserved: `current_source`, `canonical_target`, `test_control`, controlled current migrations, non-authoritative CI step.
-- F04-F12 intentionally untouched as implementation scope.
-- Phase B not implemented.
+- A1 topology preserved: `current_source`, `canonical_target`, `test_control`, controlled migrations, target draft application, schema isolation, cleanup/recreate, and non-authoritative CI step.
+- Expected target fixture is comparator-only and cannot be read before observed target rows exist.
+- F04-F12 intentionally untouched.
+- Phase B not implemented or authorized.
 - NLI-WO-002B remains unauthorized.
 - PR #8 remains separate.
-- PR #7 must stay open, draft, and unmerged.
-- No runtime app/API/frontend implementation, executable migration, migration-runner change, Docker runtime config, production/pilot data, `.env*`, secret path, or PR #8 path is part of this correction.
+- No runtime app/API/frontend code, executable migrations, `infra/scripts/migrate.py`, Docker runtime config, production/pilot data, `.env*`, secret path, or PR #8 path is changed.
 
-## Corrected Phase A evidence
+## Corrected execution evidence
 
 | Evidence | Result |
 |---|---:|
-| Current pg_catalog fields | 237 |
-| Reviewed transformation fields | 237 |
-| Authoritative executed dispositions | 237 |
-| Current tables covered | 25 |
+| Source tables populated | 25 |
+| Source records inserted | 25 |
+| Source fields queried | 237 |
+| Reviewed current fields | 237 |
+| Executed field dispositions | 237 |
 | Missing fields | 0 |
-| Duplicate field claims | 0 |
-| Conflicting dispositions | 0 |
-| Transform groups declared | 90 |
-| Transform implementations | 90 |
+| Duplicate/conflicting executions | 0 |
+| Reviewed transform groups | 90 |
+| Executable implementations resolved | 90 |
+| Executable implementations invoked | 90 |
 | Unexecuted groups | 0 |
-| Expected rows | 856 |
-| Actual rows | 856 |
-| Target entities | 93 |
-| Target child rows | 239 |
-| Target relationships | 1 |
-| Crosswalks | 238 |
-| Archives | 237 |
-| Exceptions | 48 |
-| First-run inserts | 856 |
+| Actual target entities | 135 |
+| Actual child rows | 17 |
+| Actual relationships | 1 |
+| Actual crosswalks | 21 |
+| Actual archives | 23 |
+| Actual exceptions | 17 |
+| Expected/actual rows | 199 / 199 |
+| Unexpected rows | 0 |
+| Missing rows | 0 |
+| First-run inserts | 199 |
 | Second-run inserts | 0 |
 | Second-run updates | 0 |
-| Queried duplicate count | 0 |
-| Distinct negative probes passed | 10 |
+| Queried semantic duplicates | 0 |
+| Normal-path negative probes | 10 |
 | Cleanup/recreate | passed |
 
 ## Evidence files
 
 | Evidence | Path |
 |---|---|
-| Machine coverage matrix | `docs/sda/data-model/phase-a-coverage-matrix-report.json` |
-| Fixture inventory | `docs/sda/data-model/phase-a-complete-source-record-fixture-inventory.json` |
-| Current source catalog | `docs/sda/data-model/phase-a-current-source-catalog-report.json` |
-| Canonical target catalog | `docs/sda/data-model/phase-a-canonical-target-catalog-report.json` |
-| Topology/schema leakage | `docs/sda/data-model/phase-a-topology-schema-leakage-report.json` |
-| Target transform inventory | `docs/sda/data-model/phase-a-target-entity-transform-inventory.json` |
-| FK/crosswalk evidence | `docs/sda/data-model/phase-a-target-fk-crosswalk-evidence.json` |
+| Source fixture execution | `docs/sda/data-model/phase-a-current-source-execution-report.json` |
+| Runtime telemetry | `docs/sda/data-model/phase-a-transform-runtime-telemetry-report.json` |
+| Coverage matrix | `docs/sda/data-model/phase-a-coverage-matrix-report.json` |
+| Target inventory | `docs/sda/data-model/phase-a-target-entity-transform-inventory.json` |
+| FK/crosswalk validation | `docs/sda/data-model/phase-a-target-fk-crosswalk-evidence.json` |
 | Archive/exception evidence | `docs/sda/data-model/phase-a-archive-exception-evidence.json` |
 | Idempotency evidence | `docs/sda/data-model/phase-a-idempotency-evidence.json` |
 | Negative probes | `docs/sda/data-model/phase-a-strict-negative-probe-report.json` |
 | Cleanup/recreate proof | `docs/sda/data-model/phase-a-cleanup-recreate-report.json` |
-| Cleanup action report | `docs/sda/data-model/phase-a-cleanup-report.json` |
-| Legacy-vs-authoritative distinction | `docs/sda/data-model/phase-a-legacy-vs-authoritative.md` |
+| Expected target comparator fixture | `docs/sda/data-model/fixtures/expected-target/phase-a-expected-target-records.json` |
 
 ## Local corrected Phase A result
 
@@ -81,10 +80,6 @@ Result:
 {"command": "phase-a-all", "status": "passed"}
 ```
 
-## Review 11 resolution log update
-
-Only F02 and F14 agent-response cells were updated to `READY FOR SDA PHASE A REASSESSMENT`. SDA dispositions were not changed. F04-F12 remain pending/open.
-
 ## Non-claims
 
 - This does not accept NLI-WO-002.
@@ -96,4 +91,4 @@ Only F02 and F14 agent-response cells were updated to `READY FOR SDA PHASE A REA
 
 ## Next required action
 
-SDA must assess the corrected Phase A checkpoint before Phase B begins.
+SDA must assess the corrected real execution Phase A checkpoint before Phase B begins.

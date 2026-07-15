@@ -1,5 +1,10 @@
 {
-  "archives": 237,
-  "exceptions": 48,
-  "status": "passed"
+  "archive_tables": [
+    "proposed_source_payload_archive"
+  ],
+  "archives": 23,
+  "exception_tables": [
+    "proposed_migration_exception"
+  ],
+  "exceptions": 17
 }

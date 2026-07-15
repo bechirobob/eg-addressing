@@ -1,17 +1,17 @@
 {
   "authoritative_state_unchanged": true,
-  "execution_mode": "phase-a-f02-normal-path-negative-probes",
+  "execution_mode": "phase-a-real-transform-normal-path-negative-probes",
   "negative_probes_passed": 10,
   "results": [
     {
       "expected_reason": "wrong transform implementation",
-      "observed_reason": "wrong transform implementation: mismatched typed hash: expected fixture rows hash 9bfe750249d755021f75c08d437f4c4df12f6423bcceff2982151a755dee585b does not match declared 0c16ff30de8f744de068edf4fe65110e42ca6412c705f76af23b92238d57e2ed",
+      "observed_reason": "wrong transform implementation: implementation is not linked to reviewed group: ['phase-a-unreviewed-implementation']",
       "probe_id": "phase-a-neg-wrong-transform-implementation",
       "status": "passed"
     },
     {
       "expected_reason": "wrong independently expected value",
-      "observed_reason": "wrong independently expected value: mismatched typed hash: expected fixture rows hash 8f1923dc9d3972878e0c316d145ebf05d3465222b83627b645624b44743b9c0c does not match declared 0c16ff30de8f744de068edf4fe65110e42ca6412c705f76af23b92238d57e2ed",
+      "observed_reason": "wrong independently expected value: mismatched typed hash: expected fixture rows hash c71885fcb1e4e0f8e2831af58b5ee81cfe831c2951dcd8ebab6271883b18ccda does not match declared 1e9d364c62cc19648dfc72a0948c69bebd357c267b5578e87254ef3958298051",
       "probe_id": "phase-a-neg-wrong-expected-value",
       "status": "passed"
     },
@@ -23,43 +23,43 @@
     },
     {
       "expected_reason": "missing real target identity",
-      "observed_reason": "missing real target identity: missing expected target row: [('proposed_location_record', (('location_record_id', 'phase-a-missing-location'),))]",
+      "observed_reason": "missing real target identity: missing expected target row: [('proposed_correction_case', (('correction_case_id', 'phase-a-correction-case-001'),)), ('proposed_decision_event', (('decision_event_id', 'phase-a-decision-correction-001'),)), ('proposed_legacy_crosswalk', (('legacy_crosswalk_id', 'phase-a-crosswalk-address-corrections-correction-case'),))]",
       "probe_id": "phase-a-neg-missing-real-target-identity",
       "status": "passed"
     },
     {
       "expected_reason": "unresolved real FK",
-      "observed_reason": "unresolved real FK: insert or update on table \"proposed_public_code_alias\" violates foreign key constraint \"proposed_public_code_alias_location_record_id_fk\"\nDETAIL:  Key (location_record_id)=(phase-a-missing-location) is not present in table \"proposed_location_record\".",
+      "observed_reason": "unresolved real FK: crosswalk target validation failed: [{'legacy_crosswalk_id': 'phase-a-crosswalk-wo002-r06-identity-crosswalk-address-corrections', 'target_entity': 'location_record', 'target_id': 'phase-a-missing-target', 'reason': 'target id missing'}]",
       "probe_id": "phase-a-neg-unresolved-real-fk",
       "status": "passed"
     },
     {
       "expected_reason": "missing archive",
-      "observed_reason": "missing archive: missing expected target row: [('proposed_source_payload_archive', (('archive_id', 'phase-a-missing-archive'),))]",
+      "observed_reason": "missing archive: declared target entity absent from observed output: WO002-R06-correction-case-archive-address_corrections -> proposed_source_payload_archive",
       "probe_id": "phase-a-neg-missing-archive",
       "status": "passed"
     },
     {
       "expected_reason": "missing exception",
-      "observed_reason": "missing exception: missing expected target row: [('proposed_migration_exception', (('migration_exception_id', 'phase-a-missing-exception'),))]",
+      "observed_reason": "missing exception: declared target entity absent from observed output: WO002-R06-identity-crosswalk-address_record_events -> proposed_migration_exception",
       "probe_id": "phase-a-neg-missing-exception",
       "status": "passed"
     },
     {
       "expected_reason": "duplicate output",
-      "observed_reason": "duplicate output",
+      "observed_reason": "duplicate output: queried semantic duplicates found: {'queried_semantic_duplicate_count': 1, 'duplicate_rows': {'crosswalk_semantic': [{'target_entity': 'location_record', 'target_id': 'phase-a-location-geotag', 'source_table': 'address_corrections', 'source_field': 'id', 'legacy_id': 'phase-a-correction-001', 'c': 2}], 'archive_source_uri': [], 'relationship_semantic': [], 'name_semantic': []}}",
       "probe_id": "phase-a-neg-duplicate-output",
       "status": "passed"
     },
     {
       "expected_reason": "lost relationship",
-      "observed_reason": "lost relationship: missing expected target row: [('proposed_location_record_relationship', (('relationship_id', 'phase-a-missing-relationship'),))]",
+      "observed_reason": "lost relationship: missing expected target row: [('proposed_location_record_relationship', (('relationship_id', 'phase-a-relationship-geotag-near-address-reference'),))]",
       "probe_id": "phase-a-neg-lost-relationship",
       "status": "passed"
     },
     {
       "expected_reason": "mismatched typed hash",
-      "observed_reason": "mismatched typed hash: mismatched typed hash: expected fixture rows hash 0c16ff30de8f744de068edf4fe65110e42ca6412c705f76af23b92238d57e2ed does not match declared 0000000000000000000000000000000000000000000000000000000000000000",
+      "observed_reason": "mismatched typed hash: mismatched typed hash: expected fixture rows hash 1e9d364c62cc19648dfc72a0948c69bebd357c267b5578e87254ef3958298051 does not match declared 0000000000000000000000000000000000000000000000000000000000000000",
       "probe_id": "phase-a-neg-mismatched-typed-hash",
       "status": "passed"
     }

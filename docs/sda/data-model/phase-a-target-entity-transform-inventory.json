@@ -1,46 +1,42 @@
 {
-  "actual_rows": 856,
+  "actual_rows": 199,
   "coverage": {
-    "authoritative_executed_dispositions": 237,
-    "conflicting_disposition_count": 0,
-    "conflicting_dispositions": [],
     "current_pg_catalog_fields": 237,
-    "current_tables_covered": 25,
-    "duplicate_field_claim_count": 0,
-    "duplicate_field_claims": [],
-    "duplicate_implementation_units": [],
-    "execution_mode": "phase-a-a2-a3-machine-checked-coverage",
+    "duplicate_conflicting_execution_count": 0,
+    "duplicate_conflicting_executions": [],
+    "executable_implementations_invoked": 90,
+    "executable_implementations_resolved": 90,
+    "executed_field_dispositions": 237,
+    "execution_mode": "phase-a-real-transform-telemetry-coverage",
     "extra_fields": [],
-    "implementation_without_reviewed_group": [],
     "missing_field_count": 0,
     "missing_fields": [],
-    "reviewed_transformation_fields": 237,
-    "transform_groups_declared": 90,
-    "transform_implementations": 90,
-    "unexecuted_transform_group_count": 0,
-    "unexecuted_transform_groups": []
+    "reviewed_current_fields": 237,
+    "reviewed_groups": 90,
+    "unexecuted_group_count": 0,
+    "unexecuted_groups": []
   },
-  "execution_mode": "phase-a-authoritative-f02-transforms",
-  "expected_rows": 856,
-  "first_run_inserts": 856,
+  "execution_mode": "phase-a-real-current-source-to-canonical-target-transform",
+  "expected_rows": 199,
+  "first_run_inserts": 199,
   "queried_duplicates": {
     "duplicate_rows": {
       "archive_source_uri": [],
-      "assertion_current_field": [],
       "crosswalk_semantic": [],
+      "name_semantic": [],
       "relationship_semantic": []
     },
-    "queried_duplicate_count": 0
+    "queried_semantic_duplicate_count": 0
   },
   "second_run_inserts": 0,
   "second_run_updates": 0,
   "target_counts": {
-    "archives": 237,
-    "crosswalks": 238,
-    "exceptions": 48,
-    "target_child_rows": 239,
-    "target_entities": 93,
+    "archives": 23,
+    "crosswalks": 21,
+    "exceptions": 17,
+    "target_child_rows": 17,
+    "target_entities": 135,
     "target_relationships": 1
   },
-  "target_state_hash": "0c16ff30de8f744de068edf4fe65110e42ca6412c705f76af23b92238d57e2ed"
+  "target_state_hash": "1e9d364c62cc19648dfc72a0948c69bebd357c267b5578e87254ef3958298051"
 }
