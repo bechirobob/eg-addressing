@@ -1325,6 +1325,8 @@ def run_precision_test() -> dict[str, Any]:
 
 
 def run_address_points_geometry_slice() -> dict[str, Any]:
+    broad_report_path = DM / 'phase-a-current-source-execution-report.json'
+    broad_report_original = broad_report_path.read_text() if broad_report_path.exists() else None
     if address_points_oracle_hash() != ADDRESS_POINTS_ORACLE_BASELINE_SHA256:
         raise HarnessError('reviewer-owned parent oracle changed')
     if address_points_correction_oracle_hash() != ADDRESS_POINTS_CORRECTION_ORACLE_BASELINE_SHA256:
@@ -1402,6 +1404,10 @@ def run_address_points_geometry_slice() -> dict[str, Any]:
         'failed_test_state_unchanged': all(t.get('state_unchanged', True) for t in test_results),
     }
     write_json(DM / 'phase-a-address-points-geometry-slice-report.json', report)
+    if broad_report_original is not None:
+        broad_report_path.write_text(broad_report_original)
+    elif broad_report_path.exists():
+        broad_report_path.unlink()
     return report
 
 def phase_a_all() -> dict[str,Any]:
