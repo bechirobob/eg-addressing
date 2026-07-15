@@ -84,6 +84,15 @@
       "idempotency_key": "address_points.phase-a-address-points-001::WO002-R06-geometry-observation-address_points",
       "implementation_unit": "impl_wo002_r06_geometry_observation_address_points",
       "operation": "registry-disposition-to-canonical-target-evidence",
+      "required_context_fields": [
+        "address_points.id",
+        "address_points.address_id",
+        "address_points.source_method",
+        "address_points.created_at"
+      ],
+      "source_method_translation": {
+        "phase-a address_points source_method": "derived-from-source"
+      },
       "source_record_key": "address_points:phase-a-address-points-001",
       "source_table": "address_points",
       "target_entities": [

@@ -48,3 +48,24 @@ The command `address-points-geometry-slice` writes:
 `docs/sda/data-model/phase-a-address-points-geometry-slice-report.json`
 
 This report is the checkpoint evidence for C01-C07 and the preserved original slice tests.
+
+
+## Final control correction C08-C11
+
+**Reviewer-owned head synchronized:** `6739d736e9be134679b42069766f5f908f710377`
+**Reviewed implementation head:** `64ad44b8553dcd0f18bd7dd41363230fb492862b`
+**Assessment:** `docs/sda/reviews/NLI-WO-002-phase-a-address-points-geometry-assessment-02.md`
+**Final correction oracle:** `docs/sda/acceptance/NLI-WO-002-phase-a-address-points-geometry-final-correction-oracle.json`
+
+Authorized work remains strictly limited to the same `WO002-R06-geometry-observation-address_points` vertical slice.
+
+### Final controls
+
+| Finding | Correction target |
+|---|---|
+| C08 | Transform output producer no longer reads any acceptance oracle; oracle access is gated to comparator/test authority blocks. |
+| C09 | The reviewed transform-spec row now declares `required_context_fields` and `source_method_translation`; validator checks both actual spec values. |
+| C10 | The address identity crosswalk is the reviewed address-level crosswalk `phase-a-crosswalk-addresses-id-to-location-record`; two address-point rows share exactly one address identity crosswalk. |
+| C11 | Missing-source uses the common same-database rollback evidence path with measured pre/post rows and hashes. |
+
+No other transform group, broad reassessment, SDA Review 12, F04-F12, runtime code, executable migration, Docker runtime config, production/pilot data, secrets, `.env*`, or PR #8 scope is authorized or changed.

@@ -435,7 +435,8 @@ def add_source_records_and_evidence(rows: dict[str,list[dict[str,Any]]], records
         if rec['source_table'] in ('provinces','admin_units','reference_data_loads','reference_data_load_history'):
             auth='phase-a-authority-conditional-admin-reference'
         package_id=f'phase-a-source-package-{slug(rec["source_table"])}'
-        rows['proposed_source_package'].append({'source_package_id':package_id,'source_authority_id':auth,'package_name':f'Phase A source package {rec["source_table"]}','package_checksum':sha(rec['values']),'licence_id':None,'loaded_at':TS,'load_context':{'source_table':rec['source_table'],'phase':'A'}})
+        if not any(r.get('source_package_id') == package_id for r in rows['proposed_source_package']):
+            rows['proposed_source_package'].append({'source_package_id':package_id,'source_authority_id':auth,'package_name':f'Phase A source package {rec["source_table"]}','package_checksum':sha(rec['values']),'licence_id':None,'loaded_at':TS,'load_context':{'source_table':rec['source_table'],'phase':'A'}})
         rows['proposed_source_record'].append({'source_record_id':rec['source_record_id'],'source_package_id':package_id,'source_key':rec['source_key'],'raw_payload_hash':sha(rec['values']),'raw_payload_classification':rec.get('classification','government-internal'),'recorded_at':rec['values'].get('created_at',TS)})
         rows['proposed_evidence_object'].append({'evidence_object_id':f'phase-a-evidence-{slug(rec["source_table"])}','source_record_id':rec['source_record_id'],'storage_uri':f'phase-a://evidence/{rec["source_key"]}','content_hash':sha(rec['values']),'media_type':'application/json','classification':rec.get('classification','government-internal'),'captured_at':rec['values'].get('created_at',TS),'retention_state':'active'})
 
@@ -783,8 +784,11 @@ def cleanup_recreate() -> dict[str,Any]:
 ACCEPTANCE = ROOT / 'docs' / 'sda' / 'acceptance'
 ADDRESS_POINTS_ORACLE = ACCEPTANCE / 'NLI-WO-002-phase-a-address-points-geometry-expected.json'
 ADDRESS_POINTS_CORRECTION_ORACLE = ACCEPTANCE / 'NLI-WO-002-phase-a-address-points-geometry-correction-oracle.json'
+ADDRESS_POINTS_FINAL_CORRECTION_ORACLE = ACCEPTANCE / 'NLI-WO-002-phase-a-address-points-geometry-final-correction-oracle.json'
 ADDRESS_POINTS_ORACLE_BASELINE_SHA256 = 'cf699de04e0ca500c3a7826f257e190d24835356ef96db1650160d7d438edaea'
 ADDRESS_POINTS_CORRECTION_ORACLE_BASELINE_SHA256 = '12214d3967c6561eaa30c4577d9ab445a9b90d14b6d5c3374a842868e4e62bea'
+ADDRESS_POINTS_FINAL_CORRECTION_ORACLE_BASELINE_SHA256 = '187d940235cdf1ef0976c423151f11ab5a378f1761e30b0007942d9aa4bd9278'
+ADDRESS_POINTS_ORACLE_ACCESS_ALLOWED = False
 ADDRESS_POINTS_GROUP_ID = 'WO002-R06-geometry-observation-address_points'
 ADDRESS_POINTS_IMPL_UNIT = 'impl_wo002_r06_geometry_observation_address_points'
 ADDRESS_POINTS_FUNCTION = 'transform_address_points_geometry'
@@ -804,14 +808,39 @@ def address_points_correction_oracle_hash() -> str:
     return file_sha256(ADDRESS_POINTS_CORRECTION_ORACLE)
 
 
-def load_address_points_oracle(allowed: bool) -> dict[str, Any]:
-    if not allowed:
-        raise HarnessError('reviewer-owned expected geometry oracle may be read only by comparator after observed target state exists')
+def address_points_final_correction_oracle_hash() -> str:
+    return file_sha256(ADDRESS_POINTS_FINAL_CORRECTION_ORACLE)
+
+
+def load_address_points_oracle() -> dict[str, Any]:
+    if not ADDRESS_POINTS_ORACLE_ACCESS_ALLOWED:
+        raise HarnessError('reviewer-owned expected geometry oracle access is disabled outside the read-only comparator')
     return json.loads(ADDRESS_POINTS_ORACLE.read_text())
 
 
 def load_address_points_correction_oracle() -> dict[str, Any]:
+    if not ADDRESS_POINTS_ORACLE_ACCESS_ALLOWED:
+        raise HarnessError('reviewer-owned correction oracle access is disabled outside the read-only comparator')
     return json.loads(ADDRESS_POINTS_CORRECTION_ORACLE.read_text())
+
+
+def load_address_points_final_correction_oracle() -> dict[str, Any]:
+    if not ADDRESS_POINTS_ORACLE_ACCESS_ALLOWED:
+        raise HarnessError('reviewer-owned final correction oracle access is disabled outside the read-only comparator')
+    return json.loads(ADDRESS_POINTS_FINAL_CORRECTION_ORACLE.read_text())
+
+
+class address_points_oracle_access:
+    def __init__(self, enabled: bool):
+        self.enabled = enabled
+        self.previous = None
+    def __enter__(self):
+        global ADDRESS_POINTS_ORACLE_ACCESS_ALLOWED
+        self.previous = ADDRESS_POINTS_ORACLE_ACCESS_ALLOWED
+        ADDRESS_POINTS_ORACLE_ACCESS_ALLOWED = self.enabled
+    def __exit__(self, exc_type, exc, tb):
+        global ADDRESS_POINTS_ORACLE_ACCESS_ALLOWED
+        ADDRESS_POINTS_ORACLE_ACCESS_ALLOWED = self.previous
 
 
 def select_address_points_record(records: list[dict[str, Any]], source_id: str = 'phase-a-address-points-id') -> dict[str, Any]:
@@ -859,7 +888,7 @@ def ensure_address_points_preconditions(cur, rec: dict[str, Any], mutation: dict
                 evidence['evidence_object_id'] = f'phase-a-evidence-address-points-{slug(rec_values["id"])}'
     if not mutation.get('missing_address_crosswalk'):
         add_unique(rows, 'proposed_legacy_crosswalk', {
-            'legacy_crosswalk_id': f'phase-a-crosswalk-addresses-id-to-location-record-{slug(rec_values["id"])}',
+            'legacy_crosswalk_id': 'phase-a-crosswalk-addresses-id-to-location-record',
             'source_table': 'addresses',
             'source_field': 'id',
             'legacy_id': rec_values['address_id'],
@@ -870,6 +899,28 @@ def ensure_address_points_preconditions(cur, rec: dict[str, Any], mutation: dict
     if mutation.get('missing_evidence_object'):
         wanted_source_record = rec['source_record_id']
         rows['proposed_evidence_object'] = [r for r in rows.get('proposed_evidence_object', []) if r.get('source_record_id') != wanted_source_record]
+    apply_target_rows(cur, rows)
+    cur.execute('SET CONSTRAINTS ALL IMMEDIATE')
+
+
+def ensure_address_points_multi_preconditions(cur, records: list[dict[str, Any]]) -> None:
+    rows = base_target_rows()
+    add_source_records_and_evidence(rows, records)
+    for rec in records:
+        rec_values = normalize_current_fixture_values('address_points', rec['values'])
+        if rec_values['id'] != 'phase-a-address-points-id':
+            for evidence in rows.get('proposed_evidence_object', []):
+                if evidence.get('source_record_id') == rec['source_record_id']:
+                    evidence['evidence_object_id'] = f'phase-a-evidence-address-points-{slug(rec_values["id"])}'
+    add_unique(rows, 'proposed_legacy_crosswalk', {
+        'legacy_crosswalk_id': 'phase-a-crosswalk-addresses-id-to-location-record',
+        'source_table': 'addresses',
+        'source_field': 'id',
+        'legacy_id': 'phase-a-addresses-id',
+        'target_entity': 'location_record',
+        'target_id': 'phase-a-location-address-reference',
+        'created_at': TS,
+    })
     apply_target_rows(cur, rows)
     cur.execute('SET CONSTRAINTS ALL IMMEDIATE')
 
@@ -944,31 +995,51 @@ def validate_coordinate_range(row: dict[str, Any]) -> None:
 
 
 def reviewed_address_points_transform_spec(spec_mutation: dict[str, Any] | None = None) -> dict[str, Any]:
-    correction = load_address_points_correction_oracle()['required_spec_binding']
+    expected = {
+        'transform_group_id': ADDRESS_POINTS_GROUP_ID,
+        'implementation_unit': ADDRESS_POINTS_IMPL_UNIT,
+        'callable': ADDRESS_POINTS_FUNCTION,
+        'covered_source_fields': [
+            'address_points.accuracy_meters',
+            'address_points.latitude',
+            'address_points.longitude',
+        ],
+        'required_context_fields': [
+            'address_points.id',
+            'address_points.address_id',
+            'address_points.source_method',
+            'address_points.created_at',
+        ],
+        'source_method_translation': {
+            'phase-a address_points source_method': 'derived-from-source',
+        },
+        'target_entities': ['geometry_observation'],
+    }
     groups = copy.deepcopy(registry_groups())
     group = next((g for g in groups if g['transform_group_id'] == ADDRESS_POINTS_GROUP_ID), None)
     if not group:
         raise HarnessError('address_points geometry transform specification binding mismatch: reviewed group missing')
     if spec_mutation:
-        if spec_mutation.get('implementation_unit'):
-            group['implementation_unit'] = spec_mutation['implementation_unit']
-        if spec_mutation.get('covered_source_fields'):
-            group['covered_source_fields'] = spec_mutation['covered_source_fields']
-        if spec_mutation.get('target_entities'):
-            group['target_entities'] = spec_mutation['target_entities']
-    context_fields = list(correction['required_context_fields'])
+        for key in ['implementation_unit', 'covered_source_fields', 'target_entities', 'required_context_fields', 'source_method_translation']:
+            if key in spec_mutation:
+                group[key] = spec_mutation[key]
     checks = {
-        'transform_group_id': group.get('transform_group_id') == correction['transform_group_id'],
-        'implementation_unit': group.get('implementation_unit') == correction['implementation_unit'],
-        'callable': ADDRESS_POINTS_GEOMETRY_IMPLEMENTATIONS.get(group.get('implementation_unit')) is transform_address_points_geometry and correction['callable'] == ADDRESS_POINTS_FUNCTION,
-        'covered_source_fields': sorted(group.get('covered_source_fields', [])) == sorted(correction['covered_source_fields']),
-        'required_context_fields': context_fields == correction['required_context_fields'],
-        'target_entity': group.get('target_entities') == ['geometry_observation'],
+        'transform_group_id': group.get('transform_group_id') == expected['transform_group_id'],
+        'implementation_unit': group.get('implementation_unit') == expected['implementation_unit'],
+        'callable': ADDRESS_POINTS_GEOMETRY_IMPLEMENTATIONS.get(group.get('implementation_unit')) is transform_address_points_geometry and expected['callable'] == ADDRESS_POINTS_FUNCTION,
+        'covered_source_fields': sorted(group.get('covered_source_fields', [])) == sorted(expected['covered_source_fields']),
+        'required_context_fields': group.get('required_context_fields') == expected['required_context_fields'],
+        'source_method_translation': group.get('source_method_translation') == expected['source_method_translation'],
+        'target_entity': group.get('target_entities') == expected['target_entities'],
     }
     if not all(checks.values()):
         raise HarnessError(f'address_points geometry transform specification binding mismatch: {checks}')
-    return {'group': group, 'required_context_fields': context_fields, 'validation': checks}
-
+    return {
+        'group': group,
+        'required_context_fields': group['required_context_fields'],
+        'source_method_translation': group['source_method_translation'],
+        'validation': checks,
+    }
 
 def insert_row(cur, table: str, row: dict[str,Any]) -> str:
     pk=primary_key(row,table); where=' AND '.join([f'{k}=%s' for k in pk])
@@ -1004,8 +1075,7 @@ def transform_address_points_geometry(cur, *, source_id: str = 'phase-a-address-
     validate_coordinate_range(source_row)
     identity = resolve_address_points_target_identity(cur, source_row['address_id'])
     lineage = require_address_points_lineage(cur, source_row)
-    parent_oracle = load_address_points_oracle(True)
-    capture_map = parent_oracle['reviewed_transform']['source_method_translation']
+    capture_map = spec_validation['source_method_translation']
     capture_method = capture_map.get(source_row['source_method'])
     if not capture_method:
         raise HarnessError('address_points.source_method has no reviewed capture-method translation')
@@ -1172,12 +1242,14 @@ def compare_address_points_oracle_read_only(*, source_key: str = 'address_points
         cur.execute('BEGIN READ ONLY')
         cur.execute('SHOW transaction_read_only')
         comparator_read_only = cur.fetchone()['transaction_read_only']
-        oracle = load_address_points_oracle(True)
+        with address_points_oracle_access(True):
+            oracle = load_address_points_oracle()
         if expected_mutation and expected_mutation.get('wrong_expected_geometry'):
             oracle = copy.deepcopy(oracle)
             oracle['expected_inserted_rows'][0]['values']['observed_geom_wkt'] = 'POINT(0 0)'
         if expected_mutation and expected_mutation.get('precision_expected'):
-            correction = load_address_points_correction_oracle()['precision_case']
+            with address_points_oracle_access(True):
+                correction = load_address_points_correction_oracle()['precision_case']
             oracle = copy.deepcopy(oracle)
             oracle['expected_inserted_rows'][0]['values']['observed_geom_wkt'] = correction['expected_wkt']
             oracle['expected_inserted_rows'][0]['values']['observed_geom_srid'] = correction['expected_srid']
@@ -1225,7 +1297,7 @@ def run_address_points_slice_once(*, mutation: dict[str, Any] | None = None, com
         if mutation.get('invalid_coordinate_current_source'):
             cur.execute("UPDATE current_source.address_points SET latitude = 91.0 WHERE id = %s", (source_id,))
         if mutation.get('precision_case'):
-            values = load_address_points_correction_oracle()['precision_case']['source_values']
+            values = {'latitude': 3.7523456, 'longitude': 8.7834567, 'accuracy_meters': 4.5}
             cur.execute("UPDATE current_source.address_points SET latitude=%s, longitude=%s, accuracy_meters=%s WHERE id=%s", (values['latitude'], values['longitude'], values['accuracy_meters'], source_id))
         spec_validation = reviewed_address_points_transform_spec(mutation.get('spec_drift'))
         impl = ADDRESS_POINTS_GEOMETRY_IMPLEMENTATIONS.get(ADDRESS_POINTS_IMPL_UNIT)
@@ -1244,10 +1316,11 @@ def prepare_address_points_slice_state(cur, *, source_id: str = 'phase-a-address
     records = fixture_records()
     rec = make_address_points_record(source_id)
     records = [r for r in records if not (r['source_table'] == 'address_points')]
-    if not mutation.get('missing_source'):
-        records.append(rec)
+    records.append(rec)
     source_report = insert_current_fixture_rows(cur, records)
     ensure_address_points_preconditions(cur, rec, mutation)
+    if mutation.get('missing_source'):
+        cur.execute('DELETE FROM current_source.address_points WHERE id = %s', (source_id,))
     return {'source_report': source_report, 'record': rec}
 
 
@@ -1266,7 +1339,8 @@ def run_address_points_negative_probe(probe_id: str, expected_error: str, mutati
             transform_address_points_geometry(cur, source_id='phase-a-address-points-id', mutation=mutation, spec_validation=spec_validation)
             if mutation.get('wrong_expected_geometry') or mutation.get('unexpected_extra_target_row') or mutation.get('wrong_longitude_implementation'):
                 actual = address_points_complete_target_rows(cur, source_key)
-                oracle = load_address_points_oracle(True)
+                with address_points_oracle_access(True):
+                    oracle = load_address_points_oracle()
                 if mutation.get('wrong_expected_geometry'):
                     oracle = copy.deepcopy(oracle); oracle['expected_inserted_rows'][0]['values']['observed_geom_wkt'] = 'POINT(0 0)'
                 expected = expected_address_points_rows(oracle, source_key)
@@ -1291,37 +1365,129 @@ def run_address_points_negative_probe(probe_id: str, expected_error: str, mutati
                 after = target_slice_hash(check_cur, source_key)
             if before != after:
                 raise HarnessError(f'same-database rollback proof failed for {probe_id}: before={before["hash"]} after={after["hash"]}')
-            return {'test_id': probe_id, 'expected_error': expected_error, 'observed_error': observed, 'same_database_pre_test_hash': before['hash'], 'same_database_post_failure_hash': after['hash'], 'rollback_equality': True, 'state_unchanged': True, 'status': 'passed'}
+            return {'test_id': probe_id, 'expected_error': expected_error, 'observed_error': observed, 'same_database_pre_test_rows': before['rows'], 'same_database_pre_test_hash': before['hash'], 'same_database_post_failure_rows': after['rows'], 'same_database_post_failure_hash': after['hash'], 'rollback_equality': True, 'state_unchanged': True, 'status': 'passed'}
+
+def address_points_crosswalk_controls(cur) -> dict[str, Any]:
+    cur.execute("""
+        SELECT legacy_crosswalk_id, source_table, source_field, legacy_id, target_entity, target_id
+        FROM canonical_target.proposed_legacy_crosswalk
+        WHERE source_table='addresses'
+          AND source_field='id'
+          AND legacy_id='phase-a-addresses-id'
+          AND target_entity='location_record'
+          AND target_id='phase-a-location-address-reference'
+        ORDER BY legacy_crosswalk_id
+    """)
+    rows = [norm_row(dict(r)) for r in cur.fetchall()]
+    cur.execute("""
+        SELECT source_table, source_field, legacy_id, target_entity, target_id, COUNT(*)::int AS c
+        FROM canonical_target.proposed_legacy_crosswalk
+        GROUP BY 1,2,3,4,5 HAVING COUNT(*) > 1
+    """)
+    duplicates = [norm_row(dict(r)) for r in cur.fetchall()]
+    cur.execute("""
+        SELECT legacy_id, COUNT(*)::int AS c
+        FROM canonical_target.proposed_legacy_crosswalk
+        WHERE source_table='addresses' AND source_field='id' AND legacy_id='phase-a-addresses-id' AND target_entity='location_record'
+        GROUP BY legacy_id HAVING COUNT(*) > 1
+    """)
+    multiple_identity_resolution = [norm_row(dict(r)) for r in cur.fetchall()]
+    return {
+        'query': 'address identity crosswalk rows grouped by source_table/source_field/legacy_id/target_entity/target_id',
+        'rows': rows,
+        'matching_address_crosswalk_rows': len(rows),
+        'semantic_duplicate_crosswalks': duplicates,
+        'semantic_duplicate_crosswalk_count': len(duplicates),
+        'multiple_identity_resolution': multiple_identity_resolution,
+        'multiple_identity_resolution_count': len(multiple_identity_resolution),
+    }
+
 
 def run_second_source_identity_test() -> dict[str, Any]:
     setup_address_points_geometry_database()
+    first_id = 'phase-a-address-points-id'
     second_id = 'phase-a-address-points-002'
-    report = run_address_points_slice_once(compare_expected=False, source_id=second_id)
-    source_key = f'address_points:{second_id}'
+    rec1 = make_address_points_record(first_id)
+    rec2 = make_address_points_record(second_id)
+    records = [r for r in fixture_records() if r['source_table'] != 'address_points'] + [rec1, rec2]
+    with connect(options='-c search_path=canonical_target,public') as conn, conn.cursor() as cur:
+        source_report = insert_current_fixture_rows(cur, records)
+        ensure_address_points_multi_preconditions(cur, [rec1, rec2])
+        spec_validation = reviewed_address_points_transform_spec()
+        first = transform_address_points_geometry(cur, source_id=first_id, spec_validation=spec_validation)
+        second = transform_address_points_geometry(cur, source_id=second_id, spec_validation=spec_validation)
+        conn.commit()
     with connect() as conn, conn.cursor() as cur:
-        rows = address_points_complete_target_rows(cur, source_key)
-    geom = next(r for r in rows if r['table'] == 'proposed_geometry_observation')
-    exc = next(r for r in rows if r['table'] == 'proposed_migration_exception')
+        cur.execute("SELECT COUNT(*)::int AS c FROM current_source.address_points WHERE id IN (%s,%s)", (first_id, second_id))
+        source_count = cur.fetchone()['c']
+        cur.execute("SELECT COUNT(*)::int AS c FROM canonical_target.proposed_geometry_observation WHERE geometry_observation_id IN (%s,%s)", (f'phase-a-geometry-address-points-{first_id}', f'phase-a-geometry-address-points-{second_id}'))
+        geometry_count = cur.fetchone()['c']
+        cur.execute("SELECT COUNT(*)::int AS c FROM canonical_target.proposed_migration_exception WHERE migration_exception_id IN (%s,%s)", (f'phase-a-exception-geometry-authority-address-points-{first_id}', f'phase-a-exception-geometry-authority-address-points-{second_id}'))
+        exception_count = cur.fetchone()['c']
+        first_rows = address_points_complete_target_rows(cur, f'address_points:{first_id}')
+        second_rows = address_points_complete_target_rows(cur, f'address_points:{second_id}')
+        crosswalk_controls = address_points_crosswalk_controls(cur)
+    geom = next(r for r in second_rows if r['table'] == 'proposed_geometry_observation')
+    exc = next(r for r in second_rows if r['table'] == 'proposed_migration_exception')
     checks = {
-        'source_key': report['transform']['lineage']['derived_source_key'] == source_key,
-        'source_record_id': report['transform']['lineage']['source_row']['source_record_id'] == 'phase-a-source-record-address-points-002',
-        'evidence_object_resolved': report['transform']['lineage']['evidence_row']['source_record_id'] == 'phase-a-source-record-address-points-002',
+        'source_key': second['lineage']['derived_source_key'] == f'address_points:{second_id}',
+        'source_record_id': second['lineage']['source_row']['source_record_id'] == 'phase-a-source-record-address-points-002',
+        'evidence_object_resolved': second['lineage']['evidence_row']['evidence_object_id'] == 'phase-a-evidence-address-points-phase-a-address-points-002',
         'geometry_id': geom['primary_key']['geometry_observation_id'] == 'phase-a-geometry-address-points-phase-a-address-points-002',
-        'exception_source_key': exc['values']['source_key'] == source_key,
+        'exception_source_key': exc['values']['source_key'] == f'address_points:{second_id}',
+        'source_rows': source_count == 2,
+        'geometry_observations': geometry_count == 2,
+        'conditional_exceptions': exception_count == 2,
+        'matching_address_crosswalk_rows': crosswalk_controls['matching_address_crosswalk_rows'] == 1,
+        'multiple_identity_resolution': crosswalk_controls['multiple_identity_resolution_count'] == 0,
+        'semantic_duplicate_crosswalks': crosswalk_controls['semantic_duplicate_crosswalk_count'] == 0,
     }
     if not all(checks.values()):
         raise HarnessError(f'second-source-identity test failed: {checks}')
-    return {'test_id': 'lineage-derived-not-hardcoded', 'status': 'passed', 'source_id': second_id, 'checks': checks, 'geometry_row': geom, 'exception_row': exc}
-
+    return {
+        'test_id': 'lineage-derived-not-hardcoded',
+        'status': 'passed',
+        'source_report': source_report,
+        'source_ids': [first_id, second_id],
+        'checks': checks,
+        'address_points_rows': source_count,
+        'geometry_observations': geometry_count,
+        'conditional_exceptions': exception_count,
+        'address_identity_crosswalk_id': 'phase-a-crosswalk-addresses-id-to-location-record',
+        'crosswalk_controls': crosswalk_controls,
+        'first_rows': first_rows,
+        'second_rows': second_rows,
+        'first_transform_lineage': first['lineage'],
+        'second_transform_lineage': second['lineage'],
+        'geometry_row': geom,
+        'exception_row': exc,
+    }
 
 def run_precision_test() -> dict[str, Any]:
     setup_address_points_geometry_database()
     report = run_address_points_slice_once(mutation={'precision_case': True, 'precision_expected': True}, compare_expected=True)
     geom = next(r for r in report['comparison']['actual_rows_detail'] if r['table'] == 'proposed_geometry_observation')
-    expected = load_address_points_correction_oracle()['precision_case']
+    expected = {'expected_wkt': 'POINT(8.7834567 3.7523456)', 'expected_srid': 4326}
     if geom['values']['observed_geom_wkt'] != expected['expected_wkt'] or geom['values']['observed_geom_srid'] != expected['expected_srid']:
         raise HarnessError(f'precision-preservation failed: {geom}')
     return {'test_id': 'precision-preservation', 'status': 'passed', 'wkt': geom['values']['observed_geom_wkt'], 'srid': geom['values']['observed_geom_srid']}
+
+
+def run_oracle_access_prohibited_test() -> dict[str, Any]:
+    setup_address_points_geometry_database()
+    with connect(options='-c search_path=canonical_target,public') as conn, conn.cursor() as cur:
+        prepare_address_points_slice_state(cur)
+        spec_validation = reviewed_address_points_transform_spec()
+        with address_points_oracle_access(False):
+            result = transform_address_points_geometry(cur, spec_validation=spec_validation)
+        conn.rollback()
+    return {
+        'test_id': 'transform-expected-oracle-access-prohibited',
+        'status': 'passed',
+        'oracle_access_disabled': True,
+        'transform_succeeded': True,
+        'function_invoked': result['function_invoked'],
+    }
 
 
 def run_address_points_geometry_slice() -> dict[str, Any]:
@@ -1331,14 +1497,19 @@ def run_address_points_geometry_slice() -> dict[str, Any]:
         raise HarnessError('reviewer-owned parent oracle changed')
     if address_points_correction_oracle_hash() != ADDRESS_POINTS_CORRECTION_ORACLE_BASELINE_SHA256:
         raise HarnessError('reviewer-owned correction oracle changed')
+    if address_points_final_correction_oracle_hash() != ADDRESS_POINTS_FINAL_CORRECTION_ORACLE_BASELINE_SHA256:
+        raise HarnessError('reviewer-owned final correction oracle changed')
     setup_address_points_geometry_database()
     positive = run_address_points_slice_once(compare_expected=True)
     test_results = [{'test_id': 'positive-authoritative-slice', 'status': 'passed'}]
+    oracle_access_test = run_oracle_access_prohibited_test(); test_results.append(oracle_access_test)
     test_results.append({'test_id': 'second-run-idempotency', 'status': 'passed', 'first_run_inserts': positive['transform']['insert_stats_first']['inserted'], 'second_run_inserts': positive['transform']['insert_stats_second']['inserted'], 'second_run_updates': 0, 'geometry_observation_count': positive['comparison']['geometry_observation_count']})
     precision = run_precision_test(); test_results.append(precision)
     second_identity = run_second_source_identity_test(); test_results.append(second_identity)
     probes = [
         ('transform-spec-binding-drift', 'address_points geometry transform specification binding mismatch', {'spec_drift': {'implementation_unit': 'impl_wrong'}}),
+        ('transform-spec-context-field-drift', 'address_points geometry transform specification binding mismatch', {'spec_drift': {'required_context_fields': ['address_points.id']}}),
+        ('transform-spec-source-method-translation-drift', 'address_points geometry transform specification binding mismatch', {'spec_drift': {'source_method_translation': {'phase-a address_points source_method': 'wrong-method'}}}),
         ('wrong-longitude-transform-implementation', 'geometry observation does not match reviewer-owned expected WKT', {'wrong_longitude_implementation': True}),
         ('invalid-coordinate-current-source', 'coordinate out of range', {'invalid_coordinate_current_source': True}),
         ('unexpected-extra-target-row', 'unexpected address_points geometry slice target row', {'unexpected_extra_target_row': True}),
@@ -1348,19 +1519,7 @@ def run_address_points_geometry_slice() -> dict[str, Any]:
         ('wrong-independent-expected-geometry', 'observed geometry differs from reviewer-owned expected geometry', {'wrong_expected_geometry': True}),
     ]
     for pid, reason, mutation in probes:
-        if mutation.get('missing_source'):
-            setup_address_points_geometry_database()
-            try:
-                run_address_points_slice_once(mutation=mutation, compare_expected=True)
-            except Exception as exc:
-                observed = str(exc)
-                if reason not in observed:
-                    raise HarnessError(f'{pid} failed for wrong reason: expected {reason!r}, got {observed!r}')
-                test_results.append({'test_id': pid, 'expected_error': reason, 'observed_error': observed, 'status': 'passed', 'state_unchanged': True})
-            else:
-                raise HarnessError(f'{pid} unexpectedly passed')
-        else:
-            test_results.append(run_address_points_negative_probe(pid, reason, mutation))
+        test_results.append(run_address_points_negative_probe(pid, reason, mutation))
     geom = next(r for r in positive['comparison']['actual_rows_detail'] if r['table'] == 'proposed_geometry_observation')
     exc = next(r for r in positive['comparison']['actual_rows_detail'] if r['table'] == 'proposed_migration_exception')
     rollback_hashes = [t for t in test_results if 'same_database_pre_test_hash' in t]
@@ -1371,9 +1530,15 @@ def run_address_points_geometry_slice() -> dict[str, Any]:
         'reviewer_owned_oracle_changed': False,
         'reviewer_owned_correction_oracle_sha256': address_points_correction_oracle_hash(),
         'reviewer_owned_correction_oracle_changed': False,
+        'reviewer_owned_final_correction_oracle_sha256': address_points_final_correction_oracle_hash(),
+        'reviewer_owned_final_correction_oracle_changed': False,
         'exact_function_implemented': ADDRESS_POINTS_FUNCTION,
         'exact_registry_binding': {ADDRESS_POINTS_IMPL_UNIT: ADDRESS_POINTS_FUNCTION},
         'generic_transform_group_used_for_slice': False,
+        'transform_reads_expected_oracle': False,
+        'transform_input_files': ['docs/sda/data-model/fixtures/transform-specs/phase-a-transform-specs.json'],
+        'comparator_oracle_access_gate': 'ADDRESS_POINTS_ORACLE_ACCESS_ALLOWED is enabled only inside read-only comparator/test authority blocks',
+        'oracle_access_prohibition_test': oracle_access_test,
         'coordinate_insertion_method': 'typed numeric parameters via ST_SetSRID(ST_MakePoint(%s,%s),4326); no fixed-decimal WKT formatting before insertion',
         'precision_test_wkt_srid': {'wkt': precision['wkt'], 'srid': precision['srid']},
         'source_row_query': positive['transform']['source_row_query']['sql'],
@@ -1383,8 +1548,16 @@ def run_address_points_geometry_slice() -> dict[str, Any]:
         'source_record_resolution': positive['transform']['lineage']['source_row'],
         'evidence_resolution': positive['transform']['lineage']['evidence_row'],
         'second_source_identity_test': second_identity,
+        'address_identity_crosswalk_id': second_identity['address_identity_crosswalk_id'],
+        'two_source_rows_in_same_database': second_identity['address_points_rows'],
+        'two_source_geometry_observations': second_identity['geometry_observations'],
+        'two_source_conditional_exceptions': second_identity['conditional_exceptions'],
+        'matching_address_crosswalk_rows': second_identity['crosswalk_controls']['matching_address_crosswalk_rows'],
+        'semantic_duplicate_crosswalks': second_identity['crosswalk_controls']['semantic_duplicate_crosswalk_count'],
         'reviewed_transform_spec_row': positive['transform']['spec_validation']['group'],
         'binding_validation': positive['transform']['spec_validation']['validation'],
+        'reviewed_spec_required_context_fields': positive['transform']['spec_validation']['required_context_fields'],
+        'reviewed_spec_source_method_translation': positive['transform']['spec_validation']['source_method_translation'],
         'target_identity_resolution': positive['transform']['target_identity_resolution'],
         'geometry_observation_row': geom,
         'geometry_wkt_srid': {'wkt': geom['values']['observed_geom_wkt'], 'srid': geom['values']['observed_geom_srid']},
