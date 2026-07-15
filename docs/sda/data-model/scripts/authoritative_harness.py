@@ -159,6 +159,15 @@ def normalize(value: Any) -> Any:
 def norm_row(row: dict[str, Any]) -> dict[str, Any]:
     return {k: normalize(v) for k, v in row.items()}
 
+def broad_payload_hash_input(value: Any) -> Any:
+    if isinstance(value, datetime) and value.tzinfo is not None:
+        return value.astimezone(timezone.utc)
+    if isinstance(value, dict):
+        return {k: broad_payload_hash_input(v) for k, v in value.items()}
+    if isinstance(value, list):
+        return [broad_payload_hash_input(v) for v in value]
+    return value
+
 def slug(value: str) -> str:
     return re.sub(r'[^a-z0-9]+', '-', value.lower()).strip('-')[:160]
 
@@ -286,8 +295,12 @@ def catalog_fields() -> set[str]:
 def registry_groups() -> list[dict[str, Any]]:
     return load_json('transform-specs/phase-a-transform-specs.json')['transform_groups']
 
-def registry_fields() -> set[str]:
-    return {field for g in registry_groups() for field in g['covered_source_fields']}
+def broad_registry_groups() -> list[dict[str, Any]]:
+    return load_json('transform-specs/phase-a-broad-generic-transform-specs-frozen.json')['transform_groups']
+
+def registry_fields(groups: list[dict[str, Any]] | None = None) -> set[str]:
+    selected = groups if groups is not None else registry_groups()
+    return {field for g in selected for field in g['covered_source_fields']}
 
 def current_column_meta(cur) -> dict[str, dict[str, dict[str, Any]]]:
     cur.execute("""
@@ -504,7 +517,7 @@ def transform_group(cur, rows: dict[str,list[dict[str,Any]]], group: dict[str,An
             pass
         else:
             payload={f:source_values[f.split('.')[-1]] for f in group['covered_source_fields'] if f.split('.')[-1] in source_values}
-            add_unique(rows,'proposed_source_payload_archive',{'archive_id':f'phase-a-archive-{gslug}','source_record_id':source_id,'payload_uri':f'phase-a://archive/{gid}','payload_hash_sha256':sha(payload),'classification':'restricted','retention_state':'active','created_at':TS})
+            add_unique(rows,'proposed_source_payload_archive',{'archive_id':f'phase-a-archive-{gslug}','source_record_id':source_id,'payload_uri':f'phase-a://archive/{gid}','payload_hash_sha256':sha(broad_payload_hash_input(payload)),'classification':'restricted','retention_state':'active','created_at':TS})
     if 'migration_exception' in ents or 'formal-exception' in group['dispositions'] or any(str(x)!='none' for x in group.get('conditional_authority_rfi_status',[])):
         if TRANSFORM_MUTATIONS.get('missing_exception') == gid:
             pass
@@ -562,7 +575,7 @@ def build_target_rows_from_transforms(cur, records: list[dict[str,Any]], groups:
     return rows, telemetry, coverage_from_telemetry(groups, telemetry)
 
 def coverage_from_telemetry(groups: list[dict[str,Any]], telemetry: list[dict[str,Any]]) -> dict[str,Any]:
-    catalog=catalog_fields(); reviewed=registry_fields(); executed=[]
+    catalog=catalog_fields(); reviewed=registry_fields(groups); executed=[]
     for t in telemetry:
         executed.extend(t['source_fields_consumed'])
     counts={f:executed.count(f) for f in set(executed)}
@@ -672,7 +685,7 @@ def run_real_transform(read_expected: bool=False, mutation: dict[str,Any]|None=N
     global EXPECTED_READ_ALLOWED, TRANSFORM_MUTATIONS
     TRANSFORM_MUTATIONS = mutation or {}
     records=fixture_records(mutation)
-    groups=copy.deepcopy(registry_groups())
+    groups=copy.deepcopy(broad_registry_groups())
     if mutation and mutation.get('spec_missing_group'):
         groups=groups[1:]
     if mutation and mutation.get('spec_wrong_target'):
@@ -712,7 +725,7 @@ def run_real_transform(read_expected: bool=False, mutation: dict[str,Any]|None=N
         write_json(DM / 'phase-a-target-entity-transform-inventory.json', {'execution_mode':report['execution_mode'],'coverage':coverage,'expected_rows':compare['expected_rows'] if compare else None,'actual_rows':compare['actual_rows'] if compare else None,'first_run_inserts':stats1['inserted'],'second_run_inserts':stats2['inserted'],'second_run_updates':0,'queried_duplicates':dup,'target_counts':counts,'target_state_hash':compare['target_state_hash'] if compare else None})
         write_json(DM / 'phase-a-target-fk-crosswalk-evidence.json', {'crosswalk_target_validation':crosswalks,'target_counts':counts})
         write_json(DM / 'phase-a-archive-exception-evidence.json', {'archives':counts['archives'],'exceptions':counts['exceptions'],'archive_tables':ARCHIVE_TABLES,'exception_tables':EXCEPTION_TABLES})
-        write_json(DM / 'phase-a-complete-source-record-fixture-inventory.json', {'execution_mode':'phase-a-real-source-fixture-inventory','source_records':len(records),'source_tables':sorted({r['source_table'] for r in records}),'source_fields_covered':len(catalog_fields()),'transform_groups':len(groups),'expected_hash':compare['target_state_hash'] if compare else None})
+        write_json(DM / 'phase-a-complete-source-record-fixture-inventory.json', {'execution_mode':'phase-a-real-source-fixture-inventory','source_records':len(records),'source_tables':sorted({r['source_table'] for r in records}),'source_fields_covered':len(registry_fields(groups)),'transform_groups':len(groups),'expected_hash':compare['target_state_hash'] if compare else None})
         return report
 
 def pin_expected_from_observed() -> dict[str,Any]:
@@ -736,11 +749,11 @@ def run_negative_probes() -> dict[str,Any]:
         'phase-a-neg-wrong-expected-value': {'expected_wrong_value': True},
         'phase-a-neg-invalid-controlled-translation': {'source_wrong_value': True},
         'phase-a-neg-missing-real-target-identity': {'spec_wrong_target': True},
-        'phase-a-neg-unresolved-real-fk': {'wrong_crosswalk_target': next(g['transform_group_id'] for g in registry_groups() if 'legacy_crosswalk' in g['target_entities'])},
-        'phase-a-neg-missing-archive': {'missing_archive': next(g['transform_group_id'] for g in registry_groups() if 'source_payload_archive' in g['target_entities'])},
-        'phase-a-neg-missing-exception': {'missing_exception': next(g['transform_group_id'] for g in registry_groups() if 'migration_exception' in g['target_entities'])},
-        'phase-a-neg-duplicate-output': {'wrong_id_algorithm': next(g['transform_group_id'] for g in registry_groups() if 'legacy_crosswalk' in g['target_entities'])},
-        'phase-a-neg-lost-relationship': {'lost_relationship': registry_groups()[0]['transform_group_id']},
+        'phase-a-neg-unresolved-real-fk': {'wrong_crosswalk_target': next(g['transform_group_id'] for g in broad_registry_groups() if 'legacy_crosswalk' in g['target_entities'])},
+        'phase-a-neg-missing-archive': {'missing_archive': next(g['transform_group_id'] for g in broad_registry_groups() if 'source_payload_archive' in g['target_entities'])},
+        'phase-a-neg-missing-exception': {'missing_exception': next(g['transform_group_id'] for g in broad_registry_groups() if 'migration_exception' in g['target_entities'])},
+        'phase-a-neg-duplicate-output': {'wrong_id_algorithm': next(g['transform_group_id'] for g in broad_registry_groups() if 'legacy_crosswalk' in g['target_entities'])},
+        'phase-a-neg-lost-relationship': {'lost_relationship': broad_registry_groups()[0]['transform_group_id']},
         'phase-a-neg-mismatched-typed-hash': {'expected_bad_hash': True},
     }
     results=[]
@@ -3292,6 +3305,24 @@ def addresses_identity_rows_for_source(source_id: str, mutation: dict[str, Any] 
             'target_id': loc_id,
             'created_at': TS,
         })
+    if mutation.get('unexpected_extra_location_record'):
+        rows['proposed_location_record'].append({
+            'location_record_id': addresses_location_id(source_id) + '-extra',
+            'record_type': 'address',
+            'created_at': TS,
+            'retired_at': None,
+            'classification': 'government-internal',
+        })
+    if mutation.get('unexpected_extra_registry_subject'):
+        rows['proposed_registry_subject'].append({
+            'subject_id': addresses_subject_id(source_id) + '-extra',
+            'subject_entity': 'location_record',
+            'created_at': TS,
+            'native_id': addresses_location_id(source_id),
+            'subject_state': 'active',
+            'retired_at': None,
+            'delete_policy': 'retire-only',
+        })
     return rows
 
 
@@ -3355,8 +3386,12 @@ def transform_addresses_identity_crosswalk(cur, *, source_id: str = 'phase-a-add
 ADDRESSES_IDENTITY_IMPLEMENTATIONS[ADDRESSES_IDENTITY_IMPL_UNIT] = transform_addresses_identity_crosswalk
 
 
-def addresses_identity_complete_target_rows(cur, source_id: str = 'phase-a-addresses-id') -> list[dict[str, Any]]:
+def addresses_identity_complete_target_rows(cur, source_id: str = 'phase-a-addresses-id', include_source_derived_orphans: bool = True) -> list[dict[str, Any]]:
     rows: list[dict[str, Any]] = []
+    expected_location_id = addresses_location_id(source_id)
+    expected_subject_id = addresses_subject_id(source_id)
+    location_prefix = expected_location_id + '-'
+    subject_prefix = expected_subject_id + '-'
     cur.execute("""
         SELECT legacy_crosswalk_id, source_table, source_field, legacy_id, target_entity, target_id, created_at
         FROM canonical_target.proposed_legacy_crosswalk
@@ -3364,31 +3399,43 @@ def addresses_identity_complete_target_rows(cur, source_id: str = 'phase-a-addre
         ORDER BY legacy_crosswalk_id
     """, (source_id,))
     crosswalks = [dict(r) for r in cur.fetchall()]
-    target_ids = [r['target_id'] for r in crosswalks]
-    if target_ids:
-        cur.execute("""
-            SELECT location_record_id, record_type, created_at, retired_at, classification
-            FROM canonical_target.proposed_location_record
-            WHERE location_record_id = ANY(%s)
-            ORDER BY location_record_id
-        """, (target_ids,))
-        for lr in cur.fetchall():
-            d = norm_row(dict(lr))
-            rows.append({'table':'proposed_location_record','primary_key':{'location_record_id':lr['location_record_id']},'values':d})
-        cur.execute("""
-            SELECT subject_id, subject_entity, created_at, native_id, subject_state, retired_at, delete_policy
-            FROM canonical_target.proposed_registry_subject
-            WHERE native_id = ANY(%s) AND subject_entity = 'location_record'
-            ORDER BY subject_id
-        """, (target_ids,))
-        for rs in cur.fetchall():
-            d = norm_row(dict(rs))
-            rows.append({'table':'proposed_registry_subject','primary_key':{'subject_id':rs['subject_id']},'values':d})
+    target_ids = {r['target_id'] for r in crosswalks}
+    target_ids.add(expected_location_id)
+    location_predicates = ['location_record_id = ANY(%s)']
+    location_params: list[Any] = [list(target_ids)]
+    if include_source_derived_orphans:
+        location_predicates.append('location_record_id LIKE %s')
+        location_params.append(location_prefix + '%')
+    cur.execute(f"""
+        SELECT location_record_id, record_type, created_at, retired_at, classification
+        FROM canonical_target.proposed_location_record
+        WHERE {' OR '.join(location_predicates)}
+        ORDER BY location_record_id
+    """, location_params)
+    actual_location_ids: set[str] = set()
+    for lr in cur.fetchall():
+        d = norm_row(dict(lr))
+        actual_location_ids.add(lr['location_record_id'])
+        rows.append({'table':'proposed_location_record','primary_key':{'location_record_id':lr['location_record_id']},'values':d})
+    subject_native_ids = sorted(target_ids | actual_location_ids)
+    subject_predicates = ['(native_id = ANY(%s) AND subject_entity = \'location_record\')', 'subject_id = %s']
+    subject_params: list[Any] = [subject_native_ids, expected_subject_id]
+    if include_source_derived_orphans:
+        subject_predicates.append('subject_id LIKE %s')
+        subject_params.append(subject_prefix + '%')
+    cur.execute(f"""
+        SELECT subject_id, subject_entity, created_at, native_id, subject_state, retired_at, delete_policy
+        FROM canonical_target.proposed_registry_subject
+        WHERE {' OR '.join(subject_predicates)}
+        ORDER BY subject_id
+    """, subject_params)
+    for rs in cur.fetchall():
+        d = norm_row(dict(rs))
+        rows.append({'table':'proposed_registry_subject','primary_key':{'subject_id':rs['subject_id']},'values':d})
     for cw in crosswalks:
         d = norm_row(cw)
         rows.append({'table':'proposed_legacy_crosswalk','primary_key':{'legacy_crosswalk_id':cw['legacy_crosswalk_id']},'values':d})
     return sorted(rows, key=lambda r: (r['table'], json.dumps(r['primary_key'], sort_keys=True)))
-
 
 def addresses_identity_target_slice_hash(cur, source_id: str = 'phase-a-addresses-id') -> dict[str, Any]:
     rows = addresses_identity_complete_target_rows(cur, source_id)
@@ -3514,7 +3561,7 @@ def run_addresses_identity_negative_probe(probe_id: str, expected_error: str, mu
         try:
             spec_validation = reviewed_addresses_identity_transform_spec(mutation.get('spec_drift'))
             transform_addresses_identity_crosswalk(cur, source_id=source_id, mutation=mutation, spec_validation=spec_validation)
-            if mutation.get('wrong_target_identity_implementation') or mutation.get('unexpected_extra_crosswalk') or mutation.get('reference_field_identity_substitution'):
+            if mutation.get('wrong_target_identity_implementation') or mutation.get('unexpected_extra_crosswalk') or mutation.get('unexpected_extra_location_record') or mutation.get('unexpected_extra_registry_subject') or mutation.get('reference_field_identity_substitution'):
                 actual = addresses_identity_complete_target_rows(cur, source_id)
                 with addresses_identity_oracle_access(True):
                     oracle = load_addresses_identity_oracle()
@@ -3527,7 +3574,7 @@ def run_addresses_identity_negative_probe(probe_id: str, expected_error: str, mu
                 if actual != expected:
                     if mutation.get('reference_field_identity_substitution'):
                         raise HarnessError('addresses identity must derive from addresses.id')
-                    if mutation.get('unexpected_extra_crosswalk'):
+                    if mutation.get('unexpected_extra_crosswalk') or mutation.get('unexpected_extra_location_record') or mutation.get('unexpected_extra_registry_subject'):
                         raise HarnessError('unexpected addresses identity-foundation target row')
                     raise HarnessError('addresses identity rows differ from reviewer-owned expected target identity')
             raise HarnessError(f'{probe_id} unexpectedly passed')
@@ -3563,8 +3610,8 @@ def run_addresses_second_source_identity_test() -> dict[str, Any]:
         cur.execute("SELECT COUNT(*)::int AS c FROM canonical_target.proposed_registry_subject WHERE subject_id IN (%s,%s) AND subject_state='active'", (addresses_subject_id(first_id), addresses_subject_id(second_id))); subj_count=cur.fetchone()['c']
         cur.execute("SELECT COUNT(*)::int AS c FROM canonical_target.proposed_legacy_crosswalk WHERE legacy_crosswalk_id IN (%s,%s)", (addresses_crosswalk_id(first_id), addresses_crosswalk_id(second_id))); cw_count=cur.fetchone()['c']
         controls = addresses_semantic_uniqueness(cur)
-        first_rows = addresses_identity_complete_target_rows(cur, first_id)
-        second_rows = addresses_identity_complete_target_rows(cur, second_id)
+        first_rows = addresses_identity_complete_target_rows(cur, first_id, include_source_derived_orphans=False)
+        second_rows = addresses_identity_complete_target_rows(cur, second_id, include_source_derived_orphans=False)
     checks={'source_records': source_count==2, 'location_records': loc_count==2, 'active_registry_subjects': subj_count==2, 'distinct_crosswalks': cw_count==2, 'duplicate_crosswalks': controls['semantic_duplicate_count']==0, 'multiple_target_resolution': controls['semantic_duplicate_count']==0, 'second_source_key': second['lineage']['derived_source_key']==f'addresses:{second_id}', 'second_subject': second['derived_ids']['subject_id']==addresses_subject_id(second_id)}
     if not all(checks.values()):
         raise HarnessError(f'addresses second-source identity test failed: {checks}')
@@ -3595,6 +3642,8 @@ def run_addresses_identity_slice() -> dict[str, Any]:
         ('existing-subject-conflict','existing correct target row changed for proposed_registry_subject',{'existing_subject_conflict':True}),
         ('existing-crosswalk-conflict','existing correct target row changed for proposed_legacy_crosswalk',{'existing_crosswalk_conflict':True}),
         ('unexpected-extra-crosswalk','unexpected addresses identity-foundation target row',{'unexpected_extra_crosswalk':True}),
+        ('unexpected-extra-location-record','unexpected addresses identity-foundation target row',{'unexpected_extra_location_record':True}),
+        ('unexpected-extra-registry-subject','unexpected addresses identity-foundation target row',{'unexpected_extra_registry_subject':True}),
         ('semantic-duplicate-multiple-target-crosswalk','addresses identity crosswalk semantic uniqueness violated',{'semantic_duplicate_crosswalk':True}),
         ('transform-spec-binding-drift','addresses identity transform specification binding mismatch',{'spec_drift': {'implementation_unit':'impl_wrong'}}),
         ('transform-spec-covered-fields-drift','addresses identity transform specification binding mismatch',{'spec_drift': {'covered_source_fields':['addresses.id','addresses.building_id']}}),

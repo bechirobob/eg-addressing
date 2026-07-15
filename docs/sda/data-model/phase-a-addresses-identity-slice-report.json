@@ -317,7 +317,7 @@
   "reviewer_owned_oracle_changed": false,
   "reviewer_owned_oracle_sha256": "518af277e96c94c55808f9ac1e7992059c371bd225d906cf77156c478b0497cd",
   "rollback_equality_all": true,
-  "rollback_evidence_count": 18,
+  "rollback_evidence_count": 20,
   "second_run_inserts": 0,
   "second_run_updates": 0,
   "second_source_identity_test": {
@@ -778,10 +778,38 @@
       "expected_error": "existing correct target row changed for proposed_location_record",
       "observed_error": "existing correct target row changed for proposed_location_record {'location_record_id': 'phase-a-location-address-reference'}: {'existing': {'location_record_id': 'phase-a-location-address-reference', 'record_type': 'address', 'created_at': '2026-07-15T00:00:00Z', 'retired_at': None, 'classification': 'restricted'}, 'desired': {'location_record_id': 'phase-a-location-address-reference', 'record_type': 'address', 'created_at': '2026-07-15T00:00:00Z', 'retired_at': None, 'classification': 'government-internal'}}",
       "rollback_equality": true,
-      "same_database_post_failure_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
-      "same_database_post_failure_rows": [],
-      "same_database_pre_test_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
-      "same_database_pre_test_rows": [],
+      "same_database_post_failure_hash": "ef80dc386d1951e18c796b758afe7517581ffae62b9ec128478f90566a1acc13",
+      "same_database_post_failure_rows": [
+        {
+          "primary_key": {
+            "location_record_id": "phase-a-location-address-reference"
+          },
+          "table": "proposed_location_record",
+          "values": {
+            "classification": "restricted",
+            "created_at": "2026-07-15T00:00:00Z",
+            "location_record_id": "phase-a-location-address-reference",
+            "record_type": "address",
+            "retired_at": null
+          }
+        }
+      ],
+      "same_database_pre_test_hash": "ef80dc386d1951e18c796b758afe7517581ffae62b9ec128478f90566a1acc13",
+      "same_database_pre_test_rows": [
+        {
+          "primary_key": {
+            "location_record_id": "phase-a-location-address-reference"
+          },
+          "table": "proposed_location_record",
+          "values": {
+            "classification": "restricted",
+            "created_at": "2026-07-15T00:00:00Z",
+            "location_record_id": "phase-a-location-address-reference",
+            "record_type": "address",
+            "retired_at": null
+          }
+        }
+      ],
       "state_unchanged": true,
       "status": "passed",
       "test_id": "existing-location-conflict"
@@ -790,10 +818,42 @@
       "expected_error": "existing correct target row changed for proposed_registry_subject",
       "observed_error": "existing correct target row changed for proposed_registry_subject {'subject_id': 'phase-a-subject-phase-a-location-address-reference'}: {'existing': {'subject_id': 'phase-a-subject-phase-a-location-address-reference', 'subject_entity': 'location_record', 'created_at': '2026-07-15T00:00:00Z', 'native_id': 'phase-a-location-conflict', 'subject_state': 'active', 'retired_at': None, 'delete_policy': 'retire-only'}, 'desired': {'subject_id': 'phase-a-subject-phase-a-location-address-reference', 'subject_entity': 'location_record', 'created_at': '2026-07-15T00:00:00Z', 'native_id': 'phase-a-location-address-reference', 'subject_state': 'active', 'retired_at': None, 'delete_policy': 'retire-only'}}",
       "rollback_equality": true,
-      "same_database_post_failure_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
-      "same_database_post_failure_rows": [],
-      "same_database_pre_test_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
-      "same_database_pre_test_rows": [],
+      "same_database_post_failure_hash": "643765ca58f5b3ef640f3d376a15d8df7c6ed1fd2671f96bc87b89c054ba3bf0",
+      "same_database_post_failure_rows": [
+        {
+          "primary_key": {
+            "subject_id": "phase-a-subject-phase-a-location-address-reference"
+          },
+          "table": "proposed_registry_subject",
+          "values": {
+            "created_at": "2026-07-15T00:00:00Z",
+            "delete_policy": "retire-only",
+            "native_id": "phase-a-location-conflict",
+            "retired_at": null,
+            "subject_entity": "location_record",
+            "subject_id": "phase-a-subject-phase-a-location-address-reference",
+            "subject_state": "active"
+          }
+        }
+      ],
+      "same_database_pre_test_hash": "643765ca58f5b3ef640f3d376a15d8df7c6ed1fd2671f96bc87b89c054ba3bf0",
+      "same_database_pre_test_rows": [
+        {
+          "primary_key": {
+            "subject_id": "phase-a-subject-phase-a-location-address-reference"
+          },
+          "table": "proposed_registry_subject",
+          "values": {
+            "created_at": "2026-07-15T00:00:00Z",
+            "delete_policy": "retire-only",
+            "native_id": "phase-a-location-conflict",
+            "retired_at": null,
+            "subject_entity": "location_record",
+            "subject_id": "phase-a-subject-phase-a-location-address-reference",
+            "subject_state": "active"
+          }
+        }
+      ],
       "state_unchanged": true,
       "status": "passed",
       "test_id": "existing-subject-conflict"
@@ -853,6 +913,30 @@
       "state_unchanged": true,
       "status": "passed",
       "test_id": "unexpected-extra-crosswalk"
+    },
+    {
+      "expected_error": "unexpected addresses identity-foundation target row",
+      "observed_error": "unexpected addresses identity-foundation target row",
+      "rollback_equality": true,
+      "same_database_post_failure_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_post_failure_rows": [],
+      "same_database_pre_test_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_pre_test_rows": [],
+      "state_unchanged": true,
+      "status": "passed",
+      "test_id": "unexpected-extra-location-record"
+    },
+    {
+      "expected_error": "unexpected addresses identity-foundation target row",
+      "observed_error": "unexpected addresses identity-foundation target row",
+      "rollback_equality": true,
+      "same_database_post_failure_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_post_failure_rows": [],
+      "same_database_pre_test_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_pre_test_rows": [],
+      "state_unchanged": true,
+      "status": "passed",
+      "test_id": "unexpected-extra-registry-subject"
     },
     {
       "expected_error": "addresses identity crosswalk semantic uniqueness violated",
