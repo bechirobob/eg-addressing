@@ -161,6 +161,10 @@
     },
     {
       "archive_behavior": "archive required when registry target/archive_object requires source_payload_archive; operational-control records retain typed disposition otherwise",
+      "capture_method_translation": {
+        "browser-gps": "browser-gps"
+      },
+      "classification_rule": "restricted",
       "conditional_authority_rfi_status": [
         "none"
       ],
@@ -174,10 +178,24 @@
         "structured-transform"
       ],
       "exception_behavior": "owned exception required for RFI/conditional/unresolved authority or unresolved reference dispositions",
+      "field_verified_at_role": "verification context only; must not replace observation or recorded time",
       "id_algorithm": "phase-a deterministic slug(source table/group/current field)",
       "idempotency_key": "citizen_geotag_submissions.phase-a-citizen-geotag-submissions-001::WO002-R06-geometry-observation-citizen_geotag_submissions",
+      "identity_rule": "citizen_geotag_submissions.id resolves to a provisional non-official location_record identity; territory_id and field_submission_id are context/provenance only",
       "implementation_unit": "impl_wo002_r06_geometry_observation_citizen_geotag_submissions",
+      "observed_at_rule": "citizen_geotag_submissions.created_at",
       "operation": "registry-disposition-to-canonical-target-evidence",
+      "recorded_at_rule": "citizen_geotag_submissions.created_at",
+      "required_context_fields": [
+        "citizen_geotag_submissions.id",
+        "citizen_geotag_submissions.capture_method",
+        "citizen_geotag_submissions.created_at",
+        "citizen_geotag_submissions.updated_at",
+        "citizen_geotag_submissions.field_verified_at",
+        "citizen_geotag_submissions.status",
+        "citizen_geotag_submissions.territory_id",
+        "citizen_geotag_submissions.field_submission_id"
+      ],
       "source_record_key": "citizen_geotag_submissions:phase-a-citizen-geotag-submissions-001",
       "source_table": "citizen_geotag_submissions",
       "target_entities": [
