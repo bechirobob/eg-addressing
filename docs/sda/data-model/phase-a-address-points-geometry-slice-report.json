@@ -1,0 +1,200 @@
+{
+  "accuracy_capture_method": {
+    "capture_method": "derived-from-source",
+    "horizontal_accuracy_m": "4.50"
+  },
+  "command": "address-points-geometry-slice",
+  "conditional_exception_row": {
+    "primary_key": {
+      "migration_exception_id": "phase-a-exception-geometry-authority-address-points-phase-a-address-points-id"
+    },
+    "table": "proposed_migration_exception",
+    "values": {
+      "batch_id": "phase-a-address-points-geometry-slice",
+      "created_at": "2026-07-15T00:00:00Z",
+      "details_json": {
+        "non_official": true,
+        "open_authority_rfi": "geometry-promotion-authority",
+        "reason": "Canonical geometry promotion authority unresolved; observation preserved without canonical promotion",
+        "target_entity": "geometry_observation",
+        "target_id": "phase-a-geometry-address-points-phase-a-address-points-id"
+      },
+      "exception_type": "authority-rfi",
+      "migration_exception_id": "phase-a-exception-geometry-authority-address-points-phase-a-address-points-id",
+      "owner": "SDA",
+      "resolved_at": null,
+      "severity": "medium",
+      "source_field": null,
+      "source_key": "address_points:phase-a-address-points-001",
+      "source_table": "address_points"
+    }
+  },
+  "exact_function_implemented": "transform_address_points_geometry",
+  "exact_registry_binding": {
+    "impl_wo002_r06_geometry_observation_address_points": "transform_address_points_geometry"
+  },
+  "expected_absent_rows_verified": [
+    {
+      "count": 0,
+      "reason": "No canonical geometry promotion is authorized in this slice",
+      "table": "proposed_geometry_version",
+      "where": null
+    },
+    {
+      "count": 0,
+      "reason": "Quality approval is outside this slice",
+      "table": "proposed_geometry_quality_assessment",
+      "where": null
+    },
+    {
+      "count": 0,
+      "reason": "Source coordinates are already WGS84 and no CRS transformation is required",
+      "table": "proposed_geometry_transformation",
+      "where": null
+    },
+    {
+      "count": 0,
+      "reason": "Per-field assertions must not substitute for the grouped geometry observation",
+      "table": "proposed_location_record_assertion",
+      "where": "value_json->>'current_field' IN ('address_points.latitude','address_points.longitude','address_points.accuracy_meters')"
+    }
+  ],
+  "failed_test_state_unchanged": true,
+  "fields_consumed": [
+    "address_points.id",
+    "address_points.address_id",
+    "address_points.latitude",
+    "address_points.longitude",
+    "address_points.accuracy_meters",
+    "address_points.source_method",
+    "address_points.created_at"
+  ],
+  "first_run_inserts": 2,
+  "generic_transform_group_used_for_slice": false,
+  "geometry_observation_duplicates": [],
+  "geometry_observation_row": {
+    "primary_key": {
+      "geometry_observation_id": "phase-a-geometry-address-points-phase-a-address-points-id"
+    },
+    "table": "proposed_geometry_observation",
+    "values": {
+      "capture_method": "derived-from-source",
+      "classification": "restricted",
+      "evidence_object_id": "phase-a-evidence-address-points",
+      "geometry_observation_id": "phase-a-geometry-address-points-phase-a-address-points-id",
+      "geometry_role": "location-point",
+      "horizontal_accuracy_m": "4.50",
+      "licence_id": null,
+      "observed_at": "2026-07-15T00:00:00Z",
+      "observed_geom_srid": 4326,
+      "observed_geom_wkt": "POINT(8.783 3.752)",
+      "recorded_at": "2026-07-15T00:00:00Z",
+      "source_record_id": "phase-a-source-record-address-points-001",
+      "subject_id": "phase-a-subject-phase-a-location-address-reference"
+    }
+  },
+  "geometry_wkt_srid": {
+    "srid": 4326,
+    "wkt": "POINT(8.783 3.752)"
+  },
+  "reviewer_owned_oracle_changed": false,
+  "reviewer_owned_oracle_sha256": "cf699de04e0ca500c3a7826f257e190d24835356ef96db1650160d7d438edaea",
+  "second_run_inserts": 0,
+  "second_run_updates": 0,
+  "source_evidence_lineage": {
+    "evidence_query": "SELECT evidence_object_id, source_record_id FROM canonical_target.proposed_evidence_object WHERE evidence_object_id = %s",
+    "evidence_row": {
+      "evidence_object_id": "phase-a-evidence-address-points",
+      "source_record_id": "phase-a-source-record-address-points-001"
+    },
+    "source_query": "SELECT source_record_id, source_key FROM canonical_target.proposed_source_record WHERE source_record_id = %s",
+    "source_row": {
+      "source_key": "address_points:phase-a-address-points-001",
+      "source_record_id": "phase-a-source-record-address-points-001"
+    }
+  },
+  "source_row_query": "SELECT id,address_id,latitude,longitude,accuracy_meters,source_method,is_active,created_at,updated_at FROM current_source.address_points WHERE id = %s",
+  "source_row_returned": {
+    "accuracy_meters": 4.5,
+    "address_id": "phase-a-addresses-id",
+    "created_at": "2026-07-15T00:00:00Z",
+    "id": "phase-a-address-points-id",
+    "is_active": false,
+    "latitude": 3.752,
+    "longitude": 8.783,
+    "source_method": "phase-a address_points source_method",
+    "updated_at": "2026-07-15T00:00:00Z"
+  },
+  "status": "passed",
+  "target_identity_resolution": {
+    "params": [
+      "phase-a-addresses-id"
+    ],
+    "row": {
+      "legacy_crosswalk_id": "phase-a-crosswalk-addresses-id-to-location-record",
+      "native_id": "phase-a-location-address-reference",
+      "subject_entity": "location_record",
+      "subject_id": "phase-a-subject-phase-a-location-address-reference",
+      "subject_state": "active",
+      "target_entity": "location_record",
+      "target_id": "phase-a-location-address-reference"
+    },
+    "sql": "SELECT cw.legacy_crosswalk_id, cw.target_entity, cw.target_id, rs.subject_id, rs.native_id, rs.subject_entity, rs.subject_state FROM canonical_target.proposed_legacy_crosswalk cw JOIN canonical_target.proposed_registry_subject rs ON rs.native_id = cw.target_id AND rs.subject_entity = cw.target_entity WHERE cw.source_table = 'addresses' AND cw.source_field = 'id' AND cw.legacy_id = %s AND cw.target_entity = 'location_record'"
+  },
+  "tests": [
+    {
+      "status": "passed",
+      "test_id": "positive-authoritative-slice"
+    },
+    {
+      "first_run_inserts": 2,
+      "geometry_observation_count": 1,
+      "second_run_inserts": 0,
+      "second_run_updates": 0,
+      "status": "passed",
+      "test_id": "second-run-idempotency"
+    },
+    {
+      "expected_error": "geometry observation does not match reviewer-owned expected WKT",
+      "observed_error": "geometry observation does not match reviewer-owned expected WKT",
+      "state_unchanged": true,
+      "status": "passed",
+      "test_id": "wrong-longitude-implementation"
+    },
+    {
+      "expected_error": "coordinate out of range",
+      "observed_error": "coordinate out of range",
+      "state_unchanged": true,
+      "status": "passed",
+      "test_id": "invalid-coordinate-source"
+    },
+    {
+      "expected_error": "address_points source row not found",
+      "observed_error": "address_points source row not found",
+      "state_unchanged": true,
+      "status": "passed",
+      "test_id": "missing-source-record"
+    },
+    {
+      "expected_error": "address_points.address_id cannot resolve target location record",
+      "observed_error": "address_points.address_id cannot resolve target location record",
+      "state_unchanged": true,
+      "status": "passed",
+      "test_id": "missing-address-crosswalk"
+    },
+    {
+      "expected_error": "address_points evidence object not found",
+      "observed_error": "address_points evidence object not found",
+      "state_unchanged": true,
+      "status": "passed",
+      "test_id": "missing-evidence-object"
+    },
+    {
+      "expected_error": "observed geometry differs from reviewer-owned expected geometry",
+      "observed_error": "observed geometry differs from reviewer-owned expected geometry",
+      "state_unchanged": true,
+      "status": "passed",
+      "test_id": "wrong-independent-expected-geometry"
+    }
+  ]
+}

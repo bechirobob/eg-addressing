@@ -81,6 +81,17 @@ jobs:
           conn.close()
           PY
           python3 docs/sda/data-model/scripts/authoritative_harness.py phase-a-all
+          python3 - <<'PY'
+          import psycopg
+          conn = psycopg.connect('postgresql://addressing:ci_password@127.0.0.1:5432/postgres')
+          conn.autocommit = True
+          with conn.cursor() as cur:
+              cur.execute("SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE datname='addressing_phase_a'")
+              cur.execute('DROP DATABASE IF EXISTS addressing_phase_a')
+              cur.execute('CREATE DATABASE addressing_phase_a')
+          conn.close()
+          PY
+          python3 docs/sda/data-model/scripts/authoritative_harness.py address-points-geometry-slice
           git diff --exit-code docs/sda/data-model
 
   api-tests:
