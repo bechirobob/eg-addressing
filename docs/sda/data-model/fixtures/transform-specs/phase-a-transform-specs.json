@@ -105,9 +105,24 @@
     },
     {
       "archive_behavior": "archive required when registry target/archive_object requires source_payload_archive; operational-control records retain typed disposition otherwise",
+      "capture_method_rule": {
+        "type": "reviewed-constant-after-source-parity",
+        "value": "address-record-derived"
+      },
+      "classification_rule": "restricted",
       "conditional_authority_rfi_status": [
         "none"
       ],
+      "coordinate_authority": {
+        "geom_role": "derived-parity-check",
+        "mismatch_behavior": "fail closed before target writes with address_records geom does not match latitude/longitude",
+        "primary": [
+          "address_records.longitude",
+          "address_records.latitude"
+        ],
+        "required_geom_srid": 4326,
+        "source_crs": "EPSG:4326"
+      },
       "covered_source_fields": [
         "address_records.accuracy_meters",
         "address_records.latitude",
@@ -121,8 +136,20 @@
       "id_algorithm": "phase-a deterministic slug(source table/group/current field)",
       "idempotency_key": "address_records.phase-a-address-records-001::WO002-R06-geometry-observation-address_records",
       "implementation_unit": "impl_wo002_r06_geometry_observation_address_records",
+      "observed_at_rule": "address_records.created_at",
       "operation": "registry-disposition-to-canonical-target-evidence",
+      "recorded_at_rule": "address_records.updated_at",
+      "required_context_fields": [
+        "address_records.id",
+        "address_records.source_submission_id",
+        "address_records.created_at",
+        "address_records.updated_at",
+        "address_records.status",
+        "address_records.publication_state",
+        "address_records.geom"
+      ],
       "source_record_key": "address_records:phase-a-address-records-001",
+      "source_submission_role": "provenance-only; must not determine the geometry subject identity",
       "source_table": "address_records",
       "target_entities": [
         "geometry_observation"
