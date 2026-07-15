@@ -256,14 +256,14 @@ Keep PR #7 draft and unmerged. NLI-WO-002B remains unauthorized.
 
 | Finding | Agent response | Commit/evidence | SDA disposition | Date |
 |---|---|---|---|---|
-| F02 | Pending | — | OPEN | 2026-07-14 |
-| F04 | Pending | — | OPEN | 2026-07-14 |
-| F05 | Pending | — | OPEN | 2026-07-14 |
-| F06 | Pending | — | OPEN | 2026-07-14 |
-| F07 | Pending | — | OPEN | 2026-07-14 |
-| F08 | Pending | — | OPEN | 2026-07-14 |
-| F09 | Pending | — | OPEN | 2026-07-14 |
-| F10 | Pending | — | OPEN | 2026-07-14 |
-| F11 | Pending | — | OPEN | 2026-07-14 |
-| F12 | Pending | — | OPEN | 2026-07-14 |
-| F13 | Separate maintenance PR #8 | PR #8 remains separate | RESOLVED FOR PR #7 / EXTERNAL MAINTENANCE OPEN | 2026-07-14 |
+| F02 | READY FOR SDA REVIEW — validation-time authoring removed; transform independently constructs target entity/field/identity/output/crosswalk/final FK/archive/exception/relationship rows and uses expected fixture only in validation; strict failure probes and zero-row idempotency retained. | `d4c85e3`, `transformation-fixture-report.json`, `review09_f02_independent_transform.py` | READY FOR SDA REVIEW | 2026-07-14 |
+| F04 | READY FOR SDA REVIEW — record-role matrix now executes PostgreSQL transactions for required/optional roles, missing/invalid roles/entities, maxima, retired/deleted/merged successor behavior, and multilingual current/historical names. | `91f294b`, `review09-f04-record-role-execution-report.json` | READY FOR SDA REVIEW | 2026-07-14 |
+| F05 | READY FOR SDA REVIEW — temporal strategy/history suite executes named-date as-recorded/effective/public-release queries and negative temporal cases against PostgreSQL evidence. | `91f294b`, `review09-f05-temporal-execution-report.json` | READY FOR SDA REVIEW | 2026-07-14 |
+| F06 | READY FOR SDA REVIEW — typed institutional authority model is represented and executed for actor/service/institution/membership/permission/scope/assertion/decision/observation/evidence/quality promotion cases. | `91f294b`, `review09-f06-typed-geometry-authority-report.json` | READY FOR SDA REVIEW | 2026-07-14 |
+| F07 | READY FOR SDA REVIEW — lifecycle graph/context suite computes graph coverage and enforces actor/permission/institution/scope/evidence/audit/public-effect context cases. | `91f294b`, `review09-f07-lifecycle-graph-report.json` | READY FOR SDA REVIEW | 2026-07-14 |
+| F08 | READY FOR SDA REVIEW — expected API contracts are immutable reviewed inputs; observed contracts are rebuilt from current FastAPI/OpenAPI implementation; generic fallback fields and repairs removed. | `be92706`, `openapi-policy-projection-assertions.json`, `openapi-reviewed-projection-contracts.json` | READY FOR SDA REVIEW | 2026-07-14 |
+| F09 | READY FOR SDA REVIEW — convergence units revalidated only after F02/F04-F10/F12 suites passed; 90/90 units pass Review 10 reconciliation. | `97c01ef`, `review09-f09-f11-reconciliation-report.json` | READY FOR SDA REVIEW | 2026-07-14 |
+| F10 | READY FOR SDA REVIEW — seven hand-authored minimal scenario sources/expected files are inserted into fresh PostgreSQL schemas and compared by named-date canonical/effective/recorded/public/operator queries plus absences. | `c645a21`, `review09/scenarios/*`, `review09-scenario-comparison-report.json` | READY FOR SDA REVIEW | 2026-07-14 |
+| F11 | READY FOR SDA REVIEW — ADR-005 through ADR-009 remain proposed and evidence-linked to Review 10 executable suites; institutional/runtime RFIs remain visible. | `97c01ef`, `adr-005-009-evidence-matrix.md` | READY FOR SDA REVIEW | 2026-07-14 |
+| F12 | READY FOR SDA REVIEW — semantic mutation suite now runs a temp repository with required sources through generator, F02, F08, F10, F04-F07, F09/F11, and consistency checker; 11/11 named mutations caught. | `97c01ef`, `semantic-mutation-test-report.json` | READY FOR SDA REVIEW | 2026-07-14 |
+| F13 | Separate maintenance PR #8 remains isolated; no PR #8 runtime fix copied into PR #7. | PR #8 separate | RESOLVED FOR PR #7 / EXTERNAL MAINTENANCE OPEN | 2026-07-14 |
