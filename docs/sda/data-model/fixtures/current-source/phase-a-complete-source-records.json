@@ -1,68 +1,11 @@
 {
-  "fixture_authority": "SDA Review 11 Phase A complete-source fixture authority",
-  "review_status": "phase-a-independent-source-fixture",
+  "fixture_authority": "SDA Review 11 Phase A correction complete-source fixture authority",
   "records": [
     {
-      "source_record_id": "phase-a-source-record-geotag-001",
-      "source_table": "citizen_geotag_submissions",
-      "source_key": "citizen_geotag_submissions:phase-a-geotag-001",
-      "classification": "restricted",
-      "covered_fields": [
-        "id",
-        "address_label",
-        "latitude",
-        "longitude",
-        "accuracy_meters",
-        "capture_method",
-        "grid_code",
-        "status",
-        "landmark",
-        "citizen_contact",
-        "created_at"
-      ],
-      "values": {
-        "id": "phase-a-geotag-001",
-        "territory_id": null,
-        "address_label": "Controlled Phase A household near Malabo civic office",
-        "citizen_name": "Phase A Fixture Citizen",
-        "citizen_contact": "+240000000000",
-        "dip_last4": null,
-        "identity_verification_status": "unverified",
-        "identity_document_verified": false,
-        "identity_verified_at": null,
-        "landmark": "Near controlled civic office fixture",
-        "latitude": 3.752000,
-        "longitude": 8.783000,
-        "accuracy_meters": 4.5,
-        "capture_method": "browser-gps",
-        "grid_code": "PHASE-A-NONOFFICIAL-001",
-        "status": "submitted",
-        "duplicate_hint": "none",
-        "reviewer_note": "Phase A controlled non-official fixture",
-        "suggested_road_name": "Controlled Phase A Road",
-        "suggested_local_area": "Controlled Phase A Area",
-        "suggested_place_name": "Controlled Phase A Place",
-        "map_display_name": "Controlled fixture point",
-        "road_suggestion_source": "manual-fixture",
-        "road_suggestion_attribution": "SDA Phase A fixture",
-        "road_suggestion_status": "reviewed",
-        "reviewed_road_name": "Controlled Phase A Road",
-        "field_submission_id": null,
-        "field_status": "assigned",
-        "field_note": "Non-official harness fixture",
-        "field_verified_at": null,
-        "signage_batch": null,
-        "created_at": "2026-07-15T00:00:00Z",
-        "updated_at": "2026-07-15T00:00:00Z"
-      }
-    },
-    {
-      "source_record_id": "phase-a-source-record-correction-001",
-      "source_table": "address_corrections",
-      "source_key": "address_corrections:phase-a-correction-001",
       "classification": "government-internal",
       "covered_fields": [
         "id",
+        "address_id",
         "public_code",
         "query",
         "correction_type",
@@ -71,24 +14,717 @@
         "reporter_name",
         "reporter_contact",
         "status",
-        "reviewer_note",
-        "created_at"
+        "created_at",
+        "updated_at",
+        "reviewer_note"
       ],
+      "source_key": "address_corrections:phase-a-address-corrections-001",
+      "source_record_id": "phase-a-source-record-address-corrections-001",
+      "source_table": "address_corrections",
       "values": {
+        "address_id": "phase-a-address-id",
+        "correction_type": "record-update",
+        "created_at": "2026-07-15T00:05:00Z",
         "id": "phase-a-correction-001",
-        "address_id": null,
+        "note": "Archive this note as raw source detail",
         "public_code": "PHASE-A-NONOFFICIAL-001",
         "query": "Controlled fixture asks to correct public label",
-        "correction_type": "record-update",
         "reason": "label correction",
-        "note": "Archive this note as raw source detail",
-        "reporter_name": "Phase A Reporter",
         "reporter_contact": "phase-a@example.invalid",
+        "reporter_name": "Phase A Reporter",
+        "reviewer_note": "Controlled correction requires review",
         "status": "submitted",
-        "reviewer_note": "Controlled exception required for correction_type translation",
-        "created_at": "2026-07-15T00:05:00Z",
         "updated_at": "2026-07-15T00:05:00Z"
       }
+    },
+    {
+      "classification": "government-internal",
+      "covered_fields": [
+        "id",
+        "address_id",
+        "latitude",
+        "longitude",
+        "accuracy_meters",
+        "source_method",
+        "is_active",
+        "created_at",
+        "updated_at"
+      ],
+      "source_key": "address_points:phase-a-address-points-001",
+      "source_record_id": "phase-a-source-record-address-points-001",
+      "source_table": "address_points",
+      "values": {
+        "accuracy_meters": 4.5,
+        "address_id": "phase-a-address-id",
+        "created_at": "2026-07-15T00:00:00Z",
+        "id": "phase-a-address-points-id",
+        "is_active": false,
+        "latitude": 3.752,
+        "longitude": 8.783,
+        "source_method": "phase-a address_points source_method",
+        "updated_at": "2026-07-15T00:00:00Z"
+      }
+    },
+    {
+      "classification": "government-internal",
+      "covered_fields": [
+        "id",
+        "address_record_id",
+        "event_type",
+        "actor_id",
+        "actor_username",
+        "actor_role",
+        "details",
+        "created_at"
+      ],
+      "source_key": "address_record_events:phase-a-address-record-events-001",
+      "source_record_id": "phase-a-source-record-address-record-events-001",
+      "source_table": "address_record_events",
+      "values": {
+        "actor_id": "phase-a-actor-id",
+        "actor_role": "phase-a address_record_events actor_role",
+        "actor_username": "phase-a address_record_events actor_username",
+        "address_record_id": "phase-a-address-record-id",
+        "created_at": "2026-07-15T00:00:00Z",
+        "details": "phase-a address_record_events details",
+        "event_type": "phase-a address_record_events event_type",
+        "id": "phase-a-address-record-events-id"
+      }
+    },
+    {
+      "classification": "government-internal",
+      "covered_fields": [
+        "id",
+        "address_code",
+        "source_submission_id",
+        "province_code",
+        "territory_id",
+        "address_label",
+        "status",
+        "publication_state",
+        "latitude",
+        "longitude",
+        "accuracy_meters",
+        "search_text",
+        "record_bundle",
+        "is_archived",
+        "created_at",
+        "updated_at",
+        "geom"
+      ],
+      "source_key": "address_records:phase-a-address-records-001",
+      "source_record_id": "phase-a-source-record-address-records-001",
+      "source_table": "address_records",
+      "values": {
+        "accuracy_meters": 4.5,
+        "address_code": "PHASE-A-NONOFFICIAL-001",
+        "address_label": "Controlled Phase A address label",
+        "created_at": "2026-07-15T00:00:00Z",
+        "geom": "phase-a address_records geom",
+        "id": "phase-a-address-records-id",
+        "is_archived": false,
+        "latitude": 3.752,
+        "longitude": 8.783,
+        "province_code": "BN",
+        "publication_state": "phase-a address_records publication_state",
+        "record_bundle": "phase-a address_records record_bundle",
+        "search_text": "phase-a address_records search_text",
+        "source_submission_id": "phase-a-source-submission-id",
+        "status": "submitted",
+        "territory_id": "phase-a-territory-id",
+        "updated_at": "2026-07-15T00:00:00Z"
+      }
+    },
+    {
+      "classification": "government-internal",
+      "covered_fields": [
+        "id",
+        "formatted",
+        "territory_id",
+        "road_id",
+        "building_id",
+        "province_code",
+        "public_code",
+        "issuance_method",
+        "source",
+        "verification_status",
+        "superseded_by_address_id",
+        "status",
+        "publication_state",
+        "is_archived",
+        "created_at",
+        "updated_at"
+      ],
+      "source_key": "addresses:phase-a-addresses-001",
+      "source_record_id": "phase-a-source-record-addresses-001",
+      "source_table": "addresses",
+      "values": {
+        "building_id": "phase-a-building-id",
+        "created_at": "2026-07-15T00:00:00Z",
+        "formatted": "Controlled Phase A address label",
+        "id": "phase-a-addresses-id",
+        "is_archived": false,
+        "issuance_method": "phase-a addresses issuance_method",
+        "province_code": "BN",
+        "public_code": "PHASE-A-NONOFFICIAL-001",
+        "publication_state": "phase-a addresses publication_state",
+        "road_id": "phase-a-road-id",
+        "source": "phase-a addresses source",
+        "status": "submitted",
+        "superseded_by_address_id": "phase-a-superseded-by-address-id",
+        "territory_id": "phase-a-territory-id",
+        "updated_at": "2026-07-15T00:00:00Z",
+        "verification_status": "phase-a addresses verification_status"
+      }
+    },
+    {
+      "classification": "government-internal",
+      "covered_fields": [
+        "id",
+        "level",
+        "code",
+        "parent_id",
+        "province_code",
+        "name_es",
+        "name_en",
+        "status",
+        "sort_order",
+        "created_at",
+        "updated_at"
+      ],
+      "source_key": "admin_units:phase-a-admin-units-001",
+      "source_record_id": "phase-a-source-record-admin-units-001",
+      "source_table": "admin_units",
+      "values": {
+        "code": "phase-a-admin-units-code",
+        "created_at": "2026-07-15T00:00:00Z",
+        "id": "phase-a-admin-units-id",
+        "level": "phase-a admin_units level",
+        "name_en": "phase-a admin_units name_en",
+        "name_es": "phase-a admin_units name_es",
+        "parent_id": "phase-a-parent-id",
+        "province_code": "BN",
+        "sort_order": 1,
+        "status": "submitted",
+        "updated_at": "2026-07-15T00:00:00Z"
+      }
+    },
+    {
+      "classification": "government-internal",
+      "covered_fields": [
+        "id",
+        "actor_user_id",
+        "actor_username",
+        "actor_role",
+        "action",
+        "entity_type",
+        "entity_id",
+        "details",
+        "created_at"
+      ],
+      "source_key": "audit_logs:phase-a-audit-logs-001",
+      "source_record_id": "phase-a-source-record-audit-logs-001",
+      "source_table": "audit_logs",
+      "values": {
+        "action": "phase-a audit_logs action",
+        "actor_role": "phase-a audit_logs actor_role",
+        "actor_user_id": "phase-a-actor-user-id",
+        "actor_username": "phase-a audit_logs actor_username",
+        "created_at": "2026-07-15T00:00:00Z",
+        "details": "phase-a audit_logs details",
+        "entity_id": "phase-a-entity-id",
+        "entity_type": "phase-a audit_logs entity_type",
+        "id": 1
+      }
+    },
+    {
+      "classification": "restricted",
+      "covered_fields": [
+        "token",
+        "user_id",
+        "created_at",
+        "expires_at",
+        "revoked_at",
+        "last_seen_at"
+      ],
+      "source_key": "auth_tokens:phase-a-auth-tokens-001",
+      "source_record_id": "phase-a-source-record-auth-tokens-001",
+      "source_table": "auth_tokens",
+      "values": {
+        "created_at": "2026-07-15T00:00:00Z",
+        "expires_at": "2026-07-15T00:00:00Z",
+        "last_seen_at": "2026-07-15T00:00:00Z",
+        "revoked_at": "2026-07-15T00:00:00Z",
+        "token": "phase-a-auth-tokens-token",
+        "user_id": "phase-a-user-id"
+      }
+    },
+    {
+      "classification": "government-internal",
+      "covered_fields": [
+        "id",
+        "label",
+        "territory_id",
+        "road_id",
+        "status",
+        "usage",
+        "spatial_evidence",
+        "is_archived",
+        "created_at",
+        "updated_at"
+      ],
+      "source_key": "buildings:phase-a-buildings-001",
+      "source_record_id": "phase-a-source-record-buildings-001",
+      "source_table": "buildings",
+      "values": {
+        "created_at": "2026-07-15T00:00:00Z",
+        "id": "phase-a-buildings-id",
+        "is_archived": false,
+        "label": "Controlled Phase A address label",
+        "road_id": "phase-a-road-id",
+        "spatial_evidence": "phase-a buildings spatial_evidence",
+        "status": "submitted",
+        "territory_id": "phase-a-territory-id",
+        "updated_at": "2026-07-15T00:00:00Z",
+        "usage": "phase-a buildings usage"
+      }
+    },
+    {
+      "classification": "restricted",
+      "covered_fields": [
+        "id",
+        "territory_id",
+        "address_label",
+        "citizen_name",
+        "citizen_contact",
+        "dip_last4",
+        "identity_verification_status",
+        "identity_document_verified",
+        "identity_verified_at",
+        "landmark",
+        "latitude",
+        "longitude",
+        "accuracy_meters",
+        "capture_method",
+        "grid_code",
+        "status",
+        "duplicate_hint",
+        "reviewer_note",
+        "suggested_road_name",
+        "suggested_local_area",
+        "suggested_place_name",
+        "map_display_name",
+        "road_suggestion_source",
+        "road_suggestion_attribution",
+        "road_suggestion_status",
+        "reviewed_road_name",
+        "field_submission_id",
+        "field_status",
+        "field_note",
+        "field_verified_at",
+        "signage_batch",
+        "created_at",
+        "updated_at"
+      ],
+      "source_key": "citizen_geotag_submissions:phase-a-citizen-geotag-submissions-001",
+      "source_record_id": "phase-a-source-record-citizen-geotag-submissions-001",
+      "source_table": "citizen_geotag_submissions",
+      "values": {
+        "accuracy_meters": 4.5,
+        "address_label": "Controlled Phase A household near Malabo civic office",
+        "capture_method": "browser-gps",
+        "citizen_contact": "+240****0000",
+        "citizen_name": "Phase A Fixture Citizen",
+        "created_at": "2026-07-15T00:00:00Z",
+        "dip_last4": "phase-a citizen_geotag_submissions dip_last4",
+        "duplicate_hint": "near-controlled-address",
+        "field_note": "phase-a citizen_geotag_submissions field_note",
+        "field_status": "phase-a citizen_geotag_submissions field_status",
+        "field_submission_id": "phase-a-field-submission-id",
+        "field_verified_at": "2026-07-15T00:00:00Z",
+        "grid_code": "PHASE-A-NONOFFICIAL-001",
+        "id": "phase-a-geotag-001",
+        "identity_document_verified": false,
+        "identity_verification_status": "phase-a citizen_geotag_submissions identity_verification_status",
+        "identity_verified_at": "2026-07-15T00:00:00Z",
+        "landmark": "phase-a citizen_geotag_submissions landmark",
+        "latitude": 3.752,
+        "longitude": 8.783,
+        "map_display_name": "phase-a citizen_geotag_submissions map_display_name",
+        "reviewed_road_name": "phase-a citizen_geotag_submissions reviewed_road_name",
+        "reviewer_note": "phase-a citizen_geotag_submissions reviewer_note",
+        "road_suggestion_attribution": "phase-a citizen_geotag_submissions road_suggestion_attribution",
+        "road_suggestion_source": "phase-a citizen_geotag_submissions road_suggestion_source",
+        "road_suggestion_status": "phase-a citizen_geotag_submissions road_suggestion_status",
+        "signage_batch": "phase-a citizen_geotag_submissions signage_batch",
+        "status": "submitted",
+        "suggested_local_area": "phase-a citizen_geotag_submissions suggested_local_area",
+        "suggested_place_name": "phase-a citizen_geotag_submissions suggested_place_name",
+        "suggested_road_name": "phase-a citizen_geotag_submissions suggested_road_name",
+        "territory_id": "phase-a-territory-id",
+        "updated_at": "2026-07-15T00:00:00Z"
+      }
+    },
+    {
+      "classification": "government-internal",
+      "covered_fields": [
+        "batch_id",
+        "fixture_version",
+        "environment",
+        "loaded_at",
+        "cleaned_at",
+        "execution_context"
+      ],
+      "source_key": "development_fixture_batches:phase-a-development-fixture-batches-001",
+      "source_record_id": "phase-a-source-record-development-fixture-batches-001",
+      "source_table": "development_fixture_batches",
+      "values": {
+        "batch_id": "phase-a-development-fixture-batches-batch-id",
+        "cleaned_at": "2026-07-15T00:00:00Z",
+        "environment": "phase-a development_fixture_batches environment",
+        "execution_context": "phase-a development_fixture_batches execution_context",
+        "fixture_version": "phase-a development_fixture_batches fixture_version",
+        "loaded_at": "2026-07-15T00:00:00Z"
+      }
+    },
+    {
+      "classification": "government-internal",
+      "covered_fields": [
+        "batch_id",
+        "table_name",
+        "record_id",
+        "created_by_batch",
+        "recorded_at"
+      ],
+      "source_key": "development_fixture_records:phase-a-development-fixture-records-001",
+      "source_record_id": "phase-a-source-record-development-fixture-records-001",
+      "source_table": "development_fixture_records",
+      "values": {
+        "batch_id": "phase-a-development-fixture-records-batch-id",
+        "created_by_batch": false,
+        "record_id": "phase-a-development-fixture-records-record-id",
+        "recorded_at": "2026-07-15T00:00:00Z",
+        "table_name": "phase-a development_fixture_records table_name"
+      }
+    },
+    {
+      "classification": "government-internal",
+      "covered_fields": [
+        "assignment_id",
+        "territory_id",
+        "territory",
+        "task",
+        "team",
+        "priority",
+        "created_at"
+      ],
+      "source_key": "field_assignments:phase-a-field-assignments-001",
+      "source_record_id": "phase-a-source-record-field-assignments-001",
+      "source_table": "field_assignments",
+      "values": {
+        "assignment_id": "phase-a-field-assignments-assignment-id",
+        "created_at": "2026-07-15T00:00:00Z",
+        "priority": "phase-a field_assignments priority",
+        "task": "phase-a field_assignments task",
+        "team": "phase-a field_assignments team",
+        "territory": "phase-a field_assignments territory",
+        "territory_id": "phase-a-territory-id"
+      }
+    },
+    {
+      "classification": "government-internal",
+      "covered_fields": [
+        "id",
+        "assignment_id",
+        "territory_id",
+        "submission_type",
+        "candidate_name",
+        "candidate_status",
+        "notes",
+        "submitted_by",
+        "review_status",
+        "reviewer_note",
+        "registry_entity_id",
+        "spatial_evidence",
+        "created_at",
+        "updated_at"
+      ],
+      "source_key": "field_submissions:phase-a-field-submissions-001",
+      "source_record_id": "phase-a-source-record-field-submissions-001",
+      "source_table": "field_submissions",
+      "values": {
+        "assignment_id": "phase-a-field-submissions-assignment-id",
+        "candidate_name": "phase-a field_submissions candidate_name",
+        "candidate_status": "phase-a field_submissions candidate_status",
+        "created_at": "2026-07-15T00:00:00Z",
+        "id": "phase-a-field-submissions-id",
+        "notes": "phase-a field_submissions notes",
+        "registry_entity_id": "phase-a-registry-entity-id",
+        "review_status": "phase-a field_submissions review_status",
+        "reviewer_note": "phase-a field_submissions reviewer_note",
+        "spatial_evidence": "phase-a field_submissions spatial_evidence",
+        "submission_type": "phase-a field_submissions submission_type",
+        "submitted_by": "phase-a field_submissions submitted_by",
+        "territory_id": "phase-a-territory-id",
+        "updated_at": "2026-07-15T00:00:00Z"
+      }
+    },
+    {
+      "classification": "government-internal",
+      "covered_fields": [
+        "id",
+        "name",
+        "source_name",
+        "status",
+        "imported_count",
+        "created_at",
+        "updated_at"
+      ],
+      "source_key": "import_jobs:phase-a-import-jobs-001",
+      "source_record_id": "phase-a-source-record-import-jobs-001",
+      "source_table": "import_jobs",
+      "values": {
+        "created_at": "2026-07-15T00:00:00Z",
+        "id": "phase-a-import-jobs-id",
+        "imported_count": 1,
+        "name": "Phase A import_jobs",
+        "source_name": "phase-a import_jobs source_name",
+        "status": "submitted",
+        "updated_at": "2026-07-15T00:00:00Z"
+      }
+    },
+    {
+      "classification": "government-internal",
+      "covered_fields": [
+        "job_id",
+        "row_number",
+        "submission_type",
+        "territory_id",
+        "candidate_name",
+        "candidate_status",
+        "notes",
+        "validation_status",
+        "validation_message",
+        "committed_submission_id"
+      ],
+      "source_key": "import_rows:phase-a-import-rows-001",
+      "source_record_id": "phase-a-source-record-import-rows-001",
+      "source_table": "import_rows",
+      "values": {
+        "candidate_name": "phase-a import_rows candidate_name",
+        "candidate_status": "phase-a import_rows candidate_status",
+        "committed_submission_id": "phase-a-committed-submission-id",
+        "job_id": "phase-a-import-rows-job-id",
+        "notes": "phase-a import_rows notes",
+        "row_number": 1,
+        "submission_type": "phase-a import_rows submission_type",
+        "territory_id": "phase-a-territory-id",
+        "validation_message": "phase-a import_rows validation_message",
+        "validation_status": "phase-a import_rows validation_status"
+      }
+    },
+    {
+      "classification": "government-internal",
+      "covered_fields": [
+        "code",
+        "name",
+        "created_at"
+      ],
+      "source_key": "provinces:phase-a-provinces-001",
+      "source_record_id": "phase-a-source-record-provinces-001",
+      "source_table": "provinces",
+      "values": {
+        "code": "phase-a-provinces-code",
+        "created_at": "2026-07-15T00:00:00Z",
+        "name": "Phase A provinces"
+      }
+    },
+    {
+      "classification": "government-internal",
+      "covered_fields": [
+        "publication_pack_id",
+        "address_id"
+      ],
+      "source_key": "publication_pack_addresses:phase-a-publication-pack-addresses-001",
+      "source_record_id": "phase-a-source-record-publication-pack-addresses-001",
+      "source_table": "publication_pack_addresses",
+      "values": {
+        "address_id": "phase-a-address-id",
+        "publication_pack_id": "phase-a-publication-pack-addresses-publication-pack-id"
+      }
+    },
+    {
+      "classification": "government-internal",
+      "covered_fields": [
+        "id",
+        "name",
+        "status",
+        "audience",
+        "created_at",
+        "updated_at"
+      ],
+      "source_key": "publication_packs:phase-a-publication-packs-001",
+      "source_record_id": "phase-a-source-record-publication-packs-001",
+      "source_table": "publication_packs",
+      "values": {
+        "audience": "phase-a publication_packs audience",
+        "created_at": "2026-07-15T00:00:00Z",
+        "id": "phase-a-publication-packs-id",
+        "name": "Phase A publication_packs",
+        "status": "submitted",
+        "updated_at": "2026-07-15T00:00:00Z"
+      }
+    },
+    {
+      "classification": "government-internal",
+      "covered_fields": [
+        "id",
+        "package_id",
+        "package_version",
+        "source",
+        "authority_status",
+        "package_checksum",
+        "loaded_at",
+        "execution_context"
+      ],
+      "source_key": "reference_data_load_history:phase-a-reference-data-load-history-001",
+      "source_record_id": "phase-a-source-record-reference-data-load-history-001",
+      "source_table": "reference_data_load_history",
+      "values": {
+        "authority_status": "phase-a reference_data_load_history authority_status",
+        "execution_context": "phase-a reference_data_load_history execution_context",
+        "id": 1,
+        "loaded_at": "2026-07-15T00:00:00Z",
+        "package_checksum": "phase-a reference_data_load_history package_checksum",
+        "package_id": "phase-a-package-id",
+        "package_version": "phase-a reference_data_load_history package_version",
+        "source": "phase-a reference_data_load_history source"
+      }
+    },
+    {
+      "classification": "government-internal",
+      "covered_fields": [
+        "package_id",
+        "package_version",
+        "source",
+        "authority_status",
+        "package_checksum",
+        "loaded_at",
+        "execution_context"
+      ],
+      "source_key": "reference_data_loads:phase-a-reference-data-loads-001",
+      "source_record_id": "phase-a-source-record-reference-data-loads-001",
+      "source_table": "reference_data_loads",
+      "values": {
+        "authority_status": "phase-a reference_data_loads authority_status",
+        "execution_context": "phase-a reference_data_loads execution_context",
+        "loaded_at": "2026-07-15T00:00:00Z",
+        "package_checksum": "phase-a reference_data_loads package_checksum",
+        "package_id": "phase-a-package-id",
+        "package_version": "phase-a reference_data_loads package_version",
+        "source": "phase-a reference_data_loads source"
+      }
+    },
+    {
+      "classification": "government-internal",
+      "covered_fields": [
+        "id",
+        "name",
+        "territory_id",
+        "status",
+        "length_km",
+        "spatial_evidence",
+        "is_archived",
+        "created_at",
+        "updated_at"
+      ],
+      "source_key": "roads:phase-a-roads-001",
+      "source_record_id": "phase-a-source-record-roads-001",
+      "source_table": "roads",
+      "values": {
+        "created_at": "2026-07-15T00:00:00Z",
+        "id": "phase-a-roads-id",
+        "is_archived": false,
+        "length_km": "phase-a roads length_km",
+        "name": "Phase A roads",
+        "spatial_evidence": "phase-a roads spatial_evidence",
+        "status": "submitted",
+        "territory_id": "phase-a-territory-id",
+        "updated_at": "2026-07-15T00:00:00Z"
+      }
+    },
+    {
+      "classification": "government-internal",
+      "covered_fields": [
+        "version",
+        "filename",
+        "checksum",
+        "applied_at",
+        "execution_context"
+      ],
+      "source_key": "schema_migrations:phase-a-schema-migrations-001",
+      "source_record_id": "phase-a-source-record-schema-migrations-001",
+      "source_table": "schema_migrations",
+      "values": {
+        "applied_at": "2026-07-15T00:00:00Z",
+        "checksum": "phase-a schema_migrations checksum",
+        "execution_context": "phase-a schema_migrations execution_context",
+        "filename": "phase-a schema_migrations filename",
+        "version": "phase-a-schema-migrations-version"
+      }
+    },
+    {
+      "classification": "government-internal",
+      "covered_fields": [
+        "id",
+        "name",
+        "province_code",
+        "admin_unit_id",
+        "type",
+        "readiness",
+        "is_archived",
+        "created_at",
+        "updated_at"
+      ],
+      "source_key": "territories:phase-a-territories-001",
+      "source_record_id": "phase-a-source-record-territories-001",
+      "source_table": "territories",
+      "values": {
+        "admin_unit_id": "phase-a-admin-unit-id",
+        "created_at": "2026-07-15T00:00:00Z",
+        "id": "phase-a-territories-id",
+        "is_archived": false,
+        "name": "Phase A territories",
+        "province_code": "BN",
+        "readiness": "phase-a territories readiness",
+        "type": "phase-a territories type",
+        "updated_at": "2026-07-15T00:00:00Z"
+      }
+    },
+    {
+      "classification": "restricted",
+      "covered_fields": [
+        "id",
+        "username",
+        "full_name",
+        "role",
+        "password_hash",
+        "is_active",
+        "created_at"
+      ],
+      "source_key": "users:phase-a-users-001",
+      "source_record_id": "phase-a-source-record-users-001",
+      "source_table": "users",
+      "values": {
+        "created_at": "2026-07-15T00:00:00Z",
+        "full_name": "phase-a users full_name",
+        "id": "phase-a-users-id",
+        "is_active": false,
+        "password_hash": "phase-a users password_hash",
+        "role": "admin",
+        "username": "phase-a users username"
+      }
     }
-  ]
+  ],
+  "review_status": "phase-a-correction-independent-source-fixture"
 }

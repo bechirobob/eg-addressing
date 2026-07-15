@@ -296,7 +296,7 @@ Keep PR #7 draft and unmerged. NLI-WO-002B remains unauthorized.
 
 | Finding | Agent response | Commit/evidence | SDA disposition | Date |
 |---|---|---|---|---|
-| F02 | READY FOR SDA CHECKPOINT ASSESSMENT | Phase A: `authoritative_harness.py phase-a-all`; reports `phase-a-current-source-catalog-report.json`, `phase-a-canonical-target-catalog-report.json`, `phase-a-target-entity-transform-inventory.json`, `phase-a-strict-negative-probe-report.json` | OPEN | 2026-07-15 |
+| F02 | READY FOR SDA PHASE A REASSESSMENT | Phase A correction: 237/237 current fields covered, 90/90 reviewed groups executed, complete expected rows compared bidirectionally; evidence `phase-a-coverage-matrix-report.json`, `phase-a-target-entity-transform-inventory.json`, `phase-a-strict-negative-probe-report.json`, `phase-a-cleanup-recreate-report.json` | OPEN | 2026-07-15 |
 | F04 | Pending | — | OPEN | 2026-07-15 |
 | F05 | Pending | — | OPEN | 2026-07-15 |
 | F06 | Pending | — | OPEN | 2026-07-15 |
@@ -307,4 +307,4 @@ Keep PR #7 draft and unmerged. NLI-WO-002B remains unauthorized.
 | F11 | Pending | — | OPEN | 2026-07-15 |
 | F12 | Pending | — | OPEN | 2026-07-15 |
 | F13 | Separate maintenance PR #8 | PR #8 remains separate | RESOLVED FOR PR #7 / EXTERNAL MAINTENANCE OPEN | 2026-07-15 |
-| F14 | READY FOR SDA CHECKPOINT ASSESSMENT | Phase A topology: `current_source`, `canonical_target`, `test_control`; evidence `phase-a-topology-schema-leakage-report.json` and `phase-a-legacy-vs-authoritative.md` | OPEN | 2026-07-15 |
+| F14 | READY FOR SDA PHASE A REASSESSMENT | A1 topology preserved; A2/A3 corrected with DB-queried actual/expected rows, duplicate checks, negative probes, and cleanup/recreate proof; evidence `phase-a-topology-schema-leakage-report.json`, `phase-a-legacy-vs-authoritative.md`, `phase-a-cleanup-recreate-report.json` | OPEN | 2026-07-15 |

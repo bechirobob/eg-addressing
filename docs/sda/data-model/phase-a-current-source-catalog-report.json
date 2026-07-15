@@ -1,25 +1,4 @@
 {
-  "assertions": [
-    {
-      "name": "schemas-created-explicitly",
-      "schemas": [
-        "current_source",
-        "canonical_target",
-        "test_control"
-      ],
-      "status": "passed"
-    },
-    {
-      "name": "migration-ledger-in-current-source",
-      "rows": 8,
-      "status": "passed"
-    },
-    {
-      "count": 25,
-      "name": "operational-tables-in-current-source",
-      "status": "passed"
-    }
-  ],
   "execution_mode": "phase-a-current-source-discovery",
   "migration_command": "infra/scripts/migrate.py apply with PGOPTIONS=-c search_path=current_source,public",
   "migration_ledger_locations": [

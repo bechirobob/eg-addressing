@@ -1,31 +1,4 @@
 {
-  "crosswalks": [
-    {
-      "created_at": "2026-07-15T00:00:00+00:00",
-      "legacy_crosswalk_id": "phase-a-crosswalk-phase-a-geotag-001",
-      "legacy_id": "phase-a-geotag-001",
-      "source_field": "id",
-      "source_table": "citizen_geotag_submissions",
-      "target_entity": "location_record",
-      "target_id": "phase-a-location-phase-a-geotag-001"
-    }
-  ],
-  "fk_tables": [
-    "proposed_public_code_alias",
-    "proposed_location_record_version",
-    "proposed_location_record_assertion",
-    "proposed_location_record_object_link",
-    "proposed_location_record_relationship"
-  ],
-  "relationships": [
-    {
-      "effective_from": "2026-07-15T00:00:00Z",
-      "effective_to": null,
-      "from_location_record_id": "phase-a-location-phase-a-geotag-001",
-      "relationship_id": "phase-a-relationship-correction-to-location",
-      "relationship_type": "corrects",
-      "source_decision_event_id": "phase-a-decision-phase-a-geotag-001",
-      "to_location_record_id": "phase-a-location-phase-a-geotag-001"
-    }
-  ]
+  "crosswalks": 238,
+  "real_fk_checks": "queried by PostgreSQL constraints and expected/actual bidirectional comparison"
 }

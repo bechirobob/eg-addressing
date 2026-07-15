@@ -1,0 +1,37 @@
+{
+  "cleanup_after_failure": {
+    "after": {},
+    "before": {
+      "canonical_target": 100,
+      "current_source": 25,
+      "test_control": 3
+    },
+    "execution_mode": "phase-a-cleanup",
+    "schemas_removed": [
+      "current_source",
+      "canonical_target",
+      "test_control"
+    ]
+  },
+  "cleanup_after_success": {
+    "after": {},
+    "before": {
+      "canonical_target": 100,
+      "current_source": 25,
+      "test_control": 3
+    },
+    "execution_mode": "phase-a-cleanup",
+    "schemas_removed": [
+      "current_source",
+      "canonical_target",
+      "test_control"
+    ]
+  },
+  "execution_mode": "phase-a-cleanup-recreate-proof",
+  "expected_hash": "0c16ff30de8f744de068edf4fe65110e42ca6412c705f76af23b92238d57e2ed",
+  "failure_seen": true,
+  "first_recreate_hash": "0c16ff30de8f744de068edf4fe65110e42ca6412c705f76af23b92238d57e2ed",
+  "recreated_catalog_table_count": 100,
+  "second_recreate_hash": "0c16ff30de8f744de068edf4fe65110e42ca6412c705f76af23b92238d57e2ed",
+  "status": "passed"
+}

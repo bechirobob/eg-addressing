@@ -1,50 +1,6 @@
 {
-  "assertions": [
-    {
-      "name": "current-source-isolated",
-      "status": "passed",
-      "tables": 25
-    },
-    {
-      "name": "canonical-target-isolated",
-      "status": "passed",
-      "tables": 100
-    },
-    {
-      "name": "test-control-is-control-only",
-      "status": "passed",
-      "tables": [
-        "phase_a_assertion",
-        "phase_a_fixture_manifest",
-        "phase_a_run"
-      ]
-    },
-    {
-      "name": "public-schema-has-no-business-tables",
-      "status": "passed"
-    }
-  ],
   "execution_mode": "phase-a-topology-check",
-  "public_extension_objects": [
-    {
-      "extname": "postgis",
-      "kind": "v",
-      "name": "geography_columns",
-      "schema": "public"
-    },
-    {
-      "extname": "postgis",
-      "kind": "v",
-      "name": "geometry_columns",
-      "schema": "public"
-    },
-    {
-      "extname": "postgis",
-      "kind": "r",
-      "name": "spatial_ref_sys",
-      "schema": "public"
-    }
-  ],
+  "public_extension_object_count": 3,
   "public_non_extension_tables": [],
   "schemas": {
     "canonical_target": [
@@ -177,6 +133,8 @@
       "users"
     ],
     "public": [
+      "geography_columns",
+      "geometry_columns",
       "spatial_ref_sys"
     ],
     "test_control": [
@@ -185,5 +143,6 @@
       "phase_a_run"
     ]
   },
-  "test_control_business_domain_tables": []
+  "status": "passed",
+  "test_control_business_tables": []
 }

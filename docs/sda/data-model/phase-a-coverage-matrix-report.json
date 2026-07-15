@@ -1,0 +1,20 @@
+{
+  "authoritative_executed_dispositions": 237,
+  "conflicting_disposition_count": 0,
+  "conflicting_dispositions": [],
+  "current_pg_catalog_fields": 237,
+  "current_tables_covered": 25,
+  "duplicate_field_claim_count": 0,
+  "duplicate_field_claims": [],
+  "duplicate_implementation_units": [],
+  "execution_mode": "phase-a-a2-a3-machine-checked-coverage",
+  "extra_fields": [],
+  "implementation_without_reviewed_group": [],
+  "missing_field_count": 0,
+  "missing_fields": [],
+  "reviewed_transformation_fields": 237,
+  "transform_groups_declared": 90,
+  "transform_implementations": 90,
+  "unexecuted_transform_group_count": 0,
+  "unexecuted_transform_groups": []
+}

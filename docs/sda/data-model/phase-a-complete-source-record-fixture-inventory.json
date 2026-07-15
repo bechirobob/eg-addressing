@@ -1,36 +1,35 @@
 {
   "execution_mode": "phase-a-fixture-inventory",
-  "fixture_count": 6,
-  "fixtures": [
-    {
-      "fixture_class": "current-source",
-      "path": "docs/sda/data-model/fixtures/current-source/phase-a-complete-source-records.json",
-      "sha256": "522bf1b23b7a4520867e2a61a4fcc5a58ffaff28f4226e461fa0f73660637914"
-    },
-    {
-      "fixture_class": "expected-target",
-      "path": "docs/sda/data-model/fixtures/expected-target/phase-a-expected-target-records.json",
-      "sha256": "72409bc2e09d12d499c6c9b99c0a0f130c6761a25be7f8e79217fd10541a3bfa"
-    },
-    {
-      "fixture_class": "transform-specs",
-      "path": "docs/sda/data-model/fixtures/transform-specs/phase-a-transform-specs.json",
-      "sha256": "96993f0f1065e06487fa5f87788f5f2736ca14846130c8443c88a3d54d4bee80"
-    },
-    {
-      "fixture_class": "api-contracts",
-      "path": "docs/sda/data-model/fixtures/api-contracts/README.md",
-      "sha256": "fee997c333febaa78bd6a1acbd9a66bf16b450aca5d8b0b36845896649df3d6f"
-    },
-    {
-      "fixture_class": "scenarios",
-      "path": "docs/sda/data-model/fixtures/scenarios/README.md",
-      "sha256": "169c20182e69a8422c3017af43c97cfc55ed7a4799f5e31c2fa7a20d087eb50d"
-    },
-    {
-      "fixture_class": "mutations",
-      "path": "docs/sda/data-model/fixtures/mutations/phase-a-negative-probes.json",
-      "sha256": "04022f464620266e0f0c6299ccd57373dc417577e9555167a538dd0e8592cf20"
-    }
-  ]
+  "expected_hash": "0c16ff30de8f744de068edf4fe65110e42ca6412c705f76af23b92238d57e2ed",
+  "expected_rows": 856,
+  "source_fields_covered": 237,
+  "source_records": 25,
+  "source_tables": [
+    "address_corrections",
+    "address_points",
+    "address_record_events",
+    "address_records",
+    "addresses",
+    "admin_units",
+    "audit_logs",
+    "auth_tokens",
+    "buildings",
+    "citizen_geotag_submissions",
+    "development_fixture_batches",
+    "development_fixture_records",
+    "field_assignments",
+    "field_submissions",
+    "import_jobs",
+    "import_rows",
+    "provinces",
+    "publication_pack_addresses",
+    "publication_packs",
+    "reference_data_load_history",
+    "reference_data_loads",
+    "roads",
+    "schema_migrations",
+    "territories",
+    "users"
+  ],
+  "transform_groups": 90
 }

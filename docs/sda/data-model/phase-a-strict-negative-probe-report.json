@@ -1,38 +1,18 @@
 {
-  "assertions": [
+  "authoritative_state_unchanged": true,
+  "execution_mode": "phase-a-f02-normal-path-negative-probes",
+  "negative_probes_passed": 10,
+  "results": [
     {
-      "count": 10,
-      "name": "strict-negative-probes-fail-for-semantic-reasons",
+      "expected_reason": "wrong transform implementation",
+      "observed_reason": "wrong transform implementation: mismatched typed hash: expected fixture rows hash 9bfe750249d755021f75c08d437f4c4df12f6423bcceff2982151a755dee585b does not match declared 0c16ff30de8f744de068edf4fe65110e42ca6412c705f76af23b92238d57e2ed",
+      "probe_id": "phase-a-neg-wrong-transform-implementation",
       "status": "passed"
     },
     {
-      "name": "expected-target-hash-matches-independent-fixture",
-      "status": "passed"
-    }
-  ],
-  "counts": {
-    "archives": 1,
-    "assertions": 17,
-    "crosswalks": 1,
-    "current_fields_covered": 22,
-    "current_source_records": 2,
-    "exceptions": 1,
-    "target_child_rows": 2,
-    "target_entities": 14,
-    "target_relationships": 1
-  },
-  "execution_mode": "phase-a-f02-check",
-  "negative_probes": [
-    {
-      "expected_reason": "invalid controlled translation",
-      "observed_reason": "invalid controlled translation",
-      "probe_id": "phase-a-neg-wrong-transform-operation",
-      "status": "passed"
-    },
-    {
-      "expected_reason": "mismatched typed hash",
-      "observed_reason": "mismatched typed hash: expected wrong-f7aa46cebe5881ec2a70d3b76973822215aca51b862d2b5acfae68f049f3916e actual f7aa46cebe5881ec2a70d3b76973822215aca51b862d2b5acfae68f049f3916e",
-      "probe_id": "phase-a-neg-wrong-independent-expected-value",
+      "expected_reason": "wrong independently expected value",
+      "observed_reason": "wrong independently expected value: mismatched typed hash: expected fixture rows hash 8f1923dc9d3972878e0c316d145ebf05d3465222b83627b645624b44743b9c0c does not match declared 0c16ff30de8f744de068edf4fe65110e42ca6412c705f76af23b92238d57e2ed",
+      "probe_id": "phase-a-neg-wrong-expected-value",
       "status": "passed"
     },
     {
@@ -43,47 +23,45 @@
     },
     {
       "expected_reason": "missing real target identity",
-      "observed_reason": "missing real target identity",
+      "observed_reason": "missing real target identity: missing expected target row: [('proposed_location_record', (('location_record_id', 'phase-a-missing-location'),))]",
       "probe_id": "phase-a-neg-missing-real-target-identity",
       "status": "passed"
     },
     {
-      "expected_reason": "violates foreign key constraint",
-      "observed_reason": "violates foreign key constraint",
-      "probe_id": "phase-a-neg-unresolved-real-target-fk",
+      "expected_reason": "unresolved real FK",
+      "observed_reason": "unresolved real FK: insert or update on table \"proposed_public_code_alias\" violates foreign key constraint \"proposed_public_code_alias_location_record_id_fk\"\nDETAIL:  Key (location_record_id)=(phase-a-missing-location) is not present in table \"proposed_location_record\".",
+      "probe_id": "phase-a-neg-unresolved-real-fk",
       "status": "passed"
     },
     {
       "expected_reason": "missing archive",
-      "observed_reason": "missing archive",
+      "observed_reason": "missing archive: missing expected target row: [('proposed_source_payload_archive', (('archive_id', 'phase-a-missing-archive'),))]",
       "probe_id": "phase-a-neg-missing-archive",
       "status": "passed"
     },
     {
       "expected_reason": "missing exception",
-      "observed_reason": "missing exception",
+      "observed_reason": "missing exception: missing expected target row: [('proposed_migration_exception', (('migration_exception_id', 'phase-a-missing-exception'),))]",
       "probe_id": "phase-a-neg-missing-exception",
       "status": "passed"
     },
     {
-      "expected_reason": "duplicate target output",
-      "observed_reason": "duplicate target output: proposed_legacy_crosswalk.legacy_crosswalk_id=phase-a-crosswalk-phase-a-geotag-001",
-      "probe_id": "phase-a-neg-duplicate-target-output",
+      "expected_reason": "duplicate output",
+      "observed_reason": "duplicate output",
+      "probe_id": "phase-a-neg-duplicate-output",
       "status": "passed"
     },
     {
-      "expected_reason": "expected count mismatch",
-      "observed_reason": "expected count mismatch: expected {'target_entities': 14, 'target_child_rows': 2, 'target_relationships': 1, 'crosswalks': 1, 'archives': 1, 'exceptions': 1} actual {'target_entities': 14, 'target_child_rows': 2, 'target_relationships': 0, 'crosswalks': 1, 'archives': 1, 'exceptions': 1}",
+      "expected_reason": "lost relationship",
+      "observed_reason": "lost relationship: missing expected target row: [('proposed_location_record_relationship', (('relationship_id', 'phase-a-missing-relationship'),))]",
       "probe_id": "phase-a-neg-lost-relationship",
       "status": "passed"
     },
     {
       "expected_reason": "mismatched typed hash",
-      "observed_reason": "mismatched typed hash: expected wrong-f7aa46cebe5881ec2a70d3b76973822215aca51b862d2b5acfae68f049f3916e actual f7aa46cebe5881ec2a70d3b76973822215aca51b862d2b5acfae68f049f3916e",
+      "observed_reason": "mismatched typed hash: mismatched typed hash: expected fixture rows hash 0c16ff30de8f744de068edf4fe65110e42ca6412c705f76af23b92238d57e2ed does not match declared 0000000000000000000000000000000000000000000000000000000000000000",
       "probe_id": "phase-a-neg-mismatched-typed-hash",
       "status": "passed"
     }
-  ],
-  "negative_probes_passed": 10,
-  "positive_target_state_hash": "f7aa46cebe5881ec2a70d3b76973822215aca51b862d2b5acfae68f049f3916e"
+  ]
 }

@@ -1,53 +1,46 @@
 {
-  "assertions": [
-    {
-      "name": "complete-source-records-read-from-current-source",
-      "status": "passed"
-    },
-    {
-      "name": "target-rows-inserted-into-canonical-target",
-      "status": "passed"
-    },
-    {
-      "name": "real-target-fks-used",
-      "status": "passed"
-    },
-    {
-      "count": 1,
-      "name": "crosswalks-created",
-      "status": "passed"
-    },
-    {
-      "count": 1,
-      "name": "archives-created",
-      "status": "passed"
-    },
-    {
-      "count": 1,
-      "name": "exceptions-created",
-      "status": "passed"
-    },
-    {
-      "name": "idempotent-second-run",
-      "status": "passed"
-    }
-  ],
-  "current_fields_covered": 22,
-  "current_source_records": 2,
-  "duplicate_count": 0,
+  "actual_rows": 856,
+  "coverage": {
+    "authoritative_executed_dispositions": 237,
+    "conflicting_disposition_count": 0,
+    "conflicting_dispositions": [],
+    "current_pg_catalog_fields": 237,
+    "current_tables_covered": 25,
+    "duplicate_field_claim_count": 0,
+    "duplicate_field_claims": [],
+    "duplicate_implementation_units": [],
+    "execution_mode": "phase-a-a2-a3-machine-checked-coverage",
+    "extra_fields": [],
+    "implementation_without_reviewed_group": [],
+    "missing_field_count": 0,
+    "missing_fields": [],
+    "reviewed_transformation_fields": 237,
+    "transform_groups_declared": 90,
+    "transform_implementations": 90,
+    "unexecuted_transform_group_count": 0,
+    "unexecuted_transform_groups": []
+  },
   "execution_mode": "phase-a-authoritative-f02-transforms",
-  "first_run_inserts": 20,
-  "legacy_guardrail_distinction": "authoritative Phase A F02 uses current_source complete records and canonical_target proposed_* tables; Review 04-10 checks remain legacy guardrails.",
+  "expected_rows": 856,
+  "first_run_inserts": 856,
+  "queried_duplicates": {
+    "duplicate_rows": {
+      "archive_source_uri": [],
+      "assertion_current_field": [],
+      "crosswalk_semantic": [],
+      "relationship_semantic": []
+    },
+    "queried_duplicate_count": 0
+  },
   "second_run_inserts": 0,
-  "second_run_unchanged_existing": 20,
   "second_run_updates": 0,
   "target_counts": {
-    "archives": 1,
-    "crosswalks": 1,
-    "exceptions": 1,
-    "target_child_rows": 2,
-    "target_entities": 14,
+    "archives": 237,
+    "crosswalks": 238,
+    "exceptions": 48,
+    "target_child_rows": 239,
+    "target_entities": 93,
     "target_relationships": 1
   },
-  "target_state_hash": "f7aa46cebe5881ec2a70d3b76973822215aca51b862d2b5acfae68f049f3916e"
+  "target_state_hash": "0c16ff30de8f744de068edf4fe65110e42ca6412c705f76af23b92238d57e2ed"
 }

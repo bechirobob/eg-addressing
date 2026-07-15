@@ -1,29 +1,5 @@
 {
-  "archives": [
-    {
-      "archive_id": "phase-a-archive-phase-a-correction-001",
-      "classification": "restricted",
-      "payload_hash_sha256": "312ebcfae9ee484e0914ef788a80dc0691c241c0492815240daa40eb45c514f8",
-      "payload_uri": "phase-a://archive/phase-a-correction-001",
-      "retention_state": "active",
-      "source_record_id": "phase-a-source-record-correction-001"
-    }
-  ],
-  "exceptions": [
-    {
-      "batch_id": "phase-a-batch-001",
-      "details_json": {
-        "source_value": "record-update",
-        "target_value": "label"
-      },
-      "exception_type": "controlled-translation-review-required",
-      "migration_exception_id": "phase-a-exception-phase-a-correction-001",
-      "owner": "SDA migration exception owner",
-      "resolved_at": null,
-      "severity": "required",
-      "source_field": "correction_type",
-      "source_key": "phase-a-correction-001",
-      "source_table": "address_corrections"
-    }
-  ]
+  "archives": 237,
+  "exceptions": 48,
+  "status": "passed"
 }
