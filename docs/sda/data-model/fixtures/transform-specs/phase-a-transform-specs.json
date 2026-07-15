@@ -180,7 +180,7 @@
       "exception_behavior": "owned exception required for RFI/conditional/unresolved authority or unresolved reference dispositions",
       "field_verified_at_role": "verification context only; must not replace observation or recorded time",
       "id_algorithm": "phase-a deterministic slug(source table/group/current field)",
-      "idempotency_key": "citizen_geotag_submissions.phase-a-citizen-geotag-submissions-001::WO002-R06-geometry-observation-citizen_geotag_submissions",
+      "idempotency_key": "citizen_geotag_submissions.phase-a-geotag-001::WO002-R06-geometry-observation-citizen_geotag_submissions",
       "identity_rule": "citizen_geotag_submissions.id resolves to a provisional non-official location_record identity; territory_id and field_submission_id are context/provenance only",
       "implementation_unit": "impl_wo002_r06_geometry_observation_citizen_geotag_submissions",
       "observed_at_rule": "citizen_geotag_submissions.created_at",
@@ -196,7 +196,7 @@
         "citizen_geotag_submissions.territory_id",
         "citizen_geotag_submissions.field_submission_id"
       ],
-      "source_record_key": "citizen_geotag_submissions:phase-a-citizen-geotag-submissions-001",
+      "source_record_key": "citizen_geotag_submissions:phase-a-geotag-001",
       "source_table": "citizen_geotag_submissions",
       "target_entities": [
         "geometry_observation"

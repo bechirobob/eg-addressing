@@ -26,3 +26,15 @@ Implement the citizen-geotag geometry vertical slice only. Do not modify accepte
 ## Boundary
 
 No accepted address_points/address_records modifications, no other transform group, no F04-F12, no broad reassessment, no SDA Review 12, no runtime app/frontend/API code, executable migrations, migration runner, Docker runtime, production/pilot data, secrets, `.env*`, publication, public-code issuance, certificates, signage, partner release, or PR #8.
+
+## C15-C17 correction checkpoint
+
+Reviewer head synchronized: `0577ae56f63cec111fc57be082187aee53720e84`.
+
+Corrections remain inside the existing citizen-geotag geometry slice only:
+
+- C15: enforce restricted `proposed_source_record.raw_payload_classification` and restricted `proposed_evidence_object.classification` before target writes.
+- C16: validate the resolved target `proposed_location_record` is an active restricted address and the resolved `proposed_registry_subject` is active/non-retired.
+- C17: align reviewed transform-spec `source_record_key` and `idempotency_key` to `phase-a-geotag-001`; add validator coverage and drift probes.
+
+No additional transform group is implemented. No parent/correction oracle is modified.

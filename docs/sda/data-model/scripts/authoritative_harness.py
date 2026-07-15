@@ -537,6 +537,9 @@ def build_target_rows_from_transforms(cur, records: list[dict[str,Any]], groups:
     add_source_records_and_evidence(rows, records)
     telemetry=[]
     record_by_key={r['source_key']:r for r in records}
+    for r in records:
+        if r.get('source_table') == 'citizen_geotag_submissions' and r.get('values', {}).get('id'):
+            record_by_key[f"citizen_geotag_submissions:{r['values']['id']}"] = r
     dispatcher=build_dispatcher(groups)
     group_ids={g['transform_group_id'] for g in groups}
     unlinked=sorted(set(dispatcher)-group_ids)
@@ -2296,6 +2299,8 @@ def run_address_records_geometry_slice() -> dict[str, Any]:
 # ---- Citizen geotag geometry one-slice checkpoint ----
 CITIZEN_GEOTAG_ORACLE = ACCEPTANCE / 'NLI-WO-002-phase-a-citizen-geotag-geometry-expected.json'
 CITIZEN_GEOTAG_ORACLE_BASELINE_SHA256 = '5a09abd8a017dcbf8210040e9311bc4118be82e24c245cafa485987eb5932a46'
+CITIZEN_GEOTAG_CORRECTION_ORACLE = ACCEPTANCE / 'NLI-WO-002-phase-a-citizen-geotag-geometry-correction-oracle.json'
+CITIZEN_GEOTAG_CORRECTION_ORACLE_BASELINE_SHA256 = 'f2cbb6689154616955b330c068b4bdfcdaac4b18642799fcca1f94270fe0d7f2'
 CITIZEN_GEOTAG_ORACLE_ACCESS_ALLOWED = False
 CITIZEN_GEOTAG_GROUP_ID = 'WO002-R06-geometry-observation-citizen_geotag_submissions'
 CITIZEN_GEOTAG_IMPL_UNIT = 'impl_wo002_r06_geometry_observation_citizen_geotag_submissions'
@@ -2305,6 +2310,9 @@ CITIZEN_GEOTAG_GEOMETRY_IMPLEMENTATIONS: dict[str, Callable[..., dict[str, Any]]
 
 def citizen_geotag_oracle_hash() -> str:
     return file_sha256(CITIZEN_GEOTAG_ORACLE)
+
+def citizen_geotag_correction_oracle_hash() -> str:
+    return file_sha256(CITIZEN_GEOTAG_CORRECTION_ORACLE)
 
 
 def load_citizen_geotag_oracle() -> dict[str, Any]:
@@ -2490,16 +2498,19 @@ def query_complete_citizen_geotag_row(cur, source_id: str = 'phase-a-geotag-001'
 def resolve_citizen_geotag_target_identity(cur, source_id: str) -> dict[str, Any]:
     sql = """
         SELECT cw.legacy_crosswalk_id, cw.source_table, cw.source_field, cw.legacy_id, cw.target_entity, cw.target_id,
-               rs.subject_id, rs.native_id, rs.subject_entity, rs.subject_state
+               lr.location_record_id, lr.record_type, lr.classification AS location_classification, lr.retired_at AS location_retired_at,
+               rs.subject_id, rs.native_id, rs.subject_entity, rs.subject_state, rs.retired_at AS subject_retired_at
         FROM canonical_target.proposed_legacy_crosswalk cw
+        JOIN canonical_target.proposed_location_record lr
+          ON lr.location_record_id = cw.target_id
         JOIN canonical_target.proposed_registry_subject rs
-          ON rs.native_id = cw.target_id
+          ON rs.native_id = lr.location_record_id
          AND rs.subject_entity = cw.target_entity
         WHERE cw.source_table = 'citizen_geotag_submissions'
           AND cw.source_field = 'id'
           AND cw.legacy_id = %s
           AND cw.target_entity = 'location_record'
-        ORDER BY cw.legacy_crosswalk_id
+        ORDER BY cw.legacy_crosswalk_id, rs.subject_id
     """
     cur.execute(sql, (source_id,))
     rows = cur.fetchall()
@@ -2510,6 +2521,10 @@ def resolve_citizen_geotag_target_identity(cur, source_id: str) -> dict[str, Any
     row = norm_row(dict(rows[0]))
     if row['target_id'] != citizen_geotag_location_id(source_id):
         raise HarnessError('citizen geotag geometry subject must resolve through citizen_geotag_submissions.id')
+    if row['location_record_id'] != row['target_id'] or row['record_type'] != 'address' or row['location_classification'] != 'restricted' or row['location_retired_at'] is not None:
+        raise HarnessError('citizen geotag target location record must be an active restricted provisional address')
+    if row['native_id'] != row['target_id'] or row['subject_entity'] != 'location_record' or row['subject_state'] != 'active' or row['subject_retired_at'] is not None:
+        raise HarnessError('citizen geotag target registry subject must be active')
     return {'sql': ' '.join(sql.split()), 'params': [source_id], 'row': row}
 
 
@@ -2523,6 +2538,8 @@ def require_citizen_geotag_lineage(cur, source_row: dict[str, Any]) -> dict[str,
     if len(source_rows) != 1:
         raise HarnessError(f'citizen geotag source key resolves multiple source records: {derived_source_key}')
     source = dict(source_rows[0])
+    if source.get('raw_payload_classification') != 'restricted':
+        raise HarnessError('citizen geotag source record must remain restricted')
     evidence_sql = "SELECT evidence_object_id, source_record_id, classification FROM canonical_target.proposed_evidence_object WHERE source_record_id = %s ORDER BY evidence_object_id"
     cur.execute(evidence_sql, (source['source_record_id'],))
     evidence_rows = cur.fetchall()
@@ -2531,6 +2548,8 @@ def require_citizen_geotag_lineage(cur, source_row: dict[str, Any]) -> dict[str,
     if len(evidence_rows) != 1:
         raise HarnessError(f'citizen geotag evidence object resolution is not exactly one: {len(evidence_rows)}')
     evidence = dict(evidence_rows[0])
+    if evidence.get('classification') != 'restricted':
+        raise HarnessError('citizen geotag evidence object must remain restricted')
     return {'derived_source_key': derived_source_key, 'source_query': source_sql, 'source_params': [derived_source_key], 'source_row': norm_row(source), 'evidence_query': evidence_sql, 'evidence_params': [source['source_record_id']], 'evidence_row': norm_row(evidence)}
 
 
@@ -2548,6 +2567,8 @@ def reviewed_citizen_geotag_transform_spec(spec_mutation: dict[str, Any] | None 
         'classification_rule': 'restricted',
         'identity_rule': 'citizen_geotag_submissions.id resolves to a provisional non-official location_record identity; territory_id and field_submission_id are context/provenance only',
         'target_entities': ['geometry_observation'],
+        'source_record_key': 'citizen_geotag_submissions:phase-a-geotag-001',
+        'idempotency_key': 'citizen_geotag_submissions.phase-a-geotag-001::WO002-R06-geometry-observation-citizen_geotag_submissions',
     }
     groups = copy.deepcopy(registry_groups())
     group = next((g for g in groups if g['transform_group_id'] == CITIZEN_GEOTAG_GROUP_ID), None)
@@ -2569,6 +2590,8 @@ def reviewed_citizen_geotag_transform_spec(spec_mutation: dict[str, Any] | None 
         'classification_rule': group.get('classification_rule') == expected['classification_rule'],
         'identity_rule': group.get('identity_rule') == expected['identity_rule'],
         'target_entity': group.get('target_entities') == expected['target_entities'],
+        'source_record_key': group.get('source_record_key') == expected['source_record_key'],
+        'idempotency_key': group.get('idempotency_key') == expected['idempotency_key'],
     }
     if not all(checks.values()):
         raise HarnessError(f'citizen geotag geometry transform specification binding mismatch: {checks}')
@@ -2819,6 +2842,16 @@ def run_citizen_geotag_negative_probe(probe_id: str, expected_error: str, mutati
                 cur.execute("UPDATE current_source.citizen_geotag_submissions SET latitude = 91.0 WHERE id = %s", ('phase-a-geotag-001',))
             if mutation.get('unknown_capture_method'):
                 cur.execute("UPDATE current_source.citizen_geotag_submissions SET capture_method=%s WHERE id=%s", ('paper-map', 'phase-a-geotag-001'))
+            if mutation.get('source_record_classification_drift'):
+                cur.execute("UPDATE canonical_target.proposed_source_record SET raw_payload_classification=%s WHERE source_key=%s", ('government-internal', source_key))
+            if mutation.get('evidence_classification_drift'):
+                cur.execute("UPDATE canonical_target.proposed_evidence_object SET classification=%s WHERE source_record_id=%s", ('government-internal', 'phase-a-source-record-citizen-geotag-submissions-001'))
+            if mutation.get('target_location_classification_drift'):
+                cur.execute("UPDATE canonical_target.proposed_location_record SET classification=%s WHERE location_record_id=%s", ('government-internal', 'phase-a-location-citizen-geotag-001'))
+            if mutation.get('target_location_record_type_drift'):
+                cur.execute("UPDATE canonical_target.proposed_location_record SET record_type=%s WHERE location_record_id=%s", ('building', 'phase-a-location-citizen-geotag-001'))
+            if mutation.get('target_subject_state_drift'):
+                cur.execute("UPDATE canonical_target.proposed_registry_subject SET subject_state=%s WHERE native_id=%s AND subject_entity=%s", ('retired', 'phase-a-location-citizen-geotag-001', 'location_record'))
             transform_citizen_geotag_geometry(cur, source_id='phase-a-geotag-001', mutation=mutation, spec_validation=spec_validation)
             if mutation.get('wrong_expected_geometry') or mutation.get('unexpected_extra_target_row') or mutation.get('wrong_longitude_implementation') or mutation.get('wrong_field_verified_timing_implementation'):
                 actual = citizen_geotag_complete_target_rows(cur, source_key)
@@ -2955,6 +2988,8 @@ def run_citizen_geotag_geometry_slice() -> dict[str, Any]:
     broad_report_original = broad_report_path.read_text() if broad_report_path.exists() else None
     if citizen_geotag_oracle_hash() != CITIZEN_GEOTAG_ORACLE_BASELINE_SHA256:
         raise HarnessError('reviewer-owned citizen geotag oracle changed')
+    if citizen_geotag_correction_oracle_hash() != CITIZEN_GEOTAG_CORRECTION_ORACLE_BASELINE_SHA256:
+        raise HarnessError('reviewer-owned citizen geotag correction oracle changed')
     setup_citizen_geotag_geometry_database()
     positive=run_citizen_geotag_slice_once(compare_expected=True)
     test_results=[{'test_id':'positive-authoritative-slice','status':'passed'}]
@@ -2976,6 +3011,13 @@ def run_citizen_geotag_geometry_slice() -> dict[str, Any]:
         ('wrong-independent-expected-geometry','observed geometry differs from reviewer-owned expected geometry',{'wrong_expected_geometry':True}),
         ('unexpected-extra-target-row','unexpected citizen geotag geometry slice target row',{'unexpected_extra_target_row':True}),
         ('transform-spec-binding-drift','citizen geotag geometry transform specification binding mismatch',{'spec_drift': {'implementation_unit':'impl_wrong'}}),
+        ('source-record-classification-drift','citizen geotag source record must remain restricted',{'source_record_classification_drift':True}),
+        ('evidence-classification-drift','citizen geotag evidence object must remain restricted',{'evidence_classification_drift':True}),
+        ('target-location-classification-drift','citizen geotag target location record must be an active restricted provisional address',{'target_location_classification_drift':True}),
+        ('target-location-record-type-drift','citizen geotag target location record must be an active restricted provisional address',{'target_location_record_type_drift':True}),
+        ('target-subject-state-drift','citizen geotag target registry subject must be active',{'target_subject_state_drift':True}),
+        ('transform-spec-source-record-key-drift','citizen geotag geometry transform specification binding mismatch',{'spec_drift': {'source_record_key':'citizen_geotag_submissions:wrong'}}),
+        ('transform-spec-idempotency-key-drift','citizen geotag geometry transform specification binding mismatch',{'spec_drift': {'idempotency_key':'wrong::WO002-R06-geometry-observation-citizen_geotag_submissions'}}),
     ]
     for pid, reason, mutation in probes:
         test_results.append(run_citizen_geotag_negative_probe(pid, reason, mutation))
@@ -2983,6 +3025,25 @@ def run_citizen_geotag_geometry_slice() -> dict[str, Any]:
     exc=next(r for r in positive['comparison']['actual_rows_detail'] if r['table']=='proposed_migration_exception')
     rollback_hashes=[t for t in test_results if 'same_database_pre_test_hash' in t]
     report={'command':'citizen-geotag-geometry-slice','status':'passed','reviewer_owned_oracle_sha256':citizen_geotag_oracle_hash(),'reviewer_owned_oracle_changed':False,'accepted_address_points_controls_changed':False,'accepted_address_records_controls_changed':False,'exact_function_implemented':CITIZEN_GEOTAG_FUNCTION,'exact_registry_binding':{CITIZEN_GEOTAG_IMPL_UNIT:CITIZEN_GEOTAG_FUNCTION},'generic_transform_group_used_for_slice':False,'transform_reads_expected_oracle':False,'source_row_query':positive['transform']['source_row_query']['sql'],'source_row_returned':positive['transform']['source_row_query']['row'],'fields_consumed':positive['transform']['fields_consumed'],'capture_method_translation':positive['transform']['capture_method_translation'],'target_vocabulary_preexisted':positive['transform']['capture_method_translation']['target_vocabulary_preexisted'],'harness_vocabulary_mutation':False,'source_key_derivation':{'rule':'citizen_geotag_submissions:<queried id>','value':positive['transform']['lineage']['derived_source_key']},'source_record_resolution':positive['transform']['lineage']['source_row'],'evidence_resolution':positive['transform']['lineage']['evidence_row'],'target_identity_resolution':positive['transform']['target_identity_resolution'],'identity_crosswalk':positive['transform']['target_identity_resolution']['row']['legacy_crosswalk_id'],'target_location_record':positive['transform']['target_identity_resolution']['row']['target_id'],'target_registry_subject':positive['transform']['target_identity_resolution']['row']['subject_id'],'forbidden_subject_fields_used':positive['transform']['forbidden_subject_fields_used'],'numeric_coordinate_point':positive['transform']['numeric_coordinate_point'],'reviewed_transform_spec_row':positive['transform']['spec_validation']['group'],'binding_validation':positive['transform']['spec_validation']['validation'],'geometry_observation_row':geom,'conditional_exception_row':exc,'expected_absent_rows_verified':positive['comparison']['expected_absent_rows'],'observed_at_source':positive['transform']['observed_at_source'],'recorded_at_source':positive['transform']['recorded_at_source'],'field_verified_at_used_for_target_timing':positive['transform']['field_verified_at_used_for_target_timing'],'comparator_connection':positive['comparison']['comparator_connection'],'comparator_read_only_proof':positive['comparison']['comparator_read_only_proof'],'complete_target_set_comparison':positive['comparison']['complete_target_set_query'],'first_run_inserts':positive['transform']['insert_stats_first']['inserted'],'second_run_inserts':positive['transform']['insert_stats_second']['inserted'],'second_run_updates':0,'semantic_duplicates':positive['comparison']['geometry_observation_duplicates'],'precision_test_wkt_srid':{'wkt':precision['wkt'],'srid':precision['srid']},'capture_method_test':capture_method,'field_verified_timing_test':field_verified_timing,'privacy_publication_boundary_test':privacy_boundary,'second_source_identity_test':second_identity,'source_records_second_source':second_identity['source_records'],'geometry_observations_second_source':second_identity['geometry_observations'],'authority_exceptions_second_source':second_identity['authority_exceptions'],'citizen_geotag_identity_crosswalks_second_source':second_identity['citizen_geotag_identity_crosswalks'],'duplicate_crosswalks_second_source':second_identity['duplicate_crosswalks'],'multiple_subject_resolution_second_source':second_identity['multiple_subject_resolution'],'tests':test_results,'same_database_rollback_proofs':rollback_hashes,'rollback_equality':all(t.get('rollback_equality', True) for t in test_results),'failed_test_state_unchanged':all(t.get('state_unchanged', True) for t in test_results)}
+    report['reviewer_owned_correction_oracle_sha256'] = citizen_geotag_correction_oracle_hash()
+    report['reviewer_owned_correction_oracle_changed'] = False
+    report['source_record_classification_validation'] = positive['transform']['lineage']['source_row']['raw_payload_classification'] == 'restricted'
+    report['evidence_classification_validation'] = positive['transform']['lineage']['evidence_row']['classification'] == 'restricted'
+    report['target_location_record_validation'] = {
+        'record_type': positive['transform']['target_identity_resolution']['row']['record_type'],
+        'classification': positive['transform']['target_identity_resolution']['row']['location_classification'],
+        'retired_at': positive['transform']['target_identity_resolution']['row']['location_retired_at'],
+        'valid': positive['transform']['target_identity_resolution']['row']['record_type'] == 'address' and positive['transform']['target_identity_resolution']['row']['location_classification'] == 'restricted' and positive['transform']['target_identity_resolution']['row']['location_retired_at'] is None,
+    }
+    report['target_registry_subject_validation'] = {
+        'native_id': positive['transform']['target_identity_resolution']['row']['native_id'],
+        'subject_entity': positive['transform']['target_identity_resolution']['row']['subject_entity'],
+        'subject_state': positive['transform']['target_identity_resolution']['row']['subject_state'],
+        'retired_at': positive['transform']['target_identity_resolution']['row']['subject_retired_at'],
+        'valid': positive['transform']['target_identity_resolution']['row']['subject_entity'] == 'location_record' and positive['transform']['target_identity_resolution']['row']['subject_state'] == 'active' and positive['transform']['target_identity_resolution']['row']['subject_retired_at'] is None,
+    }
+    report['reviewed_source_record_key'] = positive['transform']['spec_validation']['group'].get('source_record_key')
+    report['reviewed_idempotency_key'] = positive['transform']['spec_validation']['group'].get('idempotency_key')
     write_json(DM / 'phase-a-citizen-geotag-geometry-slice-report.json', report)
     if broad_report_original is not None:
         broad_report_path.write_text(broad_report_original)
