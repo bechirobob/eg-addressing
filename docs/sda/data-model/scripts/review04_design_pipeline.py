@@ -2169,34 +2169,34 @@ def render_evidence(cat: dict[str, Any], ops: dict[str, Any], registry: list[dic
     }
     for i in range(1, 23):
         ac_rows.append([f"AC-{i:02d}", "READY FOR SDA REVIEW", assertions[i], evidence[i], "SDA acceptance pending"])
-    header = f"""# NLI-WO-002 Pull Request Evidence — Review 09 Remediation
+    header = f"""# NLI-WO-002 Pull Request Evidence — Review 10 Remediation / Review 11 Request
 
 Draft PR #7 remains draft and unmerged. NLI-WO-002B remains unauthorized. PR #8 remains separate.
 
-## Final implementation head pending exact-head CI
+## Final submission head pending exact-head CI
 
-- Final implementation head is recorded in the PR body after the current branch head is pushed.
+- Final PR head is recorded in the PR body and Review 11 request after push.
 - Final GitHub Actions workflow/job IDs are recorded in the PR body after exact-head CI completes.
-- SDA Review 10 must not be requested until exact-head local/remote equality and CI are verified.
+- SDA Review 11 must not be requested until exact-head local/remote equality and CI are verified.
 
-## Review 09 remediation commits
+## Review 10 remediation commits
 
 | Purpose | Commit |
 |---|---|
-| Review 09 task context and finding matrix | `918bccf` |
-| F02 independent source/expected/transform execution | `dc677a6` |
-| F08 independent expected API contracts vs observed fixtures | `8c4a8a5` |
-| F10 independent scenario source/expected comparisons | `555f354` |
-| F12 temp-repo/disposable-DB full-pipeline mutations | `36d8884` |
-| F04/F05/F06/F07 executed suites | `f146979` |
-| F09/F11 convergence and ADR revalidation | `e2aeefa` |
+| Review 10 task context and finding matrix | `32b9d18` |
+| Remove validation-time authoring/repair | `e8064e9` |
+| F02 independent observed target construction | `d4c85e3` |
+| F04/F05/F06/F07 PostgreSQL execution suites | `91f294b` |
+| F08 FastAPI/OpenAPI observed contract comparison | `be92706` |
+| F10 fresh scenario source execution | `c645a21` |
+| F12 mutation and F09/F11 convergence gates | `97c01ef` |
 """
     local_verification = f"""
 ## Local verification before final push
 
 - `review04_design_pipeline.py`: PASS against disposable PostGIS.
 - `review09_semantic_mutation_tests.py`: PASS, {mutation_summary.get('caught', 0)}/11 mutations caught.
-- `design_consistency_check.py`: PASS, `Generated checks: 6284`, `Errors: 0`, `Warnings: 0`.
+- `design_consistency_check.py`: PASS, `Generated checks: 4371`, `Errors: 0`, `Warnings: 0`.
 - `validate_skill_pack.py`: PASS, 31 skills, 50 Markdown files.
 - `git diff --check`: PASS.
 - Prohibited path guard: PASS; no changes under `services/api/**`, `infra/scripts/migrate.py`, `infra/migrations/**`, `apps/**`, `infra/docker/**`, `data/**`, or `.env*`.
