@@ -1,0 +1,90 @@
+{
+  "control_id": "NLI-WO-002-PA-ID-04",
+  "control_status": "reviewer-owned-acceptance-oracle",
+  "implementation_must_not_modify": true,
+  "normative_proposal": {
+    "commit": "36e0fcc5f370612c6d263e836989b7e6d46d5ec2",
+    "path": "docs/agent/tasks/NLI-WO-002-phase-a-citizen-geotag-identity-control-proposal.md",
+    "git_blob_sha": "0eaf7a8bc4c479d2d0b3efc8fe6c24c35b819a7d",
+    "sections": ["identity decision", "lineage", "exclusions", "privacy boundary", "expected rows", "expected absences", "tests", "geometry compatibility"]
+  },
+  "source": {
+    "table": "citizen_geotag_submissions",
+    "id": "phase-a-geotag-001",
+    "source_key": "citizen_geotag_submissions:phase-a-geotag-001",
+    "source_record_id": "phase-a-source-record-citizen-geotag-submissions-001",
+    "evidence_object_id": "phase-a-evidence-citizen-geotag-submissions",
+    "classification": "restricted",
+    "created_at": "2026-07-15T00:00:00Z"
+  },
+  "reviewed_transform": {
+    "transform_group_id": "WO002-R06-identity-crosswalk-citizen_geotag_submissions",
+    "implementation_unit": "impl_wo002_r06_identity_crosswalk_citizen_geotag_submissions",
+    "required_callable": "transform_citizen_geotag_identity_crosswalk",
+    "covered_source_fields": ["citizen_geotag_submissions.id"],
+    "required_context_rule": "Query the complete normalized row; every field other than id is excluded from identity according to the normative proposal.",
+    "source_record_key": "citizen_geotag_submissions:phase-a-geotag-001",
+    "idempotency_key": "citizen_geotag_submissions.phase-a-geotag-001::WO002-R06-identity-crosswalk-citizen_geotag_submissions",
+    "target_entities": ["location_record", "registry_subject", "legacy_crosswalk"],
+    "forbidden_input": "docs/sda/acceptance/NLI-WO-002-phase-a-citizen-geotag-identity-expected.json"
+  },
+  "expected_rows": {
+    "location_record": {
+      "location_record_id": "phase-a-location-citizen-geotag-001",
+      "record_type": "address",
+      "classification": "restricted",
+      "created_at": "2026-07-15T00:00:00Z",
+      "retired_at": null
+    },
+    "registry_subject": {
+      "subject_id": "phase-a-subject-phase-a-location-citizen-geotag-001",
+      "subject_entity": "location_record",
+      "native_id": "phase-a-location-citizen-geotag-001",
+      "subject_state": "active",
+      "created_at": "2026-07-15T00:00:00Z",
+      "retired_at": null,
+      "delete_policy": "retire-only"
+    },
+    "legacy_crosswalk": {
+      "legacy_crosswalk_id": "phase-a-crosswalk-citizen-geotag-id-to-location-record",
+      "source_table": "citizen_geotag_submissions",
+      "source_field": "id",
+      "legacy_id": "phase-a-geotag-001",
+      "target_entity": "location_record",
+      "target_id": "phase-a-location-citizen-geotag-001",
+      "created_at": "2026-07-15T00:00:00Z"
+    }
+  },
+  "execution_contract": {
+    "first_run_inserts": 3,
+    "second_run_inserts": 0,
+    "second_run_updates": 0,
+    "semantic_uniqueness": "(source_table, source_field, legacy_id, target_entity) resolves to one target_id or no row",
+    "separate_read_only_comparator": true,
+    "same_database_rollback_for_every_failure": true
+  },
+  "evidence_contract": {
+    "fixture_only": true,
+    "complete_source_query": true,
+    "committed_report_contains_field_names_checks_and_hashes_only": true,
+    "committed_report_contains_excluded_source_values": false,
+    "target_rows_contain_excluded_source_values": false,
+    "nonpublic_output_only": true
+  },
+  "expected_absences": ["identity exception", "alternate-field crosswalk", "version", "geometry output", "code alias", "publication item", "external effect"],
+  "required_tests": [
+    "positive-authoritative-slice", "second-run-idempotency", "missing-source-record", "missing-source-lineage",
+    "missing-evidence-object", "source-record-classification-drift", "evidence-classification-drift",
+    "all identity-substitution tests in the normative proposal", "wrong-target-identity-implementation",
+    "existing-location-conflict", "existing-subject-conflict", "existing-crosswalk-conflict",
+    "unexpected-extra-crosswalk", "unexpected-extra-location-record", "unexpected-extra-registry-subject",
+    "semantic-duplicate-crosswalk", "transform-spec-binding-drift", "second-source-identity",
+    "privacy-output-boundary", "accepted-geometry-compatibility", "read-only-complete-set-comparison",
+    "same-database-rollback-proof"
+  ],
+  "geometry_compatibility": {
+    "identity_slice_geometry_rows": 0,
+    "required_test": "In a separate fresh database the unchanged accepted geometry callable resolves these three identity rows and still matches its unchanged oracle."
+  },
+  "prohibited": ["modify reviewer or accepted controls", "use a non-id field as identity", "emit excluded source values", "create non-identity output", "run on non-fixture data", "implement another group", "change broad, runtime, migration, deployment or PR #8 scope"]
+}
