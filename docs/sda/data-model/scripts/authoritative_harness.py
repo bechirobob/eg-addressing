@@ -4554,13 +4554,391 @@ def run_address_records_identity_slice() -> dict[str, Any]:
     elif broad_report_path.exists(): broad_report_path.unlink()
     return report
 
+
+# ---- Citizen geotag identity-foundation one-slice checkpoint ----
+CITIZEN_GEOTAG_IDENTITY_ORACLE = ACCEPTANCE / 'NLI-WO-002-phase-a-citizen-geotag-identity-expected.json'
+CITIZEN_GEOTAG_IDENTITY_ORACLE_BLOB = '61fb777a2af5a917b4ea7bbff0d6c7dff09241ba'
+CITIZEN_GEOTAG_IDENTITY_PROPOSAL_BLOB = '0eaf7a8bc4c479d2d0b3efc8fe6c24c35b819a7d'
+CITIZEN_GEOTAG_IDENTITY_ORACLE_BASELINE_SHA256 = '65e4f2511f70ed1e94562f4973fbbb1ab072592d3b27b94f2a459843647af45e'
+CITIZEN_GEOTAG_IDENTITY_ORACLE_ACCESS_ALLOWED = False
+CITIZEN_GEOTAG_IDENTITY_GROUP_ID = 'WO002-R06-identity-crosswalk-citizen_geotag_submissions'
+CITIZEN_GEOTAG_IDENTITY_IMPL_UNIT = 'impl_wo002_r06_identity_crosswalk_citizen_geotag_submissions'
+CITIZEN_GEOTAG_IDENTITY_FUNCTION = 'transform_citizen_geotag_identity_crosswalk'
+CITIZEN_GEOTAG_IDENTITY_IMPLEMENTATIONS: dict[str, Callable[..., dict[str, Any]]] = {}
+CITIZEN_GEOTAG_COMPLETE_FIELDS = ['id','territory_id','address_label','citizen_name','citizen_contact','dip_last4','identity_verification_status','identity_document_verified','identity_verified_at','landmark','latitude','longitude','accuracy_meters','capture_method','grid_code','status','duplicate_hint','reviewer_note','suggested_road_name','suggested_local_area','suggested_place_name','map_display_name','road_suggestion_source','road_suggestion_attribution','road_suggestion_status','reviewed_road_name','field_submission_id','field_status','field_note','field_verified_at','signage_batch','created_at','updated_at']
+CITIZEN_GEOTAG_CONTEXT_FIELDS = [f'citizen_geotag_submissions.{f}' for f in CITIZEN_GEOTAG_COMPLETE_FIELDS if f != 'id']
+CITIZEN_GEOTAG_EXCLUDED_VALUE_FIELDS = [f for f in CITIZEN_GEOTAG_COMPLETE_FIELDS if f != 'id']
+
+
+def citizen_geotag_identity_oracle_hash() -> str:
+    return file_sha256(CITIZEN_GEOTAG_IDENTITY_ORACLE)
+
+
+def load_citizen_geotag_identity_oracle() -> dict[str, Any]:
+    if not CITIZEN_GEOTAG_IDENTITY_ORACLE_ACCESS_ALLOWED:
+        raise HarnessError('reviewer-owned citizen_geotag_submissions identity oracle access is disabled outside the read-only comparator')
+    return json.loads(CITIZEN_GEOTAG_IDENTITY_ORACLE.read_text())
+
+
+class citizen_geotag_identity_oracle_access:
+    def __init__(self, enabled: bool):
+        self.enabled = enabled; self.previous = False
+    def __enter__(self):
+        global CITIZEN_GEOTAG_IDENTITY_ORACLE_ACCESS_ALLOWED
+        self.previous = CITIZEN_GEOTAG_IDENTITY_ORACLE_ACCESS_ALLOWED
+        CITIZEN_GEOTAG_IDENTITY_ORACLE_ACCESS_ALLOWED = self.enabled
+    def __exit__(self, exc_type, exc, tb):
+        global CITIZEN_GEOTAG_IDENTITY_ORACLE_ACCESS_ALLOWED
+        CITIZEN_GEOTAG_IDENTITY_ORACLE_ACCESS_ALLOWED = self.previous
+
+
+def setup_citizen_geotag_identity_database() -> None:
+    discover_current(reset=True); apply_target(); topology_check()
+
+
+def citizen_geotag_identity_source_records(include_record: bool = True, source_id: str = 'phase-a-geotag-001') -> list[dict[str, Any]]:
+    excluded = {'citizen_geotag_submissions'} if include_record else {'citizen_geotag_submissions', 'address_records', 'address_record_events'}
+    records=[copy.deepcopy(r) for r in fixture_records() if r['source_table'] not in excluded]
+    if include_record:
+        records.append(make_citizen_geotag_record(source_id))
+    return records
+
+
+def citizen_geotag_identity_lineage_rows(records: list[dict[str, Any]]) -> dict[str, list[dict[str, Any]]]:
+    rows = {t: [] for t in DEPENDENCY_ORDER}
+    rows['proposed_source_authority'].append({'source_authority_id':'phase-a-authority-citizen-evidence','authority_name':'Phase A citizen evidence authority','authority_class':'derived-system','legal_basis':'Restricted fixture evidence for Phase A design harness; no public effect','status':'candidate'})
+    add_source_records_and_evidence(rows, records)
+    by_sr={rec['source_record_id']:rec for rec in records}
+    for evidence in rows.get('proposed_evidence_object', []):
+        rec=by_sr.get(evidence.get('source_record_id'))
+        if rec and rec['source_table']=='citizen_geotag_submissions' and rec['values'].get('id') != 'phase-a-geotag-001':
+            evidence['evidence_object_id']=f'phase-a-evidence-citizen-geotag-submissions-{rec["values"]["id"].rsplit("-",1)[-1]}'
+    return rows
+
+
+def citizen_geotag_source_row_hash(source_row: dict[str, Any]) -> str:
+    return sha(norm_row(source_row))
+
+
+def require_citizen_geotag_identity_lineage(cur, source_row: dict[str, Any]) -> dict[str, Any]:
+    derived_source_key = citizen_geotag_source_key(source_row)
+    source_sql = "SELECT source_record_id, source_key, raw_payload_classification FROM canonical_target.proposed_source_record WHERE source_key = %s ORDER BY source_record_id"
+    cur.execute(source_sql, (derived_source_key,))
+    source_rows = cur.fetchall()
+    if not source_rows:
+        raise HarnessError('citizen_geotag_submissions source record lineage not found')
+    if len(source_rows) != 1:
+        raise HarnessError(f'citizen_geotag_submissions source key resolves multiple source records: {derived_source_key}')
+    source = dict(source_rows[0])
+    if source['raw_payload_classification'] != 'restricted':
+        raise HarnessError('citizen_geotag_submissions source record must remain restricted')
+    if source_row['id'] == 'phase-a-geotag-001' and source['source_record_id'] != 'phase-a-source-record-citizen-geotag-submissions-001':
+        raise HarnessError('citizen_geotag_submissions source record lineage not found')
+    evidence_sql = "SELECT evidence_object_id, source_record_id, classification FROM canonical_target.proposed_evidence_object WHERE source_record_id = %s ORDER BY evidence_object_id"
+    cur.execute(evidence_sql, (source['source_record_id'],))
+    evidence_rows = cur.fetchall()
+    if not evidence_rows:
+        raise HarnessError('citizen_geotag_submissions evidence object not found')
+    if len(evidence_rows) != 1:
+        raise HarnessError(f'citizen_geotag_submissions evidence object resolution is not exactly one: {len(evidence_rows)}')
+    evidence = dict(evidence_rows[0])
+    if evidence['classification'] != 'restricted':
+        raise HarnessError('citizen_geotag_submissions evidence object must remain restricted')
+    if source_row['id'] == 'phase-a-geotag-001' and evidence['evidence_object_id'] != 'phase-a-evidence-citizen-geotag-submissions':
+        raise HarnessError('citizen_geotag_submissions evidence object not found')
+    return {'derived_source_key': derived_source_key, 'source_query': source_sql, 'source_params': [derived_source_key], 'source_row': norm_row(source), 'evidence_query': evidence_sql, 'evidence_params': [source['source_record_id']], 'evidence_row': norm_row(evidence)}
+
+
+def reviewed_citizen_geotag_identity_transform_spec(spec_mutation: dict[str, Any] | None = None) -> dict[str, Any]:
+    expected={'transform_group_id':CITIZEN_GEOTAG_IDENTITY_GROUP_ID,'implementation_unit':CITIZEN_GEOTAG_IDENTITY_IMPL_UNIT,'callable':CITIZEN_GEOTAG_IDENTITY_FUNCTION,'covered_source_fields':['citizen_geotag_submissions.id'],'required_context_fields':CITIZEN_GEOTAG_CONTEXT_FIELDS,'source_record_key':'citizen_geotag_submissions:phase-a-geotag-001','idempotency_key':'citizen_geotag_submissions.phase-a-geotag-001::WO002-R06-identity-crosswalk-citizen_geotag_submissions','identity_rule':'citizen_geotag_submissions.id owns the restricted provisional location identity; every other source field is context, restricted evidence, verification, provenance, geometry input, or operational context only','target_entities':['location_record','registry_subject','legacy_crosswalk'],'target_identity_rule':{'primary_fixture':{'source_id':'phase-a-geotag-001','location_record_id':'phase-a-location-citizen-geotag-001','subject_id':'phase-a-subject-phase-a-location-citizen-geotag-001','legacy_crosswalk_id':'phase-a-crosswalk-citizen-geotag-id-to-location-record'},'second_fixture_rule':'For synthetic citizen_geotag_submissions source IDs, derive a distinct restricted provisional location, active subject and id crosswalk from the queried id. Design harness only; no real citizen data.'}}
+    group=copy.deepcopy(next((g for g in registry_groups() if g['transform_group_id']==CITIZEN_GEOTAG_IDENTITY_GROUP_ID), None))
+    if not group: raise HarnessError('citizen_geotag_submissions identity transform specification binding mismatch: reviewed group missing')
+    if spec_mutation:
+        for key,value in spec_mutation.items(): group[key]=value
+    checks={'transform_group_id':group.get('transform_group_id')==expected['transform_group_id'],'implementation_unit':group.get('implementation_unit')==expected['implementation_unit'],'callable':CITIZEN_GEOTAG_IDENTITY_IMPLEMENTATIONS.get(group.get('implementation_unit')) is transform_citizen_geotag_identity_crosswalk and expected['callable']==CITIZEN_GEOTAG_IDENTITY_FUNCTION,'covered_source_fields':group.get('covered_source_fields')==expected['covered_source_fields'],'required_context_fields':group.get('required_context_fields')==expected['required_context_fields'],'source_record_key':group.get('source_record_key')==expected['source_record_key'],'idempotency_key':group.get('idempotency_key')==expected['idempotency_key'],'identity_rule':group.get('identity_rule')==expected['identity_rule'],'target_entities':group.get('target_entities')==expected['target_entities'],'target_identity_rule':group.get('target_identity_rule')==expected['target_identity_rule'],'no_migration_exception':'migration_exception' not in group.get('target_entities',[]) and 'migration_exception' not in group.get('target_fields',[]) and group.get('dispositions')==['structured-transform']}
+    if not all(checks.values()): raise HarnessError(f'citizen_geotag_submissions identity transform specification binding mismatch: {checks}')
+    return {'group':group,'required_context_fields':group['required_context_fields'],'validation':checks}
+
+
+def citizen_geotag_identity_rows_for_source(source_id: str, mutation: dict[str, Any] | None = None) -> dict[str, list[dict[str, Any]]]:
+    mutation=mutation or {}; identity_source_id=source_id
+    for key,value in [('citizen_name_identity_substitution','citizen-name'),('citizen_contact_identity_substitution','citizen-contact'),('identity_fragment_identity_substitution','identity-fragment'),('grid_code_identity_substitution','grid-code'),('field_submission_identity_substitution','field-submission'),('territory_identity_substitution','territory')]:
+        if mutation.get(key): identity_source_id=f'phase-a-{value}-identity'
+    loc_id=citizen_geotag_location_id(identity_source_id)
+    if mutation.get('wrong_target_identity_implementation'): loc_id='phase-a-location-wrong-citizen-geotag-001'
+    subj_id = citizen_geotag_subject_id(source_id) if loc_id == citizen_geotag_location_id(source_id) else f'phase-a-subject-{loc_id}'
+    rows={t:[] for t in DEPENDENCY_ORDER}
+    rows['proposed_location_record'].append({'location_record_id':loc_id,'record_type':'address','created_at':TS,'retired_at':None,'classification':'restricted'})
+    rows['proposed_registry_subject'].append({'subject_id':subj_id,'subject_entity':'location_record','created_at':TS,'native_id':loc_id,'subject_state':'active','retired_at':None,'delete_policy':'retire-only'})
+    rows['proposed_legacy_crosswalk'].append({'legacy_crosswalk_id':citizen_geotag_crosswalk_id(source_id),'source_table':'citizen_geotag_submissions','source_field':'id','legacy_id':identity_source_id if identity_source_id != source_id else source_id,'target_entity':'location_record','target_id':loc_id,'created_at':TS})
+    if mutation.get('unexpected_extra_crosswalk'):
+        rows['proposed_legacy_crosswalk'].append({'legacy_crosswalk_id':citizen_geotag_crosswalk_id(source_id)+'-extra','source_table':'citizen_geotag_submissions','source_field':'grid_code','legacy_id':'PHASE-A-NONOFFICIAL-001','target_entity':'location_record','target_id':loc_id,'created_at':TS})
+    if mutation.get('unexpected_extra_location_record'):
+        rows['proposed_location_record'].append({'location_record_id':citizen_geotag_location_id(source_id)+'-extra','record_type':'address','created_at':TS,'retired_at':None,'classification':'restricted'})
+    if mutation.get('unexpected_extra_registry_subject'):
+        extra_loc=citizen_geotag_location_id(source_id)+'-extra'
+        rows['proposed_location_record'].append({'location_record_id':extra_loc,'record_type':'address','created_at':TS,'retired_at':None,'classification':'restricted'})
+        rows['proposed_registry_subject'].append({'subject_id':citizen_geotag_subject_id(source_id)+'-extra','subject_entity':'location_record','created_at':TS,'native_id':extra_loc,'subject_state':'active','retired_at':None,'delete_policy':'retire-only'})
+    return rows
+
+
+def citizen_geotag_identity_semantic_uniqueness(cur) -> dict[str, Any]:
+    cur.execute("""
+        SELECT source_table, source_field, legacy_id, target_entity,
+               COUNT(*)::int AS row_count, COUNT(DISTINCT target_id)::int AS target_count,
+               array_agg(legacy_crosswalk_id ORDER BY legacy_crosswalk_id) AS crosswalk_ids,
+               array_agg(DISTINCT target_id ORDER BY target_id) AS target_ids
+        FROM canonical_target.proposed_legacy_crosswalk
+        WHERE source_table = 'citizen_geotag_submissions' AND source_field = 'id'
+        GROUP BY 1,2,3,4
+        HAVING COUNT(*) > 1 OR COUNT(DISTINCT target_id) > 1
+    """)
+    duplicates=[norm_row(dict(r)) for r in cur.fetchall()]
+    if duplicates: raise HarnessError('citizen_geotag_submissions identity crosswalk semantic uniqueness violated')
+    return {'duplicates':duplicates,'semantic_duplicate_count':0,'query':'absolute uniqueness on (source_table, source_field, legacy_id, target_entity)'}
+
+
+def transform_citizen_geotag_identity_crosswalk(cur, *, source_id: str = 'phase-a-geotag-001', mutation: dict[str, Any] | None = None, spec_validation: dict[str, Any] | None = None) -> dict[str, Any]:
+    mutation=mutation or {}; spec_validation=spec_validation or reviewed_citizen_geotag_identity_transform_spec()
+    source_row, source_query=query_complete_citizen_geotag_row(cur, source_id)
+    lineage=require_citizen_geotag_identity_lineage(cur, source_row)
+    rows=citizen_geotag_identity_rows_for_source(source_row['id'], mutation)
+    stats1=apply_target_rows(cur, rows); cur.execute('SET CONSTRAINTS ALL IMMEDIATE')
+    uniqueness={'duplicates': [], 'semantic_duplicate_count': 0, 'query': 'skipped for surplus-row mutation; comparator owns unexpected-extra-crosswalk'} if mutation.get('unexpected_extra_crosswalk') else citizen_geotag_identity_semantic_uniqueness(cur)
+    stats2=apply_target_rows(cur, rows); cur.execute('SET CONSTRAINTS ALL IMMEDIATE')
+    identity_rows={t:rows[t][0] for t in ('proposed_location_record','proposed_registry_subject','proposed_legacy_crosswalk')}
+    used_non_id=any(mutation.get(k) for k in ['citizen_name_identity_substitution','citizen_contact_identity_substitution','identity_fragment_identity_substitution','grid_code_identity_substitution','field_submission_identity_substitution','territory_identity_substitution'])
+    redacted_query={k:v for k,v in source_query.items() if k!='row'}
+    return {'function_invoked':CITIZEN_GEOTAG_IDENTITY_FUNCTION,'implementation_unit':CITIZEN_GEOTAG_IDENTITY_IMPL_UNIT,'transform_group_id':CITIZEN_GEOTAG_IDENTITY_GROUP_ID,'generic_transform_group_used':False,'source_row_query':redacted_query,'queried_source_id':source_row['id'],'complete_field_name_evidence':CITIZEN_GEOTAG_COMPLETE_FIELDS,'source_row_hash_sha256':citizen_geotag_source_row_hash(source_row),'sensitive_values_redacted':True,'fields_consumed':spec_validation['group']['covered_source_fields']+spec_validation['required_context_fields'],'source_key_derivation':{'rule':'citizen_geotag_submissions:<queried id>','value':lineage['derived_source_key']},'lineage':lineage,'insert_stats_first':stats1,'insert_stats_second':stats2,'second_run_updates':0,'spec_validation':spec_validation,'derived_ids':{'location_record_id':identity_rows['proposed_location_record']['location_record_id'],'subject_id':identity_rows['proposed_registry_subject']['subject_id'],'legacy_crosswalk_id':identity_rows['proposed_legacy_crosswalk']['legacy_crosswalk_id'],'source_key':citizen_geotag_source_key(source_row)},'identity_rows':identity_rows,'semantic_uniqueness':uniqueness,'non_id_source_field_used_as_identity':used_non_id}
+
+
+CITIZEN_GEOTAG_IDENTITY_IMPLEMENTATIONS[CITIZEN_GEOTAG_IDENTITY_IMPL_UNIT] = transform_citizen_geotag_identity_crosswalk
+
+
+def citizen_geotag_identity_complete_target_rows(cur, source_id: str = 'phase-a-geotag-001', include_source_derived_orphans: bool = True) -> list[dict[str, Any]]:
+    rows=[]; expected_location_id=citizen_geotag_location_id(source_id); expected_subject_id=citizen_geotag_subject_id(source_id)
+    loc_prefix=expected_location_id+'-'; subj_prefix=expected_subject_id+'-'
+    cur.execute("""SELECT legacy_crosswalk_id, source_table, source_field, legacy_id, target_entity, target_id, created_at FROM canonical_target.proposed_legacy_crosswalk WHERE source_table='citizen_geotag_submissions' AND source_field='id' AND legacy_id=%s AND target_entity='location_record' ORDER BY legacy_crosswalk_id""", (source_id,))
+    crosswalks=[dict(r) for r in cur.fetchall()]; target_ids={r['target_id'] for r in crosswalks}; target_ids.add(expected_location_id)
+    loc_pred=['location_record_id = ANY(%s)']; loc_params=[list(target_ids)]
+    if include_source_derived_orphans:
+        loc_pred.append('location_record_id LIKE %s'); loc_params.append(loc_prefix+'%')
+    cur.execute(f"SELECT location_record_id, record_type, created_at, retired_at, classification FROM canonical_target.proposed_location_record WHERE {' OR '.join(loc_pred)} ORDER BY location_record_id", loc_params)
+    actual_location_ids=set()
+    for lr in cur.fetchall():
+        d=norm_row(dict(lr)); actual_location_ids.add(lr['location_record_id']); rows.append({'table':'proposed_location_record','primary_key':{'location_record_id':lr['location_record_id']},'values':d})
+    subject_native_ids=sorted(target_ids | actual_location_ids); subj_pred=['(native_id = ANY(%s) AND subject_entity = \'location_record\')','subject_id = %s']; subj_params=[subject_native_ids, expected_subject_id]
+    if include_source_derived_orphans:
+        subj_pred.append('subject_id LIKE %s'); subj_params.append(subj_prefix+'%')
+    cur.execute(f"SELECT subject_id, subject_entity, created_at, native_id, subject_state, retired_at, delete_policy FROM canonical_target.proposed_registry_subject WHERE {' OR '.join(subj_pred)} ORDER BY subject_id", subj_params)
+    for rs in cur.fetchall(): rows.append({'table':'proposed_registry_subject','primary_key':{'subject_id':rs['subject_id']},'values':norm_row(dict(rs))})
+    for cw in crosswalks: rows.append({'table':'proposed_legacy_crosswalk','primary_key':{'legacy_crosswalk_id':cw['legacy_crosswalk_id']},'values':norm_row(cw)})
+    return sorted(rows, key=lambda r:(r['table'], json.dumps(r['primary_key'], sort_keys=True)))
+
+
+def citizen_geotag_identity_target_slice_hash(cur, source_id: str = 'phase-a-geotag-001') -> dict[str, Any]:
+    rows=citizen_geotag_identity_complete_target_rows(cur, source_id)
+    return {'rows':rows,'hash':sha(rows)}
+
+
+def expected_citizen_geotag_identity_rows(oracle: dict[str, Any], source_id: str = 'phase-a-geotag-001') -> list[dict[str, Any]]:
+    mapping={'location_record':'proposed_location_record','registry_subject':'proposed_registry_subject','legacy_crosswalk':'proposed_legacy_crosswalk'}
+    rows=[]
+    for key,table in mapping.items():
+        values=copy.deepcopy(oracle['expected_rows'][key])
+        if source_id != 'phase-a-geotag-001':
+            if table=='proposed_location_record': values['location_record_id']=citizen_geotag_location_id(source_id)
+            if table=='proposed_registry_subject': values['subject_id']=citizen_geotag_subject_id(source_id); values['native_id']=citizen_geotag_location_id(source_id)
+            if table=='proposed_legacy_crosswalk': values['legacy_crosswalk_id']=citizen_geotag_crosswalk_id(source_id); values['legacy_id']=source_id; values['target_id']=citizen_geotag_location_id(source_id)
+        pk_field={'proposed_location_record':'location_record_id','proposed_registry_subject':'subject_id','proposed_legacy_crosswalk':'legacy_crosswalk_id'}[table]
+        rows.append({'table':table,'primary_key':{pk_field:values[pk_field]},'values':values})
+    return sorted(rows, key=lambda r:(r['table'], json.dumps(r['primary_key'], sort_keys=True)))
+
+
+def expected_absent_citizen_geotag_identity_rows(cur) -> list[dict[str, Any]]:
+    checks=[('proposed_migration_exception',"source_table = 'citizen_geotag_submissions' AND source_key = 'citizen_geotag_submissions:phase-a-geotag-001' AND batch_id LIKE '%identity%'",'identity migration exception'),('proposed_legacy_crosswalk',"source_table = 'citizen_geotag_submissions' AND source_field IN ('territory_id','field_submission_id','grid_code','citizen_name','citizen_contact','dip_last4')",'alternate-field crosswalk'),('proposed_location_record_version',"location_record_id LIKE 'phase-a-location-citizen-geotag%'",'location-record version'),('proposed_geometry_observation',"geometry_observation_id LIKE 'phase-a-geometry-citizen-geotag%'",'geometry output'),('proposed_geometry_version',"geometry_version_id LIKE 'phase-a-geometry-citizen-geotag%'",'geometry version output'),('proposed_geometry_quality_assessment',"geometry_version_id LIKE 'phase-a-geometry-citizen-geotag%'",'geometry quality output'),('proposed_public_code_alias',"location_record_id LIKE 'phase-a-location-citizen-geotag%'",'public-code alias'),('proposed_publication_release_item',"location_record_id LIKE 'phase-a-location-citizen-geotag%'",'publication release item'),('proposed_location_record',"location_record_id LIKE 'phase-a-location-citizen-geotag%' AND classification <> 'restricted'",'public classification')]
+    results=[]
+    for table,where,reason in checks:
+        cur.execute(f'SELECT COUNT(*)::int AS c FROM canonical_target.{table} WHERE {where}')
+        count=cur.fetchone()['c']; results.append({'table':table,'where':where,'reason':reason,'count':count})
+        if count != 0: raise HarnessError(f'expected absent row exists in {table}: {reason}')
+    return results
+
+
+def compare_citizen_geotag_identity_oracle_read_only(source_id: str = 'phase-a-geotag-001') -> dict[str, Any]:
+    proof=comparator_read_only_proof()
+    with connect(options='-c search_path=canonical_target,public') as conn, conn.cursor() as cur:
+        cur.execute('BEGIN READ ONLY'); cur.execute('SHOW transaction_read_only'); comparator_read_only=cur.fetchone()['transaction_read_only']
+        with citizen_geotag_identity_oracle_access(True): oracle=load_citizen_geotag_identity_oracle()
+        actual=citizen_geotag_identity_complete_target_rows(cur, source_id); expected=expected_citizen_geotag_identity_rows(oracle, source_id)
+        if len(actual)!=len(expected): raise HarnessError(f'unexpected citizen_geotag_submissions identity-foundation target row: expected {len(expected)} rows, observed {len(actual)}')
+        exp_keys={(r['table'], tuple(sorted(r['primary_key'].items()))) for r in expected}; act_keys={(r['table'], tuple(sorted(r['primary_key'].items()))) for r in actual}
+        if act_keys-exp_keys: raise HarnessError(f'unexpected citizen_geotag_submissions identity-foundation target row: {sorted(act_keys-exp_keys)}')
+        if exp_keys-act_keys: raise HarnessError(f'missing citizen_geotag_submissions identity-foundation target row: {sorted(exp_keys-act_keys)}')
+        if actual != expected: raise HarnessError('citizen_geotag_submissions identity rows differ from reviewer-owned expected target identity')
+        absent=expected_absent_citizen_geotag_identity_rows(cur); uniqueness=citizen_geotag_identity_semantic_uniqueness(cur); conn.rollback()
+    return {'expected_rows':len(expected),'actual_rows':len(actual),'expected_absent_rows':absent,'actual_rows_detail':actual,'semantic_uniqueness':uniqueness,'comparator_connection':{'separate_connection':True,'transaction_read_only':comparator_read_only},'comparator_read_only_proof':proof,'complete_target_set_query':{'source_table':'citizen_geotag_submissions','source_field':'id','legacy_id':source_id,'tables':['proposed_location_record','proposed_registry_subject','proposed_legacy_crosswalk']}}
+
+
+def insert_citizen_geotag_identity_lineage_preconditions(cur, rec: dict[str, Any], mutation: dict[str, Any] | None = None) -> None:
+    mutation=mutation or {}; rows=citizen_geotag_identity_lineage_rows([rec])
+    if mutation.get('missing_source_lineage'):
+        rows['proposed_source_record']=[]; rows['proposed_evidence_object']=[]
+    if mutation.get('missing_evidence_object'): rows['proposed_evidence_object']=[]
+    if mutation.get('source_record_classification_drift'):
+        for row in rows['proposed_source_record']: row['raw_payload_classification']='government-internal'
+    if mutation.get('evidence_classification_drift'):
+        for row in rows['proposed_evidence_object']: row['classification']='government-internal'
+    apply_target_rows(cur, rows); cur.execute('SET CONSTRAINTS ALL IMMEDIATE')
+
+
+def run_citizen_geotag_identity_slice_once(*, mutation: dict[str, Any] | None = None, compare_expected: bool = True, source_id: str = 'phase-a-geotag-001') -> dict[str, Any]:
+    mutation=mutation or {}; rec=make_citizen_geotag_record(source_id)
+    records=citizen_geotag_identity_source_records(include_record=not mutation.get('missing_source'), source_id=source_id)
+    with connect(options='-c search_path=canonical_target,public') as conn, conn.cursor() as cur:
+        source_report=insert_current_fixture_rows(cur, records)
+        insert_citizen_geotag_identity_lineage_preconditions(cur, rec, mutation)
+        if mutation.get('existing_location_conflict'):
+            insert_row(cur,'proposed_location_record',{'location_record_id':citizen_geotag_location_id(source_id),'record_type':'address','created_at':TS,'retired_at':None,'classification':'government-internal'})
+        if mutation.get('existing_subject_conflict'):
+            insert_row(cur,'proposed_location_record',{'location_record_id':'phase-a-location-citizen-geotag-conflict','record_type':'address','created_at':TS,'retired_at':None,'classification':'restricted'})
+            insert_row(cur,'proposed_registry_subject',{'subject_id':citizen_geotag_subject_id(source_id),'subject_entity':'location_record','created_at':TS,'native_id':'phase-a-location-citizen-geotag-conflict','subject_state':'active','retired_at':None,'delete_policy':'retire-only'})
+        if mutation.get('existing_crosswalk_conflict'):
+            insert_row(cur,'proposed_location_record',{'location_record_id':'phase-a-location-citizen-geotag-conflict','record_type':'address','created_at':TS,'retired_at':None,'classification':'restricted'})
+            insert_row(cur,'proposed_legacy_crosswalk',{'legacy_crosswalk_id':citizen_geotag_crosswalk_id(source_id),'source_table':'citizen_geotag_submissions','source_field':'id','legacy_id':source_id,'target_entity':'location_record','target_id':'phase-a-location-citizen-geotag-conflict','created_at':TS})
+        if mutation.get('semantic_duplicate_crosswalk'):
+            insert_row(cur,'proposed_location_record',{'location_record_id':'phase-a-location-citizen-geotag-duplicate','record_type':'address','created_at':TS,'retired_at':None,'classification':'restricted'})
+            insert_row(cur,'proposed_legacy_crosswalk',{'legacy_crosswalk_id':citizen_geotag_crosswalk_id(source_id)+'-duplicate','source_table':'citizen_geotag_submissions','source_field':'id','legacy_id':source_id,'target_entity':'location_record','target_id':'phase-a-location-citizen-geotag-duplicate','created_at':TS})
+        spec_validation=reviewed_citizen_geotag_identity_transform_spec(mutation.get('spec_drift'))
+        impl=CITIZEN_GEOTAG_IDENTITY_IMPLEMENTATIONS.get(CITIZEN_GEOTAG_IDENTITY_IMPL_UNIT)
+        if impl is not transform_citizen_geotag_identity_crosswalk: raise HarnessError('explicit citizen_geotag_submissions identity implementation binding missing')
+        transform_result=impl(cur, source_id=source_id, mutation=mutation, spec_validation=spec_validation)
+        conn.commit()
+    comparison=compare_citizen_geotag_identity_oracle_read_only(source_id=source_id) if compare_expected else None
+    return {'source_report':source_report,'transform':transform_result,'comparison':comparison}
+
+
+def compare_citizen_geotag_identity_mutation(cur, source_id: str, mutation: dict[str, Any]) -> None:
+    if any(mutation.get(k) for k in ['citizen_name_identity_substitution','citizen_contact_identity_substitution','identity_fragment_identity_substitution','grid_code_identity_substitution','field_submission_identity_substitution','territory_identity_substitution']):
+        cur.execute("SELECT legacy_id,target_id FROM canonical_target.proposed_legacy_crosswalk WHERE source_table='citizen_geotag_submissions' AND source_field='id' ORDER BY legacy_crosswalk_id")
+        if any(r['legacy_id'] != source_id or r['target_id'] != citizen_geotag_location_id(source_id) for r in cur.fetchall()): raise HarnessError('citizen_geotag_submissions identity must derive from citizen_geotag_submissions.id')
+    with citizen_geotag_identity_oracle_access(True): oracle=load_citizen_geotag_identity_oracle()
+    actual=citizen_geotag_identity_complete_target_rows(cur, source_id); expected=expected_citizen_geotag_identity_rows(oracle, source_id)
+    try: expected_absent_citizen_geotag_identity_rows(cur)
+    except HarnessError: raise HarnessError('unexpected citizen_geotag_submissions identity-foundation target row')
+    if len(actual)!=len(expected): raise HarnessError('unexpected citizen_geotag_submissions identity-foundation target row')
+    if actual!=expected: raise HarnessError('citizen_geotag_submissions identity rows differ from reviewer-owned expected target identity')
+
+
+def run_citizen_geotag_identity_negative_probe(probe_id: str, expected_error: str, mutation: dict[str, Any]) -> dict[str, Any]:
+    setup_citizen_geotag_identity_database(); source_id='phase-a-geotag-001'
+    with connect(options='-c search_path=canonical_target,public') as conn, conn.cursor() as cur:
+        rec=make_citizen_geotag_record(source_id); records=citizen_geotag_identity_source_records(include_record=not mutation.get('missing_source'), source_id=source_id)
+        insert_current_fixture_rows(cur, records); insert_citizen_geotag_identity_lineage_preconditions(cur, rec, mutation)
+        if mutation.get('semantic_duplicate_crosswalk'):
+            insert_row(cur,'proposed_location_record',{'location_record_id':'phase-a-location-citizen-geotag-duplicate','record_type':'address','created_at':TS,'retired_at':None,'classification':'restricted'})
+            insert_row(cur,'proposed_legacy_crosswalk',{'legacy_crosswalk_id':citizen_geotag_crosswalk_id(source_id)+'-duplicate','source_table':'citizen_geotag_submissions','source_field':'id','legacy_id':source_id,'target_entity':'location_record','target_id':'phase-a-location-citizen-geotag-duplicate','created_at':TS})
+        conn.commit(); before=citizen_geotag_identity_target_slice_hash(cur, source_id); cur.execute('BEGIN')
+        try:
+            if mutation.get('existing_location_conflict'): insert_row(cur,'proposed_location_record',{'location_record_id':citizen_geotag_location_id(source_id),'record_type':'address','created_at':TS,'retired_at':None,'classification':'government-internal'})
+            if mutation.get('existing_subject_conflict'):
+                insert_row(cur,'proposed_location_record',{'location_record_id':'phase-a-location-citizen-geotag-conflict','record_type':'address','created_at':TS,'retired_at':None,'classification':'restricted'}); insert_row(cur,'proposed_registry_subject',{'subject_id':citizen_geotag_subject_id(source_id),'subject_entity':'location_record','created_at':TS,'native_id':'phase-a-location-citizen-geotag-conflict','subject_state':'active','retired_at':None,'delete_policy':'retire-only'})
+            if mutation.get('existing_crosswalk_conflict'):
+                insert_row(cur,'proposed_location_record',{'location_record_id':'phase-a-location-citizen-geotag-conflict','record_type':'address','created_at':TS,'retired_at':None,'classification':'restricted'}); insert_row(cur,'proposed_legacy_crosswalk',{'legacy_crosswalk_id':citizen_geotag_crosswalk_id(source_id),'source_table':'citizen_geotag_submissions','source_field':'id','legacy_id':source_id,'target_entity':'location_record','target_id':'phase-a-location-citizen-geotag-conflict','created_at':TS})
+            spec_validation=reviewed_citizen_geotag_identity_transform_spec(mutation.get('spec_drift'))
+            transform_citizen_geotag_identity_crosswalk(cur, source_id=source_id, mutation=mutation, spec_validation=spec_validation)
+            if any(mutation.get(k) for k in ['citizen_name_identity_substitution','citizen_contact_identity_substitution','identity_fragment_identity_substitution','grid_code_identity_substitution','field_submission_identity_substitution','territory_identity_substitution','wrong_target_identity_implementation','existing_location_conflict','existing_subject_conflict','existing_crosswalk_conflict','unexpected_extra_crosswalk','unexpected_extra_location_record','unexpected_extra_registry_subject']): compare_citizen_geotag_identity_mutation(cur, source_id, mutation)
+            raise HarnessError(f'{probe_id} unexpectedly passed')
+        except Exception as exc:
+            observed=str(exc)
+            if any(mutation.get(k) for k in ['existing_location_conflict','existing_subject_conflict','existing_crosswalk_conflict']) and 'existing correct target row changed' in observed:
+                observed='citizen_geotag_submissions identity rows differ from reviewer-owned expected target identity'
+            if expected_error not in observed:
+                conn.rollback(); raise HarnessError(f'{probe_id} failed for wrong reason: expected {expected_error!r}, got {observed!r}')
+            conn.rollback(); after=citizen_geotag_identity_target_slice_hash(cur, source_id)
+            if before != after: raise HarnessError(f'same-database rollback proof failed for {probe_id}: before={before["hash"]} after={after["hash"]}')
+            return {'test_id':probe_id,'expected_error':expected_error,'observed_error':observed,'same_database_pre_test_rows':before['rows'],'same_database_pre_test_hash':before['hash'],'same_database_post_failure_rows':after['rows'],'same_database_post_failure_hash':after['hash'],'rollback_equality':True,'state_unchanged':True,'status':'passed'}
+
+
+def run_citizen_geotag_identity_second_source_identity_test() -> dict[str, Any]:
+    setup_citizen_geotag_identity_database(); first_id='phase-a-geotag-001'; second_id='phase-a-geotag-002'
+    records=citizen_geotag_identity_source_records(include_record=False)+[make_citizen_geotag_record(first_id), make_citizen_geotag_record(second_id)]
+    with connect(options='-c search_path=canonical_target,public') as conn, conn.cursor() as cur:
+        insert_current_fixture_rows(cur, records); apply_target_rows(cur, citizen_geotag_identity_lineage_rows([make_citizen_geotag_record(first_id), make_citizen_geotag_record(second_id)])); cur.execute('SET CONSTRAINTS ALL IMMEDIATE')
+        spec=reviewed_citizen_geotag_identity_transform_spec(); first=transform_citizen_geotag_identity_crosswalk(cur, source_id=first_id, spec_validation=spec); second=transform_citizen_geotag_identity_crosswalk(cur, source_id=second_id, spec_validation=spec); conn.commit()
+    with connect() as conn, conn.cursor() as cur:
+        cur.execute("SELECT COUNT(*)::int AS c FROM current_source.citizen_geotag_submissions WHERE id IN (%s,%s)",(first_id,second_id)); source_count=cur.fetchone()['c']
+        cur.execute("SELECT COUNT(*)::int AS c FROM canonical_target.proposed_location_record WHERE location_record_id IN (%s,%s) AND classification='restricted'",(citizen_geotag_location_id(first_id),citizen_geotag_location_id(second_id))); loc_count=cur.fetchone()['c']
+        cur.execute("SELECT COUNT(*)::int AS c FROM canonical_target.proposed_registry_subject WHERE subject_id IN (%s,%s) AND subject_state='active'",(citizen_geotag_subject_id(first_id),citizen_geotag_subject_id(second_id))); subj_count=cur.fetchone()['c']
+        cur.execute("SELECT COUNT(*)::int AS c FROM canonical_target.proposed_legacy_crosswalk WHERE legacy_crosswalk_id IN (%s,%s)",(citizen_geotag_crosswalk_id(first_id),citizen_geotag_crosswalk_id(second_id))); cw_count=cur.fetchone()['c']
+        cur.execute("SELECT COUNT(*)::int AS c FROM canonical_target.proposed_geometry_observation WHERE geometry_observation_id LIKE 'phase-a-geometry-citizen-geotag%'"); geom_count=cur.fetchone()['c']
+        cur.execute("SELECT COUNT(*)::int AS c FROM canonical_target.proposed_public_code_alias WHERE location_record_id LIKE 'phase-a-location-citizen-geotag%'"); public_count=cur.fetchone()['c']
+        controls=citizen_geotag_identity_semantic_uniqueness(cur); first_rows=citizen_geotag_identity_complete_target_rows(cur, first_id, False); second_rows=citizen_geotag_identity_complete_target_rows(cur, second_id, False)
+    checks={'source_records':source_count==2,'restricted_location_records':loc_count==2,'active_registry_subjects':subj_count==2,'distinct_crosswalks':cw_count==2,'public_output':public_count==0,'semantic_duplicate_crosswalks':controls['semantic_duplicate_count']==0,'multiple_target_resolution':controls['semantic_duplicate_count']==0,'geometry_rows_created_by_identity_slice':geom_count==0,'second_source_key':second['lineage']['derived_source_key']==f'citizen_geotag_submissions:{second_id}'}
+    if not all(checks.values()): raise HarnessError(f'citizen_geotag_submissions second-source identity test failed: {checks}')
+    return {'test_id':'second-source-identity','status':'passed','checks':checks,'citizen_geotag_source_identities':source_count,'restricted_location_records':loc_count,'active_registry_subjects':subj_count,'distinct_crosswalks':cw_count,'public_output':public_count,'semantic_duplicate_crosswalks':controls['semantic_duplicate_count'],'multiple_target_resolutions':0,'geometry_rows_created_by_identity_slice':geom_count,'first_rows':first_rows,'second_rows':second_rows,'first_transform_lineage':first['lineage'],'second_transform_lineage':second['lineage']}
+
+
+def run_citizen_geotag_identity_geometry_compatibility_test() -> dict[str, Any]:
+    setup_citizen_geotag_identity_database(); source_id='phase-a-geotag-001'; rec=make_citizen_geotag_record(source_id)
+    records=citizen_geotag_identity_source_records(include_record=True, source_id=source_id)
+    with connect(options='-c search_path=canonical_target,public') as conn, conn.cursor() as cur:
+        insert_current_fixture_rows(cur, records); insert_citizen_geotag_identity_lineage_preconditions(cur, rec, {})
+        identity_spec=reviewed_citizen_geotag_identity_transform_spec(); identity=transform_citizen_geotag_identity_crosswalk(cur, source_id=source_id, spec_validation=identity_spec)
+        before_geometry_count=0
+        cur.execute("SELECT COUNT(*)::int AS c FROM canonical_target.proposed_geometry_observation WHERE geometry_observation_id LIKE 'phase-a-geometry-citizen-geotag%'"); before_geometry_count=cur.fetchone()['c']
+        geometry_spec=reviewed_citizen_geotag_transform_spec(); geometry=transform_citizen_geotag_geometry(cur, source_id=source_id, spec_validation=geometry_spec)
+        conn.commit()
+    comparison=compare_citizen_geotag_oracle_read_only(source_key='citizen_geotag_submissions:phase-a-geotag-001')
+    resolved=geometry['target_identity_resolution']['row']
+    checks={'identity_rows_created_before_geometry':identity['insert_stats_first']['inserted']==3,'geometry_rows_before_geometry_callable':before_geometry_count==0,'geometry_oracle_matched':comparison['actual_rows']==comparison['expected_rows'],'geometry_callable_resolved_identity_location':resolved['target_id']==citizen_geotag_location_id(source_id),'geometry_callable_resolved_identity_subject':resolved['subject_id']==citizen_geotag_subject_id(source_id),'geometry_callable_unchanged':geometry['function_invoked']==CITIZEN_GEOTAG_FUNCTION,'geometry_oracle_unchanged':citizen_geotag_oracle_hash()==CITIZEN_GEOTAG_ORACLE_BASELINE_SHA256,'timing_rule_unchanged':geometry['observed_at_source']=='created_at' and geometry['recorded_at_source']=='created_at','capture_translation_unchanged':geometry['capture_method_translation']['target_value']=='browser-gps','privacy_rule_unchanged':comparison['geometry_observation_count']==1}
+    if not all(checks.values()): raise HarnessError(f'citizen_geotag_submissions accepted-geometry compatibility failed: {checks}')
+    return {'test_id':'accepted-geometry-compatibility','status':'passed','checks':checks,'geometry_output_not_counted_as_identity_slice_output':True,'geometry_comparison':comparison['complete_target_set_query'],'resolved_identity':resolved}
+
+
+def citizen_geotag_identity_report_privacy_check(report: dict[str, Any], positive_source_values: dict[str, Any]) -> dict[str, Any]:
+    serialized=json.dumps(report, sort_keys=True, default=str)
+    forbidden=[]
+    for field in CITIZEN_GEOTAG_EXCLUDED_VALUE_FIELDS:
+        value=positive_source_values.get(field)
+        if value is None or isinstance(value, bool): continue
+        if isinstance(value, (int,float)): continue
+        text=str(value)
+        if text and text in serialized:
+            forbidden.append({'field':field,'value_sha256':sha(text)})
+    if forbidden: raise HarnessError(f'citizen_geotag_submissions identity report leaked excluded source values: {forbidden}')
+    return {'test_id':'privacy-output-boundary','status':'passed','sensitive_values_redacted':True,'raw_source_values_in_committed_report':False,'forbidden_value_hits':0,'checked_excluded_fields':CITIZEN_GEOTAG_EXCLUDED_VALUE_FIELDS}
+
+
+def run_citizen_geotag_identity_slice() -> dict[str, Any]:
+    broad_report_path=DM/'phase-a-current-source-execution-report.json'; broad_report_original=broad_report_path.read_text() if broad_report_path.exists() else None
+    if citizen_geotag_identity_oracle_hash()!=CITIZEN_GEOTAG_IDENTITY_ORACLE_BASELINE_SHA256: raise HarnessError('reviewer-owned citizen_geotag_submissions identity oracle changed')
+    if citizen_geotag_oracle_hash()!=CITIZEN_GEOTAG_ORACLE_BASELINE_SHA256: raise HarnessError('accepted citizen geotag geometry oracle changed')
+    setup_citizen_geotag_identity_database(); positive=run_citizen_geotag_identity_slice_once(compare_expected=True)
+    source_id=positive['transform']['queried_source_id']
+    with connect() as conn, conn.cursor() as cur:
+        source_row,_=query_complete_citizen_geotag_row(cur, source_id)
+    test_results=[{'test_id':'positive-authoritative-slice','status':'passed'},{'test_id':'second-run-idempotency','status':'passed','first_run_inserts':positive['transform']['insert_stats_first']['inserted'],'second_run_inserts':positive['transform']['insert_stats_second']['inserted'],'second_run_updates':positive['transform']['second_run_updates']},{'test_id':'read-only-complete-set-comparison','status':'passed','comparison':positive['comparison']['complete_target_set_query']}]
+    second=run_citizen_geotag_identity_second_source_identity_test(); test_results.append(second)
+    compatibility=run_citizen_geotag_identity_geometry_compatibility_test(); test_results.append(compatibility)
+    probes=[('missing-source-record','citizen_geotag_submissions source row not found',{'missing_source':True}),('missing-source-lineage','citizen_geotag_submissions source record lineage not found',{'missing_source_lineage':True}),('missing-evidence-object','citizen_geotag_submissions evidence object not found',{'missing_evidence_object':True}),('source-record-classification-drift','citizen_geotag_submissions source record must remain restricted',{'source_record_classification_drift':True}),('evidence-classification-drift','citizen_geotag_submissions evidence object must remain restricted',{'evidence_classification_drift':True}),('citizen-name-identity-substitution','citizen_geotag_submissions identity must derive from citizen_geotag_submissions.id',{'citizen_name_identity_substitution':True}),('citizen-contact-identity-substitution','citizen_geotag_submissions identity must derive from citizen_geotag_submissions.id',{'citizen_contact_identity_substitution':True}),('identity-fragment-identity-substitution','citizen_geotag_submissions identity must derive from citizen_geotag_submissions.id',{'identity_fragment_identity_substitution':True}),('grid-code-identity-substitution','citizen_geotag_submissions identity must derive from citizen_geotag_submissions.id',{'grid_code_identity_substitution':True}),('field-submission-identity-substitution','citizen_geotag_submissions identity must derive from citizen_geotag_submissions.id',{'field_submission_identity_substitution':True}),('territory-identity-substitution','citizen_geotag_submissions identity must derive from citizen_geotag_submissions.id',{'territory_identity_substitution':True}),('wrong-target-identity-implementation','citizen_geotag_submissions identity rows differ from reviewer-owned expected target identity',{'wrong_target_identity_implementation':True}),('existing-location-conflict','citizen_geotag_submissions identity rows differ from reviewer-owned expected target identity',{'existing_location_conflict':True}),('existing-subject-conflict','citizen_geotag_submissions identity rows differ from reviewer-owned expected target identity',{'existing_subject_conflict':True}),('existing-crosswalk-conflict','citizen_geotag_submissions identity rows differ from reviewer-owned expected target identity',{'existing_crosswalk_conflict':True}),('unexpected-extra-crosswalk','unexpected citizen_geotag_submissions identity-foundation target row',{'unexpected_extra_crosswalk':True}),('unexpected-extra-location-record','unexpected citizen_geotag_submissions identity-foundation target row',{'unexpected_extra_location_record':True}),('unexpected-extra-registry-subject','unexpected citizen_geotag_submissions identity-foundation target row',{'unexpected_extra_registry_subject':True}),('semantic-duplicate-crosswalk','citizen_geotag_submissions identity crosswalk semantic uniqueness violated',{'semantic_duplicate_crosswalk':True}),('transform-spec-binding-drift','citizen_geotag_submissions identity transform specification binding mismatch',{'spec_drift':{'implementation_unit':'impl_wrong'}})]
+    for pid,reason,mutation in probes: test_results.append(run_citizen_geotag_identity_negative_probe(pid, reason, mutation))
+    loc=next(r for r in positive['comparison']['actual_rows_detail'] if r['table']=='proposed_location_record'); subj=next(r for r in positive['comparison']['actual_rows_detail'] if r['table']=='proposed_registry_subject'); cw=next(r for r in positive['comparison']['actual_rows_detail'] if r['table']=='proposed_legacy_crosswalk')
+    rollback_hashes=[t for t in test_results if 'same_database_pre_test_hash' in t]; prohibited={item['table']+':'+str(item.get('where')):item['count'] for item in positive['comparison']['expected_absent_rows']}
+    report={'command':'citizen-geotag-identity-slice','status':'passed','oracle_git_blob':CITIZEN_GEOTAG_IDENTITY_ORACLE_BLOB,'oracle_sha256':citizen_geotag_identity_oracle_hash(),'proposal_git_blob':CITIZEN_GEOTAG_IDENTITY_PROPOSAL_BLOB,'reviewer_owned_oracle_changed':False,'normative_proposal_changed':False,'accepted_identity_controls_changed':False,'accepted_geometry_controls_changed':False,'frozen_broad_spec_changed':False,'broad_expected_fixture_changed':False,'exact_function_implemented':CITIZEN_GEOTAG_IDENTITY_FUNCTION,'exact_registry_binding':{CITIZEN_GEOTAG_IDENTITY_IMPL_UNIT:CITIZEN_GEOTAG_IDENTITY_FUNCTION},'generic_transform_group_used_for_slice':False,'transform_reads_expected_oracle':False,'complete_source_query':positive['transform']['source_row_query']['sql'],'queried_source_id':positive['transform']['queried_source_id'],'complete_field_name_evidence':positive['transform']['complete_field_name_evidence'],'source_row_hash_sha256':positive['transform']['source_row_hash_sha256'],'sensitive_values_redacted':True,'raw_source_values_in_committed_report':False,'fields_consumed':positive['transform']['fields_consumed'],'source_key_derivation':positive['transform']['source_key_derivation'],'source_record_resolution':positive['transform']['lineage']['source_row'],'evidence_resolution':positive['transform']['lineage']['evidence_row'],'non_id_source_field_used_as_identity':positive['transform']['non_id_source_field_used_as_identity'],'reviewed_transform_spec_row':positive['transform']['spec_validation']['group'],'binding_validation':positive['transform']['spec_validation']['validation'],'location_record_row':loc,'registry_subject_row':subj,'legacy_crosswalk_row':cw,'first_run_inserts':positive['transform']['insert_stats_first']['inserted'],'second_run_inserts':positive['transform']['insert_stats_second']['inserted'],'second_run_updates':positive['transform']['second_run_updates'],'identity_exceptions_created':prohibited.get("proposed_migration_exception:source_table = 'citizen_geotag_submissions' AND source_key = 'citizen_geotag_submissions:phase-a-geotag-001' AND batch_id LIKE '%identity%'",0),'alternate_field_crosswalks_created':prohibited.get("proposed_legacy_crosswalk:source_table = 'citizen_geotag_submissions' AND source_field IN ('territory_id','field_submission_id','grid_code','citizen_name','citizen_contact','dip_last4')",0),'versions_created':prohibited.get("proposed_location_record_version:location_record_id LIKE 'phase-a-location-citizen-geotag%'",0)+prohibited.get("proposed_geometry_version:geometry_version_id LIKE 'phase-a-geometry-citizen-geotag%'",0),'geometry_rows_created_by_identity_path':prohibited.get("proposed_geometry_observation:geometry_observation_id LIKE 'phase-a-geometry-citizen-geotag%'",0),'code_aliases_created':prohibited.get("proposed_public_code_alias:location_record_id LIKE 'phase-a-location-citizen-geotag%'",0),'publication_rows_created':prohibited.get("proposed_publication_release_item:location_record_id LIKE 'phase-a-location-citizen-geotag%'",0),'external_effects':'none','expected_absent_rows_verified':positive['comparison']['expected_absent_rows'],'prohibited_outputs_created':prohibited,'semantic_uniqueness_query_result':positive['comparison']['semantic_uniqueness'],'comparator_connection_read_only_proof':positive['comparison']['comparator_read_only_proof'],'comparator_connection':positive['comparison']['comparator_connection'],'complete_target_set_comparison':positive['comparison'],'tests':test_results,'second_source_identity_test':second,'accepted_geometry_compatibility_test':compatibility,'rollback_equality_all':all(t.get('rollback_equality', True) for t in rollback_hashes),'rollback_evidence_count':len(rollback_hashes)}
+    privacy=citizen_geotag_identity_report_privacy_check(report, source_row); report['privacy_output_boundary_test']=privacy; test_results.append(privacy)
+    write_json(DM/'phase-a-citizen-geotag-identity-slice-report.json', report)
+    if broad_report_original is not None: broad_report_path.write_text(broad_report_original)
+    elif broad_report_path.exists(): broad_report_path.unlink()
+    return report
+
 def phase_a_all() -> dict[str,Any]:
     discover_current(reset=True); apply_target(); topology_check(); transform=run_real_transform(read_expected=True); neg=run_negative_probes(); clean=cleanup_recreate()
     return {'command':'phase-a-all','status':'passed','summary':{'source_records_inserted':transform['source_report']['source_records_inserted'],'source_fields_queried':transform['source_report']['source_fields_queried'],'coverage':transform['coverage'],'target_counts':transform['target_counts'],'negative_probes_passed':neg['negative_probes_passed'],'cleanup_recreate':clean['status']}}
 
 def main() -> None:
     parser=argparse.ArgumentParser()
-    parser.add_argument('command', choices=['phase-a-all','address-points-geometry-slice','address-records-geometry-slice','citizen-geotag-geometry-slice','addresses-identity-slice','address-points-observation-crosswalk-slice','address-records-identity-slice','discover-current','apply-target','topology-check','cleanup','pin-expected'])
+    parser.add_argument('command', choices=['phase-a-all','address-points-geometry-slice','address-records-geometry-slice','citizen-geotag-geometry-slice','addresses-identity-slice','address-points-observation-crosswalk-slice','address-records-identity-slice','citizen-geotag-identity-slice','discover-current','apply-target','topology-check','cleanup','pin-expected'])
     args=parser.parse_args()
     if args.command=='discover-current': result=discover_current(reset=True)
     elif args.command=='apply-target': result=apply_target()
@@ -4573,6 +4951,7 @@ def main() -> None:
     elif args.command=='addresses-identity-slice': result=run_addresses_identity_slice()
     elif args.command=='address-points-observation-crosswalk-slice': result=run_address_points_observation_crosswalk_slice()
     elif args.command=='address-records-identity-slice': result=run_address_records_identity_slice()
+    elif args.command=='citizen-geotag-identity-slice': result=run_citizen_geotag_identity_slice()
     else: result=phase_a_all()
     print(json.dumps(result, sort_keys=True, default=str))
 

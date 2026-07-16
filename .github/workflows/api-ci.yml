@@ -147,6 +147,17 @@ jobs:
           conn.close()
           PY
           python3 docs/sda/data-model/scripts/authoritative_harness.py address-records-identity-slice
+          python3 - <<'PY'
+          import psycopg
+          conn = psycopg.connect(host='127.0.0.1', port=5432, dbname='postgres', user='addressing', password='ci_password')
+          conn.autocommit = True
+          with conn.cursor() as cur:
+              cur.execute("SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE datname='addressing_phase_a'")
+              cur.execute('DROP DATABASE IF EXISTS addressing_phase_a')
+              cur.execute('CREATE DATABASE addressing_phase_a')
+          conn.close()
+          PY
+          python3 docs/sda/data-model/scripts/authoritative_harness.py citizen-geotag-identity-slice
           git diff --exit-code docs/sda/data-model
 
   api-tests:

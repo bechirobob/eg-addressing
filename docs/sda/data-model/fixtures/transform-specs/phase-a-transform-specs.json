@@ -541,30 +541,107 @@
         "none"
       ],
       "covered_source_fields": [
-        "citizen_geotag_submissions.field_submission_id",
-        "citizen_geotag_submissions.id",
-        "citizen_geotag_submissions.territory_id"
+        "citizen_geotag_submissions.id"
       ],
       "crosswalk_algorithm": "source table + source key + target entity -> proposed_legacy_crosswalk when registry declares identity/crosswalk target",
       "dispositions": [
-        "formal-exception",
         "structured-transform"
       ],
-      "exception_behavior": "owned exception required for RFI/conditional/unresolved authority or unresolved reference dispositions",
+      "exception_behavior": "no migration exception in this identity slice; non-id source fields are excluded from identity and retained only as context/evidence/provenance/geometry/operational inputs",
       "id_algorithm": "phase-a deterministic slug(source table/group/current field)",
-      "idempotency_key": "citizen_geotag_submissions.phase-a-citizen-geotag-submissions-001::WO002-R06-identity-crosswalk-citizen_geotag_submissions",
+      "idempotency_key": "citizen_geotag_submissions.phase-a-geotag-001::WO002-R06-identity-crosswalk-citizen_geotag_submissions",
+      "identity_exclusion_roles": {
+        "accuracy_meters": "geometry input only",
+        "address_label": "descriptive context only",
+        "capture_method": "geometry input only",
+        "citizen_contact": "restricted evidence/contact context only",
+        "citizen_name": "restricted evidence context only",
+        "created_at": "timestamp context only; may populate created_at but not identity",
+        "dip_last4": "restricted identity-verification context only",
+        "duplicate_hint": "operational review context only",
+        "field_note": "field verification context only",
+        "field_status": "field verification context only",
+        "field_submission_id": "provenance reference only",
+        "field_verified_at": "field verification context only",
+        "grid_code": "non-official fixture/reference context only",
+        "identity_document_verified": "verification context only",
+        "identity_verification_status": "verification context only",
+        "identity_verified_at": "verification timing context only",
+        "landmark": "descriptive context only",
+        "latitude": "geometry input only",
+        "longitude": "geometry input only",
+        "map_display_name": "display context only",
+        "reviewed_road_name": "restricted/source attribution context only",
+        "reviewer_note": "operational review context only",
+        "road_suggestion_attribution": "restricted/source attribution context only",
+        "road_suggestion_source": "restricted/source attribution context only",
+        "road_suggestion_status": "restricted/source attribution context only",
+        "signage_batch": "signage context only; no signage effect authorized",
+        "status": "operational context only",
+        "suggested_local_area": "restricted/source attribution context only",
+        "suggested_place_name": "restricted/source attribution context only",
+        "suggested_road_name": "restricted/source attribution context only",
+        "territory_id": "territorial context only",
+        "updated_at": "timestamp context only"
+      },
+      "identity_rule": "citizen_geotag_submissions.id owns the restricted provisional location identity; every other source field is context, restricted evidence, verification, provenance, geometry input, or operational context only",
       "implementation_unit": "impl_wo002_r06_identity_crosswalk_citizen_geotag_submissions",
       "operation": "registry-disposition-to-canonical-target-evidence",
-      "source_record_key": "citizen_geotag_submissions:phase-a-citizen-geotag-submissions-001",
+      "required_context_fields": [
+        "citizen_geotag_submissions.territory_id",
+        "citizen_geotag_submissions.address_label",
+        "citizen_geotag_submissions.citizen_name",
+        "citizen_geotag_submissions.citizen_contact",
+        "citizen_geotag_submissions.dip_last4",
+        "citizen_geotag_submissions.identity_verification_status",
+        "citizen_geotag_submissions.identity_document_verified",
+        "citizen_geotag_submissions.identity_verified_at",
+        "citizen_geotag_submissions.landmark",
+        "citizen_geotag_submissions.latitude",
+        "citizen_geotag_submissions.longitude",
+        "citizen_geotag_submissions.accuracy_meters",
+        "citizen_geotag_submissions.capture_method",
+        "citizen_geotag_submissions.grid_code",
+        "citizen_geotag_submissions.status",
+        "citizen_geotag_submissions.duplicate_hint",
+        "citizen_geotag_submissions.reviewer_note",
+        "citizen_geotag_submissions.suggested_road_name",
+        "citizen_geotag_submissions.suggested_local_area",
+        "citizen_geotag_submissions.suggested_place_name",
+        "citizen_geotag_submissions.map_display_name",
+        "citizen_geotag_submissions.road_suggestion_source",
+        "citizen_geotag_submissions.road_suggestion_attribution",
+        "citizen_geotag_submissions.road_suggestion_status",
+        "citizen_geotag_submissions.reviewed_road_name",
+        "citizen_geotag_submissions.field_submission_id",
+        "citizen_geotag_submissions.field_status",
+        "citizen_geotag_submissions.field_note",
+        "citizen_geotag_submissions.field_verified_at",
+        "citizen_geotag_submissions.signage_batch",
+        "citizen_geotag_submissions.created_at",
+        "citizen_geotag_submissions.updated_at"
+      ],
+      "source_record_key": "citizen_geotag_submissions:phase-a-geotag-001",
       "source_table": "citizen_geotag_submissions",
       "target_entities": [
-        "legacy_crosswalk",
-        "migration_exception"
+        "location_record",
+        "registry_subject",
+        "legacy_crosswalk"
       ],
       "target_fields": [
-        "legacy_crosswalk.legacy_id",
-        "migration_exception.migration_exception_id"
+        "location_record.location_record_id",
+        "registry_subject.subject_id",
+        "legacy_crosswalk.legacy_id"
       ],
+      "target_identity_rule": {
+        "primary_fixture": {
+          "legacy_crosswalk_id": "phase-a-crosswalk-citizen-geotag-id-to-location-record",
+          "location_record_id": "phase-a-location-citizen-geotag-001",
+          "source_id": "phase-a-geotag-001",
+          "subject_id": "phase-a-subject-phase-a-location-citizen-geotag-001"
+        },
+        "second_fixture_rule": "For synthetic citizen_geotag_submissions source IDs, derive a distinct restricted provisional location, active subject and id crosswalk from the queried id. Design harness only; no real citizen data."
+      },
       "transform_group_id": "WO002-R06-identity-crosswalk-citizen_geotag_submissions"
     },
     {
