@@ -42,6 +42,7 @@
   },
   "accepted_geometry_controls_changed": false,
   "accepted_identity_controls_changed": false,
+  "all_non_id_source_field_crosswalks": 0,
   "alternate_field_crosswalks_created": 0,
   "binding_validation": {
     "callable": true,
@@ -152,6 +153,7 @@
         }
       }
     ],
+    "all_non_id_source_field_crosswalks": 0,
     "comparator_connection": {
       "separate_connection": true,
       "transaction_read_only": "on"
@@ -181,9 +183,9 @@
       },
       {
         "count": 0,
-        "reason": "alternate-field crosswalk",
+        "reason": "all non-id source-field crosswalks",
         "table": "proposed_legacy_crosswalk",
-        "where": "source_table = 'citizen_geotag_submissions' AND source_field IN ('territory_id','field_submission_id','grid_code','citizen_name','citizen_contact','dip_last4')"
+        "where": "source_table = 'citizen_geotag_submissions' AND source_field <> 'id'"
       },
       {
         "count": 0,
@@ -229,6 +231,7 @@
       }
     ],
     "expected_rows": 3,
+    "id_crosswalk_count": 1,
     "semantic_uniqueness": {
       "duplicates": [],
       "query": "absolute uniqueness on (source_table, source_field, legacy_id, target_entity)",
@@ -253,9 +256,9 @@
     },
     {
       "count": 0,
-      "reason": "alternate-field crosswalk",
+      "reason": "all non-id source-field crosswalks",
       "table": "proposed_legacy_crosswalk",
-      "where": "source_table = 'citizen_geotag_submissions' AND source_field IN ('territory_id','field_submission_id','grid_code','citizen_name','citizen_contact','dip_last4')"
+      "where": "source_table = 'citizen_geotag_submissions' AND source_field <> 'id'"
     },
     {
       "count": 0,
@@ -374,6 +377,7 @@
   "oracle_git_blob": "61fb777a2af5a917b4ea7bbff0d6c7dff09241ba",
   "oracle_sha256": "65e4f2511f70ed1e94562f4973fbbb1ab072592d3b27b94f2a459843647af45e",
   "privacy_output_boundary_test": {
+    "boolean_values_covered": true,
     "checked_excluded_fields": [
       "territory_id",
       "address_label",
@@ -408,17 +412,28 @@
       "created_at",
       "updated_at"
     ],
+    "differential_redaction_passed": true,
+    "forbidden_report_paths": [],
     "forbidden_value_hits": 0,
+    "normalized_reports_equal": true,
+    "numeric_values_covered": true,
     "raw_source_values_in_committed_report": false,
     "sensitive_values_redacted": true,
+    "source_hashes_differ": true,
     "status": "passed",
-    "test_id": "privacy-output-boundary"
+    "structural_allowlist_passed": true,
+    "test_id": "privacy-output-boundary",
+    "text_values_covered": true,
+    "timestamp_values_covered": true,
+    "variant_a_source_row_hash_sha256": "77752eaf1d5a327563fcd6e690b62a62b5aa4f6fff3a08707a0366f503ad14ce",
+    "variant_b_source_row_hash_sha256": "0997905542cbc73b6b8e470ad0f26c7c049c29f37c140de7c2b2098814b9e1d3",
+    "variant_sentinel_hits": []
   },
   "prohibited_outputs_created": {
     "proposed_geometry_observation:geometry_observation_id LIKE 'phase-a-geometry-citizen-geotag%'": 0,
     "proposed_geometry_quality_assessment:geometry_version_id LIKE 'phase-a-geometry-citizen-geotag%'": 0,
     "proposed_geometry_version:geometry_version_id LIKE 'phase-a-geometry-citizen-geotag%'": 0,
-    "proposed_legacy_crosswalk:source_table = 'citizen_geotag_submissions' AND source_field IN ('territory_id','field_submission_id','grid_code','citizen_name','citizen_contact','dip_last4')": 0,
+    "proposed_legacy_crosswalk:source_table = 'citizen_geotag_submissions' AND source_field <> 'id'": 0,
     "proposed_location_record:location_record_id LIKE 'phase-a-location-citizen-geotag%' AND classification <> 'restricted'": 0,
     "proposed_location_record_version:location_record_id LIKE 'phase-a-location-citizen-geotag%'": 0,
     "proposed_migration_exception:source_table = 'citizen_geotag_submissions' AND source_key = 'citizen_geotag_submissions:phase-a-geotag-001' AND batch_id LIKE '%identity%'": 0,
@@ -555,17 +570,23 @@
   },
   "reviewer_owned_oracle_changed": false,
   "rollback_equality_all": true,
-  "rollback_evidence_count": 20,
+  "rollback_evidence_count": 21,
   "second_run_inserts": 0,
   "second_run_updates": 0,
   "second_source_identity_test": {
     "active_registry_subjects": 2,
     "checks": {
       "active_registry_subjects": true,
-      "distinct_crosswalks": true,
-      "geometry_rows_created_by_identity_slice": true,
+      "distinct_id_crosswalks": true,
+      "identity_migration_exceptions": true,
+      "identity_path_geometry_observations": true,
+      "identity_path_geometry_versions": true,
+      "identity_path_quality_approvals": true,
       "multiple_target_resolution": true,
-      "public_output": true,
+      "non_id_crosswalks": true,
+      "non_restricted_identity_rows": true,
+      "public_code_aliases": true,
+      "publication_release_items": true,
       "restricted_location_records": true,
       "second_source_key": true,
       "semantic_duplicate_crosswalks": true,
@@ -620,28 +641,36 @@
     ],
     "first_transform_lineage": {
       "derived_source_key": "citizen_geotag_submissions:phase-a-geotag-001",
-      "evidence_params": [
-        "phase-a-source-record-citizen-geotag-submissions-001"
-      ],
-      "evidence_query": "SELECT evidence_object_id, source_record_id, classification FROM canonical_target.proposed_evidence_object WHERE source_record_id = %s ORDER BY evidence_object_id",
-      "evidence_row": {
+      "evidence_resolution": {
         "classification": "restricted",
         "evidence_object_id": "phase-a-evidence-citizen-geotag-submissions",
         "source_record_id": "phase-a-source-record-citizen-geotag-submissions-001"
       },
-      "source_params": [
-        "citizen_geotag_submissions:phase-a-geotag-001"
-      ],
-      "source_query": "SELECT source_record_id, source_key, raw_payload_classification FROM canonical_target.proposed_source_record WHERE source_key = %s ORDER BY source_record_id",
-      "source_row": {
+      "source_record_resolution": {
         "raw_payload_classification": "restricted",
         "source_key": "citizen_geotag_submissions:phase-a-geotag-001",
         "source_record_id": "phase-a-source-record-citizen-geotag-submissions-001"
       }
     },
-    "geometry_rows_created_by_identity_slice": 0,
+    "identity_migration_exceptions": 0,
+    "identity_path_geometry_observations": 0,
+    "identity_path_geometry_versions": 0,
+    "identity_path_quality_approvals": 0,
     "multiple_target_resolutions": 0,
-    "public_output": 0,
+    "non_id_crosswalks": 0,
+    "non_restricted_identity_rows": 0,
+    "public_boundary_counts": {
+      "identity_migration_exceptions": 0,
+      "identity_path_geometry_observations": 0,
+      "identity_path_geometry_versions": 0,
+      "identity_path_quality_approvals": 0,
+      "non_id_crosswalks": 0,
+      "non_restricted_identity_rows": 0,
+      "public_code_aliases": 0,
+      "publication_release_items": 0
+    },
+    "public_code_aliases": 0,
+    "publication_release_items": 0,
     "restricted_location_records": 2,
     "second_rows": [
       {
@@ -690,20 +719,12 @@
     ],
     "second_transform_lineage": {
       "derived_source_key": "citizen_geotag_submissions:phase-a-geotag-002",
-      "evidence_params": [
-        "phase-a-source-record-citizen-geotag-submissions-002"
-      ],
-      "evidence_query": "SELECT evidence_object_id, source_record_id, classification FROM canonical_target.proposed_evidence_object WHERE source_record_id = %s ORDER BY evidence_object_id",
-      "evidence_row": {
+      "evidence_resolution": {
         "classification": "restricted",
         "evidence_object_id": "phase-a-evidence-citizen-geotag-submissions-002",
         "source_record_id": "phase-a-source-record-citizen-geotag-submissions-002"
       },
-      "source_params": [
-        "citizen_geotag_submissions:phase-a-geotag-002"
-      ],
-      "source_query": "SELECT source_record_id, source_key, raw_payload_classification FROM canonical_target.proposed_source_record WHERE source_key = %s ORDER BY source_record_id",
-      "source_row": {
+      "source_record_resolution": {
         "raw_payload_classification": "restricted",
         "source_key": "citizen_geotag_submissions:phase-a-geotag-002",
         "source_record_id": "phase-a-source-record-citizen-geotag-submissions-002"
@@ -760,10 +781,16 @@
       "active_registry_subjects": 2,
       "checks": {
         "active_registry_subjects": true,
-        "distinct_crosswalks": true,
-        "geometry_rows_created_by_identity_slice": true,
+        "distinct_id_crosswalks": true,
+        "identity_migration_exceptions": true,
+        "identity_path_geometry_observations": true,
+        "identity_path_geometry_versions": true,
+        "identity_path_quality_approvals": true,
         "multiple_target_resolution": true,
-        "public_output": true,
+        "non_id_crosswalks": true,
+        "non_restricted_identity_rows": true,
+        "public_code_aliases": true,
+        "publication_release_items": true,
         "restricted_location_records": true,
         "second_source_key": true,
         "semantic_duplicate_crosswalks": true,
@@ -818,28 +845,36 @@
       ],
       "first_transform_lineage": {
         "derived_source_key": "citizen_geotag_submissions:phase-a-geotag-001",
-        "evidence_params": [
-          "phase-a-source-record-citizen-geotag-submissions-001"
-        ],
-        "evidence_query": "SELECT evidence_object_id, source_record_id, classification FROM canonical_target.proposed_evidence_object WHERE source_record_id = %s ORDER BY evidence_object_id",
-        "evidence_row": {
+        "evidence_resolution": {
           "classification": "restricted",
           "evidence_object_id": "phase-a-evidence-citizen-geotag-submissions",
           "source_record_id": "phase-a-source-record-citizen-geotag-submissions-001"
         },
-        "source_params": [
-          "citizen_geotag_submissions:phase-a-geotag-001"
-        ],
-        "source_query": "SELECT source_record_id, source_key, raw_payload_classification FROM canonical_target.proposed_source_record WHERE source_key = %s ORDER BY source_record_id",
-        "source_row": {
+        "source_record_resolution": {
           "raw_payload_classification": "restricted",
           "source_key": "citizen_geotag_submissions:phase-a-geotag-001",
           "source_record_id": "phase-a-source-record-citizen-geotag-submissions-001"
         }
       },
-      "geometry_rows_created_by_identity_slice": 0,
+      "identity_migration_exceptions": 0,
+      "identity_path_geometry_observations": 0,
+      "identity_path_geometry_versions": 0,
+      "identity_path_quality_approvals": 0,
       "multiple_target_resolutions": 0,
-      "public_output": 0,
+      "non_id_crosswalks": 0,
+      "non_restricted_identity_rows": 0,
+      "public_boundary_counts": {
+        "identity_migration_exceptions": 0,
+        "identity_path_geometry_observations": 0,
+        "identity_path_geometry_versions": 0,
+        "identity_path_quality_approvals": 0,
+        "non_id_crosswalks": 0,
+        "non_restricted_identity_rows": 0,
+        "public_code_aliases": 0,
+        "publication_release_items": 0
+      },
+      "public_code_aliases": 0,
+      "publication_release_items": 0,
       "restricted_location_records": 2,
       "second_rows": [
         {
@@ -888,20 +923,12 @@
       ],
       "second_transform_lineage": {
         "derived_source_key": "citizen_geotag_submissions:phase-a-geotag-002",
-        "evidence_params": [
-          "phase-a-source-record-citizen-geotag-submissions-002"
-        ],
-        "evidence_query": "SELECT evidence_object_id, source_record_id, classification FROM canonical_target.proposed_evidence_object WHERE source_record_id = %s ORDER BY evidence_object_id",
-        "evidence_row": {
+        "evidence_resolution": {
           "classification": "restricted",
           "evidence_object_id": "phase-a-evidence-citizen-geotag-submissions-002",
           "source_record_id": "phase-a-source-record-citizen-geotag-submissions-002"
         },
-        "source_params": [
-          "citizen_geotag_submissions:phase-a-geotag-002"
-        ],
-        "source_query": "SELECT source_record_id, source_key, raw_payload_classification FROM canonical_target.proposed_source_record WHERE source_key = %s ORDER BY source_record_id",
-        "source_row": {
+        "source_record_resolution": {
           "raw_payload_classification": "restricted",
           "source_key": "citizen_geotag_submissions:phase-a-geotag-002",
           "source_record_id": "phase-a-source-record-citizen-geotag-submissions-002"
@@ -1154,6 +1181,18 @@
       "same_database_pre_test_rows": [],
       "state_unchanged": true,
       "status": "passed",
+      "test_id": "unexpected-unlisted-alternate-field-crosswalk"
+    },
+    {
+      "expected_error": "unexpected citizen_geotag_submissions identity-foundation target row",
+      "observed_error": "unexpected citizen_geotag_submissions identity-foundation target row",
+      "rollback_equality": true,
+      "same_database_post_failure_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_post_failure_rows": [],
+      "same_database_pre_test_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_pre_test_rows": [],
+      "state_unchanged": true,
+      "status": "passed",
       "test_id": "unexpected-extra-location-record"
     },
     {
@@ -1251,6 +1290,7 @@
       "test_id": "transform-spec-binding-drift"
     },
     {
+      "boolean_values_covered": true,
       "checked_excluded_fields": [
         "territory_id",
         "address_label",
@@ -1285,11 +1325,22 @@
         "created_at",
         "updated_at"
       ],
+      "differential_redaction_passed": true,
+      "forbidden_report_paths": [],
       "forbidden_value_hits": 0,
+      "normalized_reports_equal": true,
+      "numeric_values_covered": true,
       "raw_source_values_in_committed_report": false,
       "sensitive_values_redacted": true,
+      "source_hashes_differ": true,
       "status": "passed",
-      "test_id": "privacy-output-boundary"
+      "structural_allowlist_passed": true,
+      "test_id": "privacy-output-boundary",
+      "text_values_covered": true,
+      "timestamp_values_covered": true,
+      "variant_a_source_row_hash_sha256": "77752eaf1d5a327563fcd6e690b62a62b5aa4f6fff3a08707a0366f503ad14ce",
+      "variant_b_source_row_hash_sha256": "0997905542cbc73b6b8e470ad0f26c7c049c29f37c140de7c2b2098814b9e1d3",
+      "variant_sentinel_hits": []
     }
   ],
   "transform_reads_expected_oracle": false,
