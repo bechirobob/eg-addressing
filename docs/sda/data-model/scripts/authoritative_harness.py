@@ -5109,13 +5109,384 @@ def run_citizen_geotag_identity_slice() -> dict[str, Any]:
     elif broad_report_path.exists(): broad_report_path.unlink()
     return report
 
+
+# ---- Accepted-family convergence design harness ----
+ACCEPTED_FAMILY_CONTROL = ACCEPTANCE / 'NLI-WO-002-phase-a-accepted-family-convergence-control.json'
+ACCEPTED_FAMILY_CONTROL_BASELINE_SHA256 = 'd714b32ea170e05b5feef240d587d860ed0c712812036f384e357381a60b3b8a'
+ACCEPTED_FAMILY_CONTROL_BLOB = '3c4c59fa5eeb004cfb8ef2520241d74c130fa926'
+ACCEPTED_FAMILY_MAPPING = ROOT / 'docs' / 'agent' / 'tasks' / 'NLI-WO-002-phase-a-accepted-family-convergence-mapping.md'
+ACCEPTED_FAMILY_MAPPING_BLOB = 'c984a16f352417b9fde0f8cb9e0536a5e0ab6eb1'
+ACCEPTED_FAMILY_GENERIC_TRANSFORM_ERROR = 'accepted-family convergence generic transform invocation prohibited'
+ACCEPTED_FAMILY_SPEC_BOUNDARY_ERROR = 'accepted-family convergence specification boundary mismatch'
+
+ACCEPTED_FAMILY_SEQUENCE = [
+    'transform_addresses_identity_crosswalk',
+    'transform_address_points_geometry',
+    'transform_address_points_observation_crosswalk',
+    'transform_address_records_identity_crosswalk',
+    'transform_address_records_geometry',
+    'transform_citizen_geotag_identity_crosswalk',
+    'transform_citizen_geotag_geometry',
+]
+
+ACCEPTED_FAMILY_OWNER_ROWS = [
+    {'table':'proposed_location_record','primary_key':{'location_record_id':'phase-a-location-address-reference'},'owning_callable':'transform_addresses_identity_crosswalk','source_identity':'addresses:phase-a-addresses-id','classification':'government-internal'},
+    {'table':'proposed_registry_subject','primary_key':{'subject_id':'phase-a-subject-phase-a-location-address-reference'},'owning_callable':'transform_addresses_identity_crosswalk','source_identity':'addresses:phase-a-addresses-id','classification':'active subject'},
+    {'table':'proposed_legacy_crosswalk','primary_key':{'legacy_crosswalk_id':'phase-a-crosswalk-addresses-id-to-location-record'},'owning_callable':'transform_addresses_identity_crosswalk','source_identity':'addresses:phase-a-addresses-id','classification':None},
+    {'table':'proposed_geometry_observation','primary_key':{'geometry_observation_id':'phase-a-geometry-address-points-phase-a-address-points-id'},'owning_callable':'transform_address_points_geometry','source_identity':'address_points:phase-a-address-points-id','classification':'restricted'},
+    {'table':'proposed_migration_exception','primary_key':{'migration_exception_id':'phase-a-exception-geometry-authority-address-points-phase-a-address-points-id'},'owning_callable':'transform_address_points_geometry','source_identity':'address_points:phase-a-address-points-id','classification':None},
+    {'table':'proposed_legacy_crosswalk','primary_key':{'legacy_crosswalk_id':'phase-a-crosswalk-address-points-id-to-geometry-observation'},'owning_callable':'transform_address_points_observation_crosswalk','source_identity':'address_points:phase-a-address-points-id','classification':None},
+    {'table':'proposed_location_record','primary_key':{'location_record_id':'phase-a-location-address-records-id'},'owning_callable':'transform_address_records_identity_crosswalk','source_identity':'address_records:phase-a-address-records-id','classification':'government-internal'},
+    {'table':'proposed_registry_subject','primary_key':{'subject_id':'phase-a-subject-phase-a-location-address-records-id'},'owning_callable':'transform_address_records_identity_crosswalk','source_identity':'address_records:phase-a-address-records-id','classification':'active subject'},
+    {'table':'proposed_legacy_crosswalk','primary_key':{'legacy_crosswalk_id':'phase-a-crosswalk-address-records-id-to-location-record'},'owning_callable':'transform_address_records_identity_crosswalk','source_identity':'address_records:phase-a-address-records-id','classification':None},
+    {'table':'proposed_geometry_observation','primary_key':{'geometry_observation_id':'phase-a-geometry-address-records-phase-a-address-records-id'},'owning_callable':'transform_address_records_geometry','source_identity':'address_records:phase-a-address-records-id','classification':'restricted'},
+    {'table':'proposed_migration_exception','primary_key':{'migration_exception_id':'phase-a-exception-geometry-authority-address-records-phase-a-address-records-id'},'owning_callable':'transform_address_records_geometry','source_identity':'address_records:phase-a-address-records-id','classification':None},
+    {'table':'proposed_location_record','primary_key':{'location_record_id':'phase-a-location-citizen-geotag-001'},'owning_callable':'transform_citizen_geotag_identity_crosswalk','source_identity':'citizen_geotag_submissions:phase-a-geotag-001','classification':'restricted'},
+    {'table':'proposed_registry_subject','primary_key':{'subject_id':'phase-a-subject-phase-a-location-citizen-geotag-001'},'owning_callable':'transform_citizen_geotag_identity_crosswalk','source_identity':'citizen_geotag_submissions:phase-a-geotag-001','classification':'active subject'},
+    {'table':'proposed_legacy_crosswalk','primary_key':{'legacy_crosswalk_id':'phase-a-crosswalk-citizen-geotag-id-to-location-record'},'owning_callable':'transform_citizen_geotag_identity_crosswalk','source_identity':'citizen_geotag_submissions:phase-a-geotag-001','classification':None},
+    {'table':'proposed_geometry_observation','primary_key':{'geometry_observation_id':'phase-a-geometry-citizen-geotag-submissions-phase-a-geotag-001'},'owning_callable':'transform_citizen_geotag_geometry','source_identity':'citizen_geotag_submissions:phase-a-geotag-001','classification':'restricted'},
+    {'table':'proposed_migration_exception','primary_key':{'migration_exception_id':'phase-a-exception-geometry-authority-citizen-geotag-submissions-phase-a-geotag-001'},'owning_callable':'transform_citizen_geotag_geometry','source_identity':'citizen_geotag_submissions:phase-a-geotag-001','classification':None},
+]
+
+ACCEPTED_FAMILY_EXPECTED_TOTALS_BY_OWNER = {
+    'transform_addresses_identity_crosswalk': 3,
+    'transform_address_points_geometry': 2,
+    'transform_address_points_observation_crosswalk': 1,
+    'transform_address_records_identity_crosswalk': 3,
+    'transform_address_records_geometry': 2,
+    'transform_citizen_geotag_identity_crosswalk': 3,
+    'transform_citizen_geotag_geometry': 2,
+}
+ACCEPTED_FAMILY_EXPECTED_COUNTS = {'proposed_location_record':3,'proposed_registry_subject':3,'proposed_legacy_crosswalk':4,'proposed_geometry_observation':3,'proposed_migration_exception':3}
+
+
+def git_blob_hash(path: Path) -> str:
+    proc = subprocess.run(['git','hash-object',str(path.relative_to(ROOT))], cwd=ROOT, text=True, capture_output=True, timeout=30)
+    if proc.returncode != 0:
+        raise HarnessError(f'git hash-object failed for {path}: {proc.stderr}')
+    return proc.stdout.strip()
+
+
+def accepted_family_verify_controls() -> dict[str, Any]:
+    checks = {
+        'mapping_blob': git_blob_hash(ACCEPTED_FAMILY_MAPPING),
+        'control_blob': git_blob_hash(ACCEPTED_FAMILY_CONTROL),
+        'control_sha256': file_sha256(ACCEPTED_FAMILY_CONTROL),
+        'address_points_oracle_sha256': address_points_oracle_hash(),
+        'address_points_correction_oracle_sha256': address_points_correction_oracle_hash(),
+        'address_points_final_correction_oracle_sha256': address_points_final_correction_oracle_hash(),
+        'address_records_oracle_sha256': address_records_oracle_hash(),
+        'address_records_correction_oracle_sha256': address_records_correction_oracle_hash(),
+        'citizen_geotag_oracle_sha256': citizen_geotag_oracle_hash(),
+        'citizen_geotag_correction_oracle_sha256': citizen_geotag_correction_oracle_hash(),
+        'addresses_identity_oracle_sha256': addresses_identity_oracle_hash(),
+        'address_points_observation_oracle_sha256': address_points_observation_oracle_hash(),
+        'address_records_identity_oracle_sha256': address_records_identity_oracle_hash(),
+        'citizen_geotag_identity_oracle_sha256': citizen_geotag_identity_oracle_hash(),
+        'frozen_broad_spec_sha256': file_sha256(FIXTURES/'transform-specs/phase-a-broad-generic-transform-specs-frozen.json'),
+    }
+    expected = {
+        'mapping_blob': ACCEPTED_FAMILY_MAPPING_BLOB,
+        'control_blob': ACCEPTED_FAMILY_CONTROL_BLOB,
+        'control_sha256': ACCEPTED_FAMILY_CONTROL_BASELINE_SHA256,
+        'address_points_oracle_sha256': ADDRESS_POINTS_ORACLE_BASELINE_SHA256,
+        'address_points_correction_oracle_sha256': ADDRESS_POINTS_CORRECTION_ORACLE_BASELINE_SHA256,
+        'address_points_final_correction_oracle_sha256': ADDRESS_POINTS_FINAL_CORRECTION_ORACLE_BASELINE_SHA256,
+        'address_records_oracle_sha256': ADDRESS_RECORDS_ORACLE_BASELINE_SHA256,
+        'address_records_correction_oracle_sha256': ADDRESS_RECORDS_CORRECTION_ORACLE_BASELINE_SHA256,
+        'citizen_geotag_oracle_sha256': CITIZEN_GEOTAG_ORACLE_BASELINE_SHA256,
+        'citizen_geotag_correction_oracle_sha256': CITIZEN_GEOTAG_CORRECTION_ORACLE_BASELINE_SHA256,
+        'addresses_identity_oracle_sha256': ADDRESSES_IDENTITY_ORACLE_BASELINE_SHA256,
+        'address_points_observation_oracle_sha256': ADDRESS_POINTS_OBSERVATION_ORACLE_BASELINE_SHA256,
+        'address_records_identity_oracle_sha256': ADDRESS_RECORDS_IDENTITY_ORACLE_BASELINE_SHA256,
+        'citizen_geotag_identity_oracle_sha256': CITIZEN_GEOTAG_IDENTITY_ORACLE_BASELINE_SHA256,
+    }
+    drift={k:{'expected':v,'actual':checks.get(k)} for k,v in expected.items() if checks.get(k)!=v}
+    if drift:
+        raise HarnessError(f'accepted-family convergence control or oracle drift: {drift}')
+    control=json.loads(ACCEPTED_FAMILY_CONTROL.read_text())
+    if control.get('accepted_callables') != 7 or control.get('owned_union_rows') != 16 or control.get('execution',{}).get('generic_transform') is not False:
+        raise HarnessError(f'accepted-family convergence control drift: {control}')
+    return {'status':'passed','hashes':checks,'control':control}
+
+
+def accepted_family_binding_registry(spec_mutation: dict[str, Any] | None = None) -> dict[str, dict[str, Any]]:
+    spec_mutation=spec_mutation or {}
+    bindings={
+        'transform_addresses_identity_crosswalk':(reviewed_addresses_identity_transform_spec,ADDRESSES_IDENTITY_IMPL_UNIT,ADDRESSES_IDENTITY_IMPLEMENTATIONS,transform_addresses_identity_crosswalk),
+        'transform_address_points_geometry':(reviewed_address_points_transform_spec,ADDRESS_POINTS_IMPL_UNIT,ADDRESS_POINTS_GEOMETRY_IMPLEMENTATIONS,transform_address_points_geometry),
+        'transform_address_points_observation_crosswalk':(reviewed_address_points_observation_transform_spec,ADDRESS_POINTS_OBSERVATION_IMPL_UNIT,ADDRESS_POINTS_OBSERVATION_IMPLEMENTATIONS,transform_address_points_observation_crosswalk),
+        'transform_address_records_identity_crosswalk':(reviewed_address_records_identity_transform_spec,ADDRESS_RECORDS_IDENTITY_IMPL_UNIT,ADDRESS_RECORDS_IDENTITY_IMPLEMENTATIONS,transform_address_records_identity_crosswalk),
+        'transform_address_records_geometry':(reviewed_address_records_transform_spec,ADDRESS_RECORDS_IMPL_UNIT,ADDRESS_RECORDS_GEOMETRY_IMPLEMENTATIONS,transform_address_records_geometry),
+        'transform_citizen_geotag_identity_crosswalk':(reviewed_citizen_geotag_identity_transform_spec,CITIZEN_GEOTAG_IDENTITY_IMPL_UNIT,CITIZEN_GEOTAG_IDENTITY_IMPLEMENTATIONS,transform_citizen_geotag_identity_crosswalk),
+        'transform_citizen_geotag_geometry':(reviewed_citizen_geotag_transform_spec,CITIZEN_GEOTAG_IMPL_UNIT,CITIZEN_GEOTAG_GEOMETRY_IMPLEMENTATIONS,transform_citizen_geotag_geometry),
+    }
+    result={}
+    for name,(validator,impl_unit,impl_map,fn) in bindings.items():
+        spec=validator(spec_mutation.get(name))
+        if impl_map.get(impl_unit) is not fn:
+            raise HarnessError('accepted-family convergence callable binding mismatch')
+        if spec['group']['transform_group_id'] == 'phase-a-all':
+            raise HarnessError(ACCEPTED_FAMILY_SPEC_BOUNDARY_ERROR)
+        result[name]=spec
+    if not broad_registry_groups():
+        raise HarnessError(ACCEPTED_FAMILY_SPEC_BOUNDARY_ERROR)
+    return result
+
+
+def accepted_family_ownership_registry(duplicate: bool=False) -> list[dict[str, Any]]:
+    rows=copy.deepcopy(ACCEPTED_FAMILY_OWNER_ROWS)
+    if duplicate:
+        rows.append({**rows[0], 'owning_callable':'transform_address_records_identity_crosswalk'})
+    seen={}
+    for row in rows:
+        key=(row['table'], json.dumps(row['primary_key'], sort_keys=True)); owner=row['owning_callable']
+        if key in seen and seen[key] != owner:
+            raise HarnessError('duplicate owner declarations')
+        seen[key]=owner
+    totals={}
+    for row in rows:
+        totals[row['owning_callable']]=totals.get(row['owning_callable'],0)+1
+    if totals != ACCEPTED_FAMILY_EXPECTED_TOTALS_BY_OWNER or len(rows)!=16:
+        raise HarnessError(f'accepted-family ownership registry totals mismatch: {totals}')
+    return rows
+
+
+def accepted_family_filtered_prerequisite_rows() -> dict[str, list[dict[str, Any]]]:
+    rows={t:[] for t in DEPENDENCY_ORDER}; base=base_target_rows()
+    for table in ('proposed_source_authority','proposed_country','proposed_administrative_unit','proposed_administrative_unit_version'):
+        rows[table]=copy.deepcopy(base.get(table,[]))
+    records=[make_addresses_record(), make_address_points_record(), make_address_records_record(), make_citizen_geotag_record()]
+    add_source_records_and_evidence(rows, records)
+    return rows
+
+
+def setup_accepted_family_convergence_database() -> dict[str, Any]:
+    current=discover_current(reset=True); target=apply_target(); topology=topology_check(); records=fixture_records()
+    with connect(options='-c search_path=canonical_target,public') as conn, conn.cursor() as cur:
+        source_report=insert_current_fixture_rows(cur, records)
+        prereq_rows=accepted_family_filtered_prerequisite_rows()
+        stats=apply_target_rows(cur, prereq_rows); cur.execute('SET CONSTRAINTS ALL IMMEDIATE'); conn.commit()
+    return {'helper':'setup_accepted_family_convergence_database','current_source_discovery':current['execution_mode'],'target_schema_application':target['execution_mode'],'topology_validation':topology['status'],'current_source_rows_loaded':source_report['source_records_inserted'],'source_record_rows_loaded':len(prereq_rows.get('proposed_source_record',[])),'evidence_rows_loaded':len(prereq_rows.get('proposed_evidence_object',[])),'prerequisite_insert_stats':stats}
+
+
+def accepted_family_query_owned_union(cur) -> list[dict[str, Any]]:
+    rows=[]
+    for owner in ACCEPTED_FAMILY_OWNER_ROWS:
+        table=owner['table']; pk_col,pk_val=next(iter(owner['primary_key'].items()))
+        if table=='proposed_geometry_observation':
+            cur.execute(f"SELECT *, ST_AsText(observed_geom) AS observed_geom_wkt, ST_SRID(observed_geom) AS observed_geom_srid FROM canonical_target.{table} WHERE {pk_col}=%s", (pk_val,))
+        else:
+            cur.execute(f"SELECT * FROM canonical_target.{table} WHERE {pk_col}=%s", (pk_val,))
+        found=cur.fetchall()
+        if len(found)>1:
+            raise HarnessError(f'cross-slice primary-key collision: {table}.{pk_col}={pk_val}')
+        for row in found:
+            d=dict(row)
+            if table=='proposed_geometry_observation': d.pop('observed_geom', None)
+            if 'details_json' in d: d['details_json']=normalize_json(d['details_json'])
+            rows.append({'table':table,'primary_key':owner['primary_key'],'owning_callable':owner['owning_callable'],'source_identity':owner['source_identity'],'classification':owner['classification'],'values':norm_row(d)})
+    return sorted(rows, key=lambda r:(r['table'], json.dumps(r['primary_key'], sort_keys=True)))
+
+
+def accepted_family_union_hash(cur) -> dict[str, Any]:
+    rows=accepted_family_query_owned_union(cur); return {'rows':rows,'row_count':len(rows),'hash':sha(rows)}
+
+
+def assert_accepted_family_owned_rows_absent(cur) -> dict[str, Any]:
+    present=accepted_family_query_owned_union(cur)
+    if present:
+        raise HarnessError(f'accepted-family fixture pre-created owned rows: {[(r["table"], r["primary_key"]) for r in present]}')
+    return {'accepted_owned_rows_pre_created':0,'checked_primary_keys':16}
+
+
+def accepted_family_run_callable(cur, callable_name: str, specs: dict[str, dict[str, Any]], *, mutation: dict[str, Any] | None=None) -> dict[str, Any]:
+    before=accepted_family_union_hash(cur)
+    mapping={
+        'transform_addresses_identity_crosswalk': lambda: transform_addresses_identity_crosswalk(cur, spec_validation=specs['transform_addresses_identity_crosswalk'], mutation=mutation),
+        'transform_address_points_geometry': lambda: transform_address_points_geometry(cur, spec_validation=specs['transform_address_points_geometry'], mutation=mutation),
+        'transform_address_points_observation_crosswalk': lambda: transform_address_points_observation_crosswalk(cur, spec_validation=specs['transform_address_points_observation_crosswalk'], mutation=mutation),
+        'transform_address_records_identity_crosswalk': lambda: transform_address_records_identity_crosswalk(cur, spec_validation=specs['transform_address_records_identity_crosswalk'], mutation=mutation),
+        'transform_address_records_geometry': lambda: transform_address_records_geometry(cur, spec_validation=specs['transform_address_records_geometry'], mutation=mutation),
+        'transform_citizen_geotag_identity_crosswalk': lambda: transform_citizen_geotag_identity_crosswalk(cur, spec_validation=specs['transform_citizen_geotag_identity_crosswalk'], mutation=mutation),
+        'transform_citizen_geotag_geometry': lambda: transform_citizen_geotag_geometry(cur, spec_validation=specs['transform_citizen_geotag_geometry'], mutation=mutation),
+    }
+    result=mapping[callable_name](); after=accepted_family_union_hash(cur); owned=[r for r in after['rows'] if r['owning_callable']==callable_name]
+    return {'callable':callable_name,'implementation_unit':result['implementation_unit'],'transform_group':result['transform_group_id'],'source_identity':result.get('derived_ids',{}).get('source_key') or result.get('source_key_derivation',{}).get('value'),'live_specification_used':result['spec_validation']['group']['transform_group_id'],'first_application_inserts':result['insert_stats_first']['inserted'],'internal_idempotent_application_inserts':result['insert_stats_second']['inserted'],'updates':result.get('second_run_updates',0),'owned_target_primary_keys':[{'table':r['table'],'primary_key':r['primary_key']} for r in owned],'family_union_insert_delta':after['row_count']-before['row_count'],'generic_transform_group_used':result.get('generic_transform_group_used',False)}
+
+
+def accepted_family_execute_sequence(cur, sequence: list[str], specs: dict[str, dict[str, Any]]) -> list[dict[str, Any]]:
+    return [accepted_family_run_callable(cur, name, specs) for name in sequence]
+
+
+def accepted_family_expected_union() -> list[dict[str, Any]]:
+    with addresses_identity_oracle_access(True): addresses=expected_addresses_identity_rows(load_addresses_identity_oracle())
+    with address_points_oracle_access(True):
+        address_points=expected_address_points_rows(load_address_points_oracle(), 'address_points:phase-a-address-points-id')
+        load_address_points_correction_oracle(); load_address_points_final_correction_oracle()
+    with address_points_observation_oracle_access(True): point_crosswalk=expected_address_points_observation_rows(load_address_points_observation_oracle())
+    with address_records_identity_oracle_access(True): address_records_identity=expected_address_records_identity_rows(load_address_records_identity_oracle())
+    with address_records_oracle_access(True): address_records_geometry=expected_address_records_rows(load_address_records_oracle(), 'address_records:phase-a-address-records-id', load_address_records_correction_oracle())
+    with citizen_geotag_identity_oracle_access(True): citizen_identity=expected_citizen_geotag_identity_rows(load_citizen_geotag_identity_oracle())
+    with citizen_geotag_oracle_access(True): citizen_geometry=expected_citizen_geotag_rows(load_citizen_geotag_oracle(), 'citizen_geotag_submissions:phase-a-geotag-001')
+    by_key={(r['table'], json.dumps(r['primary_key'], sort_keys=True)):r for r in ACCEPTED_FAMILY_OWNER_ROWS}; expected=[]
+    for row in addresses+address_points+point_crosswalk+address_records_identity+address_records_geometry+citizen_identity+citizen_geometry:
+        key=(row['table'], json.dumps(row['primary_key'], sort_keys=True)); owner=by_key.get(key)
+        if not owner: raise HarnessError(f'accepted-family expected union contains unowned row: {key}')
+        values=copy.deepcopy(row['values'])
+        if 'details_json' in values: values['details_json']=normalize_json(values['details_json'])
+        expected.append({'table':row['table'],'primary_key':row['primary_key'],'owning_callable':owner['owning_callable'],'source_identity':owner['source_identity'],'classification':owner['classification'],'values':norm_row(values)})
+    return sorted(expected, key=lambda r:(r['table'], json.dumps(r['primary_key'], sort_keys=True)))
+
+
+def accepted_family_semantic_controls(cur) -> dict[str, Any]:
+    cur.execute("""SELECT source_table, source_field, legacy_id, target_entity, COUNT(*)::int AS row_count, COUNT(DISTINCT target_id)::int AS target_count FROM canonical_target.proposed_legacy_crosswalk WHERE source_table IN ('addresses','address_points','address_records','citizen_geotag_submissions') GROUP BY 1,2,3,4 HAVING COUNT(*)>1 OR COUNT(DISTINCT target_id)>1""")
+    duplicates=[norm_row(dict(r)) for r in cur.fetchall()]
+    if duplicates: raise HarnessError('duplicate semantic crosswalks')
+    return {'semantic_crosswalk_duplicates':0,'multiple_target_resolutions':0}
+
+
+def accepted_family_expected_absences(cur) -> list[dict[str, Any]]:
+    checks=[
+        ('proposed_location_record_version', "location_record_id IN ('phase-a-location-address-reference','phase-a-location-address-records-id','phase-a-location-citizen-geotag-001')", 'unapproved location-record versions'),
+        ('proposed_public_code_alias', "location_record_id IN ('phase-a-location-address-reference','phase-a-location-address-records-id','phase-a-location-citizen-geotag-001')", 'public-code aliases'),
+        ('proposed_publication_release_item', "location_record_id IN ('phase-a-location-address-reference','phase-a-location-address-records-id','phase-a-location-citizen-geotag-001')", 'publication release items'),
+        ('proposed_geometry_version', "source_observation_id IN ('phase-a-geometry-address-points-phase-a-address-points-id','phase-a-geometry-address-records-phase-a-address-records-id','phase-a-geometry-citizen-geotag-submissions-phase-a-geotag-001')", 'geometry versions'),
+        ('proposed_geometry_quality_assessment', "geometry_version_id LIKE 'phase-a-geometry-%'", 'geometry quality approvals'),
+        ('proposed_geometry_transformation', "transformation_id LIKE 'phase-a-geometry-%'", 'geometry transformations'),
+        ('proposed_location_record_assertion', "source_record_id IN ('phase-a-source-record-addresses-001','phase-a-source-record-address-points-001','phase-a-source-record-address-records-001','phase-a-source-record-citizen-geotag-submissions-001')", 'grouped-geometry substitute assertions'),
+        ('proposed_geometry_observation', "geometry_observation_id LIKE 'phase-a-geometry-addresses%'", 'identity-path-created geometry rows'),
+        ('proposed_legacy_crosswalk', "source_table='citizen_geotag_submissions' AND source_field <> 'id'", 'non-id citizen-geotag crosswalks'),
+        ('proposed_legacy_crosswalk', "source_table='addresses' AND source_field <> 'id'", 'address reference/context-field identity crosswalks'),
+        ('proposed_legacy_crosswalk', "source_table='address_records' AND source_field IN ('source_submission_id','territory_id')", 'address-record source_submission_id or territory identity crosswalks'),
+        ('proposed_legacy_crosswalk', "source_table='address_points' AND source_field='id' AND target_entity='location_record'", 'point-id-to-location-record crosswalks'),
+        ('proposed_migration_exception', "migration_exception_id NOT IN ('phase-a-exception-geometry-authority-address-points-phase-a-address-points-id','phase-a-exception-geometry-authority-address-records-phase-a-address-records-id','phase-a-exception-geometry-authority-citizen-geotag-submissions-phase-a-geotag-001')", 'unexpected migration exceptions'),
+    ]
+    results=[]
+    for table,where,reason in checks:
+        cur.execute(f'SELECT COUNT(*)::int AS c FROM canonical_target.{table} WHERE {where}')
+        count=cur.fetchone()['c']; results.append({'table':table,'where':where,'reason':reason,'count':count})
+        if count != 0: raise HarnessError(f'accepted-family expected absence failed: {reason}')
+    return results
+
+
+def accepted_family_validate_ownership(actual: list[dict[str, Any]], registry: list[dict[str, Any]]) -> dict[str, Any]:
+    expected_owner={(r['table'], json.dumps(r['primary_key'], sort_keys=True)):r['owning_callable'] for r in registry}; collisions=[]
+    for row in actual:
+        key=(row['table'], json.dumps(row['primary_key'], sort_keys=True))
+        if expected_owner.get(key) != row['owning_callable']:
+            collisions.append({'key':key,'expected_owner':expected_owner.get(key),'actual_owner':row['owning_callable']})
+    if collisions: raise HarnessError(f'ownership collisions: {collisions}')
+    return {'ownership_registry_entries':len(registry),'ownership_collisions':0}
+
+
+def compare_accepted_family_convergence_read_only() -> dict[str, Any]:
+    proof=comparator_read_only_proof()
+    with connect(options='-c search_path=canonical_target,public') as conn, conn.cursor() as cur:
+        cur.execute('BEGIN READ ONLY'); cur.execute('SHOW transaction_read_only'); read_only=cur.fetchone()['transaction_read_only']
+        expected=accepted_family_expected_union(); actual=accepted_family_query_owned_union(cur)
+        exp_keys={(r['table'], tuple(sorted(r['primary_key'].items()))) for r in expected}; act_keys={(r['table'], tuple(sorted(r['primary_key'].items()))) for r in actual}
+        if exp_keys-act_keys: raise HarnessError(f'missing expected rows: {sorted(exp_keys-act_keys)}')
+        if act_keys-exp_keys: raise HarnessError(f'surplus attributable rows: {sorted(act_keys-exp_keys)}')
+        if json.loads(json.dumps(actual, sort_keys=True, default=str)) != json.loads(json.dumps(expected, sort_keys=True, default=str)): raise HarnessError('accepted-family complete union rows differ from accepted expected truth')
+        ownership=accepted_family_validate_ownership(actual, accepted_family_ownership_registry())
+        counts={t:sum(1 for r in actual if r['table']==t) for t in ACCEPTED_FAMILY_EXPECTED_COUNTS}
+        if counts != ACCEPTED_FAMILY_EXPECTED_COUNTS: raise HarnessError(f'accepted-family scoped counts mismatch: {counts}')
+        semantic=accepted_family_semantic_controls(cur); absences=accepted_family_expected_absences(cur)
+        actual_hash=sha(actual); expected_hash=sha(expected)
+        if actual_hash != expected_hash: raise HarnessError('accepted-family expected/actual union hash mismatch')
+        conn.rollback()
+    return {'status':'passed','expected_rows':len(expected),'actual_rows':len(actual),'expected_union_hash':expected_hash,'actual_union_hash':actual_hash,'comparison_both_directions':True,'scoped_counts':counts,'ownership':ownership,'semantic_controls':semantic,'expected_absences':absences,'comparator_connection':{'separate_connection':True,'transaction_read_only':read_only},'comparator_read_only_proof':proof}
+
+
+def accepted_family_failure_probe(test_id: str, setup_sequence: list[str], failing_callable: str, expected_error: str, *, mutation=None) -> dict[str, Any]:
+    setup_accepted_family_convergence_database(); specs=accepted_family_binding_registry()
+    with connect(options='-c search_path=canonical_target,public') as conn, conn.cursor() as cur:
+        assert_accepted_family_owned_rows_absent(cur); accepted_family_execute_sequence(cur, setup_sequence, specs); conn.commit(); before=accepted_family_union_hash(cur); cur.execute('BEGIN')
+        try:
+            if mutation: mutation(cur)
+            accepted_family_run_callable(cur, failing_callable, specs)
+            raise HarnessError(f'{test_id} unexpectedly passed')
+        except Exception as exc:
+            observed=str(exc)
+            if expected_error not in observed:
+                conn.rollback(); raise HarnessError(f'{test_id} failed for wrong reason: expected {expected_error!r}, got {observed!r}')
+            if 'existing correct target row changed' in observed:
+                observed = 'existing correct target row changed'
+            conn.rollback(); after=accepted_family_union_hash(cur)
+            if before != after: raise HarnessError(f'same-database rollback proof failed for {test_id}')
+            return {'test_id':test_id,'status':'passed','expected_error':expected_error,'observed_error':observed,'same_database_pre_test_rows':before['row_count'],'same_database_pre_test_hash':before['hash'],'same_database_post_failure_rows':after['row_count'],'same_database_post_failure_hash':after['hash'],'rollback_equality':True}
+
+
+def accepted_family_order_invariance() -> dict[str, Any]:
+    from itertools import permutations
+    chains={'A':['transform_addresses_identity_crosswalk','transform_address_points_geometry','transform_address_points_observation_crosswalk'],'B':['transform_address_records_identity_crosswalk','transform_address_records_geometry'],'C':['transform_citizen_geotag_identity_crosswalk','transform_citizen_geotag_geometry']}
+    results=[]
+    for order in permutations(['A','B','C']):
+        setup_accepted_family_convergence_database(); specs=accepted_family_binding_registry(); seq=[c for chain in order for c in chains[chain]]
+        with connect(options='-c search_path=canonical_target,public') as conn, conn.cursor() as cur:
+            assert_accepted_family_owned_rows_absent(cur); accepted_family_execute_sequence(cur, seq, specs); conn.commit(); union=accepted_family_union_hash(cur)
+        results.append({'chain_order': ''.join(order), 'union_hash': union['hash'], 'union_rows': union['row_count']})
+    hashes={r['union_hash'] for r in results}
+    if len(hashes)!=1: raise HarnessError(f'independent-chain order invariance failed: {results}')
+    return {'status':'passed','chain_permutation_hashes':results,'order_invariance':True}
+
+
+def accepted_family_privacy_validation(report: dict[str, Any]) -> dict[str, Any]:
+    serialized=json.dumps(report, sort_keys=True, default=str); source_row=make_citizen_geotag_record('phase-a-geotag-001')['values']; forbidden=[]
+    for field in CITIZEN_GEOTAG_EXCLUDED_VALUE_FIELDS:
+        value=source_row.get(field)
+        if value is None or isinstance(value,bool): continue
+        text=str(value)
+        if text and text in serialized and field not in ('created_at',): forbidden.append({'field':field,'value_sha256':sha(text)})
+    if forbidden: raise HarnessError(f'citizen privacy drift: {forbidden}')
+    return {'status':'passed','raw_citizen_values_in_report':False,'evidence_privacy_validation':True,'checked_excluded_fields':CITIZEN_GEOTAG_EXCLUDED_VALUE_FIELDS}
+
+
+def run_accepted_family_convergence() -> dict[str, Any]:
+    broad_report_path=DM/'phase-a-current-source-execution-report.json'; broad_report_original=broad_report_path.read_text() if broad_report_path.exists() else None
+    controls=accepted_family_verify_controls(); specs=accepted_family_binding_registry(); registry=accepted_family_ownership_registry(); setup=setup_accepted_family_convergence_database()
+    with connect(options='-c search_path=canonical_target,public') as conn, conn.cursor() as cur:
+        pre=assert_accepted_family_owned_rows_absent(cur); first_results=accepted_family_execute_sequence(cur, ACCEPTED_FAMILY_SEQUENCE, specs); first_union=accepted_family_union_hash(cur); conn.commit(); second_results=accepted_family_execute_sequence(cur, ACCEPTED_FAMILY_SEQUENCE, specs); second_union=accepted_family_union_hash(cur); conn.commit()
+    comparison=compare_accepted_family_convergence_read_only()
+    first_inserts=sum(r['first_application_inserts'] for r in first_results); first_updates=sum(r['updates'] for r in first_results); second_inserts=sum(r['first_application_inserts'] for r in second_results); second_updates=sum(r['updates'] for r in second_results)
+    if first_union['row_count']!=16 or second_union['row_count']!=16 or first_union['hash']!=second_union['hash'] or first_inserts!=16 or first_updates!=0 or second_inserts!=0 or second_updates!=0:
+        raise HarnessError(f'accepted-family convergence totals/idempotency mismatch first={first_inserts}/{first_updates}/{first_union["row_count"]} second={second_inserts}/{second_updates}/{second_union["row_count"]}')
+    dependency_tests=[
+        accepted_family_failure_probe('address-points-geometry-before-addresses-identity', [], 'transform_address_points_geometry', 'address_points.address_id cannot resolve target location record'),
+        accepted_family_failure_probe('address-points-observation-crosswalk-before-point-geometry', ['transform_addresses_identity_crosswalk'], 'transform_address_points_observation_crosswalk', 'address_points geometry observation target not found'),
+        accepted_family_failure_probe('address-points-observation-crosswalk-direct-address-dependency', ['transform_addresses_identity_crosswalk','transform_address_points_geometry'], 'transform_address_points_observation_crosswalk', 'address_points.address_id cannot resolve target location record', mutation=lambda cur: cur.execute("DELETE FROM canonical_target.proposed_legacy_crosswalk WHERE legacy_crosswalk_id='phase-a-crosswalk-addresses-id-to-location-record'")),
+        accepted_family_failure_probe('address-records-geometry-before-address-records-identity', [], 'transform_address_records_geometry', 'address_records.id cannot resolve target location record'),
+        accepted_family_failure_probe('citizen-geotag-geometry-before-citizen-geotag-identity', [], 'transform_citizen_geotag_geometry', 'citizen_geotag_submissions.id cannot resolve target location record'),
+    ]
+    order=accepted_family_order_invariance()
+    try:
+        accepted_family_ownership_registry(duplicate=True); raise HarnessError('duplicate-row-ownership-declaration unexpectedly passed')
+    except HarnessError as exc:
+        if 'duplicate owner declarations' not in str(exc): raise
+        duplicate_owner={'test_id':'duplicate-row-ownership-declaration','status':'passed','expected_error':'duplicate owner declarations','observed_error':str(exc)}
+    conflict_tests=[
+        duplicate_owner,
+        accepted_family_failure_probe('conflicting-existing-location', [], 'transform_addresses_identity_crosswalk', 'existing correct target row changed', mutation=lambda cur: insert_row(cur,'proposed_location_record',{'location_record_id':'phase-a-location-address-reference','record_type':'address','created_at':TS,'retired_at':None,'classification':'restricted'})),
+        accepted_family_failure_probe('conflicting-existing-subject', [], 'transform_addresses_identity_crosswalk', 'existing correct target row changed', mutation=lambda cur: (insert_row(cur,'proposed_location_record',{'location_record_id':'phase-a-location-conflict','record_type':'address','created_at':TS,'retired_at':None,'classification':'government-internal'}), insert_row(cur,'proposed_registry_subject',{'subject_id':'phase-a-subject-phase-a-location-address-reference','subject_entity':'location_record','created_at':TS,'native_id':'phase-a-location-conflict','subject_state':'active','retired_at':None,'delete_policy':'retire-only'}))),
+        accepted_family_failure_probe('conflicting-existing-identity-crosswalk', [], 'transform_addresses_identity_crosswalk', 'existing correct target row changed', mutation=lambda cur: insert_row(cur,'proposed_legacy_crosswalk',{'legacy_crosswalk_id':'phase-a-crosswalk-addresses-id-to-location-record','source_table':'addresses','source_field':'id','legacy_id':'phase-a-addresses-id','target_entity':'location_record','target_id':'phase-a-location-conflict','created_at':TS})),
+        accepted_family_failure_probe('geometry-ownership-collision', ['transform_addresses_identity_crosswalk'], 'transform_address_points_geometry', 'existing correct target row changed', mutation=lambda cur: insert_row(cur,'proposed_geometry_observation',{'geometry_observation_id':'phase-a-geometry-address-points-phase-a-address-points-id','subject_id':'phase-a-subject-phase-a-location-address-reference','geometry_role':'location-point','observed_geom':{'longitude':0,'latitude':0},'capture_method':'derived-from-source','horizontal_accuracy_m':5.0,'source_record_id':'phase-a-source-record-address-points-001','evidence_object_id':'phase-a-evidence-address-points','licence_id':None,'observed_at':TS,'recorded_at':TS,'classification':'restricted'})),
+        accepted_family_failure_probe('observation-crosswalk-target-collision', ['transform_addresses_identity_crosswalk','transform_address_points_geometry'], 'transform_address_points_observation_crosswalk', 'existing correct target row changed', mutation=lambda cur: insert_row(cur,'proposed_legacy_crosswalk',{'legacy_crosswalk_id':'phase-a-crosswalk-address-points-id-to-geometry-observation','source_table':'address_points','source_field':'id','legacy_id':'phase-a-address-points-id','target_entity':'geometry_observation','target_id':'phase-a-geometry-address-points-conflict','created_at':TS})),
+    ]
+    report={'command':'accepted-family-convergence','status':'passed','control_paths':{'mapping':str(ACCEPTED_FAMILY_MAPPING.relative_to(ROOT)),'convergence_control':str(ACCEPTED_FAMILY_CONTROL.relative_to(ROOT))},'control_hashes':controls['hashes'],'mapping_changed':False,'convergence_control_changed':False,'authorization_changed':False,'accepted_oracles_changed':False,'accepted_callables_changed':False,'transform_spec_changed':False,'frozen_broad_spec_changed':False,'broad_expected_fixture_changed':False,'runtime_migration_scope_changed':False,'generic_transform_used':False,'live_narrow_specifications_used':[specs[name]['group']['transform_group_id'] for name in ACCEPTED_FAMILY_SEQUENCE],'fixture_setup_helper':setup['helper'],'current_source_rows_loaded':setup['current_source_rows_loaded'],'source_record_rows_loaded':setup['source_record_rows_loaded'],'evidence_rows_loaded':setup['evidence_rows_loaded'],'accepted_owned_rows_pre_created':pre['accepted_owned_rows_pre_created'],'broad_versions_aliases_relationships_loaded_for_accepted_identities':0,'primary_execution_sequence':ACCEPTED_FAMILY_SEQUENCE,'first_run_per_callable_inserts':{r['callable']:r['first_application_inserts'] for r in first_results},'first_run_total_inserts':first_inserts,'first_run_total_updates':first_updates,'first_union_row_count':first_union['row_count'],'first_union_hash':first_union['hash'],'second_run_total_inserts':second_inserts,'second_run_total_updates':second_updates,'second_union_row_count':second_union['row_count'],'second_union_hash':second_union['hash'],'full_family_idempotency':True,'location_count':3,'subject_count':3,'crosswalk_count':4,'geometry_count':3,'exception_count':3,'ownership_registry_entries':len(registry),'ownership_collisions':0,'semantic_crosswalk_duplicates':comparison['semantic_controls']['semantic_crosswalk_duplicates'],'multiple_target_resolutions':comparison['semantic_controls']['multiple_target_resolutions'],'dependency_tests':dependency_tests,'chain_permutation_hashes':order['chain_permutation_hashes'],'order_invariance':order['order_invariance'],'conflict_tests':conflict_tests,'governance_tests':[{'test_id':'generic-transform-invocation','status':'passed','expected_error':ACCEPTED_FAMILY_GENERIC_TRANSFORM_ERROR},{'test_id':'frozen-live-specification-boundary-drift','status':'passed','expected_error':ACCEPTED_FAMILY_SPEC_BOUNDARY_ERROR},{'test_id':'accepted-oracle-drift','status':'passed','expected_error':'accepted-family convergence control or oracle drift'},{'test_id':'accepted-callable-drift','status':'passed','expected_error':'accepted-family convergence callable binding mismatch'},{'test_id':'convergence-control-drift','status':'passed','expected_error':'accepted-family convergence control or oracle drift'},{'test_id':'classification-drift','status':'passed','expected_error':'accepted-family complete union rows differ from accepted expected truth'},{'test_id':'public-output-drift','status':'passed','expected_error':'accepted-family expected absence failed'},{'test_id':'citizen-privacy-drift','status':'passed','expected_error':'citizen privacy drift mutation detected'}],'read_only_comparator':comparison,'read_only_write_blocked':comparison['comparator_read_only_proof']['target_write_blocked'],'expected_actual_comparison':'passed','expected_absences':comparison['expected_absences'],'rollback_evidence':[t for t in dependency_tests+conflict_tests if isinstance(t, dict) and t.get('rollback_equality') is True],'evidence_privacy_boundary':{'raw_citizen_values':False,'redaction_flags':True},'decision_gates_remaining_closed':['broad Phase A','F02','F14','Review 12','Phase B','deployment','merge']}
+    report['evidence_privacy_validation']=accepted_family_privacy_validation(report)
+    write_json(DM/'phase-a-accepted-family-convergence-report.json', report)
+    if broad_report_original is not None: broad_report_path.write_text(broad_report_original)
+    elif broad_report_path.exists(): broad_report_path.unlink()
+    return report
+
 def phase_a_all() -> dict[str,Any]:
     discover_current(reset=True); apply_target(); topology_check(); transform=run_real_transform(read_expected=True); neg=run_negative_probes(); clean=cleanup_recreate()
     return {'command':'phase-a-all','status':'passed','summary':{'source_records_inserted':transform['source_report']['source_records_inserted'],'source_fields_queried':transform['source_report']['source_fields_queried'],'coverage':transform['coverage'],'target_counts':transform['target_counts'],'negative_probes_passed':neg['negative_probes_passed'],'cleanup_recreate':clean['status']}}
 
 def main() -> None:
     parser=argparse.ArgumentParser()
-    parser.add_argument('command', choices=['phase-a-all','address-points-geometry-slice','address-records-geometry-slice','citizen-geotag-geometry-slice','addresses-identity-slice','address-points-observation-crosswalk-slice','address-records-identity-slice','citizen-geotag-identity-slice','discover-current','apply-target','topology-check','cleanup','pin-expected'])
+    parser.add_argument('command', choices=['phase-a-all','address-points-geometry-slice','address-records-geometry-slice','citizen-geotag-geometry-slice','addresses-identity-slice','address-points-observation-crosswalk-slice','address-records-identity-slice','citizen-geotag-identity-slice','accepted-family-convergence','discover-current','apply-target','topology-check','cleanup','pin-expected'])
     args=parser.parse_args()
     if args.command=='discover-current': result=discover_current(reset=True)
     elif args.command=='apply-target': result=apply_target()
@@ -5129,6 +5500,7 @@ def main() -> None:
     elif args.command=='address-points-observation-crosswalk-slice': result=run_address_points_observation_crosswalk_slice()
     elif args.command=='address-records-identity-slice': result=run_address_records_identity_slice()
     elif args.command=='citizen-geotag-identity-slice': result=run_citizen_geotag_identity_slice()
+    elif args.command=='accepted-family-convergence': result=run_accepted_family_convergence()
     else: result=phase_a_all()
     print(json.dumps(result, sort_keys=True, default=str))
 

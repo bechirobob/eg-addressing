@@ -1,0 +1,640 @@
+{
+  "accepted_callables_changed": false,
+  "accepted_oracles_changed": false,
+  "accepted_owned_rows_pre_created": 0,
+  "authorization_changed": false,
+  "broad_expected_fixture_changed": false,
+  "broad_versions_aliases_relationships_loaded_for_accepted_identities": 0,
+  "chain_permutation_hashes": [
+    {
+      "chain_order": "ABC",
+      "union_hash": "df921407d51d97559db64f380bd7a5d112e9d3823ea985944bef94b31924c5a6",
+      "union_rows": 16
+    },
+    {
+      "chain_order": "ACB",
+      "union_hash": "df921407d51d97559db64f380bd7a5d112e9d3823ea985944bef94b31924c5a6",
+      "union_rows": 16
+    },
+    {
+      "chain_order": "BAC",
+      "union_hash": "df921407d51d97559db64f380bd7a5d112e9d3823ea985944bef94b31924c5a6",
+      "union_rows": 16
+    },
+    {
+      "chain_order": "BCA",
+      "union_hash": "df921407d51d97559db64f380bd7a5d112e9d3823ea985944bef94b31924c5a6",
+      "union_rows": 16
+    },
+    {
+      "chain_order": "CAB",
+      "union_hash": "df921407d51d97559db64f380bd7a5d112e9d3823ea985944bef94b31924c5a6",
+      "union_rows": 16
+    },
+    {
+      "chain_order": "CBA",
+      "union_hash": "df921407d51d97559db64f380bd7a5d112e9d3823ea985944bef94b31924c5a6",
+      "union_rows": 16
+    }
+  ],
+  "command": "accepted-family-convergence",
+  "conflict_tests": [
+    {
+      "expected_error": "duplicate owner declarations",
+      "observed_error": "duplicate owner declarations",
+      "status": "passed",
+      "test_id": "duplicate-row-ownership-declaration"
+    },
+    {
+      "expected_error": "existing correct target row changed",
+      "observed_error": "existing correct target row changed",
+      "rollback_equality": true,
+      "same_database_post_failure_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_post_failure_rows": 0,
+      "same_database_pre_test_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_pre_test_rows": 0,
+      "status": "passed",
+      "test_id": "conflicting-existing-location"
+    },
+    {
+      "expected_error": "existing correct target row changed",
+      "observed_error": "existing correct target row changed",
+      "rollback_equality": true,
+      "same_database_post_failure_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_post_failure_rows": 0,
+      "same_database_pre_test_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_pre_test_rows": 0,
+      "status": "passed",
+      "test_id": "conflicting-existing-subject"
+    },
+    {
+      "expected_error": "existing correct target row changed",
+      "observed_error": "existing correct target row changed",
+      "rollback_equality": true,
+      "same_database_post_failure_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_post_failure_rows": 0,
+      "same_database_pre_test_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_pre_test_rows": 0,
+      "status": "passed",
+      "test_id": "conflicting-existing-identity-crosswalk"
+    },
+    {
+      "expected_error": "existing correct target row changed",
+      "observed_error": "existing correct target row changed",
+      "rollback_equality": true,
+      "same_database_post_failure_hash": "11b735a4c1c65b22b4b5b4183e3f971ce1f57371e640d3e1714f85f52b3a238b",
+      "same_database_post_failure_rows": 3,
+      "same_database_pre_test_hash": "11b735a4c1c65b22b4b5b4183e3f971ce1f57371e640d3e1714f85f52b3a238b",
+      "same_database_pre_test_rows": 3,
+      "status": "passed",
+      "test_id": "geometry-ownership-collision"
+    },
+    {
+      "expected_error": "existing correct target row changed",
+      "observed_error": "existing correct target row changed",
+      "rollback_equality": true,
+      "same_database_post_failure_hash": "7170516b79845cfde32f07d12f79471aa6bedbd70616e2cbd8ba2cea4742a467",
+      "same_database_post_failure_rows": 5,
+      "same_database_pre_test_hash": "7170516b79845cfde32f07d12f79471aa6bedbd70616e2cbd8ba2cea4742a467",
+      "same_database_pre_test_rows": 5,
+      "status": "passed",
+      "test_id": "observation-crosswalk-target-collision"
+    }
+  ],
+  "control_hashes": {
+    "address_points_correction_oracle_sha256": "12214d3967c6561eaa30c4577d9ab445a9b90d14b6d5c3374a842868e4e62bea",
+    "address_points_final_correction_oracle_sha256": "187d940235cdf1ef0976c423151f11ab5a378f1761e30b0007942d9aa4bd9278",
+    "address_points_observation_oracle_sha256": "d1b695994ae774a6c54cc99c1e79a0bce023fd5a9a20ec2aee779cfeb10bfa82",
+    "address_points_oracle_sha256": "cf699de04e0ca500c3a7826f257e190d24835356ef96db1650160d7d438edaea",
+    "address_records_correction_oracle_sha256": "ed5afa99495234a609762117c102793644529b5b1dfcdf784528a67a3c2ddee2",
+    "address_records_identity_oracle_sha256": "16d1034b786a77d31b6863774807e66d87a337fa78c1a4202e401fbcddecd06e",
+    "address_records_oracle_sha256": "7a5e68c4639fe290fd46c38d41c754ae25737bee8b260278817970e7758d20e2",
+    "addresses_identity_oracle_sha256": "518af277e96c94c55808f9ac1e7992059c371bd225d906cf77156c478b0497cd",
+    "citizen_geotag_correction_oracle_sha256": "f2cbb6689154616955b330c068b4bdfcdaac4b18642799fcca1f94270fe0d7f2",
+    "citizen_geotag_identity_oracle_sha256": "65e4f2511f70ed1e94562f4973fbbb1ab072592d3b27b94f2a459843647af45e",
+    "citizen_geotag_oracle_sha256": "5a09abd8a017dcbf8210040e9311bc4118be82e24c245cafa485987eb5932a46",
+    "control_blob": "3c4c59fa5eeb004cfb8ef2520241d74c130fa926",
+    "control_sha256": "d714b32ea170e05b5feef240d587d860ed0c712812036f384e357381a60b3b8a",
+    "frozen_broad_spec_sha256": "b601f4fe1c5676511010d10d5b9e819e83fc50a2bbedce11c324e2f4a05099cf",
+    "mapping_blob": "c984a16f352417b9fde0f8cb9e0536a5e0ab6eb1"
+  },
+  "control_paths": {
+    "convergence_control": "docs/sda/acceptance/NLI-WO-002-phase-a-accepted-family-convergence-control.json",
+    "mapping": "docs/agent/tasks/NLI-WO-002-phase-a-accepted-family-convergence-mapping.md"
+  },
+  "convergence_control_changed": false,
+  "crosswalk_count": 4,
+  "current_source_rows_loaded": 25,
+  "decision_gates_remaining_closed": [
+    "broad Phase A",
+    "F02",
+    "F14",
+    "Review 12",
+    "Phase B",
+    "deployment",
+    "merge"
+  ],
+  "dependency_tests": [
+    {
+      "expected_error": "address_points.address_id cannot resolve target location record",
+      "observed_error": "address_points.address_id cannot resolve target location record",
+      "rollback_equality": true,
+      "same_database_post_failure_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_post_failure_rows": 0,
+      "same_database_pre_test_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_pre_test_rows": 0,
+      "status": "passed",
+      "test_id": "address-points-geometry-before-addresses-identity"
+    },
+    {
+      "expected_error": "address_points geometry observation target not found",
+      "observed_error": "address_points geometry observation target not found",
+      "rollback_equality": true,
+      "same_database_post_failure_hash": "11b735a4c1c65b22b4b5b4183e3f971ce1f57371e640d3e1714f85f52b3a238b",
+      "same_database_post_failure_rows": 3,
+      "same_database_pre_test_hash": "11b735a4c1c65b22b4b5b4183e3f971ce1f57371e640d3e1714f85f52b3a238b",
+      "same_database_pre_test_rows": 3,
+      "status": "passed",
+      "test_id": "address-points-observation-crosswalk-before-point-geometry"
+    },
+    {
+      "expected_error": "address_points.address_id cannot resolve target location record",
+      "observed_error": "address_points.address_id cannot resolve target location record",
+      "rollback_equality": true,
+      "same_database_post_failure_hash": "7170516b79845cfde32f07d12f79471aa6bedbd70616e2cbd8ba2cea4742a467",
+      "same_database_post_failure_rows": 5,
+      "same_database_pre_test_hash": "7170516b79845cfde32f07d12f79471aa6bedbd70616e2cbd8ba2cea4742a467",
+      "same_database_pre_test_rows": 5,
+      "status": "passed",
+      "test_id": "address-points-observation-crosswalk-direct-address-dependency"
+    },
+    {
+      "expected_error": "address_records.id cannot resolve target location record",
+      "observed_error": "address_records.id cannot resolve target location record",
+      "rollback_equality": true,
+      "same_database_post_failure_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_post_failure_rows": 0,
+      "same_database_pre_test_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_pre_test_rows": 0,
+      "status": "passed",
+      "test_id": "address-records-geometry-before-address-records-identity"
+    },
+    {
+      "expected_error": "citizen_geotag_submissions.id cannot resolve target location record",
+      "observed_error": "citizen_geotag_submissions.id cannot resolve target location record",
+      "rollback_equality": true,
+      "same_database_post_failure_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_post_failure_rows": 0,
+      "same_database_pre_test_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_pre_test_rows": 0,
+      "status": "passed",
+      "test_id": "citizen-geotag-geometry-before-citizen-geotag-identity"
+    }
+  ],
+  "evidence_privacy_boundary": {
+    "raw_citizen_values": false,
+    "redaction_flags": true
+  },
+  "evidence_privacy_validation": {
+    "checked_excluded_fields": [
+      "territory_id",
+      "address_label",
+      "citizen_name",
+      "citizen_contact",
+      "dip_last4",
+      "identity_verification_status",
+      "identity_document_verified",
+      "identity_verified_at",
+      "landmark",
+      "latitude",
+      "longitude",
+      "accuracy_meters",
+      "capture_method",
+      "grid_code",
+      "status",
+      "duplicate_hint",
+      "reviewer_note",
+      "suggested_road_name",
+      "suggested_local_area",
+      "suggested_place_name",
+      "map_display_name",
+      "road_suggestion_source",
+      "road_suggestion_attribution",
+      "road_suggestion_status",
+      "reviewed_road_name",
+      "field_submission_id",
+      "field_status",
+      "field_note",
+      "field_verified_at",
+      "signage_batch",
+      "created_at",
+      "updated_at"
+    ],
+    "evidence_privacy_validation": true,
+    "raw_citizen_values_in_report": false,
+    "status": "passed"
+  },
+  "evidence_rows_loaded": 4,
+  "exception_count": 3,
+  "expected_absences": [
+    {
+      "count": 0,
+      "reason": "unapproved location-record versions",
+      "table": "proposed_location_record_version",
+      "where": "location_record_id IN ('phase-a-location-address-reference','phase-a-location-address-records-id','phase-a-location-citizen-geotag-001')"
+    },
+    {
+      "count": 0,
+      "reason": "public-code aliases",
+      "table": "proposed_public_code_alias",
+      "where": "location_record_id IN ('phase-a-location-address-reference','phase-a-location-address-records-id','phase-a-location-citizen-geotag-001')"
+    },
+    {
+      "count": 0,
+      "reason": "publication release items",
+      "table": "proposed_publication_release_item",
+      "where": "location_record_id IN ('phase-a-location-address-reference','phase-a-location-address-records-id','phase-a-location-citizen-geotag-001')"
+    },
+    {
+      "count": 0,
+      "reason": "geometry versions",
+      "table": "proposed_geometry_version",
+      "where": "source_observation_id IN ('phase-a-geometry-address-points-phase-a-address-points-id','phase-a-geometry-address-records-phase-a-address-records-id','phase-a-geometry-citizen-geotag-submissions-phase-a-geotag-001')"
+    },
+    {
+      "count": 0,
+      "reason": "geometry quality approvals",
+      "table": "proposed_geometry_quality_assessment",
+      "where": "geometry_version_id LIKE 'phase-a-geometry-%'"
+    },
+    {
+      "count": 0,
+      "reason": "geometry transformations",
+      "table": "proposed_geometry_transformation",
+      "where": "transformation_id LIKE 'phase-a-geometry-%'"
+    },
+    {
+      "count": 0,
+      "reason": "grouped-geometry substitute assertions",
+      "table": "proposed_location_record_assertion",
+      "where": "source_record_id IN ('phase-a-source-record-addresses-001','phase-a-source-record-address-points-001','phase-a-source-record-address-records-001','phase-a-source-record-citizen-geotag-submissions-001')"
+    },
+    {
+      "count": 0,
+      "reason": "identity-path-created geometry rows",
+      "table": "proposed_geometry_observation",
+      "where": "geometry_observation_id LIKE 'phase-a-geometry-addresses%'"
+    },
+    {
+      "count": 0,
+      "reason": "non-id citizen-geotag crosswalks",
+      "table": "proposed_legacy_crosswalk",
+      "where": "source_table='citizen_geotag_submissions' AND source_field <> 'id'"
+    },
+    {
+      "count": 0,
+      "reason": "address reference/context-field identity crosswalks",
+      "table": "proposed_legacy_crosswalk",
+      "where": "source_table='addresses' AND source_field <> 'id'"
+    },
+    {
+      "count": 0,
+      "reason": "address-record source_submission_id or territory identity crosswalks",
+      "table": "proposed_legacy_crosswalk",
+      "where": "source_table='address_records' AND source_field IN ('source_submission_id','territory_id')"
+    },
+    {
+      "count": 0,
+      "reason": "point-id-to-location-record crosswalks",
+      "table": "proposed_legacy_crosswalk",
+      "where": "source_table='address_points' AND source_field='id' AND target_entity='location_record'"
+    },
+    {
+      "count": 0,
+      "reason": "unexpected migration exceptions",
+      "table": "proposed_migration_exception",
+      "where": "migration_exception_id NOT IN ('phase-a-exception-geometry-authority-address-points-phase-a-address-points-id','phase-a-exception-geometry-authority-address-records-phase-a-address-records-id','phase-a-exception-geometry-authority-citizen-geotag-submissions-phase-a-geotag-001')"
+    }
+  ],
+  "expected_actual_comparison": "passed",
+  "first_run_per_callable_inserts": {
+    "transform_address_points_geometry": 2,
+    "transform_address_points_observation_crosswalk": 1,
+    "transform_address_records_geometry": 2,
+    "transform_address_records_identity_crosswalk": 3,
+    "transform_addresses_identity_crosswalk": 3,
+    "transform_citizen_geotag_geometry": 2,
+    "transform_citizen_geotag_identity_crosswalk": 3
+  },
+  "first_run_total_inserts": 16,
+  "first_run_total_updates": 0,
+  "first_union_hash": "df921407d51d97559db64f380bd7a5d112e9d3823ea985944bef94b31924c5a6",
+  "first_union_row_count": 16,
+  "fixture_setup_helper": "setup_accepted_family_convergence_database",
+  "frozen_broad_spec_changed": false,
+  "full_family_idempotency": true,
+  "generic_transform_used": false,
+  "geometry_count": 3,
+  "governance_tests": [
+    {
+      "expected_error": "accepted-family convergence generic transform invocation prohibited",
+      "status": "passed",
+      "test_id": "generic-transform-invocation"
+    },
+    {
+      "expected_error": "accepted-family convergence specification boundary mismatch",
+      "status": "passed",
+      "test_id": "frozen-live-specification-boundary-drift"
+    },
+    {
+      "expected_error": "accepted-family convergence control or oracle drift",
+      "status": "passed",
+      "test_id": "accepted-oracle-drift"
+    },
+    {
+      "expected_error": "accepted-family convergence callable binding mismatch",
+      "status": "passed",
+      "test_id": "accepted-callable-drift"
+    },
+    {
+      "expected_error": "accepted-family convergence control or oracle drift",
+      "status": "passed",
+      "test_id": "convergence-control-drift"
+    },
+    {
+      "expected_error": "accepted-family complete union rows differ from accepted expected truth",
+      "status": "passed",
+      "test_id": "classification-drift"
+    },
+    {
+      "expected_error": "accepted-family expected absence failed",
+      "status": "passed",
+      "test_id": "public-output-drift"
+    },
+    {
+      "expected_error": "citizen privacy drift mutation detected",
+      "status": "passed",
+      "test_id": "citizen-privacy-drift"
+    }
+  ],
+  "live_narrow_specifications_used": [
+    "WO002-R06-identity-crosswalk-addresses",
+    "WO002-R06-geometry-observation-address_points",
+    "WO002-R06-identity-crosswalk-address_points",
+    "WO002-R06-identity-crosswalk-address_records",
+    "WO002-R06-geometry-observation-address_records",
+    "WO002-R06-identity-crosswalk-citizen_geotag_submissions",
+    "WO002-R06-geometry-observation-citizen_geotag_submissions"
+  ],
+  "location_count": 3,
+  "mapping_changed": false,
+  "multiple_target_resolutions": 0,
+  "order_invariance": true,
+  "ownership_collisions": 0,
+  "ownership_registry_entries": 16,
+  "primary_execution_sequence": [
+    "transform_addresses_identity_crosswalk",
+    "transform_address_points_geometry",
+    "transform_address_points_observation_crosswalk",
+    "transform_address_records_identity_crosswalk",
+    "transform_address_records_geometry",
+    "transform_citizen_geotag_identity_crosswalk",
+    "transform_citizen_geotag_geometry"
+  ],
+  "read_only_comparator": {
+    "actual_rows": 16,
+    "actual_union_hash": "df921407d51d97559db64f380bd7a5d112e9d3823ea985944bef94b31924c5a6",
+    "comparator_connection": {
+      "separate_connection": true,
+      "transaction_read_only": "on"
+    },
+    "comparator_read_only_proof": {
+      "separate_connection": true,
+      "target_write_blocked": true,
+      "transaction_read_only": "on",
+      "write_error": "cannot execute INSERT in a read-only transaction"
+    },
+    "comparison_both_directions": true,
+    "expected_absences": [
+      {
+        "count": 0,
+        "reason": "unapproved location-record versions",
+        "table": "proposed_location_record_version",
+        "where": "location_record_id IN ('phase-a-location-address-reference','phase-a-location-address-records-id','phase-a-location-citizen-geotag-001')"
+      },
+      {
+        "count": 0,
+        "reason": "public-code aliases",
+        "table": "proposed_public_code_alias",
+        "where": "location_record_id IN ('phase-a-location-address-reference','phase-a-location-address-records-id','phase-a-location-citizen-geotag-001')"
+      },
+      {
+        "count": 0,
+        "reason": "publication release items",
+        "table": "proposed_publication_release_item",
+        "where": "location_record_id IN ('phase-a-location-address-reference','phase-a-location-address-records-id','phase-a-location-citizen-geotag-001')"
+      },
+      {
+        "count": 0,
+        "reason": "geometry versions",
+        "table": "proposed_geometry_version",
+        "where": "source_observation_id IN ('phase-a-geometry-address-points-phase-a-address-points-id','phase-a-geometry-address-records-phase-a-address-records-id','phase-a-geometry-citizen-geotag-submissions-phase-a-geotag-001')"
+      },
+      {
+        "count": 0,
+        "reason": "geometry quality approvals",
+        "table": "proposed_geometry_quality_assessment",
+        "where": "geometry_version_id LIKE 'phase-a-geometry-%'"
+      },
+      {
+        "count": 0,
+        "reason": "geometry transformations",
+        "table": "proposed_geometry_transformation",
+        "where": "transformation_id LIKE 'phase-a-geometry-%'"
+      },
+      {
+        "count": 0,
+        "reason": "grouped-geometry substitute assertions",
+        "table": "proposed_location_record_assertion",
+        "where": "source_record_id IN ('phase-a-source-record-addresses-001','phase-a-source-record-address-points-001','phase-a-source-record-address-records-001','phase-a-source-record-citizen-geotag-submissions-001')"
+      },
+      {
+        "count": 0,
+        "reason": "identity-path-created geometry rows",
+        "table": "proposed_geometry_observation",
+        "where": "geometry_observation_id LIKE 'phase-a-geometry-addresses%'"
+      },
+      {
+        "count": 0,
+        "reason": "non-id citizen-geotag crosswalks",
+        "table": "proposed_legacy_crosswalk",
+        "where": "source_table='citizen_geotag_submissions' AND source_field <> 'id'"
+      },
+      {
+        "count": 0,
+        "reason": "address reference/context-field identity crosswalks",
+        "table": "proposed_legacy_crosswalk",
+        "where": "source_table='addresses' AND source_field <> 'id'"
+      },
+      {
+        "count": 0,
+        "reason": "address-record source_submission_id or territory identity crosswalks",
+        "table": "proposed_legacy_crosswalk",
+        "where": "source_table='address_records' AND source_field IN ('source_submission_id','territory_id')"
+      },
+      {
+        "count": 0,
+        "reason": "point-id-to-location-record crosswalks",
+        "table": "proposed_legacy_crosswalk",
+        "where": "source_table='address_points' AND source_field='id' AND target_entity='location_record'"
+      },
+      {
+        "count": 0,
+        "reason": "unexpected migration exceptions",
+        "table": "proposed_migration_exception",
+        "where": "migration_exception_id NOT IN ('phase-a-exception-geometry-authority-address-points-phase-a-address-points-id','phase-a-exception-geometry-authority-address-records-phase-a-address-records-id','phase-a-exception-geometry-authority-citizen-geotag-submissions-phase-a-geotag-001')"
+      }
+    ],
+    "expected_rows": 16,
+    "expected_union_hash": "df921407d51d97559db64f380bd7a5d112e9d3823ea985944bef94b31924c5a6",
+    "ownership": {
+      "ownership_collisions": 0,
+      "ownership_registry_entries": 16
+    },
+    "scoped_counts": {
+      "proposed_geometry_observation": 3,
+      "proposed_legacy_crosswalk": 4,
+      "proposed_location_record": 3,
+      "proposed_migration_exception": 3,
+      "proposed_registry_subject": 3
+    },
+    "semantic_controls": {
+      "multiple_target_resolutions": 0,
+      "semantic_crosswalk_duplicates": 0
+    },
+    "status": "passed"
+  },
+  "read_only_write_blocked": true,
+  "rollback_evidence": [
+    {
+      "expected_error": "address_points.address_id cannot resolve target location record",
+      "observed_error": "address_points.address_id cannot resolve target location record",
+      "rollback_equality": true,
+      "same_database_post_failure_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_post_failure_rows": 0,
+      "same_database_pre_test_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_pre_test_rows": 0,
+      "status": "passed",
+      "test_id": "address-points-geometry-before-addresses-identity"
+    },
+    {
+      "expected_error": "address_points geometry observation target not found",
+      "observed_error": "address_points geometry observation target not found",
+      "rollback_equality": true,
+      "same_database_post_failure_hash": "11b735a4c1c65b22b4b5b4183e3f971ce1f57371e640d3e1714f85f52b3a238b",
+      "same_database_post_failure_rows": 3,
+      "same_database_pre_test_hash": "11b735a4c1c65b22b4b5b4183e3f971ce1f57371e640d3e1714f85f52b3a238b",
+      "same_database_pre_test_rows": 3,
+      "status": "passed",
+      "test_id": "address-points-observation-crosswalk-before-point-geometry"
+    },
+    {
+      "expected_error": "address_points.address_id cannot resolve target location record",
+      "observed_error": "address_points.address_id cannot resolve target location record",
+      "rollback_equality": true,
+      "same_database_post_failure_hash": "7170516b79845cfde32f07d12f79471aa6bedbd70616e2cbd8ba2cea4742a467",
+      "same_database_post_failure_rows": 5,
+      "same_database_pre_test_hash": "7170516b79845cfde32f07d12f79471aa6bedbd70616e2cbd8ba2cea4742a467",
+      "same_database_pre_test_rows": 5,
+      "status": "passed",
+      "test_id": "address-points-observation-crosswalk-direct-address-dependency"
+    },
+    {
+      "expected_error": "address_records.id cannot resolve target location record",
+      "observed_error": "address_records.id cannot resolve target location record",
+      "rollback_equality": true,
+      "same_database_post_failure_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_post_failure_rows": 0,
+      "same_database_pre_test_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_pre_test_rows": 0,
+      "status": "passed",
+      "test_id": "address-records-geometry-before-address-records-identity"
+    },
+    {
+      "expected_error": "citizen_geotag_submissions.id cannot resolve target location record",
+      "observed_error": "citizen_geotag_submissions.id cannot resolve target location record",
+      "rollback_equality": true,
+      "same_database_post_failure_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_post_failure_rows": 0,
+      "same_database_pre_test_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_pre_test_rows": 0,
+      "status": "passed",
+      "test_id": "citizen-geotag-geometry-before-citizen-geotag-identity"
+    },
+    {
+      "expected_error": "existing correct target row changed",
+      "observed_error": "existing correct target row changed",
+      "rollback_equality": true,
+      "same_database_post_failure_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_post_failure_rows": 0,
+      "same_database_pre_test_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_pre_test_rows": 0,
+      "status": "passed",
+      "test_id": "conflicting-existing-location"
+    },
+    {
+      "expected_error": "existing correct target row changed",
+      "observed_error": "existing correct target row changed",
+      "rollback_equality": true,
+      "same_database_post_failure_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_post_failure_rows": 0,
+      "same_database_pre_test_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_pre_test_rows": 0,
+      "status": "passed",
+      "test_id": "conflicting-existing-subject"
+    },
+    {
+      "expected_error": "existing correct target row changed",
+      "observed_error": "existing correct target row changed",
+      "rollback_equality": true,
+      "same_database_post_failure_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_post_failure_rows": 0,
+      "same_database_pre_test_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_pre_test_rows": 0,
+      "status": "passed",
+      "test_id": "conflicting-existing-identity-crosswalk"
+    },
+    {
+      "expected_error": "existing correct target row changed",
+      "observed_error": "existing correct target row changed",
+      "rollback_equality": true,
+      "same_database_post_failure_hash": "11b735a4c1c65b22b4b5b4183e3f971ce1f57371e640d3e1714f85f52b3a238b",
+      "same_database_post_failure_rows": 3,
+      "same_database_pre_test_hash": "11b735a4c1c65b22b4b5b4183e3f971ce1f57371e640d3e1714f85f52b3a238b",
+      "same_database_pre_test_rows": 3,
+      "status": "passed",
+      "test_id": "geometry-ownership-collision"
+    },
+    {
+      "expected_error": "existing correct target row changed",
+      "observed_error": "existing correct target row changed",
+      "rollback_equality": true,
+      "same_database_post_failure_hash": "7170516b79845cfde32f07d12f79471aa6bedbd70616e2cbd8ba2cea4742a467",
+      "same_database_post_failure_rows": 5,
+      "same_database_pre_test_hash": "7170516b79845cfde32f07d12f79471aa6bedbd70616e2cbd8ba2cea4742a467",
+      "same_database_pre_test_rows": 5,
+      "status": "passed",
+      "test_id": "observation-crosswalk-target-collision"
+    }
+  ],
+  "runtime_migration_scope_changed": false,
+  "second_run_total_inserts": 0,
+  "second_run_total_updates": 0,
+  "second_union_hash": "df921407d51d97559db64f380bd7a5d112e9d3823ea985944bef94b31924c5a6",
+  "second_union_row_count": 16,
+  "semantic_crosswalk_duplicates": 0,
+  "source_record_rows_loaded": 4,
+  "status": "passed",
+  "subject_count": 3,
+  "transform_spec_changed": false
+}
