@@ -443,7 +443,9 @@
         "structured-transform"
       ],
       "exception_behavior": "no migration exception in this identity shell; every non-id source field is context or a future authority input and may not create an exception, hierarchy fact, code, name, version or publication output.",
-      "conditional_authority_rfi_status": "none",
+      "conditional_authority_rfi_status": [
+        "none"
+      ],
       "authority_resolution": "NLI-WO-002-PA-ADMIN-ID-SHELL-01 resolves the narrow identity-shell authority question only; hierarchy, version, code, name, province and territory authority remain unresolved.",
       "target_entities": [
         "administrative_unit",
