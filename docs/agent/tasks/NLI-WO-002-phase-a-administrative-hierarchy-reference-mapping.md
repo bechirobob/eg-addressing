@@ -1,14 +1,13 @@
 # NLI-WO-002 Phase A administrative hierarchy and reference-identity mapping pack
 
-**Base / continuation commit:** `d3de026620249857a1a858f6b8e1afe04c9dcb4b`
+**Base / continuation commit:** `ed2d2a563720beca3ee09abd487797232e36ece3`
 
-**PR review read:** `4714974768` — C37 accepted; one administrative hierarchy/reference mapping checkpoint authorized; no reviewer oracle, transform, broad Phase A, F02/F14 closure, Review 12, Phase B, deployment, publication, merge, or PR #8 work authorized.
+**Reviewed mapping:** `2a14a74e472eda04a06f89f754a145b4450a77f9`. **SDA assessment:** `docs/sda/reviews/NLI-WO-002-administrative-hierarchy-mapping-assessment.json`. Decision: correction required, mapping only, findings C38-C40.
 
 ## 0. Scope and closed-gate declaration
 This document is a mapping pack only. It does not prepare or approve a reviewer oracle; implement an administrative transform; modify accepted callables or convergence; accept broad Phase A; close F02 or F14; authorize Review 12 or Phase B; authorize public-code issuance or publication; authorize deployment or merge; or modify PR #8.
 
 ## 1. Controlling artifacts pinned
-
 | artifact | path | git blob | sha256 |
 | --- | --- | --- | --- |
 | corrected residual-readiness mapping | docs/agent/tasks/NLI-WO-002-phase-a-residual-control-readiness-mapping.md | 7fcb73f3c99c56ba9c38207c689492a608fe17b7 | d2ae6ffc999c8f59486dcbc7a0d47d62a2465b99ec9aa3cf1116384003526758 |
@@ -28,9 +27,9 @@ This document is a mapping pack only. It does not prepare or approve a reviewer 
 | accepted address-points geometry control | docs/sda/acceptance/NLI-WO-002-phase-a-address-points-geometry-expected.json | 691d08f09bfd12e227207cd5913b6b54caf59536 | cf699de04e0ca500c3a7826f257e190d24835356ef96db1650160d7d438edaea |
 | accepted citizen-geotag identity control | docs/sda/acceptance/NLI-WO-002-phase-a-citizen-geotag-identity-expected.json | 61fb777a2af5a917b4ea7bbff0d6c7dff09241ba | 65e4f2511f70ed1e94562f4973fbbb1ab072592d3b27b94f2a459843647af45e |
 | accepted citizen-geotag geometry control | docs/sda/acceptance/NLI-WO-002-phase-a-citizen-geotag-geometry-expected.json | d5ae8a9a859ec466b68365ee006c310a85955504 | 5a09abd8a017dcbf8210040e9311bc4118be82e24c245cafa485987eb5932a46 |
+| C38-C40 assessment | docs/sda/reviews/NLI-WO-002-administrative-hierarchy-mapping-assessment.json | d5414abba28489e6032819479ac2c4c8b658a98d | 9baa93e62658e45ea433f6879408628f455ce3b3242768a293668ffa24144d5b |
 
 ## 2. Source tables audited
-
 | source table | source key | source_record_id | field | fixture value | classification |
 | --- | --- | --- | --- | --- | --- |
 | admin_units | admin_units:phase-a-admin-units-001 | phase-a-source-record-admin-units-001 | id | phase-a-admin-units-id | identity candidate |
@@ -58,10 +57,9 @@ This document is a mapping pack only. It does not prepare or approve a reviewer 
 | territories | territories:phase-a-territories-001 | phase-a-source-record-territories-001 | updated_at | 2026-07-15T00:00:00Z | temporal context |
 
 ## 3. Fixture inconsistencies — recorded, not normalized
-
 | fixture value | finding | mismatch type | do not repair |
 | --- | --- | --- | --- |
-| admin_units.id = phase-a-admin-units-id | does not match territories.admin_unit_id = phase-a-admin-unit-id or requested canonical-looking admin-unit references | unresolved source-system relationship; required authority lookup; required future mutation test | yes |
+| admin_units.id = phase-a-admin-units-id | does not match territories.admin_unit_id = phase-a-admin-unit-id | unresolved source-system relationship; required authority lookup; required future mutation test | yes |
 | territories.admin_unit_id = phase-a-admin-unit-id | does not match admin_units.id = phase-a-admin-units-id | deliberately incomplete fixture relationship; malformed generic fixture; required future mutation test | yes |
 | admin_units.parent_id = phase-a-parent-id | references no source admin_units.id in the complete fixture | unresolved source-system relationship; required authority lookup; required future mutation test | yes |
 | admin_units.province_code = BN | does not match provinces.code = phase-a-provinces-code | required authority lookup; unresolved source-system relationship; required future mutation test | yes |
@@ -70,189 +68,222 @@ This document is a mapping pack only. It does not prepare or approve a reviewer 
 | admin_units.level = phase-a admin_units level | not one of target vocabulary country/province/district/municipality/local_council | malformed generic fixture; unresolved authority input; required future mutation test | yes |
 
 ## 4. Source-to-subject model alternatives
+| model | status | summary |
+| --- | --- | --- |
+| A — admin_units is canonical | evaluated; not selected | admin_units.id owns administrative identity; provinces/territories become aliases/context after authority. Strong single-owner model, but fixture mismatches and province authority remain unresolved. |
+| B — all three tables own distinct administrative units | evaluated; not selected | provinces, admin_units and territories each own administrative identities. Preserves source rows but risks duplicate semantic subjects and wrongly promoting operational territories. |
+| C — split administrative and operational concepts | preferred working hypothesis | provinces/admin_units are administrative candidates; territories remain locality/operational/context until territory registry authority classifies each row. Accepted address rows remain unchanged. |
 
-| model | advantages | contradictions | required target rows | hierarchy behavior | impact on accepted addresses and address_records | authority decisions | privacy/publication implications | negative tests | physical schema supports it |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| A — admin_units is canonical | single owner for administrative-unit identity; avoids duplicate subject for the same real-world unit; aligns parent_id and code/name fields around one table | fixture province_code BN conflicts with provinces.code; territories.admin_unit_id mismatch; provinces may be official first-level authority not mere alias | proposed_country prerequisite; proposed_administrative_unit and version from admin_units.id; code history from admin_units.code/province_code after authority; name records from name_es/name_en; crosswalk admin_units.id -> administrative_unit | admin_units.parent_id defines parent once valid; province/territory are context/aliases unless authority promotes them | accepted address/address_record rows remain unchanged; future context integration resolves province_code/territory_id through crosswalks, not accepted identity rows | official hierarchy owner, code owner, level translation, parent-lineage authority required | administrative identity may be public-after-release only after classification/public-release authority; no citizen privacy issue | missing parent, level unsupported, province-code mismatch, duplicate semantic crosswalk, generic subject reuse | yes for administrative_unit/version/code/name/crosswalk; lacks direct admin subject FK for names unless registry_subject decision is made |
-| B — all three tables own distinct administrative units | preserves every source table identity; can represent province, admin unit and territory as separate levels if institution confirms hierarchy | territories may be operational rollout areas; provinces.code generic mismatch with BN; duplicate real-world unit risk; parent hierarchy not explicit across all three tables | administrative_unit/version per provinces/admin_units/territories; crosswalk for each source id/code; name records for each; parent relationships between target units | country -> province -> admin_unit -> territory if authority approves; otherwise fails on missing/incorrect links | context fields can resolve to province/territory units but accepted rows stay unchanged; future integration needs new crosswalks | stronger official hierarchy and territory registry authority required before any implementation | publication risk higher because territory may not be official admin geography | duplicate administrative identity, wrong parent level, one source resolving to multiple targets, territory/admin-unit mismatch | partially; administrative_unit/version supports hierarchy, but territory-as-admin requires level translation and authority; operational-area alternative may be better |
-| C — split administrative and operational concepts | matches WO-002 requirement to separate administrative units from operational zones; provinces/admin_units can be official geography while territories become locality/operational area/context where appropriate | accepted-context fields currently reference territories; fixture territories.admin_unit_id mismatch still needs authority; territory name/type/readiness must not be silently promoted | proposed_country prerequisite; administrative_unit/version for provinces/admin_units; proposed_locality or proposed_operational_area for territories if authority chooses; crosswalks and names to distinct subject types | country -> province -> district/municipality/local_council through admin units; territories attach as context/coverage to administrative unit or locality when approved | accepted rows remain unchanged; future integration resolves territory_id via operational/locality crosswalk and province_code via admin code history; no accepted identity mutation | territory registry owner, operational-vs-administrative classification, parent-lineage, code history and publication authority required | lowest publication risk; territories remain government-internal until official status confirmed | territory promoted as admin without authority, wrong name subject, public alias output, mismatch between territory/admin-unit and province code | yes conceptually: administrative_unit/version plus proposed_locality/proposed_operational_area exist; exact territory target requires reviewer oracle |
+**Recommended model:** Model C — split administrative and operational concepts.
+**Recommendation confidence:** medium. Model C remains a working hypothesis only; it does not authorize an oracle or implementation.
+## 5. C38 physical-lineage matrix
+Do not claim target-persisted source-record lineage where no target column exists. Source-record lineage for the administrative identity shell is comparator-enforced, not fully persisted on the identity row.
+| target family | actual lineage columns present | source_record_id persisted | evidence_object_id persisted | source_authority_id persisted | source_table/source_field/legacy_id persisted | target row join back to exact source record | evidence only in test_control/reviewer evidence | cannot persist without future schema change |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| proposed_administrative_unit | administrative_unit_id, country_id, created_at, retired_at only | no | no | no | no | none directly; join through proposed_legacy_crosswalk.target_entity=administrative_unit and target_id=administrative_unit_id, then comparator maps source_table/source_field/legacy_id to reviewed source record | source_record/evidence_object proof for identity shell | direct identity-row source_record_id, evidence_object_id, source_authority_id |
+| proposed_administrative_unit_version | administrative_unit_version_id, administrative_unit_id, parent_administrative_unit_id, admin_level, lifecycle_state, effective dates, recorded dates, source_authority_id, classification | no | no | yes | no | none directly; only authority can be joined; comparator must prove version values against reviewed source/control inputs | source row/evidence object behind level, parent and effective-date decisions | direct version source_record_id/evidence_object_id or separate version-lineage relation |
+| proposed_administrative_code_history | admin_code_history_id, administrative_unit_id, code_scheme, official_code, effective dates, recorded dates, source_id | yes, as source_id referencing proposed_source_record.source_record_id | no | no | no | source_id -> proposed_source_record.source_record_id | evidence_object and authority proof for code scheme/history | direct evidence_object_id/source_authority_id on code-history row |
+| proposed_name_record | name_record_id, subject_id, language_code, name_kind, name_status, name_text, normalized_text, source_record_id, effective dates | yes | no | no | no | source_record_id -> proposed_source_record.source_record_id | evidence_object, field-level name authority and language decision | direct evidence_object_id/source_authority_id/source_field on name row |
+| proposed_legacy_crosswalk | legacy_crosswalk_id, source_table, source_field, legacy_id, target_entity, target_id, created_at | no | no | no | yes | source_table + source_field + legacy_id can be comparator-matched to reviewed proposed_source_record/source_key but no source_record_id/source_key column exists | proof that legacy tuple corresponds to expected source record and evidence object | direct source_record_id/source_key/evidence_object_id on crosswalk |
+| proposed_registry_subject | subject_id, subject_entity, created_at, native_id, subject_state, retired_at, delete_policy | no | no | no | no | none directly; subject native_id joins to administrative_unit_id, then identity lineage is crosswalk/comparator-enforced | subject ownership by identity slice and source/evidence proof | direct subject lineage columns or subject-source relation |
 
-**Recommended model for SDA consideration:** Model C — split administrative and operational concepts.  
-**Recommendation confidence:** medium; strongest alignment with WO-002 separation rule, but authority must resolve whether territories are official administrative units, localities, operational areas, or mixed by type. This is not acceptance and not implementation authorization.
+### C38 lineage model evaluation
+| lineage model | definition | direct persisted source-record lineage on identity/version | oracle implication |
+| --- | --- | --- | --- |
+| L1 — Current-schema indirect lineage | Administrative identity is linked by proposed_legacy_crosswalk.source_table/source_field/legacy_id -> target_entity/target_id. The reviewer comparator separately proves that the crosswalk corresponds to the reviewed proposed_source_record and evidence object. | no | possible for an identity-shell oracle without schema change if the oracle explicitly checks crosswalk-to-source-record/evidence in test_control/reviewer evidence |
+| L2 — Lineage-bearing fact rows | Identity shell is linked indirectly through crosswalk, while code-history and name facts carry direct source-record lineage via source_id/source_record_id. | no | good for code/name facts, but does not solve direct lineage for administrative_unit, version or registry_subject |
+| L3 — Future schema enhancement | Future schema change adds administrative identity/version lineage relation or source_record_id/evidence_object_id columns. | would be yes after change | not authorized now; useful later if SDA requires target-persisted lineage rather than comparator-enforced lineage |
 
-## 5. Candidate target row families
-Administrative identities must not be represented as address `proposed_location_record` identities unless a later reviewer decision establishes that model. No target row may have two owners.
+**Recommended lineage model:** L1 — Current-schema indirect lineage, with L2 for name/code fact rows where those rows actually carry source-record columns.
+**Oracle possible without schema change:** YES for the administrative identity shell only, if the future reviewer oracle explicitly proves crosswalk-to-source-record/evidence correspondence in comparator/test_control evidence. NO for direct target-persisted identity/version source-record lineage without a future schema change.
+## 6. C39 identity stability and registry-subject ownership
+### Province source identity
+- `provinces.code` is the current-source primary key. It is not automatically the stable canonical administrative identity.
+- Separate concepts: current-source row identity = `provinces.code`; stable canonical administrative identity = reviewer/authority-assigned province identity token; official administrative code = code value approved for code history; historical code value = effective-dated code-history row.
+- Province-code change outcomes: (1) new source row resolves to same canonical administrative unit if authority proves continuity; (2) new canonical administrative identity if authority says the code change represents a new unit; or (3) unresolved authority event requiring manual linkage.
+- Do not derive permanent `administrative_unit_id` directly from mutable normalized `provinces.code` unless the authority explicitly declares the code immutable.
+- Province identity is authority-blocked and not oracle-ready until stable canonical identity and code-continuity rules are decided.
+### Admin-unit source identity
+- `admin_units.id` remains the preferred source identity candidate, subject to official hierarchy authority.
+- Target deterministic ID must be independent from name, code, parent and status changes. Candidate rule: `administrative-unit:admin_units:{admin_units.id}` after authority confirms `admin_units.id` is stable enough for the identity shell.
+- Name/code/parent/status changes create facts, versions or authority events; they must not rewrite the administrative identity shell ID.
+### Territory identity
+- Under Model C, territory identity remains distinct from administrative-unit identity until the territory registry authority decides whether each territory is an administrative unit, locality, operational area, or another context entity.
+- Territory rows are excluded from the first administrative identity oracle.
+### Registry-subject model
+**Selected model:** Subject Model S1 — Identity slice owns subject. The administrative identity slice creates the administrative unit, administrative legacy crosswalk and administrative registry subject. The subject is mandatory, not optional. No name or geometry slice may create a subject.
+| property | value |
+| --- | --- |
+| subject_entity | administrative_unit |
+| native_id | the owned proposed_administrative_unit.administrative_unit_id |
+| subject ID rule | subject:administrative_unit:{administrative_unit_id} |
+| state | active on insert; retire-only if administrative unit retires |
+| delete policy | retire-only |
+| owner slice | Subject Model S1 — identity slice owns subject |
+| expected insert count | 1 registry subject per administrative identity shell row |
+| expected absence rules | no accepted address subject; no phase-a-subject-phase-a-location-geotag; no generic subject for multiple administrative records; no subject created by name/geometry slice |
 
-| target family | owner source table/field | deterministic ID rule | classification | source-record lineage | required authority | consumers | shared | other callable may update | expected absence rules |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| proposed_administrative_unit | admin_units.id for Model A; provinces.code/admin_units.id for Model C province/admin-unit units after authority | admin-unit:{source_table}:{stable source key}; do not use address location_record IDs | identity shell, government-internal until release decision | source_record_id for owning source row plus evidence_object prerequisite | official administrative hierarchy owner | administrative_unit_version, code_history, accepted-context future lookups | yes, one unit may be referenced by multiple context tables | no owner changes; later version/code/name callables may add child facts only | no location_record identity; no public_code_alias; no duplicate unit for same semantic authority identity |
-| proposed_administrative_unit_version | admin_units.level,parent_id,status,created_at,updated_at; provinces/territory if selected model authorizes | admin-unit-version:{administrative_unit_id}:{effective_from}:{source_record_id} | effective-dated state/version, not identity | owning source record and source_authority_id required | level translation, parent-lineage, lifecycle/effective-date authority | hierarchy traversal; address/address_record context integration | no; versions are owned by unit/version callable | no mutation; supersession via new version only | reject unsupported level, missing parent without root rule, self/cycle/duplicate current child |
-| proposed_administrative_code_history | admin_units.code, admin_units.province_code, provinces.code, territories.province_code if authorized | admin-code:{code_scheme}:{administrative_unit_id}:{normalized_code}:{effective_from} | code history; administrative code not NLI public address code | source_record_id and/or source_id in schema; authority evidence required | province-code owner, admin-unit code owner, code-history authority | future lookup from addresses.province_code/address_records.province_code and source crosswalks | yes as lookup, no as owner | only a future code-history callable may add/supersede codes | no proposed_public_code_alias; reject same code resolving to multiple units unless scope/scheme distinguishes |
-| proposed_name_record | admin_units.name_es/name_en; provinces.name; territories.name depending model | name:{subject_id}:{language}:{name_kind}:{normalized_text}:{source_record_id} | name fact; official/provisional status depends on authority | source_record_id required; no unrelated generic subject | bilingual naming authority and classification authority | operator display, future public presentation after release authority | subject may have multiple names, each row has one source owner | no mutation; add/supersede effective-dated name rows | no name row targeting phase-a-subject-phase-a-location-geotag or accepted address subjects |
-| proposed_legacy_crosswalk | source stable key: admin_units.id, provinces.code, territories.id/admin_unit_id as context only | crosswalk:{source_table}:{source_field}:{legacy_id}:to:{target_entity}:{target_id} | source identity/linkage; not official semantic proof by itself | source_record_id and exact source_field/source_key required | source-system relationship and target owner decision | future accepted-context dependency integration | lookup shared, row owner unique | no duplicate semantic crosswalk; future callables may read only | reject one source identity resolving to multiple targets and duplicate target semantic crosswalks |
-| proposed_registry_subject | derived from approved administrative_unit_id or locality/operational_area id; not directly from address location rows | subject:{subject_entity}:{native_id} | subject anchor for names/future geometry if used | created with identity row lineage; name/geometry rows reference it | registry-subject usage decision for administrative units | proposed_name_record; future geometry_observation/geometry_version for boundaries | yes as subject anchor; one per native entity | no; consumers reference only | do not reuse accepted address/geotag subjects; no one generic subject for multiple admin records |
-| proposed_country as prerequisite only | static GQ prerequisite from accepted source authority, not a transform output from admin tables | country:GQ / phase-a-country-gq | legitimate prerequisite | source_authority_id required; no admin source row owns it | country baseline authority already prerequisite; not expanded here | administrative_unit.country_id | yes | no in this checkpoint | do not create extra country rows or mutate accepted prerequisite |
+### Exact identity-shell rows under S1
+| row family | exact count | owner | ID rule |
+| --- | --- | --- | --- |
+| proposed_administrative_unit | 1 | administrative identity shell slice | administrative-unit:admin_units:phase-a-admin-units-id, only after official hierarchy authority confirms admin_units.id as stable source identity candidate |
+| proposed_legacy_crosswalk | 1 | administrative identity shell slice | crosswalk:admin_units:id:phase-a-admin-units-id:to:administrative_unit:{administrative_unit_id} |
+| proposed_registry_subject | 1 | administrative identity shell slice under S1 | subject:administrative_unit:{administrative_unit_id} |
 
-## 6. Registry-subject usage decision
+## 7. Candidate target row families — corrected ownership and lineage
+| target family | owner and deterministic ID rule | lineage statement | expected absences |
+| --- | --- | --- | --- |
+| proposed_administrative_unit | identity shell slice; administrative-unit:admin_units:{admin_units.id} only after authority approves admin_units.id stability | no persisted source_record/evidence/authority columns; lineage is through crosswalk plus comparator/test_control evidence | no location_record, no name/code/version/publication rows |
+| proposed_administrative_unit_version | future hierarchy version slice only after level/parent/effective-date authority | source_authority_id persisted; no source_record_id/evidence_object_id | absent from identity shell |
+| proposed_administrative_code_history | future code-history slice; ID includes code_scheme, unit, normalized code and effective_from | source_id persists proposed_source_record; evidence/authority not persisted on row | absent until code authority resolves; no public_code_alias |
+| proposed_name_record | future naming slice; ID includes S1 subject, language, kind, normalized text and source record | source_record_id persisted; evidence/authority not persisted on row | no names on generic/accepted address subjects |
+| proposed_legacy_crosswalk | identity shell or code/crosswalk slice; tuple source_table/source_field/legacy_id -> target | source tuple persisted but no source_record_id/source_key; comparator enforces exact source-record/evidence match | no duplicate semantic crosswalk; no one source to multiple targets |
+| proposed_registry_subject | S1 identity shell; subject:administrative_unit:{administrative_unit_id} | no source-lineage columns; lineage through native_id -> administrative_unit -> crosswalk/comparator proof | not optional; no accepted/geotag/generic subject reuse |
 
-Yes, recommended for SDA consideration: administrative units need proposed_registry_subject rows if proposed_name_record and future geometry observations/versions are to resolve a stable administrative subject. subject_entity should be administrative_unit; native_id should equal proposed_administrative_unit.administrative_unit_id; lifecycle follows the administrative unit lifecycle with retire-only delete policy; administrative_unit_version rows define effective state while names point to the registry subject. If SDA rejects registry_subject for admin units, a different name-subject FK or target vocabulary would be needed; the current physical schema supports name_record.subject_id -> registry_subject, so no-subject mode is not cleanly supported for names/geometry.
-
-## 7. Hierarchy semantics
-
+## 8. Hierarchy semantics
 | rule | definition |
 | --- | --- |
-| allowed levels | target vocabulary only: country, province, district, municipality, local_council |
-| country to province | province versions may have parent_administrative_unit_id null only if country relationship is represented by proposed_administrative_unit.country_id; otherwise parent must be country-level unit if model adds one |
-| province to subordinate administrative unit | province may parent district, municipality, or local_council only after level authority; district may parent municipality/local_council; municipality may parent local_council |
-| administrative unit to territory | only if territory is authorized as administrative level; otherwise territory maps to locality/operational area coverage referencing administrative_unit_id |
-| root behavior | country is root prerequisite; province is first-level root within country unless explicit country-level admin unit model is approved |
-| missing parent | fail unless source row is approved root level; missing parent_id in non-root is unresolved authority error |
-| parent-cycle prohibition | reject any cycle in parent_administrative_unit_id chain |
-| self-parent prohibition | reject parent id equal to child administrative_unit_id |
-| duplicate child prohibition | same semantic child cannot have two active parents for overlapping effective interval |
-| effective-date behavior | effective_from required; effective_to null means current; overlaps for same unit/version role rejected |
-| retirement/supersession | retire with effective_to/recorded_to or new version; never hard-delete referenced units |
-| orphan handling | quarantine as authority RFI/migration exception design; do not infer parent from code prefix |
+| allowed levels | country, province, district, municipality, local_council only |
+| root behavior | country is prerequisite; province is first-level within country unless future authority approves country-level admin unit row |
+| missing parent | fail with administrative hierarchy parent missing unless row is approved root |
+| self parent | fail with administrative hierarchy self parent prohibited |
+| cycle | fail with administrative hierarchy cycle detected |
+| wrong parent level | fail with administrative hierarchy parent level mismatch |
+| effective dates | blocked until effective-date authority resolves; no version row in identity shell |
 
-Any source `admin_units.level` value outside `country`, `province`, `district`, `municipality`, `local_council` cannot be translated without authority. The complete fixture value `phase-a admin_units level` is therefore unresolved authority input.
-
-## 8. Code ownership and collision rules
-
+## 9. Code ownership and bilingual naming rules
 | case | rule |
 | --- | --- |
-| internal deterministic primary keys | generated target IDs; not public; never exposed as NLI address code |
-| source legacy IDs | store in proposed_legacy_crosswalk with source_table/source_field/legacy_id; do not treat as official code |
-| province codes | candidate for proposed_administrative_code_history after province-code owner decision; may also be crosswalk source key when code is source PK |
-| admin-unit codes | candidate administrative code history after code-history authority; crosswalk if used to resolve legacy record |
-| territory IDs | crosswalk source identity for territory/locality/operational-area target; not administrative code unless territory authority says so |
-| public codes | not authorized; proposed_public_code_alias must remain absent for this checkpoint |
-| same code different tables | collision unless code_scheme/source_table/level scope separates them; require negative test |
-| code reused across levels | reject without scoped code_scheme and authority proof |
-| code changes over time | new code_history row with effective interval; old row effective_to; no mutation in place |
-| case/format differences | normalize for comparison but preserve source value; collision check uses normalized form |
-| one code to multiple targets | fail unless authority defines scoped code scheme that disambiguates |
+| internal deterministic primary keys | target IDs are internal; not public and not derived from mutable public codes unless authority declares immutability |
+| source legacy IDs | persist in proposed_legacy_crosswalk; source_record_id is comparator-enforced, not persisted on crosswalk |
+| province codes | provinces.code is current-source PK but not automatically stable canonical identity; code goes to crosswalk/code-history after authority |
+| admin-unit codes | candidate code-history value; cannot change administrative_unit_id |
+| territory IDs | source identity for territory entity only after classification; outside first administrative identity oracle |
+| public codes | not authorized; proposed_public_code_alias absent |
+| same code different tables | collision unless authority defines scoped code scheme |
+| code reused across levels | reject without scoped scheme and authority proof |
+| code changes over time | manual authority event determines same canonical unit vs new unit vs unresolved linkage; record history only after authority |
+| case/format differences | preserve source value; compare normalized value for collisions |
+| one code to multiple targets | fail with administrative code multiple unit resolution |
 
-## 9. Bilingual naming
-
-| field | language | name kind | status | normalization | target subject | source lineage | authority status | effective dates |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| admin_units.name_es | es | official/admin-name candidate | unresolved-authority/provisional | trim, collapse whitespace, casefold for duplicate check; preserve original text | administrative_unit registry subject for admin_units.id | phase-a-source-record-admin-units-001 | bilingual naming authority required | created_at as candidate effective_from only if authority approves |
-| admin_units.name_en | en | official/admin-name candidate | unresolved-authority/provisional | same | administrative_unit registry subject for admin_units.id | phase-a-source-record-admin-units-001 | bilingual naming authority required | created_at candidate |
-| provinces.name | undetermined/es-or-en | province name candidate | not assumed official | same; language must be decided or source metadata added | province administrative_unit subject if model includes provinces | phase-a-source-record-provinces-001 | province naming authority required | created_at candidate |
-| territories.name | undetermined/es-or-en | territory/locality/operational-area name candidate | not assumed official | same | territory locality/operational_area subject unless territory authorized as admin unit | phase-a-source-record-territories-001 | territory registry/naming authority required | created_at candidate |
-
-No province or territory fixture name is assumed official. No name record may target an unrelated generic subject.
+| field | language | target subject | lineage | authority |
+| --- | --- | --- | --- | --- |
+| admin_units.name_es | es | administrative_unit subject owned by S1 identity slice | source_record_id persisted on name_record | bilingual naming authority required |
+| admin_units.name_en | en | administrative_unit subject owned by S1 identity slice | source_record_id persisted on name_record | bilingual naming authority required |
+| provinces.name | undetermined/es-or-en | province administrative_unit subject only after province canonical identity authority | source_record_id persisted on name_record | province naming/language authority required |
+| territories.name | undetermined/es-or-en | territory locality/operational_area/admin subject only after territory classification | source_record_id persisted on name_record | territory registry/naming authority required |
 
 ## 10. Accepted-family administrative-context dependencies
-The accepted-family convergence union must remain unchanged. Future integration requires new context/crosswalk slices rather than modifying accepted identity rows.
-
-| source field | currently accepted context only | proposed lookup path | expected target entity | failure behavior | accepted rows remain unchanged | future integration requires |
-| --- | --- | --- | --- | --- | --- | --- |
-| addresses.territory_id | yes | addresses.territory_id -> territory crosswalk -> locality/operational_area or admin unit per Model C | not accepted location_record; future context relation/crosswalk | no match or ambiguous match fails future integration; accepted identity row unchanged | yes | new crosswalk/context slice, not modifying accepted address identity row |
-| addresses.province_code | yes | province_code -> administrative_code_history/province crosswalk after authority | administrative_unit/code_history | BN vs phase-a-provinces-code mismatch fails until authority lookup resolves | yes | new admin code/history lookup slice |
-| address_records.territory_id | yes | address_records.territory_id -> territory crosswalk -> context target | locality/operational_area or administrative_unit context | ambiguous/missing territory fails future context integration | yes | new crosswalk/context slice |
-| address_records.province_code | yes | province_code -> admin code history/province unit | administrative_unit/code_history | mismatch fails without authority mapping | yes | new admin code/history slice |
-| roads.territory_id | no; not accepted slice yet | roads.territory_id -> territory crosswalk | context relation for future road identity | future road slice fails if territory unresolved | yes | future roads identity/reference slice |
-| buildings.territory_id | no; not accepted slice yet | buildings.territory_id -> territory crosswalk | context relation for future building identity | future building slice fails if territory unresolved | yes | future buildings identity/reference slice |
-| field_assignments.territory_id | no | field assignment territory -> operational area/coverage | operational_area coverage or assignment context | field workflow slice fails; not an admin identity failure | yes | future field/operational-area slice |
-| field_submissions.territory_id | no | field submission territory -> operational area/locality context | operational_area/locality context | field submission integration fails without territory resolution | yes | future field submission context slice |
+Accepted rows and the accepted-family convergence union remain unchanged. Future integration uses new crosswalk/context slices, not accepted identity row mutation.
+| source field | currently accepted context only | future lookup path | accepted rows changed |
+| --- | --- | --- | --- |
+| addresses.territory_id | yes | territory_id -> territory crosswalk after classification -> locality/operational/admin context | no |
+| addresses.province_code | yes | province_code -> code-history/crosswalk after province authority | no |
+| address_records.territory_id | yes | territory_id -> territory context crosswalk | no |
+| address_records.province_code | yes | province_code -> province/admin code-history | no |
+| roads.territory_id | no | future roads slice reads territory context crosswalk | no |
+| buildings.territory_id | no | future buildings slice reads territory context crosswalk | no |
+| field_assignments.territory_id | no | field operational-area/territory coverage after classification | no |
+| field_submissions.territory_id | no | field submission territory/locality/operational context | no |
 
 ## 11. Authority-decision register / RFIs
-No implementation may be recommended before identity and hierarchy authority questions are resolved.
+| RFI | status |
+| --- | --- |
+| official administrative hierarchy owner | unresolved; mapping/RFI drafting only; implementation/oracle preparation prohibited until resolved where it affects exact expected rows |
+| official province-code owner | unresolved; mapping/RFI drafting only; implementation/oracle preparation prohibited until resolved where it affects exact expected rows |
+| official territory registry owner | unresolved; mapping/RFI drafting only; implementation/oracle preparation prohibited until resolved where it affects exact expected rows |
+| bilingual naming authority | unresolved; mapping/RFI drafting only; implementation/oracle preparation prohibited until resolved where it affects exact expected rows |
+| administrative level translation | unresolved; mapping/RFI drafting only; implementation/oracle preparation prohibited until resolved where it affects exact expected rows |
+| parent-lineage authority | unresolved; mapping/RFI drafting only; implementation/oracle preparation prohibited until resolved where it affects exact expected rows |
+| code history authority | unresolved; mapping/RFI drafting only; implementation/oracle preparation prohibited until resolved where it affects exact expected rows |
+| effective-date authority | unresolved; mapping/RFI drafting only; implementation/oracle preparation prohibited until resolved where it affects exact expected rows |
+| classification and public-release authority | unresolved; mapping/RFI drafting only; implementation/oracle preparation prohibited until resolved where it affects exact expected rows |
 
-| RFI | decision required | proposed institution/role | minimum evidence | affected source fields | affected target rows | work permitted before resolution | work prohibited before resolution |
-| --- | --- | --- | --- | --- | --- | --- | --- |
-| official administrative hierarchy owner | Which institution owns official country/province/district/municipality/local_council hierarchy? | Ministry/agency responsible for territorial administration and national GIS registry | gazetted hierarchy, current reference dataset, legal mandate | admin_units.level,parent_id,province_code; provinces.code/name; territories.admin_unit_id | administrative_unit/version/code/name/crosswalk | mapping and RFI drafting only | oracle/transform/implementation/publication |
-| official province-code owner | Who owns province code values such as BN and their history? | territorial administration / statistics / GIS authority | official code list, effective dates, retired codes | provinces.code, admin_units.province_code, territories.province_code, addresses.province_code | administrative_code_history, legacy_crosswalk | collision analysis only | code-history implementation or public-code issuance |
-| official territory registry owner | Are territories official administrative units, localities, or operational rollout areas? | NLI registry/SDA plus territorial administration | territory registry definition, purpose/type vocabulary, relationship to admin units | territories.id,name,type,readiness,admin_unit_id,province_code | administrative_unit or locality/operational_area/crosswalk | model evaluation only | promoting territories into admin units |
-| bilingual naming authority | Who approves Spanish/English/undetermined names and language status? | territorial administration + language/publication authority | official bilingual gazette/list, translation policy | admin_units.name_es,name_en; provinces.name; territories.name | name_record | normalization design only | official/public name rows |
-| administrative level translation | How does source level string translate to target levels? | SDA + territorial administration | controlled level map | admin_units.level, territories.type | administrative_unit_version.admin_level | unsupported-level test design | fallback mapping |
-| parent-lineage authority | Which parent relationships are official and effective-dated? | territorial administration/GIS authority | parent-child hierarchy with effective intervals | admin_units.parent_id, territories.admin_unit_id, province_code fields | administrative_unit_version.parent_administrative_unit_id | cycle/missing-parent test design | parent inference from code |
-| code history authority | Who decides code reuse, changes, and schemes? | national code/list owner | code scheme definition and historical list | admin_units.code, provinces.code, territory ids/province_code | administrative_code_history and crosswalks | collision rules design only | code rows or alias rows |
-| effective-date authority | Which source dates become effective_from/effective_to vs recorded_at? | SDA + source data owner | temporal policy and source metadata | created_at,updated_at,status,is_archived | versions, code_history, name_record | temporal model design only | using created_at as official effective date |
-| classification and public-release authority | Which admin reference facts may be public and when? | Programme Owner/SDA/publication authority | classification policy and release approval | all admin/province/territory rows and names/codes | classification fields; publication rows | classification boundary statement only | public aliases/publication output |
-
-## 12. Future negative tests — designs only
-
-| negative test design | setup | mutation | expected failure | implementation status |
-| --- | --- | --- | --- | --- |
-| unsupported administrative level | Prepare future reviewed admin mapping fixture with unsupported administrative level condition; use independent expected source, not transform output. | Mutate only the relevant source/control field to trigger unsupported administrative level. | Future oracle/comparator rejects unsupported administrative level; no target rows persist; rollback/read-only evidence remains equal where applicable. | design only; not authorized |
-| missing parent | Prepare future reviewed admin mapping fixture with missing parent condition; use independent expected source, not transform output. | Mutate only the relevant source/control field to trigger missing parent. | Future oracle/comparator rejects missing parent; no target rows persist; rollback/read-only evidence remains equal where applicable. | design only; not authorized |
-| self-parent | Prepare future reviewed admin mapping fixture with self-parent condition; use independent expected source, not transform output. | Mutate only the relevant source/control field to trigger self-parent. | Future oracle/comparator rejects self-parent; no target rows persist; rollback/read-only evidence remains equal where applicable. | design only; not authorized |
-| hierarchy cycle | Prepare future reviewed admin mapping fixture with hierarchy cycle condition; use independent expected source, not transform output. | Mutate only the relevant source/control field to trigger hierarchy cycle. | Future oracle/comparator rejects hierarchy cycle; no target rows persist; rollback/read-only evidence remains equal where applicable. | design only; not authorized |
-| wrong parent level | Prepare future reviewed admin mapping fixture with wrong parent level condition; use independent expected source, not transform output. | Mutate only the relevant source/control field to trigger wrong parent level. | Future oracle/comparator rejects wrong parent level; no target rows persist; rollback/read-only evidence remains equal where applicable. | design only; not authorized |
-| province-code mismatch | Prepare future reviewed admin mapping fixture with province-code mismatch condition; use independent expected source, not transform output. | Mutate only the relevant source/control field to trigger province-code mismatch. | Future oracle/comparator rejects province-code mismatch; no target rows persist; rollback/read-only evidence remains equal where applicable. | design only; not authorized |
-| territory/admin-unit mismatch | Prepare future reviewed admin mapping fixture with territory/admin-unit mismatch condition; use independent expected source, not transform output. | Mutate only the relevant source/control field to trigger territory/admin-unit mismatch. | Future oracle/comparator rejects territory/admin-unit mismatch; no target rows persist; rollback/read-only evidence remains equal where applicable. | design only; not authorized |
-| duplicate administrative identity | Prepare future reviewed admin mapping fixture with duplicate administrative identity condition; use independent expected source, not transform output. | Mutate only the relevant source/control field to trigger duplicate administrative identity. | Future oracle/comparator rejects duplicate administrative identity; no target rows persist; rollback/read-only evidence remains equal where applicable. | design only; not authorized |
-| duplicate semantic crosswalk | Prepare future reviewed admin mapping fixture with duplicate semantic crosswalk condition; use independent expected source, not transform output. | Mutate only the relevant source/control field to trigger duplicate semantic crosswalk. | Future oracle/comparator rejects duplicate semantic crosswalk; no target rows persist; rollback/read-only evidence remains equal where applicable. | design only; not authorized |
-| one source identity resolving to multiple targets | Prepare future reviewed admin mapping fixture with one source identity resolving to multiple targets condition; use independent expected source, not transform output. | Mutate only the relevant source/control field to trigger one source identity resolving to multiple targets. | Future oracle/comparator rejects one source identity resolving to multiple targets; no target rows persist; rollback/read-only evidence remains equal where applicable. | design only; not authorized |
-| one code resolving to multiple units | Prepare future reviewed admin mapping fixture with one code resolving to multiple units condition; use independent expected source, not transform output. | Mutate only the relevant source/control field to trigger one code resolving to multiple units. | Future oracle/comparator rejects one code resolving to multiple units; no target rows persist; rollback/read-only evidence remains equal where applicable. | design only; not authorized |
-| conflicting bilingual name | Prepare future reviewed admin mapping fixture with conflicting bilingual name condition; use independent expected source, not transform output. | Mutate only the relevant source/control field to trigger conflicting bilingual name. | Future oracle/comparator rejects conflicting bilingual name; no target rows persist; rollback/read-only evidence remains equal where applicable. | design only; not authorized |
-| wrong name subject | Prepare future reviewed admin mapping fixture with wrong name subject condition; use independent expected source, not transform output. | Mutate only the relevant source/control field to trigger wrong name subject. | Future oracle/comparator rejects wrong name subject; no target rows persist; rollback/read-only evidence remains equal where applicable. | design only; not authorized |
-| generic geotag-subject reuse | Prepare future reviewed admin mapping fixture with generic geotag-subject reuse condition; use independent expected source, not transform output. | Mutate only the relevant source/control field to trigger generic geotag-subject reuse. | Future oracle/comparator rejects generic geotag-subject reuse; no target rows persist; rollback/read-only evidence remains equal where applicable. | design only; not authorized |
-| classification drift | Prepare future reviewed admin mapping fixture with classification drift condition; use independent expected source, not transform output. | Mutate only the relevant source/control field to trigger classification drift. | Future oracle/comparator rejects classification drift; no target rows persist; rollback/read-only evidence remains equal where applicable. | design only; not authorized |
-| unauthorized public alias | Prepare future reviewed admin mapping fixture with unauthorized public alias condition; use independent expected source, not transform output. | Mutate only the relevant source/control field to trigger unauthorized public alias. | Future oracle/comparator rejects unauthorized public alias; no target rows persist; rollback/read-only evidence remains equal where applicable. | design only; not authorized |
-| unauthorized publication output | Prepare future reviewed admin mapping fixture with unauthorized publication output condition; use independent expected source, not transform output. | Mutate only the relevant source/control field to trigger unauthorized publication output. | Future oracle/comparator rejects unauthorized publication output; no target rows persist; rollback/read-only evidence remains equal where applicable. | design only; not authorized |
-| missing source authority | Prepare future reviewed admin mapping fixture with missing source authority condition; use independent expected source, not transform output. | Mutate only the relevant source/control field to trigger missing source authority. | Future oracle/comparator rejects missing source authority; no target rows persist; rollback/read-only evidence remains equal where applicable. | design only; not authorized |
-| wrong source/evidence lineage | Prepare future reviewed admin mapping fixture with wrong source/evidence lineage condition; use independent expected source, not transform output. | Mutate only the relevant source/control field to trigger wrong source/evidence lineage. | Future oracle/comparator rejects wrong source/evidence lineage; no target rows persist; rollback/read-only evidence remains equal where applicable. | design only; not authorized |
-| unexpected version | Prepare future reviewed admin mapping fixture with unexpected version condition; use independent expected source, not transform output. | Mutate only the relevant source/control field to trigger unexpected version. | Future oracle/comparator rejects unexpected version; no target rows persist; rollback/read-only evidence remains equal where applicable. | design only; not authorized |
-| unexpected decision event | Prepare future reviewed admin mapping fixture with unexpected decision event condition; use independent expected source, not transform output. | Mutate only the relevant source/control field to trigger unexpected decision event. | Future oracle/comparator rejects unexpected decision event; no target rows persist; rollback/read-only evidence remains equal where applicable. | design only; not authorized |
-| second-run idempotency | Prepare future reviewed admin mapping fixture with second-run idempotency condition; use independent expected source, not transform output. | Mutate only the relevant source/control field to trigger second-run idempotency. | Future oracle/comparator rejects second-run idempotency; no target rows persist; rollback/read-only evidence remains equal where applicable. | design only; not authorized |
-| read-only complete comparison | Prepare future reviewed admin mapping fixture with read-only complete comparison condition; use independent expected source, not transform output. | Mutate only the relevant source/control field to trigger read-only complete comparison. | Future oracle/comparator rejects read-only complete comparison; no target rows persist; rollback/read-only evidence remains equal where applicable. | design only; not authorized |
-| same-database rollback equality | Prepare future reviewed admin mapping fixture with same-database rollback equality condition; use independent expected source, not transform output. | Mutate only the relevant source/control field to trigger same-database rollback equality. | Future oracle/comparator rejects same-database rollback equality; no target rows persist; rollback/read-only evidence remains equal where applicable. | design only; not authorized |
-
-## 13. Potential slice boundaries — not authorized
-
-| slice | exact source table | covered fields | context fields | target rows | prerequisite slices | authority prerequisite | privacy/publication boundary | expected inserts | expected absences |
+## 12. C40 exact future negative-test contracts — designs only
+These are contract designs only. They do not prepare a reviewer oracle and do not authorize implementation.
+| test_id | owning proposed slice | exact baseline source rows and IDs | exact prerequisite target rows | exact mutation value | exact callable or comparator stage | exact expected error string | expected inserted/updated/deleted row sets before failure | same-database rollback proof | read-only comparison expectation |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| administrative-unit identity and hierarchy | admin_units plus provinces as context if authorized | admin_units.id, level, parent_id, province_code, status, created_at, updated_at; provinces.code as context | country prerequisite, source_authority, source_record/evidence | proposed_administrative_unit, proposed_administrative_unit_version, proposed_legacy_crosswalk, optional proposed_registry_subject | country/source/evidence prerequisites | official hierarchy owner, level translation, parent-lineage authority | government-internal/public-after-release only after authority | one unit, one version, one crosswalk, optional subject for fixture row | no location_record, no public_code_alias, no publication, no decision_event unless future oracle authorizes |
-| administrative code history/crosswalk | admin_units, provinces, territories | admin_units.code, admin_units.province_code, provinces.code, territories.province_code, territories.id | resolved administrative_unit_id, code scheme, effective dates | proposed_administrative_code_history, proposed_legacy_crosswalk | administrative-unit identity and hierarchy | province-code owner, code-history authority | administrative codes not NLI public address codes | code history rows only for authority-resolved codes | no proposed_public_code_alias, no duplicate code-to-target rows |
-| administrative names | admin_units, provinces, territories | admin_units.name_es, admin_units.name_en, provinces.name, territories.name | registry subject, language decision, name authority, effective dates | proposed_name_record | identity/registry-subject decision | bilingual naming authority | not official/public until publication authority | one or more name rows per approved subject/language | no generic geotag subject; no accepted address subjects |
-| accepted-context dependency integration | addresses, address_records, roads, buildings, field_assignments, field_submissions | territory_id, province_code, admin context references | admin/territory crosswalks, code history | future context relationship/crosswalk rows only; accepted identity rows unchanged | identity/hierarchy, code history, territory classification | territory registry owner and context lookup authority | no publication effect | context lookup/crosswalk rows if authorized | no accepted-family convergence union mutation |
+| ADMIN-NEG-001 | administrative identity shell / future hierarchy version | admin_units:phase-a-admin-units-001; provinces:phase-a-provinces-001 | country prerequisite; source_authority/source_record/evidence prerequisites; identity shell rows if version stage is tested | admin_units.level = unsupported_prefecture | comparator validation before target insert | administrative hierarchy unsupported level | inserts=0, updates=0, deletes=0 for failing mutation; if failure occurs after staged writes, same transaction must roll back to pre-test attributable set | required: complete pre-test rows/hash equals post-rollback rows/hash | not applicable unless test stage is read-only comparator; read-only comparator must not write |
+| ADMIN-NEG-002 | administrative hierarchy version | admin_units:phase-a-admin-units-001 | identity shell rows; parent lookup prerequisite intentionally absent | admin_units.parent_id = missing-admin-unit-id | comparator validation before version insert | administrative hierarchy parent missing | inserts=0, updates=0, deletes=0 for failing mutation; if failure occurs after staged writes, same transaction must roll back to pre-test attributable set | required: complete pre-test rows/hash equals post-rollback rows/hash | not applicable unless test stage is read-only comparator; read-only comparator must not write |
+| ADMIN-NEG-003 | administrative hierarchy version | admin_units:phase-a-admin-units-001 | identity shell rows for child | admin_units.parent_id = phase-a-admin-units-id | comparator validation before version insert | administrative hierarchy self parent prohibited | inserts=0, updates=0, deletes=0 for failing mutation; if failure occurs after staged writes, same transaction must roll back to pre-test attributable set | required: complete pre-test rows/hash equals post-rollback rows/hash | not applicable unless test stage is read-only comparator; read-only comparator must not write |
+| ADMIN-NEG-004 | administrative hierarchy version | admin_units:phase-a-admin-units-001 plus reviewed parent fixture row | identity shell rows for both units | parent row points back to child administrative_unit_id | comparator graph validation before commit | administrative hierarchy cycle detected | inserts=0, updates=0, deletes=0 for failing mutation; if failure occurs after staged writes, same transaction must roll back to pre-test attributable set | required: complete pre-test rows/hash equals post-rollback rows/hash | not applicable unless test stage is read-only comparator; read-only comparator must not write |
+| ADMIN-NEG-005 | administrative hierarchy version | admin_units:phase-a-admin-units-001 plus parent unit | identity shell + parent version rows | parent admin_level = local_council while child admin_level = province | comparator hierarchy validation | administrative hierarchy parent level mismatch | inserts=0, updates=0, deletes=0 for failing mutation; if failure occurs after staged writes, same transaction must roll back to pre-test attributable set | required: complete pre-test rows/hash equals post-rollback rows/hash | not applicable unless test stage is read-only comparator; read-only comparator must not write |
+| ADMIN-NEG-006 | administrative code/history or context lookup | admin_units:phase-a-admin-units-001; provinces:phase-a-provinces-001 | identity shell rows; province code authority fixture | admin_units.province_code = XX while provinces.code = BN | comparator source relationship validation | administrative hierarchy province code mismatch | inserts=0, updates=0, deletes=0 for failing mutation; if failure occurs after staged writes, same transaction must roll back to pre-test attributable set | required: complete pre-test rows/hash equals post-rollback rows/hash | not applicable unless test stage is read-only comparator; read-only comparator must not write |
+| ADMIN-NEG-007 | accepted-context dependency integration / territory classification | territories:phase-a-territories-001; admin_units:phase-a-admin-units-001 | identity shell rows; territory classification prerequisite | territories.admin_unit_id = different-admin-unit-id | comparator territory relationship validation | administrative hierarchy territory relationship mismatch | inserts=0, updates=0, deletes=0 for failing mutation; if failure occurs after staged writes, same transaction must roll back to pre-test attributable set | required: complete pre-test rows/hash equals post-rollback rows/hash | not applicable unless test stage is read-only comparator; read-only comparator must not write |
+| ADMIN-NEG-008 | administrative identity shell | admin_units:phase-a-admin-units-001 plus duplicate source row | country/source/evidence prerequisites | two source rows resolve to same administrative_unit_id or subject_id | comparator semantic uniqueness check | administrative identity duplicate semantic subject | inserts=0, updates=0, deletes=0 for failing mutation; if failure occurs after staged writes, same transaction must roll back to pre-test attributable set | required: complete pre-test rows/hash equals post-rollback rows/hash | not applicable unless test stage is read-only comparator; read-only comparator must not write |
+| ADMIN-NEG-009 | administrative identity shell | admin_units:phase-a-admin-units-001 | existing crosswalk for same source_table/source_field/legacy_id | same legacy tuple resolves to second target_id | comparator crosswalk uniqueness check | administrative crosswalk multiple target resolution | inserts=0, updates=0, deletes=0 for failing mutation; if failure occurs after staged writes, same transaction must roll back to pre-test attributable set | required: complete pre-test rows/hash equals post-rollback rows/hash | not applicable unless test stage is read-only comparator; read-only comparator must not write |
+| ADMIN-NEG-010 | administrative code history/crosswalk | admin_units:phase-a-admin-units-001; provinces:phase-a-provinces-001 | two authority-approved units in same code_scheme | official_code BN resolves to two administrative_unit_id values | comparator code uniqueness check | administrative code multiple unit resolution | inserts=0, updates=0, deletes=0 for failing mutation; if failure occurs after staged writes, same transaction must roll back to pre-test attributable set | required: complete pre-test rows/hash equals post-rollback rows/hash | not applicable unless test stage is read-only comparator; read-only comparator must not write |
+| ADMIN-NEG-011 | administrative names | admin_units:phase-a-admin-units-001 | identity shell rows and S1 registry subject | name_record.subject_id = phase-a-subject-phase-a-location-address-reference | comparator name subject validation | administrative name subject mismatch | inserts=0, updates=0, deletes=0 for failing mutation; if failure occurs after staged writes, same transaction must roll back to pre-test attributable set | required: complete pre-test rows/hash equals post-rollback rows/hash | not applicable unless test stage is read-only comparator; read-only comparator must not write |
+| ADMIN-NEG-012 | administrative identity shell / names / geometry preparation | admin_units:phase-a-admin-units-001 | identity shell rows | subject_id = phase-a-subject-phase-a-location-geotag | comparator subject ownership validation | administrative generic subject reuse prohibited | inserts=0, updates=0, deletes=0 for failing mutation; if failure occurs after staged writes, same transaction must roll back to pre-test attributable set | required: complete pre-test rows/hash equals post-rollback rows/hash | not applicable unless test stage is read-only comparator; read-only comparator must not write |
+| ADMIN-NEG-013 | administrative identity shell / version | admin_units:phase-a-admin-units-001 | authority-approved expected classification | classification = public-after-release before release authority or mismatched government-internal expectation | complete expected/actual comparison | administrative classification drift | inserts=0, updates=0, deletes=0 for failing mutation; if failure occurs after staged writes, same transaction must roll back to pre-test attributable set | required: complete pre-test rows/hash equals post-rollback rows/hash | not applicable unless test stage is read-only comparator; read-only comparator must not write |
+| ADMIN-NEG-014 | all administrative slices | admin_units:phase-a-admin-units-001 | identity shell prerequisites only | insert proposed_public_code_alias or proposed_publication_release_item | unexpected-row comparator | administrative public output prohibited | inserts=0, updates=0, deletes=0 for failing mutation; if failure occurs after staged writes, same transaction must roll back to pre-test attributable set | required: complete pre-test rows/hash equals post-rollback rows/hash | not applicable unless test stage is read-only comparator; read-only comparator must not write |
+| ADMIN-NEG-015 | administrative hierarchy version / country prerequisite | admin_units:phase-a-admin-units-001 | source_authority prerequisite intentionally absent | source_authority_id = missing-authority-id | precondition comparator | administrative source authority missing | inserts=0, updates=0, deletes=0 for failing mutation; if failure occurs after staged writes, same transaction must roll back to pre-test attributable set | required: complete pre-test rows/hash equals post-rollback rows/hash | not applicable unless test stage is read-only comparator; read-only comparator must not write |
+| ADMIN-NEG-016 | administrative identity shell | admin_units:phase-a-admin-units-001 | source_record/evidence prerequisites; crosswalk expected tuple | crosswalk legacy_id = phase-a-admin-units-id but comparator source_record = wrong source record | lineage comparator | administrative lineage mismatch | inserts=0, updates=0, deletes=0 for failing mutation; if failure occurs after staged writes, same transaction must roll back to pre-test attributable set | required: complete pre-test rows/hash equals post-rollback rows/hash | not applicable unless test stage is read-only comparator; read-only comparator must not write |
+| ADMIN-NEG-017 | all administrative slices | admin_units:phase-a-admin-units-001 | identity shell expected rows only | extra proposed_decision_event, proposed_migration_exception, proposed_name_record or code_history in identity shell | complete attributable-union comparator | administrative unexpected target row | inserts=0, updates=0, deletes=0 for failing mutation; if failure occurs after staged writes, same transaction must roll back to pre-test attributable set | required: complete pre-test rows/hash equals post-rollback rows/hash | not applicable unless test stage is read-only comparator; read-only comparator must not write |
 
-**Recommended first potential slice:** administrative-unit identity and hierarchy. It has the highest dependency leverage for accepted-context resolution, but remains unauthorized until SDA approves reviewer-oracle preparation and authority questions are answered.
+## 13. C40 positive proof contracts — not failing mutations
+| contract_id | proof contract | requirements | not a failing mutation |
+| --- | --- | --- | --- |
+| ADMIN-POS-001 | second-run idempotency | first-run exact expected inserts; second-run 0 inserts, 0 updates, 0 deletes; identical attributable union and hash | yes |
+| ADMIN-POS-002 | read-only complete comparison | separate connection; read-only transaction; attempted write blocked; expected/actual comparison in both directions; complete normalized values compared | yes |
+| ADMIN-POS-003 | same-database rollback equality | mandatory evidence for every failing database mutation: complete pre-test rows, complete post-rollback rows, pre/post counts, pre/post hashes, row equality, hash equality | yes |
 
-## 14. F02 / F14 impact and remaining gates
+## 14. Corrected potential slice boundaries — no optional rows
+| slice | status | exact source table | exact covered fields | context fields | exact owned rows | prerequisite slices | authority prerequisite | privacy/publication boundary | expected inserts | expected absences |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Administrative identity shell — authority-approved admin_units.id | recommended first potential slice; not authorized | admin_units | admin_units.id only for identity; source_key/source_record/evidence verified by comparator/test_control | proposed_country prerequisite; source authority/source package/source record/evidence prerequisites | one proposed_administrative_unit; one proposed_legacy_crosswalk; one proposed_registry_subject because S1 selected | country/source/evidence prerequisites | official hierarchy owner confirms admin_units.id stable enough for identity shell | government-internal; no public release | 3 exact rows | no location_record; no address subject; no name_record; no code_history; no public_code_alias; no publication; no decision_event; no migration exception unless separately authorized RFI model requires it |
+| Administrative hierarchy version | authority-blocked; not first oracle-ready | admin_units | level, parent_id, status, created_at, updated_at after authority | approved identity shell rows; parent identity rows; source_authority_id | conditional exact alternative A: one proposed_administrative_unit_version when level/parent/effective-date authority resolves; alternative B: zero rows and authority-blocked failure | identity shell; parent identity if non-root | level translation, parent-lineage and effective-date authority | no publication | 0 until authority; then exactly 1 version row per approved admin_units row | no inferred parent, no version from unsupported level, no decision_event |
+| Province identity | authority-blocked; not oracle-ready | provinces | code as current-source PK only; name as later naming fact | reviewer-assigned canonical province identity token required | conditional exact alternative A: one administrative unit, one crosswalk, one S1 subject after canonical identity authority; alternative B: zero rows while authority-blocked | stable province canonical identity decision | stable identity and code-continuity authority | no public-code issuance | 0 until authority | no ID derived directly from mutable normalized provinces.code |
+| Territory identity | outside administrative identity slice under Model C; authority-blocked for classification | territories | id, admin_unit_id, province_code, type, readiness only after classification | territory registry authority and Model C target choice | conditional exact alternative A: locality/operational_area/admin unit rows depending classification; alternative B: zero administrative identity rows | territory classification decision; admin identity/context crosswalks | territory registry owner decides administrative unit vs locality vs operational area vs other context entity | government-internal; no publication | 0 in first administrative identity oracle | no territory rows in first administrative identity oracle |
+| Administrative code history/crosswalk | blocked until identity and code authority | admin_units, provinces, territories | admin_units.code, admin_units.province_code, provinces.code, territories.province_code, territories.id | resolved administrative_unit_id; code_scheme; effective dates | conditional exact alternative A: exact proposed_administrative_code_history rows after authority; alternative B: zero rows while code authority unresolved | identity shell and/or province identity | province-code owner and code-history authority | administrative codes are not NLI public address codes | 0 until authority | no proposed_public_code_alias |
+| Administrative names | blocked until S1 subject exists and naming authority resolves | admin_units, provinces, territories | admin_units.name_es, admin_units.name_en, provinces.name, territories.name | S1 registry subject, language decision, name authority, effective dates | conditional exact alternative A: exact proposed_name_record rows for approved subject/language; alternative B: zero rows until authority | identity shell with S1 subject; naming authority | bilingual naming authority and subject ownership | not public until release authority | 0 until authority | no names on accepted address/geotag/generic subjects |
+| Accepted-context dependency integration | future slice; not authorized | addresses, address_records, roads, buildings, field_assignments, field_submissions | territory_id, province_code | admin/territory crosswalks, code history | conditional exact alternatives depend on future context relation target; accepted identity rows remain unchanged | identity, code history, territory classification | territory registry owner and context lookup authority | no publication | 0 now | no accepted-family convergence union mutation |
 
+**Recommended first potential slice:** Administrative identity shell — authority-approved `admin_units.id`, with S1 mandatory registry subject ownership.
+**Authority-blocked slices:** administrative hierarchy version; province identity; territory identity; administrative code history/crosswalk; administrative names; accepted-context dependency integration.
+## 15. F02 / F14 impact and remaining gates
 | item | status |
 | --- | --- |
-| F02 impact | positive design impact only: defines source-row, field, target-family, ownership, authority and negative-test boundaries for admin/reference data; F02 remains partially satisfied and not closed |
-| F14 impact | positive design impact only: separates admin/reference authority from generic broad outputs and accepted-family convergence; F14 remains partially satisfied and not closed |
-| Remaining closed gates | reviewer-oracle preparation, administrative implementation, another transform group, broad Phase A reassessment, F02/F14 closure, Review 12, Phase B, publication, deployment, merge and PR #8 remain closed |
-
-## 15. Return summary values
-
-| field | value |
-| --- | --- |
-| Source tables mapped | 3 — admin_units, provinces, territories |
-| Source fields mapped | 23 |
-| Fixture inconsistencies | 7 |
-| Candidate models evaluated | 3 |
-| Recommended model | Model C — split administrative and operational concepts |
-| Recommendation confidence | medium; strongest alignment with WO-002 separation rule, but authority must resolve whether territories are official administrative units, localities, operational areas, or mixed by type |
-| Unresolved authority decisions | 9 |
-| Administrative-unit owners | admin_units.id preferred under Model A/C for admin_units; provinces.code may own province unit if authority accepts Model C; territories not admin owner unless authority says so |
-| Version owners | administrative-unit version callable/slice owns level/parent/lifecycle/effective state |
-| Code-history owners | future code-history slice only; source codes from admin_units/provinces/territories after authority |
-| Name-record owners | future naming slice; admin_units/provinces/territories names by subject after authority |
-| Crosswalk owners | future identity/hierarchy or code-history slices; no duplicate owners |
-| Registry-subject decision | recommended yes for administrative_unit subjects; no reuse of accepted/geotag/generic subjects |
-| Country prerequisite | proposed_country is prerequisite only, not admin transform output |
-| Hierarchy levels | country, province, district, municipality, local_council |
-| Parent rules | 12 |
-| Code rules | 11 |
-| Name rules | 4 |
-| Classification boundary | government-internal or public-after-release only after authority; no publication now |
-| Publication boundary | no proposed_public_code_alias, publication_release, release_item or public output authorized |
-| Accepted-context dependencies | 8 |
 | Accepted rows modified | 0 |
 | Accepted convergence modified | no |
-| Authority RFIs | 9 |
-| Negative tests designed | 24 |
-| Potential slice boundaries | 4 |
-| Recommended first potential slice | administrative-unit identity and hierarchy |
-| F02 impact | design impact only; partially satisfied, not closed |
-| F14 impact | design impact only; partially satisfied, not closed |
-| Remaining closed gates | oracle preparation, admin implementation, transform groups, broad Phase A, F02/F14 closure, Review 12, Phase B, publication, deployment, merge, PR #8 |
-| Current instructed action | Administrative hierarchy and reference-identity mapping only. |
-| Next instruction required from SDA | YES — before reviewer-oracle preparation, administrative implementation, another transform group, broad Phase A reassessment, F02/F14 closure, Review 12, Phase B, publication, deployment or merge. |
+| F02 status | partially satisfied and open; C38-C40 improve mapping contracts only |
+| F14 status | partially satisfied and open; no broad reassessment or oracle prepared |
+| Remaining closed gates | administrative reviewer-oracle preparation, implementation, another transform group, broad Phase A reassessment, F02/F14 closure, Review 12, Phase B, publication, deployment, merge, PR #8 |
+
+## 16. Return summary values
+| field | value |
+| --- | --- |
+| Lineage matrix rows | 6 |
+| Identity persisted source_record | no |
+| Version persisted source_record | no |
+| Crosswalk persisted source_record | no |
+| Subject persisted source_record | no |
+| Code-history persisted source_record | yes, as source_id referencing proposed_source_record |
+| Name persisted source_record | yes, as source_record_id |
+| Recommended lineage model | L1 — Current-schema indirect lineage, plus L2 for code/name fact rows |
+| Oracle possible without schema change | YES for administrative identity shell only with comparator-enforced source/evidence lineage; NO for direct persisted identity/version lineage |
+| Province source PK | provinces.code |
+| Province canonical identity rule | reviewer/authority-assigned canonical province identity token; do not derive permanent ID from mutable normalized code |
+| Province code-continuity rule | code change is same unit, new unit, or unresolved manual linkage only by authority decision; province identity remains authority-blocked/not oracle-ready |
+| Admin-unit identity rule | admin_units.id preferred source identity; target ID independent from name/code/parent/status changes after hierarchy authority confirms stability |
+| Territory identity status | distinct from administrative-unit identity; excluded from first administrative identity oracle under Model C until territory classification authority resolves |
+| Registry-subject model | S1 — identity slice owns subject |
+| Registry-subject owner | administrative identity shell slice |
+| Registry-subject mandatory | yes |
+| Subject ID rule | subject:administrative_unit:{administrative_unit_id} |
+| Exact identity-shell rows | one proposed_administrative_unit; one proposed_legacy_crosswalk; one proposed_registry_subject |
+| Exact negative-test contracts | 17 |
+| Exact positive-proof contracts | 3 |
+| Idempotency contract | first-run exact expected inserts; second-run 0 inserts/updates/deletes; identical attributable union/hash |
+| Read-only contract | separate connection; read-only transaction; attempted write blocked; bidirectional complete normalized comparison |
+| Rollback evidence contract | complete pre/post attributable rows, counts, hashes, row equality and hash equality for every failing database mutation |
+| Potential slice boundaries | 7 |
+| Recommended first potential slice | Administrative identity shell — authority-approved admin_units.id |
+| Authority-blocked slices | administrative hierarchy version; province identity; territory identity; administrative code history/crosswalk; administrative names; accepted-context dependency integration |
+| Accepted rows modified | 0 |
+| Accepted convergence modified | no |
+| F02 status | partially satisfied and open |
+| F14 status | partially satisfied and open |
+| Remaining closed gates | administrative reviewer-oracle preparation, implementation, another transform group, broad Phase A reassessment, F02/F14 closure, Review 12, Phase B, publication, deployment, merge, PR #8 |
+| Current instructed action | Correct C38-C40 in the administrative hierarchy and reference-identity mapping only. |
+| Next instruction required from SDA | YES — before administrative reviewer-oracle preparation, implementation, another transform group, broad Phase A reassessment, F02/F14 closure, Review 12, Phase B, publication, deployment or merge. |
