@@ -417,35 +417,74 @@
       "transform_group_id": "WO002-R06-identity-crosswalk-addresses"
     },
     {
-      "archive_behavior": "archive required when registry target/archive_object requires source_payload_archive; operational-control records retain typed disposition otherwise",
-      "conditional_authority_rfi_status": [
-        "none"
-      ],
+      "transform_group_id": "WO002-R06-identity-crosswalk-admin_units",
+      "implementation_unit": "impl_wo002_r06_identity_crosswalk_admin_units",
+      "required_future_callable": "transform_admin_units_identity_crosswalk",
+      "source_table": "admin_units",
+      "source_record_key": "admin_units:phase-a-admin-units-001",
+      "idempotency_key": "admin_units.phase-a-admin-units-id::WO002-R06-identity-crosswalk-admin_units",
       "covered_source_fields": [
-        "admin_units.id",
-        "admin_units.parent_id"
+        "admin_units.id"
       ],
-      "crosswalk_algorithm": "source table + source key + target entity -> proposed_legacy_crosswalk when registry declares identity/crosswalk target",
+      "required_context_fields": [
+        "admin_units.level",
+        "admin_units.code",
+        "admin_units.parent_id",
+        "admin_units.province_code",
+        "admin_units.name_es",
+        "admin_units.name_en",
+        "admin_units.status",
+        "admin_units.sort_order",
+        "admin_units.created_at",
+        "admin_units.updated_at"
+      ],
+      "identity_rule": "admin_units.id alone owns the provisional government-internal administrative identity shell; level, code, parent, province, names, lifecycle, ordering and timestamps must not determine or replace the identity.",
       "dispositions": [
-        "formal-exception",
         "structured-transform"
       ],
-      "exception_behavior": "owned exception required for RFI/conditional/unresolved authority or unresolved reference dispositions",
-      "id_algorithm": "phase-a deterministic slug(source table/group/current field)",
-      "idempotency_key": "admin_units.phase-a-admin-units-001::WO002-R06-identity-crosswalk-admin_units",
-      "implementation_unit": "impl_wo002_r06_identity_crosswalk_admin_units",
-      "operation": "registry-disposition-to-canonical-target-evidence",
-      "source_record_key": "admin_units:phase-a-admin-units-001",
-      "source_table": "admin_units",
+      "exception_behavior": "no migration exception in this identity shell; every non-id source field is context or a future authority input and may not create an exception, hierarchy fact, code, name, version or publication output.",
+      "conditional_authority_rfi_status": "none",
+      "authority_resolution": "NLI-WO-002-PA-ADMIN-ID-SHELL-01 resolves the narrow identity-shell authority question only; hierarchy, version, code, name, province and territory authority remain unresolved.",
       "target_entities": [
-        "legacy_crosswalk",
-        "migration_exception"
+        "administrative_unit",
+        "registry_subject",
+        "legacy_crosswalk"
       ],
       "target_fields": [
-        "legacy_crosswalk.legacy_id",
-        "migration_exception.migration_exception_id"
+        "administrative_unit.administrative_unit_id",
+        "registry_subject.subject_id",
+        "legacy_crosswalk.legacy_id"
       ],
-      "transform_group_id": "WO002-R06-identity-crosswalk-admin_units"
+      "target_identity_rule": {
+        "primary_fixture": {
+          "source_id": "phase-a-admin-units-id",
+          "administrative_unit_id": "administrative-unit:admin_units:phase-a-admin-units-id",
+          "legacy_crosswalk_id": "crosswalk:admin_units:id:phase-a-admin-units-id:to:administrative_unit:administrative-unit:admin_units:phase-a-admin-units-id",
+          "subject_id": "subject:administrative_unit:administrative-unit:admin_units:phase-a-admin-units-id",
+          "subject_entity": "administrative_unit",
+          "country_id": "phase-a-country-gq"
+        },
+        "synthetic_design_fixture_rule": {
+          "scope": "design harness only; no production national identifier policy",
+          "for_source_id": "<source-id>",
+          "administrative_unit_id": "administrative-unit:admin_units:<source-id>",
+          "subject_id": "subject:administrative_unit:administrative-unit:admin_units:<source-id>",
+          "legacy_crosswalk_id": "crosswalk:admin_units:id:<source-id>:to:administrative_unit:administrative-unit:admin_units:<source-id>",
+          "constraints": [
+            "design harness only",
+            "no production national identifier policy",
+            "no hierarchy version",
+            "no names or code history",
+            "no province or territory identity",
+            "no migration exception",
+            "no public or publication output"
+          ]
+        }
+      },
+      "archive_behavior": "archive required when registry target/archive_object requires source_payload_archive; operational-control records retain typed disposition otherwise",
+      "crosswalk_algorithm": "source table + source key + target entity -> proposed_legacy_crosswalk when registry declares identity/crosswalk target",
+      "id_algorithm": "phase-a deterministic slug(source table/group/current field)",
+      "operation": "registry-disposition-to-canonical-target-evidence"
     },
     {
       "archive_behavior": "archive required when registry target/archive_object requires source_payload_archive; operational-control records retain typed disposition otherwise",
