@@ -1,0 +1,22 @@
+{
+  "control_id": "NLI-WO-002-PA-CONVERGENCE-01",
+  "status": "reviewer-owned-control",
+  "mapping_commit": "1ff0f9ee53728c96291ce1e24de2cf2faf6ed9ba",
+  "mapping_blob": "c984a16f352417b9fde0f8cb9e0536a5e0ab6eb1",
+  "accepted_callables": 7,
+  "owned_union_rows": 16,
+  "owned_counts": {"location":3,"subject":3,"crosswalk":4,"geometry":3,"exception":3},
+  "count_scope": "accepted-family owned rows only",
+  "direct_dependencies": [
+    "addresses identity -> address-points geometry",
+    "addresses identity -> address-points observation crosswalk",
+    "address-points geometry -> address-points observation crosswalk",
+    "address-records identity -> address-records geometry",
+    "citizen-geotag identity -> citizen-geotag geometry"
+  ],
+  "fixture_rule": "setup must not pre-create any accepted-family owned row or broad version/alias/relationship for an accepted identity",
+  "expected_truth_rule": "compose from unchanged accepted oracles and geometry correction oracles, never from observed output",
+  "execution": {"first_inserts":16,"second_inserts":0,"second_updates":0,"generic_transform":false},
+  "comparison": {"separate_read_only_connection":true,"both_directions":true,"raw_citizen_values":false},
+  "boundary": "no broad Phase A, F02/F14 closure, Review 12, Phase B, deployment, merge or additional transform group"
+}
