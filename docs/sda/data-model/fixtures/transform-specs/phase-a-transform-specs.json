@@ -315,30 +315,51 @@
         "none"
       ],
       "covered_source_fields": [
-        "address_records.id",
-        "address_records.source_submission_id",
-        "address_records.territory_id"
+        "address_records.id"
       ],
       "crosswalk_algorithm": "source table + source key + target entity -> proposed_legacy_crosswalk when registry declares identity/crosswalk target",
       "dispositions": [
-        "formal-exception",
         "structured-transform"
       ],
-      "exception_behavior": "owned exception required for RFI/conditional/unresolved authority or unresolved reference dispositions",
+      "exception_behavior": "no migration exception in this identity slice; provenance/territory/publication/geometry fields are context only",
       "id_algorithm": "phase-a deterministic slug(source table/group/current field)",
-      "idempotency_key": "address_records.phase-a-address-records-001::WO002-R06-identity-crosswalk-address_records",
+      "idempotency_key": "address_records.phase-a-address-records-id::WO002-R06-identity-crosswalk-address_records",
+      "identity_rule": "address_records.id owns the identity; source_submission_id, territory_id, address_code, publication and geometry fields are context only",
       "implementation_unit": "impl_wo002_r06_identity_crosswalk_address_records",
       "operation": "registry-disposition-to-canonical-target-evidence",
-      "source_record_key": "address_records:phase-a-address-records-001",
+      "required_context_fields": [
+        "address_records.address_code",
+        "address_records.source_submission_id",
+        "address_records.province_code",
+        "address_records.territory_id",
+        "address_records.address_label",
+        "address_records.status",
+        "address_records.publication_state",
+        "address_records.is_archived",
+        "address_records.created_at",
+        "address_records.updated_at"
+      ],
+      "source_record_key": "address_records:phase-a-address-records-id",
       "source_table": "address_records",
       "target_entities": [
-        "legacy_crosswalk",
-        "migration_exception"
+        "location_record",
+        "registry_subject",
+        "legacy_crosswalk"
       ],
       "target_fields": [
-        "legacy_crosswalk.legacy_id",
-        "migration_exception.migration_exception_id"
+        "location_record.location_record_id",
+        "registry_subject.subject_id",
+        "legacy_crosswalk.legacy_id"
       ],
+      "target_identity_rule": {
+        "primary_fixture": {
+          "legacy_crosswalk_id": "phase-a-crosswalk-address-records-id-to-location-record",
+          "location_record_id": "phase-a-location-address-records-id",
+          "source_id": "phase-a-address-records-id",
+          "subject_id": "phase-a-subject-phase-a-location-address-records-id"
+        },
+        "second_fixture_rule": "For phase-a-address-records-<suffix>, use matching location, subject and crosswalk IDs ending in <suffix>. Design harness only."
+      },
       "transform_group_id": "WO002-R06-identity-crosswalk-address_records"
     },
     {

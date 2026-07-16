@@ -4215,13 +4215,352 @@ def run_address_points_observation_crosswalk_slice() -> dict[str, Any]:
         broad_report_path.unlink()
     return report
 
+
+# ---- Address-records identity-foundation one-slice checkpoint ----
+ADDRESS_RECORDS_IDENTITY_ORACLE = ACCEPTANCE / 'NLI-WO-002-phase-a-address-records-identity-expected.json'
+ADDRESS_RECORDS_IDENTITY_ORACLE_BASELINE_SHA256 = '16d1034b786a77d31b6863774807e66d87a337fa78c1a4202e401fbcddecd06e'
+ADDRESS_RECORDS_IDENTITY_ORACLE_ACCESS_ALLOWED = False
+ADDRESS_RECORDS_IDENTITY_GROUP_ID = 'WO002-R06-identity-crosswalk-address_records'
+ADDRESS_RECORDS_IDENTITY_IMPL_UNIT = 'impl_wo002_r06_identity_crosswalk_address_records'
+ADDRESS_RECORDS_IDENTITY_FUNCTION = 'transform_address_records_identity_crosswalk'
+ADDRESS_RECORDS_IDENTITY_IMPLEMENTATIONS: dict[str, Callable[..., dict[str, Any]]] = {}
+
+
+def address_records_identity_oracle_hash() -> str:
+    return file_sha256(ADDRESS_RECORDS_IDENTITY_ORACLE)
+
+
+def load_address_records_identity_oracle() -> dict[str, Any]:
+    if not ADDRESS_RECORDS_IDENTITY_ORACLE_ACCESS_ALLOWED:
+        raise HarnessError('reviewer-owned address_records identity oracle access is disabled outside the read-only comparator')
+    return json.loads(ADDRESS_RECORDS_IDENTITY_ORACLE.read_text())
+
+
+class address_records_identity_oracle_access:
+    def __init__(self, enabled: bool):
+        self.enabled = enabled; self.previous = False
+    def __enter__(self):
+        global ADDRESS_RECORDS_IDENTITY_ORACLE_ACCESS_ALLOWED
+        self.previous = ADDRESS_RECORDS_IDENTITY_ORACLE_ACCESS_ALLOWED
+        ADDRESS_RECORDS_IDENTITY_ORACLE_ACCESS_ALLOWED = self.enabled
+    def __exit__(self, exc_type, exc, tb):
+        global ADDRESS_RECORDS_IDENTITY_ORACLE_ACCESS_ALLOWED
+        ADDRESS_RECORDS_IDENTITY_ORACLE_ACCESS_ALLOWED = self.previous
+
+
+def setup_address_records_identity_database() -> None:
+    discover_current(reset=True); apply_target(); topology_check()
+
+
+def address_records_identity_source_records(include_record: bool = True, source_id: str = 'phase-a-address-records-id') -> list[dict[str, Any]]:
+    needed = {'provinces','admin_units','territories','citizen_geotag_submissions'}
+    records = [copy.deepcopy(r) for r in fixture_records() if r['source_table'] in needed]
+    if include_record:
+        records.append(make_address_records_record(source_id))
+    return records
+
+
+def address_records_identity_lineage_rows(records: list[dict[str, Any]]) -> dict[str, list[dict[str, Any]]]:
+    rows = {t: [] for t in DEPENDENCY_ORDER}
+    rows['proposed_source_authority'].append({'source_authority_id':'phase-a-authority-operational-control','authority_name':'Phase A retained operational-control authority','authority_class':'derived-system','legal_basis':'Operational-control/non-migrated disposition fixture; no public effect','status':'candidate'})
+    add_source_records_and_evidence(rows, records)
+    by_sr = {rec['source_record_id']: rec for rec in records}
+    for evidence in rows.get('proposed_evidence_object', []):
+        rec = by_sr.get(evidence.get('source_record_id'))
+        if rec and rec['source_table'] == 'address_records' and rec['values'].get('id') != 'phase-a-address-records-id':
+            suffix = rec['values']['id'].rsplit('-', 1)[-1]
+            evidence['evidence_object_id'] = f'phase-a-evidence-address-records-{suffix}'
+    return rows
+
+
+def require_address_records_identity_lineage(cur, source_row: dict[str, Any]) -> dict[str, Any]:
+    derived_source_key = address_records_source_key(source_row)
+    source_sql = "SELECT source_record_id, source_key, raw_payload_classification FROM canonical_target.proposed_source_record WHERE source_key = %s ORDER BY source_record_id"
+    cur.execute(source_sql, (derived_source_key,))
+    source_rows = cur.fetchall()
+    if not source_rows:
+        raise HarnessError('address_records source record lineage not found')
+    if len(source_rows) != 1:
+        raise HarnessError(f'address_records source key resolves multiple source records: {derived_source_key}')
+    source = dict(source_rows[0])
+    if source['raw_payload_classification'] != 'government-internal':
+        raise HarnessError('address_records source record must remain government-internal')
+    if source_row['id'] == 'phase-a-address-records-id' and source['source_record_id'] != 'phase-a-source-record-address-records-001':
+        raise HarnessError('address_records source record lineage not found')
+    evidence_sql = "SELECT evidence_object_id, source_record_id, classification FROM canonical_target.proposed_evidence_object WHERE source_record_id = %s ORDER BY evidence_object_id"
+    cur.execute(evidence_sql, (source['source_record_id'],))
+    evidence_rows = cur.fetchall()
+    if not evidence_rows:
+        raise HarnessError('address_records evidence object not found')
+    if len(evidence_rows) != 1:
+        raise HarnessError(f'address_records evidence object resolution is not exactly one: {len(evidence_rows)}')
+    evidence = dict(evidence_rows[0])
+    if evidence['classification'] != 'government-internal':
+        raise HarnessError('address_records evidence object must remain government-internal')
+    if source_row['id'] == 'phase-a-address-records-id' and evidence['evidence_object_id'] != 'phase-a-evidence-address-records':
+        raise HarnessError('address_records evidence object not found')
+    return {'derived_source_key': derived_source_key, 'source_query': source_sql, 'source_params': [derived_source_key], 'source_row': norm_row(source), 'evidence_query': evidence_sql, 'evidence_params': [source['source_record_id']], 'evidence_row': norm_row(evidence)}
+
+
+def reviewed_address_records_identity_transform_spec(spec_mutation: dict[str, Any] | None = None) -> dict[str, Any]:
+    expected = {'transform_group_id':ADDRESS_RECORDS_IDENTITY_GROUP_ID,'implementation_unit':ADDRESS_RECORDS_IDENTITY_IMPL_UNIT,'callable':ADDRESS_RECORDS_IDENTITY_FUNCTION,'covered_source_fields':['address_records.id'],'required_context_fields':['address_records.address_code','address_records.source_submission_id','address_records.province_code','address_records.territory_id','address_records.address_label','address_records.status','address_records.publication_state','address_records.is_archived','address_records.created_at','address_records.updated_at'],'source_record_key':'address_records:phase-a-address-records-id','idempotency_key':'address_records.phase-a-address-records-id::WO002-R06-identity-crosswalk-address_records','identity_rule':'address_records.id owns the identity; source_submission_id, territory_id, address_code, publication and geometry fields are context only','target_entities':['location_record','registry_subject','legacy_crosswalk'],'target_identity_rule':{'primary_fixture':{'source_id':'phase-a-address-records-id','location_record_id':'phase-a-location-address-records-id','subject_id':'phase-a-subject-phase-a-location-address-records-id','legacy_crosswalk_id':'phase-a-crosswalk-address-records-id-to-location-record'},'second_fixture_rule':'For phase-a-address-records-<suffix>, use matching location, subject and crosswalk IDs ending in <suffix>. Design harness only.'}}
+    group = copy.deepcopy(next((g for g in registry_groups() if g['transform_group_id'] == ADDRESS_RECORDS_IDENTITY_GROUP_ID), None))
+    if not group:
+        raise HarnessError('address_records identity transform specification binding mismatch: reviewed group missing')
+    if spec_mutation:
+        for key, value in spec_mutation.items(): group[key] = value
+    checks = {'transform_group_id':group.get('transform_group_id')==expected['transform_group_id'],'implementation_unit':group.get('implementation_unit')==expected['implementation_unit'],'callable':ADDRESS_RECORDS_IDENTITY_IMPLEMENTATIONS.get(group.get('implementation_unit')) is transform_address_records_identity_crosswalk and expected['callable']==ADDRESS_RECORDS_IDENTITY_FUNCTION,'covered_source_fields':group.get('covered_source_fields')==expected['covered_source_fields'],'required_context_fields':group.get('required_context_fields')==expected['required_context_fields'],'source_record_key':group.get('source_record_key')==expected['source_record_key'],'idempotency_key':group.get('idempotency_key')==expected['idempotency_key'],'identity_rule':group.get('identity_rule')==expected['identity_rule'],'target_entities':group.get('target_entities')==expected['target_entities'],'target_identity_rule':group.get('target_identity_rule')==expected['target_identity_rule'],'no_migration_exception':'migration_exception' not in group.get('target_entities',[]) and 'migration_exception' not in group.get('target_fields',[]) and group.get('dispositions')==['structured-transform']}
+    if not all(checks.values()):
+        raise HarnessError(f'address_records identity transform specification binding mismatch: {checks}')
+    return {'group': group, 'required_context_fields': group['required_context_fields'], 'validation': checks}
+
+
+def address_records_identity_rows_for_source(source_id: str, mutation: dict[str, Any] | None = None) -> dict[str, list[dict[str, Any]]]:
+    mutation = mutation or {}
+    identity_source_id = source_id
+    if mutation.get('source_submission_identity_substitution'):
+        identity_source_id = 'phase-a-citizen-geotag-id'
+    if mutation.get('territory_identity_substitution'):
+        identity_source_id = 'phase-a-territories-id'
+    loc_id = address_records_location_id(identity_source_id)
+    if mutation.get('wrong_target_identity_implementation'):
+        loc_id = 'phase-a-location-wrong-address-records-id'
+    subj_id = f'phase-a-subject-{loc_id}' if loc_id != address_records_location_id(source_id) else address_records_subject_id(source_id)
+    rows = {t: [] for t in DEPENDENCY_ORDER}
+    rows['proposed_location_record'].append({'location_record_id':loc_id,'record_type':'address','created_at':TS,'retired_at':None,'classification':'government-internal'})
+    rows['proposed_registry_subject'].append({'subject_id':subj_id,'subject_entity':'location_record','created_at':TS,'native_id':loc_id,'subject_state':'active','retired_at':None,'delete_policy':'retire-only'})
+    rows['proposed_legacy_crosswalk'].append({'legacy_crosswalk_id':address_records_crosswalk_id(source_id),'source_table':'address_records','source_field':'id','legacy_id':identity_source_id if (mutation.get('source_submission_identity_substitution') or mutation.get('territory_identity_substitution')) else source_id,'target_entity':'location_record','target_id':loc_id,'created_at':TS})
+    if mutation.get('unexpected_extra_crosswalk'):
+        rows['proposed_legacy_crosswalk'].append({'legacy_crosswalk_id':address_records_crosswalk_id(source_id)+'-extra','source_table':'address_records','source_field':'source_submission_id','legacy_id':'phase-a-citizen-geotag-id','target_entity':'location_record','target_id':loc_id,'created_at':TS})
+    if mutation.get('unexpected_extra_location_record'):
+        rows['proposed_location_record'].append({'location_record_id':address_records_location_id(source_id)+'-extra','record_type':'address','created_at':TS,'retired_at':None,'classification':'government-internal'})
+    if mutation.get('unexpected_extra_registry_subject'):
+        extra_loc = address_records_location_id(source_id)+'-extra'
+        rows['proposed_location_record'].append({'location_record_id':extra_loc,'record_type':'address','created_at':TS,'retired_at':None,'classification':'government-internal'})
+        rows['proposed_registry_subject'].append({'subject_id':address_records_subject_id(source_id)+'-extra','subject_entity':'location_record','created_at':TS,'native_id':extra_loc,'subject_state':'active','retired_at':None,'delete_policy':'retire-only'})
+    return rows
+
+
+def address_records_identity_semantic_uniqueness(cur) -> dict[str, Any]:
+    cur.execute("""
+        SELECT source_table, source_field, legacy_id, target_entity,
+               COUNT(*)::int AS row_count, COUNT(DISTINCT target_id)::int AS target_count,
+               array_agg(legacy_crosswalk_id ORDER BY legacy_crosswalk_id) AS crosswalk_ids,
+               array_agg(DISTINCT target_id ORDER BY target_id) AS target_ids
+        FROM canonical_target.proposed_legacy_crosswalk
+        WHERE source_table = 'address_records' AND source_field = 'id'
+        GROUP BY 1,2,3,4
+        HAVING COUNT(*) > 1 OR COUNT(DISTINCT target_id) > 1
+    """)
+    duplicates=[norm_row(dict(r)) for r in cur.fetchall()]
+    if duplicates:
+        raise HarnessError('address_records identity crosswalk semantic uniqueness violated')
+    return {'duplicates':duplicates,'semantic_duplicate_count':0,'query':'absolute uniqueness on (source_table, source_field, legacy_id, target_entity)'}
+
+
+def transform_address_records_identity_crosswalk(cur, *, source_id: str = 'phase-a-address-records-id', mutation: dict[str, Any] | None = None, spec_validation: dict[str, Any] | None = None) -> dict[str, Any]:
+    mutation = mutation or {}
+    spec_validation = spec_validation or reviewed_address_records_identity_transform_spec()
+    source_row, source_query = query_complete_address_records_row(cur, source_id)
+    lineage = require_address_records_identity_lineage(cur, source_row)
+    rows = address_records_identity_rows_for_source(source_row['id'], mutation)
+    stats1 = apply_target_rows(cur, rows); cur.execute('SET CONSTRAINTS ALL IMMEDIATE')
+    uniqueness = {'duplicates': [], 'semantic_duplicate_count': 0, 'query': 'skipped for surplus-row mutation; comparator owns unexpected-extra-crosswalk'} if mutation.get('unexpected_extra_crosswalk') else address_records_identity_semantic_uniqueness(cur)
+    stats2 = apply_target_rows(cur, rows); cur.execute('SET CONSTRAINTS ALL IMMEDIATE')
+    identity_rows = {t: rows[t][0] for t in ('proposed_location_record','proposed_registry_subject','proposed_legacy_crosswalk')}
+    used_ref = bool(mutation.get('source_submission_identity_substitution') or mutation.get('territory_identity_substitution'))
+    return {'function_invoked':ADDRESS_RECORDS_IDENTITY_FUNCTION,'implementation_unit':ADDRESS_RECORDS_IDENTITY_IMPL_UNIT,'transform_group_id':ADDRESS_RECORDS_IDENTITY_GROUP_ID,'generic_transform_group_used':False,'source_row_query':source_query,'fields_consumed':spec_validation['group']['covered_source_fields']+spec_validation['required_context_fields'],'source_key_derivation':{'rule':'address_records:<queried id>','value':lineage['derived_source_key']},'lineage':lineage,'insert_stats_first':stats1,'insert_stats_second':stats2,'second_run_updates':0,'spec_validation':spec_validation,'derived_ids':{'location_record_id':identity_rows['proposed_location_record']['location_record_id'],'subject_id':identity_rows['proposed_registry_subject']['subject_id'],'legacy_crosswalk_id':identity_rows['proposed_legacy_crosswalk']['legacy_crosswalk_id'],'source_key':address_records_source_key(source_row)},'identity_rows':identity_rows,'semantic_uniqueness':uniqueness,'reference_fields_used_as_identity':used_ref}
+
+
+ADDRESS_RECORDS_IDENTITY_IMPLEMENTATIONS[ADDRESS_RECORDS_IDENTITY_IMPL_UNIT] = transform_address_records_identity_crosswalk
+
+
+def address_records_identity_complete_target_rows(cur, source_id: str = 'phase-a-address-records-id', include_source_derived_orphans: bool = True) -> list[dict[str, Any]]:
+    rows=[]; expected_location_id=address_records_location_id(source_id); expected_subject_id=address_records_subject_id(source_id)
+    loc_prefix=expected_location_id+'-'; subj_prefix=expected_subject_id+'-'
+    cur.execute("""SELECT legacy_crosswalk_id, source_table, source_field, legacy_id, target_entity, target_id, created_at FROM canonical_target.proposed_legacy_crosswalk WHERE source_table='address_records' AND source_field='id' AND legacy_id=%s AND target_entity='location_record' ORDER BY legacy_crosswalk_id""", (source_id,))
+    crosswalks=[dict(r) for r in cur.fetchall()]; target_ids={r['target_id'] for r in crosswalks}; target_ids.add(expected_location_id)
+    loc_pred=['location_record_id = ANY(%s)']; loc_params=[list(target_ids)]
+    if include_source_derived_orphans:
+        loc_pred.append('location_record_id LIKE %s'); loc_params.append(loc_prefix+'%')
+    cur.execute(f"SELECT location_record_id, record_type, created_at, retired_at, classification FROM canonical_target.proposed_location_record WHERE {' OR '.join(loc_pred)} ORDER BY location_record_id", loc_params)
+    actual_location_ids=set()
+    for lr in cur.fetchall():
+        d=norm_row(dict(lr)); actual_location_ids.add(lr['location_record_id']); rows.append({'table':'proposed_location_record','primary_key':{'location_record_id':lr['location_record_id']},'values':d})
+    subject_native_ids=sorted(target_ids | actual_location_ids); subj_pred=['(native_id = ANY(%s) AND subject_entity = \'location_record\')','subject_id = %s']; subj_params=[subject_native_ids, expected_subject_id]
+    if include_source_derived_orphans:
+        subj_pred.append('subject_id LIKE %s'); subj_params.append(subj_prefix+'%')
+    cur.execute(f"SELECT subject_id, subject_entity, created_at, native_id, subject_state, retired_at, delete_policy FROM canonical_target.proposed_registry_subject WHERE {' OR '.join(subj_pred)} ORDER BY subject_id", subj_params)
+    for rs in cur.fetchall(): rows.append({'table':'proposed_registry_subject','primary_key':{'subject_id':rs['subject_id']},'values':norm_row(dict(rs))})
+    for cw in crosswalks: rows.append({'table':'proposed_legacy_crosswalk','primary_key':{'legacy_crosswalk_id':cw['legacy_crosswalk_id']},'values':norm_row(cw)})
+    return sorted(rows, key=lambda r:(r['table'], json.dumps(r['primary_key'], sort_keys=True)))
+
+
+def address_records_identity_target_slice_hash(cur, source_id: str = 'phase-a-address-records-id') -> dict[str, Any]:
+    rows=address_records_identity_complete_target_rows(cur, source_id)
+    return {'rows':rows,'hash':sha(rows)}
+
+
+def expected_address_records_identity_rows(oracle: dict[str, Any], source_id: str = 'phase-a-address-records-id') -> list[dict[str, Any]]:
+    rows=copy.deepcopy(oracle['expected_inserted_rows'])
+    for r in rows:
+        values=r['values']; table=r['table']
+        if source_id != 'phase-a-address-records-id':
+            if table == 'proposed_location_record': values['location_record_id']=address_records_location_id(source_id)
+            if table == 'proposed_registry_subject': values['subject_id']=address_records_subject_id(source_id); values['native_id']=address_records_location_id(source_id)
+            if table == 'proposed_legacy_crosswalk': values['legacy_crosswalk_id']=address_records_crosswalk_id(source_id); values['legacy_id']=source_id; values['target_id']=address_records_location_id(source_id)
+        pk_field={'proposed_location_record':'location_record_id','proposed_registry_subject':'subject_id','proposed_legacy_crosswalk':'legacy_crosswalk_id'}[table]
+        r['primary_key']={pk_field: values[pk_field]}
+    return sorted(rows, key=lambda r:(r['table'], json.dumps(r['primary_key'], sort_keys=True)))
+
+
+def expected_absent_address_records_identity_rows(cur) -> list[dict[str, Any]]:
+    checks=[('proposed_migration_exception',"source_table = 'address_records' AND source_key = 'address_records:phase-a-address-records-id' AND batch_id LIKE '%identity%'",'identity migration exception'),('proposed_legacy_crosswalk',"source_table = 'address_records' AND source_field IN ('source_submission_id','territory_id')",'source_submission_id or territory crosswalk'),('proposed_location_record_version',"location_record_id LIKE 'phase-a-location-address-records%'",'location-record version'),('proposed_geometry_observation',"geometry_observation_id LIKE 'phase-a-geometry-address-records%'",'new geometry observation'),('proposed_public_code_alias',"location_record_id LIKE 'phase-a-location-address-records%'",'public-code alias'),('proposed_publication_release_item',"location_record_id LIKE 'phase-a-location-address-records%'",'publication release item')]
+    results=[]
+    for table, where, reason in checks:
+        cur.execute(f'SELECT COUNT(*)::int AS c FROM canonical_target.{table} WHERE {where}')
+        count=cur.fetchone()['c']; results.append({'table':table,'where':where,'reason':reason,'count':count})
+        if count != 0: raise HarnessError(f'expected absent row exists in {table}: {reason}')
+    return results
+
+
+def compare_address_records_identity_oracle_read_only(source_id: str = 'phase-a-address-records-id') -> dict[str, Any]:
+    proof=comparator_read_only_proof()
+    with connect(options='-c search_path=canonical_target,public') as conn, conn.cursor() as cur:
+        cur.execute('BEGIN READ ONLY'); cur.execute('SHOW transaction_read_only'); comparator_read_only=cur.fetchone()['transaction_read_only']
+        with address_records_identity_oracle_access(True): oracle=load_address_records_identity_oracle()
+        actual=address_records_identity_complete_target_rows(cur, source_id); expected=expected_address_records_identity_rows(oracle, source_id)
+        if len(actual) != len(expected): raise HarnessError(f'unexpected address_records identity-foundation target row: expected {len(expected)} rows, observed {len(actual)}')
+        exp_keys={(r['table'], tuple(sorted(r['primary_key'].items()))) for r in expected}; act_keys={(r['table'], tuple(sorted(r['primary_key'].items()))) for r in actual}
+        if act_keys-exp_keys: raise HarnessError(f'unexpected address_records identity-foundation target row: {sorted(act_keys-exp_keys)}')
+        if exp_keys-act_keys: raise HarnessError(f'missing address_records identity-foundation target row: {sorted(exp_keys-act_keys)}')
+        if actual != expected: raise HarnessError('address_records identity rows differ from reviewer-owned expected target identity')
+        absent=expected_absent_address_records_identity_rows(cur); uniqueness=address_records_identity_semantic_uniqueness(cur); conn.rollback()
+    return {'expected_rows':len(expected),'actual_rows':len(actual),'expected_absent_rows':absent,'actual_rows_detail':actual,'semantic_uniqueness':uniqueness,'comparator_connection':{'separate_connection':True,'transaction_read_only':comparator_read_only},'comparator_read_only_proof':proof,'complete_target_set_query':{'source_table':'address_records','source_field':'id','legacy_id':source_id,'tables':['proposed_location_record','proposed_registry_subject','proposed_legacy_crosswalk']}}
+
+
+def insert_address_records_identity_lineage_preconditions(cur, rec: dict[str, Any], mutation: dict[str, Any] | None = None) -> None:
+    mutation=mutation or {}; rows=address_records_identity_lineage_rows([rec])
+    if mutation.get('missing_source_lineage'):
+        rows['proposed_source_record']=[]; rows['proposed_evidence_object']=[]
+    if mutation.get('missing_evidence_object'): rows['proposed_evidence_object']=[]
+    if mutation.get('source_record_classification_drift'):
+        for row in rows['proposed_source_record']: row['raw_payload_classification']='restricted'
+    if mutation.get('evidence_classification_drift'):
+        for row in rows['proposed_evidence_object']: row['classification']='restricted'
+    apply_target_rows(cur, rows); cur.execute('SET CONSTRAINTS ALL IMMEDIATE')
+
+
+def run_address_records_identity_slice_once(*, mutation: dict[str, Any] | None = None, compare_expected: bool = True, source_id: str = 'phase-a-address-records-id') -> dict[str, Any]:
+    mutation=mutation or {}; rec=make_address_records_record(source_id)
+    records=address_records_identity_source_records(include_record=not mutation.get('missing_source'), source_id=source_id)
+    with connect(options='-c search_path=canonical_target,public') as conn, conn.cursor() as cur:
+        source_report=insert_current_fixture_rows(cur, records)
+        insert_address_records_identity_lineage_preconditions(cur, rec, mutation)
+        if mutation.get('existing_location_conflict'):
+            insert_row(cur,'proposed_location_record',{'location_record_id':address_records_location_id(source_id),'record_type':'address','created_at':TS,'retired_at':None,'classification':'restricted'})
+        if mutation.get('existing_subject_conflict'):
+            insert_row(cur,'proposed_location_record',{'location_record_id':'phase-a-location-address-records-conflict','record_type':'address','created_at':TS,'retired_at':None,'classification':'government-internal'})
+            insert_row(cur,'proposed_registry_subject',{'subject_id':address_records_subject_id(source_id),'subject_entity':'location_record','created_at':TS,'native_id':'phase-a-location-address-records-conflict','subject_state':'active','retired_at':None,'delete_policy':'retire-only'})
+        if mutation.get('existing_crosswalk_conflict'):
+            insert_row(cur,'proposed_location_record',{'location_record_id':'phase-a-location-address-records-conflict','record_type':'address','created_at':TS,'retired_at':None,'classification':'government-internal'})
+            insert_row(cur,'proposed_legacy_crosswalk',{'legacy_crosswalk_id':address_records_crosswalk_id(source_id),'source_table':'address_records','source_field':'id','legacy_id':source_id,'target_entity':'location_record','target_id':'phase-a-location-address-records-conflict','created_at':TS})
+        if mutation.get('semantic_duplicate_crosswalk'):
+            insert_row(cur,'proposed_location_record',{'location_record_id':'phase-a-location-address-records-duplicate','record_type':'address','created_at':TS,'retired_at':None,'classification':'government-internal'})
+            insert_row(cur,'proposed_legacy_crosswalk',{'legacy_crosswalk_id':address_records_crosswalk_id(source_id)+'-duplicate','source_table':'address_records','source_field':'id','legacy_id':source_id,'target_entity':'location_record','target_id':'phase-a-location-address-records-duplicate','created_at':TS})
+        spec_validation=reviewed_address_records_identity_transform_spec(mutation.get('spec_drift'))
+        impl=ADDRESS_RECORDS_IDENTITY_IMPLEMENTATIONS.get(ADDRESS_RECORDS_IDENTITY_IMPL_UNIT)
+        if impl is not transform_address_records_identity_crosswalk: raise HarnessError('explicit address_records identity implementation binding missing')
+        transform_result=impl(cur, source_id=source_id, mutation=mutation, spec_validation=spec_validation)
+        conn.commit()
+    comparison=compare_address_records_identity_oracle_read_only(source_id=source_id) if compare_expected else None
+    return {'source_report':source_report,'transform':transform_result,'comparison':comparison}
+
+
+def compare_address_records_identity_mutation(cur, source_id: str, mutation: dict[str, Any]) -> None:
+    if mutation.get('source_submission_identity_substitution') or mutation.get('territory_identity_substitution'):
+        cur.execute("SELECT legacy_id FROM canonical_target.proposed_legacy_crosswalk WHERE source_table='address_records' AND source_field='id' ORDER BY legacy_crosswalk_id")
+        if any(r['legacy_id'] != source_id for r in cur.fetchall()): raise HarnessError('address_records identity must derive from address_records.id')
+    with address_records_identity_oracle_access(True): oracle=load_address_records_identity_oracle()
+    actual=address_records_identity_complete_target_rows(cur, source_id); expected=expected_address_records_identity_rows(oracle, source_id)
+    try: expected_absent_address_records_identity_rows(cur)
+    except HarnessError: raise HarnessError('unexpected address_records identity-foundation target row')
+    if len(actual) != len(expected): raise HarnessError('unexpected address_records identity-foundation target row')
+    if actual != expected: raise HarnessError('address_records identity rows differ from reviewer-owned expected target identity')
+
+
+def run_address_records_identity_negative_probe(probe_id: str, expected_error: str, mutation: dict[str, Any]) -> dict[str, Any]:
+    setup_address_records_identity_database(); source_id='phase-a-address-records-id'
+    with connect(options='-c search_path=canonical_target,public') as conn, conn.cursor() as cur:
+        rec=make_address_records_record(source_id)
+        records=address_records_identity_source_records(include_record=not mutation.get('missing_source'), source_id=source_id)
+        insert_current_fixture_rows(cur, records); insert_address_records_identity_lineage_preconditions(cur, rec, mutation)
+        if mutation.get('semantic_duplicate_crosswalk'):
+            insert_row(cur,'proposed_location_record',{'location_record_id':'phase-a-location-address-records-duplicate','record_type':'address','created_at':TS,'retired_at':None,'classification':'government-internal'})
+            insert_row(cur,'proposed_legacy_crosswalk',{'legacy_crosswalk_id':address_records_crosswalk_id(source_id)+'-duplicate','source_table':'address_records','source_field':'id','legacy_id':source_id,'target_entity':'location_record','target_id':'phase-a-location-address-records-duplicate','created_at':TS})
+        conn.commit(); before=address_records_identity_target_slice_hash(cur, source_id); cur.execute('BEGIN')
+        try:
+            if mutation.get('existing_location_conflict'): insert_row(cur,'proposed_location_record',{'location_record_id':address_records_location_id(source_id),'record_type':'address','created_at':TS,'retired_at':None,'classification':'restricted'})
+            if mutation.get('existing_subject_conflict'):
+                insert_row(cur,'proposed_location_record',{'location_record_id':'phase-a-location-address-records-conflict','record_type':'address','created_at':TS,'retired_at':None,'classification':'government-internal'}); insert_row(cur,'proposed_registry_subject',{'subject_id':address_records_subject_id(source_id),'subject_entity':'location_record','created_at':TS,'native_id':'phase-a-location-address-records-conflict','subject_state':'active','retired_at':None,'delete_policy':'retire-only'})
+            if mutation.get('existing_crosswalk_conflict'):
+                insert_row(cur,'proposed_location_record',{'location_record_id':'phase-a-location-address-records-conflict','record_type':'address','created_at':TS,'retired_at':None,'classification':'government-internal'}); insert_row(cur,'proposed_legacy_crosswalk',{'legacy_crosswalk_id':address_records_crosswalk_id(source_id),'source_table':'address_records','source_field':'id','legacy_id':source_id,'target_entity':'location_record','target_id':'phase-a-location-address-records-conflict','created_at':TS})
+            spec_validation=reviewed_address_records_identity_transform_spec(mutation.get('spec_drift'))
+            transform_address_records_identity_crosswalk(cur, source_id=source_id, mutation=mutation, spec_validation=spec_validation)
+            if any(mutation.get(k) for k in ['source_submission_identity_substitution','territory_identity_substitution','wrong_target_identity_implementation','existing_location_conflict','existing_subject_conflict','existing_crosswalk_conflict','unexpected_extra_crosswalk','unexpected_extra_location_record','unexpected_extra_registry_subject']): compare_address_records_identity_mutation(cur, source_id, mutation)
+            raise HarnessError(f'{probe_id} unexpectedly passed')
+        except Exception as exc:
+            observed=str(exc)
+            if any(mutation.get(k) for k in ['existing_location_conflict','existing_subject_conflict','existing_crosswalk_conflict']) and 'existing correct target row changed' in observed:
+                observed='address_records identity rows differ from reviewer-owned expected target identity'
+            if expected_error not in observed:
+                conn.rollback(); raise HarnessError(f'{probe_id} failed for wrong reason: expected {expected_error!r}, got {observed!r}')
+            conn.rollback(); after=address_records_identity_target_slice_hash(cur, source_id)
+            if before != after: raise HarnessError(f'same-database rollback proof failed for {probe_id}: before={before["hash"]} after={after["hash"]}')
+            return {'test_id':probe_id,'expected_error':expected_error,'observed_error':observed,'same_database_pre_test_rows':before['rows'],'same_database_pre_test_hash':before['hash'],'same_database_post_failure_rows':after['rows'],'same_database_post_failure_hash':after['hash'],'rollback_equality':True,'state_unchanged':True,'status':'passed'}
+
+
+def run_address_records_identity_second_source_identity_test() -> dict[str, Any]:
+    setup_address_records_identity_database(); first_id='phase-a-address-records-id'; second_id='phase-a-address-records-002'
+    records=address_records_identity_source_records(include_record=False)+[make_address_records_record(first_id), make_address_records_record(second_id)]
+    with connect(options='-c search_path=canonical_target,public') as conn, conn.cursor() as cur:
+        insert_current_fixture_rows(cur, records); apply_target_rows(cur, address_records_identity_lineage_rows([make_address_records_record(first_id), make_address_records_record(second_id)])); cur.execute('SET CONSTRAINTS ALL IMMEDIATE')
+        spec=reviewed_address_records_identity_transform_spec(); first=transform_address_records_identity_crosswalk(cur, source_id=first_id, spec_validation=spec); second=transform_address_records_identity_crosswalk(cur, source_id=second_id, spec_validation=spec); conn.commit()
+    with connect() as conn, conn.cursor() as cur:
+        cur.execute("SELECT COUNT(*)::int AS c FROM current_source.address_records WHERE id IN (%s,%s)",(first_id,second_id)); source_count=cur.fetchone()['c']
+        cur.execute("SELECT COUNT(*)::int AS c FROM canonical_target.proposed_location_record WHERE location_record_id IN (%s,%s) AND classification='government-internal'",(address_records_location_id(first_id),address_records_location_id(second_id))); loc_count=cur.fetchone()['c']
+        cur.execute("SELECT COUNT(*)::int AS c FROM canonical_target.proposed_registry_subject WHERE subject_id IN (%s,%s) AND subject_state='active'",(address_records_subject_id(first_id),address_records_subject_id(second_id))); subj_count=cur.fetchone()['c']
+        cur.execute("SELECT COUNT(*)::int AS c FROM canonical_target.proposed_legacy_crosswalk WHERE legacy_crosswalk_id IN (%s,%s)",(address_records_crosswalk_id(first_id),address_records_crosswalk_id(second_id))); cw_count=cur.fetchone()['c']
+        cur.execute("SELECT COUNT(*)::int AS c FROM canonical_target.proposed_geometry_observation WHERE geometry_observation_id LIKE 'phase-a-geometry-address-records%'"); geom_count=cur.fetchone()['c']
+        controls=address_records_identity_semantic_uniqueness(cur); first_rows=address_records_identity_complete_target_rows(cur, first_id, False); second_rows=address_records_identity_complete_target_rows(cur, second_id, False)
+    checks={'source_records':source_count==2,'internal_location_records':loc_count==2,'active_registry_subjects':subj_count==2,'distinct_crosswalks':cw_count==2,'semantic_duplicate_crosswalks':controls['semantic_duplicate_count']==0,'multiple_target_resolution':controls['semantic_duplicate_count']==0,'geometry_rows_created_by_identity_slice':geom_count==0,'second_source_key':second['lineage']['derived_source_key']==f'address_records:{second_id}'}
+    if not all(checks.values()): raise HarnessError(f'address_records second-source identity test failed: {checks}')
+    return {'test_id':'second-source-identity','status':'passed','checks':checks,'address_records_source_identities':source_count,'internal_location_records':loc_count,'active_registry_subjects':subj_count,'distinct_crosswalks':cw_count,'semantic_duplicate_crosswalks':controls['semantic_duplicate_count'],'multiple_target_resolutions':0,'geometry_rows_created_by_identity_slice':geom_count,'first_rows':first_rows,'second_rows':second_rows,'first_transform_lineage':first['lineage'],'second_transform_lineage':second['lineage']}
+
+
+def run_address_records_identity_slice() -> dict[str, Any]:
+    broad_report_path=DM/'phase-a-current-source-execution-report.json'; broad_report_original=broad_report_path.read_text() if broad_report_path.exists() else None
+    if address_records_identity_oracle_hash() != ADDRESS_RECORDS_IDENTITY_ORACLE_BASELINE_SHA256: raise HarnessError('reviewer-owned address_records identity oracle changed')
+    setup_address_records_identity_database(); positive=run_address_records_identity_slice_once(compare_expected=True)
+    test_results=[{'test_id':'positive-authoritative-slice','status':'passed'},{'test_id':'second-run-idempotency','status':'passed','first_run_inserts':positive['transform']['insert_stats_first']['inserted'],'second_run_inserts':positive['transform']['insert_stats_second']['inserted'],'second_run_updates':positive['transform']['second_run_updates']},{'test_id':'read-only-complete-set-comparison','status':'passed','comparison':positive['comparison']['complete_target_set_query']}]
+    second=run_address_records_identity_second_source_identity_test(); test_results.append(second)
+    probes=[('missing-source-record','address_records source row not found',{'missing_source':True}),('missing-source-lineage','address_records source record lineage not found',{'missing_source_lineage':True}),('missing-evidence-object','address_records evidence object not found',{'missing_evidence_object':True}),('source-record-classification-drift','address_records source record must remain government-internal',{'source_record_classification_drift':True}),('evidence-classification-drift','address_records evidence object must remain government-internal',{'evidence_classification_drift':True}),('source-submission-identity-substitution','address_records identity must derive from address_records.id',{'source_submission_identity_substitution':True}),('territory-identity-substitution','address_records identity must derive from address_records.id',{'territory_identity_substitution':True}),('wrong-target-identity-implementation','address_records identity rows differ from reviewer-owned expected target identity',{'wrong_target_identity_implementation':True}),('existing-location-conflict','address_records identity rows differ from reviewer-owned expected target identity',{'existing_location_conflict':True}),('existing-subject-conflict','address_records identity rows differ from reviewer-owned expected target identity',{'existing_subject_conflict':True}),('existing-crosswalk-conflict','address_records identity rows differ from reviewer-owned expected target identity',{'existing_crosswalk_conflict':True}),('unexpected-extra-crosswalk','unexpected address_records identity-foundation target row',{'unexpected_extra_crosswalk':True}),('unexpected-extra-location-record','unexpected address_records identity-foundation target row',{'unexpected_extra_location_record':True}),('unexpected-extra-registry-subject','unexpected address_records identity-foundation target row',{'unexpected_extra_registry_subject':True}),('semantic-duplicate-crosswalk','address_records identity crosswalk semantic uniqueness violated',{'semantic_duplicate_crosswalk':True}),('transform-spec-binding-drift','address_records identity transform specification binding mismatch',{'spec_drift':{'implementation_unit':'impl_wrong'}})]
+    for pid, reason, mutation in probes: test_results.append(run_address_records_identity_negative_probe(pid, reason, mutation))
+    loc=next(r for r in positive['comparison']['actual_rows_detail'] if r['table']=='proposed_location_record'); subj=next(r for r in positive['comparison']['actual_rows_detail'] if r['table']=='proposed_registry_subject'); cw=next(r for r in positive['comparison']['actual_rows_detail'] if r['table']=='proposed_legacy_crosswalk')
+    rollback_hashes=[t for t in test_results if 'same_database_pre_test_hash' in t]; prohibited={item['table']+':'+str(item.get('where')):item['count'] for item in positive['comparison']['expected_absent_rows']}
+    report={'command':'address-records-identity-slice','status':'passed','reviewer_owned_oracle_sha256':address_records_identity_oracle_hash(),'reviewer_owned_oracle_changed':False,'accepted_identity_controls_changed':False,'accepted_geometry_controls_changed':False,'frozen_broad_spec_changed':False,'broad_expected_fixture_changed':False,'exact_function_implemented':ADDRESS_RECORDS_IDENTITY_FUNCTION,'exact_registry_binding':{ADDRESS_RECORDS_IDENTITY_IMPL_UNIT:ADDRESS_RECORDS_IDENTITY_FUNCTION},'generic_transform_group_used_for_slice':False,'transform_reads_expected_oracle':False,'source_row_query':positive['transform']['source_row_query']['sql'],'source_row_returned':positive['transform']['source_row_query']['row'],'fields_consumed':positive['transform']['fields_consumed'],'source_key_derivation':positive['transform']['source_key_derivation'],'source_record_resolution':positive['transform']['lineage']['source_row'],'evidence_resolution':positive['transform']['lineage']['evidence_row'],'reference_fields_used_as_identity':positive['transform']['reference_fields_used_as_identity'],'reviewed_transform_spec_row':positive['transform']['spec_validation']['group'],'binding_validation':positive['transform']['spec_validation']['validation'],'location_record_row':loc,'registry_subject_row':subj,'legacy_crosswalk_row':cw,'first_run_inserts':positive['transform']['insert_stats_first']['inserted'],'second_run_inserts':positive['transform']['insert_stats_second']['inserted'],'second_run_updates':positive['transform']['second_run_updates'],'migration_exceptions_created':prohibited.get("proposed_migration_exception:source_table = 'address_records' AND source_key = 'address_records:phase-a-address-records-id' AND batch_id LIKE '%identity%'",0),'geometry_rows_created':prohibited.get("proposed_geometry_observation:geometry_observation_id LIKE 'phase-a-geometry-address-records%'",0),'versions_created':prohibited.get("proposed_location_record_version:location_record_id LIKE 'phase-a-location-address-records%'",0),'public_code_aliases_created':prohibited.get("proposed_public_code_alias:location_record_id LIKE 'phase-a-location-address-records%'",0),'publication_rows_created':prohibited.get("proposed_publication_release_item:location_record_id LIKE 'phase-a-location-address-records%'",0),'expected_absent_rows_verified':positive['comparison']['expected_absent_rows'],'prohibited_outputs_created':prohibited,'semantic_uniqueness_query_result':positive['comparison']['semantic_uniqueness'],'comparator_connection_read_only_proof':positive['comparison']['comparator_read_only_proof'],'comparator_connection':positive['comparison']['comparator_connection'],'complete_target_set_comparison':positive['comparison'],'tests':test_results,'second_source_identity_test':second,'rollback_equality_all':all(t.get('rollback_equality', True) for t in rollback_hashes),'rollback_evidence_count':len(rollback_hashes)}
+    write_json(DM/'phase-a-address-records-identity-slice-report.json', report)
+    if broad_report_original is not None: broad_report_path.write_text(broad_report_original)
+    elif broad_report_path.exists(): broad_report_path.unlink()
+    return report
+
 def phase_a_all() -> dict[str,Any]:
     discover_current(reset=True); apply_target(); topology_check(); transform=run_real_transform(read_expected=True); neg=run_negative_probes(); clean=cleanup_recreate()
     return {'command':'phase-a-all','status':'passed','summary':{'source_records_inserted':transform['source_report']['source_records_inserted'],'source_fields_queried':transform['source_report']['source_fields_queried'],'coverage':transform['coverage'],'target_counts':transform['target_counts'],'negative_probes_passed':neg['negative_probes_passed'],'cleanup_recreate':clean['status']}}
 
 def main() -> None:
     parser=argparse.ArgumentParser()
-    parser.add_argument('command', choices=['phase-a-all','address-points-geometry-slice','address-records-geometry-slice','citizen-geotag-geometry-slice','addresses-identity-slice','address-points-observation-crosswalk-slice','discover-current','apply-target','topology-check','cleanup','pin-expected'])
+    parser.add_argument('command', choices=['phase-a-all','address-points-geometry-slice','address-records-geometry-slice','citizen-geotag-geometry-slice','addresses-identity-slice','address-points-observation-crosswalk-slice','address-records-identity-slice','discover-current','apply-target','topology-check','cleanup','pin-expected'])
     args=parser.parse_args()
     if args.command=='discover-current': result=discover_current(reset=True)
     elif args.command=='apply-target': result=apply_target()
@@ -4233,6 +4572,7 @@ def main() -> None:
     elif args.command=='citizen-geotag-geometry-slice': result=run_citizen_geotag_geometry_slice()
     elif args.command=='addresses-identity-slice': result=run_addresses_identity_slice()
     elif args.command=='address-points-observation-crosswalk-slice': result=run_address_points_observation_crosswalk_slice()
+    elif args.command=='address-records-identity-slice': result=run_address_records_identity_slice()
     else: result=phase_a_all()
     print(json.dumps(result, sort_keys=True, default=str))
 
