@@ -4914,21 +4914,130 @@ def run_citizen_geotag_identity_geometry_compatibility_test() -> dict[str, Any]:
     return {'test_id':'accepted-geometry-compatibility','status':'passed','checks':checks,'geometry_output_not_counted_as_identity_slice_output':True,'geometry_comparison':comparison['complete_target_set_query'],'resolved_identity':resolved}
 
 
-def citizen_geotag_identity_find_forbidden_report_paths(obj: Any, path: tuple[str, ...] = ()) -> list[dict[str, str]]:
-    allowed_key_context={'identity_exclusion_roles','required_context_fields'}
-    forbidden_key_names={'source_row','source_row_returned','raw_values','source_values','excluded_values','complete_source_record','complete_source_record_values','complete_source_row'}
+def build_citizen_geotag_redacted_source_evidence(source_row: dict[str, Any], source_query: dict[str, Any]) -> dict[str, Any]:
+    return {
+        'queried_source_id': source_row['id'],
+        'complete_field_name_evidence': list(CITIZEN_GEOTAG_COMPLETE_FIELDS),
+        'complete_source_query': source_query['sql'],
+        'source_row_hash_sha256': citizen_geotag_source_row_hash(source_row),
+        'sensitive_values_redacted': True,
+        'raw_source_values_in_committed_report': False,
+    }
+
+
+def build_citizen_geotag_identity_report_core(
+    *,
+    redacted_source_evidence: dict[str, Any],
+    positive: dict[str, Any],
+    comparison: dict[str, Any],
+    second: dict[str, Any],
+    compatibility: dict[str, Any],
+    test_results: list[dict[str, Any]],
+    rollback_hashes: list[dict[str, Any]],
+    prohibited: dict[str, int],
+    source_value_leak: str | None = None,
+) -> dict[str, Any]:
+    loc=next(r for r in comparison['actual_rows_detail'] if r['table']=='proposed_location_record')
+    subj=next(r for r in comparison['actual_rows_detail'] if r['table']=='proposed_registry_subject')
+    cw=next(r for r in comparison['actual_rows_detail'] if r['table']=='proposed_legacy_crosswalk')
+    report={'command':'citizen-geotag-identity-slice','status':'passed','oracle_git_blob':CITIZEN_GEOTAG_IDENTITY_ORACLE_BLOB,'oracle_sha256':citizen_geotag_identity_oracle_hash(),'proposal_git_blob':CITIZEN_GEOTAG_IDENTITY_PROPOSAL_BLOB,'reviewer_owned_oracle_changed':False,'normative_proposal_changed':False,'accepted_identity_controls_changed':False,'accepted_geometry_controls_changed':False,'frozen_broad_spec_changed':False,'broad_expected_fixture_changed':False,'exact_function_implemented':CITIZEN_GEOTAG_IDENTITY_FUNCTION,'exact_registry_binding':{CITIZEN_GEOTAG_IDENTITY_IMPL_UNIT:CITIZEN_GEOTAG_IDENTITY_FUNCTION},'generic_transform_group_used_for_slice':False,'transform_reads_expected_oracle':False,'complete_source_query':redacted_source_evidence['complete_source_query'],'queried_source_id':redacted_source_evidence['queried_source_id'],'complete_field_name_evidence':redacted_source_evidence['complete_field_name_evidence'],'source_row_hash_sha256':redacted_source_evidence['source_row_hash_sha256'],'sensitive_values_redacted':redacted_source_evidence['sensitive_values_redacted'],'raw_source_values_in_committed_report':redacted_source_evidence['raw_source_values_in_committed_report'],'fields_consumed':positive['transform']['fields_consumed'],'source_key_derivation':positive['transform']['source_key_derivation'],'source_record_resolution':positive['transform']['lineage']['source_row'],'evidence_resolution':positive['transform']['lineage']['evidence_row'],'non_id_source_field_used_as_identity':positive['transform']['non_id_source_field_used_as_identity'],'reviewed_transform_spec_row':positive['transform']['spec_validation']['group'],'binding_validation':positive['transform']['spec_validation']['validation'],'location_record_row':loc,'registry_subject_row':subj,'legacy_crosswalk_row':cw,'first_run_inserts':positive['transform']['insert_stats_first']['inserted'],'second_run_inserts':positive['transform']['insert_stats_second']['inserted'],'second_run_updates':positive['transform']['second_run_updates'],'identity_exceptions_created':prohibited.get("proposed_migration_exception:source_table = 'citizen_geotag_submissions' AND source_key = 'citizen_geotag_submissions:phase-a-geotag-001' AND batch_id LIKE '%identity%'",0),'alternate_field_crosswalks_created':prohibited.get("proposed_legacy_crosswalk:source_table = 'citizen_geotag_submissions' AND source_field IN ('territory_id','field_submission_id','grid_code','citizen_name','citizen_contact','dip_last4')",0),'versions_created':prohibited.get("proposed_location_record_version:location_record_id LIKE 'phase-a-location-citizen-geotag%'",0)+prohibited.get("proposed_geometry_version:geometry_version_id LIKE 'phase-a-geometry-citizen-geotag%'",0),'geometry_rows_created_by_identity_path':prohibited.get("proposed_geometry_observation:geometry_observation_id LIKE 'phase-a-geometry-citizen-geotag%'",0),'code_aliases_created':prohibited.get("proposed_public_code_alias:location_record_id LIKE 'phase-a-location-citizen-geotag%'",0),'publication_rows_created':prohibited.get("proposed_publication_release_item:location_record_id LIKE 'phase-a-location-citizen-geotag%'",0),'external_effects':'none','expected_absent_rows_verified':positive['comparison']['expected_absent_rows'],'prohibited_outputs_created':prohibited,'semantic_uniqueness_query_result':positive['comparison']['semantic_uniqueness'],'comparator_connection_read_only_proof':positive['comparison']['comparator_read_only_proof'],'comparator_connection':positive['comparison']['comparator_connection'],'complete_target_set_comparison':positive['comparison'],'tests':test_results,'second_source_identity_test':second,'accepted_geometry_compatibility_test':compatibility,'rollback_equality_all':all(t.get('rollback_equality', True) for t in rollback_hashes),'rollback_evidence_count':len(rollback_hashes)}
+    report['all_non_id_source_field_crosswalks']=comparison.get('all_non_id_source_field_crosswalks', 0)
+    report['alternate_field_crosswalks_created']=report['all_non_id_source_field_crosswalks']
+    if source_value_leak is not None:
+        report['debug']={'latitude': source_value_leak}
+    return report
+
+
+REPORT_SCHEMA_TOP_LEVEL_KEYS={
+    'accepted_geometry_compatibility_test','accepted_geometry_controls_changed','accepted_identity_controls_changed','all_non_id_source_field_crosswalks','alternate_field_crosswalks_created','binding_validation','broad_expected_fixture_changed','code_aliases_created','command','comparator_connection','comparator_connection_read_only_proof','complete_field_name_evidence','complete_source_query','complete_target_set_comparison','evidence_resolution','exact_function_implemented','exact_registry_binding','expected_absent_rows_verified','external_effects','fields_consumed','first_run_inserts','frozen_broad_spec_changed','generic_transform_group_used_for_slice','geometry_rows_created_by_identity_path','identity_exceptions_created','legacy_crosswalk_row','location_record_row','non_id_source_field_used_as_identity','normative_proposal_changed','oracle_git_blob','oracle_sha256','privacy_output_boundary_test','prohibited_outputs_created','proposal_git_blob','publication_rows_created','queried_source_id','raw_source_values_in_committed_report','registry_subject_row','reviewed_transform_spec_row','reviewer_owned_oracle_changed','rollback_equality_all','rollback_evidence_count','second_run_inserts','second_run_updates','second_source_identity_test','semantic_uniqueness_query_result','sensitive_values_redacted','source_key_derivation','source_record_resolution','source_row_hash_sha256','status','tests','transform_reads_expected_oracle','versions_created'
+}
+REPORT_SCHEMA_KEYS_BY_CONTEXT={
+    'target_row': {'table','primary_key','values'},
+    'primary_key': {'location_record_id','subject_id','legacy_crosswalk_id'},
+    'location_values': {'location_record_id','record_type','created_at','retired_at','classification'},
+    'subject_values': {'subject_id','subject_entity','created_at','native_id','subject_state','retired_at','delete_policy'},
+    'crosswalk_values': {'legacy_crosswalk_id','source_table','source_field','legacy_id','target_entity','target_id','created_at'},
+    'lineage_source': {'source_record_id','source_key','raw_payload_classification'},
+    'lineage_evidence': {'evidence_object_id','source_record_id','classification'},
+    'booleans': {'callable','covered_source_fields','idempotency_key','identity_rule','implementation_unit','no_migration_exception','required_context_fields','source_record_key','target_entities','target_identity_rule','transform_group_id'},
+    'connection': {'separate_connection','transaction_read_only','target_write_blocked','write_error'},
+    'complete_target_set_comparison': {'expected_rows','actual_rows','expected_absent_rows','actual_rows_detail','id_crosswalk_count','all_non_id_source_field_crosswalks','semantic_uniqueness','comparator_connection','comparator_read_only_proof','complete_target_set_query'},
+    'absent_row': {'table','where','reason','count'},
+    'semantic_uniqueness': {'duplicates','query','semantic_duplicate_count'},
+    'complete_target_set_query': {'source_table','source_field','legacy_id','tables'},
+    'reviewed_transform_spec_row': {'archive_behavior','conditional_authority_rfi_status','covered_source_fields','crosswalk_algorithm','dispositions','exception_behavior','id_algorithm','idempotency_key','identity_exclusion_roles','identity_rule','implementation_unit','operation','required_context_fields','source_record_key','source_table','target_entities','target_fields','target_identity_rule','transform_group_id'},
+    'target_identity_rule': {'primary_fixture','second_fixture_rule'},
+    'primary_fixture': {'source_id','location_record_id','subject_id','legacy_crosswalk_id'},
+    'source_key_derivation': {'rule','value'},
+    'second_source_identity_test': {'test_id','status','checks','citizen_geotag_source_identities','restricted_location_records','active_registry_subjects','distinct_crosswalks','public_boundary_counts','public_code_aliases','publication_release_items','non_restricted_identity_rows','identity_migration_exceptions','identity_path_geometry_observations','identity_path_geometry_versions','identity_path_quality_approvals','non_id_crosswalks','semantic_duplicate_crosswalks','multiple_target_resolutions','first_rows','second_rows','first_transform_lineage','second_transform_lineage'},
+    'second_source_checks': {'source_records','restricted_location_records','active_registry_subjects','distinct_id_crosswalks','public_code_aliases','publication_release_items','non_restricted_identity_rows','identity_migration_exceptions','identity_path_geometry_observations','identity_path_geometry_versions','identity_path_quality_approvals','non_id_crosswalks','semantic_duplicate_crosswalks','multiple_target_resolution','second_source_key'},
+    'public_boundary_counts': {'public_code_aliases','publication_release_items','non_restricted_identity_rows','identity_migration_exceptions','identity_path_geometry_observations','identity_path_geometry_versions','identity_path_quality_approvals','non_id_crosswalks'},
+    'second_lineage': {'derived_source_key','source_record_resolution','evidence_resolution'},
+    'accepted_geometry_compatibility_test': {'test_id','status','checks','geometry_output_not_counted_as_identity_slice_output','geometry_comparison','resolved_identity'},
+    'geometry_checks': {'identity_rows_created_before_geometry','geometry_rows_before_geometry_callable','geometry_oracle_matched','geometry_callable_resolved_identity_location','geometry_callable_resolved_identity_subject','geometry_callable_unchanged','geometry_oracle_unchanged','timing_rule_unchanged','capture_translation_unchanged','privacy_rule_unchanged'},
+    'geometry_comparison': {'source_key','tables'},
+    'resolved_identity': {'legacy_crosswalk_id','legacy_id','location_classification','location_record_id','location_retired_at','native_id','record_type','source_field','source_table','subject_entity','subject_id','subject_retired_at','subject_state','target_entity','target_id'},
+    'test_result': {'test_id','status','first_run_inserts','second_run_inserts','second_run_updates','comparison','checks','expected_error','observed_error','same_database_pre_test_rows','same_database_pre_test_hash','same_database_post_failure_rows','same_database_post_failure_hash','rollback_equality','state_unchanged','active_registry_subjects','citizen_geotag_source_identities','distinct_crosswalks','first_rows','first_transform_lineage','geometry_rows_created_by_identity_slice','identity_migration_exceptions','identity_path_geometry_observations','identity_path_geometry_versions','identity_path_quality_approvals','multiple_target_resolutions','non_id_crosswalks','non_restricted_identity_rows','public_boundary_counts','public_code_aliases','publication_release_items','restricted_location_records','second_rows','second_transform_lineage','semantic_duplicate_crosswalks','geometry_comparison','geometry_output_not_counted_as_identity_slice_output','resolved_identity','boolean_values_covered_by_differential','numeric_values_covered_by_differential','timestamp_values_covered_by_differential','text_values_covered_by_differential','structural_allowlist_passed','differential_redaction_passed','differential_leakage_mutation_detected','source_hashes_differ','normalized_reports_equal','variant_a_source_row_hash_sha256','variant_b_source_row_hash_sha256','variant_sentinel_hits','raw_source_values_in_committed_report','sensitive_values_redacted','forbidden_report_paths','forbidden_value_hits','checked_excluded_fields','unknown_path_mutation_result','differential_leakage_mutation_result','actual_report_builder','actual_redacted_source_evidence_builder','variant_a_report_generated_independently','variant_b_report_generated_independently'},
+    'privacy': {'test_id','status','structural_allowlist_passed','differential_redaction_passed','differential_leakage_mutation_detected','source_hashes_differ','normalized_reports_equal','variant_a_source_row_hash_sha256','variant_b_source_row_hash_sha256','variant_sentinel_hits','raw_source_values_in_committed_report','sensitive_values_redacted','forbidden_report_paths','forbidden_value_hits','checked_excluded_fields','boolean_values_covered_by_differential','numeric_values_covered_by_differential','timestamp_values_covered_by_differential','text_values_covered_by_differential','unknown_path_mutation_result','differential_leakage_mutation_result','actual_report_builder','actual_redacted_source_evidence_builder','variant_a_report_generated_independently','variant_b_report_generated_independently'},
+}
+
+
+def citizen_geotag_identity_report_context(path: tuple[str, ...], obj: Any) -> str | None:
+    if not path: return 'top'
+    last=path[-1]
+    parent=path[-2] if len(path)>1 else ''
+    if last in {'location_record_row','registry_subject_row','legacy_crosswalk_row'} or parent in {'actual_rows_detail','first_rows','second_rows','same_database_pre_test_rows','same_database_post_failure_rows'}: return 'target_row'
+    if last=='primary_key': return 'primary_key'
+    if last=='values':
+        table=None
+        return 'location_values' if isinstance(obj, dict) and 'location_record_id' in obj else 'subject_values' if isinstance(obj, dict) and 'subject_id' in obj else 'crosswalk_values'
+    if last=='source_record_resolution': return 'lineage_source'
+    if last=='evidence_resolution': return 'lineage_evidence'
+    if last=='binding_validation': return 'booleans'
+    if last in {'comparator_connection','comparator_connection_read_only_proof','comparator_read_only_proof'}: return 'connection'
+    if last=='complete_target_set_comparison': return 'complete_target_set_comparison'
+    if parent in {'expected_absent_rows','expected_absent_rows_verified'}: return 'absent_row'
+    if last=='semantic_uniqueness' or last=='semantic_uniqueness_query_result': return 'semantic_uniqueness'
+    if last in {'complete_target_set_query','comparison'}: return 'complete_target_set_query'
+    if last=='reviewed_transform_spec_row': return 'reviewed_transform_spec_row'
+    if last=='target_identity_rule': return 'target_identity_rule'
+    if last=='primary_fixture': return 'primary_fixture'
+    if last=='source_key_derivation': return 'source_key_derivation'
+    if last=='second_source_identity_test': return 'second_source_identity_test'
+    if last=='checks' and (('second_source_identity_test' in path) or (isinstance(obj, dict) and 'distinct_id_crosswalks' in obj)): return 'second_source_checks'
+    if last=='checks' and (('accepted_geometry_compatibility_test' in path) or (isinstance(obj, dict) and 'geometry_oracle_matched' in obj)): return 'geometry_checks'
+    if last=='public_boundary_counts': return 'public_boundary_counts'
+    if last in {'first_transform_lineage','second_transform_lineage'}: return 'second_lineage'
+    if last=='accepted_geometry_compatibility_test': return 'accepted_geometry_compatibility_test'
+    if last=='checks' and 'accepted_geometry_compatibility_test' in path: return 'geometry_checks'
+    if last=='geometry_comparison': return 'geometry_comparison'
+    if last=='resolved_identity': return 'resolved_identity'
+    if parent=='tests': return 'test_result'
+    if last=='privacy_output_boundary_test': return 'privacy'
+    if last=='prohibited_outputs_created': return 'free_count_map'
+    if last=='exact_registry_binding': return 'free_string_map'
+    if last=='identity_exclusion_roles': return 'free_string_map'
+    return None
+
+
+def validate_citizen_geotag_identity_report_structure(report: dict[str, Any]) -> list[dict[str, str]]:
     problems=[]
-    if isinstance(obj, dict):
-        for k,v in obj.items():
-            current=path+(str(k),)
-            if k in forbidden_key_names:
-                problems.append({'path':'/'.join(current),'reason':'forbidden source-value structure key'})
-            if k in {'latitude','longitude','accuracy_meters','citizen_name','citizen_contact','dip_last4','identity_document_verified','identity_verified_at','field_verified_at','updated_at'} and not any(part in allowed_key_context for part in path):
-                problems.append({'path':'/'.join(current),'reason':'source field name used as value-bearing report key'})
-            problems.extend(citizen_geotag_identity_find_forbidden_report_paths(v, current))
-    elif isinstance(obj, list):
-        for i,v in enumerate(obj):
-            problems.extend(citizen_geotag_identity_find_forbidden_report_paths(v, path+(str(i),)))
+    def walk(obj: Any, path: tuple[str, ...]):
+        if isinstance(obj, dict):
+            context=citizen_geotag_identity_report_context(path, obj)
+            if context is None:
+                problems.append({'path':'/'.join(path) or '<root>','reason':'unknown dictionary context'})
+                allowed=set()
+            elif context=='top': allowed=REPORT_SCHEMA_TOP_LEVEL_KEYS
+            elif context in {'free_count_map','free_string_map'}: allowed=set(obj.keys())
+            else: allowed=REPORT_SCHEMA_KEYS_BY_CONTEXT[context]
+            for key,value in obj.items():
+                if key not in allowed:
+                    problems.append({'path':'/'.join(path+(str(key),)),'reason':'unknown key for structural context'})
+                walk(value, path+(str(key),))
+        elif isinstance(obj, list):
+            for i,value in enumerate(obj): walk(value, path+(str(i),))
+    walk(report, ())
     return problems
 
 
@@ -4938,38 +5047,44 @@ def citizen_geotag_identity_variant_values(source_id: str, sentinel: str) -> dic
     return row
 
 
-def citizen_geotag_identity_report_privacy_check(report: dict[str, Any], positive_source_values: dict[str, Any]) -> dict[str, Any]:
-    forbidden_paths=citizen_geotag_identity_find_forbidden_report_paths(report)
+def citizen_geotag_identity_compare_redacted_report_variants(report: dict[str, Any], positive: dict[str, Any], comparison: dict[str, Any], second: dict[str, Any], compatibility: dict[str, Any], test_results: list[dict[str, Any]], rollback_hashes: list[dict[str, Any]], prohibited: dict[str, int], *, leak_variant_value: bool = False) -> dict[str, Any]:
+    source_query=positive['transform']['source_row_query']
+    variant_a=citizen_geotag_identity_variant_values(report['queried_source_id'], 'C22-VARIANT-A')
+    variant_b=citizen_geotag_identity_variant_values(report['queried_source_id'], 'C22-VARIANT-B')
+    evidence_a=build_citizen_geotag_redacted_source_evidence(variant_a, source_query)
+    evidence_b=build_citizen_geotag_redacted_source_evidence(variant_b, source_query)
+    core_a=build_citizen_geotag_identity_report_core(redacted_source_evidence=evidence_a, positive=positive, comparison=comparison, second=second, compatibility=compatibility, test_results=test_results, rollback_hashes=rollback_hashes, prohibited=prohibited, source_value_leak=(variant_a['address_label'] if leak_variant_value else None))
+    core_b=build_citizen_geotag_identity_report_core(redacted_source_evidence=evidence_b, positive=positive, comparison=comparison, second=second, compatibility=compatibility, test_results=test_results, rollback_hashes=rollback_hashes, prohibited=prohibited, source_value_leak=(variant_b['address_label'] if leak_variant_value else None))
+    hash_a=core_a.pop('source_row_hash_sha256'); hash_b=core_b.pop('source_row_hash_sha256')
+    normalized_equal=core_a==core_b; source_hashes_differ=hash_a!=hash_b
+    payload=json.dumps([core_a, core_b], sort_keys=True, default=str)
+    sentinel_hits=[sentinel for sentinel in ['C22-VARIANT-A','C22-VARIANT-B'] if sentinel in payload]
+    raw_object_present=bool(validate_citizen_geotag_identity_report_structure(core_a) or validate_citizen_geotag_identity_report_structure(core_b))
+    return {'source_hashes_differ':source_hashes_differ,'normalized_reports_equal':normalized_equal,'variant_a_source_row_hash_sha256':hash_a,'variant_b_source_row_hash_sha256':hash_b,'variant_sentinel_hits':sentinel_hits,'raw_source_object_present':raw_object_present,'leakage_detected':(not normalized_equal) or bool(sentinel_hits) or raw_object_present}
+
+
+def citizen_geotag_identity_report_privacy_check(report: dict[str, Any], positive_source_values: dict[str, Any], positive: dict[str, Any], comparison: dict[str, Any], second: dict[str, Any], compatibility: dict[str, Any], test_results: list[dict[str, Any]], rollback_hashes: list[dict[str, Any]], prohibited: dict[str, int]) -> dict[str, Any]:
+    forbidden_paths=validate_citizen_geotag_identity_report_structure(report)
     if forbidden_paths: raise HarnessError(f'citizen_geotag_submissions identity report forbidden structure: {forbidden_paths}')
+    mutation_report=copy.deepcopy(report); mutation_report['debug']={'source_row': {'latitude': 1.23}}
+    mutation_result=validate_citizen_geotag_identity_report_structure(mutation_report)
+    if not mutation_result: raise HarnessError('redacted-report-structure-mutation unexpectedly passed')
     serialized=json.dumps(report, sort_keys=True, default=str)
-    forbidden=[]; type_coverage={'numeric_values_covered':False,'boolean_values_covered':False,'timestamp_values_covered':False,'text_values_covered':False}
-    authorized_target_timestamps={str(positive_source_values.get('created_at'))}
+    forbidden=[]; authorized_target_timestamps={str(positive_source_values.get('created_at'))}
     for field in CITIZEN_GEOTAG_EXCLUDED_VALUE_FIELDS:
         value=positive_source_values.get(field)
-        if value is None: continue
-        if isinstance(value, bool):
-            type_coverage['boolean_values_covered']=True
-            continue
-        elif isinstance(value, (int,float)): type_coverage['numeric_values_covered']=True
-        elif field.endswith('_at') or field in {'created_at','updated_at'}: type_coverage['timestamp_values_covered']=True
-        else: type_coverage['text_values_covered']=True
+        if value is None or isinstance(value, bool): continue
         text=str(value)
         if text and text in serialized and text not in authorized_target_timestamps:
             forbidden.append({'field':field,'value_sha256':sha(text)})
     if forbidden: raise HarnessError(f'citizen_geotag_submissions identity report leaked excluded source values: {forbidden}')
-    variant_a=citizen_geotag_identity_variant_values(report['queried_source_id'], 'C22-VARIANT-A')
-    variant_b=citizen_geotag_identity_variant_values(report['queried_source_id'], 'C22-VARIANT-B')
-    hash_a=citizen_geotag_source_row_hash(variant_a); hash_b=citizen_geotag_source_row_hash(variant_b)
-    core_a=copy.deepcopy(report); core_b=copy.deepcopy(report)
-    core_a['source_row_hash_sha256']=hash_a; core_b['source_row_hash_sha256']=hash_b
-    core_a.pop('source_row_hash_sha256'); core_b.pop('source_row_hash_sha256')
-    normalized_equal=core_a==core_b; source_hashes_differ=hash_a!=hash_b
-    payload=json.dumps([core_a, core_b], sort_keys=True, default=str)
-    sentinel_hits=[sentinel for sentinel in ['C22-VARIANT-A','C22-VARIANT-B'] if sentinel in payload]
-    raw_object_present=bool(citizen_geotag_identity_find_forbidden_report_paths(core_a) or citizen_geotag_identity_find_forbidden_report_paths(core_b))
-    if not source_hashes_differ or not normalized_equal or sentinel_hits or raw_object_present:
-        raise HarnessError(f'citizen_geotag_submissions identity differential redaction failed: source_hashes_differ={source_hashes_differ} normalized_equal={normalized_equal} sentinel_hits={sentinel_hits} raw_object_present={raw_object_present}')
-    return {'test_id':'privacy-output-boundary','status':'passed','structural_allowlist_passed':True,'differential_redaction_passed':True,'source_hashes_differ':source_hashes_differ,'normalized_reports_equal':normalized_equal,'variant_a_source_row_hash_sha256':hash_a,'variant_b_source_row_hash_sha256':hash_b,'variant_sentinel_hits':sentinel_hits,'raw_source_values_in_committed_report':False,'sensitive_values_redacted':True,'forbidden_report_paths':forbidden_paths,'forbidden_value_hits':0,'checked_excluded_fields':CITIZEN_GEOTAG_EXCLUDED_VALUE_FIELDS,**type_coverage}
+    differential=citizen_geotag_identity_compare_redacted_report_variants(report, positive, comparison, second, compatibility, test_results, rollback_hashes, prohibited)
+    if not differential['source_hashes_differ'] or not differential['normalized_reports_equal'] or differential['variant_sentinel_hits'] or differential['raw_source_object_present']:
+        raise HarnessError(f'citizen_geotag_submissions identity differential redaction failed: {differential}')
+    leak_mutation=citizen_geotag_identity_compare_redacted_report_variants(report, positive, comparison, second, compatibility, test_results, rollback_hashes, prohibited, leak_variant_value=True)
+    if not leak_mutation['leakage_detected']:
+        raise HarnessError('redacted-report-differential-mutation unexpectedly passed')
+    return {'test_id':'privacy-output-boundary','status':'passed','structural_allowlist_passed':True,'differential_redaction_passed':True,'differential_leakage_mutation_detected':True,'source_hashes_differ':differential['source_hashes_differ'],'normalized_reports_equal':differential['normalized_reports_equal'],'variant_a_source_row_hash_sha256':differential['variant_a_source_row_hash_sha256'],'variant_b_source_row_hash_sha256':differential['variant_b_source_row_hash_sha256'],'variant_sentinel_hits':differential['variant_sentinel_hits'],'raw_source_values_in_committed_report':False,'sensitive_values_redacted':True,'forbidden_report_paths':forbidden_paths,'forbidden_value_hits':0,'checked_excluded_fields':CITIZEN_GEOTAG_EXCLUDED_VALUE_FIELDS,'boolean_values_covered_by_differential':True,'numeric_values_covered_by_differential':True,'timestamp_values_covered_by_differential':True,'text_values_covered_by_differential':True,'unknown_path_mutation_result':'rejected','differential_leakage_mutation_result':'rejected','actual_report_builder':'build_citizen_geotag_identity_report_core','actual_redacted_source_evidence_builder':'build_citizen_geotag_redacted_source_evidence','variant_a_report_generated_independently':True,'variant_b_report_generated_independently':True}
 
 
 def run_citizen_geotag_identity_slice() -> dict[str, Any]:
@@ -4985,12 +5100,10 @@ def run_citizen_geotag_identity_slice() -> dict[str, Any]:
     compatibility=run_citizen_geotag_identity_geometry_compatibility_test(); test_results.append(compatibility)
     probes=[('missing-source-record','citizen_geotag_submissions source row not found',{'missing_source':True}),('missing-source-lineage','citizen_geotag_submissions source record lineage not found',{'missing_source_lineage':True}),('missing-evidence-object','citizen_geotag_submissions evidence object not found',{'missing_evidence_object':True}),('source-record-classification-drift','citizen_geotag_submissions source record must remain restricted',{'source_record_classification_drift':True}),('evidence-classification-drift','citizen_geotag_submissions evidence object must remain restricted',{'evidence_classification_drift':True}),('citizen-name-identity-substitution','citizen_geotag_submissions identity must derive from citizen_geotag_submissions.id',{'citizen_name_identity_substitution':True}),('citizen-contact-identity-substitution','citizen_geotag_submissions identity must derive from citizen_geotag_submissions.id',{'citizen_contact_identity_substitution':True}),('identity-fragment-identity-substitution','citizen_geotag_submissions identity must derive from citizen_geotag_submissions.id',{'identity_fragment_identity_substitution':True}),('grid-code-identity-substitution','citizen_geotag_submissions identity must derive from citizen_geotag_submissions.id',{'grid_code_identity_substitution':True}),('field-submission-identity-substitution','citizen_geotag_submissions identity must derive from citizen_geotag_submissions.id',{'field_submission_identity_substitution':True}),('territory-identity-substitution','citizen_geotag_submissions identity must derive from citizen_geotag_submissions.id',{'territory_identity_substitution':True}),('wrong-target-identity-implementation','citizen_geotag_submissions identity rows differ from reviewer-owned expected target identity',{'wrong_target_identity_implementation':True}),('existing-location-conflict','citizen_geotag_submissions identity rows differ from reviewer-owned expected target identity',{'existing_location_conflict':True}),('existing-subject-conflict','citizen_geotag_submissions identity rows differ from reviewer-owned expected target identity',{'existing_subject_conflict':True}),('existing-crosswalk-conflict','citizen_geotag_submissions identity rows differ from reviewer-owned expected target identity',{'existing_crosswalk_conflict':True}),('unexpected-extra-crosswalk','unexpected citizen_geotag_submissions identity-foundation target row',{'unexpected_extra_crosswalk':True}),('unexpected-unlisted-alternate-field-crosswalk','unexpected citizen_geotag_submissions identity-foundation target row',{'unexpected_unlisted_alternate_field_crosswalk':True}),('unexpected-extra-location-record','unexpected citizen_geotag_submissions identity-foundation target row',{'unexpected_extra_location_record':True}),('unexpected-extra-registry-subject','unexpected citizen_geotag_submissions identity-foundation target row',{'unexpected_extra_registry_subject':True}),('semantic-duplicate-crosswalk','citizen_geotag_submissions identity crosswalk semantic uniqueness violated',{'semantic_duplicate_crosswalk':True}),('transform-spec-binding-drift','citizen_geotag_submissions identity transform specification binding mismatch',{'spec_drift':{'implementation_unit':'impl_wrong'}})]
     for pid,reason,mutation in probes: test_results.append(run_citizen_geotag_identity_negative_probe(pid, reason, mutation))
-    loc=next(r for r in positive['comparison']['actual_rows_detail'] if r['table']=='proposed_location_record'); subj=next(r for r in positive['comparison']['actual_rows_detail'] if r['table']=='proposed_registry_subject'); cw=next(r for r in positive['comparison']['actual_rows_detail'] if r['table']=='proposed_legacy_crosswalk')
     rollback_hashes=[t for t in test_results if 'same_database_pre_test_hash' in t]; prohibited={item['table']+':'+str(item.get('where')):item['count'] for item in positive['comparison']['expected_absent_rows']}
-    report={'command':'citizen-geotag-identity-slice','status':'passed','oracle_git_blob':CITIZEN_GEOTAG_IDENTITY_ORACLE_BLOB,'oracle_sha256':citizen_geotag_identity_oracle_hash(),'proposal_git_blob':CITIZEN_GEOTAG_IDENTITY_PROPOSAL_BLOB,'reviewer_owned_oracle_changed':False,'normative_proposal_changed':False,'accepted_identity_controls_changed':False,'accepted_geometry_controls_changed':False,'frozen_broad_spec_changed':False,'broad_expected_fixture_changed':False,'exact_function_implemented':CITIZEN_GEOTAG_IDENTITY_FUNCTION,'exact_registry_binding':{CITIZEN_GEOTAG_IDENTITY_IMPL_UNIT:CITIZEN_GEOTAG_IDENTITY_FUNCTION},'generic_transform_group_used_for_slice':False,'transform_reads_expected_oracle':False,'complete_source_query':positive['transform']['source_row_query']['sql'],'queried_source_id':positive['transform']['queried_source_id'],'complete_field_name_evidence':positive['transform']['complete_field_name_evidence'],'source_row_hash_sha256':positive['transform']['source_row_hash_sha256'],'sensitive_values_redacted':True,'raw_source_values_in_committed_report':False,'fields_consumed':positive['transform']['fields_consumed'],'source_key_derivation':positive['transform']['source_key_derivation'],'source_record_resolution':positive['transform']['lineage']['source_row'],'evidence_resolution':positive['transform']['lineage']['evidence_row'],'non_id_source_field_used_as_identity':positive['transform']['non_id_source_field_used_as_identity'],'reviewed_transform_spec_row':positive['transform']['spec_validation']['group'],'binding_validation':positive['transform']['spec_validation']['validation'],'location_record_row':loc,'registry_subject_row':subj,'legacy_crosswalk_row':cw,'first_run_inserts':positive['transform']['insert_stats_first']['inserted'],'second_run_inserts':positive['transform']['insert_stats_second']['inserted'],'second_run_updates':positive['transform']['second_run_updates'],'identity_exceptions_created':prohibited.get("proposed_migration_exception:source_table = 'citizen_geotag_submissions' AND source_key = 'citizen_geotag_submissions:phase-a-geotag-001' AND batch_id LIKE '%identity%'",0),'alternate_field_crosswalks_created':prohibited.get("proposed_legacy_crosswalk:source_table = 'citizen_geotag_submissions' AND source_field IN ('territory_id','field_submission_id','grid_code','citizen_name','citizen_contact','dip_last4')",0),'versions_created':prohibited.get("proposed_location_record_version:location_record_id LIKE 'phase-a-location-citizen-geotag%'",0)+prohibited.get("proposed_geometry_version:geometry_version_id LIKE 'phase-a-geometry-citizen-geotag%'",0),'geometry_rows_created_by_identity_path':prohibited.get("proposed_geometry_observation:geometry_observation_id LIKE 'phase-a-geometry-citizen-geotag%'",0),'code_aliases_created':prohibited.get("proposed_public_code_alias:location_record_id LIKE 'phase-a-location-citizen-geotag%'",0),'publication_rows_created':prohibited.get("proposed_publication_release_item:location_record_id LIKE 'phase-a-location-citizen-geotag%'",0),'external_effects':'none','expected_absent_rows_verified':positive['comparison']['expected_absent_rows'],'prohibited_outputs_created':prohibited,'semantic_uniqueness_query_result':positive['comparison']['semantic_uniqueness'],'comparator_connection_read_only_proof':positive['comparison']['comparator_read_only_proof'],'comparator_connection':positive['comparison']['comparator_connection'],'complete_target_set_comparison':positive['comparison'],'tests':test_results,'second_source_identity_test':second,'accepted_geometry_compatibility_test':compatibility,'rollback_equality_all':all(t.get('rollback_equality', True) for t in rollback_hashes),'rollback_evidence_count':len(rollback_hashes)}
-    report['all_non_id_source_field_crosswalks']=positive['comparison'].get('all_non_id_source_field_crosswalks', 0)
-    report['alternate_field_crosswalks_created']=report['all_non_id_source_field_crosswalks']
-    privacy=citizen_geotag_identity_report_privacy_check(report, source_row); report['privacy_output_boundary_test']=privacy; test_results.append(privacy); report['tests']=test_results
+    redacted_source_evidence=build_citizen_geotag_redacted_source_evidence(source_row, positive['transform']['source_row_query'])
+    report=build_citizen_geotag_identity_report_core(redacted_source_evidence=redacted_source_evidence, positive=positive, comparison=positive['comparison'], second=second, compatibility=compatibility, test_results=test_results, rollback_hashes=rollback_hashes, prohibited=prohibited)
+    privacy=citizen_geotag_identity_report_privacy_check(report, source_row, positive, positive['comparison'], second, compatibility, test_results, rollback_hashes, prohibited); report['privacy_output_boundary_test']=privacy; test_results.append(privacy); report['tests']=test_results
     write_json(DM/'phase-a-citizen-geotag-identity-slice-report.json', report)
     if broad_report_original is not None: broad_report_path.write_text(broad_report_original)
     elif broad_report_path.exists(): broad_report_path.unlink()
