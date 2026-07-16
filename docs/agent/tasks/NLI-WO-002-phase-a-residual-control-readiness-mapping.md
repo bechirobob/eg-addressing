@@ -1,12 +1,12 @@
-# NLI-WO-002 Phase A residual-control and broad-readiness mapping pack — C32-C36 correction
+# NLI-WO-002 Phase A residual-control and broad-readiness mapping pack — C37 decision-event row-role correction
 
 **Reviewed base mapping commit:** `50837a3c8053a0a79dbf0d57321d3b49407929ef`
 
-**Reviewer-controlled synchronization head:** `eeb6fbdbd5269c6d41e7696331c2e33f1d4f2578`
+**Reviewer-controlled synchronization head:** `c615d16853685f2f3ac2800aadae1b5bbc87ccae`
 
-**Assessment read:** `docs/sda/reviews/NLI-WO-002-phase-a-residual-readiness-mapping-assessment.json`
+**Assessment read:** `docs/sda/reviews/NLI-WO-002-C37.json`
 
-**PR review read:** `4714329154` — mapping-only correction required; no transform group or broad reassessment authorized.
+**PR review read:** `4714714220` — C37 row-role correction required; mapping-only; no transform group or broad reassessment authorized.
 
 ## 0. Closed-boundary declaration
 This correction changes this mapping document only. It does **not** modify `authoritative_harness.py`, any generated report, transform specification, fixture, `api-ci.yml`, reviewer controls/oracles, accepted callables, runtime application code, executable migrations, deployment/publication code, or PR #8. It does **not** authorize reviewer-oracle preparation, another transform group, broad Phase A reassessment, F02/F14 closure, Review 12, Phase B, deployment or merge.
@@ -15,7 +15,7 @@ This correction changes this mapping document only. It does **not** modify `auth
 
 | authority | path | git blob | sha256 |
 | --- | --- | --- | --- |
-| reviewer residual assessment | docs/sda/reviews/NLI-WO-002-phase-a-residual-readiness-mapping-assessment.json | bed631ea0e6059dd8d4f3278a203fce81058e8f4 | 9d85539af98070aa1d13f8d151bdb982dd1fe37800db306d786a144e3c3fc82e |
+| reviewer C37 assessment | docs/sda/reviews/NLI-WO-002-C37.json | 07311d3c71084d3b04813c9411792b93b4068c2d | bb5e7d241aa80b0af74467a99e1c8668367376ef5a003f51fd35cb591efb9260 |
 | accepted-family convergence mapping | docs/agent/tasks/NLI-WO-002-phase-a-accepted-family-convergence-mapping.md | c984a16f352417b9fde0f8cb9e0536a5e0ab6eb1 | 382c1ccd0de2b90ecb08241d8cf3f6788ae7166ef93f9122bb6ed3b6ed3669ce |
 | convergence control | docs/sda/acceptance/NLI-WO-002-phase-a-accepted-family-convergence-control.json | 3c4c59fa5eeb004cfb8ef2520241d74c130fa926 | d714b32ea170e05b5feef240d587d860ed0c712812036f384e357381a60b3b8a |
 | accepted convergence report | docs/sda/data-model/phase-a-accepted-family-convergence-report.json | bc0346d30eb49f1d2956b81e6cffa5e3e9933d65 | f28cd006d27cf0d764db1863956d39dc97aa13b11df0d063d8c3b8ad2698a304 |
@@ -297,6 +297,7 @@ This correction changes this mapping document only. It does **not** modify `auth
 
 | row family | counting scope | count |
 | --- | --- | --- |
+| proposed_decision_event | rows classified as frozen/prohibited/structurally invalid broad history | 2 |
 | proposed_geometry_observation | rows classified as frozen/prohibited/structurally invalid broad history | 2 |
 | proposed_legacy_crosswalk | rows classified as frozen/prohibited/structurally invalid broad history | 8 |
 | proposed_location_record_object_link | rows classified as frozen/prohibited/structurally invalid broad history | 1 |
@@ -327,6 +328,7 @@ This correction changes this mapping document only. It does **not** modify `auth
 | frozen historical row | proposed_source_payload_archive | {"archive_id": "phase-a-archive-wo002-r06-source-archive-reference-data-loads"} | reference_data_loads | historical-only broad retention evidence; do not govern future acceptance |
 | frozen historical row | proposed_source_payload_archive | {"archive_id": "phase-a-archive-wo002-r06-source-archive-roads"} | roads | historical-only broad retention evidence; do not govern future acceptance |
 | frozen historical row | proposed_source_payload_archive | {"archive_id": "phase-a-archive-wo002-r06-source-archive-territories"} | territories | historical-only broad retention evidence; do not govern future acceptance |
+| frozen historical row | proposed_decision_event | {"decision_event_id": "phase-a-decision-phase-a-location-address-reference"} |  | historical-only broad retention evidence; do not govern future acceptance |
 | explicitly prohibited row | proposed_location_record_version | {"location_record_version_id": "phase-a-version-phase-a-location-address-reference"} |  | remove from future broad acceptance scope |
 | explicitly prohibited row | proposed_location_record_relationship | {"relationship_id": "phase-a-relationship-geotag-near-address-reference"} |  | remove from future broad acceptance scope |
 
@@ -343,6 +345,7 @@ This correction changes this mapping document only. It does **not** modify `auth
 
 | table | primary key | source table | current target | reason invalid | affected accepted control | recommended disposition |
 | --- | --- | --- | --- | --- | --- | --- |
+| proposed_decision_event | {"decision_event_id": "phase-a-decision-phase-a-location-geotag"} |  | n/a | attached to generic broad geotag identity/subject model superseded by accepted citizen-geotag controls | accepted-family ownership/absence/privacy/generic-transform prohibition | remove/redesign/defer; require reviewer-owned subject-resolution oracle |
 | proposed_geometry_observation | {"geometry_observation_id": "phase-a-geometry-wo002-r06-geometry-observation-address-points"} | address_points | phase-a-subject-phase-a-location-geotag | generic row targets phase-a-subject-phase-a-location-geotag from an unrelated source | accepted-family ownership/absence/privacy/generic-transform prohibition | remove/redesign/defer; require reviewer-owned subject-resolution oracle |
 | proposed_geometry_observation | {"geometry_observation_id": "phase-a-geometry-wo002-r06-geometry-observation-address-records"} | address_records | phase-a-subject-phase-a-location-geotag | generic row targets phase-a-subject-phase-a-location-geotag from an unrelated source | accepted-family ownership/absence/privacy/generic-transform prohibition | remove/redesign/defer; require reviewer-owned subject-resolution oracle |
 | proposed_legacy_crosswalk | {"legacy_crosswalk_id": "phase-a-crosswalk-wo002-r06-identity-crosswalk-audit-logs"} | audit_logs | location_record | generic crosswalk resolves operational/control source audit_logs to a target without reviewed subject-resolution semantics | accepted-family ownership/absence/privacy/generic-transform prohibition | remove/redesign/defer; require reviewer-owned subject-resolution oracle |
@@ -376,6 +379,38 @@ This correction changes this mapping document only. It does **not** modify `auth
 | proposed_name_record | {"name_record_id": "phase-a-name-wo002-r06-name-record-users"} | users | phase-a-subject-phase-a-location-geotag | name record sourced from users is not a reviewed location subject/name lineage | accepted-family ownership/absence/privacy/generic-transform prohibition | remove/redesign/defer; require reviewer-owned subject-resolution oracle |
 | proposed_registry_subject | {"subject_id": "phase-a-subject-phase-a-location-geotag"} |  | phase-a-subject-phase-a-location-geotag | generic row targets phase-a-subject-phase-a-location-geotag from an unrelated source | accepted-family ownership/absence/privacy/generic-transform prohibition | remove/redesign/defer; require reviewer-owned subject-resolution oracle |
 
+## 6.5 C37 — all 25 broad decision-event rows
+
+Decision events in the broad expected fixture are Phase A transform outputs under assessment, not convergence fixture prerequisites. A legitimate prerequisite must be loaded before accepted callable execution or required as reviewed source lineage/schema vocabulary, and must not be produced by a Phase A transform group under assessment.
+
+| decision_event_id | source table | source transform group | decision type | current target or subject relationship | loaded by accepted convergence fixture | produced by broad transform execution | primary Phase A domain | authority overlay | privacy overlay | corrected mutually exclusive row category | recommended future disposition |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| phase-a-decision-correction-001 | address_corrections | WO002-R06-correction-case-address_corrections | correct-record | {"source_record": "phase-a-source-record-address-corrections-001"} | no | yes | future workflow candidate | none | none | future workflow candidate | requires future workflow oracle; generic row is not expected truth |
+| phase-a-decision-phase-a-location-address-reference |  | generic broad address-reference identity/lifecycle fixture | promote-record | {"non_official": true, "open_authority_rfi": "administrative-authority"} | no | yes | frozen historical row | authority decision required | none | frozen historical row | historical-only broad retention evidence; do not govern future acceptance |
+| phase-a-decision-phase-a-location-geotag |  | generic broad geotag identity/subject fixture | promote-record | {"non_official": true, "open_authority_rfi": "administrative-authority"} | no | yes | structurally invalid generic output | none | none | structurally invalid generic output | remove/redesign/defer; require reviewer-owned subject-resolution oracle |
+| phase-a-decision-wo002-r06-recorded-time-address-corrections | address_corrections | WO002-R06-recorded-time-address-corrections | promote-record | {"fields": ["address_corrections.created_at", "address_corrections.updated_at"], "source_record": "phase-a-source-record-address-corrections-001"} | no | yes | future provenance/control candidate | authority decision required | none | future provenance/control candidate | requires future reviewer-owned provenance/control oracle; generic row is not expected truth |
+| phase-a-decision-wo002-r06-recorded-time-address-points | address_points | WO002-R06-recorded-time-address-points | promote-record | {"fields": ["address_points.created_at", "address_points.updated_at"], "source_record": "phase-a-source-record-address-points-001"} | no | yes | future provenance/control candidate | authority decision required | none | future provenance/control candidate | requires future reviewer-owned provenance/control oracle; generic row is not expected truth |
+| phase-a-decision-wo002-r06-recorded-time-address-record-events | address_record_events | WO002-R06-recorded-time-address-record-events | promote-record | {"fields": ["address_record_events.created_at"], "source_record": "phase-a-source-record-address-record-events-001"} | no | yes | future provenance/control candidate | authority decision required | none | future provenance/control candidate | requires future reviewer-owned provenance/control oracle; generic row is not expected truth |
+| phase-a-decision-wo002-r06-recorded-time-address-records | address_records | WO002-R06-recorded-time-address-records | promote-record | {"fields": ["address_records.created_at", "address_records.updated_at"], "source_record": "phase-a-source-record-address-records-001"} | no | yes | future provenance/control candidate | authority decision required | none | future provenance/control candidate | requires future reviewer-owned provenance/control oracle; generic row is not expected truth |
+| phase-a-decision-wo002-r06-recorded-time-addresses | addresses | WO002-R06-recorded-time-addresses | promote-record | {"fields": ["addresses.created_at", "addresses.updated_at"], "source_record": "phase-a-source-record-addresses-001"} | no | yes | future provenance/control candidate | authority decision required | none | future provenance/control candidate | requires future reviewer-owned provenance/control oracle; generic row is not expected truth |
+| phase-a-decision-wo002-r06-recorded-time-admin-units | admin_units | WO002-R06-recorded-time-admin-units | promote-record | {"fields": ["admin_units.created_at", "admin_units.updated_at"], "source_record": "phase-a-source-record-admin-units-001"} | no | yes | future provenance/control candidate | authority decision required | none | future provenance/control candidate | requires future reviewer-owned provenance/control oracle; generic row is not expected truth |
+| phase-a-decision-wo002-r06-recorded-time-audit-logs | audit_logs | WO002-R06-recorded-time-audit-logs | promote-record | {"fields": ["audit_logs.created_at"], "source_record": "phase-a-source-record-audit-logs-001"} | no | yes | security/audit/development/migration out-of-scope | none | none | security/audit/development/migration out-of-scope | remove from Phase A location-model acceptance scope |
+| phase-a-decision-wo002-r06-recorded-time-auth-tokens | auth_tokens | WO002-R06-recorded-time-auth-tokens | promote-record | {"fields": ["auth_tokens.created_at", "auth_tokens.expires_at", "auth_tokens.last_seen_at", "auth_tokens.revoked_at"], "source_record": "phase-a-source-record-auth-tokens-001"} | no | yes | security/audit/development/migration out-of-scope | none | none | security/audit/development/migration out-of-scope | remove from Phase A location-model acceptance scope |
+| phase-a-decision-wo002-r06-recorded-time-buildings | buildings | WO002-R06-recorded-time-buildings | promote-record | {"fields": ["buildings.created_at", "buildings.updated_at"], "source_record": "phase-a-source-record-buildings-001"} | no | yes | future provenance/control candidate | authority decision required | none | future provenance/control candidate | requires future reviewer-owned provenance/control oracle; generic row is not expected truth |
+| phase-a-decision-wo002-r06-recorded-time-citizen-geotag-submissions | citizen_geotag_submissions | WO002-R06-recorded-time-citizen-geotag-submissions | promote-record | {"fields": ["citizen_geotag_submissions.created_at", "citizen_geotag_submissions.field_verified_at", "citizen_geotag_submissions.identity_verified_at", "citizen_geotag_submissions.updated_at"], "source_record": "phase-a-source-record-citizen-geotag-submissions-001"} | no | yes | privacy blocked | none | privacy review required | privacy blocked | privacy review required before any oracle |
+| phase-a-decision-wo002-r06-recorded-time-development-fixture-batches | development_fixture_batches | WO002-R06-recorded-time-development-fixture-batches | promote-record | {"fields": ["development_fixture_batches.cleaned_at", "development_fixture_batches.loaded_at"], "source_record": "phase-a-source-record-development-fixture-batches-001"} | no | yes | security/audit/development/migration out-of-scope | none | none | security/audit/development/migration out-of-scope | remove from Phase A location-model acceptance scope |
+| phase-a-decision-wo002-r06-recorded-time-development-fixture-records | development_fixture_records | WO002-R06-recorded-time-development-fixture-records | promote-record | {"fields": ["development_fixture_records.created_by_batch", "development_fixture_records.recorded_at"], "source_record": "phase-a-source-record-development-fixture-records-001"} | no | yes | security/audit/development/migration out-of-scope | none | none | security/audit/development/migration out-of-scope | remove from Phase A location-model acceptance scope |
+| phase-a-decision-wo002-r06-recorded-time-field-assignments | field_assignments | WO002-R06-recorded-time-field-assignments | promote-record | {"fields": ["field_assignments.created_at"], "source_record": "phase-a-source-record-field-assignments-001"} | no | yes | future provenance/control candidate | authority decision required | none | future provenance/control candidate | requires future reviewer-owned provenance/control oracle; generic row is not expected truth |
+| phase-a-decision-wo002-r06-recorded-time-field-submissions | field_submissions | WO002-R06-recorded-time-field-submissions | promote-record | {"fields": ["field_submissions.created_at", "field_submissions.submitted_by", "field_submissions.updated_at"], "source_record": "phase-a-source-record-field-submissions-001"} | no | yes | future provenance/control candidate | authority decision required | none | future provenance/control candidate | requires future reviewer-owned provenance/control oracle; generic row is not expected truth |
+| phase-a-decision-wo002-r06-recorded-time-import-jobs | import_jobs | WO002-R06-recorded-time-import-jobs | promote-record | {"fields": ["import_jobs.created_at", "import_jobs.updated_at"], "source_record": "phase-a-source-record-import-jobs-001"} | no | yes | future provenance/control candidate | authority decision required | none | future provenance/control candidate | requires future reviewer-owned provenance/control oracle; generic row is not expected truth |
+| phase-a-decision-wo002-r06-recorded-time-provinces | provinces | WO002-R06-recorded-time-provinces | promote-record | {"fields": ["provinces.created_at"], "source_record": "phase-a-source-record-provinces-001"} | no | yes | future provenance/control candidate | authority decision required | none | future provenance/control candidate | requires future reviewer-owned provenance/control oracle; generic row is not expected truth |
+| phase-a-decision-wo002-r06-recorded-time-publication-packs | publication_packs | WO002-R06-recorded-time-publication-packs | promote-record | {"fields": ["publication_packs.created_at", "publication_packs.updated_at"], "source_record": "phase-a-source-record-publication-packs-001"} | no | yes | publication/release candidate | authority decision required | none | publication/release candidate | defer until publication authority |
+| phase-a-decision-wo002-r06-recorded-time-reference-data-load-history | reference_data_load_history | WO002-R06-recorded-time-reference-data-load-history | promote-record | {"fields": ["reference_data_load_history.loaded_at"], "source_record": "phase-a-source-record-reference-data-load-history-001"} | no | yes | future provenance/control candidate | authority decision required | none | future provenance/control candidate | requires future reviewer-owned provenance/control oracle; generic row is not expected truth |
+| phase-a-decision-wo002-r06-recorded-time-reference-data-loads | reference_data_loads | WO002-R06-recorded-time-reference-data-loads | promote-record | {"fields": ["reference_data_loads.loaded_at"], "source_record": "phase-a-source-record-reference-data-loads-001"} | no | yes | future provenance/control candidate | authority decision required | none | future provenance/control candidate | requires future reviewer-owned provenance/control oracle; generic row is not expected truth |
+| phase-a-decision-wo002-r06-recorded-time-roads | roads | WO002-R06-recorded-time-roads | promote-record | {"fields": ["roads.created_at", "roads.updated_at"], "source_record": "phase-a-source-record-roads-001"} | no | yes | future provenance/control candidate | authority decision required | none | future provenance/control candidate | requires future reviewer-owned provenance/control oracle; generic row is not expected truth |
+| phase-a-decision-wo002-r06-recorded-time-territories | territories | WO002-R06-recorded-time-territories | promote-record | {"fields": ["territories.created_at", "territories.updated_at"], "source_record": "phase-a-source-record-territories-001"} | no | yes | future provenance/control candidate | authority decision required | none | future provenance/control candidate | requires future reviewer-owned provenance/control oracle; generic row is not expected truth |
+| phase-a-decision-wo002-r06-recorded-time-users | users | WO002-R06-recorded-time-users | promote-record | {"fields": ["users.created_at"], "source_record": "phase-a-source-record-users-001"} | no | yes | security/audit/development/migration out-of-scope | none | none | security/audit/development/migration out-of-scope | remove from Phase A location-model acceptance scope |
+
 ## 7. Reconciled 199 broad expected rows
 
 | category | count |
@@ -383,14 +418,15 @@ This correction changes this mapping document only. It does **not** modify `auth
 | accepted-family row represented consistently | 2 |
 | authority blocked | 5 |
 | explicitly prohibited row | 2 |
-| frozen historical row | 16 |
+| frozen historical row | 17 |
 | future location-domain candidate | 11 |
-| future workflow candidate | 9 |
-| legitimate prerequisite | 104 |
-| privacy blocked | 6 |
-| publication/release candidate | 6 |
-| security/audit/development/migration out-of-scope | 5 |
-| structurally invalid generic output | 32 |
+| future provenance/control candidate | 15 |
+| future workflow candidate | 10 |
+| legitimate prerequisite | 79 |
+| privacy blocked | 7 |
+| publication/release candidate | 7 |
+| security/audit/development/migration out-of-scope | 10 |
+| structurally invalid generic output | 33 |
 | unresolved after analysis | 1 |
 
 ### 7.1 Complete row inventory
@@ -422,33 +458,33 @@ This correction changes this mapping document only. It does **not** modify `auth
 | security/audit/development/migration out-of-scope | proposed_source_payload_archive | {"archive_id": "phase-a-archive-wo002-r06-source-archive-schema-migrations"} | schema_migrations | n/a |  | n/a | remove from Phase A location-model acceptance scope |
 | frozen historical row | proposed_source_payload_archive | {"archive_id": "phase-a-archive-wo002-r06-source-archive-territories"} | territories | n/a |  | accepted-family ownership/absence/privacy/generic-transform prohibition | historical-only broad retention evidence; do not govern future acceptance |
 | security/audit/development/migration out-of-scope | proposed_source_payload_archive | {"archive_id": "phase-a-archive-wo002-r06-source-archive-users"} | users | n/a |  | n/a | remove from Phase A location-model acceptance scope |
-| future workflow candidate | proposed_correction_case | {"correction_case_id": "phase-a-correction-case-001"} |  | phase-a-location-geotag |  | n/a | requires future workflow oracle |
+| future workflow candidate | proposed_correction_case | {"correction_case_id": "phase-a-correction-case-001"} |  | phase-a-location-geotag |  | n/a | requires future workflow oracle; generic row is not expected truth |
 | legitimate prerequisite | proposed_country | {"country_id": "phase-a-country-gq"} |  | n/a |  | n/a | retain only as prerequisite, not output ownership |
-| legitimate prerequisite | proposed_decision_event | {"decision_event_id": "phase-a-decision-correction-001"} | address_corrections | n/a |  | n/a | retain only as prerequisite, not output ownership |
-| legitimate prerequisite | proposed_decision_event | {"decision_event_id": "phase-a-decision-phase-a-location-address-reference"} |  | n/a |  | n/a | retain only as prerequisite, not output ownership |
-| legitimate prerequisite | proposed_decision_event | {"decision_event_id": "phase-a-decision-phase-a-location-geotag"} |  | n/a |  | n/a | retain only as prerequisite, not output ownership |
-| legitimate prerequisite | proposed_decision_event | {"decision_event_id": "phase-a-decision-wo002-r06-recorded-time-address-corrections"} | address_corrections | n/a |  | n/a | retain only as prerequisite, not output ownership |
-| legitimate prerequisite | proposed_decision_event | {"decision_event_id": "phase-a-decision-wo002-r06-recorded-time-address-points"} | address_points | n/a |  | n/a | retain only as prerequisite, not output ownership |
-| legitimate prerequisite | proposed_decision_event | {"decision_event_id": "phase-a-decision-wo002-r06-recorded-time-address-record-events"} | address_record_events | n/a |  | n/a | retain only as prerequisite, not output ownership |
-| legitimate prerequisite | proposed_decision_event | {"decision_event_id": "phase-a-decision-wo002-r06-recorded-time-address-records"} | address_records | n/a |  | n/a | retain only as prerequisite, not output ownership |
-| legitimate prerequisite | proposed_decision_event | {"decision_event_id": "phase-a-decision-wo002-r06-recorded-time-addresses"} | addresses | n/a |  | n/a | retain only as prerequisite, not output ownership |
-| legitimate prerequisite | proposed_decision_event | {"decision_event_id": "phase-a-decision-wo002-r06-recorded-time-admin-units"} | admin_units | n/a |  | n/a | retain only as prerequisite, not output ownership |
-| legitimate prerequisite | proposed_decision_event | {"decision_event_id": "phase-a-decision-wo002-r06-recorded-time-audit-logs"} | audit_logs | n/a |  | n/a | retain only as prerequisite, not output ownership |
-| legitimate prerequisite | proposed_decision_event | {"decision_event_id": "phase-a-decision-wo002-r06-recorded-time-auth-tokens"} | auth_tokens | n/a |  | n/a | retain only as prerequisite, not output ownership |
-| legitimate prerequisite | proposed_decision_event | {"decision_event_id": "phase-a-decision-wo002-r06-recorded-time-buildings"} | buildings | n/a |  | n/a | retain only as prerequisite, not output ownership |
-| legitimate prerequisite | proposed_decision_event | {"decision_event_id": "phase-a-decision-wo002-r06-recorded-time-citizen-geotag-submissions"} | citizen_geotag_submissions | n/a |  | n/a | retain only as prerequisite, not output ownership |
-| legitimate prerequisite | proposed_decision_event | {"decision_event_id": "phase-a-decision-wo002-r06-recorded-time-development-fixture-batches"} | development_fixture_batches | n/a |  | n/a | retain only as prerequisite, not output ownership |
-| legitimate prerequisite | proposed_decision_event | {"decision_event_id": "phase-a-decision-wo002-r06-recorded-time-development-fixture-records"} | development_fixture_records | n/a |  | n/a | retain only as prerequisite, not output ownership |
-| legitimate prerequisite | proposed_decision_event | {"decision_event_id": "phase-a-decision-wo002-r06-recorded-time-field-assignments"} | field_assignments | n/a |  | n/a | retain only as prerequisite, not output ownership |
-| legitimate prerequisite | proposed_decision_event | {"decision_event_id": "phase-a-decision-wo002-r06-recorded-time-field-submissions"} | field_submissions | n/a |  | n/a | retain only as prerequisite, not output ownership |
-| legitimate prerequisite | proposed_decision_event | {"decision_event_id": "phase-a-decision-wo002-r06-recorded-time-import-jobs"} | import_jobs | n/a |  | n/a | retain only as prerequisite, not output ownership |
-| legitimate prerequisite | proposed_decision_event | {"decision_event_id": "phase-a-decision-wo002-r06-recorded-time-provinces"} | provinces | n/a |  | n/a | retain only as prerequisite, not output ownership |
-| legitimate prerequisite | proposed_decision_event | {"decision_event_id": "phase-a-decision-wo002-r06-recorded-time-publication-packs"} | publication_packs | n/a |  | n/a | retain only as prerequisite, not output ownership |
-| legitimate prerequisite | proposed_decision_event | {"decision_event_id": "phase-a-decision-wo002-r06-recorded-time-reference-data-load-history"} | reference_data_load_history | n/a |  | n/a | retain only as prerequisite, not output ownership |
-| legitimate prerequisite | proposed_decision_event | {"decision_event_id": "phase-a-decision-wo002-r06-recorded-time-reference-data-loads"} | reference_data_loads | n/a |  | n/a | retain only as prerequisite, not output ownership |
-| legitimate prerequisite | proposed_decision_event | {"decision_event_id": "phase-a-decision-wo002-r06-recorded-time-roads"} | roads | n/a |  | n/a | retain only as prerequisite, not output ownership |
-| legitimate prerequisite | proposed_decision_event | {"decision_event_id": "phase-a-decision-wo002-r06-recorded-time-territories"} | territories | n/a |  | n/a | retain only as prerequisite, not output ownership |
-| legitimate prerequisite | proposed_decision_event | {"decision_event_id": "phase-a-decision-wo002-r06-recorded-time-users"} | users | n/a |  | n/a | retain only as prerequisite, not output ownership |
+| future workflow candidate | proposed_decision_event | {"decision_event_id": "phase-a-decision-correction-001"} | address_corrections | n/a | correction-workflow output, not fixture setup | accepted-family ownership/absence/privacy/generic-transform prohibition | requires future workflow oracle; generic row is not expected truth |
+| frozen historical row | proposed_decision_event | {"decision_event_id": "phase-a-decision-phase-a-location-address-reference"} |  | n/a | accepted addresses identity callable does not own/create this decision event; future lifecycle/identity event needs reviewer-owned governance oracle | accepted-family ownership/absence/privacy/generic-transform prohibition | historical-only broad retention evidence; do not govern future acceptance |
+| structurally invalid generic output | proposed_decision_event | {"decision_event_id": "phase-a-decision-phase-a-location-geotag"} |  | n/a | attached to generic broad geotag identity/subject model superseded by accepted citizen-geotag controls | accepted-family ownership/absence/privacy/generic-transform prohibition | remove/redesign/defer; require reviewer-owned subject-resolution oracle |
+| future provenance/control candidate | proposed_decision_event | {"decision_event_id": "phase-a-decision-wo002-r06-recorded-time-address-corrections"} | address_corrections | n/a | recorded-time broad transform output; future reviewer-owned provenance/control oracle required | accepted-family ownership/absence/privacy/generic-transform prohibition | requires future reviewer-owned provenance/control oracle; generic row is not expected truth |
+| future provenance/control candidate | proposed_decision_event | {"decision_event_id": "phase-a-decision-wo002-r06-recorded-time-address-points"} | address_points | n/a | recorded-time broad transform output; future reviewer-owned provenance/control oracle required | accepted-family ownership/absence/privacy/generic-transform prohibition | requires future reviewer-owned provenance/control oracle; generic row is not expected truth |
+| future provenance/control candidate | proposed_decision_event | {"decision_event_id": "phase-a-decision-wo002-r06-recorded-time-address-record-events"} | address_record_events | n/a | recorded-time broad transform output; future reviewer-owned provenance/control oracle required | accepted-family ownership/absence/privacy/generic-transform prohibition | requires future reviewer-owned provenance/control oracle; generic row is not expected truth |
+| future provenance/control candidate | proposed_decision_event | {"decision_event_id": "phase-a-decision-wo002-r06-recorded-time-address-records"} | address_records | n/a | recorded-time broad transform output; future reviewer-owned provenance/control oracle required | accepted-family ownership/absence/privacy/generic-transform prohibition | requires future reviewer-owned provenance/control oracle; generic row is not expected truth |
+| future provenance/control candidate | proposed_decision_event | {"decision_event_id": "phase-a-decision-wo002-r06-recorded-time-addresses"} | addresses | n/a | recorded-time broad transform output; future reviewer-owned provenance/control oracle required | accepted-family ownership/absence/privacy/generic-transform prohibition | requires future reviewer-owned provenance/control oracle; generic row is not expected truth |
+| future provenance/control candidate | proposed_decision_event | {"decision_event_id": "phase-a-decision-wo002-r06-recorded-time-admin-units"} | admin_units | n/a | recorded-time broad transform output; future reviewer-owned provenance/control oracle required | accepted-family ownership/absence/privacy/generic-transform prohibition | requires future reviewer-owned provenance/control oracle; generic row is not expected truth |
+| security/audit/development/migration out-of-scope | proposed_decision_event | {"decision_event_id": "phase-a-decision-wo002-r06-recorded-time-audit-logs"} | audit_logs | n/a | recorded-time row belongs to security/audit/development domain outside Phase A location model | accepted-family ownership/absence/privacy/generic-transform prohibition | remove from Phase A location-model acceptance scope |
+| security/audit/development/migration out-of-scope | proposed_decision_event | {"decision_event_id": "phase-a-decision-wo002-r06-recorded-time-auth-tokens"} | auth_tokens | n/a | recorded-time row belongs to security/audit/development domain outside Phase A location model | accepted-family ownership/absence/privacy/generic-transform prohibition | remove from Phase A location-model acceptance scope |
+| future provenance/control candidate | proposed_decision_event | {"decision_event_id": "phase-a-decision-wo002-r06-recorded-time-buildings"} | buildings | n/a | recorded-time broad transform output; future reviewer-owned provenance/control oracle required | accepted-family ownership/absence/privacy/generic-transform prohibition | requires future reviewer-owned provenance/control oracle; generic row is not expected truth |
+| privacy blocked | proposed_decision_event | {"decision_event_id": "phase-a-decision-wo002-r06-recorded-time-citizen-geotag-submissions"} | citizen_geotag_submissions | n/a | citizen event evidence requires privacy review and must not reproduce sensitive values | accepted-family ownership/absence/privacy/generic-transform prohibition | privacy review required before any oracle |
+| security/audit/development/migration out-of-scope | proposed_decision_event | {"decision_event_id": "phase-a-decision-wo002-r06-recorded-time-development-fixture-batches"} | development_fixture_batches | n/a | recorded-time row belongs to security/audit/development domain outside Phase A location model | accepted-family ownership/absence/privacy/generic-transform prohibition | remove from Phase A location-model acceptance scope |
+| security/audit/development/migration out-of-scope | proposed_decision_event | {"decision_event_id": "phase-a-decision-wo002-r06-recorded-time-development-fixture-records"} | development_fixture_records | n/a | recorded-time row belongs to security/audit/development domain outside Phase A location model | accepted-family ownership/absence/privacy/generic-transform prohibition | remove from Phase A location-model acceptance scope |
+| future provenance/control candidate | proposed_decision_event | {"decision_event_id": "phase-a-decision-wo002-r06-recorded-time-field-assignments"} | field_assignments | n/a | recorded-time broad transform output; future reviewer-owned provenance/control oracle required | accepted-family ownership/absence/privacy/generic-transform prohibition | requires future reviewer-owned provenance/control oracle; generic row is not expected truth |
+| future provenance/control candidate | proposed_decision_event | {"decision_event_id": "phase-a-decision-wo002-r06-recorded-time-field-submissions"} | field_submissions | n/a | recorded-time broad transform output; future reviewer-owned provenance/control oracle required | accepted-family ownership/absence/privacy/generic-transform prohibition | requires future reviewer-owned provenance/control oracle; generic row is not expected truth |
+| future provenance/control candidate | proposed_decision_event | {"decision_event_id": "phase-a-decision-wo002-r06-recorded-time-import-jobs"} | import_jobs | n/a | recorded-time broad transform output; future reviewer-owned provenance/control oracle required | accepted-family ownership/absence/privacy/generic-transform prohibition | requires future reviewer-owned provenance/control oracle; generic row is not expected truth |
+| future provenance/control candidate | proposed_decision_event | {"decision_event_id": "phase-a-decision-wo002-r06-recorded-time-provinces"} | provinces | n/a | recorded-time broad transform output; future reviewer-owned provenance/control oracle required | accepted-family ownership/absence/privacy/generic-transform prohibition | requires future reviewer-owned provenance/control oracle; generic row is not expected truth |
+| publication/release candidate | proposed_decision_event | {"decision_event_id": "phase-a-decision-wo002-r06-recorded-time-publication-packs"} | publication_packs | n/a | publication/release authority must be separately resolved before implementation | accepted-family ownership/absence/privacy/generic-transform prohibition | defer until publication authority |
+| future provenance/control candidate | proposed_decision_event | {"decision_event_id": "phase-a-decision-wo002-r06-recorded-time-reference-data-load-history"} | reference_data_load_history | n/a | recorded-time broad transform output; future reviewer-owned provenance/control oracle required | accepted-family ownership/absence/privacy/generic-transform prohibition | requires future reviewer-owned provenance/control oracle; generic row is not expected truth |
+| future provenance/control candidate | proposed_decision_event | {"decision_event_id": "phase-a-decision-wo002-r06-recorded-time-reference-data-loads"} | reference_data_loads | n/a | recorded-time broad transform output; future reviewer-owned provenance/control oracle required | accepted-family ownership/absence/privacy/generic-transform prohibition | requires future reviewer-owned provenance/control oracle; generic row is not expected truth |
+| future provenance/control candidate | proposed_decision_event | {"decision_event_id": "phase-a-decision-wo002-r06-recorded-time-roads"} | roads | n/a | recorded-time broad transform output; future reviewer-owned provenance/control oracle required | accepted-family ownership/absence/privacy/generic-transform prohibition | requires future reviewer-owned provenance/control oracle; generic row is not expected truth |
+| future provenance/control candidate | proposed_decision_event | {"decision_event_id": "phase-a-decision-wo002-r06-recorded-time-territories"} | territories | n/a | recorded-time broad transform output; future reviewer-owned provenance/control oracle required | accepted-family ownership/absence/privacy/generic-transform prohibition | requires future reviewer-owned provenance/control oracle; generic row is not expected truth |
+| security/audit/development/migration out-of-scope | proposed_decision_event | {"decision_event_id": "phase-a-decision-wo002-r06-recorded-time-users"} | users | n/a | recorded-time row belongs to security/audit/development domain outside Phase A location model | accepted-family ownership/absence/privacy/generic-transform prohibition | remove from Phase A location-model acceptance scope |
 | legitimate prerequisite | proposed_evidence_object | {"evidence_object_id": "phase-a-evidence-address-corrections"} | address_corrections | n/a |  | n/a | retain only as prerequisite, not output ownership |
 | legitimate prerequisite | proposed_evidence_object | {"evidence_object_id": "phase-a-evidence-address-points"} | address_points | n/a |  | n/a | retain only as prerequisite, not output ownership |
 | legitimate prerequisite | proposed_evidence_object | {"evidence_object_id": "phase-a-evidence-address-record-events"} | address_record_events | n/a |  | n/a | retain only as prerequisite, not output ownership |
@@ -477,10 +513,10 @@ This correction changes this mapping document only. It does **not** modify `auth
 | structurally invalid generic output | proposed_geometry_observation | {"geometry_observation_id": "phase-a-geometry-wo002-r06-geometry-observation-address-points"} | address_points | phase-a-subject-phase-a-location-geotag | generic row targets phase-a-subject-phase-a-location-geotag from an unrelated source | accepted-family ownership/absence/privacy/generic-transform prohibition | remove/redesign/defer; require reviewer-owned subject-resolution oracle |
 | structurally invalid generic output | proposed_geometry_observation | {"geometry_observation_id": "phase-a-geometry-wo002-r06-geometry-observation-address-records"} | address_records | phase-a-subject-phase-a-location-geotag | generic row targets phase-a-subject-phase-a-location-geotag from an unrelated source | accepted-family ownership/absence/privacy/generic-transform prohibition | remove/redesign/defer; require reviewer-owned subject-resolution oracle |
 | privacy blocked | proposed_geometry_observation | {"geometry_observation_id": "phase-a-geometry-wo002-r06-geometry-observation-citizen-geotag-submissions"} | citizen_geotag_submissions | phase-a-subject-phase-a-location-geotag |  | n/a | privacy review required before any oracle |
-| future workflow candidate | proposed_legacy_crosswalk | {"legacy_crosswalk_id": "phase-a-crosswalk-address-corrections-correction-case"} | address_corrections | correction_case |  | n/a | requires future workflow oracle |
-| future workflow candidate | proposed_legacy_crosswalk | {"legacy_crosswalk_id": "phase-a-crosswalk-wo002-r06-identity-crosswalk-address-corrections"} | address_corrections | location_record |  | n/a | requires future workflow oracle |
+| future workflow candidate | proposed_legacy_crosswalk | {"legacy_crosswalk_id": "phase-a-crosswalk-address-corrections-correction-case"} | address_corrections | correction_case |  | n/a | requires future workflow oracle; generic row is not expected truth |
+| future workflow candidate | proposed_legacy_crosswalk | {"legacy_crosswalk_id": "phase-a-crosswalk-wo002-r06-identity-crosswalk-address-corrections"} | address_corrections | location_record |  | n/a | requires future workflow oracle; generic row is not expected truth |
 | future location-domain candidate | proposed_legacy_crosswalk | {"legacy_crosswalk_id": "phase-a-crosswalk-wo002-r06-identity-crosswalk-address-points"} | address_points | location_record |  | n/a | requires future reviewer-owned location/reference oracle |
-| future workflow candidate | proposed_legacy_crosswalk | {"legacy_crosswalk_id": "phase-a-crosswalk-wo002-r06-identity-crosswalk-address-record-events"} | address_record_events | location_record |  | n/a | requires future workflow oracle |
+| future workflow candidate | proposed_legacy_crosswalk | {"legacy_crosswalk_id": "phase-a-crosswalk-wo002-r06-identity-crosswalk-address-record-events"} | address_record_events | location_record |  | n/a | requires future workflow oracle; generic row is not expected truth |
 | future location-domain candidate | proposed_legacy_crosswalk | {"legacy_crosswalk_id": "phase-a-crosswalk-wo002-r06-identity-crosswalk-address-records"} | address_records | location_record |  | n/a | requires future reviewer-owned location/reference oracle |
 | future location-domain candidate | proposed_legacy_crosswalk | {"legacy_crosswalk_id": "phase-a-crosswalk-wo002-r06-identity-crosswalk-addresses"} | addresses | location_record |  | n/a | requires future reviewer-owned location/reference oracle |
 | authority blocked | proposed_legacy_crosswalk | {"legacy_crosswalk_id": "phase-a-crosswalk-wo002-r06-identity-crosswalk-admin-units"} | admin_units | location_record |  | n/a | authority decision required before implementation |
@@ -488,8 +524,8 @@ This correction changes this mapping document only. It does **not** modify `auth
 | structurally invalid generic output | proposed_legacy_crosswalk | {"legacy_crosswalk_id": "phase-a-crosswalk-wo002-r06-identity-crosswalk-auth-tokens"} | auth_tokens | location_record | generic crosswalk resolves operational/control source auth_tokens to a target without reviewed subject-resolution semantics | accepted-family ownership/absence/privacy/generic-transform prohibition | remove/redesign/defer; require reviewer-owned subject-resolution oracle |
 | authority blocked | proposed_legacy_crosswalk | {"legacy_crosswalk_id": "phase-a-crosswalk-wo002-r06-identity-crosswalk-buildings"} | buildings | location_record |  | n/a | authority decision required before implementation |
 | privacy blocked | proposed_legacy_crosswalk | {"legacy_crosswalk_id": "phase-a-crosswalk-wo002-r06-identity-crosswalk-citizen-geotag-submissions"} | citizen_geotag_submissions | location_record |  | n/a | privacy review required before any oracle |
-| future workflow candidate | proposed_legacy_crosswalk | {"legacy_crosswalk_id": "phase-a-crosswalk-wo002-r06-identity-crosswalk-field-assignments"} | field_assignments | location_record |  | n/a | requires future workflow oracle |
-| future workflow candidate | proposed_legacy_crosswalk | {"legacy_crosswalk_id": "phase-a-crosswalk-wo002-r06-identity-crosswalk-field-submissions"} | field_submissions | location_record |  | n/a | requires future workflow oracle |
+| future workflow candidate | proposed_legacy_crosswalk | {"legacy_crosswalk_id": "phase-a-crosswalk-wo002-r06-identity-crosswalk-field-assignments"} | field_assignments | location_record |  | n/a | requires future workflow oracle; generic row is not expected truth |
+| future workflow candidate | proposed_legacy_crosswalk | {"legacy_crosswalk_id": "phase-a-crosswalk-wo002-r06-identity-crosswalk-field-submissions"} | field_submissions | location_record |  | n/a | requires future workflow oracle; generic row is not expected truth |
 | structurally invalid generic output | proposed_legacy_crosswalk | {"legacy_crosswalk_id": "phase-a-crosswalk-wo002-r06-identity-crosswalk-import-jobs"} | import_jobs | location_record | generic crosswalk resolves operational/control source import_jobs to a target without reviewed subject-resolution semantics | accepted-family ownership/absence/privacy/generic-transform prohibition | remove/redesign/defer; require reviewer-owned subject-resolution oracle |
 | structurally invalid generic output | proposed_legacy_crosswalk | {"legacy_crosswalk_id": "phase-a-crosswalk-wo002-r06-identity-crosswalk-import-rows"} | import_rows | location_record | generic crosswalk resolves operational/control source import_rows to a target without reviewed subject-resolution semantics | accepted-family ownership/absence/privacy/generic-transform prohibition | remove/redesign/defer; require reviewer-owned subject-resolution oracle |
 | structurally invalid generic output | proposed_legacy_crosswalk | {"legacy_crosswalk_id": "phase-a-crosswalk-wo002-r06-identity-crosswalk-publication-pack-addresses"} | publication_pack_addresses | location_record | generic crosswalk resolves operational/control source publication_pack_addresses to a target without reviewed subject-resolution semantics | accepted-family ownership/absence/privacy/generic-transform prohibition | remove/redesign/defer; require reviewer-owned subject-resolution oracle |
@@ -507,7 +543,7 @@ This correction changes this mapping document only. It does **not** modify `auth
 | future location-domain candidate | proposed_migration_exception | {"migration_exception_id": "phase-a-exception-geometry-authority-wo002-r06-geometry-observation-address-points"} | address_points | n/a |  | n/a | requires future reviewer-owned location/reference oracle |
 | future location-domain candidate | proposed_migration_exception | {"migration_exception_id": "phase-a-exception-geometry-authority-wo002-r06-geometry-observation-address-records"} | address_records | n/a |  | n/a | requires future reviewer-owned location/reference oracle |
 | privacy blocked | proposed_migration_exception | {"migration_exception_id": "phase-a-exception-geometry-authority-wo002-r06-geometry-observation-citizen-geotag-submissions"} | citizen_geotag_submissions | n/a |  | n/a | privacy review required before any oracle |
-| future workflow candidate | proposed_migration_exception | {"migration_exception_id": "phase-a-exception-wo002-r06-identity-crosswalk-address-record-events"} | address_record_events | n/a |  | n/a | requires future workflow oracle |
+| future workflow candidate | proposed_migration_exception | {"migration_exception_id": "phase-a-exception-wo002-r06-identity-crosswalk-address-record-events"} | address_record_events | n/a |  | n/a | requires future workflow oracle; generic row is not expected truth |
 | future location-domain candidate | proposed_migration_exception | {"migration_exception_id": "phase-a-exception-wo002-r06-identity-crosswalk-address-records"} | address_records | n/a |  | n/a | requires future reviewer-owned location/reference oracle |
 | future location-domain candidate | proposed_migration_exception | {"migration_exception_id": "phase-a-exception-wo002-r06-identity-crosswalk-addresses"} | addresses | n/a |  | n/a | requires future reviewer-owned location/reference oracle |
 | authority blocked | proposed_migration_exception | {"migration_exception_id": "phase-a-exception-wo002-r06-identity-crosswalk-admin-units"} | admin_units | n/a |  | n/a | authority decision required before implementation |
@@ -515,8 +551,8 @@ This correction changes this mapping document only. It does **not** modify `auth
 | privacy blocked | proposed_migration_exception | {"migration_exception_id": "phase-a-exception-wo002-r06-identity-crosswalk-citizen-geotag-submissions"} | citizen_geotag_submissions | n/a |  | n/a | privacy review required before any oracle |
 | structurally invalid generic output | proposed_migration_exception | {"migration_exception_id": "phase-a-exception-wo002-r06-identity-crosswalk-development-fixture-batches"} | development_fixture_batches | n/a | generic migration exception for development_fixture_batches exists solely because broad transformer could not establish a reviewed target identity | accepted-family ownership/absence/privacy/generic-transform prohibition | remove/redesign/defer; require reviewer-owned subject-resolution oracle |
 | structurally invalid generic output | proposed_migration_exception | {"migration_exception_id": "phase-a-exception-wo002-r06-identity-crosswalk-development-fixture-records"} | development_fixture_records | n/a | generic migration exception for development_fixture_records exists solely because broad transformer could not establish a reviewed target identity | accepted-family ownership/absence/privacy/generic-transform prohibition | remove/redesign/defer; require reviewer-owned subject-resolution oracle |
-| future workflow candidate | proposed_migration_exception | {"migration_exception_id": "phase-a-exception-wo002-r06-identity-crosswalk-field-assignments"} | field_assignments | n/a |  | n/a | requires future workflow oracle |
-| future workflow candidate | proposed_migration_exception | {"migration_exception_id": "phase-a-exception-wo002-r06-identity-crosswalk-field-submissions"} | field_submissions | n/a |  | n/a | requires future workflow oracle |
+| future workflow candidate | proposed_migration_exception | {"migration_exception_id": "phase-a-exception-wo002-r06-identity-crosswalk-field-assignments"} | field_assignments | n/a |  | n/a | requires future workflow oracle; generic row is not expected truth |
+| future workflow candidate | proposed_migration_exception | {"migration_exception_id": "phase-a-exception-wo002-r06-identity-crosswalk-field-submissions"} | field_submissions | n/a |  | n/a | requires future workflow oracle; generic row is not expected truth |
 | structurally invalid generic output | proposed_migration_exception | {"migration_exception_id": "phase-a-exception-wo002-r06-identity-crosswalk-import-rows"} | import_rows | n/a | generic migration exception for import_rows exists solely because broad transformer could not establish a reviewed target identity | accepted-family ownership/absence/privacy/generic-transform prohibition | remove/redesign/defer; require reviewer-owned subject-resolution oracle |
 | publication/release candidate | proposed_migration_exception | {"migration_exception_id": "phase-a-exception-wo002-r06-identity-crosswalk-publication-pack-addresses"} | publication_pack_addresses | n/a |  | n/a | defer until publication authority |
 | structurally invalid generic output | proposed_migration_exception | {"migration_exception_id": "phase-a-exception-wo002-r06-identity-crosswalk-reference-data-load-history"} | reference_data_load_history | n/a | generic migration exception for reference_data_load_history exists solely because broad transformer could not establish a reviewed target identity | accepted-family ownership/absence/privacy/generic-transform prohibition | remove/redesign/defer; require reviewer-owned subject-resolution oracle |
@@ -875,6 +911,8 @@ This reconciliation is separate from frozen/live transform-spec coverage. A fiel
 **Recommended first mapping checkpoint:** administrative-unit / province / territory reference identity and naming
 **Recommendation rationale:** foundational hierarchy for all locations; authority requirement explicit
 
+**Wave 1 authorization:** administrative hierarchy mapping is recommended but not yet authorized; no reviewer-oracle preparation is authorized; no implementation is authorized; authority resolution remains required.
+
 ## 11. Required corrected return values
 
 | field | value |
@@ -883,7 +921,7 @@ This reconciliation is separate from frozen/live transform-spec coverage. A fiel
 | Historical frozen variants | 7 |
 | Core-location candidates | 5 |
 | Administrative/reference candidates | 5 |
-| Workflow candidates | 8 |
+| Workflow candidate groups | 8 |
 | Provenance/control groups | 36 |
 | Publication/release groups | 8 |
 | Security/credential out-of-scope | 7 |
@@ -895,15 +933,33 @@ This reconciliation is separate from frozen/live transform-spec coverage. A fiel
 | Deferred groups | 0 |
 | Broad expected rows total | 199 |
 | Accepted-consistent rows | 2 |
-| Legitimate prerequisites | 104 |
-| Location/workflow candidates | 20 |
-| Publication/release candidates | 6 |
-| Out-of-scope rows | 5 |
-| Privacy-blocked rows | 6 |
+| Decision-event rows found | 25 |
+| Special decision events | 3 |
+| Recorded-time decision events | 22 |
+| Legitimate source authorities | 3 |
+| Legitimate source packages | 25 |
+| Legitimate source records | 25 |
+| Legitimate evidence objects | 25 |
+| Legitimate country rows | 1 |
+| Legitimate prerequisite total | 79 |
+| Legitimate prerequisites | 79 |
+| Location candidates | 11 |
+| Workflow candidates | 10 |
+| Provenance/control candidates | 15 |
+| Publication/release candidates | 7 |
+| Out-of-scope rows | 10 |
+| Privacy-blocked rows | 7 |
 | Authority-blocked rows | 5 |
-| Historical rows | 16 |
+| Historical rows | 17 |
 | Prohibited rows | 2 |
-| Structurally invalid generic rows | 32 |
+| Future provenance/control decision events | 15 |
+| Workflow decision events | 1 |
+| Publication decision events | 1 |
+| Out-of-scope decision events | 5 |
+| Privacy-blocked decision events | 1 |
+| Historical decision events | 1 |
+| Structurally invalid decision events | 1 |
+| Structurally invalid generic rows | 33 |
 | Unresolved rows | 1 |
 | Row-category sum | 199 |
 | Catalog field total | 237 |
@@ -928,12 +984,12 @@ This reconciliation is separate from frozen/live transform-spec coverage. A fiel
 | Wave 1 shortlist | 1. administrative-unit / province / territory reference identity and naming; 2. roads identity and name reference mapping; 3. buildings identity and label reference mapping; 4. territorial-reference crosswalks for accepted address/address-record dependencies; 5. reference-data load provenance/control prerequisite review |
 | Recommended first mapping checkpoint | administrative-unit / province / territory reference identity and naming |
 | Recommendation rationale | foundational hierarchy for all locations; authority requirement explicit |
-| Current instructed action | Correct the Phase A residual-control and broad-readiness mapping only. |
-| Next instruction required from SDA | YES — before reviewer-oracle preparation, another transform group, broad Phase A reassessment, F02/F14 closure, Review 12, Phase B, deployment or merge. |
+| Current instructed action | Correct C37 broad decision-event row roles in the residual-readiness mapping only. |
+| Next instruction required from SDA | YES — before administrative hierarchy mapping, reviewer-oracle preparation, another transform group, broad Phase A reassessment, F02/F14 closure, Review 12, Phase B, deployment or merge. |
 
 
 ## Current instructed action
-Correct the Phase A residual-control and broad-readiness mapping only.
+Correct C37 broad decision-event row roles in the residual-readiness mapping only.
 
 ## Next instruction required from SDA
-YES — before reviewer-oracle preparation, another transform group, broad Phase A reassessment, F02/F14 closure, Review 12, Phase B, deployment or merge.
+YES — before administrative hierarchy mapping, reviewer-oracle preparation, another transform group, broad Phase A reassessment, F02/F14 closure, Review 12, Phase B, deployment or merge.
