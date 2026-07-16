@@ -37,7 +37,9 @@
       "union_rows": 16
     }
   ],
+  "citizen_boolean_leak_mutation_detected": true,
   "citizen_leak_mutation_detected": true,
+  "citizen_text_leak_mutation_detected": true,
   "command": "accepted-family-convergence",
   "conflict_tests": [
     {
@@ -447,8 +449,11 @@
   ],
   "consumer_prerequisite_update_test": {
     "detection_executed": true,
+    "detector": "accepted_family_run_callable delta validation",
     "expected_error": "accepted-family convergence prerequisite row changed",
-    "mutation": "test-only consumer prerequisite mutation",
+    "foreign_row_detected": true,
+    "manual_expected_error_raise": false,
+    "mutation": "post-call hook mutates transform_addresses_identity_crosswalk-owned prerequisite",
     "observed_error": "accepted-family convergence prerequisite row changed",
     "rollback_equality": true,
     "rollback_hash_equality": true,
@@ -591,8 +596,11 @@
   "convergence_control_changed": false,
   "cross_owner_production_test": {
     "detection_executed": true,
+    "detector": "accepted_family_run_callable delta validation",
     "expected_error": "accepted-family convergence row ownership violation",
-    "mutation": "test-only callable production of another owner exact row",
+    "foreign_row_detected": true,
+    "manual_expected_error_raise": false,
+    "mutation": "post-call hook inserts transform_address_records_identity_crosswalk-owned location row",
     "observed_error": "accepted-family convergence row ownership violation",
     "rollback_equality": true,
     "rollback_hash_equality": true,
@@ -1019,40 +1027,6 @@
     "redaction_flags": true
   },
   "evidence_privacy_validation": {
-    "checked_excluded_fields": [
-      "territory_id",
-      "address_label",
-      "citizen_name",
-      "citizen_contact",
-      "dip_last4",
-      "identity_verification_status",
-      "identity_document_verified",
-      "identity_verified_at",
-      "landmark",
-      "latitude",
-      "longitude",
-      "accuracy_meters",
-      "capture_method",
-      "grid_code",
-      "status",
-      "duplicate_hint",
-      "reviewer_note",
-      "suggested_road_name",
-      "suggested_local_area",
-      "suggested_place_name",
-      "map_display_name",
-      "road_suggestion_source",
-      "road_suggestion_attribution",
-      "road_suggestion_status",
-      "reviewed_road_name",
-      "field_submission_id",
-      "field_status",
-      "field_note",
-      "field_verified_at",
-      "signage_batch",
-      "created_at",
-      "updated_at"
-    ],
     "evidence_privacy_validation": true,
     "raw_citizen_values_in_report": false,
     "status": "passed"
@@ -1165,6 +1139,41 @@
   "first_union_hash": "df921407d51d97559db64f380bd7a5d112e9d3823ea985944bef94b31924c5a6",
   "first_union_row_count": 16,
   "fixture_setup_helper": "setup_accepted_family_convergence_database",
+  "free_map_key_domains": {
+    "callable_count_maps": [
+      "transform_address_points_geometry",
+      "transform_address_points_observation_crosswalk",
+      "transform_address_records_geometry",
+      "transform_address_records_identity_crosswalk",
+      "transform_addresses_identity_crosswalk",
+      "transform_citizen_geotag_geometry",
+      "transform_citizen_geotag_identity_crosswalk"
+    ],
+    "control_hashes": [
+      "address_points_correction_oracle_sha256",
+      "address_points_final_correction_oracle_sha256",
+      "address_points_observation_oracle_sha256",
+      "address_points_oracle_sha256",
+      "address_records_correction_oracle_sha256",
+      "address_records_identity_oracle_sha256",
+      "address_records_oracle_sha256",
+      "addresses_identity_oracle_sha256",
+      "citizen_geotag_correction_oracle_sha256",
+      "citizen_geotag_identity_oracle_sha256",
+      "citizen_geotag_oracle_sha256",
+      "control_blob",
+      "control_sha256",
+      "frozen_broad_spec_sha256",
+      "mapping_blob"
+    ],
+    "scoped_table_counts": [
+      "proposed_geometry_observation",
+      "proposed_legacy_crosswalk",
+      "proposed_location_record",
+      "proposed_migration_exception",
+      "proposed_registry_subject"
+    ]
+  },
   "frozen_broad_spec_changed": false,
   "full_family_idempotency": true,
   "generic_transform_used": false,
@@ -2581,18 +2590,26 @@
     {
       "detection_executed": true,
       "expected_error": "accepted-family convergence report structure violation",
-      "mutation": "inject unknown nested report path",
+      "mutation": "inject unknown key inside governance_tests[0]",
       "observed_error": "accepted-family convergence report structure violation",
       "status": "passed",
-      "test_id": "convergence-report-structure-mutation"
+      "test_id": "convergence-report-nested-structure-mutation"
     },
     {
       "detection_executed": true,
       "expected_error": "accepted-family convergence citizen privacy drift",
-      "mutation": "inject synthetic citizen sentinel through report builder",
+      "mutation": "inject citizen verification boolean into privacy boundary",
       "observed_error": "accepted-family convergence citizen privacy drift",
       "status": "passed",
-      "test_id": "convergence-report-citizen-leak-mutation"
+      "test_id": "convergence-report-citizen-boolean-leak-mutation"
+    },
+    {
+      "detection_executed": true,
+      "expected_error": "accepted-family convergence citizen privacy drift",
+      "mutation": "inject citizen verification text into privacy boundary",
+      "observed_error": "accepted-family convergence citizen privacy drift",
+      "status": "passed",
+      "test_id": "convergence-report-citizen-text-leak-mutation"
     }
   ],
   "implementation_delta_checks": [
@@ -2688,6 +2705,7 @@
           "table": "proposed_registry_subject"
         }
       ],
+      "post_callable_mutation_hook_used": false,
       "source_identity": "addresses:phase-a-addresses-id",
       "transform_group": "WO002-R06-identity-crosswalk-addresses",
       "updates": 0
@@ -2778,6 +2796,7 @@
           "table": "proposed_migration_exception"
         }
       ],
+      "post_callable_mutation_hook_used": false,
       "source_identity": "address_points:phase-a-address-points-id",
       "transform_group": "WO002-R06-geometry-observation-address_points",
       "updates": 0
@@ -2828,6 +2847,7 @@
           "table": "proposed_legacy_crosswalk"
         }
       ],
+      "post_callable_mutation_hook_used": false,
       "source_identity": "address_points:phase-a-address-points-id",
       "transform_group": "WO002-R06-identity-crosswalk-address_points",
       "updates": 0
@@ -2924,6 +2944,7 @@
           "table": "proposed_registry_subject"
         }
       ],
+      "post_callable_mutation_hook_used": false,
       "source_identity": "address_records:phase-a-address-records-id",
       "transform_group": "WO002-R06-identity-crosswalk-address_records",
       "updates": 0
@@ -3014,6 +3035,7 @@
           "table": "proposed_migration_exception"
         }
       ],
+      "post_callable_mutation_hook_used": false,
       "source_identity": "address_records:phase-a-address-records-id",
       "transform_group": "WO002-R06-geometry-observation-address_records",
       "updates": 0
@@ -3110,6 +3132,7 @@
           "table": "proposed_registry_subject"
         }
       ],
+      "post_callable_mutation_hook_used": false,
       "source_identity": "citizen_geotag_submissions:phase-a-geotag-001",
       "transform_group": "WO002-R06-identity-crosswalk-citizen_geotag_submissions",
       "updates": 0
@@ -3201,6 +3224,7 @@
           "table": "proposed_migration_exception"
         }
       ],
+      "post_callable_mutation_hook_used": false,
       "source_identity": "citizen_geotag_submissions:phase-a-geotag-001",
       "transform_group": "WO002-R06-geometry-observation-citizen_geotag_submissions",
       "updates": 0
@@ -3244,6 +3268,7 @@
           "table": "proposed_registry_subject"
         }
       ],
+      "post_callable_mutation_hook_used": false,
       "source_identity": "addresses:phase-a-addresses-id",
       "transform_group": "WO002-R06-identity-crosswalk-addresses",
       "updates": 0
@@ -3281,6 +3306,7 @@
           "table": "proposed_migration_exception"
         }
       ],
+      "post_callable_mutation_hook_used": false,
       "source_identity": "address_points:phase-a-address-points-id",
       "transform_group": "WO002-R06-geometry-observation-address_points",
       "updates": 0
@@ -3312,6 +3338,7 @@
           "table": "proposed_legacy_crosswalk"
         }
       ],
+      "post_callable_mutation_hook_used": false,
       "source_identity": "address_points:phase-a-address-points-id",
       "transform_group": "WO002-R06-identity-crosswalk-address_points",
       "updates": 0
@@ -3355,6 +3382,7 @@
           "table": "proposed_registry_subject"
         }
       ],
+      "post_callable_mutation_hook_used": false,
       "source_identity": "address_records:phase-a-address-records-id",
       "transform_group": "WO002-R06-identity-crosswalk-address_records",
       "updates": 0
@@ -3392,6 +3420,7 @@
           "table": "proposed_migration_exception"
         }
       ],
+      "post_callable_mutation_hook_used": false,
       "source_identity": "address_records:phase-a-address-records-id",
       "transform_group": "WO002-R06-geometry-observation-address_records",
       "updates": 0
@@ -3435,6 +3464,7 @@
           "table": "proposed_registry_subject"
         }
       ],
+      "post_callable_mutation_hook_used": false,
       "source_identity": "citizen_geotag_submissions:phase-a-geotag-001",
       "transform_group": "WO002-R06-identity-crosswalk-citizen_geotag_submissions",
       "updates": 0
@@ -3472,6 +3502,7 @@
           "table": "proposed_migration_exception"
         }
       ],
+      "post_callable_mutation_hook_used": false,
       "source_identity": "citizen_geotag_submissions:phase-a-geotag-001",
       "transform_group": "WO002-R06-geometry-observation-citizen_geotag_submissions",
       "updates": 0
@@ -3489,10 +3520,42 @@
   "location_count": 3,
   "mapping_changed": false,
   "multiple_target_resolutions": 0,
+  "nested_schema_contexts": [
+    "callable delta result",
+    "canonical row wrapper",
+    "conflict test",
+    "control hashes",
+    "control paths",
+    "dependency test",
+    "expected absence result",
+    "free-form callable-name to integer count",
+    "free-form fixed table-name to count",
+    "free-map key domains",
+    "governance test",
+    "inserted/updated/deleted row",
+    "normalized target values by table",
+    "order-invariance result",
+    "ownership result",
+    "privacy result",
+    "read-only comparator",
+    "read-only comparator connection",
+    "read-only comparator proof",
+    "reviewed details_json target value",
+    "rollback proof",
+    "scope-isolation result",
+    "semantic controls",
+    "target primary key",
+    "target primary key reference",
+    "top-level report",
+    "unexpected-row test"
+  ],
+  "nested_unknown_path_mutation_detected": true,
+  "normal_path_uses_hook": false,
   "order_invariance": true,
   "ownership_collisions": 0,
   "ownership_registry_entries": 16,
   "path_aware_structure_validation": true,
+  "post_callable_mutation_hook": "post_callable_mutation",
   "primary_execution_sequence": [
     "transform_addresses_identity_crosswalk",
     "transform_address_points_geometry",
@@ -9846,8 +9909,11 @@
     },
     {
       "detection_executed": true,
+      "detector": "accepted_family_run_callable delta validation",
       "expected_error": "accepted-family convergence row ownership violation",
-      "mutation": "test-only callable production of another owner exact row",
+      "foreign_row_detected": true,
+      "manual_expected_error_raise": false,
+      "mutation": "post-call hook inserts transform_address_records_identity_crosswalk-owned location row",
       "observed_error": "accepted-family convergence row ownership violation",
       "rollback_equality": true,
       "rollback_hash_equality": true,
@@ -9862,8 +9928,11 @@
     },
     {
       "detection_executed": true,
+      "detector": "accepted_family_run_callable delta validation",
       "expected_error": "accepted-family convergence prerequisite row changed",
-      "mutation": "test-only consumer prerequisite mutation",
+      "foreign_row_detected": true,
+      "manual_expected_error_raise": false,
+      "mutation": "post-call hook mutates transform_addresses_identity_crosswalk-owned prerequisite",
       "observed_error": "accepted-family convergence prerequisite row changed",
       "rollback_equality": true,
       "rollback_hash_equality": true,
@@ -14079,10 +14148,26 @@
   ],
   "unknown_path_mutation_detected": true,
   "unrelated_scope_isolation_test": {
-    "comparator_still_passed": true,
+    "accepted_attributable_hash_unchanged": true,
+    "after_hash": "df921407d51d97559db64f380bd7a5d112e9d3823ea985944bef94b31924c5a6",
+    "before_hash": "df921407d51d97559db64f380bd7a5d112e9d3823ea985944bef94b31924c5a6",
     "detection_executed": true,
-    "mutation": "insert unrelated exception/public alias outside accepted-family source identities",
+    "expected_absence_controls_passed": true,
+    "mutation": "insert unrelated location, subject, public alias, migration exception, geometry observation, geometry version, and quality row outside accepted-family source identities",
+    "ownership_validation_passed": true,
+    "semantic_controls_passed": true,
     "status": "passed",
-    "test_id": "unrelated-prerequisite-scope-isolation"
+    "test_id": "unrelated-prerequisite-scope-isolation",
+    "union_comparison_passed": true,
+    "unrelated_rows_excluded_from_attribution": true,
+    "unrelated_rows_inserted": [
+      "proposed_location_record",
+      "proposed_registry_subject",
+      "proposed_public_code_alias",
+      "proposed_migration_exception",
+      "proposed_geometry_observation",
+      "proposed_geometry_version",
+      "proposed_geometry_quality_assessment"
+    ]
   }
 }
