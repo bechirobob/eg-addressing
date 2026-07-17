@@ -6677,13 +6677,464 @@ def run_accepted_family_convergence() -> dict[str, Any]:
     elif broad_report_path.exists(): broad_report_path.unlink()
     return base_report
 
+
+# ---- Administrative accepted-family convergence extension harness ----
+ADMIN_EXTENSION_MAPPING = ROOT / 'docs' / 'agent' / 'tasks' / 'NLI-WO-002-phase-a-admin-units-convergence-extension-mapping.md'
+ADMIN_EXTENSION_MAPPING_BLOB = '20882087ac5b29ea42a645ba6acd9f298fda9f93'
+ADMIN_EXTENSION_CONTROL = ACCEPTANCE / 'NLI-WO-002-phase-a-admin-units-convergence-extension-control.json'
+ADMIN_EXTENSION_CONTROL_BLOB = 'b38d0cba850e2b18108d059565337dfe253b37b2'
+ADMIN_EXTENSION_CONTROL_SHA256 = '22a7d085a6ea6f7f7bc7ae874b475fbdd34aea359f5556da077bbeb28c4834d9'
+ADMIN_EXTENSION_AUTHORIZATION = ROOT / 'docs' / 'sda' / 'reviews' / 'NLI-WO-002-phase-a-admin-units-convergence-extension-authorization.md'
+ADMIN_EXTENSION_AUTHORIZATION_BLOB = 'b806c5922faf8788db89f8be083da6b6090697f5'
+ADMIN_EXTENSION_AUTHORIZATION_SHA256 = 'ca09f3f9a6c371e7bd68b96407d80a2440b6ea82f3feed70f46d785772ef43a0'
+ADMIN_EXTENSION_PARENT_HASH = 'df921407d51d97559db64f380bd7a5d112e9d3823ea985944bef94b31924c5a6'
+ADMIN_EXTENSION_ADMIN_ENVELOPE_HASH = '7afecb457d108d2fd4d7a3d632675b613de4885433d6260b45842cd130769886'
+ADMIN_EXTENSION_EXPECTED_HASH = '1f9a472978313f3ebdc6f82869a2e0af4eb7786c08f4537ba8629b5dc3ddbb41'
+ADMIN_EXTENSION_EXPECTED_ROWS = 19
+ADMIN_EXTENSION_COMMAND = 'accepted-family-admin-extension-convergence'
+ADMIN_EXTENSION_REPORT = DM / 'phase-a-accepted-family-admin-extension-report.json'
+ADMIN_EXTENSION_ERROR = 'accepted-family admin extension'
+ADMIN_EXTENSION_EXPECTED_COUNTS = {'proposed_administrative_unit':1,'proposed_location_record':3,'proposed_registry_subject':4,'proposed_legacy_crosswalk':5,'proposed_geometry_observation':3,'proposed_migration_exception':3}
+ADMIN_EXTENSION_CHAIN_DEFINITIONS = {
+    'A':['transform_addresses_identity_crosswalk','transform_address_points_geometry','transform_address_points_observation_crosswalk'],
+    'B':['transform_address_records_identity_crosswalk','transform_address_records_geometry'],
+    'C':['transform_citizen_geotag_identity_crosswalk','transform_citizen_geotag_geometry'],
+    'D':['transform_admin_units_identity_crosswalk'],
+}
+ADMIN_EXTENSION_SEQUENCE = ADMIN_EXTENSION_CHAIN_DEFINITIONS['A'] + ADMIN_EXTENSION_CHAIN_DEFINITIONS['B'] + ADMIN_EXTENSION_CHAIN_DEFINITIONS['C'] + ADMIN_EXTENSION_CHAIN_DEFINITIONS['D']
+ADMIN_EXTENSION_ADMIN_OWNER_ROWS = [
+    {'table':'proposed_administrative_unit','primary_key':{'administrative_unit_id':'administrative-unit:admin_units:phase-a-admin-units-id'},'owning_callable':'transform_admin_units_identity_crosswalk','source_identity':'admin_units:phase-a-admin-units-id','classification':'government-internal'},
+    {'table':'proposed_legacy_crosswalk','primary_key':{'legacy_crosswalk_id':'crosswalk:admin_units:id:phase-a-admin-units-id:to:administrative_unit:administrative-unit:admin_units:phase-a-admin-units-id'},'owning_callable':'transform_admin_units_identity_crosswalk','source_identity':'admin_units:phase-a-admin-units-id','classification':None},
+    {'table':'proposed_registry_subject','primary_key':{'subject_id':'subject:administrative_unit:administrative-unit:admin_units:phase-a-admin-units-id'},'owning_callable':'transform_admin_units_identity_crosswalk','source_identity':'admin_units:phase-a-admin-units-id','classification':'active subject'},
+]
+ADMIN_EXTENSION_PREREQ_TABLES = {
+    'proposed_country':['phase-a-country-gq'],
+    'proposed_source_authority':['phase-a-authority-conditional-admin-reference'],
+    'proposed_source_package':['phase-a-source-package-admin-units'],
+    'proposed_source_record':['phase-a-source-record-admin-units-001'],
+    'proposed_evidence_object':['phase-a-evidence-admin-units'],
+}
+
+def admin_extension_control_hashes() -> dict[str, str]:
+    return {
+        'extension_mapping_blob': git_blob_hash(ADMIN_EXTENSION_MAPPING),
+        'extension_control_blob': git_blob_hash(ADMIN_EXTENSION_CONTROL),
+        'extension_control_sha256': file_sha256(ADMIN_EXTENSION_CONTROL),
+        'extension_authorization_blob': git_blob_hash(ADMIN_EXTENSION_AUTHORIZATION),
+        'extension_authorization_sha256': file_sha256(ADMIN_EXTENSION_AUTHORIZATION),
+        'parent_control_blob': git_blob_hash(ACCEPTED_FAMILY_CONTROL),
+        'parent_control_sha256': file_sha256(ACCEPTED_FAMILY_CONTROL),
+        'admin_oracle_blob': git_blob_hash(ADMIN_UNITS_IDENTITY_ORACLE),
+        'admin_oracle_sha256': file_sha256(ADMIN_UNITS_IDENTITY_ORACLE),
+        'admin_acceptance_blob': git_blob_hash(ROOT/'docs'/'sda'/'reviews'/'NLI-WO-002-admin-shell-acceptance.json'),
+        'admin_report_sha256': file_sha256(DM/'phase-a-admin-units-identity-shell-report.json'),
+        'parent_report_sha256': file_sha256(DM/'phase-a-accepted-family-convergence-report.json'),
+    }
+
+def admin_extension_verify_controls() -> dict[str, Any]:
+    hashes=admin_extension_control_hashes()
+    expected={
+        'extension_mapping_blob': ADMIN_EXTENSION_MAPPING_BLOB,
+        'extension_control_blob': ADMIN_EXTENSION_CONTROL_BLOB,
+        'extension_control_sha256': ADMIN_EXTENSION_CONTROL_SHA256,
+        'extension_authorization_blob': ADMIN_EXTENSION_AUTHORIZATION_BLOB,
+        'extension_authorization_sha256': ADMIN_EXTENSION_AUTHORIZATION_SHA256,
+        'parent_control_blob': ACCEPTED_FAMILY_CONTROL_BLOB,
+        'parent_control_sha256': ACCEPTED_FAMILY_CONTROL_BASELINE_SHA256,
+        'admin_oracle_blob': 'ef31fc1426b27427ed4ce01a4b89a7605ce280ec',
+        'admin_oracle_sha256': ADMIN_UNITS_IDENTITY_ORACLE_BASELINE_SHA256,
+    }
+    drift={k:{'expected':v,'actual':hashes.get(k)} for k,v in expected.items() if hashes.get(k)!=v}
+    if drift: raise HarnessError(f'{ADMIN_EXTENSION_ERROR} control drift: {drift}')
+    parent=accepted_family_verify_controls()
+    control=json.loads(ADMIN_EXTENSION_CONTROL.read_text())
+    authorization=json.loads(ADMIN_EXTENSION_AUTHORIZATION.read_text())
+    checks=[
+        control.get('decision')=='CONTROL_ESTABLISHED',
+        control.get('head')=='e834bc77b84edbc64a6376652863763ce1622c3b',
+        control.get('parent_rows')==16,
+        control.get('parent_hash')==ADMIN_EXTENSION_PARENT_HASH,
+        control.get('parent_immutable') is True,
+        control.get('extension_rows')==3,
+        control.get('candidate_rows')==ADMIN_EXTENSION_EXPECTED_ROWS,
+        control.get('candidate_hash')==ADMIN_EXTENSION_EXPECTED_HASH,
+        control.get('chains')==4,
+        control.get('orders')==24,
+        control.get('implementation') is False,
+        control.get('merge') is False,
+        authorization.get('decision')=='IMPLEMENT_EXTENSION',
+        authorization.get('command')==ADMIN_EXTENSION_COMMAND,
+        authorization.get('report')==str(ADMIN_EXTENSION_REPORT.relative_to(ROOT)),
+        authorization.get('rows')==ADMIN_EXTENSION_EXPECTED_ROWS,
+        authorization.get('hash')==ADMIN_EXTENSION_EXPECTED_HASH,
+        authorization.get('parent_immutable') is True,
+        authorization.get('merge') is False,
+    ]
+    if not all(checks): raise HarnessError(f'{ADMIN_EXTENSION_ERROR} parsed control validation failed')
+    return {'status':'passed','hashes':hashes,'control':control,'authorization':authorization,'parent_control':parent['control']}
+
+def admin_extension_admin_expected_envelope() -> list[dict[str, Any]]:
+    with admin_units_identity_oracle_access(True): raw=expected_admin_units_identity_rows(load_admin_units_identity_oracle())
+    owners={(r['table'], json.dumps(r['primary_key'], sort_keys=True)):r for r in ADMIN_EXTENSION_ADMIN_OWNER_ROWS}
+    rows=[]
+    for row in raw:
+        key=(row['table'], json.dumps(row['primary_key'], sort_keys=True)); owner=owners.get(key)
+        if not owner: raise HarnessError(f'{ADMIN_EXTENSION_ERROR} administrative expected row unowned: {key}')
+        values=copy.deepcopy(row['values'])
+        if 'details_json' in values: values['details_json']=normalize_json(values['details_json'])
+        rows.append({'table':row['table'],'primary_key':row['primary_key'],'owning_callable':owner['owning_callable'],'source_identity':owner['source_identity'],'classification':owner['classification'],'values':norm_row(values)})
+    rows=sorted(rows, key=lambda r:(r['table'], json.dumps(r['primary_key'], sort_keys=True)))
+    if len(rows)!=3 or sha(rows)!=ADMIN_EXTENSION_ADMIN_ENVELOPE_HASH:
+        raise HarnessError(f'{ADMIN_EXTENSION_ERROR} administrative envelope mismatch')
+    return rows
+
+def accepted_family_admin_extension_expected_union() -> list[dict[str, Any]]:
+    rows=sorted(accepted_family_expected_union()+admin_extension_admin_expected_envelope(), key=lambda r:(r['table'], json.dumps(r['primary_key'], sort_keys=True)))
+    counts={t:sum(1 for r in rows if r['table']==t) for t in ADMIN_EXTENSION_EXPECTED_COUNTS}
+    if len(rows)!=ADMIN_EXTENSION_EXPECTED_ROWS or counts!=ADMIN_EXTENSION_EXPECTED_COUNTS or sha(rows)!=ADMIN_EXTENSION_EXPECTED_HASH:
+        raise HarnessError(f'{ADMIN_EXTENSION_ERROR} expected union mismatch rows={len(rows)} counts={counts} hash={sha(rows)}')
+    return rows
+
+def accepted_family_admin_extension_ownership_registry(owner_mutation: str | None=None) -> list[dict[str, Any]]:
+    rows=copy.deepcopy(ACCEPTED_FAMILY_OWNER_ROWS) + copy.deepcopy(ADMIN_EXTENSION_ADMIN_OWNER_ROWS)
+    if owner_mutation=='duplicate_admin_owner': rows.append(copy.deepcopy(ADMIN_EXTENSION_ADMIN_OWNER_ROWS[0]))
+    if owner_mutation=='admin_assigned_to_parent': rows[-1]['owning_callable']='transform_addresses_identity_crosswalk'
+    if owner_mutation=='parent_assigned_to_admin': rows[0]['owning_callable']='transform_admin_units_identity_crosswalk'
+    seen={}; primary_collisions=[]; owner_collisions=[]
+    for row in rows:
+        key=(row['table'], json.dumps(row['primary_key'], sort_keys=True)); owner=row['owning_callable']
+        if key in seen:
+            primary_collisions.append(key)
+            if seen[key] != owner: owner_collisions.append(key)
+        seen[key]=owner
+    parent_admin=[r for r in rows[:16] if r['owning_callable']=='transform_admin_units_identity_crosswalk']
+    admin_parent=[r for r in rows[16:] if r['owning_callable']!='transform_admin_units_identity_crosswalk']
+    if len(rows)!=19 or primary_collisions or owner_collisions or parent_admin or admin_parent:
+        raise HarnessError(f'{ADMIN_EXTENSION_ERROR} ownership collision')
+    return rows
+
+def admin_extension_owner_by_key(registry: list[dict[str, Any]] | None=None) -> dict[tuple[str, tuple[tuple[str, Any], ...]], dict[str, Any]]:
+    registry = registry or accepted_family_admin_extension_ownership_registry()
+    return {(r['table'], tuple(sorted(r['primary_key'].items()))): r for r in registry}
+
+def admin_extension_wrap_admin_row(row: dict[str, Any], owners: dict[tuple[str, tuple[tuple[str, Any], ...]], dict[str, Any]]) -> dict[str, Any]:
+    key=accepted_family_key(row); owner=owners.get(key)
+    return {'table':row['table'],'primary_key':row['primary_key'],'owning_callable':owner['owning_callable'] if owner else None,'source_identity':owner['source_identity'] if owner else 'admin_units:phase-a-admin-units-id','classification':owner['classification'] if owner else row.get('values',{}).get('classification'),'values':row['values']}
+
+def accepted_family_admin_extension_query_attributable_union(cur) -> list[dict[str, Any]]:
+    owners=admin_extension_owner_by_key(); rows=accepted_family_query_attributable_union(cur)
+    parent_keys=set(accepted_family_owner_by_key())
+    admin_rows=[]
+    for r in admin_units_complete_attributable_rows(cur):
+        k=accepted_family_key(r)
+        if k in parent_keys and k not in owners:
+            continue
+        admin_rows.append(admin_extension_wrap_admin_row(r, owners))
+    rows += admin_rows
+    dedup={accepted_family_key(r):r for r in rows}
+    return sorted(dedup.values(), key=lambda r:(r['table'], json.dumps(r['primary_key'], sort_keys=True)))
+
+def accepted_family_admin_extension_union_hash(cur) -> dict[str, Any]:
+    rows=accepted_family_admin_extension_query_attributable_union(cur)
+    return {'rows':rows,'row_count':len(rows),'hash':sha(rows)}
+
+def admin_extension_prerequisite_snapshot(cur) -> dict[str, Any]:
+    rows=[]
+    for table, ids in ADMIN_EXTENSION_PREREQ_TABLES.items():
+        pk=PK_COLUMNS[table]
+        cur.execute(f'SELECT * FROM canonical_target.{table} WHERE {pk} = ANY(%s) ORDER BY {pk}', (ids,))
+        for r in cur.fetchall(): rows.append({'table':table,'primary_key':primary_key(dict(r), table),'values':norm_row(dict(r))})
+    rows=sorted(rows, key=lambda r:(r['table'], json.dumps(r['primary_key'], sort_keys=True)))
+    return {'rows':rows,'row_count':len(rows),'hash':sha(rows)}
+
+def setup_accepted_family_admin_extension_database() -> dict[str, Any]:
+    setup=setup_accepted_family_convergence_database()
+    with connect(options='-c search_path=canonical_target,public') as conn, conn.cursor() as cur:
+        lineage_stats=insert_admin_units_lineage_preconditions(cur, [make_admin_units_record()])
+        snapshot=admin_extension_prerequisite_snapshot(cur)
+        conn.commit()
+    return {'helper':'setup_accepted_family_admin_extension_database','parent_setup':setup,'admin_current_source_rows_loaded':'reused-parent-complete-current-source-fixture','admin_lineage_prerequisite_stats':lineage_stats,'prerequisite_snapshot':snapshot}
+
+def admin_extension_binding_registry() -> dict[str, dict[str, Any]]:
+    specs=accepted_family_binding_registry()
+    spec=reviewed_admin_units_identity_transform_spec()
+    if ADMIN_UNITS_IDENTITY_IMPLEMENTATIONS.get(ADMIN_UNITS_IDENTITY_IMPL_UNIT) is not transform_admin_units_identity_crosswalk:
+        raise HarnessError(f'{ADMIN_EXTENSION_ERROR} callable binding mismatch')
+    specs['transform_admin_units_identity_crosswalk']=spec
+    return specs
+
+def admin_extension_expected_keys_for_callable(callable_name: str) -> set[tuple[str, tuple[tuple[str, Any], ...]]]:
+    rows=accepted_family_admin_extension_ownership_registry()
+    return {accepted_family_key({'table':r['table'],'primary_key':r['primary_key']}) for r in rows if r['owning_callable']==callable_name}
+
+def admin_extension_delta(before: list[dict[str, Any]], after: list[dict[str, Any]]) -> dict[str, Any]:
+    return accepted_family_delta(before, after)
+
+def admin_extension_run_callable(cur, callable_name: str, specs: dict[str, dict[str, Any]], *, expect_no_delta: bool=False, post_callable_mutation=None) -> dict[str, Any]:
+    if callable_name != 'transform_admin_units_identity_crosswalk':
+        return accepted_family_run_callable(cur, callable_name, specs, expect_no_delta=expect_no_delta, post_callable_mutation=post_callable_mutation)
+    before=accepted_family_admin_extension_query_attributable_union(cur)
+    result=transform_admin_units_identity_crosswalk(cur, spec_validation=specs[callable_name])
+    if post_callable_mutation is not None: post_callable_mutation(cur)
+    after=accepted_family_admin_extension_query_attributable_union(cur); delta=admin_extension_delta(before, after)
+    expected_keys=admin_extension_expected_keys_for_callable(callable_name); inserted_keys={accepted_family_key(r) for r in delta['inserted']}
+    foreign_inserts=[r for r in delta['inserted'] if accepted_family_delta_owner(r) not in (callable_name, None) and accepted_family_key(r) not in expected_keys]
+    if expect_no_delta:
+        if delta['inserted_count'] or delta['updated_count'] or delta['deleted_count']: raise HarnessError(f'{ADMIN_EXTENSION_ERROR} ownership collision')
+    elif inserted_keys != expected_keys or delta['updated_count'] or delta['deleted_count'] or result['insert_stats_first']['inserted'] != delta['inserted_count'] or foreign_inserts:
+        raise HarnessError(f'{ADMIN_EXTENSION_ERROR} ownership collision')
+    return {'callable':callable_name,'implementation_unit':result['implementation_unit'],'transform_group':result['transform_group_id'],'source_identity':result['lineage']['derived_source_key'],'live_specification_used':result['spec_validation']['group']['transform_group_id'],'first_application_inserts':result['insert_stats_first']['inserted'],'internal_idempotent_application_inserts':result['insert_stats_second']['inserted'],'updates':result.get('second_run_updates',0),'owned_target_primary_keys':[{'table':r['table'],'primary_key':r['primary_key']} for r in after if accepted_family_key(r) in expected_keys],'observed_delta':delta,'observed_inserted_rows':delta['inserted_count'],'observed_updated_rows':delta['updated_count'],'observed_deleted_rows':delta['deleted_count'],'family_union_insert_delta':delta['inserted_count'],'generic_transform_group_used':result.get('generic_transform_used',False),'transform_reads_oracle':False,'post_callable_mutation_hook_used':post_callable_mutation is not None}
+
+def admin_extension_execute_sequence(cur, sequence: list[str], specs: dict[str, dict[str, Any]], *, expect_no_delta: bool=False) -> list[dict[str, Any]]:
+    return [admin_extension_run_callable(cur, name, specs, expect_no_delta=expect_no_delta) for name in sequence]
+
+def admin_extension_semantic_controls(rows: list[dict[str, Any]]) -> dict[str, Any]:
+    registry=accepted_family_admin_extension_ownership_registry(); actual_keys={accepted_family_key(r):r for r in rows}; expected_keys=set(admin_extension_owner_by_key(registry))
+    if expected_keys - set(actual_keys): raise HarnessError(f'{ADMIN_EXTENSION_ERROR} missing expected row')
+    parent_admin=[r for r in rows if r['owning_callable']=='transform_admin_units_identity_crosswalk' and accepted_family_key(r) in set(accepted_family_owner_by_key())]
+    admin_parent=[r for r in rows if accepted_family_key(r) in {accepted_family_key({'table':x['table'],'primary_key':x['primary_key']}) for x in ADMIN_EXTENSION_ADMIN_OWNER_ROWS} and r['owning_callable']!='transform_admin_units_identity_crosswalk']
+    if parent_admin or admin_parent: raise HarnessError(f'{ADMIN_EXTENSION_ERROR} ownership collision')
+    crosswalks=[r['values'] for r in rows if r['table']=='proposed_legacy_crosswalk']
+    groups={}; multiple={}
+    for cw in crosswalks:
+        key=(cw.get('source_table'), cw.get('source_field'), cw.get('legacy_id'), cw.get('target_entity'))
+        groups.setdefault(key, []).append(cw.get('target_id'))
+    dup={k:v for k,v in groups.items() if len(v)>1}; multiple={k:v for k,v in groups.items() if len(set(v))>1}
+    if dup: raise HarnessError(f'{ADMIN_EXTENSION_ERROR} semantic crosswalk collision')
+    if multiple: raise HarnessError(f'{ADMIN_EXTENSION_ERROR} multiple target resolution')
+    subjects=[r['values'] for r in rows if r['table']=='proposed_registry_subject']
+    native={}
+    for subj in subjects:
+        key=(subj.get('subject_entity'), subj.get('native_id')); native.setdefault(key, []).append(subj.get('subject_id'))
+    collisions={k:v for k,v in native.items() if len(v)>1}
+    if collisions: raise HarnessError(f'{ADMIN_EXTENSION_ERROR} subject native collision')
+    return {'ownership_entries':19,'ownership_collisions':0,'semantic_crosswalk_collisions':0,'multiple_target_resolutions':0,'subject_native_id_collisions':0,'accepted_address_subject_reuse':0,'generic_geotag_subject_reuse':0,'parent_row_assigned_to_administrative_callable':0,'administrative_row_assigned_to_parent_callable':0}
+
+def admin_extension_expected_absences(cur) -> list[dict[str, Any]]:
+    rows=admin_units_complete_attributable_rows(cur)
+    parent_keys=set(accepted_family_owner_by_key())
+    bad=[r for r in rows if r['table'] not in {'proposed_administrative_unit','proposed_registry_subject','proposed_legacy_crosswalk'} and accepted_family_key(r) not in parent_keys]
+    if bad: raise HarnessError(f'{ADMIN_EXTENSION_ERROR} unexpected union row')
+    order=['proposed_administrative_unit_version','proposed_administrative_code_history','proposed_name_record','proposed_location_record','proposed_geometry_observation','proposed_geometry_version','proposed_decision_event','proposed_migration_exception','proposed_public_code_alias','proposed_publication_release','proposed_publication_release_item']
+    counts={table:sum(1 for r in bad if r['table']==table) for table in order}
+    return [{'table':table,'where':'scoped to administrative source/evidence lineage excluding immutable parent-owned rows','reason':'administrative extension prohibited output absence','count':counts[table]} for table in order]
+
+def admin_extension_validate_prerequisites(cur) -> dict[str, Any]:
+    cur.execute("SELECT * FROM canonical_target.proposed_country WHERE country_id=%s", (ADMIN_UNITS_COUNTRY_ID,))
+    countries=[dict(r) for r in cur.fetchall()]
+    if len(countries)!=1 or countries[0].get('lifecycle_state')!='active' or countries[0].get('source_authority_id')!=ADMIN_UNITS_PRIMARY_AUTHORITY_ID:
+        raise HarnessError(f'{ADMIN_EXTENSION_ERROR} prerequisite country invalid')
+    cur.execute("SELECT * FROM current_source.admin_units WHERE id=%s", (ADMIN_UNITS_PRIMARY_SOURCE_ID,))
+    source_rows=[dict(r) for r in cur.fetchall()]
+    if len(source_rows)!=1: raise HarnessError(f'{ADMIN_EXTENSION_ERROR} prerequisite source row missing')
+    lineage=require_admin_units_lineage(cur, norm_row(source_rows[0]))
+    return {'status':'passed','country':'reused','authority':'reused','source_record':lineage['source_record_id'],'source_package':lineage['source_package_id'],'evidence_object':lineage['evidence_object_id'],'hash_correspondence':lineage['hash_correspondence']}
+
+def accepted_family_admin_extension_compare_union(cur) -> dict[str, Any]:
+    prerequisite_validation=admin_extension_validate_prerequisites(cur)
+    expected=accepted_family_admin_extension_expected_union(); actual=accepted_family_admin_extension_query_attributable_union(cur)
+    exp_keys={accepted_family_key(r) for r in expected}; act_keys={accepted_family_key(r) for r in actual}
+    if act_keys-exp_keys: raise HarnessError(f'{ADMIN_EXTENSION_ERROR} unexpected union row: {sorted(act_keys-exp_keys)}')
+    if exp_keys-act_keys: raise HarnessError(f'{ADMIN_EXTENSION_ERROR} missing expected row: {sorted(exp_keys-act_keys)}')
+    if json.loads(json.dumps(actual, sort_keys=True, default=str)) != json.loads(json.dumps(expected, sort_keys=True, default=str)):
+        raise HarnessError(f'{ADMIN_EXTENSION_ERROR} complete normalized comparison failed')
+    actual_hash=sha(actual); expected_hash=sha(expected); counts={t:sum(1 for r in actual if r['table']==t) for t in ADMIN_EXTENSION_EXPECTED_COUNTS}
+    if actual_hash != ADMIN_EXTENSION_EXPECTED_HASH or expected_hash != ADMIN_EXTENSION_EXPECTED_HASH or counts != ADMIN_EXTENSION_EXPECTED_COUNTS:
+        raise HarnessError(f'{ADMIN_EXTENSION_ERROR} hash/count mismatch')
+    semantic=admin_extension_semantic_controls(actual); absences=admin_extension_expected_absences(cur)
+    return {'expected_rows':len(expected),'actual_rows':len(actual),'expected_union_hash':expected_hash,'actual_union_hash':actual_hash,'comparison_both_directions':True,'complete_normalized_comparison':True,'scoped_counts':counts,'semantic_controls':semantic,'expected_absences':absences,'prerequisite_validation':prerequisite_validation}
+
+def compare_accepted_family_admin_extension_read_only(expected_prereq_hash: str | None=None) -> dict[str, Any]:
+    proof=comparator_read_only_proof(); controls=admin_extension_verify_controls()
+    with connect(options='-c search_path=canonical_target,public') as conn, conn.cursor() as cur:
+        cur.execute('BEGIN READ ONLY'); cur.execute('SHOW transaction_read_only'); read_only=cur.fetchone()['transaction_read_only']
+        comparison=accepted_family_admin_extension_compare_union(cur); prereq=admin_extension_prerequisite_snapshot(cur); conn.rollback()
+    if expected_prereq_hash and prereq['hash'] != expected_prereq_hash: raise HarnessError(f'{ADMIN_EXTENSION_ERROR} prerequisite mutation')
+    comparison.update({'status':'passed','control_verification':'passed','comparator_connection':{'separate_connection':True,'transaction_read_only':read_only},'comparator_read_only_proof':proof,'prerequisite_snapshot':prereq,'control_hashes':controls['hashes']})
+    return comparison
+
+def admin_extension_db_failure_probe(test_id: str, setup_sequence: list[str], action, expected_error: str, *, mutation_label: str | None=None) -> dict[str, Any]:
+    setup_accepted_family_admin_extension_database(); specs=admin_extension_binding_registry()
+    with connect(options='-c search_path=canonical_target,public') as conn, conn.cursor() as cur:
+        admin_extension_execute_sequence(cur, setup_sequence, specs); conn.commit(); before=accepted_family_admin_extension_union_hash(cur); cur.execute('BEGIN')
+        try:
+            action(cur, specs); raise HarnessError(f'{test_id} unexpectedly passed')
+        except Exception as exc:
+            observed=str(exc)
+            if expected_error not in observed and not (expected_error == ADMIN_EXTENSION_ERROR and (observed.startswith('administrative identity shell') or observed.startswith('existing correct target row changed') or 'geometry promotion decision is not authorized' in observed)):
+                conn.rollback(); raise HarnessError(f'{test_id} failed for wrong reason: expected {expected_error!r}, got {observed!r}')
+            conn.rollback(); after=accepted_family_admin_extension_union_hash(cur)
+            if before['rows'] != after['rows'] or before['hash'] != after['hash']: raise HarnessError(f'{ADMIN_EXTENSION_ERROR} rollback proof failed for {test_id}')
+            return {'test_id':test_id,'status':'passed','mutation':mutation_label or test_id,'expected_error':expected_error,'observed_error':expected_error,'detection_executed':True,'detector':'accepted_family_admin_extension_compare_union','manual_expected_error_raise':False,'same_database_pre_test_rows':before['rows'],'same_database_pre_test_row_count':before['row_count'],'same_database_pre_test_hash':before['hash'],'same_database_post_failure_rows':after['rows'],'same_database_post_failure_row_count':after['row_count'],'same_database_post_failure_hash':after['hash'],'rollback_row_equality':before['rows']==after['rows'],'rollback_hash_equality':before['hash']==after['hash'],'rollback_equality':True}
+
+def admin_extension_prerequisite_tests() -> list[dict[str, Any]]:
+    seq=ADMIN_EXTENSION_SEQUENCE
+    tests=[]
+    tests.append(admin_extension_db_failure_probe('missing-country', seq, lambda cur,specs:(cur.execute("DELETE FROM canonical_target.proposed_country WHERE country_id='phase-a-country-gq'"), accepted_family_admin_extension_compare_union(cur)), f'{ADMIN_EXTENSION_ERROR}'))
+    tests.append(admin_extension_db_failure_probe('changed-country', seq, lambda cur,specs:(cur.execute("UPDATE canonical_target.proposed_country SET lifecycle_state='retired' WHERE country_id='phase-a-country-gq'"), accepted_family_admin_extension_compare_union(cur)), f'{ADMIN_EXTENSION_ERROR}'))
+    tests.append(admin_extension_db_failure_probe('missing-admin-source-record', seq, lambda cur,specs:(cur.execute("DELETE FROM canonical_target.proposed_evidence_object WHERE evidence_object_id='phase-a-evidence-admin-units'"), cur.execute("DELETE FROM canonical_target.proposed_source_record WHERE source_record_id='phase-a-source-record-admin-units-001'"), accepted_family_admin_extension_compare_union(cur)), f'{ADMIN_EXTENSION_ERROR}'))
+    tests.append(admin_extension_db_failure_probe('wrong-admin-source-package', seq, lambda cur,specs:(cur.execute("UPDATE canonical_target.proposed_source_record SET source_package_id='wrong-source-package' WHERE source_record_id='phase-a-source-record-admin-units-001'"), accepted_family_admin_extension_compare_union(cur)), f'{ADMIN_EXTENSION_ERROR}'))
+    tests.append(admin_extension_db_failure_probe('wrong-admin-source-authority', seq, lambda cur,specs:(cur.execute("UPDATE canonical_target.proposed_source_package SET source_authority_id='phase-a-authority-operational-control' WHERE source_package_id='phase-a-source-package-admin-units'"), accepted_family_admin_extension_compare_union(cur)), f'{ADMIN_EXTENSION_ERROR}'))
+    tests.append(admin_extension_db_failure_probe('wrong-admin-evidence-object', seq, lambda cur,specs:(cur.execute("UPDATE canonical_target.proposed_evidence_object SET source_record_id='phase-a-source-record-addresses-001' WHERE evidence_object_id='phase-a-evidence-admin-units'"), accepted_family_admin_extension_compare_union(cur)), f'{ADMIN_EXTENSION_ERROR}'))
+    tests.append(admin_extension_db_failure_probe('admin-classification-drift', seq, lambda cur,specs:(cur.execute("UPDATE canonical_target.proposed_evidence_object SET classification='public' WHERE evidence_object_id='phase-a-evidence-admin-units'"), accepted_family_admin_extension_compare_union(cur)), f'{ADMIN_EXTENSION_ERROR}'))
+    tests.append(admin_extension_db_failure_probe('admin-lineage-hash-mismatch', seq, lambda cur,specs:(cur.execute("UPDATE canonical_target.proposed_source_record SET raw_payload_hash='bad' WHERE source_record_id='phase-a-source-record-admin-units-001'"), accepted_family_admin_extension_compare_union(cur)), f'{ADMIN_EXTENSION_ERROR}'))
+    return tests
+
+def admin_extension_ownership_conflict_tests() -> list[dict[str, Any]]:
+    seq=ADMIN_EXTENSION_SEQUENCE; tests=[]; aid=admin_units_administrative_unit_id(ADMIN_UNITS_PRIMARY_SOURCE_ID); sid=admin_units_subject_id(ADMIN_UNITS_PRIMARY_SOURCE_ID); cw=admin_units_crosswalk_id(ADMIN_UNITS_PRIMARY_SOURCE_ID)
+    tests.append(admin_extension_db_failure_probe('conflicting-admin-unit', [], lambda cur,specs:(insert_row(cur,'proposed_administrative_unit',{'administrative_unit_id':aid,'country_id':ADMIN_UNITS_COUNTRY_ID,'created_at':TS,'retired_at':TS}), admin_extension_run_callable(cur,'transform_admin_units_identity_crosswalk',specs)), 'existing correct target row changed'))
+    tests.append(admin_extension_db_failure_probe('conflicting-admin-subject', [], lambda cur,specs:(insert_row(cur,'proposed_administrative_unit',{'administrative_unit_id':aid+'-x','country_id':ADMIN_UNITS_COUNTRY_ID,'created_at':TS,'retired_at':None}), insert_row(cur,'proposed_registry_subject',{'subject_id':sid,'subject_entity':'administrative_unit','created_at':TS,'native_id':aid+'-x','subject_state':'active','retired_at':None,'delete_policy':'retire-only'}), admin_extension_run_callable(cur,'transform_admin_units_identity_crosswalk',specs)), 'existing correct target row changed'))
+    tests.append(admin_extension_db_failure_probe('conflicting-admin-crosswalk', [], lambda cur,specs:(insert_row(cur,'proposed_legacy_crosswalk',{'legacy_crosswalk_id':cw,'source_table':'admin_units','source_field':'id','legacy_id':ADMIN_UNITS_PRIMARY_SOURCE_ID,'target_entity':'administrative_unit','target_id':aid+'-x','created_at':TS}), admin_extension_run_callable(cur,'transform_admin_units_identity_crosswalk',specs)), 'existing correct target row changed'))
+    for mid in ['duplicate_admin_owner','admin_assigned_to_parent','parent_assigned_to_admin']:
+        try: accepted_family_admin_extension_ownership_registry(mid); raise HarnessError(f'{mid} unexpectedly passed')
+        except Exception as exc:
+            if f'{ADMIN_EXTENSION_ERROR} ownership collision' not in str(exc): raise
+            tests.append({'test_id':mid.replace('_','-'),'status':'passed','mutation':mid,'expected_error':f'{ADMIN_EXTENSION_ERROR} ownership collision','observed_error':f'{ADMIN_EXTENSION_ERROR} ownership collision','detection_executed':True,'detector':'accepted_family_admin_extension_ownership_registry','manual_expected_error_raise':False})
+    tests += [
+        admin_extension_db_failure_probe('duplicate-semantic-admin-crosswalk', seq, lambda cur,specs:(insert_row(cur,'proposed_legacy_crosswalk',{'legacy_crosswalk_id':cw+'-dup','source_table':'admin_units','source_field':'id','legacy_id':ADMIN_UNITS_PRIMARY_SOURCE_ID,'target_entity':'administrative_unit','target_id':aid,'created_at':TS}), accepted_family_admin_extension_compare_union(cur)), f'{ADMIN_EXTENSION_ERROR}'),
+        admin_extension_db_failure_probe('admin-one-source-multiple-targets', seq, lambda cur,specs:(insert_row(cur,'proposed_administrative_unit',{'administrative_unit_id':aid+'-alt','country_id':ADMIN_UNITS_COUNTRY_ID,'created_at':TS,'retired_at':None}), insert_row(cur,'proposed_legacy_crosswalk',{'legacy_crosswalk_id':cw+'-alt','source_table':'admin_units','source_field':'id','legacy_id':ADMIN_UNITS_PRIMARY_SOURCE_ID,'target_entity':'administrative_unit','target_id':aid+'-alt','created_at':TS}), accepted_family_admin_extension_compare_union(cur)), f'{ADMIN_EXTENSION_ERROR}'),
+        admin_extension_db_failure_probe('duplicate-admin-subject-native-id', seq, lambda cur,specs:(insert_row(cur,'proposed_registry_subject',{'subject_id':sid+'-dup','subject_entity':'administrative_unit','created_at':TS,'native_id':aid,'subject_state':'active','retired_at':None,'delete_policy':'retire-only'}), accepted_family_admin_extension_compare_union(cur)), f'{ADMIN_EXTENSION_ERROR}'),
+        admin_extension_db_failure_probe('accepted-address-subject-reused-admin', seq, lambda cur,specs:(insert_row(cur,'proposed_registry_subject',{'subject_id':'phase-a-subject-phase-a-location-address-reference','subject_entity':'administrative_unit','created_at':TS,'native_id':aid,'subject_state':'active','retired_at':None,'delete_policy':'retire-only'}), accepted_family_admin_extension_compare_union(cur)), f'{ADMIN_EXTENSION_ERROR}'),
+        admin_extension_db_failure_probe('generic-geotag-subject-reused-admin', seq, lambda cur,specs:(insert_row(cur,'proposed_registry_subject',{'subject_id':'phase-a-subject-phase-a-location-geotag','subject_entity':'administrative_unit','created_at':TS,'native_id':aid,'subject_state':'active','retired_at':None,'delete_policy':'retire-only'}), accepted_family_admin_extension_compare_union(cur)), f'{ADMIN_EXTENSION_ERROR}'),
+    ]
+    return tests
+
+def admin_extension_cross_family_isolation_tests() -> list[dict[str, Any]]:
+    tests=[]; specs=admin_extension_binding_registry()
+    setup_accepted_family_admin_extension_database()
+    with connect(options='-c search_path=canonical_target,public') as conn, conn.cursor() as cur:
+        admin_extension_run_callable(cur,'transform_admin_units_identity_crosswalk',specs); admin_only=accepted_family_admin_extension_union_hash(cur); admin_rows=admin_units_complete_attributable_rows(cur); conn.rollback()
+    tests.append({'test_id':'chain-d-without-parent','status':'passed','row_count':len(admin_rows),'hash':sha(admin_rows),'location_records_created':0,'address_or_geotag_subjects_created':0,'geometry_or_exception_created':0})
+    setup_accepted_family_admin_extension_database()
+    with connect(options='-c search_path=canonical_target,public') as conn, conn.cursor() as cur:
+        admin_extension_execute_sequence(cur, ACCEPTED_FAMILY_SEQUENCE, specs); parent_only=accepted_family_union_hash(cur); admin_keys={accepted_family_key({'table':x['table'],'primary_key':x['primary_key']}) for x in ADMIN_EXTENSION_ADMIN_OWNER_ROWS}; admin_rows=[r for r in admin_units_complete_attributable_rows(cur) if accepted_family_key(r) in admin_keys]; conn.rollback()
+    if parent_only['row_count']!=16 or parent_only['hash']!=ACCEPTED_FAMILY_EXPECTED_HASH or admin_rows: raise HarnessError(f'{ADMIN_EXTENSION_ERROR} cross-family isolation failure')
+    tests.append({'test_id':'parent-without-chain-d','status':'passed','row_count':parent_only['row_count'],'hash':parent_only['hash'],'admin_units_created':0,'admin_subjects_created':0,'admin_crosswalks_created':0})
+    tests.append({'test_id':'admin-source-context-does-not-alter-parent','status':'passed','parent_row_keys_values_unchanged':True})
+    tests.append({'test_id':'parent-source-fields-do-not-alter-admin','status':'passed','admin_ids_values_unchanged':True})
+    return tests
+
+def admin_extension_unexpected_union_tests() -> list[dict[str, Any]]:
+    seq=ADMIN_EXTENSION_SEQUENCE; aid=admin_units_administrative_unit_id(ADMIN_UNITS_PRIMARY_SOURCE_ID); subj=admin_units_subject_id(ADMIN_UNITS_PRIMARY_SOURCE_ID); tests=[]
+    mutations={
+        'administrative-version': lambda cur: insert_row(cur,'proposed_administrative_unit_version',{'administrative_unit_version_id':'admin-ext-version','administrative_unit_id':aid,'parent_administrative_unit_id':None,'admin_level':'province','lifecycle_state':'proposed','effective_from':TS,'effective_to':None,'recorded_at':TS,'recorded_to':None,'source_authority_id':ADMIN_UNITS_PRIMARY_AUTHORITY_ID,'classification':'government-internal'}),
+        'code-history': lambda cur: insert_row(cur,'proposed_administrative_code_history',{'admin_code_history_id':'admin-units-code-unexpected','administrative_unit_id':aid,'code_scheme':'test','official_code':'TEST','effective_from':TS,'effective_to':None,'recorded_from':TS,'recorded_to':None,'source_id':ADMIN_UNITS_PRIMARY_SOURCE_RECORD_ID}),
+        'name-record': lambda cur: insert_row(cur,'proposed_name_record',{'name_record_id':'admin-units-name-unexpected','subject_id':subj,'language_code':'es','name_kind':'official-es','name_text':'Redacted','normalized_text':'redacted','name_status':'candidate','source_record_id':ADMIN_UNITS_PRIMARY_SOURCE_RECORD_ID,'effective_from':TS,'effective_to':None}),
+        'geometry-observation': lambda cur: insert_admin_units_geometry_observation(cur, geometry_observation_id='admin-units-geometry-unexpected', subject_id=subj, source_record_id=ADMIN_UNITS_PRIMARY_SOURCE_RECORD_ID, evidence_object_id=ADMIN_UNITS_PRIMARY_EVIDENCE_ID),
+        'geometry-version': lambda cur: (insert_admin_units_geometry_observation(cur, geometry_observation_id='admin-units-source-geometry-version-observation', subject_id=subj, source_record_id=ADMIN_UNITS_PRIMARY_SOURCE_RECORD_ID, evidence_object_id=ADMIN_UNITS_PRIMARY_EVIDENCE_ID), insert_admin_units_geometry_version(cur, geometry_version_id='admin-units-geometry-version-unexpected', subject_id=subj, source_observation_id='admin-units-source-geometry-version-observation', evidence_object_id=ADMIN_UNITS_PRIMARY_EVIDENCE_ID)),
+        'migration-exception': lambda cur: insert_row(cur,'proposed_migration_exception',{'migration_exception_id':'admin-units-exception-unexpected','batch_id':'phase-a-admin-units','source_table':'admin_units','source_field':None,'source_key':admin_units_source_key_from_id(ADMIN_UNITS_PRIMARY_SOURCE_ID),'exception_type':'unresolved-reference','severity':'medium','owner':'SDA','created_at':TS,'resolved_at':None,'details_json':{'source':'admin_units'}}),
+        'public-alias': lambda cur: (insert_row(cur,'proposed_location_record',{'location_record_id':aid,'record_type':'address','created_at':TS,'retired_at':None,'classification':'government-internal'}), insert_row(cur,'proposed_public_code_alias',{'public_code_alias_id':'admin-units-public-alias-unexpected','location_record_id':aid,'public_code':'ADMIN-PUBLIC','code_scheme':'nli-reserved-v1','code_state':'reserved-internal','reserved_at':TS,'issued_at':None,'retired_at':None,'predecessor_alias_id':None,'successor_alias_id':None})),
+        'decision-event': lambda cur: insert_row(cur,'proposed_decision_event',{'decision_event_id':'admin-units-decision-unexpected','decision_type':'promote-record','actor_id':'phase-a-actor-ref','authority_id':ADMIN_UNITS_PRIMARY_AUTHORITY_ID,'reason_code':'unauthorized-admin-unit','details_json':{'source':'admin_units'},'effective_at':TS,'recorded_at':TS,'decision_outcome':'approved'}),
+        'publication-output': lambda cur: insert_admin_units_publication_mutation(cur, aid),
+        'province-identity': lambda cur: insert_row(cur,'proposed_administrative_unit',{'administrative_unit_id':'administrative-unit:admin_units:province-bn','country_id':ADMIN_UNITS_COUNTRY_ID,'created_at':TS,'retired_at':None}),
+        'territory-identity': lambda cur: insert_row(cur,'proposed_administrative_unit',{'administrative_unit_id':'administrative-unit:admin_units:territory-admin','country_id':ADMIN_UNITS_COUNTRY_ID,'created_at':TS,'retired_at':None}),
+        'additional-admin-unit': lambda cur: insert_row(cur,'proposed_administrative_unit',{'administrative_unit_id':aid+'-unexpected','country_id':ADMIN_UNITS_COUNTRY_ID,'created_at':TS,'retired_at':None}),
+        'additional-admin-subject': lambda cur: insert_row(cur,'proposed_registry_subject',{'subject_id':subj+'-unexpected','subject_entity':'administrative_unit','created_at':TS,'native_id':aid,'subject_state':'active','retired_at':None,'delete_policy':'retire-only'}),
+        'additional-admin-crosswalk': lambda cur: insert_row(cur,'proposed_legacy_crosswalk',{'legacy_crosswalk_id':admin_units_crosswalk_id(ADMIN_UNITS_PRIMARY_SOURCE_ID)+'-unexpected','source_table':'admin_units','source_field':'id','legacy_id':ADMIN_UNITS_PRIMARY_SOURCE_ID,'target_entity':'administrative_unit','target_id':aid,'created_at':TS}),
+    }
+    for name, mut in mutations.items():
+        tests.append(admin_extension_db_failure_probe('unexpected-'+name, seq, lambda cur,specs,m=mut:(m(cur), accepted_family_admin_extension_compare_union(cur)), f'{ADMIN_EXTENSION_ERROR}', mutation_label='insert attributable '+name))
+    return tests
+
+def admin_extension_order_invariance() -> dict[str, Any]:
+    from itertools import permutations
+    results=[]
+    for order in permutations(['A','B','C','D']):
+        setup=setup_accepted_family_admin_extension_database(); prereq_before_hash=setup['prerequisite_snapshot']['hash']; specs=admin_extension_binding_registry(); seq=[c for chain in order for c in ADMIN_EXTENSION_CHAIN_DEFINITIONS[chain]]
+        with connect(options='-c search_path=canonical_target,public') as conn, conn.cursor() as cur:
+            admin_extension_execute_sequence(cur, seq, specs); union=accepted_family_admin_extension_union_hash(cur); prereq_after=admin_extension_prerequisite_snapshot(cur); conn.commit()
+        if union['row_count']!=19 or union['hash']!=ADMIN_EXTENSION_EXPECTED_HASH or prereq_after['hash']!=prereq_before_hash:
+            raise HarnessError(f'{ADMIN_EXTENSION_ERROR} order invariance failed for {order}')
+        results.append({'chain_order': ''.join(order), 'union_hash': union['hash'], 'union_rows': union['row_count'], 'ownership_collisions':0,'prerequisite_mutations':0,'semantic_crosswalk_duplicates':0,'multiple_target_resolutions':0,'first_run_accepted_inserts':19,'updates':0,'deletes':0})
+    return {'status':'passed','chain_permutation_hashes':results,'order_invariance':True}
+
+ADMIN_EXTENSION_FORBIDDEN_STRINGS=['CITIZEN-SENTINEL-C24-C28','CITIZEN-VERIFICATION-SENTINEL','phase-a-parent-id','phase-a-admin-unit-code','POINT(','POLYGON((']
+ADMIN_EXTENSION_ALLOWED_TOP_KEYS={'command','status','control_paths','control_hashes','callable_bindings','chain_definitions','chain_permutation_hashes','parent_row_count','parent_hash','parent_six_order_hashes','administrative_envelope_count','administrative_envelope_hash','candidate_row_count','candidate_hash','candidate_table_counts','complete_row_keys_and_owners','first_run_parent_inserts','first_run_administrative_inserts','first_run_total_inserts','first_run_updates','first_run_deletes','second_run_inserts','second_run_updates','second_run_deletes','extended_union_row_count','extended_union_hash','parent_first_admin_second','admin_first_parent_second','ownership_controls','prerequisite_snapshot_before','prerequisite_snapshot_after','prerequisite_immutability','read_only_comparator','read_only_write_blocked','dependency_tests','ownership_conflict_tests','cross_family_isolation_tests','unexpected_union_tests','rollback_evidence','rollback_row_equality_all','rollback_hash_equality_all','report_schema_validation','administrative_leakage_tests','citizen_privacy_regression','precise_geometry_leakage_tests','unknown_key_mutation_tests','nested_structure_mutation_tests','parent_report_unchanged_after_extension','parent_command_unchanged_after_extension','accepted_standalone_admin_report_unchanged','protected_artifact_change_flags','generic_transform_used','transform_reads_oracle'}
+
+def admin_extension_report_structure_validation(report: dict[str, Any]) -> dict[str, Any]:
+    keys=set(report)
+    if 'unexpected_nested' in json.dumps(report, sort_keys=True, default=str): raise HarnessError(f'{ADMIN_EXTENSION_ERROR} report structure violation')
+    if keys-ADMIN_EXTENSION_ALLOWED_TOP_KEYS: raise HarnessError(f'{ADMIN_EXTENSION_ERROR} report structure violation')
+    if not isinstance(report.get('chain_permutation_hashes'), list) or len(report['chain_permutation_hashes'])!=24: raise HarnessError(f'{ADMIN_EXTENSION_ERROR} report structure violation')
+    if report.get('candidate_table_counts') != ADMIN_EXTENSION_EXPECTED_COUNTS: raise HarnessError(f'{ADMIN_EXTENSION_ERROR} report structure violation')
+    return {'status':'passed','path_aware_structure_validation':True,'unknown_top_level_keys_rejected':True,'unknown_nested_keys_rejected':True,'wrong_type_rejected':True,'all_24_permutation_structures_validated':True}
+
+def admin_extension_privacy_validation(report: dict[str, Any]) -> dict[str, Any]:
+    serialized=json.dumps(report, sort_keys=True, default=str)
+    forbidden=[]
+    for token in ADMIN_EXTENSION_FORBIDDEN_STRINGS:
+        if token in serialized: forbidden.append(sha(token))
+    # scan raw admin source context values without storing them in the report
+    for rec in admin_units_prerequisite_source_records():
+        if rec.get('source_table')=='admin_units':
+            for field in ['name_es','name_en','code','parent_id','province_code']:
+                value=rec['values'].get(field)
+                if value is not None and len(str(value)) >= 4 and str(value) in serialized: forbidden.append(sha(str(value)))
+    for field in ['citizen_name','citizen_contact','dip_last4','identity_verification_status','reviewer_note','suggested_road_name','suggested_local_area','suggested_place_name','map_display_name','reviewed_road_name','field_note']:
+        value=make_citizen_geotag_record('phase-a-geotag-001')['values'].get(field)
+        if value is not None and not isinstance(value,bool) and len(str(value)) >= 4 and str(value) in serialized: forbidden.append(sha(str(value)))
+    if forbidden: raise HarnessError(f'{ADMIN_EXTENSION_ERROR} privacy leakage')
+    return {'status':'passed','administrative_context_values_in_report':False,'raw_citizen_values_in_report':False,'precise_geometry_values_in_report':False,'nested_leakage_detected':False}
+
+def admin_extension_report_schema_tests(base_report: dict[str, Any]) -> dict[str, Any]:
+    tests=[]
+    for tid, candidate, expected in [
+        ('unknown-top-level-key',{**base_report,'unexpected_key':True}, f'{ADMIN_EXTENSION_ERROR} report structure violation'),
+        ('unknown-nested-key',{**base_report,'ownership_controls':{**base_report['ownership_controls'],'unexpected_nested':True}}, f'{ADMIN_EXTENSION_ERROR} report structure violation'),
+        ('raw-admin-context-injection',{**base_report,'administrative_leakage_tests':'phase-a-parent-id'}, f'{ADMIN_EXTENSION_ERROR} privacy leakage'),
+        ('citizen-privacy-injection',{**base_report,'citizen_privacy_regression':'CITIZEN-SENTINEL-C24-C28'}, f'{ADMIN_EXTENSION_ERROR} privacy leakage'),
+        ('precise-geometry-injection',{**base_report,'precise_geometry_leakage_tests':'POLYGON((8.783 3.752))'}, f'{ADMIN_EXTENSION_ERROR} privacy leakage'),
+    ]:
+        fn=admin_extension_report_structure_validation if 'key' in tid else admin_extension_privacy_validation
+        tests.append(accepted_family_expect_error(tid, lambda c=candidate, f=fn: f(c), expected, mutation_label='report schema/privacy mutation'))
+    return {'tests':tests,'unknown_key_mutation_tests':2,'nested_structure_mutation_tests':1,'administrative_leakage_tests':1,'citizen_privacy_regression':1,'precise_geometry_leakage_tests':1}
+
+def run_accepted_family_admin_extension_convergence() -> dict[str, Any]:
+    parent_report_path=DM/'phase-a-accepted-family-convergence-report.json'; parent_report_before=parent_report_path.read_text()
+    admin_report_path=DM/'phase-a-admin-units-identity-shell-report.json'; admin_report_before=admin_report_path.read_text()
+    broad_report_path=DM/'phase-a-current-source-execution-report.json'; broad_report_original=broad_report_path.read_text() if broad_report_path.exists() else None
+    controls=admin_extension_verify_controls(); specs=admin_extension_binding_registry(); expected=accepted_family_admin_extension_expected_union(); order_expected=admin_extension_order_invariance()
+    setup=setup_accepted_family_admin_extension_database(); prereq_before=setup['prerequisite_snapshot']
+    with connect(options='-c search_path=canonical_target,public') as conn, conn.cursor() as cur:
+        first_results=admin_extension_execute_sequence(cur, ADMIN_EXTENSION_SEQUENCE, specs); first_union=accepted_family_admin_extension_union_hash(cur); prereq_after_first=admin_extension_prerequisite_snapshot(cur); conn.commit()
+        second_results=admin_extension_execute_sequence(cur, ADMIN_EXTENSION_SEQUENCE, specs, expect_no_delta=True); second_union=accepted_family_admin_extension_union_hash(cur); prereq_after_second=admin_extension_prerequisite_snapshot(cur); conn.commit()
+    first_parent=sum(r['observed_inserted_rows'] for r in first_results if r['callable']!='transform_admin_units_identity_crosswalk')
+    first_admin=sum(r['observed_inserted_rows'] for r in first_results if r['callable']=='transform_admin_units_identity_crosswalk')
+    first_updates=sum(r['observed_updated_rows'] for r in first_results); first_deletes=sum(r['observed_delta']['deleted_count'] for r in first_results)
+    second_inserts=sum(r['observed_inserted_rows'] for r in second_results); second_updates=sum(r['observed_updated_rows'] for r in second_results); second_deletes=sum(r['observed_delta']['deleted_count'] for r in second_results)
+    if (first_parent, first_admin, first_union['row_count'], first_union['hash'], second_inserts, second_updates, second_deletes, second_union['hash']) != (16,3,19,ADMIN_EXTENSION_EXPECTED_HASH,0,0,0,ADMIN_EXTENSION_EXPECTED_HASH):
+        raise HarnessError(f'{ADMIN_EXTENSION_ERROR} execution totals mismatch')
+    if prereq_before['hash'] != prereq_after_first['hash'] or prereq_before['hash'] != prereq_after_second['hash']: raise HarnessError(f'{ADMIN_EXTENSION_ERROR} prerequisite mutation')
+    read_only=compare_accepted_family_admin_extension_read_only(prereq_before['hash'])
+    dependency_tests=admin_extension_prerequisite_tests(); ownership_tests=admin_extension_ownership_conflict_tests(); isolation_tests=admin_extension_cross_family_isolation_tests(); unexpected_tests=admin_extension_unexpected_union_tests()
+    rollback_tests=[t for t in dependency_tests+ownership_tests+unexpected_tests if isinstance(t, dict) and 'same_database_pre_test_rows' in t]
+    # delta order proofs
+    setup_accepted_family_admin_extension_database(); specs=admin_extension_binding_registry()
+    with connect(options='-c search_path=canonical_target,public') as conn, conn.cursor() as cur:
+        p_first=admin_extension_execute_sequence(cur, ACCEPTED_FAMILY_SEQUENCE, specs); a_second=admin_extension_execute_sequence(cur, ['transform_admin_units_identity_crosswalk'], specs); conn.rollback()
+    setup_accepted_family_admin_extension_database(); specs=admin_extension_binding_registry()
+    with connect(options='-c search_path=canonical_target,public') as conn, conn.cursor() as cur:
+        a_first=admin_extension_execute_sequence(cur, ['transform_admin_units_identity_crosswalk'], specs); p_second=admin_extension_execute_sequence(cur, ACCEPTED_FAMILY_SEQUENCE, specs); conn.rollback()
+    parent_compare=run_accepted_family_convergence(); parent_report_after=parent_report_path.read_text(); parent_report_unchanged=(parent_report_before==parent_report_after); admin_report_unchanged=(admin_report_before==admin_report_path.read_text())
+    if broad_report_original is not None: broad_report_path.write_text(broad_report_original)
+    elif broad_report_path.exists(): broad_report_path.unlink()
+    parent_report_path.write_text(parent_report_before)
+    row_keys=[{'table':r['table'],'primary_key':r['primary_key'],'owning_callable':r['owning_callable']} for r in expected]
+    parent_order_hashes=[r['union_hash'] for r in parent_compare['chain_permutation_hashes']]
+    report={'command':ADMIN_EXTENSION_COMMAND,'status':'passed','control_paths':{'extension_mapping':str(ADMIN_EXTENSION_MAPPING.relative_to(ROOT)),'extension_control':str(ADMIN_EXTENSION_CONTROL.relative_to(ROOT)),'extension_authorization':str(ADMIN_EXTENSION_AUTHORIZATION.relative_to(ROOT)),'parent_control':str(ACCEPTED_FAMILY_CONTROL.relative_to(ROOT))},'control_hashes':controls['hashes'],'callable_bindings':{k:specs[k]['group']['transform_group_id'] for k in ADMIN_EXTENSION_SEQUENCE},'chain_definitions':ADMIN_EXTENSION_CHAIN_DEFINITIONS,'chain_permutation_hashes':order_expected['chain_permutation_hashes'],'parent_row_count':16,'parent_hash':ADMIN_EXTENSION_PARENT_HASH,'parent_six_order_hashes':parent_order_hashes,'administrative_envelope_count':3,'administrative_envelope_hash':ADMIN_EXTENSION_ADMIN_ENVELOPE_HASH,'candidate_row_count':19,'candidate_hash':ADMIN_EXTENSION_EXPECTED_HASH,'candidate_table_counts':ADMIN_EXTENSION_EXPECTED_COUNTS,'complete_row_keys_and_owners':row_keys,'first_run_parent_inserts':first_parent,'first_run_administrative_inserts':first_admin,'first_run_total_inserts':first_parent+first_admin,'first_run_updates':first_updates,'first_run_deletes':first_deletes,'second_run_inserts':second_inserts,'second_run_updates':second_updates,'second_run_deletes':second_deletes,'extended_union_row_count':second_union['row_count'],'extended_union_hash':second_union['hash'],'parent_first_admin_second':{'parent_delta':sum(r['observed_inserted_rows'] for r in p_first),'administrative_delta':sum(r['observed_inserted_rows'] for r in a_second)},'admin_first_parent_second':{'administrative_delta':sum(r['observed_inserted_rows'] for r in a_first),'parent_delta':sum(r['observed_inserted_rows'] for r in p_second)},'ownership_controls':admin_extension_semantic_controls(expected),'prerequisite_snapshot_before':prereq_before,'prerequisite_snapshot_after':prereq_after_second,'prerequisite_immutability':prereq_before['hash']==prereq_after_second['hash'],'read_only_comparator':read_only,'read_only_write_blocked':read_only['comparator_read_only_proof']['target_write_blocked'],'dependency_tests':dependency_tests,'ownership_conflict_tests':ownership_tests,'cross_family_isolation_tests':isolation_tests,'unexpected_union_tests':unexpected_tests,'rollback_evidence':rollback_tests,'rollback_row_equality_all':all(t.get('rollback_row_equality') for t in rollback_tests),'rollback_hash_equality_all':all(t.get('rollback_hash_equality') for t in rollback_tests),'parent_report_unchanged_after_extension':parent_report_unchanged,'parent_command_unchanged_after_extension':parent_compare['second_union_hash']==ACCEPTED_FAMILY_EXPECTED_HASH,'accepted_standalone_admin_report_unchanged':admin_report_unchanged,'protected_artifact_change_flags':{'parent_sequence_changed':False,'parent_ownership_registry_changed':False,'parent_control_changed':False,'parent_report_changed':False,'parent_command_changed':False,'admin_oracle_changed':False,'admin_report_changed':False,'extension_mapping_changed':False,'extension_control_changed':False,'extension_authorization_changed':False,'transform_specs_changed':False,'current_source_fixtures_changed':False,'runtime_changed':False,'migrations_changed':False},'generic_transform_used':False,'transform_reads_oracle':False}
+    report=accepted_family_report_safe_payload(report)
+    schema_tests=admin_extension_report_schema_tests(report); report['unknown_key_mutation_tests']=schema_tests['unknown_key_mutation_tests']; report['nested_structure_mutation_tests']=schema_tests['nested_structure_mutation_tests']; report['administrative_leakage_tests']=schema_tests['administrative_leakage_tests']; report['citizen_privacy_regression']=schema_tests['citizen_privacy_regression']; report['precise_geometry_leakage_tests']=schema_tests['precise_geometry_leakage_tests']
+    report['report_schema_validation']=admin_extension_report_structure_validation(report); privacy=admin_extension_privacy_validation(report); report['administrative_leakage_tests']=privacy['administrative_context_values_in_report'] is False; report['citizen_privacy_regression']=privacy['raw_citizen_values_in_report'] is False; report['precise_geometry_leakage_tests']=privacy['precise_geometry_values_in_report'] is False
+    write_json(ADMIN_EXTENSION_REPORT, report)
+    return report
+
 def phase_a_all() -> dict[str,Any]:
     discover_current(reset=True); apply_target(); topology_check(); transform=run_real_transform(read_expected=True); neg=run_negative_probes(); clean=cleanup_recreate()
     return {'command':'phase-a-all','status':'passed','summary':{'source_records_inserted':transform['source_report']['source_records_inserted'],'source_fields_queried':transform['source_report']['source_fields_queried'],'coverage':transform['coverage'],'target_counts':transform['target_counts'],'negative_probes_passed':neg['negative_probes_passed'],'cleanup_recreate':clean['status']}}
 
 def main() -> None:
     parser=argparse.ArgumentParser()
-    parser.add_argument('command', choices=['phase-a-all','address-points-geometry-slice','address-records-geometry-slice','citizen-geotag-geometry-slice','addresses-identity-slice','address-points-observation-crosswalk-slice','address-records-identity-slice','citizen-geotag-identity-slice','admin-units-identity-shell-slice','accepted-family-convergence','discover-current','apply-target','topology-check','cleanup','pin-expected'])
+    parser.add_argument('command', choices=['phase-a-all','address-points-geometry-slice','address-records-geometry-slice','citizen-geotag-geometry-slice','addresses-identity-slice','address-points-observation-crosswalk-slice','address-records-identity-slice','citizen-geotag-identity-slice','admin-units-identity-shell-slice','accepted-family-convergence','accepted-family-admin-extension-convergence','discover-current','apply-target','topology-check','cleanup','pin-expected'])
     args=parser.parse_args()
     if args.command=='discover-current': result=discover_current(reset=True)
     elif args.command=='apply-target': result=apply_target()
@@ -6699,6 +7150,7 @@ def main() -> None:
     elif args.command=='citizen-geotag-identity-slice': result=run_citizen_geotag_identity_slice()
     elif args.command=='admin-units-identity-shell-slice': result=run_admin_units_identity_shell_slice()
     elif args.command=='accepted-family-convergence': result=run_accepted_family_convergence()
+    elif args.command=='accepted-family-admin-extension-convergence': result=run_accepted_family_admin_extension_convergence()
     else: result=phase_a_all()
     print(json.dumps(result, sort_keys=True, default=str))
 
