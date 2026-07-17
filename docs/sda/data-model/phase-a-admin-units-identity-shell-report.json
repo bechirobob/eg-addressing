@@ -1,10 +1,22 @@
 {
+  "administrative_unit_attribution_rules": [
+    "expected administrative-unit ID",
+    "administrative-unit IDs reached through attributable crosswalks",
+    "explicit test IDs",
+    "approved source-derived alternates"
+  ],
   "administrative_unit_id": "administrative-unit:admin_units:phase-a-admin-units-id",
   "authority_marker": {
+    "parsed": true,
     "path": "docs/sda/reviews/NLI-WO-002-admin-shell-authority.json",
     "sha256": "afee3006b9da042365de8d1d35a895e5632c69fb26f479ca2242a15f7a986a19"
   },
   "bidirectional_comparison": true,
+  "c41_assessment": {
+    "parsed": true,
+    "path": "docs/sda/reviews/NLI-WO-002-admin-spec-assessment.json",
+    "sha256": "3cf5b6e146e30d3e62111d3e8d940d6b242653ea8317809efe95b7ee37ae6a01"
+  },
   "command": "admin-units-identity-shell-slice",
   "complete_attributable_rows": [
     {
@@ -79,13 +91,61 @@
     "admin_units.updated_at"
   ],
   "context_values_used_as_identity": false,
+  "control_plane_verification": {
+    "authority_marker": {
+      "parsed": true,
+      "path": "docs/sda/reviews/NLI-WO-002-admin-shell-authority.json",
+      "sha256": "afee3006b9da042365de8d1d35a895e5632c69fb26f479ca2242a15f7a986a19"
+    },
+    "c41_assessment": {
+      "parsed": true,
+      "path": "docs/sda/reviews/NLI-WO-002-admin-spec-assessment.json",
+      "sha256": "3cf5b6e146e30d3e62111d3e8d940d6b242653ea8317809efe95b7ee37ae6a01"
+    },
+    "c42_c45_assessment": {
+      "parsed": true,
+      "path": "docs/sda/reviews/NLI-WO-002-admin-shell-assessment.json",
+      "sha256": "9f04e0447779b458f31a09928bef455f5584e2924e5144e69417d8f4f04eed1c"
+    },
+    "corrected_live_spec": {
+      "blob": "763cad920cb398771c983adbbe5d653f332bf6c1",
+      "group_contract_verified": true,
+      "path": "docs/sda/data-model/fixtures/transform-specs/phase-a-transform-specs.json",
+      "sha256": "8e39fbc84108064e2c008cac3468f7a5d82a287baeac5483ac82a8d6b4508dce"
+    },
+    "implementation_authorization": {
+      "parsed": true,
+      "path": "docs/sda/reviews/NLI-WO-002-admin-impl-auth.json",
+      "sha256": "187dae38c3f0f389f093de662c6242d63db0a8722374c71498bb1bb145e2ece1"
+    },
+    "reviewer_oracle": {
+      "parsed": true,
+      "path": "docs/sda/acceptance/NLI-WO-002-phase-a-admin-units-identity-shell-expected.json",
+      "sha256": "96d3c8a70ce995e26e1fa85ed38013c091a56e819a451a8daac257acb9347f84"
+    },
+    "specification_authorization": {
+      "parsed": true,
+      "path": "docs/sda/reviews/NLI-WO-002-admin-spec-auth.json",
+      "sha256": "f8ef3656327097281f4c4e0df0df052076ea7e13ac16e8e638c2471bec9b690b"
+    },
+    "verifier": "admin_units_verify_control_plane"
+  },
+  "control_plane_verifier": "admin_units_verify_control_plane",
   "corrected_live_spec": {
     "blob": "763cad920cb398771c983adbbe5d653f332bf6c1",
+    "group_contract_verified": true,
     "path": "docs/sda/data-model/fixtures/transform-specs/phase-a-transform-specs.json",
     "sha256": "8e39fbc84108064e2c008cac3468f7a5d82a287baeac5483ac82a8d6b4508dce"
   },
   "covered_identity_fields": [
     "admin_units.id"
+  ],
+  "crosswalk_attribution_rules": [
+    "expected crosswalk ID",
+    "queried source tuple",
+    "explicit test-attribution IDs",
+    "approved source-derived test namespaces",
+    "mutated source_table/source_field/legacy_id/target_entity/target_id/crosswalk_id captured through expected ID or source-derived target"
   ],
   "direct_target_persisted_source_record_lineage": false,
   "evidence_classification": "government-internal",
@@ -98,57 +158,57 @@
     {
       "count": 0,
       "table": "proposed_administrative_unit_version",
-      "where": "administrative_unit_id LIKE 'administrative-unit:admin_units:%'"
+      "where": "scoped to queried source identity plus explicit admin_units test-attribution IDs"
     },
     {
       "count": 0,
       "table": "proposed_administrative_code_history",
-      "where": "administrative_unit_id LIKE 'administrative-unit:admin_units:%'"
+      "where": "scoped to queried source identity plus explicit admin_units test-attribution IDs"
     },
     {
       "count": 0,
       "table": "proposed_name_record",
-      "where": "subject_id LIKE 'subject:administrative_unit:administrative-unit:admin_units:%'"
+      "where": "scoped to queried source identity plus explicit admin_units test-attribution IDs"
     },
     {
       "count": 0,
       "table": "proposed_location_record",
-      "where": "location_record_id LIKE 'administrative-unit:admin_units:%'"
+      "where": "scoped to queried source identity plus explicit admin_units test-attribution IDs"
     },
     {
       "count": 0,
       "table": "proposed_geometry_observation",
-      "where": "subject_id LIKE 'subject:administrative_unit:%'"
+      "where": "scoped to queried source identity plus explicit admin_units test-attribution IDs"
     },
     {
       "count": 0,
       "table": "proposed_geometry_version",
-      "where": "subject_id LIKE 'subject:administrative_unit:%'"
+      "where": "scoped to queried source identity plus explicit admin_units test-attribution IDs"
     },
     {
       "count": 0,
       "table": "proposed_decision_event",
-      "where": "decision_event_id LIKE 'admin-units-%'"
+      "where": "scoped to queried source identity plus explicit admin_units test-attribution IDs"
     },
     {
       "count": 0,
       "table": "proposed_migration_exception",
-      "where": "source_table = 'admin_units'"
+      "where": "scoped to queried source identity plus explicit admin_units test-attribution IDs"
     },
     {
       "count": 0,
       "table": "proposed_public_code_alias",
-      "where": "location_record_id LIKE 'administrative-unit:admin_units:%'"
+      "where": "scoped to queried source identity plus explicit admin_units test-attribution IDs"
     },
     {
       "count": 0,
       "table": "proposed_publication_release",
-      "where": "publication_release_id LIKE 'admin-units-%'"
+      "where": "scoped to queried source identity plus explicit admin_units test-attribution IDs"
     },
     {
       "count": 0,
       "table": "proposed_publication_release_item",
-      "where": "publication_release_item_id LIKE 'admin-units-%'"
+      "where": "scoped to queried source identity plus explicit admin_units test-attribution IDs"
     }
   ],
   "first_run_statistics": {
@@ -156,7 +216,12 @@
     "inserts": 3,
     "updates": 0
   },
+  "generic_detector": "admin_units_shared_state_validator generic_transform_used guard",
+  "generic_dispatcher_invoked": true,
+  "generic_manual_expected_error_raise": false,
+  "generic_target_writes_before_rejection": false,
   "generic_transform_used": false,
+  "global_absence_predicates_remaining": false,
   "governance_tests": [
     {
       "detection_executed": true,
@@ -177,6 +242,36 @@
       "observed_error": "administrative identity shell authority marker drift",
       "status": "passed",
       "test_id": "authority-marker-drift"
+    },
+    {
+      "detection_executed": true,
+      "expected_error": "administrative identity shell implementation authorization drift",
+      "mutation": {
+        "implementation_authorization_drift": true
+      },
+      "observed_error": "administrative identity shell implementation authorization drift",
+      "status": "passed",
+      "test_id": "implementation-authorization-drift"
+    },
+    {
+      "detection_executed": true,
+      "expected_error": "administrative identity shell specification authorization drift",
+      "mutation": {
+        "specification_authorization_drift": true
+      },
+      "observed_error": "administrative identity shell specification authorization drift",
+      "status": "passed",
+      "test_id": "specification-authorization-drift"
+    },
+    {
+      "detection_executed": true,
+      "expected_error": "administrative identity shell C41 assessment drift",
+      "mutation": {
+        "c41_assessment_drift": true
+      },
+      "observed_error": "administrative identity shell C41 assessment drift",
+      "status": "passed",
+      "test_id": "c41-assessment-drift"
     },
     {
       "detection_executed": true,
@@ -305,16 +400,19 @@
       "test_id": "unexpected-oracle-access-from-transform"
     }
   ],
-  "governance_tests_passed": 12,
+  "governance_tests_passed": 15,
   "harness_command": "admin-units-identity-shell-slice",
   "implementation_authorization": {
+    "parsed": true,
     "path": "docs/sda/reviews/NLI-WO-002-admin-impl-auth.json",
     "sha256": "187dae38c3f0f389f093de662c6242d63db0a8722374c71498bb1bb145e2ece1"
   },
   "legacy_crosswalk_id": "crosswalk:admin_units:id:phase-a-admin-units-id:to:administrative_unit:administrative-unit:admin_units:phase-a-admin-units-id",
   "lineage_hash_correspondence": true,
   "lineage_model": "admin_units.id tuple -> legacy crosswalk -> administrative-unit target ID -> registry-subject native ID",
+  "manual_governance_expected_error_raises_remaining": false,
   "missing_rows": [],
+  "negative_mutations_use_validator": true,
   "negative_tests": [
     {
       "detection_executed": true,
@@ -831,6 +929,13 @@
     }
   ],
   "negative_tests_passed": 27,
+  "positive_path_invokes_control_plane_verifier": true,
+  "prohibited_output_attribution_rules": [
+    "queried source identity",
+    "attributable administrative-unit IDs",
+    "attributable subject IDs",
+    "explicit admin-units test-attribution IDs; no global admin_units namespace predicates"
+  ],
   "prohibited_output_counts": {
     "proposed_administrative_code_history": 0,
     "proposed_administrative_unit_version": 0,
@@ -848,6 +953,7 @@
     "accepted_family_convergence_changed": false,
     "authority_or_authorization_markers_changed": false,
     "broad_expected_fixture_changed": false,
+    "ci_changed": false,
     "current_source_fixtures_changed": false,
     "deployment_or_publication_code_changed": false,
     "draft_physical_schema_changed": false,
@@ -857,10 +963,22 @@
     "reviewer_oracle_changed": false,
     "runtime_application_code_changed": false
   },
+  "publication_detector": "admin_units_shared_state_validator -> scoped expected absence publication release detector",
+  "publication_manual_expected_error_raise": false,
+  "publication_rollback_equality": true,
+  "publication_row_inserted": true,
   "queried_source_id": "phase-a-admin-units-id",
   "raw_context_values_in_committed_report": false,
+  "read_only_comparator_uses_validator": true,
   "read_only_write_blocked": true,
+  "registry_subject_attribution_rules": [
+    "expected subject ID",
+    "subjects whose native_id is an attributable administrative-unit ID",
+    "explicit accepted-address/geotag reuse IDs",
+    "approved source-derived alternates"
+  ],
   "reviewer_oracle": {
+    "parsed": true,
     "path": "docs/sda/acceptance/NLI-WO-002-phase-a-admin-units-identity-shell-expected.json",
     "sha256": "96d3c8a70ce995e26e1fa85ed38013c091a56e819a451a8daac257acb9347f84"
   },
@@ -1542,6 +1660,7 @@
     "separate_connection": true,
     "transaction_read_only": "on"
   },
+  "shared_state_validator": "admin_units_shared_state_validator",
   "source_authority": "phase-a-authority-conditional-admin-reference",
   "source_classification": "government-internal",
   "source_fields_queried": [
@@ -1561,6 +1680,11 @@
   "source_package": "phase-a-source-package-admin-units",
   "source_query": "SELECT id, level, code, parent_id, province_code, name_es, name_en, status, sort_order, created_at, updated_at FROM current_source.admin_units WHERE id = %s",
   "source_record": "phase-a-source-record-admin-units-001",
+  "specification_authorization": {
+    "parsed": true,
+    "path": "docs/sda/reviews/NLI-WO-002-admin-spec-auth.json",
+    "sha256": "f8ef3656327097281f4c4e0df0df052076ea7e13ac16e8e638c2471bec9b690b"
+  },
   "status": "passed",
   "subject_id": "subject:administrative_unit:administrative-unit:admin_units:phase-a-admin-units-id",
   "target_rows": {
@@ -1607,12 +1731,30 @@
       }
     }
   },
+  "test_only_field_detectors_remaining": false,
   "transform_reads_expected_oracle": false,
   "unexpected_rows": [],
   "unrelated_scope_isolation_test": {
     "attributable_row_count": 3,
+    "bidirectional_comparison": true,
+    "complete_normalized_comparison": true,
+    "expected_absences_passed": true,
+    "primary_hash": "7748ba9691b8d287b76383402959a5c8c2deb0be71c3502bad0bcfb1d080f27c",
+    "primary_row_count": 3,
+    "semantic_controls_passed": true,
     "status": "passed",
     "test_id": "unrelated-scope-isolation",
-    "unrelated_rows_excluded": true
+    "unrelated_rows_excluded": true,
+    "unrelated_rows_inserted": [
+      "administrative_unit",
+      "registry_subject",
+      "legacy_crosswalk",
+      "administrative_version",
+      "code_history",
+      "name",
+      "migration_exception",
+      "decision_event",
+      "publication_release"
+    ]
   }
 }
