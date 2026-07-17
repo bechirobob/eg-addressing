@@ -6,17 +6,39 @@
     "approved source-derived alternates"
   ],
   "administrative_unit_id": "administrative-unit:admin_units:phase-a-admin-units-id",
+  "authority_fields_validated": true,
   "authority_marker": {
+    "fields_validated": [
+      "control_id",
+      "decision",
+      "implementation_authorized",
+      "lineage_model",
+      "official_hierarchy",
+      "owned_rows",
+      "reviewed_head",
+      "source",
+      "subject_model"
+    ],
     "parsed": true,
     "path": "docs/sda/reviews/NLI-WO-002-admin-shell-authority.json",
     "sha256": "afee3006b9da042365de8d1d35a895e5632c69fb26f479ca2242a15f7a986a19"
   },
   "bidirectional_comparison": true,
   "c41_assessment": {
+    "fields_validated": [
+      "decision",
+      "finding",
+      "implementation_authorized",
+      "reviewed_head",
+      "scope",
+      "required.conditional_authority_rfi_status"
+    ],
     "parsed": true,
     "path": "docs/sda/reviews/NLI-WO-002-admin-spec-assessment.json",
     "sha256": "3cf5b6e146e30d3e62111d3e8d940d6b242653ea8317809efe95b7ee37ae6a01"
   },
+  "c41_fields_validated": true,
+  "code_history_source_record_attribution": "administrative_unit_id OR source_id equals queried source record OR explicit primary key",
   "command": "admin-units-identity-shell-slice",
   "complete_attributable_rows": [
     {
@@ -93,11 +115,30 @@
   "context_values_used_as_identity": false,
   "control_plane_verification": {
     "authority_marker": {
+      "fields_validated": [
+        "control_id",
+        "decision",
+        "implementation_authorized",
+        "lineage_model",
+        "official_hierarchy",
+        "owned_rows",
+        "reviewed_head",
+        "source",
+        "subject_model"
+      ],
       "parsed": true,
       "path": "docs/sda/reviews/NLI-WO-002-admin-shell-authority.json",
       "sha256": "afee3006b9da042365de8d1d35a895e5632c69fb26f479ca2242a15f7a986a19"
     },
     "c41_assessment": {
+      "fields_validated": [
+        "decision",
+        "finding",
+        "implementation_authorized",
+        "reviewed_head",
+        "scope",
+        "required.conditional_authority_rfi_status"
+      ],
       "parsed": true,
       "path": "docs/sda/reviews/NLI-WO-002-admin-spec-assessment.json",
       "sha256": "3cf5b6e146e30d3e62111d3e8d940d6b242653ea8317809efe95b7ee37ae6a01"
@@ -114,16 +155,32 @@
       "sha256": "8e39fbc84108064e2c008cac3468f7a5d82a287baeac5483ac82a8d6b4508dce"
     },
     "implementation_authorization": {
+      "fields_validated": [
+        "accepted_family_change",
+        "callable",
+        "decision",
+        "expected_rows",
+        "merge",
+        "reviewed_head"
+      ],
       "parsed": true,
       "path": "docs/sda/reviews/NLI-WO-002-admin-impl-auth.json",
       "sha256": "187dae38c3f0f389f093de662c6242d63db0a8722374c71498bb1bb145e2ece1"
     },
     "reviewer_oracle": {
+      "complete_contract_validated": true,
       "parsed": true,
       "path": "docs/sda/acceptance/NLI-WO-002-phase-a-admin-units-identity-shell-expected.json",
       "sha256": "96d3c8a70ce995e26e1fa85ed38013c091a56e819a451a8daac257acb9347f84"
     },
     "specification_authorization": {
+      "fields_validated": [
+        "action",
+        "control",
+        "group",
+        "implementation",
+        "oracle"
+      ],
       "parsed": true,
       "path": "docs/sda/reviews/NLI-WO-002-admin-spec-auth.json",
       "sha256": "f8ef3656327097281f4c4e0df0df052076ea7e13ac16e8e638c2471bec9b690b"
@@ -221,11 +278,16 @@
   "generic_manual_expected_error_raise": false,
   "generic_target_writes_before_rejection": false,
   "generic_transform_used": false,
+  "geometry_evidence_attribution": "evidence_object_id equals queried evidence object",
+  "geometry_source_record_attribution": "subject_id OR source_record_id equals queried source record OR evidence_object_id equals queried evidence object OR explicit primary key",
+  "geometry_version_observation_attribution": "subject_id OR source_observation_id attributable through source/evidence geometry observation OR explicit primary key",
   "global_absence_predicates_remaining": false,
   "governance_tests": [
     {
       "detection_executed": true,
+      "detector": "admin_units_verify_control_plane",
       "expected_error": "administrative identity shell reviewer oracle hash drift",
+      "manual_expected_error_raise": false,
       "mutation": {
         "oracle_hash_drift": true
       },
@@ -235,7 +297,9 @@
     },
     {
       "detection_executed": true,
+      "detector": "admin_units_verify_control_plane",
       "expected_error": "administrative identity shell authority marker drift",
+      "manual_expected_error_raise": false,
       "mutation": {
         "authority_marker_drift": true
       },
@@ -245,7 +309,9 @@
     },
     {
       "detection_executed": true,
+      "detector": "admin_units_verify_control_plane",
       "expected_error": "administrative identity shell implementation authorization drift",
+      "manual_expected_error_raise": false,
       "mutation": {
         "implementation_authorization_drift": true
       },
@@ -255,7 +321,9 @@
     },
     {
       "detection_executed": true,
+      "detector": "admin_units_verify_control_plane",
       "expected_error": "administrative identity shell specification authorization drift",
+      "manual_expected_error_raise": false,
       "mutation": {
         "specification_authorization_drift": true
       },
@@ -265,7 +333,9 @@
     },
     {
       "detection_executed": true,
+      "detector": "admin_units_verify_control_plane",
       "expected_error": "administrative identity shell C41 assessment drift",
+      "manual_expected_error_raise": false,
       "mutation": {
         "c41_assessment_drift": true
       },
@@ -275,7 +345,9 @@
     },
     {
       "detection_executed": true,
+      "detector": "admin_units_verify_control_plane",
       "expected_error": "administrative identity shell corrected live-spec drift",
+      "manual_expected_error_raise": false,
       "mutation": {
         "corrected_live_spec_drift": true
       },
@@ -285,7 +357,9 @@
     },
     {
       "detection_executed": true,
+      "detector": "reviewed_admin_units_identity_transform_spec",
       "expected_error": "administrative identity shell transform specification binding mismatch",
+      "manual_expected_error_raise": false,
       "mutation": {
         "spec_drift": {
           "implementation_unit": "wrong-impl"
@@ -297,7 +371,9 @@
     },
     {
       "detection_executed": true,
+      "detector": "generic broad dispatcher plus administrative generic guard",
       "expected_error": "administrative identity shell generic transform invocation prohibited",
+      "manual_expected_error_raise": false,
       "mutation": {
         "generic_transform_invocation": true
       },
@@ -307,7 +383,9 @@
     },
     {
       "detection_executed": true,
+      "detector": "reviewed_admin_units_identity_transform_spec",
       "expected_error": "administrative identity shell transform specification binding mismatch",
+      "manual_expected_error_raise": false,
       "mutation": {
         "spec_drift": {
           "covered_source_fields": [
@@ -322,7 +400,9 @@
     },
     {
       "detection_executed": true,
+      "detector": "reviewed_admin_units_identity_transform_spec",
       "expected_error": "administrative identity shell transform specification binding mismatch",
+      "manual_expected_error_raise": false,
       "mutation": {
         "spec_drift": {
           "required_context_fields": [
@@ -336,7 +416,9 @@
     },
     {
       "detection_executed": true,
+      "detector": "reviewed_admin_units_identity_transform_spec",
       "expected_error": "administrative identity shell transform specification binding mismatch",
+      "manual_expected_error_raise": false,
       "mutation": {
         "spec_drift": {
           "conditional_authority_rfi_status": "none"
@@ -348,7 +430,9 @@
     },
     {
       "detection_executed": true,
+      "detector": "reviewed_admin_units_identity_transform_spec",
       "expected_error": "administrative identity shell transform specification binding mismatch",
+      "manual_expected_error_raise": false,
       "mutation": {
         "spec_drift": {
           "conditional_authority_rfi_status": [
@@ -362,7 +446,9 @@
     },
     {
       "detection_executed": true,
+      "detector": "reviewed_admin_units_identity_transform_spec",
       "expected_error": "administrative identity shell transform specification binding mismatch",
+      "manual_expected_error_raise": false,
       "mutation": {
         "spec_drift": {
           "target_entities": [
@@ -377,7 +463,9 @@
     },
     {
       "detection_executed": true,
+      "detector": "reviewed_admin_units_identity_transform_spec",
       "expected_error": "administrative identity shell transform specification binding mismatch",
+      "manual_expected_error_raise": false,
       "mutation": {
         "spec_drift": {
           "target_identity_rule": {
@@ -391,7 +479,9 @@
     },
     {
       "detection_executed": true,
+      "detector": "reviewer-oracle access guard",
       "expected_error": "reviewer-owned admin_units identity-shell oracle access is disabled outside the read-only comparator",
+      "manual_expected_error_raise": false,
       "mutation": {
         "unexpected_oracle_access": true
       },
@@ -400,18 +490,30 @@
       "test_id": "unexpected-oracle-access-from-transform"
     }
   ],
+  "governance_tests_all_name_detector": true,
+  "governance_tests_manual_expected_error_raise_false": true,
   "governance_tests_passed": 15,
   "harness_command": "admin-units-identity-shell-slice",
   "implementation_authorization": {
+    "fields_validated": [
+      "accepted_family_change",
+      "callable",
+      "decision",
+      "expected_rows",
+      "merge",
+      "reviewed_head"
+    ],
     "parsed": true,
     "path": "docs/sda/reviews/NLI-WO-002-admin-impl-auth.json",
     "sha256": "187dae38c3f0f389f093de662c6242d63db0a8722374c71498bb1bb145e2ece1"
   },
+  "implementation_authorization_fields_validated": true,
   "legacy_crosswalk_id": "crosswalk:admin_units:id:phase-a-admin-units-id:to:administrative_unit:administrative-unit:admin_units:phase-a-admin-units-id",
   "lineage_hash_correspondence": true,
   "lineage_model": "admin_units.id tuple -> legacy crosswalk -> administrative-unit target ID -> registry-subject native ID",
   "manual_governance_expected_error_raises_remaining": false,
   "missing_rows": [],
+  "name_source_record_attribution": "subject_id OR source_record_id equals queried source record OR explicit primary key",
   "negative_mutations_use_validator": true,
   "negative_tests": [
     {
@@ -929,11 +1031,15 @@
     }
   ],
   "negative_tests_passed": 27,
+  "oracle_contract_validated": true,
   "positive_path_invokes_control_plane_verifier": true,
   "prohibited_output_attribution_rules": [
     "queried source identity",
+    "queried source record ID",
+    "queried evidence object ID",
     "attributable administrative-unit IDs",
     "attributable subject IDs",
+    "attributable geometry observations",
     "explicit admin-units test-attribution IDs; no global admin_units namespace predicates"
   ],
   "prohibited_output_counts": {
@@ -978,6 +1084,7 @@
     "approved source-derived alternates"
   ],
   "reviewer_oracle": {
+    "complete_contract_validated": true,
     "parsed": true,
     "path": "docs/sda/acceptance/NLI-WO-002-phase-a-admin-units-identity-shell-expected.json",
     "sha256": "96d3c8a70ce995e26e1fa85ed38013c091a56e819a451a8daac257acb9347f84"
@@ -1501,6 +1608,7 @@
   "rollback_hash_equality": true,
   "rollback_proof_count": 27,
   "rollback_row_equality": true,
+  "scope_isolation_uses_true_second_source_lineage": true,
   "second_run_statistics": {
     "deletes": 0,
     "inserts": 0,
@@ -1677,14 +1785,350 @@
     "updated_at"
   ],
   "source_key_derivation": "admin_units:phase-a-admin-units-id",
+  "source_lineage_attribution_tests": [
+    {
+      "detection_executed": true,
+      "detector": "admin_units_shared_state_validator",
+      "expected_error": "administrative identity shell unexpected code-history row",
+      "manual_expected_error_raise": false,
+      "mutation": {
+        "primary_source_unrelated_code_history": true
+      },
+      "observed_error": "administrative identity shell unexpected code-history row",
+      "rollback_equality": true,
+      "rollback_hash_equality": true,
+      "rollback_row_equality": true,
+      "same_database_post_failure_hash": "7748ba9691b8d287b76383402959a5c8c2deb0be71c3502bad0bcfb1d080f27c",
+      "same_database_post_failure_row_count": 3,
+      "same_database_post_failure_rows": [
+        {
+          "primary_key": {
+            "administrative_unit_id": "administrative-unit:admin_units:phase-a-admin-units-id"
+          },
+          "table": "proposed_administrative_unit",
+          "values": {
+            "administrative_unit_id": "administrative-unit:admin_units:phase-a-admin-units-id",
+            "country_id": "phase-a-country-gq",
+            "created_at": "2026-07-15T00:00:00Z",
+            "retired_at": null
+          }
+        },
+        {
+          "primary_key": {
+            "legacy_crosswalk_id": "crosswalk:admin_units:id:phase-a-admin-units-id:to:administrative_unit:administrative-unit:admin_units:phase-a-admin-units-id"
+          },
+          "table": "proposed_legacy_crosswalk",
+          "values": {
+            "created_at": "2026-07-15T00:00:00Z",
+            "legacy_crosswalk_id": "crosswalk:admin_units:id:phase-a-admin-units-id:to:administrative_unit:administrative-unit:admin_units:phase-a-admin-units-id",
+            "legacy_id": "phase-a-admin-units-id",
+            "source_field": "id",
+            "source_table": "admin_units",
+            "target_entity": "administrative_unit",
+            "target_id": "administrative-unit:admin_units:phase-a-admin-units-id"
+          }
+        },
+        {
+          "primary_key": {
+            "subject_id": "subject:administrative_unit:administrative-unit:admin_units:phase-a-admin-units-id"
+          },
+          "table": "proposed_registry_subject",
+          "values": {
+            "created_at": "2026-07-15T00:00:00Z",
+            "delete_policy": "retire-only",
+            "native_id": "administrative-unit:admin_units:phase-a-admin-units-id",
+            "retired_at": null,
+            "subject_entity": "administrative_unit",
+            "subject_id": "subject:administrative_unit:administrative-unit:admin_units:phase-a-admin-units-id",
+            "subject_state": "active"
+          }
+        }
+      ],
+      "same_database_pre_test_hash": "7748ba9691b8d287b76383402959a5c8c2deb0be71c3502bad0bcfb1d080f27c",
+      "same_database_pre_test_row_count": 3,
+      "same_database_pre_test_rows": [
+        {
+          "primary_key": {
+            "administrative_unit_id": "administrative-unit:admin_units:phase-a-admin-units-id"
+          },
+          "table": "proposed_administrative_unit",
+          "values": {
+            "administrative_unit_id": "administrative-unit:admin_units:phase-a-admin-units-id",
+            "country_id": "phase-a-country-gq",
+            "created_at": "2026-07-15T00:00:00Z",
+            "retired_at": null
+          }
+        },
+        {
+          "primary_key": {
+            "legacy_crosswalk_id": "crosswalk:admin_units:id:phase-a-admin-units-id:to:administrative_unit:administrative-unit:admin_units:phase-a-admin-units-id"
+          },
+          "table": "proposed_legacy_crosswalk",
+          "values": {
+            "created_at": "2026-07-15T00:00:00Z",
+            "legacy_crosswalk_id": "crosswalk:admin_units:id:phase-a-admin-units-id:to:administrative_unit:administrative-unit:admin_units:phase-a-admin-units-id",
+            "legacy_id": "phase-a-admin-units-id",
+            "source_field": "id",
+            "source_table": "admin_units",
+            "target_entity": "administrative_unit",
+            "target_id": "administrative-unit:admin_units:phase-a-admin-units-id"
+          }
+        },
+        {
+          "primary_key": {
+            "subject_id": "subject:administrative_unit:administrative-unit:admin_units:phase-a-admin-units-id"
+          },
+          "table": "proposed_registry_subject",
+          "values": {
+            "created_at": "2026-07-15T00:00:00Z",
+            "delete_policy": "retire-only",
+            "native_id": "administrative-unit:admin_units:phase-a-admin-units-id",
+            "retired_at": null,
+            "subject_entity": "administrative_unit",
+            "subject_id": "subject:administrative_unit:administrative-unit:admin_units:phase-a-admin-units-id",
+            "subject_state": "active"
+          }
+        }
+      ],
+      "status": "passed",
+      "test_id": "primary-source-unrelated-code-history"
+    },
+    {
+      "detection_executed": true,
+      "detector": "admin_units_shared_state_validator",
+      "expected_error": "administrative identity shell unexpected name row",
+      "manual_expected_error_raise": false,
+      "mutation": {
+        "primary_source_unrelated_name": true
+      },
+      "observed_error": "administrative identity shell unexpected name row",
+      "rollback_equality": true,
+      "rollback_hash_equality": true,
+      "rollback_row_equality": true,
+      "same_database_post_failure_hash": "7748ba9691b8d287b76383402959a5c8c2deb0be71c3502bad0bcfb1d080f27c",
+      "same_database_post_failure_row_count": 3,
+      "same_database_post_failure_rows": [
+        {
+          "primary_key": {
+            "administrative_unit_id": "administrative-unit:admin_units:phase-a-admin-units-id"
+          },
+          "table": "proposed_administrative_unit",
+          "values": {
+            "administrative_unit_id": "administrative-unit:admin_units:phase-a-admin-units-id",
+            "country_id": "phase-a-country-gq",
+            "created_at": "2026-07-15T00:00:00Z",
+            "retired_at": null
+          }
+        },
+        {
+          "primary_key": {
+            "legacy_crosswalk_id": "crosswalk:admin_units:id:phase-a-admin-units-id:to:administrative_unit:administrative-unit:admin_units:phase-a-admin-units-id"
+          },
+          "table": "proposed_legacy_crosswalk",
+          "values": {
+            "created_at": "2026-07-15T00:00:00Z",
+            "legacy_crosswalk_id": "crosswalk:admin_units:id:phase-a-admin-units-id:to:administrative_unit:administrative-unit:admin_units:phase-a-admin-units-id",
+            "legacy_id": "phase-a-admin-units-id",
+            "source_field": "id",
+            "source_table": "admin_units",
+            "target_entity": "administrative_unit",
+            "target_id": "administrative-unit:admin_units:phase-a-admin-units-id"
+          }
+        },
+        {
+          "primary_key": {
+            "subject_id": "subject:administrative_unit:administrative-unit:admin_units:phase-a-admin-units-id"
+          },
+          "table": "proposed_registry_subject",
+          "values": {
+            "created_at": "2026-07-15T00:00:00Z",
+            "delete_policy": "retire-only",
+            "native_id": "administrative-unit:admin_units:phase-a-admin-units-id",
+            "retired_at": null,
+            "subject_entity": "administrative_unit",
+            "subject_id": "subject:administrative_unit:administrative-unit:admin_units:phase-a-admin-units-id",
+            "subject_state": "active"
+          }
+        }
+      ],
+      "same_database_pre_test_hash": "7748ba9691b8d287b76383402959a5c8c2deb0be71c3502bad0bcfb1d080f27c",
+      "same_database_pre_test_row_count": 3,
+      "same_database_pre_test_rows": [
+        {
+          "primary_key": {
+            "administrative_unit_id": "administrative-unit:admin_units:phase-a-admin-units-id"
+          },
+          "table": "proposed_administrative_unit",
+          "values": {
+            "administrative_unit_id": "administrative-unit:admin_units:phase-a-admin-units-id",
+            "country_id": "phase-a-country-gq",
+            "created_at": "2026-07-15T00:00:00Z",
+            "retired_at": null
+          }
+        },
+        {
+          "primary_key": {
+            "legacy_crosswalk_id": "crosswalk:admin_units:id:phase-a-admin-units-id:to:administrative_unit:administrative-unit:admin_units:phase-a-admin-units-id"
+          },
+          "table": "proposed_legacy_crosswalk",
+          "values": {
+            "created_at": "2026-07-15T00:00:00Z",
+            "legacy_crosswalk_id": "crosswalk:admin_units:id:phase-a-admin-units-id:to:administrative_unit:administrative-unit:admin_units:phase-a-admin-units-id",
+            "legacy_id": "phase-a-admin-units-id",
+            "source_field": "id",
+            "source_table": "admin_units",
+            "target_entity": "administrative_unit",
+            "target_id": "administrative-unit:admin_units:phase-a-admin-units-id"
+          }
+        },
+        {
+          "primary_key": {
+            "subject_id": "subject:administrative_unit:administrative-unit:admin_units:phase-a-admin-units-id"
+          },
+          "table": "proposed_registry_subject",
+          "values": {
+            "created_at": "2026-07-15T00:00:00Z",
+            "delete_policy": "retire-only",
+            "native_id": "administrative-unit:admin_units:phase-a-admin-units-id",
+            "retired_at": null,
+            "subject_entity": "administrative_unit",
+            "subject_id": "subject:administrative_unit:administrative-unit:admin_units:phase-a-admin-units-id",
+            "subject_state": "active"
+          }
+        }
+      ],
+      "status": "passed",
+      "test_id": "primary-source-unrelated-name"
+    },
+    {
+      "detection_executed": true,
+      "detector": "admin_units_shared_state_validator",
+      "expected_error": "administrative identity shell unexpected attributable target row",
+      "manual_expected_error_raise": false,
+      "mutation": {
+        "primary_evidence_unrelated_geometry": true
+      },
+      "observed_error": "administrative identity shell unexpected attributable target row",
+      "rollback_equality": true,
+      "rollback_hash_equality": true,
+      "rollback_row_equality": true,
+      "same_database_post_failure_hash": "7748ba9691b8d287b76383402959a5c8c2deb0be71c3502bad0bcfb1d080f27c",
+      "same_database_post_failure_row_count": 3,
+      "same_database_post_failure_rows": [
+        {
+          "primary_key": {
+            "administrative_unit_id": "administrative-unit:admin_units:phase-a-admin-units-id"
+          },
+          "table": "proposed_administrative_unit",
+          "values": {
+            "administrative_unit_id": "administrative-unit:admin_units:phase-a-admin-units-id",
+            "country_id": "phase-a-country-gq",
+            "created_at": "2026-07-15T00:00:00Z",
+            "retired_at": null
+          }
+        },
+        {
+          "primary_key": {
+            "legacy_crosswalk_id": "crosswalk:admin_units:id:phase-a-admin-units-id:to:administrative_unit:administrative-unit:admin_units:phase-a-admin-units-id"
+          },
+          "table": "proposed_legacy_crosswalk",
+          "values": {
+            "created_at": "2026-07-15T00:00:00Z",
+            "legacy_crosswalk_id": "crosswalk:admin_units:id:phase-a-admin-units-id:to:administrative_unit:administrative-unit:admin_units:phase-a-admin-units-id",
+            "legacy_id": "phase-a-admin-units-id",
+            "source_field": "id",
+            "source_table": "admin_units",
+            "target_entity": "administrative_unit",
+            "target_id": "administrative-unit:admin_units:phase-a-admin-units-id"
+          }
+        },
+        {
+          "primary_key": {
+            "subject_id": "subject:administrative_unit:administrative-unit:admin_units:phase-a-admin-units-id"
+          },
+          "table": "proposed_registry_subject",
+          "values": {
+            "created_at": "2026-07-15T00:00:00Z",
+            "delete_policy": "retire-only",
+            "native_id": "administrative-unit:admin_units:phase-a-admin-units-id",
+            "retired_at": null,
+            "subject_entity": "administrative_unit",
+            "subject_id": "subject:administrative_unit:administrative-unit:admin_units:phase-a-admin-units-id",
+            "subject_state": "active"
+          }
+        }
+      ],
+      "same_database_pre_test_hash": "7748ba9691b8d287b76383402959a5c8c2deb0be71c3502bad0bcfb1d080f27c",
+      "same_database_pre_test_row_count": 3,
+      "same_database_pre_test_rows": [
+        {
+          "primary_key": {
+            "administrative_unit_id": "administrative-unit:admin_units:phase-a-admin-units-id"
+          },
+          "table": "proposed_administrative_unit",
+          "values": {
+            "administrative_unit_id": "administrative-unit:admin_units:phase-a-admin-units-id",
+            "country_id": "phase-a-country-gq",
+            "created_at": "2026-07-15T00:00:00Z",
+            "retired_at": null
+          }
+        },
+        {
+          "primary_key": {
+            "legacy_crosswalk_id": "crosswalk:admin_units:id:phase-a-admin-units-id:to:administrative_unit:administrative-unit:admin_units:phase-a-admin-units-id"
+          },
+          "table": "proposed_legacy_crosswalk",
+          "values": {
+            "created_at": "2026-07-15T00:00:00Z",
+            "legacy_crosswalk_id": "crosswalk:admin_units:id:phase-a-admin-units-id:to:administrative_unit:administrative-unit:admin_units:phase-a-admin-units-id",
+            "legacy_id": "phase-a-admin-units-id",
+            "source_field": "id",
+            "source_table": "admin_units",
+            "target_entity": "administrative_unit",
+            "target_id": "administrative-unit:admin_units:phase-a-admin-units-id"
+          }
+        },
+        {
+          "primary_key": {
+            "subject_id": "subject:administrative_unit:administrative-unit:admin_units:phase-a-admin-units-id"
+          },
+          "table": "proposed_registry_subject",
+          "values": {
+            "created_at": "2026-07-15T00:00:00Z",
+            "delete_policy": "retire-only",
+            "native_id": "administrative-unit:admin_units:phase-a-admin-units-id",
+            "retired_at": null,
+            "subject_entity": "administrative_unit",
+            "subject_id": "subject:administrative_unit:administrative-unit:admin_units:phase-a-admin-units-id",
+            "subject_state": "active"
+          }
+        }
+      ],
+      "status": "passed",
+      "test_id": "primary-evidence-unrelated-geometry"
+    }
+  ],
+  "source_lineage_attribution_tests_passed": 3,
+  "source_lineage_attribution_tests_use_shared_validator": true,
+  "source_lineage_rollback_hash_equality": true,
+  "source_lineage_rollback_proof_count": 3,
+  "source_lineage_rollback_row_equality": true,
   "source_package": "phase-a-source-package-admin-units",
   "source_query": "SELECT id, level, code, parent_id, province_code, name_es, name_en, status, sort_order, created_at, updated_at FROM current_source.admin_units WHERE id = %s",
   "source_record": "phase-a-source-record-admin-units-001",
   "specification_authorization": {
+    "fields_validated": [
+      "action",
+      "control",
+      "group",
+      "implementation",
+      "oracle"
+    ],
     "parsed": true,
     "path": "docs/sda/reviews/NLI-WO-002-admin-spec-auth.json",
     "sha256": "f8ef3656327097281f4c4e0df0df052076ea7e13ac16e8e638c2471bec9b690b"
   },
+  "specification_authorization_fields_validated": true,
   "status": "passed",
   "subject_id": "subject:administrative_unit:administrative-unit:admin_units:phase-a-admin-units-id",
   "target_rows": {
@@ -1738,10 +2182,21 @@
     "attributable_row_count": 3,
     "bidirectional_comparison": true,
     "complete_normalized_comparison": true,
+    "evidence_object": "phase-a-evidence-admin-units-002",
     "expected_absences_passed": true,
     "primary_hash": "7748ba9691b8d287b76383402959a5c8c2deb0be71c3502bad0bcfb1d080f27c",
     "primary_row_count": 3,
+    "rows_use_primary_lineage": false,
+    "second_source_validation_before_prohibited_rows": {
+      "bidirectional_comparison": true,
+      "complete_normalized_comparison": true,
+      "hash": "bd985b13ba3b2f946d84aa921d496134b3995af989890e895acdc500f0d9e60e",
+      "row_count": 3
+    },
     "semantic_controls_passed": true,
+    "source_id": "phase-a-admin-units-002",
+    "source_package": "phase-a-source-package-admin-units-002",
+    "source_record": "phase-a-source-record-admin-units-002",
     "status": "passed",
     "test_id": "unrelated-scope-isolation",
     "unrelated_rows_excluded": true,
@@ -1752,6 +2207,7 @@
       "administrative_version",
       "code_history",
       "name",
+      "geometry_observation",
       "migration_exception",
       "decision_event",
       "publication_release"

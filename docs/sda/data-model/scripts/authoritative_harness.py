@@ -585,7 +585,7 @@ def coverage_from_telemetry(groups: list[dict[str,Any]], telemetry: list[dict[st
     return {'execution_mode':'phase-a-real-transform-telemetry-coverage','reviewed_current_fields':len(reviewed),'executed_field_dispositions':len(set(executed)),'current_pg_catalog_fields':len(catalog),'missing_field_count':len(missing),'missing_fields':missing,'duplicate_conflicting_execution_count':len(duplicate),'duplicate_conflicting_executions':duplicate,'extra_fields':extra,'reviewed_groups':len(reviewed_groups),'executable_implementations_resolved':len(reviewed_groups),'executable_implementations_invoked':len(invoked),'unexecuted_group_count':len(reviewed_groups-invoked),'unexecuted_groups':sorted(reviewed_groups-invoked)}
 
 def adapt_target_insert(col: str, value: Any) -> tuple[str, Any]:
-    if col == 'observed_geom' and isinstance(value, str) and value.startswith('POINT'):
+    if col in {'observed_geom', 'geom'} and isinstance(value, str) and value.startswith(('POINT', 'POLYGON', 'MULTIPOLYGON', 'LINESTRING', 'MULTILINESTRING')):
         return 'ST_SetSRID(ST_GeomFromText(%s),4326)', value
     if isinstance(value, (dict,list)):
         return '%s', Jsonb(value)
@@ -5384,16 +5384,40 @@ def admin_units_verify_control_plane(mutation: dict[str, Any] | None = None) -> 
     c42_sha, c42 = admin_units_load_json_with_override(ADMIN_UNITS_C42_C45_ASSESSMENT, overrides, 'c42_c45_assessment')
     live_sha, live = admin_units_load_json_with_override(ADMIN_UNITS_LIVE_SPEC, overrides, 'live_spec')
 
-    if authority_sha != ADMIN_UNITS_AUTHORITY_MARKER_SHA256 or authority.get('decision') != 'OPTION_A_ORACLE_PREPARATION_AUTHORIZED' or authority.get('lineage_model') != 'L1' or authority.get('subject_model') != 'S1' or authority.get('owned_rows') != 3:
+    authority_expected={'control_id':'NLI-WO-002-PA-ADMIN-ID-SHELL-01','reviewed_head':'68404c0f46245840a1c809b186198831ea7beb1c','decision':'OPTION_A_ORACLE_PREPARATION_AUTHORIZED','source':'admin_units.id:phase-a-admin-units-id','lineage_model':'L1','subject_model':'S1','owned_rows':3,'official_hierarchy':False,'implementation_authorized':False}
+    impl_expected={'reviewed_head':'c0a961333ef292df61cab50d60bb4de9e337a10b','decision':'IMPLEMENT_ONE_ADMIN_IDENTITY_SHELL','callable':ADMIN_UNITS_IDENTITY_FUNCTION,'expected_rows':3,'accepted_family_change':False,'merge':False}
+    spec_auth_expected={'control':'NLI-WO-002-PA-ADMIN-SPEC-01','oracle':'NLI-WO-002-PA-ADMIN-ID-SHELL-EXPECTED-01','group':ADMIN_UNITS_IDENTITY_GROUP_ID,'action':'ONE_LIVE_SPEC_ROW_ONLY','implementation':False}
+    c41_expected={'reviewed_head':'04afd26e1897ca1794f0cdac1dcdd11bbfdc9bf5','decision':'CORRECTION_REQUIRED','finding':'C41','scope':'one live spec field only','implementation_authorized':False}
+    if authority_sha != ADMIN_UNITS_AUTHORITY_MARKER_SHA256 or any(authority.get(k) != v for k,v in authority_expected.items()):
         raise HarnessError('administrative identity shell authority marker drift')
-    if oracle_sha != ADMIN_UNITS_IDENTITY_ORACLE_BASELINE_SHA256 or 'expected_rows' not in oracle:
-        raise HarnessError('administrative identity shell reviewer oracle hash drift')
-    if impl_sha != ADMIN_UNITS_IMPL_AUTH_SHA256 or impl.get('decision') != 'IMPLEMENT_ONE_ADMIN_IDENTITY_SHELL' or impl.get('callable') != ADMIN_UNITS_IDENTITY_FUNCTION or impl.get('expected_rows') != 3:
+    if impl_sha != ADMIN_UNITS_IMPL_AUTH_SHA256 or any(impl.get(k) != v for k,v in impl_expected.items()):
         raise HarnessError('administrative identity shell implementation authorization drift')
-    if spec_auth_sha != ADMIN_UNITS_SPEC_AUTH_SHA256 or spec_auth.get('group') != ADMIN_UNITS_IDENTITY_GROUP_ID:
+    if spec_auth_sha != ADMIN_UNITS_SPEC_AUTH_SHA256 or any(spec_auth.get(k) != v for k,v in spec_auth_expected.items()):
         raise HarnessError('administrative identity shell specification authorization drift')
-    if c41_sha != ADMIN_UNITS_C41_ASSESSMENT_SHA256 or c41.get('finding') != 'C41' or c41.get('required', {}).get('conditional_authority_rfi_status') != ['none']:
+    if c41_sha != ADMIN_UNITS_C41_ASSESSMENT_SHA256 or any(c41.get(k) != v for k,v in c41_expected.items()) or c41.get('required', {}).get('conditional_authority_rfi_status') != ['none']:
         raise HarnessError('administrative identity shell C41 assessment drift')
+    oracle_contract_ok = (
+        oracle_sha == ADMIN_UNITS_IDENTITY_ORACLE_BASELINE_SHA256
+        and oracle.get('control_id') == 'NLI-WO-002-PA-ADMIN-ID-SHELL-EXPECTED-01'
+        and oracle.get('authority_control') == 'docs/sda/reviews/NLI-WO-002-admin-shell-authority.json'
+        and oracle.get('implementation_must_not_modify') is True
+        and oracle.get('transform_group_id') == ADMIN_UNITS_IDENTITY_GROUP_ID
+        and oracle.get('implementation_unit') == ADMIN_UNITS_IDENTITY_IMPL_UNIT
+        and oracle.get('required_callable') == ADMIN_UNITS_IDENTITY_FUNCTION
+        and oracle.get('source_identity', {}).get('source_table') == 'admin_units'
+        and oracle.get('source_identity', {}).get('source_field') == 'id'
+        and oracle.get('source_identity', {}).get('legacy_id') == ADMIN_UNITS_PRIMARY_SOURCE_ID
+        and oracle.get('source_identity', {}).get('source_record_id') == ADMIN_UNITS_PRIMARY_SOURCE_RECORD_ID
+        and oracle.get('source_identity', {}).get('evidence_object_id') == ADMIN_UNITS_PRIMARY_EVIDENCE_ID
+        and oracle.get('controlled_timestamp') == TS
+        and len(oracle.get('expected_rows', [])) == 3
+        and oracle.get('expected_counts') == {'proposed_administrative_unit':1,'proposed_legacy_crosswalk':1,'proposed_registry_subject':1,'total':3}
+        and set(oracle.get('expected_absent_tables', [])) >= {'proposed_administrative_code_history','proposed_name_record','proposed_geometry_observation','proposed_geometry_version'}
+        and oracle.get('proof_requirements', {}).get('read_only_bidirectional_comparison') is True
+        and 'PR #8' in oracle.get('closed_scope', [])
+    )
+    if not oracle_contract_ok:
+        raise HarnessError('administrative identity shell reviewer oracle hash drift')
     if c42_sha != ADMIN_UNITS_C42_C45_ASSESSMENT_SHA256 or c42.get('findings') != ['C42', 'C43', 'C44', 'C45']:
         raise HarnessError('administrative identity shell C42-C45 assessment drift')
     group = next((g for g in live.get('transform_groups', []) if g.get('transform_group_id') == ADMIN_UNITS_IDENTITY_GROUP_ID), None)
@@ -5402,11 +5426,11 @@ def admin_units_verify_control_plane(mutation: dict[str, Any] | None = None) -> 
     reviewed_admin_units_identity_transform_spec({'conditional_authority_rfi_status': group.get('conditional_authority_rfi_status')})
     return {
         'verifier': 'admin_units_verify_control_plane',
-        'authority_marker': {'path': str(ADMIN_UNITS_AUTHORITY_MARKER.relative_to(ROOT)), 'sha256': authority_sha, 'parsed': True},
-        'reviewer_oracle': {'path': str(ADMIN_UNITS_IDENTITY_ORACLE.relative_to(ROOT)), 'sha256': oracle_sha, 'parsed': True},
-        'implementation_authorization': {'path': str(ADMIN_UNITS_IMPL_AUTH.relative_to(ROOT)), 'sha256': impl_sha, 'parsed': True},
-        'specification_authorization': {'path': str(ADMIN_UNITS_SPEC_AUTH.relative_to(ROOT)), 'sha256': spec_auth_sha, 'parsed': True},
-        'c41_assessment': {'path': str(ADMIN_UNITS_SPEC_ASSESSMENT.relative_to(ROOT)), 'sha256': c41_sha, 'parsed': True},
+        'authority_marker': {'path': str(ADMIN_UNITS_AUTHORITY_MARKER.relative_to(ROOT)), 'sha256': authority_sha, 'parsed': True, 'fields_validated': sorted(authority_expected)},
+        'reviewer_oracle': {'path': str(ADMIN_UNITS_IDENTITY_ORACLE.relative_to(ROOT)), 'sha256': oracle_sha, 'parsed': True, 'complete_contract_validated': True},
+        'implementation_authorization': {'path': str(ADMIN_UNITS_IMPL_AUTH.relative_to(ROOT)), 'sha256': impl_sha, 'parsed': True, 'fields_validated': sorted(impl_expected)},
+        'specification_authorization': {'path': str(ADMIN_UNITS_SPEC_AUTH.relative_to(ROOT)), 'sha256': spec_auth_sha, 'parsed': True, 'fields_validated': sorted(spec_auth_expected)},
+        'c41_assessment': {'path': str(ADMIN_UNITS_SPEC_ASSESSMENT.relative_to(ROOT)), 'sha256': c41_sha, 'parsed': True, 'fields_validated': sorted(c41_expected) + ['required.conditional_authority_rfi_status']},
         'c42_c45_assessment': {'path': str(ADMIN_UNITS_C42_C45_ASSESSMENT.relative_to(ROOT)), 'sha256': c42_sha, 'parsed': True},
         'corrected_live_spec': {'path': str(ADMIN_UNITS_LIVE_SPEC.relative_to(ROOT)), 'blob': ADMIN_UNITS_LIVE_SPEC_BLOB, 'sha256': live_sha, 'group_contract_verified': True},
     }
@@ -5415,13 +5439,29 @@ def admin_units_explicit_admin_ids(source_id: str = ADMIN_UNITS_PRIMARY_SOURCE_I
     base = admin_units_administrative_unit_id(source_id)
     return [base, base + '-alternate', base + '-wrong', base + '-unexpected', 'administrative-unit:admin_units:province-bn', 'administrative-unit:admin_units:territory-admin']
 
+def admin_units_lineage_ids(source_id: str = ADMIN_UNITS_PRIMARY_SOURCE_ID) -> dict[str, str]:
+    suffix = source_id.rsplit('-', 1)[-1]
+    return {
+        'source_id': source_id,
+        'source_key': admin_units_source_key_from_id(source_id),
+        'source_record_id': ADMIN_UNITS_PRIMARY_SOURCE_RECORD_ID if source_id == ADMIN_UNITS_PRIMARY_SOURCE_ID else f'phase-a-source-record-admin-units-{suffix}',
+        'source_package_id': ADMIN_UNITS_PRIMARY_PACKAGE_ID if source_id == ADMIN_UNITS_PRIMARY_SOURCE_ID else f'phase-a-source-package-admin-units-{suffix}',
+        'evidence_object_id': ADMIN_UNITS_PRIMARY_EVIDENCE_ID if source_id == ADMIN_UNITS_PRIMARY_SOURCE_ID else f'phase-a-evidence-admin-units-{suffix}',
+    }
+
 def admin_units_complete_attributable_rows(cur, source_id: str = ADMIN_UNITS_PRIMARY_SOURCE_ID, include_source_derived_orphans: bool = True) -> list[dict[str, Any]]:
+    lineage = admin_units_lineage_ids(source_id)
+    source_record_id = lineage['source_record_id']; evidence_object_id = lineage['evidence_object_id']
     expected_admin_id = admin_units_administrative_unit_id(source_id)
     expected_subject_id = admin_units_subject_id(source_id)
     expected_crosswalk_id = admin_units_crosswalk_id(source_id)
     explicit_admin_ids = set(admin_units_explicit_admin_ids(source_id))
+    explicit_code_ids = ['admin-units-code-unexpected','admin-units-source-code-unexpected']
+    explicit_name_ids = ['admin-units-name-unexpected','admin-units-source-name-unexpected']
+    explicit_geometry_observation_ids = ['admin-units-geometry-unexpected','admin-units-source-geometry-unexpected']
+    explicit_geometry_version_ids = ['admin-units-geometry-version-unexpected','admin-units-source-geometry-version-unexpected']
     rows: list[dict[str, Any]] = []
-    cw_sql = """
+    cur.execute("""
         SELECT legacy_crosswalk_id, source_table, source_field, legacy_id, target_entity, target_id, created_at
         FROM canonical_target.proposed_legacy_crosswalk
         WHERE legacy_crosswalk_id = %s
@@ -5431,8 +5471,7 @@ def admin_units_complete_attributable_rows(cur, source_id: str = ADMIN_UNITS_PRI
            OR legacy_id = %s
            OR target_id = ANY(%s)
         ORDER BY legacy_crosswalk_id
-    """
-    cur.execute(cw_sql, (expected_crosswalk_id, expected_crosswalk_id + '%', f'%{source_id}%', source_id, list(explicit_admin_ids)))
+    """, (expected_crosswalk_id, expected_crosswalk_id + '%', f'%{source_id}%', source_id, list(explicit_admin_ids)))
     crosswalks = [dict(r) for r in cur.fetchall()]
     reached_admin_ids = {r['target_id'] for r in crosswalks if r.get('target_entity') == 'administrative_unit'}
     admin_ids = explicit_admin_ids | reached_admin_ids
@@ -5444,26 +5483,26 @@ def admin_units_complete_attributable_rows(cur, source_id: str = ADMIN_UNITS_PRI
     for r in cur.fetchall():
         actual_admin_ids.add(r['administrative_unit_id'])
         rows.append({'table': 'proposed_administrative_unit', 'primary_key': {'administrative_unit_id': r['administrative_unit_id']}, 'values': norm_row(dict(r))})
-    subject_ids = {expected_subject_id, expected_subject_id + '-duplicate', 'phase-a-subject-phase-a-location-address-reference', 'phase-a-subject-phase-a-location-geotag'} | {f'subject:administrative_unit:{x}' for x in actual_admin_ids | reached_admin_ids}
+    subject_ids = {expected_subject_id, expected_subject_id + '-duplicate', 'phase-a-subject-phase-a-location-address-reference', 'phase-a-subject-phase-a-location-geotag', 'subject:administrative_unit:admin-units-source-unrelated'} | {f'subject:administrative_unit:{x}' for x in actual_admin_ids | reached_admin_ids}
     cur.execute("""
         SELECT subject_id, subject_entity, created_at, native_id, subject_state, retired_at, delete_policy
         FROM canonical_target.proposed_registry_subject
         WHERE subject_id = ANY(%s) OR native_id = ANY(%s)
         ORDER BY subject_id
     """, (list(subject_ids), list(actual_admin_ids | reached_admin_ids | explicit_admin_ids)))
+    actual_subject_ids=set()
     for r in cur.fetchall():
+        actual_subject_ids.add(r['subject_id'])
         rows.append({'table': 'proposed_registry_subject', 'primary_key': {'subject_id': r['subject_id']}, 'values': norm_row(dict(r))})
     for cw in crosswalks:
         rows.append({'table': 'proposed_legacy_crosswalk', 'primary_key': {'legacy_crosswalk_id': cw['legacy_crosswalk_id']}, 'values': norm_row(cw)})
-    subject_scope = list(subject_ids)
+    subject_scope = list(subject_ids | actual_subject_ids)
     loc_scope = list(admin_ids | {expected_admin_id + '-unexpected'})
     prohibited_checks = [
         ('proposed_administrative_unit_version', 'administrative_unit_id = ANY(%s)', [list(admin_ids)]),
-        ('proposed_administrative_code_history', 'administrative_unit_id = ANY(%s)', [list(admin_ids)]),
-        ('proposed_name_record', 'subject_id = ANY(%s)', [subject_scope]),
+        ('proposed_administrative_code_history', '(administrative_unit_id = ANY(%s) OR source_id = %s OR admin_code_history_id = ANY(%s))', [list(admin_ids), source_record_id, explicit_code_ids]),
+        ('proposed_name_record', '(subject_id = ANY(%s) OR source_record_id = %s OR name_record_id = ANY(%s))', [subject_scope, source_record_id, explicit_name_ids]),
         ('proposed_location_record', 'location_record_id = ANY(%s)', [loc_scope]),
-        ('proposed_geometry_observation', 'subject_id = ANY(%s)', [[expected_subject_id]]),
-        ('proposed_geometry_version', 'subject_id = ANY(%s)', [[expected_subject_id]]),
         ('proposed_decision_event', "decision_event_id LIKE 'admin-units-%%'", []),
         ('proposed_migration_exception', '(source_key = %s OR migration_exception_id LIKE %s)', [admin_units_source_key_from_id(source_id), 'admin-units-%']),
         ('proposed_public_code_alias', 'location_record_id = ANY(%s)', [loc_scope]),
@@ -5474,6 +5513,29 @@ def admin_units_complete_attributable_rows(cur, source_id: str = ADMIN_UNITS_PRI
         cur.execute(f'SELECT * FROM canonical_target.{table} WHERE {where} ORDER BY 1', params)
         for r in cur.fetchall():
             rows.append({'table': table, 'primary_key': primary_key(dict(r), table), 'values': norm_row(dict(r))})
+    cur.execute("""
+        SELECT geometry_observation_id, ST_AsText(observed_geom) AS observed_geom_wkt, ST_SRID(observed_geom) AS observed_geom_srid,
+               geometry_role, capture_method, horizontal_accuracy_m, source_record_id, evidence_object_id, licence_id,
+               observed_at, recorded_at, classification, subject_id
+        FROM canonical_target.proposed_geometry_observation
+        WHERE subject_id = ANY(%s) OR source_record_id = %s OR evidence_object_id = %s OR geometry_observation_id = ANY(%s)
+        ORDER BY geometry_observation_id
+    """, (subject_scope, source_record_id, evidence_object_id, explicit_geometry_observation_ids))
+    attributable_observation_ids=[]
+    for r in cur.fetchall():
+        d=norm_row(dict(r)); attributable_observation_ids.append(d['geometry_observation_id'])
+        rows.append({'table':'proposed_geometry_observation','primary_key':{'geometry_observation_id':d['geometry_observation_id']},'values':d})
+    cur.execute("""
+        SELECT geometry_version_id, subject_id, geometry_role, ST_AsText(geom) AS geom_wkt, ST_SRID(geom) AS geom_srid,
+               source_observation_id, transformation_id, validation_method, validated_by_actor_id, quality_state,
+               effective_from, effective_to, recorded_at, recorded_to, superseded_by_geometry_version_id, dispute_case_id,
+               classification, promotion_decision_event_id, promotion_evidence_object_id, promotion_authority_scope
+        FROM canonical_target.proposed_geometry_version
+        WHERE subject_id = ANY(%s) OR source_observation_id = ANY(%s) OR geometry_version_id = ANY(%s)
+        ORDER BY geometry_version_id
+    """, (subject_scope, attributable_observation_ids, explicit_geometry_version_ids))
+    for r in cur.fetchall():
+        d=norm_row(dict(r)); rows.append({'table':'proposed_geometry_version','primary_key':{'geometry_version_id':d['geometry_version_id']},'values':d})
     return sorted(rows, key=lambda r: (r['table'], json.dumps(r['primary_key'], sort_keys=True)))
 
 def admin_units_target_slice_hash(cur, source_id: str = ADMIN_UNITS_PRIMARY_SOURCE_ID) -> dict[str, Any]:
@@ -5632,6 +5694,28 @@ def insert_admin_units_negative_mutation_rows(cur, mutation: dict[str, Any]) -> 
     if mutation.get('unexpected_province_identity'): insert_row(cur,'proposed_administrative_unit',{'administrative_unit_id':'administrative-unit:admin_units:province-bn','country_id':ADMIN_UNITS_COUNTRY_ID,'created_at':TS,'retired_at':None})
     if mutation.get('unexpected_territory_identity'): insert_row(cur,'proposed_administrative_unit',{'administrative_unit_id':'administrative-unit:admin_units:territory-admin','country_id':ADMIN_UNITS_COUNTRY_ID,'created_at':TS,'retired_at':None})
     if mutation.get('unexpected_attributable'): insert_row(cur,'proposed_location_record',{'location_record_id':aid+'-unexpected','record_type':'address','created_at':TS,'retired_at':None,'classification':'government-internal'})
+    if mutation.get('primary_source_unrelated_code_history'):
+        unrelated_admin, _ = insert_admin_units_unrelated_identity(cur)
+        insert_row(cur,'proposed_administrative_code_history',{'admin_code_history_id':'admin-units-source-code-unexpected','administrative_unit_id':unrelated_admin,'code_scheme':'test','official_code':'SOURCE-TEST','effective_from':TS,'effective_to':None,'recorded_from':TS,'recorded_to':None,'source_id':ADMIN_UNITS_PRIMARY_SOURCE_RECORD_ID})
+    if mutation.get('primary_source_unrelated_name'):
+        _, unrelated_subject = insert_admin_units_unrelated_identity(cur)
+        insert_row(cur,'proposed_name_record',{'name_record_id':'admin-units-source-name-unexpected','subject_id':unrelated_subject,'language_code':'es','name_kind':'official-es','name_text':'Source Redacted','normalized_text':'source-redacted','name_status':'candidate','source_record_id':ADMIN_UNITS_PRIMARY_SOURCE_RECORD_ID,'effective_from':TS,'effective_to':None})
+    if mutation.get('primary_evidence_unrelated_geometry'):
+        _, unrelated_subject = insert_admin_units_unrelated_identity(cur)
+        insert_admin_units_geometry_observation(cur, geometry_observation_id='admin-units-source-geometry-unexpected', subject_id=unrelated_subject, source_record_id=ADMIN_UNITS_PRIMARY_SOURCE_RECORD_ID, evidence_object_id=ADMIN_UNITS_PRIMARY_EVIDENCE_ID)
+
+def insert_admin_units_unrelated_identity(cur, admin_id: str = 'administrative-unit:admin_units:source-unrelated', subject_id: str = 'subject:administrative_unit:admin-units-source-unrelated') -> tuple[str, str]:
+    insert_row(cur,'proposed_administrative_unit',{'administrative_unit_id':admin_id,'country_id':ADMIN_UNITS_COUNTRY_ID,'created_at':TS,'retired_at':None})
+    insert_row(cur,'proposed_registry_subject',{'subject_id':subject_id,'subject_entity':'administrative_unit','created_at':TS,'native_id':admin_id,'subject_state':'active','retired_at':None,'delete_policy':'retire-only'})
+    return admin_id, subject_id
+
+def insert_admin_units_geometry_observation(cur, *, geometry_observation_id: str, subject_id: str, source_record_id: str, evidence_object_id: str) -> None:
+    insert_row(cur,'proposed_geometry_observation',{'geometry_observation_id':geometry_observation_id,'observed_geom':'POLYGON((8.783 3.752,8.784 3.752,8.784 3.753,8.783 3.753,8.783 3.752))','geometry_role':'admin-boundary','capture_method':'derived-from-source','horizontal_accuracy_m':None,'source_record_id':source_record_id,'evidence_object_id':evidence_object_id,'licence_id':None,'observed_at':TS,'recorded_at':TS,'classification':'restricted','subject_id':subject_id})
+
+def insert_admin_units_geometry_version(cur, *, geometry_version_id: str, subject_id: str, source_observation_id: str, evidence_object_id: str) -> None:
+    decision_id = geometry_version_id + '-decision'
+    insert_row(cur,'proposed_decision_event',{'decision_event_id':decision_id,'decision_type':'promote-record','actor_id':'phase-a-actor-ref','authority_id':ADMIN_UNITS_PRIMARY_AUTHORITY_ID,'reason_code':'unauthorized-admin-unit','details_json':{'source':'admin_units'},'effective_at':TS,'recorded_at':TS,'decision_outcome':'approved'})
+    insert_row(cur,'proposed_geometry_version',{'geometry_version_id':geometry_version_id,'subject_id':subject_id,'geometry_role':'admin-boundary','geom':'POLYGON((8.783 3.752,8.784 3.752,8.784 3.753,8.783 3.753,8.783 3.752))','source_observation_id':source_observation_id,'transformation_id':None,'validation_method':'manual-review','validated_by_actor_id':'phase-a-actor-ref','quality_state':'candidate','effective_from':TS,'effective_to':None,'recorded_at':TS,'recorded_to':None,'superseded_by_geometry_version_id':None,'dispute_case_id':None,'classification':'restricted','promotion_decision_event_id':decision_id,'promotion_evidence_object_id':evidence_object_id,'promotion_authority_scope':'admin-units-test'})
 
 def admin_units_expected_error_check(cur, mutation: dict[str, Any]) -> None:
     sid=ADMIN_UNITS_PRIMARY_SOURCE_ID
@@ -5666,22 +5750,23 @@ def admin_units_generic_dispatcher_probe() -> dict[str, Any]:
     raise HarnessError('administrative identity shell generic transform invocation probe did not reject')
 
 def run_admin_units_governance_test(test_id: str, expected_error: str, mutation: dict[str, Any]) -> dict[str, Any]:
+    detector = 'reviewed_admin_units_identity_transform_spec'
     try:
         if any(mutation.get(k) for k in ('oracle_hash_drift','authority_marker_drift','implementation_authorization_drift','specification_authorization_drift','c41_assessment_drift','corrected_live_spec_drift')):
-            admin_units_verify_control_plane(mutation)
+            detector='admin_units_verify_control_plane'; admin_units_verify_control_plane(mutation)
         elif mutation.get('generic_transform_invocation'):
-            admin_units_generic_dispatcher_probe()
+            detector='generic broad dispatcher plus administrative generic guard'; admin_units_generic_dispatcher_probe()
         elif mutation.get('unexpected_oracle_access'):
             setup_admin_units_identity_database()
             with connect(options='-c search_path=canonical_target,public') as conn, conn.cursor() as cur:
-                prepare_admin_units_identity_state(cur); transform_admin_units_identity_crosswalk(cur, mutation={'unexpected_oracle_access':True})
+                detector='reviewer-oracle access guard'; prepare_admin_units_identity_state(cur); transform_admin_units_identity_crosswalk(cur, mutation={'unexpected_oracle_access':True})
         else:
             reviewed_admin_units_identity_transform_spec(mutation.get('spec_drift'))
         raise HarnessError(f'{test_id} unexpectedly passed')
     except Exception as exc:
         observed=str(exc)
         if expected_error not in observed: raise HarnessError(f'{test_id} failed for wrong reason: expected {expected_error!r}, got {observed!r}')
-        return {'test_id':test_id,'mutation':mutation,'expected_error':expected_error,'observed_error':observed,'detection_executed':True,'status':'passed'}
+        return {'test_id':test_id,'mutation':mutation,'expected_error':expected_error,'observed_error':observed,'detection_executed':True,'detector':detector,'manual_expected_error_raise':False,'status':'passed'}
 
 def run_admin_units_second_source_identity_test() -> dict[str, Any]:
     setup_admin_units_identity_database(); first_id=ADMIN_UNITS_PRIMARY_SOURCE_ID; second_id='phase-a-admin-units-002'; records=admin_units_prerequisite_source_records(first_id) + [make_admin_units_record(second_id)]
@@ -5696,32 +5781,60 @@ def run_admin_units_second_source_identity_test() -> dict[str, Any]:
     if not all(checks.values()): raise HarnessError(f'administrative identity shell second-source proof failed: {checks}')
     return {'test_id':'second-source-identity','status':'passed','checks':checks,'source_identities':source_count,'administrative_units':admin_count,'active_registry_subjects':subj_count,'crosswalks':cw_count,'semantic_duplicates':0,'multiple_target_resolutions':0,'versions':0,'names':0,'code_history_rows':0,'exceptions':0,'publication_outputs':0,'first_rows':first_rows,'second_rows':second_rows,'first_transform_lineage':first['lineage'],'second_transform_lineage':second['lineage']}
 
+def run_admin_units_source_lineage_attribution_test(test_id: str, expected_error: str, mutation: dict[str, Any]) -> dict[str, Any]:
+    setup_admin_units_identity_database()
+    with connect(options='-c search_path=canonical_target,public') as conn, conn.cursor() as cur:
+        prepare_admin_units_identity_state(cur); transform_admin_units_identity_crosswalk(cur); conn.commit(); before=admin_units_target_slice_hash(cur); cur.execute('BEGIN')
+        try:
+            insert_admin_units_negative_mutation_rows(cur, mutation)
+            admin_units_shared_state_validator(cur, source_id=ADMIN_UNITS_PRIMARY_SOURCE_ID)
+            raise HarnessError(f'{test_id} unexpectedly passed')
+        except Exception as exc:
+            observed=str(exc)
+            if expected_error not in observed:
+                conn.rollback(); raise HarnessError(f'{test_id} failed for wrong reason: expected {expected_error!r}, got {observed!r}')
+            conn.rollback(); after=admin_units_target_slice_hash(cur)
+            if before != after: raise HarnessError(f'source-lineage rollback proof failed for {test_id}: before={before["hash"]} after={after["hash"]}')
+            return {'test_id':test_id,'mutation':mutation,'expected_error':expected_error,'observed_error':observed,'detection_executed':True,'detector':'admin_units_shared_state_validator','manual_expected_error_raise':False,'same_database_pre_test_rows':before['rows'],'same_database_pre_test_row_count':before['row_count'],'same_database_pre_test_hash':before['hash'],'same_database_post_failure_rows':after['rows'],'same_database_post_failure_row_count':after['row_count'],'same_database_post_failure_hash':after['hash'],'rollback_row_equality':before['rows']==after['rows'],'rollback_hash_equality':before['hash']==after['hash'],'rollback_equality':True,'status':'passed'}
+
+def run_admin_units_source_lineage_attribution_tests() -> list[dict[str, Any]]:
+    specs=[
+        ('primary-source-unrelated-code-history','administrative identity shell unexpected code-history row',{'primary_source_unrelated_code_history':True}),
+        ('primary-source-unrelated-name','administrative identity shell unexpected name row',{'primary_source_unrelated_name':True}),
+        ('primary-evidence-unrelated-geometry','administrative identity shell unexpected attributable target row',{'primary_evidence_unrelated_geometry':True}),
+    ]
+    return [run_admin_units_source_lineage_attribution_test(tid, err, mut) for tid,err,mut in specs]
+
 def admin_units_scope_isolation_test() -> dict[str, Any]:
     setup_admin_units_identity_database()
+    primary_id=ADMIN_UNITS_PRIMARY_SOURCE_ID; second_id='phase-a-admin-units-002'; second_lineage=admin_units_lineage_ids(second_id)
     with admin_units_identity_oracle_access(True):
-        expected=expected_admin_units_identity_rows(load_admin_units_identity_oracle())
+        primary_expected=expected_admin_units_identity_rows(load_admin_units_identity_oracle())
     with connect(options='-c search_path=canonical_target,public') as conn, conn.cursor() as cur:
-        prepare_admin_units_identity_state(cur); transform_admin_units_identity_crosswalk(cur)
-        insert_row(cur,'proposed_administrative_unit',{'administrative_unit_id':'administrative-unit:unrelated','country_id':ADMIN_UNITS_COUNTRY_ID,'created_at':TS,'retired_at':None})
-        insert_row(cur,'proposed_registry_subject',{'subject_id':'subject:administrative_unit:administrative-unit:unrelated','subject_entity':'administrative_unit','created_at':TS,'native_id':'administrative-unit:unrelated','subject_state':'active','retired_at':None,'delete_policy':'retire-only'})
-        insert_row(cur,'proposed_legacy_crosswalk',{'legacy_crosswalk_id':'crosswalk:unrelated:id:unrelated:to:administrative_unit:administrative-unit:unrelated','source_table':'unrelated','source_field':'id','legacy_id':'unrelated','target_entity':'administrative_unit','target_id':'administrative-unit:unrelated','created_at':TS})
-        insert_row(cur,'proposed_administrative_unit_version',{'administrative_unit_version_id':'unrelated-version','administrative_unit_id':'administrative-unit:unrelated','parent_administrative_unit_id':None,'admin_level':'province','lifecycle_state':'proposed','effective_from':TS,'effective_to':None,'recorded_at':TS,'recorded_to':None,'source_authority_id':ADMIN_UNITS_PRIMARY_AUTHORITY_ID,'classification':'government-internal'})
-        insert_row(cur,'proposed_administrative_code_history',{'admin_code_history_id':'unrelated-code','administrative_unit_id':'administrative-unit:unrelated','code_scheme':'test','official_code':'UNRELATED','effective_from':TS,'effective_to':None,'recorded_from':TS,'recorded_to':None,'source_id':ADMIN_UNITS_PRIMARY_SOURCE_RECORD_ID})
-        insert_row(cur,'proposed_name_record',{'name_record_id':'unrelated-name','subject_id':'subject:administrative_unit:administrative-unit:unrelated','language_code':'es','name_kind':'official-es','name_text':'Unrelated','normalized_text':'unrelated','name_status':'candidate','source_record_id':ADMIN_UNITS_PRIMARY_SOURCE_RECORD_ID,'effective_from':TS,'effective_to':None})
-        insert_row(cur,'proposed_migration_exception',{'migration_exception_id':'unrelated-exception','batch_id':'unrelated','source_table':'unrelated','source_field':None,'source_key':'unrelated:key','exception_type':'unresolved-reference','severity':'medium','owner':'SDA','created_at':TS,'resolved_at':None,'details_json':{'source':'unrelated'}})
-        insert_row(cur,'proposed_decision_event',{'decision_event_id':'unrelated-decision','decision_type':'promote-record','actor_id':'phase-a-actor-ref','authority_id':ADMIN_UNITS_PRIMARY_AUTHORITY_ID,'reason_code':'unauthorized-admin-unit','details_json':{'source':'unrelated'},'effective_at':TS,'recorded_at':TS,'decision_outcome':'approved'})
-        insert_row(cur,'proposed_publication_release',{'publication_release_id':'unrelated-publication','release_state':'approved','authority_reference':ADMIN_UNITS_PRIMARY_AUTHORITY_ID,'projection_type':'public-lookup','effective_at':TS,'recorded_at':TS,'immutable_manifest_hash':'unrelated','manifest_storage_uri':'phase-a://publication/unrelated','created_by_actor_id':'phase-a-actor-ref'})
+        records=admin_units_prerequisite_source_records(primary_id) + [make_admin_units_record(second_id)]
+        insert_current_fixture_rows(cur, records); insert_admin_units_lineage_preconditions(cur, records)
+        spec=reviewed_admin_units_identity_transform_spec(); transform_admin_units_identity_crosswalk(cur, source_id=primary_id, spec_validation=spec); transform_admin_units_identity_crosswalk(cur, source_id=second_id, spec_validation=spec)
+        second_expected=[r for r in admin_units_complete_attributable_rows(cur, second_id, False) if r['table'] in {'proposed_administrative_unit','proposed_registry_subject','proposed_legacy_crosswalk'}]
+        second_validation_before=admin_units_shared_state_validator(cur, source_id=second_id, expected_rows=second_expected)
+        second_admin=admin_units_administrative_unit_id(second_id); second_subject=admin_units_subject_id(second_id); second_source_record=second_lineage['source_record_id']; second_evidence=second_lineage['evidence_object_id']
+        insert_row(cur,'proposed_administrative_unit_version',{'administrative_unit_version_id':'second-admin-units-version','administrative_unit_id':second_admin,'parent_administrative_unit_id':None,'admin_level':'province','lifecycle_state':'proposed','effective_from':TS,'effective_to':None,'recorded_at':TS,'recorded_to':None,'source_authority_id':ADMIN_UNITS_PRIMARY_AUTHORITY_ID,'classification':'government-internal'})
+        insert_row(cur,'proposed_administrative_code_history',{'admin_code_history_id':'second-admin-units-code','administrative_unit_id':second_admin,'code_scheme':'test','official_code':'SECOND','effective_from':TS,'effective_to':None,'recorded_from':TS,'recorded_to':None,'source_id':second_source_record})
+        insert_row(cur,'proposed_name_record',{'name_record_id':'second-admin-units-name','subject_id':second_subject,'language_code':'es','name_kind':'official-es','name_text':'Second Redacted','normalized_text':'second-redacted','name_status':'candidate','source_record_id':second_source_record,'effective_from':TS,'effective_to':None})
+        insert_admin_units_geometry_observation(cur, geometry_observation_id='second-admin-units-geometry', subject_id=second_subject, source_record_id=second_source_record, evidence_object_id=second_evidence)
+        insert_row(cur,'proposed_migration_exception',{'migration_exception_id':'second-admin-units-exception','batch_id':'second-admin-units','source_table':'admin_units','source_field':None,'source_key':admin_units_source_key_from_id(second_id),'exception_type':'unresolved-reference','severity':'medium','owner':'SDA','created_at':TS,'resolved_at':None,'details_json':{'source':'admin_units'}})
+        insert_row(cur,'proposed_decision_event',{'decision_event_id':'second-admin-units-decision','decision_type':'promote-record','actor_id':'phase-a-actor-ref','authority_id':ADMIN_UNITS_PRIMARY_AUTHORITY_ID,'reason_code':'unauthorized-admin-unit','details_json':{'source':'admin_units'},'effective_at':TS,'recorded_at':TS,'decision_outcome':'approved'})
+        insert_row(cur,'proposed_publication_release',{'publication_release_id':'second-admin-units-publication','release_state':'approved','authority_reference':ADMIN_UNITS_PRIMARY_AUTHORITY_ID,'projection_type':'public-lookup','effective_at':TS,'recorded_at':TS,'immutable_manifest_hash':'second-admin-units','manifest_storage_uri':'phase-a://publication/second-admin-units','created_by_actor_id':'phase-a-actor-ref'})
         conn.commit()
     with connect() as conn, conn.cursor() as cur:
-        validation=admin_units_shared_state_validator(cur, expected_rows=expected)
-    rows=validation['attributable_union']['rows']; excluded=not any('unrelated' in json.dumps(r, sort_keys=True) for r in rows)
+        primary_validation=admin_units_shared_state_validator(cur, source_id=primary_id, expected_rows=primary_expected)
+    rows=primary_validation['attributable_union']['rows']; excluded=not any('phase-a-admin-units-002' in json.dumps(r, sort_keys=True) or 'second-admin-units' in json.dumps(r, sort_keys=True) for r in rows)
     if not excluded: raise HarnessError('administrative identity shell unrelated scope isolation failed')
-    return {'test_id':'unrelated-scope-isolation','status':'passed','unrelated_rows_excluded':True,'unrelated_rows_inserted':['administrative_unit','registry_subject','legacy_crosswalk','administrative_version','code_history','name','migration_exception','decision_event','publication_release'],'bidirectional_comparison':validation['bidirectional_comparison'],'complete_normalized_comparison':validation['complete_normalized_comparison'],'semantic_controls_passed':True,'expected_absences_passed':True,'primary_row_count':validation['attributable_union']['row_count'],'primary_hash':validation['attributable_union']['hash'],'attributable_row_count':validation['attributable_union']['row_count']}
+    return {'test_id':'unrelated-scope-isolation','status':'passed','source_id':second_id,'source_record':second_source_record,'source_package':second_lineage['source_package_id'],'evidence_object':second_evidence,'rows_use_primary_lineage':False,'second_source_validation_before_prohibited_rows':{'bidirectional_comparison':second_validation_before['bidirectional_comparison'],'complete_normalized_comparison':second_validation_before['complete_normalized_comparison'],'row_count':second_validation_before['attributable_union']['row_count'],'hash':second_validation_before['attributable_union']['hash']},'unrelated_rows_excluded':True,'unrelated_rows_inserted':['administrative_unit','registry_subject','legacy_crosswalk','administrative_version','code_history','name','geometry_observation','migration_exception','decision_event','publication_release'],'bidirectional_comparison':primary_validation['bidirectional_comparison'],'complete_normalized_comparison':primary_validation['complete_normalized_comparison'],'semantic_controls_passed':True,'expected_absences_passed':True,'primary_row_count':primary_validation['attributable_union']['row_count'],'primary_hash':primary_validation['attributable_union']['hash'],'attributable_row_count':primary_validation['attributable_union']['row_count']}
 
 def run_admin_units_identity_shell_slice() -> dict[str, Any]:
     broad_report_path=DM/'phase-a-current-source-execution-report.json'; broad_report_original=broad_report_path.read_text() if broad_report_path.exists() else None
     control_plane=admin_units_verify_control_plane()
-    setup_admin_units_identity_database(); positive=run_admin_units_identity_slice_once(compare_expected=True); second_source=run_admin_units_second_source_identity_test(); scope_isolation=admin_units_scope_isolation_test()
+    setup_admin_units_identity_database(); positive=run_admin_units_identity_slice_once(compare_expected=True); second_source=run_admin_units_second_source_identity_test(); source_lineage_tests=run_admin_units_source_lineage_attribution_tests(); scope_isolation=admin_units_scope_isolation_test()
     negative_tests=[run_admin_units_identity_negative_probe(pid, reason, mutation) for pid, reason, mutation in ADMIN_UNITS_NEGATIVE_ERRORS]
     gov_specs=[
         ('reviewer-oracle-hash-drift','administrative identity shell reviewer oracle hash drift',{'oracle_hash_drift':True}),
@@ -5740,7 +5853,7 @@ def run_admin_units_identity_shell_slice() -> dict[str, Any]:
         ('target-identity-rule-drift','administrative identity shell transform specification binding mismatch',{'spec_drift':{'target_identity_rule':{'primary_fixture':{}}}}),
         ('unexpected-oracle-access-from-transform','reviewer-owned admin_units identity-shell oracle access is disabled outside the read-only comparator',{'unexpected_oracle_access':True})]
     governance_tests=[run_admin_units_governance_test(tid, reason, mutation) for tid, reason, mutation in gov_specs]
-    comparison=positive['comparison']; transform=positive['transform']; rows=comparison['actual_rows_detail']; admin_row=next(r for r in rows if r['table']=='proposed_administrative_unit'); subj_row=next(r for r in rows if r['table']=='proposed_registry_subject'); cw_row=next(r for r in rows if r['table']=='proposed_legacy_crosswalk'); rollback_tests=[t for t in negative_tests if 'same_database_pre_test_hash' in t]
+    comparison=positive['comparison']; transform=positive['transform']; rows=comparison['actual_rows_detail']; admin_row=next(r for r in rows if r['table']=='proposed_administrative_unit'); subj_row=next(r for r in rows if r['table']=='proposed_registry_subject'); cw_row=next(r for r in rows if r['table']=='proposed_legacy_crosswalk'); rollback_tests=[t for t in negative_tests if 'same_database_pre_test_hash' in t]; source_lineage_rollback_tests=[t for t in source_lineage_tests if 'same_database_pre_test_hash' in t]
     report={
         'command':'admin-units-identity-shell-slice','status':'passed','control_plane_verifier':'admin_units_verify_control_plane','control_plane_verification':control_plane,'positive_path_invokes_control_plane_verifier':True,
         'authority_marker':control_plane['authority_marker'],'reviewer_oracle':control_plane['reviewer_oracle'],'implementation_authorization':control_plane['implementation_authorization'],'specification_authorization':control_plane['specification_authorization'],'c41_assessment':control_plane['c41_assessment'],'corrected_live_spec':control_plane['corrected_live_spec'],
@@ -5754,14 +5867,20 @@ def run_admin_units_identity_shell_slice() -> dict[str, Any]:
         'crosswalk_attribution_rules':['expected crosswalk ID','queried source tuple','explicit test-attribution IDs','approved source-derived test namespaces','mutated source_table/source_field/legacy_id/target_entity/target_id/crosswalk_id captured through expected ID or source-derived target'],
         'administrative_unit_attribution_rules':['expected administrative-unit ID','administrative-unit IDs reached through attributable crosswalks','explicit test IDs','approved source-derived alternates'],
         'registry_subject_attribution_rules':['expected subject ID','subjects whose native_id is an attributable administrative-unit ID','explicit accepted-address/geotag reuse IDs','approved source-derived alternates'],
-        'prohibited_output_attribution_rules':['queried source identity','attributable administrative-unit IDs','attributable subject IDs','explicit admin-units test-attribution IDs; no global admin_units namespace predicates'],
+        'prohibited_output_attribution_rules':['queried source identity','queried source record ID','queried evidence object ID','attributable administrative-unit IDs','attributable subject IDs','attributable geometry observations','explicit admin-units test-attribution IDs; no global admin_units namespace predicates'],
+        'code_history_source_record_attribution':'administrative_unit_id OR source_id equals queried source record OR explicit primary key',
+        'name_source_record_attribution':'subject_id OR source_record_id equals queried source record OR explicit primary key',
+        'geometry_source_record_attribution':'subject_id OR source_record_id equals queried source record OR evidence_object_id equals queried evidence object OR explicit primary key',
+        'geometry_evidence_attribution':'evidence_object_id equals queried evidence object',
+        'geometry_version_observation_attribution':'subject_id OR source_observation_id attributable through source/evidence geometry observation OR explicit primary key',
         'global_absence_predicates_remaining':False,
         'separate_read_only_comparator':comparison['comparator_connection'],'read_only_write_blocked':comparison['comparator_read_only_proof']['target_write_blocked'],'bidirectional_comparison':comparison['bidirectional_comparison'],'complete_normalized_comparison':comparison['complete_normalized_comparison'],
-        'second_source_proof':second_source,'unrelated_scope_isolation_test':scope_isolation,
+        'second_source_proof':second_source,'source_lineage_attribution_tests':source_lineage_tests,'source_lineage_attribution_tests_passed':len(source_lineage_tests),'source_lineage_attribution_tests_use_shared_validator':all(t['detector']=='admin_units_shared_state_validator' for t in source_lineage_tests),'source_lineage_rollback_proof_count':len(source_lineage_rollback_tests),'source_lineage_rollback_row_equality':all(t['rollback_row_equality'] for t in source_lineage_rollback_tests),'source_lineage_rollback_hash_equality':all(t['rollback_hash_equality'] for t in source_lineage_rollback_tests),'unrelated_scope_isolation_test':scope_isolation,'scope_isolation_uses_true_second_source_lineage':scope_isolation['rows_use_primary_lineage'] is False,
         'negative_tests':negative_tests,'governance_tests':governance_tests,'negative_tests_passed':len(negative_tests),'governance_tests_passed':len(governance_tests),'rollback_evidence':rollback_tests,'rollback_proof_count':len(rollback_tests),'rollback_row_equality':all(t['rollback_row_equality'] for t in rollback_tests),'rollback_hash_equality':all(t['rollback_hash_equality'] for t in rollback_tests),'rollback_equality':all(t['rollback_equality'] for t in rollback_tests),
         'generic_dispatcher_invoked':True,'generic_target_writes_before_rejection':False,'generic_detector':'admin_units_shared_state_validator generic_transform_used guard','generic_manual_expected_error_raise':False,
         'publication_row_inserted':True,'publication_detector':'admin_units_shared_state_validator -> scoped expected absence publication release detector','publication_manual_expected_error_raise':False,'publication_rollback_equality':next(t['rollback_equality'] for t in negative_tests if t['test_id']=='unauthorized-publication-row'),
-        'manual_governance_expected_error_raises_remaining':False,
+        'manual_governance_expected_error_raises_remaining':False,'governance_tests_all_name_detector':all(bool(t.get('detector')) for t in governance_tests),'governance_tests_manual_expected_error_raise_false':all(t.get('manual_expected_error_raise') is False for t in governance_tests),
+        'authority_fields_validated':True,'implementation_authorization_fields_validated':True,'specification_authorization_fields_validated':True,'c41_fields_validated':True,'oracle_contract_validated':True,
         'protected_artifact_change_flags':{'phase_a_transform_specs_changed':False,'frozen_broad_spec_changed':False,'broad_expected_fixture_changed':False,'reviewer_oracle_changed':False,'authority_or_authorization_markers_changed':False,'accepted_family_convergence_changed':False,'current_source_fixtures_changed':False,'draft_physical_schema_changed':False,'runtime_application_code_changed':False,'executable_migrations_changed':False,'deployment_or_publication_code_changed':False,'ci_changed':False},
         'prohibited_output_counts':{r['table']:r['count'] for r in comparison['expected_absence_results']},'raw_context_values_in_committed_report':False}
     write_json(DM/'phase-a-admin-units-identity-shell-report.json', report)
