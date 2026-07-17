@@ -1,0 +1,1618 @@
+{
+  "administrative_unit_id": "administrative-unit:admin_units:phase-a-admin-units-id",
+  "authority_marker": {
+    "path": "docs/sda/reviews/NLI-WO-002-admin-shell-authority.json",
+    "sha256": "afee3006b9da042365de8d1d35a895e5632c69fb26f479ca2242a15f7a986a19"
+  },
+  "bidirectional_comparison": true,
+  "command": "admin-units-identity-shell-slice",
+  "complete_attributable_rows": [
+    {
+      "primary_key": {
+        "administrative_unit_id": "administrative-unit:admin_units:phase-a-admin-units-id"
+      },
+      "table": "proposed_administrative_unit",
+      "values": {
+        "administrative_unit_id": "administrative-unit:admin_units:phase-a-admin-units-id",
+        "country_id": "phase-a-country-gq",
+        "created_at": "2026-07-15T00:00:00Z",
+        "retired_at": null
+      }
+    },
+    {
+      "primary_key": {
+        "legacy_crosswalk_id": "crosswalk:admin_units:id:phase-a-admin-units-id:to:administrative_unit:administrative-unit:admin_units:phase-a-admin-units-id"
+      },
+      "table": "proposed_legacy_crosswalk",
+      "values": {
+        "created_at": "2026-07-15T00:00:00Z",
+        "legacy_crosswalk_id": "crosswalk:admin_units:id:phase-a-admin-units-id:to:administrative_unit:administrative-unit:admin_units:phase-a-admin-units-id",
+        "legacy_id": "phase-a-admin-units-id",
+        "source_field": "id",
+        "source_table": "admin_units",
+        "target_entity": "administrative_unit",
+        "target_id": "administrative-unit:admin_units:phase-a-admin-units-id"
+      }
+    },
+    {
+      "primary_key": {
+        "subject_id": "subject:administrative_unit:administrative-unit:admin_units:phase-a-admin-units-id"
+      },
+      "table": "proposed_registry_subject",
+      "values": {
+        "created_at": "2026-07-15T00:00:00Z",
+        "delete_policy": "retire-only",
+        "native_id": "administrative-unit:admin_units:phase-a-admin-units-id",
+        "retired_at": null,
+        "subject_entity": "administrative_unit",
+        "subject_id": "subject:administrative_unit:administrative-unit:admin_units:phase-a-admin-units-id",
+        "subject_state": "active"
+      }
+    }
+  ],
+  "complete_attributable_union_hash": "7748ba9691b8d287b76383402959a5c8c2deb0be71c3502bad0bcfb1d080f27c",
+  "complete_attributable_union_row_count": 3,
+  "complete_normalized_comparison": true,
+  "consumed_field_names": [
+    "admin_units.id",
+    "admin_units.level",
+    "admin_units.code",
+    "admin_units.parent_id",
+    "admin_units.province_code",
+    "admin_units.name_es",
+    "admin_units.name_en",
+    "admin_units.status",
+    "admin_units.sort_order",
+    "admin_units.created_at",
+    "admin_units.updated_at"
+  ],
+  "context_fields": [
+    "admin_units.level",
+    "admin_units.code",
+    "admin_units.parent_id",
+    "admin_units.province_code",
+    "admin_units.name_es",
+    "admin_units.name_en",
+    "admin_units.status",
+    "admin_units.sort_order",
+    "admin_units.created_at",
+    "admin_units.updated_at"
+  ],
+  "context_values_used_as_identity": false,
+  "corrected_live_spec": {
+    "blob": "763cad920cb398771c983adbbe5d653f332bf6c1",
+    "path": "docs/sda/data-model/fixtures/transform-specs/phase-a-transform-specs.json",
+    "sha256": "8e39fbc84108064e2c008cac3468f7a5d82a287baeac5483ac82a8d6b4508dce"
+  },
+  "covered_identity_fields": [
+    "admin_units.id"
+  ],
+  "direct_target_persisted_source_record_lineage": false,
+  "evidence_classification": "government-internal",
+  "evidence_object": "phase-a-evidence-admin-units",
+  "exact_function": "transform_admin_units_identity_crosswalk",
+  "exact_registry_binding": {
+    "impl_wo002_r06_identity_crosswalk_admin_units": "transform_admin_units_identity_crosswalk"
+  },
+  "expected_absence_results": [
+    {
+      "count": 0,
+      "table": "proposed_administrative_unit_version",
+      "where": "administrative_unit_id LIKE 'administrative-unit:admin_units:%'"
+    },
+    {
+      "count": 0,
+      "table": "proposed_administrative_code_history",
+      "where": "administrative_unit_id LIKE 'administrative-unit:admin_units:%'"
+    },
+    {
+      "count": 0,
+      "table": "proposed_name_record",
+      "where": "subject_id LIKE 'subject:administrative_unit:administrative-unit:admin_units:%'"
+    },
+    {
+      "count": 0,
+      "table": "proposed_location_record",
+      "where": "location_record_id LIKE 'administrative-unit:admin_units:%'"
+    },
+    {
+      "count": 0,
+      "table": "proposed_geometry_observation",
+      "where": "subject_id LIKE 'subject:administrative_unit:%'"
+    },
+    {
+      "count": 0,
+      "table": "proposed_geometry_version",
+      "where": "subject_id LIKE 'subject:administrative_unit:%'"
+    },
+    {
+      "count": 0,
+      "table": "proposed_decision_event",
+      "where": "decision_event_id LIKE 'admin-units-%'"
+    },
+    {
+      "count": 0,
+      "table": "proposed_migration_exception",
+      "where": "source_table = 'admin_units'"
+    },
+    {
+      "count": 0,
+      "table": "proposed_public_code_alias",
+      "where": "location_record_id LIKE 'administrative-unit:admin_units:%'"
+    },
+    {
+      "count": 0,
+      "table": "proposed_publication_release",
+      "where": "publication_release_id LIKE 'admin-units-%'"
+    },
+    {
+      "count": 0,
+      "table": "proposed_publication_release_item",
+      "where": "publication_release_item_id LIKE 'admin-units-%'"
+    }
+  ],
+  "first_run_statistics": {
+    "deletes": 0,
+    "inserts": 3,
+    "updates": 0
+  },
+  "generic_transform_used": false,
+  "governance_tests": [
+    {
+      "detection_executed": true,
+      "expected_error": "administrative identity shell reviewer oracle hash drift",
+      "mutation": {
+        "oracle_hash_drift": true
+      },
+      "observed_error": "administrative identity shell reviewer oracle hash drift",
+      "status": "passed",
+      "test_id": "reviewer-oracle-hash-drift"
+    },
+    {
+      "detection_executed": true,
+      "expected_error": "administrative identity shell authority marker drift",
+      "mutation": {
+        "authority_marker_drift": true
+      },
+      "observed_error": "administrative identity shell authority marker drift",
+      "status": "passed",
+      "test_id": "authority-marker-drift"
+    },
+    {
+      "detection_executed": true,
+      "expected_error": "administrative identity shell corrected live-spec drift",
+      "mutation": {
+        "corrected_live_spec_drift": true
+      },
+      "observed_error": "administrative identity shell corrected live-spec drift",
+      "status": "passed",
+      "test_id": "corrected-live-spec-drift"
+    },
+    {
+      "detection_executed": true,
+      "expected_error": "administrative identity shell transform specification binding mismatch",
+      "mutation": {
+        "spec_drift": {
+          "implementation_unit": "wrong-impl"
+        }
+      },
+      "observed_error": "administrative identity shell transform specification binding mismatch: {'transform_group_id': True, 'implementation_unit': False, 'required_future_callable': True, 'source_table': True, 'source_record_key': True, 'idempotency_key': True, 'covered_source_fields': True, 'required_context_fields': True, 'identity_rule': True, 'dispositions': True, 'exception_behavior': True, 'conditional_authority_rfi_status': True, 'authority_resolution': True, 'target_entities': True, 'target_fields': True, 'target_identity_rule': True, 'callable_binding': False, 'no_scalar_conditional_status': True, 'no_formal_exception': True, 'no_migration_exception_target': True, 'parent_id_not_covered': True}",
+      "status": "passed",
+      "test_id": "callable-binding-drift"
+    },
+    {
+      "detection_executed": true,
+      "expected_error": "administrative identity shell generic transform invocation prohibited",
+      "mutation": {
+        "generic_transform_invocation": true
+      },
+      "observed_error": "administrative identity shell generic transform invocation prohibited",
+      "status": "passed",
+      "test_id": "generic-transform-invocation"
+    },
+    {
+      "detection_executed": true,
+      "expected_error": "administrative identity shell transform specification binding mismatch",
+      "mutation": {
+        "spec_drift": {
+          "covered_source_fields": [
+            "admin_units.id",
+            "admin_units.parent_id"
+          ]
+        }
+      },
+      "observed_error": "administrative identity shell transform specification binding mismatch: {'transform_group_id': True, 'implementation_unit': True, 'required_future_callable': True, 'source_table': True, 'source_record_key': True, 'idempotency_key': True, 'covered_source_fields': False, 'required_context_fields': True, 'identity_rule': True, 'dispositions': True, 'exception_behavior': True, 'conditional_authority_rfi_status': True, 'authority_resolution': True, 'target_entities': True, 'target_fields': True, 'target_identity_rule': True, 'callable_binding': True, 'no_scalar_conditional_status': True, 'no_formal_exception': True, 'no_migration_exception_target': True, 'parent_id_not_covered': False}",
+      "status": "passed",
+      "test_id": "covered-field-drift"
+    },
+    {
+      "detection_executed": true,
+      "expected_error": "administrative identity shell transform specification binding mismatch",
+      "mutation": {
+        "spec_drift": {
+          "required_context_fields": [
+            "admin_units.level"
+          ]
+        }
+      },
+      "observed_error": "administrative identity shell transform specification binding mismatch: {'transform_group_id': True, 'implementation_unit': True, 'required_future_callable': True, 'source_table': True, 'source_record_key': True, 'idempotency_key': True, 'covered_source_fields': True, 'required_context_fields': False, 'identity_rule': True, 'dispositions': True, 'exception_behavior': True, 'conditional_authority_rfi_status': True, 'authority_resolution': True, 'target_entities': True, 'target_fields': True, 'target_identity_rule': True, 'callable_binding': True, 'no_scalar_conditional_status': True, 'no_formal_exception': True, 'no_migration_exception_target': True, 'parent_id_not_covered': True}",
+      "status": "passed",
+      "test_id": "context-field-drift"
+    },
+    {
+      "detection_executed": true,
+      "expected_error": "administrative identity shell transform specification binding mismatch",
+      "mutation": {
+        "spec_drift": {
+          "conditional_authority_rfi_status": "none"
+        }
+      },
+      "observed_error": "administrative identity shell transform specification binding mismatch: {'transform_group_id': True, 'implementation_unit': True, 'required_future_callable': True, 'source_table': True, 'source_record_key': True, 'idempotency_key': True, 'covered_source_fields': True, 'required_context_fields': True, 'identity_rule': True, 'dispositions': True, 'exception_behavior': True, 'conditional_authority_rfi_status': False, 'authority_resolution': True, 'target_entities': True, 'target_fields': True, 'target_identity_rule': True, 'callable_binding': True, 'no_scalar_conditional_status': False, 'no_formal_exception': True, 'no_migration_exception_target': True, 'parent_id_not_covered': True}",
+      "status": "passed",
+      "test_id": "conditional-authority-status-type-drift"
+    },
+    {
+      "detection_executed": true,
+      "expected_error": "administrative identity shell transform specification binding mismatch",
+      "mutation": {
+        "spec_drift": {
+          "conditional_authority_rfi_status": [
+            "authority-rfi"
+          ]
+        }
+      },
+      "observed_error": "administrative identity shell transform specification binding mismatch: {'transform_group_id': True, 'implementation_unit': True, 'required_future_callable': True, 'source_table': True, 'source_record_key': True, 'idempotency_key': True, 'covered_source_fields': True, 'required_context_fields': True, 'identity_rule': True, 'dispositions': True, 'exception_behavior': True, 'conditional_authority_rfi_status': False, 'authority_resolution': True, 'target_entities': True, 'target_fields': True, 'target_identity_rule': True, 'callable_binding': True, 'no_scalar_conditional_status': True, 'no_formal_exception': True, 'no_migration_exception_target': True, 'parent_id_not_covered': True}",
+      "status": "passed",
+      "test_id": "conditional-authority-status-value-drift"
+    },
+    {
+      "detection_executed": true,
+      "expected_error": "administrative identity shell transform specification binding mismatch",
+      "mutation": {
+        "spec_drift": {
+          "target_entities": [
+            "legacy_crosswalk",
+            "migration_exception"
+          ]
+        }
+      },
+      "observed_error": "administrative identity shell transform specification binding mismatch: {'transform_group_id': True, 'implementation_unit': True, 'required_future_callable': True, 'source_table': True, 'source_record_key': True, 'idempotency_key': True, 'covered_source_fields': True, 'required_context_fields': True, 'identity_rule': True, 'dispositions': True, 'exception_behavior': True, 'conditional_authority_rfi_status': True, 'authority_resolution': True, 'target_entities': False, 'target_fields': True, 'target_identity_rule': True, 'callable_binding': True, 'no_scalar_conditional_status': True, 'no_formal_exception': True, 'no_migration_exception_target': False, 'parent_id_not_covered': True}",
+      "status": "passed",
+      "test_id": "target-entity-drift"
+    },
+    {
+      "detection_executed": true,
+      "expected_error": "administrative identity shell transform specification binding mismatch",
+      "mutation": {
+        "spec_drift": {
+          "target_identity_rule": {
+            "primary_fixture": {}
+          }
+        }
+      },
+      "observed_error": "administrative identity shell transform specification binding mismatch: {'transform_group_id': True, 'implementation_unit': True, 'required_future_callable': True, 'source_table': True, 'source_record_key': True, 'idempotency_key': True, 'covered_source_fields': True, 'required_context_fields': True, 'identity_rule': True, 'dispositions': True, 'exception_behavior': True, 'conditional_authority_rfi_status': True, 'authority_resolution': True, 'target_entities': True, 'target_fields': True, 'target_identity_rule': False, 'callable_binding': True, 'no_scalar_conditional_status': True, 'no_formal_exception': True, 'no_migration_exception_target': True, 'parent_id_not_covered': True}",
+      "status": "passed",
+      "test_id": "target-identity-rule-drift"
+    },
+    {
+      "detection_executed": true,
+      "expected_error": "reviewer-owned admin_units identity-shell oracle access is disabled outside the read-only comparator",
+      "mutation": {
+        "unexpected_oracle_access": true
+      },
+      "observed_error": "reviewer-owned admin_units identity-shell oracle access is disabled outside the read-only comparator",
+      "status": "passed",
+      "test_id": "unexpected-oracle-access-from-transform"
+    }
+  ],
+  "governance_tests_passed": 12,
+  "harness_command": "admin-units-identity-shell-slice",
+  "implementation_authorization": {
+    "path": "docs/sda/reviews/NLI-WO-002-admin-impl-auth.json",
+    "sha256": "187dae38c3f0f389f093de662c6242d63db0a8722374c71498bb1bb145e2ece1"
+  },
+  "legacy_crosswalk_id": "crosswalk:admin_units:id:phase-a-admin-units-id:to:administrative_unit:administrative-unit:admin_units:phase-a-admin-units-id",
+  "lineage_hash_correspondence": true,
+  "lineage_model": "admin_units.id tuple -> legacy crosswalk -> administrative-unit target ID -> registry-subject native ID",
+  "missing_rows": [],
+  "negative_tests": [
+    {
+      "detection_executed": true,
+      "expected_error": "administrative identity shell missing country prerequisite",
+      "mutation": {
+        "missing_country": true
+      },
+      "observed_error": "administrative identity shell missing country prerequisite",
+      "rollback_equality": true,
+      "rollback_hash_equality": true,
+      "rollback_row_equality": true,
+      "same_database_post_failure_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_post_failure_row_count": 0,
+      "same_database_post_failure_rows": [],
+      "same_database_pre_test_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_pre_test_row_count": 0,
+      "same_database_pre_test_rows": [],
+      "status": "passed",
+      "test_id": "missing-country-prerequisite"
+    },
+    {
+      "detection_executed": true,
+      "expected_error": "administrative identity shell missing reviewed source record",
+      "mutation": {
+        "missing_source_record": true
+      },
+      "observed_error": "administrative identity shell missing reviewed source record",
+      "rollback_equality": true,
+      "rollback_hash_equality": true,
+      "rollback_row_equality": true,
+      "same_database_post_failure_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_post_failure_row_count": 0,
+      "same_database_post_failure_rows": [],
+      "same_database_pre_test_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_pre_test_row_count": 0,
+      "same_database_pre_test_rows": [],
+      "status": "passed",
+      "test_id": "missing-reviewed-source-record"
+    },
+    {
+      "detection_executed": true,
+      "expected_error": "administrative identity shell wrong source package",
+      "mutation": {
+        "wrong_source_package": true
+      },
+      "observed_error": "administrative identity shell wrong source package",
+      "rollback_equality": true,
+      "rollback_hash_equality": true,
+      "rollback_row_equality": true,
+      "same_database_post_failure_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_post_failure_row_count": 0,
+      "same_database_post_failure_rows": [],
+      "same_database_pre_test_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_pre_test_row_count": 0,
+      "same_database_pre_test_rows": [],
+      "status": "passed",
+      "test_id": "wrong-source-package"
+    },
+    {
+      "detection_executed": true,
+      "expected_error": "administrative identity shell wrong source authority",
+      "mutation": {
+        "wrong_source_authority": true
+      },
+      "observed_error": "administrative identity shell wrong source authority",
+      "rollback_equality": true,
+      "rollback_hash_equality": true,
+      "rollback_row_equality": true,
+      "same_database_post_failure_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_post_failure_row_count": 0,
+      "same_database_post_failure_rows": [],
+      "same_database_pre_test_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_pre_test_row_count": 0,
+      "same_database_pre_test_rows": [],
+      "status": "passed",
+      "test_id": "wrong-source-authority"
+    },
+    {
+      "detection_executed": true,
+      "expected_error": "administrative identity shell wrong evidence object",
+      "mutation": {
+        "wrong_evidence_object": true
+      },
+      "observed_error": "administrative identity shell wrong evidence object",
+      "rollback_equality": true,
+      "rollback_hash_equality": true,
+      "rollback_row_equality": true,
+      "same_database_post_failure_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_post_failure_row_count": 0,
+      "same_database_post_failure_rows": [],
+      "same_database_pre_test_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_pre_test_row_count": 0,
+      "same_database_pre_test_rows": [],
+      "status": "passed",
+      "test_id": "wrong-evidence-object"
+    },
+    {
+      "detection_executed": true,
+      "expected_error": "administrative identity shell classification drift",
+      "mutation": {
+        "classification_drift": true
+      },
+      "observed_error": "administrative identity shell classification drift",
+      "rollback_equality": true,
+      "rollback_hash_equality": true,
+      "rollback_row_equality": true,
+      "same_database_post_failure_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_post_failure_row_count": 0,
+      "same_database_post_failure_rows": [],
+      "same_database_pre_test_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_pre_test_row_count": 0,
+      "same_database_pre_test_rows": [],
+      "status": "passed",
+      "test_id": "classification-drift"
+    },
+    {
+      "detection_executed": true,
+      "expected_error": "administrative identity shell wrong source table",
+      "mutation": {
+        "wrong_source_table": true
+      },
+      "observed_error": "administrative identity shell wrong source table",
+      "rollback_equality": true,
+      "rollback_hash_equality": true,
+      "rollback_row_equality": true,
+      "same_database_post_failure_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_post_failure_row_count": 0,
+      "same_database_post_failure_rows": [],
+      "same_database_pre_test_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_pre_test_row_count": 0,
+      "same_database_pre_test_rows": [],
+      "status": "passed",
+      "test_id": "wrong-source-table"
+    },
+    {
+      "detection_executed": true,
+      "expected_error": "administrative identity shell wrong source field",
+      "mutation": {
+        "wrong_source_field": true
+      },
+      "observed_error": "administrative identity shell wrong source field",
+      "rollback_equality": true,
+      "rollback_hash_equality": true,
+      "rollback_row_equality": true,
+      "same_database_post_failure_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_post_failure_row_count": 0,
+      "same_database_post_failure_rows": [],
+      "same_database_pre_test_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_pre_test_row_count": 0,
+      "same_database_pre_test_rows": [],
+      "status": "passed",
+      "test_id": "wrong-source-field"
+    },
+    {
+      "detection_executed": true,
+      "expected_error": "administrative identity shell wrong legacy ID",
+      "mutation": {
+        "wrong_legacy_id": true
+      },
+      "observed_error": "administrative identity shell wrong legacy ID",
+      "rollback_equality": true,
+      "rollback_hash_equality": true,
+      "rollback_row_equality": true,
+      "same_database_post_failure_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_post_failure_row_count": 0,
+      "same_database_post_failure_rows": [],
+      "same_database_pre_test_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_pre_test_row_count": 0,
+      "same_database_pre_test_rows": [],
+      "status": "passed",
+      "test_id": "wrong-legacy-id"
+    },
+    {
+      "detection_executed": true,
+      "expected_error": "administrative identity shell one source ID resolving to multiple targets",
+      "mutation": {
+        "multiple_targets": true
+      },
+      "observed_error": "administrative identity shell one source ID resolving to multiple targets",
+      "rollback_equality": true,
+      "rollback_hash_equality": true,
+      "rollback_row_equality": true,
+      "same_database_post_failure_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_post_failure_row_count": 0,
+      "same_database_post_failure_rows": [],
+      "same_database_pre_test_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_pre_test_row_count": 0,
+      "same_database_pre_test_rows": [],
+      "status": "passed",
+      "test_id": "one-source-multiple-targets"
+    },
+    {
+      "detection_executed": true,
+      "expected_error": "administrative identity shell duplicate administrative identity",
+      "mutation": {
+        "duplicate_admin_identity": true
+      },
+      "observed_error": "administrative identity shell duplicate administrative identity",
+      "rollback_equality": true,
+      "rollback_hash_equality": true,
+      "rollback_row_equality": true,
+      "same_database_post_failure_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_post_failure_row_count": 0,
+      "same_database_post_failure_rows": [],
+      "same_database_pre_test_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_pre_test_row_count": 0,
+      "same_database_pre_test_rows": [],
+      "status": "passed",
+      "test_id": "duplicate-administrative-identity"
+    },
+    {
+      "detection_executed": true,
+      "expected_error": "administrative identity shell duplicate administrative registry subject",
+      "mutation": {
+        "duplicate_registry_subject": true
+      },
+      "observed_error": "administrative identity shell duplicate administrative registry subject",
+      "rollback_equality": true,
+      "rollback_hash_equality": true,
+      "rollback_row_equality": true,
+      "same_database_post_failure_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_post_failure_row_count": 0,
+      "same_database_post_failure_rows": [],
+      "same_database_pre_test_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_pre_test_row_count": 0,
+      "same_database_pre_test_rows": [],
+      "status": "passed",
+      "test_id": "duplicate-administrative-registry-subject"
+    },
+    {
+      "detection_executed": true,
+      "expected_error": "administrative identity shell wrong subject entity",
+      "mutation": {
+        "wrong_subject_entity": true
+      },
+      "observed_error": "administrative identity shell wrong subject entity",
+      "rollback_equality": true,
+      "rollback_hash_equality": true,
+      "rollback_row_equality": true,
+      "same_database_post_failure_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_post_failure_row_count": 0,
+      "same_database_post_failure_rows": [],
+      "same_database_pre_test_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_pre_test_row_count": 0,
+      "same_database_pre_test_rows": [],
+      "status": "passed",
+      "test_id": "wrong-subject-entity"
+    },
+    {
+      "detection_executed": true,
+      "expected_error": "administrative identity shell wrong subject native ID",
+      "mutation": {
+        "wrong_subject_native_id": true
+      },
+      "observed_error": "administrative identity shell wrong subject native ID",
+      "rollback_equality": true,
+      "rollback_hash_equality": true,
+      "rollback_row_equality": true,
+      "same_database_post_failure_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_post_failure_row_count": 0,
+      "same_database_post_failure_rows": [],
+      "same_database_pre_test_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_pre_test_row_count": 0,
+      "same_database_pre_test_rows": [],
+      "status": "passed",
+      "test_id": "wrong-subject-native-id"
+    },
+    {
+      "detection_executed": true,
+      "expected_error": "administrative identity shell accepted address subject reuse",
+      "mutation": {
+        "accepted_address_subject_reuse": true
+      },
+      "observed_error": "administrative identity shell accepted address subject reuse",
+      "rollback_equality": true,
+      "rollback_hash_equality": true,
+      "rollback_row_equality": true,
+      "same_database_post_failure_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_post_failure_row_count": 0,
+      "same_database_post_failure_rows": [],
+      "same_database_pre_test_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_pre_test_row_count": 0,
+      "same_database_pre_test_rows": [],
+      "status": "passed",
+      "test_id": "accepted-address-subject-reuse"
+    },
+    {
+      "detection_executed": true,
+      "expected_error": "administrative identity shell generic geotag-subject reuse",
+      "mutation": {
+        "generic_geotag_subject_reuse": true
+      },
+      "observed_error": "administrative identity shell generic geotag-subject reuse",
+      "rollback_equality": true,
+      "rollback_hash_equality": true,
+      "rollback_row_equality": true,
+      "same_database_post_failure_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_post_failure_row_count": 0,
+      "same_database_post_failure_rows": [],
+      "same_database_pre_test_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_pre_test_row_count": 0,
+      "same_database_pre_test_rows": [],
+      "status": "passed",
+      "test_id": "generic-geotag-subject-reuse"
+    },
+    {
+      "detection_executed": true,
+      "expected_error": "administrative identity shell unexpected administrative version",
+      "mutation": {
+        "unexpected_admin_version": true
+      },
+      "observed_error": "administrative identity shell unexpected administrative version",
+      "rollback_equality": true,
+      "rollback_hash_equality": true,
+      "rollback_row_equality": true,
+      "same_database_post_failure_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_post_failure_row_count": 0,
+      "same_database_post_failure_rows": [],
+      "same_database_pre_test_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_pre_test_row_count": 0,
+      "same_database_pre_test_rows": [],
+      "status": "passed",
+      "test_id": "unexpected-administrative-version"
+    },
+    {
+      "detection_executed": true,
+      "expected_error": "administrative identity shell unexpected code-history row",
+      "mutation": {
+        "unexpected_code_history": true
+      },
+      "observed_error": "administrative identity shell unexpected code-history row",
+      "rollback_equality": true,
+      "rollback_hash_equality": true,
+      "rollback_row_equality": true,
+      "same_database_post_failure_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_post_failure_row_count": 0,
+      "same_database_post_failure_rows": [],
+      "same_database_pre_test_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_pre_test_row_count": 0,
+      "same_database_pre_test_rows": [],
+      "status": "passed",
+      "test_id": "unexpected-code-history-row"
+    },
+    {
+      "detection_executed": true,
+      "expected_error": "administrative identity shell unexpected name row",
+      "mutation": {
+        "unexpected_name": true
+      },
+      "observed_error": "administrative identity shell unexpected name row",
+      "rollback_equality": true,
+      "rollback_hash_equality": true,
+      "rollback_row_equality": true,
+      "same_database_post_failure_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_post_failure_row_count": 0,
+      "same_database_post_failure_rows": [],
+      "same_database_pre_test_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_pre_test_row_count": 0,
+      "same_database_pre_test_rows": [],
+      "status": "passed",
+      "test_id": "unexpected-name-row"
+    },
+    {
+      "detection_executed": true,
+      "expected_error": "administrative identity shell unexpected decision event",
+      "mutation": {
+        "unexpected_decision_event": true
+      },
+      "observed_error": "administrative identity shell unexpected decision event",
+      "rollback_equality": true,
+      "rollback_hash_equality": true,
+      "rollback_row_equality": true,
+      "same_database_post_failure_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_post_failure_row_count": 0,
+      "same_database_post_failure_rows": [],
+      "same_database_pre_test_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_pre_test_row_count": 0,
+      "same_database_pre_test_rows": [],
+      "status": "passed",
+      "test_id": "unexpected-decision-event"
+    },
+    {
+      "detection_executed": true,
+      "expected_error": "administrative identity shell unexpected migration exception",
+      "mutation": {
+        "unexpected_migration_exception": true
+      },
+      "observed_error": "administrative identity shell unexpected migration exception",
+      "rollback_equality": true,
+      "rollback_hash_equality": true,
+      "rollback_row_equality": true,
+      "same_database_post_failure_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_post_failure_row_count": 0,
+      "same_database_post_failure_rows": [],
+      "same_database_pre_test_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_pre_test_row_count": 0,
+      "same_database_pre_test_rows": [],
+      "status": "passed",
+      "test_id": "unexpected-migration-exception"
+    },
+    {
+      "detection_executed": true,
+      "expected_error": "administrative identity shell unauthorized public alias",
+      "mutation": {
+        "unauthorized_public_alias": true
+      },
+      "observed_error": "administrative identity shell unauthorized public alias",
+      "rollback_equality": true,
+      "rollback_hash_equality": true,
+      "rollback_row_equality": true,
+      "same_database_post_failure_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_post_failure_row_count": 0,
+      "same_database_post_failure_rows": [],
+      "same_database_pre_test_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_pre_test_row_count": 0,
+      "same_database_pre_test_rows": [],
+      "status": "passed",
+      "test_id": "unauthorized-public-alias"
+    },
+    {
+      "detection_executed": true,
+      "expected_error": "administrative identity shell unauthorized publication row",
+      "mutation": {
+        "unauthorized_publication": true
+      },
+      "observed_error": "administrative identity shell unauthorized publication row",
+      "rollback_equality": true,
+      "rollback_hash_equality": true,
+      "rollback_row_equality": true,
+      "same_database_post_failure_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_post_failure_row_count": 0,
+      "same_database_post_failure_rows": [],
+      "same_database_pre_test_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_pre_test_row_count": 0,
+      "same_database_pre_test_rows": [],
+      "status": "passed",
+      "test_id": "unauthorized-publication-row"
+    },
+    {
+      "detection_executed": true,
+      "expected_error": "administrative identity shell unexpected province identity",
+      "mutation": {
+        "unexpected_province_identity": true
+      },
+      "observed_error": "administrative identity shell unexpected province identity",
+      "rollback_equality": true,
+      "rollback_hash_equality": true,
+      "rollback_row_equality": true,
+      "same_database_post_failure_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_post_failure_row_count": 0,
+      "same_database_post_failure_rows": [],
+      "same_database_pre_test_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_pre_test_row_count": 0,
+      "same_database_pre_test_rows": [],
+      "status": "passed",
+      "test_id": "unexpected-province-identity"
+    },
+    {
+      "detection_executed": true,
+      "expected_error": "administrative identity shell unexpected territory identity",
+      "mutation": {
+        "unexpected_territory_identity": true
+      },
+      "observed_error": "administrative identity shell unexpected territory identity",
+      "rollback_equality": true,
+      "rollback_hash_equality": true,
+      "rollback_row_equality": true,
+      "same_database_post_failure_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_post_failure_row_count": 0,
+      "same_database_post_failure_rows": [],
+      "same_database_pre_test_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_pre_test_row_count": 0,
+      "same_database_pre_test_rows": [],
+      "status": "passed",
+      "test_id": "unexpected-territory-identity"
+    },
+    {
+      "detection_executed": true,
+      "expected_error": "administrative identity shell unexpected attributable target row",
+      "mutation": {
+        "unexpected_attributable": true
+      },
+      "observed_error": "administrative identity shell unexpected attributable target row",
+      "rollback_equality": true,
+      "rollback_hash_equality": true,
+      "rollback_row_equality": true,
+      "same_database_post_failure_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_post_failure_row_count": 0,
+      "same_database_post_failure_rows": [],
+      "same_database_pre_test_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_pre_test_row_count": 0,
+      "same_database_pre_test_rows": [],
+      "status": "passed",
+      "test_id": "unexpected-attributable-target-row"
+    },
+    {
+      "detection_executed": true,
+      "expected_error": "administrative identity shell missing expected identity-shell row",
+      "mutation": {
+        "missing_expected_row": true
+      },
+      "observed_error": "administrative identity shell missing expected identity-shell row",
+      "rollback_equality": true,
+      "rollback_hash_equality": true,
+      "rollback_row_equality": true,
+      "same_database_post_failure_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_post_failure_row_count": 0,
+      "same_database_post_failure_rows": [],
+      "same_database_pre_test_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_pre_test_row_count": 0,
+      "same_database_pre_test_rows": [],
+      "status": "passed",
+      "test_id": "missing-expected-identity-shell-row"
+    }
+  ],
+  "negative_tests_passed": 27,
+  "prohibited_output_counts": {
+    "proposed_administrative_code_history": 0,
+    "proposed_administrative_unit_version": 0,
+    "proposed_decision_event": 0,
+    "proposed_geometry_observation": 0,
+    "proposed_geometry_version": 0,
+    "proposed_location_record": 0,
+    "proposed_migration_exception": 0,
+    "proposed_name_record": 0,
+    "proposed_public_code_alias": 0,
+    "proposed_publication_release": 0,
+    "proposed_publication_release_item": 0
+  },
+  "protected_artifact_change_flags": {
+    "accepted_family_convergence_changed": false,
+    "authority_or_authorization_markers_changed": false,
+    "broad_expected_fixture_changed": false,
+    "current_source_fixtures_changed": false,
+    "deployment_or_publication_code_changed": false,
+    "draft_physical_schema_changed": false,
+    "executable_migrations_changed": false,
+    "frozen_broad_spec_changed": false,
+    "phase_a_transform_specs_changed": false,
+    "reviewer_oracle_changed": false,
+    "runtime_application_code_changed": false
+  },
+  "queried_source_id": "phase-a-admin-units-id",
+  "raw_context_values_in_committed_report": false,
+  "read_only_write_blocked": true,
+  "reviewer_oracle": {
+    "path": "docs/sda/acceptance/NLI-WO-002-phase-a-admin-units-identity-shell-expected.json",
+    "sha256": "96d3c8a70ce995e26e1fa85ed38013c091a56e819a451a8daac257acb9347f84"
+  },
+  "rollback_equality": true,
+  "rollback_evidence": [
+    {
+      "detection_executed": true,
+      "expected_error": "administrative identity shell missing country prerequisite",
+      "mutation": {
+        "missing_country": true
+      },
+      "observed_error": "administrative identity shell missing country prerequisite",
+      "rollback_equality": true,
+      "rollback_hash_equality": true,
+      "rollback_row_equality": true,
+      "same_database_post_failure_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_post_failure_row_count": 0,
+      "same_database_post_failure_rows": [],
+      "same_database_pre_test_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_pre_test_row_count": 0,
+      "same_database_pre_test_rows": [],
+      "status": "passed",
+      "test_id": "missing-country-prerequisite"
+    },
+    {
+      "detection_executed": true,
+      "expected_error": "administrative identity shell missing reviewed source record",
+      "mutation": {
+        "missing_source_record": true
+      },
+      "observed_error": "administrative identity shell missing reviewed source record",
+      "rollback_equality": true,
+      "rollback_hash_equality": true,
+      "rollback_row_equality": true,
+      "same_database_post_failure_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_post_failure_row_count": 0,
+      "same_database_post_failure_rows": [],
+      "same_database_pre_test_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_pre_test_row_count": 0,
+      "same_database_pre_test_rows": [],
+      "status": "passed",
+      "test_id": "missing-reviewed-source-record"
+    },
+    {
+      "detection_executed": true,
+      "expected_error": "administrative identity shell wrong source package",
+      "mutation": {
+        "wrong_source_package": true
+      },
+      "observed_error": "administrative identity shell wrong source package",
+      "rollback_equality": true,
+      "rollback_hash_equality": true,
+      "rollback_row_equality": true,
+      "same_database_post_failure_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_post_failure_row_count": 0,
+      "same_database_post_failure_rows": [],
+      "same_database_pre_test_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_pre_test_row_count": 0,
+      "same_database_pre_test_rows": [],
+      "status": "passed",
+      "test_id": "wrong-source-package"
+    },
+    {
+      "detection_executed": true,
+      "expected_error": "administrative identity shell wrong source authority",
+      "mutation": {
+        "wrong_source_authority": true
+      },
+      "observed_error": "administrative identity shell wrong source authority",
+      "rollback_equality": true,
+      "rollback_hash_equality": true,
+      "rollback_row_equality": true,
+      "same_database_post_failure_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_post_failure_row_count": 0,
+      "same_database_post_failure_rows": [],
+      "same_database_pre_test_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_pre_test_row_count": 0,
+      "same_database_pre_test_rows": [],
+      "status": "passed",
+      "test_id": "wrong-source-authority"
+    },
+    {
+      "detection_executed": true,
+      "expected_error": "administrative identity shell wrong evidence object",
+      "mutation": {
+        "wrong_evidence_object": true
+      },
+      "observed_error": "administrative identity shell wrong evidence object",
+      "rollback_equality": true,
+      "rollback_hash_equality": true,
+      "rollback_row_equality": true,
+      "same_database_post_failure_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_post_failure_row_count": 0,
+      "same_database_post_failure_rows": [],
+      "same_database_pre_test_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_pre_test_row_count": 0,
+      "same_database_pre_test_rows": [],
+      "status": "passed",
+      "test_id": "wrong-evidence-object"
+    },
+    {
+      "detection_executed": true,
+      "expected_error": "administrative identity shell classification drift",
+      "mutation": {
+        "classification_drift": true
+      },
+      "observed_error": "administrative identity shell classification drift",
+      "rollback_equality": true,
+      "rollback_hash_equality": true,
+      "rollback_row_equality": true,
+      "same_database_post_failure_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_post_failure_row_count": 0,
+      "same_database_post_failure_rows": [],
+      "same_database_pre_test_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_pre_test_row_count": 0,
+      "same_database_pre_test_rows": [],
+      "status": "passed",
+      "test_id": "classification-drift"
+    },
+    {
+      "detection_executed": true,
+      "expected_error": "administrative identity shell wrong source table",
+      "mutation": {
+        "wrong_source_table": true
+      },
+      "observed_error": "administrative identity shell wrong source table",
+      "rollback_equality": true,
+      "rollback_hash_equality": true,
+      "rollback_row_equality": true,
+      "same_database_post_failure_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_post_failure_row_count": 0,
+      "same_database_post_failure_rows": [],
+      "same_database_pre_test_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_pre_test_row_count": 0,
+      "same_database_pre_test_rows": [],
+      "status": "passed",
+      "test_id": "wrong-source-table"
+    },
+    {
+      "detection_executed": true,
+      "expected_error": "administrative identity shell wrong source field",
+      "mutation": {
+        "wrong_source_field": true
+      },
+      "observed_error": "administrative identity shell wrong source field",
+      "rollback_equality": true,
+      "rollback_hash_equality": true,
+      "rollback_row_equality": true,
+      "same_database_post_failure_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_post_failure_row_count": 0,
+      "same_database_post_failure_rows": [],
+      "same_database_pre_test_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_pre_test_row_count": 0,
+      "same_database_pre_test_rows": [],
+      "status": "passed",
+      "test_id": "wrong-source-field"
+    },
+    {
+      "detection_executed": true,
+      "expected_error": "administrative identity shell wrong legacy ID",
+      "mutation": {
+        "wrong_legacy_id": true
+      },
+      "observed_error": "administrative identity shell wrong legacy ID",
+      "rollback_equality": true,
+      "rollback_hash_equality": true,
+      "rollback_row_equality": true,
+      "same_database_post_failure_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_post_failure_row_count": 0,
+      "same_database_post_failure_rows": [],
+      "same_database_pre_test_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_pre_test_row_count": 0,
+      "same_database_pre_test_rows": [],
+      "status": "passed",
+      "test_id": "wrong-legacy-id"
+    },
+    {
+      "detection_executed": true,
+      "expected_error": "administrative identity shell one source ID resolving to multiple targets",
+      "mutation": {
+        "multiple_targets": true
+      },
+      "observed_error": "administrative identity shell one source ID resolving to multiple targets",
+      "rollback_equality": true,
+      "rollback_hash_equality": true,
+      "rollback_row_equality": true,
+      "same_database_post_failure_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_post_failure_row_count": 0,
+      "same_database_post_failure_rows": [],
+      "same_database_pre_test_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_pre_test_row_count": 0,
+      "same_database_pre_test_rows": [],
+      "status": "passed",
+      "test_id": "one-source-multiple-targets"
+    },
+    {
+      "detection_executed": true,
+      "expected_error": "administrative identity shell duplicate administrative identity",
+      "mutation": {
+        "duplicate_admin_identity": true
+      },
+      "observed_error": "administrative identity shell duplicate administrative identity",
+      "rollback_equality": true,
+      "rollback_hash_equality": true,
+      "rollback_row_equality": true,
+      "same_database_post_failure_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_post_failure_row_count": 0,
+      "same_database_post_failure_rows": [],
+      "same_database_pre_test_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_pre_test_row_count": 0,
+      "same_database_pre_test_rows": [],
+      "status": "passed",
+      "test_id": "duplicate-administrative-identity"
+    },
+    {
+      "detection_executed": true,
+      "expected_error": "administrative identity shell duplicate administrative registry subject",
+      "mutation": {
+        "duplicate_registry_subject": true
+      },
+      "observed_error": "administrative identity shell duplicate administrative registry subject",
+      "rollback_equality": true,
+      "rollback_hash_equality": true,
+      "rollback_row_equality": true,
+      "same_database_post_failure_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_post_failure_row_count": 0,
+      "same_database_post_failure_rows": [],
+      "same_database_pre_test_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_pre_test_row_count": 0,
+      "same_database_pre_test_rows": [],
+      "status": "passed",
+      "test_id": "duplicate-administrative-registry-subject"
+    },
+    {
+      "detection_executed": true,
+      "expected_error": "administrative identity shell wrong subject entity",
+      "mutation": {
+        "wrong_subject_entity": true
+      },
+      "observed_error": "administrative identity shell wrong subject entity",
+      "rollback_equality": true,
+      "rollback_hash_equality": true,
+      "rollback_row_equality": true,
+      "same_database_post_failure_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_post_failure_row_count": 0,
+      "same_database_post_failure_rows": [],
+      "same_database_pre_test_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_pre_test_row_count": 0,
+      "same_database_pre_test_rows": [],
+      "status": "passed",
+      "test_id": "wrong-subject-entity"
+    },
+    {
+      "detection_executed": true,
+      "expected_error": "administrative identity shell wrong subject native ID",
+      "mutation": {
+        "wrong_subject_native_id": true
+      },
+      "observed_error": "administrative identity shell wrong subject native ID",
+      "rollback_equality": true,
+      "rollback_hash_equality": true,
+      "rollback_row_equality": true,
+      "same_database_post_failure_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_post_failure_row_count": 0,
+      "same_database_post_failure_rows": [],
+      "same_database_pre_test_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_pre_test_row_count": 0,
+      "same_database_pre_test_rows": [],
+      "status": "passed",
+      "test_id": "wrong-subject-native-id"
+    },
+    {
+      "detection_executed": true,
+      "expected_error": "administrative identity shell accepted address subject reuse",
+      "mutation": {
+        "accepted_address_subject_reuse": true
+      },
+      "observed_error": "administrative identity shell accepted address subject reuse",
+      "rollback_equality": true,
+      "rollback_hash_equality": true,
+      "rollback_row_equality": true,
+      "same_database_post_failure_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_post_failure_row_count": 0,
+      "same_database_post_failure_rows": [],
+      "same_database_pre_test_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_pre_test_row_count": 0,
+      "same_database_pre_test_rows": [],
+      "status": "passed",
+      "test_id": "accepted-address-subject-reuse"
+    },
+    {
+      "detection_executed": true,
+      "expected_error": "administrative identity shell generic geotag-subject reuse",
+      "mutation": {
+        "generic_geotag_subject_reuse": true
+      },
+      "observed_error": "administrative identity shell generic geotag-subject reuse",
+      "rollback_equality": true,
+      "rollback_hash_equality": true,
+      "rollback_row_equality": true,
+      "same_database_post_failure_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_post_failure_row_count": 0,
+      "same_database_post_failure_rows": [],
+      "same_database_pre_test_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_pre_test_row_count": 0,
+      "same_database_pre_test_rows": [],
+      "status": "passed",
+      "test_id": "generic-geotag-subject-reuse"
+    },
+    {
+      "detection_executed": true,
+      "expected_error": "administrative identity shell unexpected administrative version",
+      "mutation": {
+        "unexpected_admin_version": true
+      },
+      "observed_error": "administrative identity shell unexpected administrative version",
+      "rollback_equality": true,
+      "rollback_hash_equality": true,
+      "rollback_row_equality": true,
+      "same_database_post_failure_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_post_failure_row_count": 0,
+      "same_database_post_failure_rows": [],
+      "same_database_pre_test_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_pre_test_row_count": 0,
+      "same_database_pre_test_rows": [],
+      "status": "passed",
+      "test_id": "unexpected-administrative-version"
+    },
+    {
+      "detection_executed": true,
+      "expected_error": "administrative identity shell unexpected code-history row",
+      "mutation": {
+        "unexpected_code_history": true
+      },
+      "observed_error": "administrative identity shell unexpected code-history row",
+      "rollback_equality": true,
+      "rollback_hash_equality": true,
+      "rollback_row_equality": true,
+      "same_database_post_failure_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_post_failure_row_count": 0,
+      "same_database_post_failure_rows": [],
+      "same_database_pre_test_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_pre_test_row_count": 0,
+      "same_database_pre_test_rows": [],
+      "status": "passed",
+      "test_id": "unexpected-code-history-row"
+    },
+    {
+      "detection_executed": true,
+      "expected_error": "administrative identity shell unexpected name row",
+      "mutation": {
+        "unexpected_name": true
+      },
+      "observed_error": "administrative identity shell unexpected name row",
+      "rollback_equality": true,
+      "rollback_hash_equality": true,
+      "rollback_row_equality": true,
+      "same_database_post_failure_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_post_failure_row_count": 0,
+      "same_database_post_failure_rows": [],
+      "same_database_pre_test_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_pre_test_row_count": 0,
+      "same_database_pre_test_rows": [],
+      "status": "passed",
+      "test_id": "unexpected-name-row"
+    },
+    {
+      "detection_executed": true,
+      "expected_error": "administrative identity shell unexpected decision event",
+      "mutation": {
+        "unexpected_decision_event": true
+      },
+      "observed_error": "administrative identity shell unexpected decision event",
+      "rollback_equality": true,
+      "rollback_hash_equality": true,
+      "rollback_row_equality": true,
+      "same_database_post_failure_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_post_failure_row_count": 0,
+      "same_database_post_failure_rows": [],
+      "same_database_pre_test_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_pre_test_row_count": 0,
+      "same_database_pre_test_rows": [],
+      "status": "passed",
+      "test_id": "unexpected-decision-event"
+    },
+    {
+      "detection_executed": true,
+      "expected_error": "administrative identity shell unexpected migration exception",
+      "mutation": {
+        "unexpected_migration_exception": true
+      },
+      "observed_error": "administrative identity shell unexpected migration exception",
+      "rollback_equality": true,
+      "rollback_hash_equality": true,
+      "rollback_row_equality": true,
+      "same_database_post_failure_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_post_failure_row_count": 0,
+      "same_database_post_failure_rows": [],
+      "same_database_pre_test_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_pre_test_row_count": 0,
+      "same_database_pre_test_rows": [],
+      "status": "passed",
+      "test_id": "unexpected-migration-exception"
+    },
+    {
+      "detection_executed": true,
+      "expected_error": "administrative identity shell unauthorized public alias",
+      "mutation": {
+        "unauthorized_public_alias": true
+      },
+      "observed_error": "administrative identity shell unauthorized public alias",
+      "rollback_equality": true,
+      "rollback_hash_equality": true,
+      "rollback_row_equality": true,
+      "same_database_post_failure_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_post_failure_row_count": 0,
+      "same_database_post_failure_rows": [],
+      "same_database_pre_test_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_pre_test_row_count": 0,
+      "same_database_pre_test_rows": [],
+      "status": "passed",
+      "test_id": "unauthorized-public-alias"
+    },
+    {
+      "detection_executed": true,
+      "expected_error": "administrative identity shell unauthorized publication row",
+      "mutation": {
+        "unauthorized_publication": true
+      },
+      "observed_error": "administrative identity shell unauthorized publication row",
+      "rollback_equality": true,
+      "rollback_hash_equality": true,
+      "rollback_row_equality": true,
+      "same_database_post_failure_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_post_failure_row_count": 0,
+      "same_database_post_failure_rows": [],
+      "same_database_pre_test_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_pre_test_row_count": 0,
+      "same_database_pre_test_rows": [],
+      "status": "passed",
+      "test_id": "unauthorized-publication-row"
+    },
+    {
+      "detection_executed": true,
+      "expected_error": "administrative identity shell unexpected province identity",
+      "mutation": {
+        "unexpected_province_identity": true
+      },
+      "observed_error": "administrative identity shell unexpected province identity",
+      "rollback_equality": true,
+      "rollback_hash_equality": true,
+      "rollback_row_equality": true,
+      "same_database_post_failure_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_post_failure_row_count": 0,
+      "same_database_post_failure_rows": [],
+      "same_database_pre_test_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_pre_test_row_count": 0,
+      "same_database_pre_test_rows": [],
+      "status": "passed",
+      "test_id": "unexpected-province-identity"
+    },
+    {
+      "detection_executed": true,
+      "expected_error": "administrative identity shell unexpected territory identity",
+      "mutation": {
+        "unexpected_territory_identity": true
+      },
+      "observed_error": "administrative identity shell unexpected territory identity",
+      "rollback_equality": true,
+      "rollback_hash_equality": true,
+      "rollback_row_equality": true,
+      "same_database_post_failure_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_post_failure_row_count": 0,
+      "same_database_post_failure_rows": [],
+      "same_database_pre_test_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_pre_test_row_count": 0,
+      "same_database_pre_test_rows": [],
+      "status": "passed",
+      "test_id": "unexpected-territory-identity"
+    },
+    {
+      "detection_executed": true,
+      "expected_error": "administrative identity shell unexpected attributable target row",
+      "mutation": {
+        "unexpected_attributable": true
+      },
+      "observed_error": "administrative identity shell unexpected attributable target row",
+      "rollback_equality": true,
+      "rollback_hash_equality": true,
+      "rollback_row_equality": true,
+      "same_database_post_failure_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_post_failure_row_count": 0,
+      "same_database_post_failure_rows": [],
+      "same_database_pre_test_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_pre_test_row_count": 0,
+      "same_database_pre_test_rows": [],
+      "status": "passed",
+      "test_id": "unexpected-attributable-target-row"
+    },
+    {
+      "detection_executed": true,
+      "expected_error": "administrative identity shell missing expected identity-shell row",
+      "mutation": {
+        "missing_expected_row": true
+      },
+      "observed_error": "administrative identity shell missing expected identity-shell row",
+      "rollback_equality": true,
+      "rollback_hash_equality": true,
+      "rollback_row_equality": true,
+      "same_database_post_failure_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_post_failure_row_count": 0,
+      "same_database_post_failure_rows": [],
+      "same_database_pre_test_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_pre_test_row_count": 0,
+      "same_database_pre_test_rows": [],
+      "status": "passed",
+      "test_id": "missing-expected-identity-shell-row"
+    }
+  ],
+  "rollback_hash_equality": true,
+  "rollback_proof_count": 27,
+  "rollback_row_equality": true,
+  "second_run_statistics": {
+    "deletes": 0,
+    "inserts": 0,
+    "updates": 0
+  },
+  "second_source_proof": {
+    "active_registry_subjects": 2,
+    "administrative_units": 2,
+    "checks": {
+      "active_registry_subjects": true,
+      "administrative_units": true,
+      "crosswalks": true,
+      "multiple_target_resolutions": true,
+      "second_source_key": true,
+      "semantic_duplicates": true,
+      "source_identities": true
+    },
+    "code_history_rows": 0,
+    "crosswalks": 2,
+    "exceptions": 0,
+    "first_rows": [
+      {
+        "primary_key": {
+          "administrative_unit_id": "administrative-unit:admin_units:phase-a-admin-units-id"
+        },
+        "table": "proposed_administrative_unit",
+        "values": {
+          "administrative_unit_id": "administrative-unit:admin_units:phase-a-admin-units-id",
+          "country_id": "phase-a-country-gq",
+          "created_at": "2026-07-15T00:00:00Z",
+          "retired_at": null
+        }
+      },
+      {
+        "primary_key": {
+          "legacy_crosswalk_id": "crosswalk:admin_units:id:phase-a-admin-units-id:to:administrative_unit:administrative-unit:admin_units:phase-a-admin-units-id"
+        },
+        "table": "proposed_legacy_crosswalk",
+        "values": {
+          "created_at": "2026-07-15T00:00:00Z",
+          "legacy_crosswalk_id": "crosswalk:admin_units:id:phase-a-admin-units-id:to:administrative_unit:administrative-unit:admin_units:phase-a-admin-units-id",
+          "legacy_id": "phase-a-admin-units-id",
+          "source_field": "id",
+          "source_table": "admin_units",
+          "target_entity": "administrative_unit",
+          "target_id": "administrative-unit:admin_units:phase-a-admin-units-id"
+        }
+      },
+      {
+        "primary_key": {
+          "subject_id": "subject:administrative_unit:administrative-unit:admin_units:phase-a-admin-units-id"
+        },
+        "table": "proposed_registry_subject",
+        "values": {
+          "created_at": "2026-07-15T00:00:00Z",
+          "delete_policy": "retire-only",
+          "native_id": "administrative-unit:admin_units:phase-a-admin-units-id",
+          "retired_at": null,
+          "subject_entity": "administrative_unit",
+          "subject_id": "subject:administrative_unit:administrative-unit:admin_units:phase-a-admin-units-id",
+          "subject_state": "active"
+        }
+      }
+    ],
+    "first_transform_lineage": {
+      "derived_source_key": "admin_units:phase-a-admin-units-id",
+      "evidence_classification": "government-internal",
+      "evidence_content_hash": "135f036e3f7c0f621fe5e90e48557a178d413d7b034f2c320eb3742263df7276",
+      "evidence_object_id": "phase-a-evidence-admin-units",
+      "hash_correspondence": true,
+      "lineage_chain": "admin_units.id tuple -> legacy crosswalk -> administrative-unit target ID -> registry-subject native ID",
+      "package_checksum": "135f036e3f7c0f621fe5e90e48557a178d413d7b034f2c320eb3742263df7276",
+      "raw_payload_hash": "135f036e3f7c0f621fe5e90e48557a178d413d7b034f2c320eb3742263df7276",
+      "source_authority_id": "phase-a-authority-conditional-admin-reference",
+      "source_classification": "government-internal",
+      "source_package_id": "phase-a-source-package-admin-units",
+      "source_record_id": "phase-a-source-record-admin-units-001"
+    },
+    "multiple_target_resolutions": 0,
+    "names": 0,
+    "publication_outputs": 0,
+    "second_rows": [
+      {
+        "primary_key": {
+          "administrative_unit_id": "administrative-unit:admin_units:phase-a-admin-units-002"
+        },
+        "table": "proposed_administrative_unit",
+        "values": {
+          "administrative_unit_id": "administrative-unit:admin_units:phase-a-admin-units-002",
+          "country_id": "phase-a-country-gq",
+          "created_at": "2026-07-15T00:00:00Z",
+          "retired_at": null
+        }
+      },
+      {
+        "primary_key": {
+          "legacy_crosswalk_id": "crosswalk:admin_units:id:phase-a-admin-units-002:to:administrative_unit:administrative-unit:admin_units:phase-a-admin-units-002"
+        },
+        "table": "proposed_legacy_crosswalk",
+        "values": {
+          "created_at": "2026-07-15T00:00:00Z",
+          "legacy_crosswalk_id": "crosswalk:admin_units:id:phase-a-admin-units-002:to:administrative_unit:administrative-unit:admin_units:phase-a-admin-units-002",
+          "legacy_id": "phase-a-admin-units-002",
+          "source_field": "id",
+          "source_table": "admin_units",
+          "target_entity": "administrative_unit",
+          "target_id": "administrative-unit:admin_units:phase-a-admin-units-002"
+        }
+      },
+      {
+        "primary_key": {
+          "subject_id": "subject:administrative_unit:administrative-unit:admin_units:phase-a-admin-units-002"
+        },
+        "table": "proposed_registry_subject",
+        "values": {
+          "created_at": "2026-07-15T00:00:00Z",
+          "delete_policy": "retire-only",
+          "native_id": "administrative-unit:admin_units:phase-a-admin-units-002",
+          "retired_at": null,
+          "subject_entity": "administrative_unit",
+          "subject_id": "subject:administrative_unit:administrative-unit:admin_units:phase-a-admin-units-002",
+          "subject_state": "active"
+        }
+      }
+    ],
+    "second_transform_lineage": {
+      "derived_source_key": "admin_units:phase-a-admin-units-002",
+      "evidence_classification": "government-internal",
+      "evidence_content_hash": "b975ef22eb6e8eadcfaf76bd96032a4819acb7cde282660cd24e2d4b7f316f35",
+      "evidence_object_id": "phase-a-evidence-admin-units-002",
+      "hash_correspondence": true,
+      "lineage_chain": "admin_units.id tuple -> legacy crosswalk -> administrative-unit target ID -> registry-subject native ID",
+      "package_checksum": "b975ef22eb6e8eadcfaf76bd96032a4819acb7cde282660cd24e2d4b7f316f35",
+      "raw_payload_hash": "b975ef22eb6e8eadcfaf76bd96032a4819acb7cde282660cd24e2d4b7f316f35",
+      "source_authority_id": "phase-a-authority-conditional-admin-reference",
+      "source_classification": "government-internal",
+      "source_package_id": "phase-a-source-package-admin-units-002",
+      "source_record_id": "phase-a-source-record-admin-units-002"
+    },
+    "semantic_duplicates": 0,
+    "source_identities": 2,
+    "status": "passed",
+    "test_id": "second-source-identity",
+    "versions": 0
+  },
+  "semantic_controls": {
+    "accepted_address_subject_reuse": 0,
+    "active_administrative_subjects_for_native_id": 1,
+    "duplicate_administrative_subjects": 0,
+    "duplicate_crosswalk_groups": 0,
+    "generic_geotag_subject_reuse": 0,
+    "multiple_target_resolutions": 0,
+    "non_id_admin_units_crosswalks": 0,
+    "semantic_duplicates": 0
+  },
+  "separate_read_only_comparator": {
+    "separate_connection": true,
+    "transaction_read_only": "on"
+  },
+  "source_authority": "phase-a-authority-conditional-admin-reference",
+  "source_classification": "government-internal",
+  "source_fields_queried": [
+    "id",
+    "level",
+    "code",
+    "parent_id",
+    "province_code",
+    "name_es",
+    "name_en",
+    "status",
+    "sort_order",
+    "created_at",
+    "updated_at"
+  ],
+  "source_key_derivation": "admin_units:phase-a-admin-units-id",
+  "source_package": "phase-a-source-package-admin-units",
+  "source_query": "SELECT id, level, code, parent_id, province_code, name_es, name_en, status, sort_order, created_at, updated_at FROM current_source.admin_units WHERE id = %s",
+  "source_record": "phase-a-source-record-admin-units-001",
+  "status": "passed",
+  "subject_id": "subject:administrative_unit:administrative-unit:admin_units:phase-a-admin-units-id",
+  "target_rows": {
+    "proposed_administrative_unit": {
+      "primary_key": {
+        "administrative_unit_id": "administrative-unit:admin_units:phase-a-admin-units-id"
+      },
+      "table": "proposed_administrative_unit",
+      "values": {
+        "administrative_unit_id": "administrative-unit:admin_units:phase-a-admin-units-id",
+        "country_id": "phase-a-country-gq",
+        "created_at": "2026-07-15T00:00:00Z",
+        "retired_at": null
+      }
+    },
+    "proposed_legacy_crosswalk": {
+      "primary_key": {
+        "legacy_crosswalk_id": "crosswalk:admin_units:id:phase-a-admin-units-id:to:administrative_unit:administrative-unit:admin_units:phase-a-admin-units-id"
+      },
+      "table": "proposed_legacy_crosswalk",
+      "values": {
+        "created_at": "2026-07-15T00:00:00Z",
+        "legacy_crosswalk_id": "crosswalk:admin_units:id:phase-a-admin-units-id:to:administrative_unit:administrative-unit:admin_units:phase-a-admin-units-id",
+        "legacy_id": "phase-a-admin-units-id",
+        "source_field": "id",
+        "source_table": "admin_units",
+        "target_entity": "administrative_unit",
+        "target_id": "administrative-unit:admin_units:phase-a-admin-units-id"
+      }
+    },
+    "proposed_registry_subject": {
+      "primary_key": {
+        "subject_id": "subject:administrative_unit:administrative-unit:admin_units:phase-a-admin-units-id"
+      },
+      "table": "proposed_registry_subject",
+      "values": {
+        "created_at": "2026-07-15T00:00:00Z",
+        "delete_policy": "retire-only",
+        "native_id": "administrative-unit:admin_units:phase-a-admin-units-id",
+        "retired_at": null,
+        "subject_entity": "administrative_unit",
+        "subject_id": "subject:administrative_unit:administrative-unit:admin_units:phase-a-admin-units-id",
+        "subject_state": "active"
+      }
+    }
+  },
+  "transform_reads_expected_oracle": false,
+  "unexpected_rows": [],
+  "unrelated_scope_isolation_test": {
+    "attributable_row_count": 3,
+    "status": "passed",
+    "test_id": "unrelated-scope-isolation",
+    "unrelated_rows_excluded": true
+  }
+}
