@@ -17,6 +17,7 @@
     "transform_citizen_geotag_geometry": "WO002-R06-geometry-observation-citizen_geotag_submissions",
     "transform_citizen_geotag_identity_crosswalk": "WO002-R06-identity-crosswalk-citizen_geotag_submissions"
   },
+  "callable_domain_mutation_tests": 1,
   "candidate_hash": "1f9a472978313f3ebdc6f82869a2e0af4eb7786c08f4537ba8629b5dc3ddbb41",
   "candidate_row_count": 19,
   "candidate_table_counts": {
@@ -492,12 +493,16 @@
     "extension_mapping": "docs/agent/tasks/NLI-WO-002-phase-a-admin-units-convergence-extension-mapping.md",
     "parent_control": "docs/sda/acceptance/NLI-WO-002-phase-a-accepted-family-convergence-control.json"
   },
+  "cross_family_isolation_executed_count": 4,
   "cross_family_isolation_tests": [
     {
       "address_or_geotag_subjects_created": 0,
+      "detection_executed": true,
+      "detector": "admin_units_shared_state_validator plus administrative envelope hash",
       "geometry_or_exception_created": 0,
       "hash": "7748ba9691b8d287b76383402959a5c8c2deb0be71c3502bad0bcfb1d080f27c",
       "location_records_created": 0,
+      "manual_expected_error_raise": false,
       "row_count": 3,
       "status": "passed",
       "test_id": "chain-d-without-parent"
@@ -506,18 +511,852 @@
       "admin_crosswalks_created": 0,
       "admin_subjects_created": 0,
       "admin_units_created": 0,
+      "detection_executed": true,
+      "detector": "accepted_family_union_hash plus administrative attributable discovery",
       "hash": "df921407d51d97559db64f380bd7a5d112e9d3823ea985944bef94b31924c5a6",
+      "manual_expected_error_raise": false,
       "row_count": 16,
       "status": "passed",
       "test_id": "parent-without-chain-d"
     },
     {
-      "parent_row_keys_values_unchanged": true,
+      "after_hash": "df921407d51d97559db64f380bd7a5d112e9d3823ea985944bef94b31924c5a6",
+      "after_row_count": 16,
+      "after_rows": [
+        {
+          "classification": "restricted",
+          "owning_callable": "transform_address_points_geometry",
+          "primary_key": {
+            "geometry_observation_id": "phase-a-geometry-address-points-phase-a-address-points-id"
+          },
+          "source_identity": "address_points:phase-a-address-points-id",
+          "table": "proposed_geometry_observation",
+          "values": {
+            "capture_method": "[REDACTED_VALUE]",
+            "classification": "restricted",
+            "evidence_object_id": "phase-a-evidence-address-points",
+            "geometry_observation_id": "phase-a-geometry-address-points-phase-a-address-points-id",
+            "geometry_role": "location-point",
+            "horizontal_accuracy_m": "[REDACTED_VALUE]",
+            "licence_id": null,
+            "observed_at": "[REDACTED_VALUE]",
+            "observed_geom_srid": "[REDACTED_VALUE]",
+            "observed_geom_wkt": "[REDACTED_VALUE]",
+            "recorded_at": "[REDACTED_VALUE]",
+            "source_record_id": "phase-a-source-record-address-points-001",
+            "subject_id": "phase-a-subject-phase-a-location-address-reference"
+          }
+        },
+        {
+          "classification": "restricted",
+          "owning_callable": "transform_address_records_geometry",
+          "primary_key": {
+            "geometry_observation_id": "phase-a-geometry-address-records-phase-a-address-records-id"
+          },
+          "source_identity": "address_records:phase-a-address-records-id",
+          "table": "proposed_geometry_observation",
+          "values": {
+            "capture_method": "[REDACTED_VALUE]",
+            "classification": "restricted",
+            "evidence_object_id": "phase-a-evidence-address-records",
+            "geometry_observation_id": "phase-a-geometry-address-records-phase-a-address-records-id",
+            "geometry_role": "location-point",
+            "horizontal_accuracy_m": "[REDACTED_VALUE]",
+            "licence_id": null,
+            "observed_at": "[REDACTED_VALUE]",
+            "observed_geom_srid": "[REDACTED_VALUE]",
+            "observed_geom_wkt": "[REDACTED_VALUE]",
+            "recorded_at": "[REDACTED_VALUE]",
+            "source_record_id": "phase-a-source-record-address-records-001",
+            "subject_id": "phase-a-subject-phase-a-location-address-records-id"
+          }
+        },
+        {
+          "classification": "restricted",
+          "owning_callable": "transform_citizen_geotag_geometry",
+          "primary_key": {
+            "geometry_observation_id": "phase-a-geometry-citizen-geotag-submissions-phase-a-geotag-001"
+          },
+          "source_identity": "citizen_geotag_submissions:phase-a-geotag-001",
+          "table": "proposed_geometry_observation",
+          "values": {
+            "capture_method": "[REDACTED_VALUE]",
+            "classification": "restricted",
+            "evidence_object_id": "phase-a-evidence-citizen-geotag-submissions",
+            "geometry_observation_id": "phase-a-geometry-citizen-geotag-submissions-phase-a-geotag-001",
+            "geometry_role": "location-point",
+            "horizontal_accuracy_m": "[REDACTED_VALUE]",
+            "licence_id": null,
+            "observed_at": "[REDACTED_VALUE]",
+            "observed_geom_srid": "[REDACTED_VALUE]",
+            "observed_geom_wkt": "[REDACTED_VALUE]",
+            "recorded_at": "[REDACTED_VALUE]",
+            "source_record_id": "phase-a-source-record-citizen-geotag-submissions-001",
+            "subject_id": "phase-a-subject-phase-a-location-citizen-geotag-001"
+          }
+        },
+        {
+          "classification": null,
+          "owning_callable": "transform_address_points_observation_crosswalk",
+          "primary_key": {
+            "legacy_crosswalk_id": "phase-a-crosswalk-address-points-id-to-geometry-observation"
+          },
+          "source_identity": "address_points:phase-a-address-points-id",
+          "table": "proposed_legacy_crosswalk",
+          "values": {
+            "created_at": "[REDACTED_VALUE]",
+            "legacy_crosswalk_id": "phase-a-crosswalk-address-points-id-to-geometry-observation",
+            "legacy_id": "phase-a-address-points-id",
+            "source_field": "id",
+            "source_table": "address_points",
+            "target_entity": "geometry_observation",
+            "target_id": "phase-a-geometry-address-points-phase-a-address-points-id"
+          }
+        },
+        {
+          "classification": null,
+          "owning_callable": "transform_address_records_identity_crosswalk",
+          "primary_key": {
+            "legacy_crosswalk_id": "phase-a-crosswalk-address-records-id-to-location-record"
+          },
+          "source_identity": "address_records:phase-a-address-records-id",
+          "table": "proposed_legacy_crosswalk",
+          "values": {
+            "created_at": "[REDACTED_VALUE]",
+            "legacy_crosswalk_id": "phase-a-crosswalk-address-records-id-to-location-record",
+            "legacy_id": "phase-a-address-records-id",
+            "source_field": "id",
+            "source_table": "address_records",
+            "target_entity": "location_record",
+            "target_id": "phase-a-location-address-records-id"
+          }
+        },
+        {
+          "classification": null,
+          "owning_callable": "transform_addresses_identity_crosswalk",
+          "primary_key": {
+            "legacy_crosswalk_id": "phase-a-crosswalk-addresses-id-to-location-record"
+          },
+          "source_identity": "addresses:phase-a-addresses-id",
+          "table": "proposed_legacy_crosswalk",
+          "values": {
+            "created_at": "[REDACTED_VALUE]",
+            "legacy_crosswalk_id": "phase-a-crosswalk-addresses-id-to-location-record",
+            "legacy_id": "phase-a-addresses-id",
+            "source_field": "id",
+            "source_table": "addresses",
+            "target_entity": "location_record",
+            "target_id": "phase-a-location-address-reference"
+          }
+        },
+        {
+          "classification": null,
+          "owning_callable": "transform_citizen_geotag_identity_crosswalk",
+          "primary_key": {
+            "legacy_crosswalk_id": "phase-a-crosswalk-citizen-geotag-id-to-location-record"
+          },
+          "source_identity": "citizen_geotag_submissions:phase-a-geotag-001",
+          "table": "proposed_legacy_crosswalk",
+          "values": {
+            "created_at": "[REDACTED_VALUE]",
+            "legacy_crosswalk_id": "phase-a-crosswalk-citizen-geotag-id-to-location-record",
+            "legacy_id": "phase-a-geotag-001",
+            "source_field": "id",
+            "source_table": "citizen_geotag_submissions",
+            "target_entity": "location_record",
+            "target_id": "phase-a-location-citizen-geotag-001"
+          }
+        },
+        {
+          "classification": "government-internal",
+          "owning_callable": "transform_address_records_identity_crosswalk",
+          "primary_key": {
+            "location_record_id": "phase-a-location-address-records-id"
+          },
+          "source_identity": "address_records:phase-a-address-records-id",
+          "table": "proposed_location_record",
+          "values": {
+            "classification": "government-internal",
+            "created_at": "[REDACTED_VALUE]",
+            "location_record_id": "phase-a-location-address-records-id",
+            "record_type": "address",
+            "retired_at": "[REDACTED_VALUE]"
+          }
+        },
+        {
+          "classification": "government-internal",
+          "owning_callable": "transform_addresses_identity_crosswalk",
+          "primary_key": {
+            "location_record_id": "phase-a-location-address-reference"
+          },
+          "source_identity": "addresses:phase-a-addresses-id",
+          "table": "proposed_location_record",
+          "values": {
+            "classification": "government-internal",
+            "created_at": "[REDACTED_VALUE]",
+            "location_record_id": "phase-a-location-address-reference",
+            "record_type": "address",
+            "retired_at": "[REDACTED_VALUE]"
+          }
+        },
+        {
+          "classification": "restricted",
+          "owning_callable": "transform_citizen_geotag_identity_crosswalk",
+          "primary_key": {
+            "location_record_id": "phase-a-location-citizen-geotag-001"
+          },
+          "source_identity": "citizen_geotag_submissions:phase-a-geotag-001",
+          "table": "proposed_location_record",
+          "values": {
+            "classification": "restricted",
+            "created_at": "[REDACTED_VALUE]",
+            "location_record_id": "phase-a-location-citizen-geotag-001",
+            "record_type": "address",
+            "retired_at": "[REDACTED_VALUE]"
+          }
+        },
+        {
+          "classification": null,
+          "owning_callable": "transform_address_points_geometry",
+          "primary_key": {
+            "migration_exception_id": "phase-a-exception-geometry-authority-address-points-phase-a-address-points-id"
+          },
+          "source_identity": "address_points:phase-a-address-points-id",
+          "table": "proposed_migration_exception",
+          "values": {
+            "batch_id": "phase-a-address-points-geometry-slice",
+            "created_at": "[REDACTED_VALUE]",
+            "details_json": {
+              "non_official": true,
+              "open_authority_rfi": "geometry-promotion-authority",
+              "reason": "Canonical geometry promotion authority unresolved; observation preserved without canonical promotion",
+              "target_entity": "geometry_observation",
+              "target_id": "phase-a-geometry-address-points-phase-a-address-points-id"
+            },
+            "exception_type": "authority-rfi",
+            "migration_exception_id": "phase-a-exception-geometry-authority-address-points-phase-a-address-points-id",
+            "owner": "SDA",
+            "resolved_at": "[REDACTED_VALUE]",
+            "severity": "medium",
+            "source_field": null,
+            "source_key": "address_points:phase-a-address-points-id",
+            "source_table": "address_points"
+          }
+        },
+        {
+          "classification": null,
+          "owning_callable": "transform_address_records_geometry",
+          "primary_key": {
+            "migration_exception_id": "phase-a-exception-geometry-authority-address-records-phase-a-address-records-id"
+          },
+          "source_identity": "address_records:phase-a-address-records-id",
+          "table": "proposed_migration_exception",
+          "values": {
+            "batch_id": "phase-a-address-records-geometry-slice",
+            "created_at": "[REDACTED_VALUE]",
+            "details_json": {
+              "non_official": true,
+              "open_authority_rfi": "geometry-promotion-authority",
+              "reason": "Canonical geometry promotion authority unresolved; address_records observation preserved without canonical promotion",
+              "target_entity": "geometry_observation",
+              "target_id": "phase-a-geometry-address-records-phase-a-address-records-id"
+            },
+            "exception_type": "authority-rfi",
+            "migration_exception_id": "phase-a-exception-geometry-authority-address-records-phase-a-address-records-id",
+            "owner": "SDA",
+            "resolved_at": "[REDACTED_VALUE]",
+            "severity": "medium",
+            "source_field": null,
+            "source_key": "address_records:phase-a-address-records-id",
+            "source_table": "address_records"
+          }
+        },
+        {
+          "classification": null,
+          "owning_callable": "transform_citizen_geotag_geometry",
+          "primary_key": {
+            "migration_exception_id": "phase-a-exception-geometry-authority-citizen-geotag-submissions-phase-a-geotag-001"
+          },
+          "source_identity": "citizen_geotag_submissions:phase-a-geotag-001",
+          "table": "proposed_migration_exception",
+          "values": {
+            "batch_id": "phase-a-citizen-geotag-submissions-geometry-slice",
+            "created_at": "[REDACTED_VALUE]",
+            "details_json": {
+              "non_official": true,
+              "open_authority_rfi": "geometry-promotion-authority",
+              "public_release_prohibited": true,
+              "reason": "Canonical geometry promotion authority unresolved; restricted citizen geotag observation preserved without canonical promotion or public release",
+              "target_entity": "geometry_observation",
+              "target_id": "phase-a-geometry-citizen-geotag-submissions-phase-a-geotag-001"
+            },
+            "exception_type": "authority-rfi",
+            "migration_exception_id": "phase-a-exception-geometry-authority-citizen-geotag-submissions-phase-a-geotag-001",
+            "owner": "SDA",
+            "resolved_at": "[REDACTED_VALUE]",
+            "severity": "medium",
+            "source_field": null,
+            "source_key": "citizen_geotag_submissions:phase-a-geotag-001",
+            "source_table": "citizen_geotag_submissions"
+          }
+        },
+        {
+          "classification": "active subject",
+          "owning_callable": "transform_address_records_identity_crosswalk",
+          "primary_key": {
+            "subject_id": "phase-a-subject-phase-a-location-address-records-id"
+          },
+          "source_identity": "address_records:phase-a-address-records-id",
+          "table": "proposed_registry_subject",
+          "values": {
+            "created_at": "[REDACTED_VALUE]",
+            "delete_policy": "retire-only",
+            "native_id": "phase-a-location-address-records-id",
+            "retired_at": "[REDACTED_VALUE]",
+            "subject_entity": "location_record",
+            "subject_id": "phase-a-subject-phase-a-location-address-records-id",
+            "subject_state": "active"
+          }
+        },
+        {
+          "classification": "active subject",
+          "owning_callable": "transform_addresses_identity_crosswalk",
+          "primary_key": {
+            "subject_id": "phase-a-subject-phase-a-location-address-reference"
+          },
+          "source_identity": "addresses:phase-a-addresses-id",
+          "table": "proposed_registry_subject",
+          "values": {
+            "created_at": "[REDACTED_VALUE]",
+            "delete_policy": "retire-only",
+            "native_id": "phase-a-location-address-reference",
+            "retired_at": "[REDACTED_VALUE]",
+            "subject_entity": "location_record",
+            "subject_id": "phase-a-subject-phase-a-location-address-reference",
+            "subject_state": "active"
+          }
+        },
+        {
+          "classification": "active subject",
+          "owning_callable": "transform_citizen_geotag_identity_crosswalk",
+          "primary_key": {
+            "subject_id": "phase-a-subject-phase-a-location-citizen-geotag-001"
+          },
+          "source_identity": "citizen_geotag_submissions:phase-a-geotag-001",
+          "table": "proposed_registry_subject",
+          "values": {
+            "created_at": "[REDACTED_VALUE]",
+            "delete_policy": "retire-only",
+            "native_id": "phase-a-location-citizen-geotag-001",
+            "retired_at": "[REDACTED_VALUE]",
+            "subject_entity": "location_record",
+            "subject_id": "phase-a-subject-phase-a-location-citizen-geotag-001",
+            "subject_state": "active"
+          }
+        }
+      ],
+      "before_hash": "df921407d51d97559db64f380bd7a5d112e9d3823ea985944bef94b31924c5a6",
+      "before_row_count": 16,
+      "before_rows": [
+        {
+          "classification": "restricted",
+          "owning_callable": "transform_address_points_geometry",
+          "primary_key": {
+            "geometry_observation_id": "phase-a-geometry-address-points-phase-a-address-points-id"
+          },
+          "source_identity": "address_points:phase-a-address-points-id",
+          "table": "proposed_geometry_observation",
+          "values": {
+            "capture_method": "[REDACTED_VALUE]",
+            "classification": "restricted",
+            "evidence_object_id": "phase-a-evidence-address-points",
+            "geometry_observation_id": "phase-a-geometry-address-points-phase-a-address-points-id",
+            "geometry_role": "location-point",
+            "horizontal_accuracy_m": "[REDACTED_VALUE]",
+            "licence_id": null,
+            "observed_at": "[REDACTED_VALUE]",
+            "observed_geom_srid": "[REDACTED_VALUE]",
+            "observed_geom_wkt": "[REDACTED_VALUE]",
+            "recorded_at": "[REDACTED_VALUE]",
+            "source_record_id": "phase-a-source-record-address-points-001",
+            "subject_id": "phase-a-subject-phase-a-location-address-reference"
+          }
+        },
+        {
+          "classification": "restricted",
+          "owning_callable": "transform_address_records_geometry",
+          "primary_key": {
+            "geometry_observation_id": "phase-a-geometry-address-records-phase-a-address-records-id"
+          },
+          "source_identity": "address_records:phase-a-address-records-id",
+          "table": "proposed_geometry_observation",
+          "values": {
+            "capture_method": "[REDACTED_VALUE]",
+            "classification": "restricted",
+            "evidence_object_id": "phase-a-evidence-address-records",
+            "geometry_observation_id": "phase-a-geometry-address-records-phase-a-address-records-id",
+            "geometry_role": "location-point",
+            "horizontal_accuracy_m": "[REDACTED_VALUE]",
+            "licence_id": null,
+            "observed_at": "[REDACTED_VALUE]",
+            "observed_geom_srid": "[REDACTED_VALUE]",
+            "observed_geom_wkt": "[REDACTED_VALUE]",
+            "recorded_at": "[REDACTED_VALUE]",
+            "source_record_id": "phase-a-source-record-address-records-001",
+            "subject_id": "phase-a-subject-phase-a-location-address-records-id"
+          }
+        },
+        {
+          "classification": "restricted",
+          "owning_callable": "transform_citizen_geotag_geometry",
+          "primary_key": {
+            "geometry_observation_id": "phase-a-geometry-citizen-geotag-submissions-phase-a-geotag-001"
+          },
+          "source_identity": "citizen_geotag_submissions:phase-a-geotag-001",
+          "table": "proposed_geometry_observation",
+          "values": {
+            "capture_method": "[REDACTED_VALUE]",
+            "classification": "restricted",
+            "evidence_object_id": "phase-a-evidence-citizen-geotag-submissions",
+            "geometry_observation_id": "phase-a-geometry-citizen-geotag-submissions-phase-a-geotag-001",
+            "geometry_role": "location-point",
+            "horizontal_accuracy_m": "[REDACTED_VALUE]",
+            "licence_id": null,
+            "observed_at": "[REDACTED_VALUE]",
+            "observed_geom_srid": "[REDACTED_VALUE]",
+            "observed_geom_wkt": "[REDACTED_VALUE]",
+            "recorded_at": "[REDACTED_VALUE]",
+            "source_record_id": "phase-a-source-record-citizen-geotag-submissions-001",
+            "subject_id": "phase-a-subject-phase-a-location-citizen-geotag-001"
+          }
+        },
+        {
+          "classification": null,
+          "owning_callable": "transform_address_points_observation_crosswalk",
+          "primary_key": {
+            "legacy_crosswalk_id": "phase-a-crosswalk-address-points-id-to-geometry-observation"
+          },
+          "source_identity": "address_points:phase-a-address-points-id",
+          "table": "proposed_legacy_crosswalk",
+          "values": {
+            "created_at": "[REDACTED_VALUE]",
+            "legacy_crosswalk_id": "phase-a-crosswalk-address-points-id-to-geometry-observation",
+            "legacy_id": "phase-a-address-points-id",
+            "source_field": "id",
+            "source_table": "address_points",
+            "target_entity": "geometry_observation",
+            "target_id": "phase-a-geometry-address-points-phase-a-address-points-id"
+          }
+        },
+        {
+          "classification": null,
+          "owning_callable": "transform_address_records_identity_crosswalk",
+          "primary_key": {
+            "legacy_crosswalk_id": "phase-a-crosswalk-address-records-id-to-location-record"
+          },
+          "source_identity": "address_records:phase-a-address-records-id",
+          "table": "proposed_legacy_crosswalk",
+          "values": {
+            "created_at": "[REDACTED_VALUE]",
+            "legacy_crosswalk_id": "phase-a-crosswalk-address-records-id-to-location-record",
+            "legacy_id": "phase-a-address-records-id",
+            "source_field": "id",
+            "source_table": "address_records",
+            "target_entity": "location_record",
+            "target_id": "phase-a-location-address-records-id"
+          }
+        },
+        {
+          "classification": null,
+          "owning_callable": "transform_addresses_identity_crosswalk",
+          "primary_key": {
+            "legacy_crosswalk_id": "phase-a-crosswalk-addresses-id-to-location-record"
+          },
+          "source_identity": "addresses:phase-a-addresses-id",
+          "table": "proposed_legacy_crosswalk",
+          "values": {
+            "created_at": "[REDACTED_VALUE]",
+            "legacy_crosswalk_id": "phase-a-crosswalk-addresses-id-to-location-record",
+            "legacy_id": "phase-a-addresses-id",
+            "source_field": "id",
+            "source_table": "addresses",
+            "target_entity": "location_record",
+            "target_id": "phase-a-location-address-reference"
+          }
+        },
+        {
+          "classification": null,
+          "owning_callable": "transform_citizen_geotag_identity_crosswalk",
+          "primary_key": {
+            "legacy_crosswalk_id": "phase-a-crosswalk-citizen-geotag-id-to-location-record"
+          },
+          "source_identity": "citizen_geotag_submissions:phase-a-geotag-001",
+          "table": "proposed_legacy_crosswalk",
+          "values": {
+            "created_at": "[REDACTED_VALUE]",
+            "legacy_crosswalk_id": "phase-a-crosswalk-citizen-geotag-id-to-location-record",
+            "legacy_id": "phase-a-geotag-001",
+            "source_field": "id",
+            "source_table": "citizen_geotag_submissions",
+            "target_entity": "location_record",
+            "target_id": "phase-a-location-citizen-geotag-001"
+          }
+        },
+        {
+          "classification": "government-internal",
+          "owning_callable": "transform_address_records_identity_crosswalk",
+          "primary_key": {
+            "location_record_id": "phase-a-location-address-records-id"
+          },
+          "source_identity": "address_records:phase-a-address-records-id",
+          "table": "proposed_location_record",
+          "values": {
+            "classification": "government-internal",
+            "created_at": "[REDACTED_VALUE]",
+            "location_record_id": "phase-a-location-address-records-id",
+            "record_type": "address",
+            "retired_at": "[REDACTED_VALUE]"
+          }
+        },
+        {
+          "classification": "government-internal",
+          "owning_callable": "transform_addresses_identity_crosswalk",
+          "primary_key": {
+            "location_record_id": "phase-a-location-address-reference"
+          },
+          "source_identity": "addresses:phase-a-addresses-id",
+          "table": "proposed_location_record",
+          "values": {
+            "classification": "government-internal",
+            "created_at": "[REDACTED_VALUE]",
+            "location_record_id": "phase-a-location-address-reference",
+            "record_type": "address",
+            "retired_at": "[REDACTED_VALUE]"
+          }
+        },
+        {
+          "classification": "restricted",
+          "owning_callable": "transform_citizen_geotag_identity_crosswalk",
+          "primary_key": {
+            "location_record_id": "phase-a-location-citizen-geotag-001"
+          },
+          "source_identity": "citizen_geotag_submissions:phase-a-geotag-001",
+          "table": "proposed_location_record",
+          "values": {
+            "classification": "restricted",
+            "created_at": "[REDACTED_VALUE]",
+            "location_record_id": "phase-a-location-citizen-geotag-001",
+            "record_type": "address",
+            "retired_at": "[REDACTED_VALUE]"
+          }
+        },
+        {
+          "classification": null,
+          "owning_callable": "transform_address_points_geometry",
+          "primary_key": {
+            "migration_exception_id": "phase-a-exception-geometry-authority-address-points-phase-a-address-points-id"
+          },
+          "source_identity": "address_points:phase-a-address-points-id",
+          "table": "proposed_migration_exception",
+          "values": {
+            "batch_id": "phase-a-address-points-geometry-slice",
+            "created_at": "[REDACTED_VALUE]",
+            "details_json": {
+              "non_official": true,
+              "open_authority_rfi": "geometry-promotion-authority",
+              "reason": "Canonical geometry promotion authority unresolved; observation preserved without canonical promotion",
+              "target_entity": "geometry_observation",
+              "target_id": "phase-a-geometry-address-points-phase-a-address-points-id"
+            },
+            "exception_type": "authority-rfi",
+            "migration_exception_id": "phase-a-exception-geometry-authority-address-points-phase-a-address-points-id",
+            "owner": "SDA",
+            "resolved_at": "[REDACTED_VALUE]",
+            "severity": "medium",
+            "source_field": null,
+            "source_key": "address_points:phase-a-address-points-id",
+            "source_table": "address_points"
+          }
+        },
+        {
+          "classification": null,
+          "owning_callable": "transform_address_records_geometry",
+          "primary_key": {
+            "migration_exception_id": "phase-a-exception-geometry-authority-address-records-phase-a-address-records-id"
+          },
+          "source_identity": "address_records:phase-a-address-records-id",
+          "table": "proposed_migration_exception",
+          "values": {
+            "batch_id": "phase-a-address-records-geometry-slice",
+            "created_at": "[REDACTED_VALUE]",
+            "details_json": {
+              "non_official": true,
+              "open_authority_rfi": "geometry-promotion-authority",
+              "reason": "Canonical geometry promotion authority unresolved; address_records observation preserved without canonical promotion",
+              "target_entity": "geometry_observation",
+              "target_id": "phase-a-geometry-address-records-phase-a-address-records-id"
+            },
+            "exception_type": "authority-rfi",
+            "migration_exception_id": "phase-a-exception-geometry-authority-address-records-phase-a-address-records-id",
+            "owner": "SDA",
+            "resolved_at": "[REDACTED_VALUE]",
+            "severity": "medium",
+            "source_field": null,
+            "source_key": "address_records:phase-a-address-records-id",
+            "source_table": "address_records"
+          }
+        },
+        {
+          "classification": null,
+          "owning_callable": "transform_citizen_geotag_geometry",
+          "primary_key": {
+            "migration_exception_id": "phase-a-exception-geometry-authority-citizen-geotag-submissions-phase-a-geotag-001"
+          },
+          "source_identity": "citizen_geotag_submissions:phase-a-geotag-001",
+          "table": "proposed_migration_exception",
+          "values": {
+            "batch_id": "phase-a-citizen-geotag-submissions-geometry-slice",
+            "created_at": "[REDACTED_VALUE]",
+            "details_json": {
+              "non_official": true,
+              "open_authority_rfi": "geometry-promotion-authority",
+              "public_release_prohibited": true,
+              "reason": "Canonical geometry promotion authority unresolved; restricted citizen geotag observation preserved without canonical promotion or public release",
+              "target_entity": "geometry_observation",
+              "target_id": "phase-a-geometry-citizen-geotag-submissions-phase-a-geotag-001"
+            },
+            "exception_type": "authority-rfi",
+            "migration_exception_id": "phase-a-exception-geometry-authority-citizen-geotag-submissions-phase-a-geotag-001",
+            "owner": "SDA",
+            "resolved_at": "[REDACTED_VALUE]",
+            "severity": "medium",
+            "source_field": null,
+            "source_key": "citizen_geotag_submissions:phase-a-geotag-001",
+            "source_table": "citizen_geotag_submissions"
+          }
+        },
+        {
+          "classification": "active subject",
+          "owning_callable": "transform_address_records_identity_crosswalk",
+          "primary_key": {
+            "subject_id": "phase-a-subject-phase-a-location-address-records-id"
+          },
+          "source_identity": "address_records:phase-a-address-records-id",
+          "table": "proposed_registry_subject",
+          "values": {
+            "created_at": "[REDACTED_VALUE]",
+            "delete_policy": "retire-only",
+            "native_id": "phase-a-location-address-records-id",
+            "retired_at": "[REDACTED_VALUE]",
+            "subject_entity": "location_record",
+            "subject_id": "phase-a-subject-phase-a-location-address-records-id",
+            "subject_state": "active"
+          }
+        },
+        {
+          "classification": "active subject",
+          "owning_callable": "transform_addresses_identity_crosswalk",
+          "primary_key": {
+            "subject_id": "phase-a-subject-phase-a-location-address-reference"
+          },
+          "source_identity": "addresses:phase-a-addresses-id",
+          "table": "proposed_registry_subject",
+          "values": {
+            "created_at": "[REDACTED_VALUE]",
+            "delete_policy": "retire-only",
+            "native_id": "phase-a-location-address-reference",
+            "retired_at": "[REDACTED_VALUE]",
+            "subject_entity": "location_record",
+            "subject_id": "phase-a-subject-phase-a-location-address-reference",
+            "subject_state": "active"
+          }
+        },
+        {
+          "classification": "active subject",
+          "owning_callable": "transform_citizen_geotag_identity_crosswalk",
+          "primary_key": {
+            "subject_id": "phase-a-subject-phase-a-location-citizen-geotag-001"
+          },
+          "source_identity": "citizen_geotag_submissions:phase-a-geotag-001",
+          "table": "proposed_registry_subject",
+          "values": {
+            "created_at": "[REDACTED_VALUE]",
+            "delete_policy": "retire-only",
+            "native_id": "phase-a-location-citizen-geotag-001",
+            "retired_at": "[REDACTED_VALUE]",
+            "subject_entity": "location_record",
+            "subject_id": "phase-a-subject-phase-a-location-citizen-geotag-001",
+            "subject_state": "active"
+          }
+        }
+      ],
+      "detection_executed": true,
+      "detector": "admin_extension_isolation_assert",
+      "detector_probe": {
+        "detection_executed": true,
+        "detector": "admin_extension_isolation_assert",
+        "expected_error": "accepted-family admin extension source context isolation mismatch",
+        "manual_expected_error_raise": false,
+        "mutation": "replace measured parent hash with an incorrect detector value",
+        "observed_error": "accepted-family admin extension source context isolation mismatch: administrative context to parent detector hash",
+        "status": "passed",
+        "test_id": "admin-context-parent-isolation-detector"
+      },
+      "manual_expected_error_raise": false,
+      "normalized_equality": true,
+      "prerequisite_equality": true,
+      "prerequisite_hash_after": "aacf2ff594f9615bc00e6f02eff07257b8eef9c4421eef607d02cb070cab11bd",
+      "prerequisite_hash_before": "aacf2ff594f9615bc00e6f02eff07257b8eef9c4421eef607d02cb070cab11bd",
+      "raw_values_redacted": true,
+      "source_mutation_fields": [
+        "admin_units.level",
+        "admin_units.code",
+        "admin_units.parent_id",
+        "admin_units.province_code",
+        "admin_units.name_es",
+        "admin_units.name_en",
+        "admin_units.status",
+        "admin_units.sort_order",
+        "admin_units.updated_at"
+      ],
       "status": "passed",
       "test_id": "admin-source-context-does-not-alter-parent"
     },
     {
-      "admin_ids_values_unchanged": true,
+      "after_hash": "7afecb457d108d2fd4d7a3d632675b613de4885433d6260b45842cd130769886",
+      "after_row_count": 3,
+      "after_rows": [
+        {
+          "classification": "government-internal",
+          "owning_callable": "transform_admin_units_identity_crosswalk",
+          "primary_key": {
+            "administrative_unit_id": "administrative-unit:admin_units:phase-a-admin-units-id"
+          },
+          "source_identity": "admin_units:phase-a-admin-units-id",
+          "table": "proposed_administrative_unit",
+          "values": {
+            "administrative_unit_id": "administrative-unit:admin_units:phase-a-admin-units-id",
+            "country_id": "phase-a-country-gq",
+            "created_at": "[REDACTED_VALUE]",
+            "retired_at": "[REDACTED_VALUE]"
+          }
+        },
+        {
+          "classification": null,
+          "owning_callable": "transform_admin_units_identity_crosswalk",
+          "primary_key": {
+            "legacy_crosswalk_id": "crosswalk:admin_units:id:phase-a-admin-units-id:to:administrative_unit:administrative-unit:admin_units:phase-a-admin-units-id"
+          },
+          "source_identity": "admin_units:phase-a-admin-units-id",
+          "table": "proposed_legacy_crosswalk",
+          "values": {
+            "created_at": "[REDACTED_VALUE]",
+            "legacy_crosswalk_id": "crosswalk:admin_units:id:phase-a-admin-units-id:to:administrative_unit:administrative-unit:admin_units:phase-a-admin-units-id",
+            "legacy_id": "phase-a-admin-units-id",
+            "source_field": "id",
+            "source_table": "admin_units",
+            "target_entity": "administrative_unit",
+            "target_id": "administrative-unit:admin_units:phase-a-admin-units-id"
+          }
+        },
+        {
+          "classification": "active subject",
+          "owning_callable": "transform_admin_units_identity_crosswalk",
+          "primary_key": {
+            "subject_id": "subject:administrative_unit:administrative-unit:admin_units:phase-a-admin-units-id"
+          },
+          "source_identity": "admin_units:phase-a-admin-units-id",
+          "table": "proposed_registry_subject",
+          "values": {
+            "created_at": "[REDACTED_VALUE]",
+            "delete_policy": "retire-only",
+            "native_id": "administrative-unit:admin_units:phase-a-admin-units-id",
+            "retired_at": "[REDACTED_VALUE]",
+            "subject_entity": "administrative_unit",
+            "subject_id": "subject:administrative_unit:administrative-unit:admin_units:phase-a-admin-units-id",
+            "subject_state": "active"
+          }
+        }
+      ],
+      "before_hash": "7afecb457d108d2fd4d7a3d632675b613de4885433d6260b45842cd130769886",
+      "before_row_count": 3,
+      "before_rows": [
+        {
+          "classification": "government-internal",
+          "owning_callable": "transform_admin_units_identity_crosswalk",
+          "primary_key": {
+            "administrative_unit_id": "administrative-unit:admin_units:phase-a-admin-units-id"
+          },
+          "source_identity": "admin_units:phase-a-admin-units-id",
+          "table": "proposed_administrative_unit",
+          "values": {
+            "administrative_unit_id": "administrative-unit:admin_units:phase-a-admin-units-id",
+            "country_id": "phase-a-country-gq",
+            "created_at": "[REDACTED_VALUE]",
+            "retired_at": "[REDACTED_VALUE]"
+          }
+        },
+        {
+          "classification": null,
+          "owning_callable": "transform_admin_units_identity_crosswalk",
+          "primary_key": {
+            "legacy_crosswalk_id": "crosswalk:admin_units:id:phase-a-admin-units-id:to:administrative_unit:administrative-unit:admin_units:phase-a-admin-units-id"
+          },
+          "source_identity": "admin_units:phase-a-admin-units-id",
+          "table": "proposed_legacy_crosswalk",
+          "values": {
+            "created_at": "[REDACTED_VALUE]",
+            "legacy_crosswalk_id": "crosswalk:admin_units:id:phase-a-admin-units-id:to:administrative_unit:administrative-unit:admin_units:phase-a-admin-units-id",
+            "legacy_id": "phase-a-admin-units-id",
+            "source_field": "id",
+            "source_table": "admin_units",
+            "target_entity": "administrative_unit",
+            "target_id": "administrative-unit:admin_units:phase-a-admin-units-id"
+          }
+        },
+        {
+          "classification": "active subject",
+          "owning_callable": "transform_admin_units_identity_crosswalk",
+          "primary_key": {
+            "subject_id": "subject:administrative_unit:administrative-unit:admin_units:phase-a-admin-units-id"
+          },
+          "source_identity": "admin_units:phase-a-admin-units-id",
+          "table": "proposed_registry_subject",
+          "values": {
+            "created_at": "[REDACTED_VALUE]",
+            "delete_policy": "retire-only",
+            "native_id": "administrative-unit:admin_units:phase-a-admin-units-id",
+            "retired_at": "[REDACTED_VALUE]",
+            "subject_entity": "administrative_unit",
+            "subject_id": "subject:administrative_unit:administrative-unit:admin_units:phase-a-admin-units-id",
+            "subject_state": "active"
+          }
+        }
+      ],
+      "detection_executed": true,
+      "detector": "admin_extension_isolation_assert",
+      "detector_probe": {
+        "detection_executed": true,
+        "detector": "admin_extension_isolation_assert",
+        "expected_error": "accepted-family admin extension source context isolation mismatch",
+        "manual_expected_error_raise": false,
+        "mutation": "replace one measured administrative envelope value with an incorrect detector value",
+        "observed_error": "accepted-family admin extension source context isolation mismatch: parent context to administrative detector hash",
+        "status": "passed",
+        "test_id": "parent-context-admin-isolation-detector"
+      },
+      "manual_expected_error_raise": false,
+      "normalized_equality": true,
+      "prerequisite_equality": true,
+      "prerequisite_hash_after": "7b26b9f2e741bb5d2dec1ae8f4b16025e6dd282a9a3a8bbeb7fe9a661c207517",
+      "prerequisite_hash_before": "7b26b9f2e741bb5d2dec1ae8f4b16025e6dd282a9a3a8bbeb7fe9a661c207517",
+      "raw_values_redacted": true,
+      "source_mutation_fields": [
+        "addresses.formatted",
+        "address_points.is_active",
+        "address_records.address_label",
+        "citizen_geotag_submissions.field_verified_at"
+      ],
       "status": "passed",
       "test_id": "parent-source-fields-do-not-alter-admin"
     }
@@ -6804,6 +7643,7 @@
       "test_id": "admin-lineage-hash-mismatch"
     }
   ],
+  "duplicate_permutation_mutation_tests": 1,
   "extended_union_hash": "1f9a472978313f3ebdc6f82869a2e0af4eb7786c08f4537ba8629b5dc3ddbb41",
   "extended_union_row_count": 19,
   "first_run_administrative_inserts": 3,
@@ -6812,7 +7652,10 @@
   "first_run_total_inserts": 19,
   "first_run_updates": 0,
   "generic_transform_used": false,
-  "nested_structure_mutation_tests": 1,
+  "manual_expected_error_raises": 0,
+  "missing_key_mutation_tests": 1,
+  "nested_structure_mutation_tests": 4,
+  "owner_domain_mutation_tests": 1,
   "ownership_conflict_tests": [
     {
       "detection_executed": true,
@@ -11020,6 +11863,7 @@
       }
     ]
   },
+  "privacy_injection_tests": 4,
   "protected_artifact_change_flags": {
     "admin_oracle_changed": false,
     "admin_report_changed": false,
@@ -11249,13 +12093,212 @@
     "status": "passed"
   },
   "read_only_write_blocked": true,
+  "report_schema_mutation_tests": [
+    {
+      "detection_executed": true,
+      "detector": "admin_extension_report_structure_validation",
+      "expected_error": "accepted-family admin extension report structure violation",
+      "manual_expected_error_raise": false,
+      "mutation": "add unknown top-level key",
+      "observed_error": "accepted-family admin extension report structure violation: <root>: unknown keys ['unexpected_key']",
+      "status": "passed",
+      "test_id": "extension-report-unknown-top-level-key"
+    },
+    {
+      "detection_executed": true,
+      "detector": "admin_extension_report_structure_validation",
+      "expected_error": "accepted-family admin extension report structure violation",
+      "manual_expected_error_raise": false,
+      "mutation": "add unknown ownership-control key",
+      "observed_error": "accepted-family admin extension report structure violation: ownership_controls: unknown keys ['unexpected_nested']",
+      "status": "passed",
+      "test_id": "extension-report-unknown-ownership-key"
+    },
+    {
+      "detection_executed": true,
+      "detector": "admin_extension_report_structure_validation",
+      "expected_error": "accepted-family admin extension report structure violation",
+      "manual_expected_error_raise": false,
+      "mutation": "add unknown permutation key",
+      "observed_error": "accepted-family admin extension report structure violation: chain_permutation_hashes[0]: unknown keys ['unexpected_nested']",
+      "status": "passed",
+      "test_id": "extension-report-unknown-permutation-key"
+    },
+    {
+      "detection_executed": true,
+      "detector": "admin_extension_report_structure_validation",
+      "expected_error": "accepted-family admin extension report structure violation",
+      "manual_expected_error_raise": false,
+      "mutation": "add unknown rollback-proof key",
+      "observed_error": "accepted-family admin extension report structure violation: rollback_evidence[0]: unknown test keys ['unexpected_nested']",
+      "status": "passed",
+      "test_id": "extension-report-unknown-rollback-key"
+    },
+    {
+      "detection_executed": true,
+      "detector": "admin_extension_report_structure_validation",
+      "expected_error": "accepted-family admin extension report structure violation",
+      "manual_expected_error_raise": false,
+      "mutation": "change parent row count to string",
+      "observed_error": "accepted-family admin extension report structure violation: parent_row_count: wrong type str",
+      "status": "passed",
+      "test_id": "extension-report-wrong-top-level-type"
+    },
+    {
+      "detection_executed": true,
+      "detector": "admin_extension_report_structure_validation",
+      "expected_error": "accepted-family admin extension report structure violation",
+      "manual_expected_error_raise": false,
+      "mutation": "change permutation list to object",
+      "observed_error": "accepted-family admin extension report structure violation: chain_permutation_hashes: unknown dictionary context",
+      "status": "passed",
+      "test_id": "extension-report-wrong-permutation-collection-type"
+    },
+    {
+      "detection_executed": true,
+      "detector": "admin_extension_report_structure_validation",
+      "expected_error": "accepted-family admin extension report structure violation",
+      "manual_expected_error_raise": false,
+      "mutation": "change candidate row count to string",
+      "observed_error": "accepted-family admin extension report structure violation: candidate_row_count: wrong type str",
+      "status": "passed",
+      "test_id": "extension-report-wrong-row-count-type"
+    },
+    {
+      "detection_executed": true,
+      "detector": "admin_extension_report_structure_validation",
+      "expected_error": "accepted-family admin extension report structure violation",
+      "manual_expected_error_raise": false,
+      "mutation": "replace row table with unreviewed table",
+      "observed_error": "accepted-family admin extension report structure violation: complete_row_keys_and_owners[0]: invalid table domain",
+      "status": "passed",
+      "test_id": "extension-report-invalid-table-domain"
+    },
+    {
+      "detection_executed": true,
+      "detector": "admin_extension_report_structure_validation",
+      "expected_error": "accepted-family admin extension report structure violation",
+      "manual_expected_error_raise": false,
+      "mutation": "add unreviewed callable binding",
+      "observed_error": "accepted-family admin extension report structure violation: callable_bindings: invalid callable binding domain",
+      "status": "passed",
+      "test_id": "extension-report-invalid-callable-domain"
+    },
+    {
+      "detection_executed": true,
+      "detector": "admin_extension_report_structure_validation",
+      "expected_error": "accepted-family admin extension report structure violation",
+      "manual_expected_error_raise": false,
+      "mutation": "replace owner with unreviewed callable",
+      "observed_error": "accepted-family admin extension report structure violation: complete_row_keys_and_owners[0]: invalid owner domain",
+      "status": "passed",
+      "test_id": "extension-report-invalid-owner-domain"
+    },
+    {
+      "detection_executed": true,
+      "detector": "admin_extension_report_structure_validation",
+      "expected_error": "accepted-family admin extension report structure violation",
+      "manual_expected_error_raise": false,
+      "mutation": "remove permutation union_hash",
+      "observed_error": "accepted-family admin extension report structure violation: chain_permutation_hashes[0]: missing keys ['union_hash']",
+      "status": "passed",
+      "test_id": "extension-report-missing-required-nested-key"
+    },
+    {
+      "detection_executed": true,
+      "detector": "admin_extension_report_structure_validation",
+      "expected_error": "accepted-family admin extension report structure violation",
+      "manual_expected_error_raise": false,
+      "mutation": "duplicate one chain permutation",
+      "observed_error": "accepted-family admin extension report structure violation: chain_permutation_hashes: duplicate or missing permutation",
+      "status": "passed",
+      "test_id": "extension-report-duplicate-permutation"
+    },
+    {
+      "detection_executed": true,
+      "detector": "admin_extension_report_structure_validation",
+      "expected_error": "accepted-family admin extension report structure violation",
+      "manual_expected_error_raise": false,
+      "mutation": "replace reviewed primary-key field",
+      "observed_error": "accepted-family admin extension report structure violation: complete_row_keys_and_owners[0].primary_key: malformed primary key",
+      "status": "passed",
+      "test_id": "extension-report-malformed-primary-key"
+    },
+    {
+      "detection_executed": true,
+      "detector": "admin_extension_privacy_validation",
+      "expected_error": "accepted-family admin extension privacy leakage",
+      "manual_expected_error_raise": false,
+      "mutation": "inject raw administrative context sentinel",
+      "observed_error": "accepted-family admin extension privacy leakage",
+      "status": "passed",
+      "test_id": "extension-report-raw-admin-context-injection"
+    },
+    {
+      "detection_executed": true,
+      "detector": "admin_extension_privacy_validation",
+      "expected_error": "accepted-family admin extension privacy leakage",
+      "manual_expected_error_raise": false,
+      "mutation": "inject restricted citizen sentinel",
+      "observed_error": "accepted-family admin extension privacy leakage",
+      "status": "passed",
+      "test_id": "extension-report-citizen-privacy-injection"
+    },
+    {
+      "detection_executed": true,
+      "detector": "admin_extension_privacy_validation",
+      "expected_error": "accepted-family admin extension privacy leakage",
+      "manual_expected_error_raise": false,
+      "mutation": "inject precise geometry value",
+      "observed_error": "accepted-family admin extension privacy leakage",
+      "status": "passed",
+      "test_id": "extension-report-precise-geometry-injection"
+    },
+    {
+      "detection_executed": true,
+      "detector": "admin_extension_privacy_validation",
+      "expected_error": "accepted-family admin extension privacy leakage",
+      "manual_expected_error_raise": false,
+      "mutation": "inject raw value inside nested list/object",
+      "observed_error": "accepted-family admin extension privacy leakage",
+      "status": "passed",
+      "test_id": "extension-report-nested-list-object-leakage"
+    }
+  ],
   "report_schema_validation": {
     "all_24_permutation_structures_validated": true,
+    "owner_table_callable_domains_validated": true,
     "path_aware_structure_validation": true,
+    "serialized_sentinel_used_as_nested_schema_detector": false,
     "status": "passed",
-    "unknown_nested_keys_rejected": true,
-    "unknown_top_level_keys_rejected": true,
-    "wrong_type_rejected": true
+    "unknown_dictionary_contexts_remaining": 0,
+    "validated_schema_contexts": [
+      "blocked write proof",
+      "callable bindings",
+      "canonical union row",
+      "chain definitions",
+      "comparator connection",
+      "control hashes",
+      "control paths",
+      "delta summary",
+      "expected absence",
+      "normalized values",
+      "ownership and semantic controls",
+      "permutation result",
+      "prerequisite row",
+      "prerequisite snapshot",
+      "prerequisite validation",
+      "primary key",
+      "protected artifact flags",
+      "read-only comparator",
+      "reviewed JSON value",
+      "root report",
+      "row ownership entry",
+      "schema validation result",
+      "table count map",
+      "test result"
+    ],
+    "wrong_types_rejected": true
   },
   "rollback_evidence": [
     {
@@ -32513,10 +33556,12 @@
   ],
   "rollback_hash_equality_all": true,
   "rollback_row_equality_all": true,
+  "schema_mutation_test_count": 17,
   "second_run_deletes": 0,
   "second_run_inserts": 0,
   "second_run_updates": 0,
   "status": "passed",
+  "table_domain_mutation_tests": 1,
   "transform_reads_oracle": false,
   "unexpected_union_tests": [
     {
@@ -43510,5 +44555,6 @@
       "test_id": "unexpected-additional-admin-crosswalk"
     }
   ],
-  "unknown_key_mutation_tests": 2
+  "unknown_key_mutation_tests": 4,
+  "wrong_type_mutation_tests": 3
 }
