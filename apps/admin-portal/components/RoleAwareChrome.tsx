@@ -53,6 +53,14 @@ function navGroupKey(group: keyof typeof navGroupLabels) {
   return labels[group];
 }
 
+function normalizedRoute(href: string) {
+  return href.split(/[?#]/, 1)[0] || '/';
+}
+
+function readableRole(role: OperatorRole) {
+  return role === 'agency_viewer' ? 'Agency viewer' : role.charAt(0).toUpperCase() + role.slice(1);
+}
+
 const STAFF_SESSION_ROUTES = new Set(['/field', '/registry', '/signage', '/reports', '/exports', '/territories', '/verify', '/records', '/admin/staff']);
 
 export function RoleAwareChrome({ apiBaseUrl, children, skipSessionLookup = false }: RoleAwareChromeProps) {
@@ -63,6 +71,7 @@ export function RoleAwareChrome({ apiBaseUrl, children, skipSessionLookup = fals
   const { sessionUser, sessionStatus, reloadSession } = useStoredSession(browserApiBaseUrl, { enabled: !skipSessionLookup });
   const [isLoggingOut, setIsLoggingOut] = useState(false);
   const [forcedGuest, setForcedGuest] = useState(false);
+  const [mobileNavigationOpen, setMobileNavigationOpen] = useState(false);
 
   const effectiveSessionUser = forcedGuest ? null : sessionUser;
   const effectiveSessionStatus = forcedGuest ? 'guest' : sessionStatus;
@@ -71,6 +80,7 @@ export function RoleAwareChrome({ apiBaseUrl, children, skipSessionLookup = fals
   const currentRoute = pathname || '/';
   const waitingForAccessResolution = effectiveSessionStatus === 'loading' && routeNeedsResolvedSession(currentRoute);
   const accessAllowed = effectiveSessionStatus === 'loading' ? true : isRouteAccessible(currentRoute, role);
+  const isProtectedWorkspace = role !== 'guest' && STAFF_SESSION_ROUTES.has(currentRoute);
 
   const visibleItems = useMemo(
     () => navItems.filter((item) => item.visibleTo.includes(role) && (role === 'guest' ? item.group === 'public' : item.group !== 'public')),
@@ -84,6 +94,10 @@ export function RoleAwareChrome({ apiBaseUrl, children, skipSessionLookup = fals
       return groups;
     }, {});
   }, [visibleItems]);
+
+  useEffect(() => {
+    setMobileNavigationOpen(false);
+  }, [currentRoute]);
 
   useEffect(() => {
     if (effectiveSessionStatus === 'loading' || accessAllowed) {
@@ -113,6 +127,9 @@ export function RoleAwareChrome({ apiBaseUrl, children, skipSessionLookup = fals
 
   const workspaceHref = defaultRouteForRole(role);
   const staffSessionUser = effectiveSessionStatus === 'ready' && effectiveSessionUser && STAFF_SESSION_ROUTES.has(currentRoute) ? effectiveSessionUser : null;
+  const currentNavItem = visibleItems.find((item) => normalizedRoute(item.href) === currentRoute) ?? null;
+  const currentNavLabelKey = currentNavItem ? navLabelKey(normalizedRoute(currentNavItem.href)) : undefined;
+  const currentSectionLabel = currentNavItem ? (currentNavLabelKey ? t(currentNavLabelKey) : currentNavItem.label) : t('navStaff');
   const controlNavItems = [
     { href: '/field', label: 'Field', iconClass: 'queue' },
     { href: '/registry', label: 'Registry', iconClass: 'case-files' },
@@ -120,6 +137,138 @@ export function RoleAwareChrome({ apiBaseUrl, children, skipSessionLookup = fals
     { href: '/reports', label: 'Reports', iconClass: 'reports' },
     ...(role === 'admin' ? [{ href: '/admin/staff?from=mobile-staff-services', label: 'Admin', iconClass: 'dashboard' }] : []),
   ].filter((item) => isRouteAccessible(item.href, role));
+
+  const accessContent = waitingForAccessResolution ? (
+    <section className="panel panel-state-grid">
+      <div className="panel-state">
+        <strong>{t('checkingAccess')}</strong>
+        <p>{t('checkingAccessCopy')}</p>
+      </div>
+    </section>
+  ) : !accessAllowed ? (
+    <section className="panel panel-state-grid">
+      <div className="panel-state">
+        <strong>{t('redirecting')}</strong>
+        <p>{t('redirectingCopy')}</p>
+      </div>
+    </section>
+  ) : (
+    children
+  );
+
+  const navigation = (
+    <nav className="top-nav grouped-top-nav" aria-label="Main platform navigation">
+      {(Object.keys(navGroupLabels) as Array<keyof typeof navGroupLabels>).map((group) => {
+        const items = groupedItems[group] ?? [];
+        if (!items.length) return null;
+        return (
+          <section className="nav-group" key={group} aria-labelledby={`nav-group-${group}`}>
+            <p className="nav-group-label" id={`nav-group-${group}`}>{t(navGroupKey(group))}</p>
+            <div className="nav-group-links">
+              {items.map((item) => {
+                const itemRoute = normalizedRoute(item.href);
+                const isActive = itemRoute === currentRoute;
+                const labelKey = navLabelKey(itemRoute);
+                return (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    className={`nav-link ${isActive ? 'nav-link-active' : ''}`}
+                    aria-current={isActive ? 'page' : undefined}
+                  >
+                    {item.href === '/login' ? (
+                      <>
+                        <span className="nav-link-title">{t('navAccount')}</span>
+                        <span className="nav-link-subtitle">{labelKey ? t(labelKey) : item.label}</span>
+                      </>
+                    ) : (
+                      <span className="nav-link-title">{labelKey ? t(labelKey) : item.label}</span>
+                    )}
+                  </Link>
+                );
+              })}
+            </div>
+          </section>
+        );
+      })}
+    </nav>
+  );
+
+  if (isProtectedWorkspace) {
+    return (
+      <div className={`operator-workspace-shell chrome-role-${role}`}>
+        <button
+          className="operator-mobile-menu"
+          type="button"
+          aria-expanded={mobileNavigationOpen}
+          aria-controls="operator-primary-navigation"
+          onClick={() => setMobileNavigationOpen((open) => !open)}
+        >
+          <span aria-hidden="true" />
+          <strong>{currentSectionLabel}</strong>
+        </button>
+
+        <aside id="operator-primary-navigation" className={`operator-sidebar ${mobileNavigationOpen ? 'is-open' : ''}`}>
+          <div className="operator-sidebar-identity">
+            <Link href={workspaceHref} className="operator-platform-link">
+              <span>{t('republic')}</span>
+              <strong>National Location Infrastructure</strong>
+            </Link>
+            {staffSessionUser ? (
+              <div className="operator-role-context">
+                <span>{t('signedInAs')}</span>
+                <strong>{staffSessionUser.full_name}</strong>
+                <small>{readableRole(role)}</small>
+              </div>
+            ) : null}
+          </div>
+          {navigation}
+        </aside>
+
+        {mobileNavigationOpen ? (
+          <button
+            className="operator-navigation-scrim"
+            type="button"
+            aria-label={t('navStaff')}
+            onClick={() => setMobileNavigationOpen(false)}
+          />
+        ) : null}
+
+        <section className="operator-workspace-column" aria-label={currentSectionLabel}>
+          <header className="operator-utility-bar">
+            <div className="operator-location-context">
+              <span>{t('navStaff')}</span>
+              <strong>{currentSectionLabel}</strong>
+            </div>
+            {staffSessionUser ? (
+              <div className="operator-session-utility" aria-live="polite">
+                <span>{readableRole(role)}</span>
+                <button type="button" onClick={() => void handleLogout()} disabled={isLoggingOut}>
+                  {isLoggingOut ? t('signingOut') : t('signOut')}
+                </button>
+              </div>
+            ) : null}
+          </header>
+
+          {accessContent}
+
+          {controlNavItems.length ? (
+            <nav className="mobile-control-nav" aria-label="Operator control navigation">
+              {controlNavItems.map((item) => {
+                const isActive = currentRoute === normalizedRoute(item.href);
+                return (
+                  <Link key={item.href} href={item.href} className={`mobile-control-nav-link mobile-control-nav-${item.iconClass} ${isActive ? 'active' : ''}`} aria-current={isActive ? 'page' : undefined}>
+                    <span aria-hidden="true" />
+                    <strong>{item.label}</strong>
+                  </Link>
+                );
+              })}
+            </nav>
+          ) : null}
+        </section>
+      </div>
+    );
+  }
 
   return (
     <>
@@ -130,40 +279,7 @@ export function RoleAwareChrome({ apiBaseUrl, children, skipSessionLookup = fals
               <span className="platform-overview-title">Home</span>
             </Link>
           ) : null}
-          <nav className="top-nav grouped-top-nav" aria-label="Main platform navigation">
-            {(Object.keys(navGroupLabels) as Array<keyof typeof navGroupLabels>).map((group) => {
-              const items = groupedItems[group] ?? [];
-              if (!items.length) return null;
-              return (
-                <section className="nav-group" key={group} aria-labelledby={`nav-group-${group}`}>
-                  <p className="nav-group-label" id={`nav-group-${group}`}>{t(navGroupKey(group))}</p>
-                  <div className="nav-group-links">
-                    {items.map((item) => {
-                      const isActive = item.href === currentRoute;
-                      const labelKey = navLabelKey(item.href);
-                      return (
-                        <Link
-                          key={item.href}
-                          href={item.href}
-                          className={`nav-link ${isActive ? 'nav-link-active' : ''}`}
-                          aria-current={isActive ? 'page' : undefined}
-                        >
-                          {item.href === '/login' ? (
-                            <>
-                              <span className="nav-link-title">{t('navAccount')}</span>
-                              <span className="nav-link-subtitle">{labelKey ? t(labelKey) : item.label}</span>
-                            </>
-                          ) : (
-                            <span className="nav-link-title">{labelKey ? t(labelKey) : item.label}</span>
-                          )}
-                        </Link>
-                      );
-                    })}
-                  </div>
-                </section>
-              );
-            })}
-          </nav>
+          {navigation}
         </div>
 
         {staffSessionUser ? (
@@ -176,37 +292,7 @@ export function RoleAwareChrome({ apiBaseUrl, children, skipSessionLookup = fals
         ) : null}
       </div>
 
-      {role !== 'guest' && ['/field', '/registry', '/signage', '/reports', '/exports', '/territories', '/verify'].includes(currentRoute) && controlNavItems.length ? (
-        <nav className="mobile-control-nav" aria-label="Operator control navigation">
-          {controlNavItems.map((item) => {
-            const isActive = currentRoute === item.href.split('?')[0];
-            return (
-              <Link key={item.href} href={item.href} className={`mobile-control-nav-link mobile-control-nav-${item.iconClass} ${isActive ? 'active' : ''}`} aria-current={isActive ? 'page' : undefined}>
-                <span aria-hidden="true" />
-                <strong>{item.label}</strong>
-              </Link>
-            );
-          })}
-        </nav>
-      ) : null}
-
-      {waitingForAccessResolution ? (
-        <section className="panel panel-state-grid">
-          <div className="panel-state">
-            <strong>{t('checkingAccess')}</strong>
-            <p>{t('checkingAccessCopy')}</p>
-          </div>
-        </section>
-      ) : !accessAllowed ? (
-        <section className="panel panel-state-grid">
-          <div className="panel-state">
-            <strong>{t('redirecting')}</strong>
-            <p>{t('redirectingCopy')}</p>
-          </div>
-        </section>
-      ) : (
-        children
-      )}
+      {accessContent}
     </>
   );
 }
