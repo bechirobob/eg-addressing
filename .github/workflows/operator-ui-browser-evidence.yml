@@ -72,7 +72,10 @@ jobs:
       - name: Capture role and viewport evidence
         env:
           OPERATOR_UI_COMMIT: ${{ github.event.pull_request.head.sha || github.sha }}
-        run: node scripts/operator-shell-browser-evidence.mjs
+        run: |
+          set -o pipefail
+          mkdir -p artifacts/operator-ui-browser-evidence
+          node scripts/operator-shell-browser-evidence.mjs 2>&1 | tee artifacts/operator-ui-browser-evidence/execution.log
 
       - name: Upload browser evidence
         if: always()
