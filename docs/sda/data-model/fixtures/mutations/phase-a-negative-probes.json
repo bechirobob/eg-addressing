@@ -1,0 +1,86 @@
+{
+  "fixture_authority": "SDA Review 11 Phase A correction strict negative-probe authority",
+  "probes": [
+    {
+      "expected_reason": "wrong transform implementation",
+      "mutation_kind": "implementation",
+      "normal_path_required": true,
+      "probe_id": "phase-a-neg-wrong-transform-implementation",
+      "rollback_required": true,
+      "unchanged_state_required": true
+    },
+    {
+      "expected_reason": "wrong independently expected value",
+      "mutation_kind": "expected",
+      "normal_path_required": true,
+      "probe_id": "phase-a-neg-wrong-expected-value",
+      "rollback_required": true,
+      "unchanged_state_required": true
+    },
+    {
+      "expected_reason": "invalid controlled translation",
+      "mutation_kind": "source",
+      "normal_path_required": true,
+      "probe_id": "phase-a-neg-invalid-controlled-translation",
+      "rollback_required": true,
+      "unchanged_state_required": true
+    },
+    {
+      "expected_reason": "missing real target identity",
+      "mutation_kind": "implementation",
+      "normal_path_required": true,
+      "probe_id": "phase-a-neg-missing-real-target-identity",
+      "rollback_required": true,
+      "unchanged_state_required": true
+    },
+    {
+      "expected_reason": "unresolved real FK",
+      "mutation_kind": "implementation",
+      "normal_path_required": true,
+      "probe_id": "phase-a-neg-unresolved-real-fk",
+      "rollback_required": true,
+      "unchanged_state_required": true
+    },
+    {
+      "expected_reason": "missing archive",
+      "mutation_kind": "implementation",
+      "normal_path_required": true,
+      "probe_id": "phase-a-neg-missing-archive",
+      "rollback_required": true,
+      "unchanged_state_required": true
+    },
+    {
+      "expected_reason": "missing exception",
+      "mutation_kind": "implementation",
+      "normal_path_required": true,
+      "probe_id": "phase-a-neg-missing-exception",
+      "rollback_required": true,
+      "unchanged_state_required": true
+    },
+    {
+      "expected_reason": "duplicate output",
+      "mutation_kind": "implementation",
+      "normal_path_required": true,
+      "probe_id": "phase-a-neg-duplicate-output",
+      "rollback_required": true,
+      "unchanged_state_required": true
+    },
+    {
+      "expected_reason": "lost relationship",
+      "mutation_kind": "relationship",
+      "normal_path_required": true,
+      "probe_id": "phase-a-neg-lost-relationship",
+      "rollback_required": true,
+      "unchanged_state_required": true
+    },
+    {
+      "expected_reason": "mismatched typed hash",
+      "mutation_kind": "expected",
+      "normal_path_required": true,
+      "probe_id": "phase-a-neg-mismatched-typed-hash",
+      "rollback_required": true,
+      "unchanged_state_required": true
+    }
+  ],
+  "review_status": "phase-a-correction-independent-negative-probe-fixture"
+}

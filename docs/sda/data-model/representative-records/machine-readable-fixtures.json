@@ -1,0 +1,3933 @@
+{
+  "negative_fixtures": {
+    "invalid-cardinality-primary-object": {
+      "expect_error": "exceeds max count"
+    },
+    "invalid-geometry-role-type": {
+      "expect_error": "invalid geometry type"
+    },
+    "invalid-publication-prerequisite": {
+      "expect_error": "publication prerequisite"
+    },
+    "invalid-self-supersession": {
+      "expect_error": "cannot supersede itself"
+    },
+    "invalid-state-transition": {
+      "expect_error": "forbidden transition"
+    },
+    "invalid-subject-reference": {
+      "expect_error": "registry subject"
+    },
+    "invalid-temporal-overlap": {
+      "expect_error": "conflicting key value violates exclusion constraint"
+    }
+  },
+  "scenarios": {
+    "administrative-boundary-change": {
+      "administrative_code_history": [
+        {
+          "admin_code_history_id": "administrative-boundary-change-administrative_code_history-07",
+          "administrative_unit_id": "administrative-boundary-change-administrative_unit-07",
+          "code_scheme": "administrative_code_history-code_scheme-value",
+          "effective_from": "2026-07-14T00:00:00Z",
+          "official_code": "administrative_code_history-official_code-value",
+          "recorded_from": "2026-07-14T00:00:00Z",
+          "source_id": "administrative-boundary-change-source_record-07"
+        }
+      ],
+      "administrative_unit": [
+        {
+          "administrative_unit_id": "administrative-boundary-change-administrative_unit-07",
+          "country_id": "administrative-boundary-change-country-07",
+          "created_at": "2026-07-14T00:00:00Z"
+        }
+      ],
+      "administrative_unit_version": [
+        {
+          "admin_level": "country",
+          "administrative_unit_id": "administrative-boundary-change-administrative_unit-07",
+          "administrative_unit_version_id": "administrative-boundary-change-admin-version-old",
+          "classification": "government-internal",
+          "effective_from": "2020-01-01T00:00:00Z",
+          "effective_to": "2026-07-01T00:00:00Z",
+          "lifecycle_state": "historical",
+          "parent_administrative_unit_id": "administrative-boundary-change-administrative_unit-07",
+          "recorded_at": "2026-07-14T00:00:00Z",
+          "source_authority_id": "administrative-boundary-change-source_authority-07"
+        },
+        {
+          "admin_level": "country",
+          "administrative_unit_id": "administrative-boundary-change-administrative_unit-07",
+          "administrative_unit_version_id": "administrative-boundary-change-admin-version-new",
+          "classification": "government-internal",
+          "effective_from": "2026-07-01T00:00:00Z",
+          "effective_to": null,
+          "lifecycle_state": "official",
+          "parent_administrative_unit_id": "administrative-boundary-change-administrative_unit-07",
+          "recorded_at": "2026-07-14T00:00:00Z",
+          "source_authority_id": "administrative-boundary-change-source_authority-07"
+        }
+      ],
+      "building": [
+        {
+          "building_id": "administrative-boundary-change-building-07",
+          "effective_from": "2026-07-14T00:00:00Z",
+          "lifecycle_state": "candidate",
+          "source_authority_id": "administrative-boundary-change-source_authority-07"
+        }
+      ],
+      "building_primary_entrance": [
+        {
+          "building_id": "administrative-boundary-change-building-07",
+          "building_primary_entrance_id": "administrative-boundary-change-building_primary_entrance-07",
+          "effective_from": "2026-07-14T00:00:00Z",
+          "entrance_id": "administrative-boundary-change-entrance-07"
+        }
+      ],
+      "correction_case": [
+        {
+          "case_state": "submitted",
+          "correction_case_id": "administrative-boundary-change-correction_case-07",
+          "correction_type": "administrative-context",
+          "resolution_event_id": "administrative-boundary-change-decision_event-07",
+          "submitted_at": "2026-07-14T00:00:00Z",
+          "target_location_record_id": "administrative-boundary-change-location_record-07"
+        }
+      ],
+      "country": [
+        {
+          "country_id": "administrative-boundary-change-country-07",
+          "created_at": "2026-07-14T00:00:00Z",
+          "iso2_code": "GQ",
+          "lifecycle_state": "active",
+          "official_name_en": "country-official_name_en-value",
+          "official_name_es": "country-official_name_es-value",
+          "source_authority_id": "administrative-boundary-change-source_authority-07"
+        }
+      ],
+      "decision_event": [
+        {
+          "actor_id": "decision_event-actor_id-001",
+          "authority_id": "administrative-boundary-change-source_authority-07",
+          "decision_event_id": "administrative-boundary-change-decision_event-07",
+          "decision_outcome": "approved",
+          "decision_type": "approve-geometry",
+          "details_json": {
+            "evidence_object_id": "administrative-boundary-change-evidence_object-07",
+            "institution_id": "national-gis-authority",
+            "permission_key": "geometry.promote",
+            "quality_authority_actor_id": "decision_event-actor_id-001",
+            "source_observation_id": "administrative-boundary-change-geometry_observation-07",
+            "territorial_scope": "national-gis-authority"
+          },
+          "effective_at": "2026-07-14T00:00:00Z",
+          "reason_code": "decision_event-reason_code-value",
+          "recorded_at": "2026-07-14T00:00:00Z"
+        }
+      ],
+      "dispute_case": [
+        {
+          "case_state": "submitted",
+          "dispute_case_id": "administrative-boundary-change-dispute_case-07",
+          "dispute_type": "authority",
+          "opened_at": "2026-07-14T00:00:00Z",
+          "resolution_event_id": "administrative-boundary-change-decision_event-07",
+          "subject_id": "administrative-boundary-change-registry_subject-07"
+        }
+      ],
+      "entrance": [
+        {
+          "building_id": "administrative-boundary-change-building-07",
+          "effective_from": "2026-07-14T00:00:00Z",
+          "entrance_id": "administrative-boundary-change-entrance-07",
+          "entrance_role": "main",
+          "lifecycle_state": "candidate"
+        }
+      ],
+      "evidence_object": [
+        {
+          "classification": "government-internal",
+          "content_hash": "evidence_object-content_hash-value",
+          "evidence_object_id": "administrative-boundary-change-evidence_object-07",
+          "media_type": "evidence_object-media_type-value",
+          "retention_state": "active",
+          "source_record_id": "administrative-boundary-change-source_record-07",
+          "storage_uri": "evidence_object-storage_uri-value"
+        }
+      ],
+      "field_assignment": [
+        {
+          "assignment_id": "administrative-boundary-change-field_assignment-07",
+          "assignment_state": "assigned",
+          "created_at": "2026-07-14T00:00:00Z",
+          "operational_area_id": "administrative-boundary-change-operational_area-07",
+          "priority": "field_assignment-priority-value",
+          "task_type": "field_assignment-task_type-value",
+          "team": "field_assignment-team-value"
+        }
+      ],
+      "field_observation": [
+        {
+          "assignment_id": "administrative-boundary-change-field_assignment-07",
+          "field_observation_id": "administrative-boundary-change-field_observation-07",
+          "geometry_observation_id": "administrative-boundary-change-geometry_observation-07",
+          "intake_case_id": "administrative-boundary-change-intake_case-07",
+          "notes_classification": "government-internal",
+          "observation_type": "field_observation-observation_type-value",
+          "recorded_at": "2026-07-14T00:00:00Z",
+          "source_record_id": "administrative-boundary-change-source_record-07",
+          "verification_state": "assigned"
+        }
+      ],
+      "geometry_observation": [
+        {
+          "capture_method": "browser-gps",
+          "classification": "government-internal",
+          "evidence_object_id": "administrative-boundary-change-evidence_object-07",
+          "geometry_observation_id": "administrative-boundary-change-geometry_observation-07",
+          "geometry_role": "admin-boundary",
+          "licence_id": "administrative-boundary-change-licence-07",
+          "observed_at": "2026-07-14T00:00:00Z",
+          "observed_geom": "SRID=4326;POLYGON((8.78 3.75,8.79 3.75,8.79 3.76,8.78 3.76,8.78 3.75))",
+          "recorded_at": "2026-07-14T00:00:00Z",
+          "source_record_id": "administrative-boundary-change-source_record-07",
+          "subject_id": "administrative-boundary-change-registry_subject-07"
+        }
+      ],
+      "geometry_quality_assessment": [
+        {
+          "assessed_at": "2026-07-14T00:00:00Z",
+          "assessed_by_actor_id": "geometry_quality_assessment-assessed_by_actor_id-001",
+          "check_name": "geometry_quality_assessment-check_name-value",
+          "check_result": "passed",
+          "geometry_version_id": "administrative-boundary-change-geometry_version-07",
+          "measured_value_json": {
+            "entity": "geometry_quality_assessment",
+            "fixture": true
+          },
+          "quality_assessment_id": "administrative-boundary-change-geometry_quality_assessment-07",
+          "tolerance_json": {
+            "entity": "geometry_quality_assessment",
+            "fixture": true
+          }
+        }
+      ],
+      "geometry_transformation": [
+        {
+          "algorithm": "geometry_transformation-algorithm-value",
+          "algorithm_version": "geometry_transformation-algorithm_version-value",
+          "parameters_json": {
+            "entity": "geometry_transformation",
+            "fixture": true
+          },
+          "performed_at": "2026-07-14T00:00:00Z",
+          "source_crs": "geometry_transformation-source_crs-value",
+          "target_crs": "geometry_transformation-target_crs-value",
+          "transformation_id": "administrative-boundary-change-geometry_transformation-07"
+        }
+      ],
+      "geometry_version": [
+        {
+          "classification": "government-internal",
+          "dispute_case_id": "administrative-boundary-change-dispute_case-07",
+          "effective_from": "2026-07-14T00:00:00Z",
+          "geom": "SRID=4326;POLYGON((8.78 3.75,8.79 3.75,8.79 3.76,8.78 3.76,8.78 3.75))",
+          "geometry_role": "admin-boundary",
+          "geometry_version_id": "administrative-boundary-change-geometry_version-07",
+          "promotion_authority_scope": "national-gis-authority",
+          "promotion_decision_event_id": "administrative-boundary-change-decision_event-07",
+          "promotion_evidence_object_id": "administrative-boundary-change-evidence_object-07",
+          "quality_state": "accepted-canonical",
+          "recorded_at": "2026-07-14T00:00:00Z",
+          "source_observation_id": "administrative-boundary-change-geometry_observation-07",
+          "subject_id": "administrative-boundary-change-registry_subject-07",
+          "transformation_id": "administrative-boundary-change-geometry_transformation-07",
+          "validated_by_actor_id": "decision_event-actor_id-001",
+          "validation_method": "geometry_version-validation_method-value"
+        }
+      ],
+      "intake_case": [
+        {
+          "created_at": "2026-07-14T00:00:00Z",
+          "intake_case_id": "administrative-boundary-change-intake_case-07",
+          "intake_state": "closed",
+          "source_record_id": "administrative-boundary-change-source_record-07",
+          "submitted_label": "intake_case-submitted_label-value"
+        }
+      ],
+      "landmark": [
+        {
+          "effective_from": "2026-07-14T00:00:00Z",
+          "landmark_id": "administrative-boundary-change-landmark-07",
+          "landmark_type": "school",
+          "lifecycle_state": "candidate",
+          "source_authority_id": "administrative-boundary-change-source_authority-07"
+        }
+      ],
+      "legacy_crosswalk": [
+        {
+          "created_at": "2026-07-14T00:00:00Z",
+          "legacy_crosswalk_id": "administrative-boundary-change-legacy_crosswalk-07",
+          "legacy_id": "legacy_crosswalk-legacy_id-001",
+          "source_field": "legacy_crosswalk-source_field-value",
+          "source_table": "legacy_crosswalk-source_table-value",
+          "target_entity": "legacy_crosswalk-target_entity-value",
+          "target_id": "legacy_crosswalk-target_id-001"
+        }
+      ],
+      "licence": [
+        {
+          "classification": "government-internal",
+          "licence_id": "administrative-boundary-change-licence-07",
+          "licence_name": "licence-licence_name-value",
+          "usage_restriction": "licence-usage_restriction-value"
+        }
+      ],
+      "locality": [
+        {
+          "administrative_unit_id": "administrative-boundary-change-administrative_unit-07",
+          "effective_from": "2026-07-14T00:00:00Z",
+          "lifecycle_state": "candidate",
+          "locality_id": "administrative-boundary-change-locality-07",
+          "locality_type": "informal_area",
+          "source_authority_id": "administrative-boundary-change-source_authority-07"
+        }
+      ],
+      "location_record": [
+        {
+          "classification": "government-internal",
+          "created_at": "2026-07-14T00:00:00Z",
+          "location_record_id": "administrative-boundary-change-location_record-07",
+          "record_type": "service-location"
+        }
+      ],
+      "location_record_assertion": [
+        {
+          "assertion_id": "administrative-boundary-change-location_record_assertion-07",
+          "classification": "government-internal",
+          "decision_event_id": "administrative-boundary-change-decision_event-07",
+          "evidence_object_id": "administrative-boundary-change-evidence_object-07",
+          "location_record_version_id": "administrative-boundary-change-location_record_version-07",
+          "source_record_id": "administrative-boundary-change-source_record-07",
+          "target_entity": "location_record_assertion-target_entity-value",
+          "target_field": "location_record_assertion-target_field-value",
+          "value_json": {
+            "entity": "location_record_assertion",
+            "fixture": true
+          }
+        }
+      ],
+      "location_record_object_link": [
+        {
+          "cardinality_rank": 1,
+          "effective_from": "2026-07-14T00:00:00Z",
+          "link_id": "administrative-boundary-change-location_record_object_link-07",
+          "location_record_version_id": "administrative-boundary-change-location_record_version-07",
+          "object_role": "primary-subject",
+          "subject_id": "administrative-boundary-change-registry_subject-07"
+        }
+      ],
+      "location_record_relationship": [
+        {
+          "effective_from": "2026-07-14T00:00:00Z",
+          "from_location_record_id": "administrative-boundary-change-location_record-07",
+          "relationship_id": "administrative-boundary-change-location_record_relationship-07",
+          "relationship_type": "contains",
+          "source_decision_event_id": "administrative-boundary-change-decision_event-07",
+          "to_location_record_id": "administrative-boundary-change-location_record-07"
+        }
+      ],
+      "location_record_version": [
+        {
+          "administrative_unit_version_id": "administrative-boundary-change-admin-version-new",
+          "correction_case_id": "administrative-boundary-change-correction_case-07",
+          "display_label_es": "location_record_version-display_label_es-value",
+          "effective_from": "2026-07-14T00:00:00Z",
+          "lifecycle_state": "active",
+          "locality_id": "administrative-boundary-change-locality-07",
+          "location_record_id": "administrative-boundary-change-location_record-07",
+          "location_record_version_id": "administrative-boundary-change-location_record_version-07",
+          "recorded_at": "2026-07-14T00:00:00Z",
+          "source_decision_event_id": "administrative-boundary-change-decision_event-07",
+          "version_number": 7
+        }
+      ],
+      "migration_exception": [
+        {
+          "batch_id": "migration_exception-batch_id-001",
+          "created_at": "2026-07-14T00:00:00Z",
+          "details_json": {
+            "entity": "migration_exception",
+            "fixture": true
+          },
+          "exception_type": "migration_exception-exception_type-value",
+          "migration_exception_id": "administrative-boundary-change-migration_exception-07",
+          "owner": "migration_exception-owner-value",
+          "severity": "migration_exception-severity-value",
+          "source_key": "migration_exception-source_key-value",
+          "source_table": "migration_exception-source_table-value"
+        }
+      ],
+      "name_record": [
+        {
+          "effective_from": "2026-07-14T00:00:00Z",
+          "language_code": "es",
+          "name_kind": "official-es",
+          "name_record_id": "administrative-boundary-change-name_record-07",
+          "name_status": "official-current",
+          "name_text": "administrative-boundary-change official name",
+          "normalized_text": "administrative boundary change",
+          "source_record_id": "administrative-boundary-change-source_record-07",
+          "subject_id": "administrative-boundary-change-registry_subject-07"
+        }
+      ],
+      "non_building_object": [
+        {
+          "effective_from": "2026-07-14T00:00:00Z",
+          "lifecycle_state": "candidate",
+          "object_id": "administrative-boundary-change-non_building_object-07",
+          "object_type": "utility-asset",
+          "source_authority_id": "administrative-boundary-change-source_authority-07"
+        }
+      ],
+      "operational_area": [
+        {
+          "area_type": "campaign",
+          "authority_owner": "operational_area-authority_owner-value",
+          "classification": "government-internal",
+          "effective_from": "2026-07-14T00:00:00Z",
+          "lifecycle_state": "planned",
+          "name_record_id": "administrative-boundary-change-name_record-07",
+          "operational_area_id": "administrative-boundary-change-operational_area-07",
+          "purpose": "operational_area-purpose-value"
+        }
+      ],
+      "operational_area_coverage": [
+        {
+          "administrative_unit_id": "administrative-boundary-change-administrative_unit-07",
+          "coverage_id": "administrative-boundary-change-operational_area_coverage-07",
+          "coverage_role": "context",
+          "effective_from": "2026-07-14T00:00:00Z",
+          "geometry_version_id": "administrative-boundary-change-geometry_version-07",
+          "operational_area_id": "administrative-boundary-change-operational_area-07"
+        }
+      ],
+      "parcel_reference": [
+        {
+          "classification": "government-internal",
+          "effective_from": "2026-07-14T00:00:00Z",
+          "external_parcel_id": "parcel_reference-external_parcel_id-001",
+          "parcel_reference_id": "administrative-boundary-change-parcel_reference-07",
+          "source_authority_id": "administrative-boundary-change-source_authority-07"
+        }
+      ],
+      "partner_projection": [
+        {
+          "classification": "government-internal",
+          "partner_projection_id": "administrative-boundary-change-partner_projection-07",
+          "partner_scope": "partner_projection-partner_scope-value",
+          "publication_release_item_id": "administrative-boundary-change-publication_release_item-07",
+          "response_field_set": {
+            "entity": "partner_projection",
+            "fixture": true
+          }
+        }
+      ],
+      "public_code_alias": [
+        {
+          "code_scheme": "public_code_alias-code_scheme-value",
+          "code_state": "active-public",
+          "location_record_id": "administrative-boundary-change-location_record-07",
+          "public_code": "public_code_alias-public_code-001",
+          "public_code_alias_id": "administrative-boundary-change-public_code_alias-07",
+          "reserved_at": "2026-07-14T00:00:00Z"
+        }
+      ],
+      "publication_release": [
+        {
+          "authority_reference": "publication_release-authority_reference-value",
+          "created_by_actor_id": "publication_release-created_by_actor_id-001",
+          "effective_at": "2026-07-14T00:00:00Z",
+          "immutable_manifest_hash": "publication_release-immutable_manifest_hash-value",
+          "manifest_storage_uri": "publication_release-manifest_storage_uri-value",
+          "projection_type": "operator-case-file",
+          "publication_release_id": "administrative-boundary-change-publication_release-07",
+          "recorded_at": "2026-07-14T00:00:00Z",
+          "release_state": "approved"
+        }
+      ],
+      "publication_release_item": [
+        {
+          "location_record_id": "administrative-boundary-change-location_record-07",
+          "location_record_version_id": "administrative-boundary-change-location_record_version-07",
+          "projection_payload_hash": "publication_release_item-projection_payload_hash-value",
+          "projection_payload_json": {
+            "entity": "publication_release_item",
+            "fixture": true
+          },
+          "projection_state": "included",
+          "public_code_alias_id": "administrative-boundary-change-public_code_alias-07",
+          "publication_release_id": "administrative-boundary-change-publication_release-07",
+          "publication_release_item_id": "administrative-boundary-change-publication_release_item-07",
+          "published_geometry_policy": "publication_release_item-published_geometry_policy-value",
+          "published_label": "publication_release_item-published_label-value"
+        }
+      ],
+      "registry_subject": [
+        {
+          "created_at": "2026-07-14T00:00:00Z",
+          "delete_policy": "retire-only",
+          "native_id": "administrative-boundary-change-administrative_unit-07",
+          "subject_entity": "administrative_unit",
+          "subject_id": "administrative-boundary-change-registry_subject-07",
+          "subject_state": "active"
+        }
+      ],
+      "road": [
+        {
+          "created_at": "2026-07-14T00:00:00Z",
+          "lifecycle_state": "candidate",
+          "road_class": "path",
+          "road_id": "administrative-boundary-change-road-07",
+          "source_authority_id": "administrative-boundary-change-source_authority-07"
+        }
+      ],
+      "road_segment": [
+        {
+          "effective_from": "2026-07-14T00:00:00Z",
+          "lifecycle_state": "draft",
+          "road_id": "administrative-boundary-change-road-07",
+          "road_segment_id": "administrative-boundary-change-road_segment-07"
+        }
+      ],
+      "source_authority": [
+        {
+          "authority_class": "citizen-submitted",
+          "authority_name": "source_authority-authority_name-value",
+          "source_authority_id": "administrative-boundary-change-source_authority-07",
+          "status": "candidate"
+        }
+      ],
+      "source_package": [
+        {
+          "licence_id": "administrative-boundary-change-licence-07",
+          "load_context": {
+            "entity": "source_package",
+            "fixture": true
+          },
+          "loaded_at": "2026-07-14T00:00:00Z",
+          "package_checksum": "source_package-package_checksum-value",
+          "package_name": "source_package-package_name-value",
+          "source_authority_id": "administrative-boundary-change-source_authority-07",
+          "source_package_id": "administrative-boundary-change-source_package-07"
+        }
+      ],
+      "source_payload_archive": [
+        {
+          "archive_id": "administrative-boundary-change-source_payload_archive-07",
+          "classification": "government-internal",
+          "created_at": "2026-07-14T00:00:00Z",
+          "payload_hash_sha256": "source_payload_archive-payload_hash_sha256-value",
+          "payload_uri": "source_payload_archive-payload_uri-value",
+          "retention_state": "active",
+          "source_record_id": "administrative-boundary-change-source_record-07"
+        }
+      ],
+      "source_record": [
+        {
+          "raw_payload_classification": "government-internal",
+          "raw_payload_hash": "source_record-raw_payload_hash-value",
+          "recorded_at": "2026-07-14T00:00:00Z",
+          "source_key": "source_record-source_key-value",
+          "source_package_id": "administrative-boundary-change-source_package-07",
+          "source_record_id": "administrative-boundary-change-source_record-07"
+        }
+      ],
+      "unit": [
+        {
+          "building_id": "administrative-boundary-change-building-07",
+          "classification": "government-internal",
+          "effective_from": "2026-07-14T00:00:00Z",
+          "lifecycle_state": "candidate",
+          "parent_unit_id": "administrative-boundary-change-unit-07",
+          "unit_id": "administrative-boundary-change-unit-07",
+          "unit_label": "unit-unit_label-value",
+          "unit_type": "apartment"
+        }
+      ]
+    },
+    "corrected-superseded-address": {
+      "administrative_code_history": [
+        {
+          "admin_code_history_id": "corrected-superseded-address-administrative_code_history-05",
+          "administrative_unit_id": "corrected-superseded-address-administrative_unit-05",
+          "code_scheme": "administrative_code_history-code_scheme-value",
+          "effective_from": "2026-07-14T00:00:00Z",
+          "official_code": "administrative_code_history-official_code-value",
+          "recorded_from": "2026-07-14T00:00:00Z",
+          "source_id": "corrected-superseded-address-source_record-05"
+        }
+      ],
+      "administrative_unit": [
+        {
+          "administrative_unit_id": "corrected-superseded-address-administrative_unit-05",
+          "country_id": "corrected-superseded-address-country-05",
+          "created_at": "2026-07-14T00:00:00Z"
+        }
+      ],
+      "administrative_unit_version": [
+        {
+          "admin_level": "country",
+          "administrative_unit_id": "corrected-superseded-address-administrative_unit-05",
+          "administrative_unit_version_id": "corrected-superseded-address-administrative_unit_version-05",
+          "classification": "government-internal",
+          "effective_from": "2026-07-14T00:00:00Z",
+          "lifecycle_state": "official",
+          "parent_administrative_unit_id": "corrected-superseded-address-administrative_unit-05",
+          "recorded_at": "2026-07-14T00:00:00Z",
+          "source_authority_id": "corrected-superseded-address-source_authority-05"
+        }
+      ],
+      "building": [
+        {
+          "building_id": "corrected-superseded-address-building-05",
+          "effective_from": "2026-07-14T00:00:00Z",
+          "lifecycle_state": "candidate",
+          "source_authority_id": "corrected-superseded-address-source_authority-05"
+        }
+      ],
+      "building_primary_entrance": [
+        {
+          "building_id": "corrected-superseded-address-building-05",
+          "building_primary_entrance_id": "corrected-superseded-address-building_primary_entrance-05",
+          "effective_from": "2026-07-14T00:00:00Z",
+          "entrance_id": "corrected-superseded-address-entrance-05"
+        }
+      ],
+      "correction_case": [
+        {
+          "case_state": "submitted",
+          "correction_case_id": "corrected-superseded-address-correction_case-05",
+          "correction_type": "administrative-context",
+          "resolution_event_id": "corrected-superseded-address-decision_event-05",
+          "submitted_at": "2026-07-14T00:00:00Z",
+          "target_location_record_id": "corrected-superseded-address-location_record-05"
+        }
+      ],
+      "country": [
+        {
+          "country_id": "corrected-superseded-address-country-05",
+          "created_at": "2026-07-14T00:00:00Z",
+          "iso2_code": "GQ",
+          "lifecycle_state": "active",
+          "official_name_en": "country-official_name_en-value",
+          "official_name_es": "country-official_name_es-value",
+          "source_authority_id": "corrected-superseded-address-source_authority-05"
+        }
+      ],
+      "decision_event": [
+        {
+          "actor_id": "decision_event-actor_id-001",
+          "authority_id": "corrected-superseded-address-source_authority-05",
+          "decision_event_id": "corrected-superseded-address-decision_event-05",
+          "decision_outcome": "approved",
+          "decision_type": "approve-geometry",
+          "details_json": {
+            "evidence_object_id": "corrected-superseded-address-evidence_object-05",
+            "institution_id": "national-gis-authority",
+            "permission_key": "geometry.promote",
+            "quality_authority_actor_id": "decision_event-actor_id-001",
+            "source_observation_id": "corrected-superseded-address-geometry_observation-05",
+            "territorial_scope": "national-gis-authority"
+          },
+          "effective_at": "2026-07-14T00:00:00Z",
+          "reason_code": "decision_event-reason_code-value",
+          "recorded_at": "2026-07-14T00:00:00Z"
+        }
+      ],
+      "dispute_case": [
+        {
+          "case_state": "submitted",
+          "dispute_case_id": "corrected-superseded-address-dispute_case-05",
+          "dispute_type": "authority",
+          "opened_at": "2026-07-14T00:00:00Z",
+          "resolution_event_id": "corrected-superseded-address-decision_event-05",
+          "subject_id": "corrected-superseded-address-registry_subject-05"
+        }
+      ],
+      "entrance": [
+        {
+          "building_id": "corrected-superseded-address-building-05",
+          "effective_from": "2026-07-14T00:00:00Z",
+          "entrance_id": "corrected-superseded-address-entrance-05",
+          "entrance_role": "main",
+          "lifecycle_state": "candidate"
+        }
+      ],
+      "evidence_object": [
+        {
+          "classification": "government-internal",
+          "content_hash": "evidence_object-content_hash-value",
+          "evidence_object_id": "corrected-superseded-address-evidence_object-05",
+          "media_type": "evidence_object-media_type-value",
+          "retention_state": "active",
+          "source_record_id": "corrected-superseded-address-source_record-05",
+          "storage_uri": "evidence_object-storage_uri-value"
+        }
+      ],
+      "field_assignment": [
+        {
+          "assignment_id": "corrected-superseded-address-field_assignment-05",
+          "assignment_state": "assigned",
+          "created_at": "2026-07-14T00:00:00Z",
+          "operational_area_id": "corrected-superseded-address-operational_area-05",
+          "priority": "field_assignment-priority-value",
+          "task_type": "field_assignment-task_type-value",
+          "team": "field_assignment-team-value"
+        }
+      ],
+      "field_observation": [
+        {
+          "assignment_id": "corrected-superseded-address-field_assignment-05",
+          "field_observation_id": "corrected-superseded-address-field_observation-05",
+          "geometry_observation_id": "corrected-superseded-address-geometry_observation-05",
+          "intake_case_id": "corrected-superseded-address-intake_case-05",
+          "notes_classification": "government-internal",
+          "observation_type": "field_observation-observation_type-value",
+          "recorded_at": "2026-07-14T00:00:00Z",
+          "source_record_id": "corrected-superseded-address-source_record-05",
+          "verification_state": "assigned"
+        }
+      ],
+      "geometry_observation": [
+        {
+          "capture_method": "browser-gps",
+          "classification": "government-internal",
+          "evidence_object_id": "corrected-superseded-address-evidence_object-05",
+          "geometry_observation_id": "corrected-superseded-address-geometry_observation-05",
+          "geometry_role": "location-point",
+          "licence_id": "corrected-superseded-address-licence-05",
+          "observed_at": "2026-07-14T00:00:00Z",
+          "observed_geom": "SRID=4326;POINT(8.78 3.75)",
+          "recorded_at": "2026-07-14T00:00:00Z",
+          "source_record_id": "corrected-superseded-address-source_record-05",
+          "subject_id": "corrected-superseded-address-registry_subject-05"
+        }
+      ],
+      "geometry_quality_assessment": [
+        {
+          "assessed_at": "2026-07-14T00:00:00Z",
+          "assessed_by_actor_id": "geometry_quality_assessment-assessed_by_actor_id-001",
+          "check_name": "geometry_quality_assessment-check_name-value",
+          "check_result": "passed",
+          "geometry_version_id": "corrected-superseded-address-geometry_version-05",
+          "measured_value_json": {
+            "entity": "geometry_quality_assessment",
+            "fixture": true
+          },
+          "quality_assessment_id": "corrected-superseded-address-geometry_quality_assessment-05",
+          "tolerance_json": {
+            "entity": "geometry_quality_assessment",
+            "fixture": true
+          }
+        }
+      ],
+      "geometry_transformation": [
+        {
+          "algorithm": "geometry_transformation-algorithm-value",
+          "algorithm_version": "geometry_transformation-algorithm_version-value",
+          "parameters_json": {
+            "entity": "geometry_transformation",
+            "fixture": true
+          },
+          "performed_at": "2026-07-14T00:00:00Z",
+          "source_crs": "geometry_transformation-source_crs-value",
+          "target_crs": "geometry_transformation-target_crs-value",
+          "transformation_id": "corrected-superseded-address-geometry_transformation-05"
+        }
+      ],
+      "geometry_version": [
+        {
+          "classification": "government-internal",
+          "dispute_case_id": "corrected-superseded-address-dispute_case-05",
+          "effective_from": "2026-07-14T00:00:00Z",
+          "geom": "SRID=4326;POINT(8.78 3.75)",
+          "geometry_role": "location-point",
+          "geometry_version_id": "corrected-superseded-address-geometry_version-05",
+          "promotion_authority_scope": "national-gis-authority",
+          "promotion_decision_event_id": "corrected-superseded-address-decision_event-05",
+          "promotion_evidence_object_id": "corrected-superseded-address-evidence_object-05",
+          "quality_state": "accepted-canonical",
+          "recorded_at": "2026-07-14T00:00:00Z",
+          "source_observation_id": "corrected-superseded-address-geometry_observation-05",
+          "subject_id": "corrected-superseded-address-registry_subject-05",
+          "transformation_id": "corrected-superseded-address-geometry_transformation-05",
+          "validated_by_actor_id": "decision_event-actor_id-001",
+          "validation_method": "geometry_version-validation_method-value"
+        }
+      ],
+      "intake_case": [
+        {
+          "created_at": "2026-07-14T00:00:00Z",
+          "intake_case_id": "corrected-superseded-address-intake_case-05",
+          "intake_state": "closed",
+          "source_record_id": "corrected-superseded-address-source_record-05",
+          "submitted_label": "intake_case-submitted_label-value"
+        }
+      ],
+      "landmark": [
+        {
+          "effective_from": "2026-07-14T00:00:00Z",
+          "landmark_id": "corrected-superseded-address-landmark-05",
+          "landmark_type": "school",
+          "lifecycle_state": "candidate",
+          "source_authority_id": "corrected-superseded-address-source_authority-05"
+        }
+      ],
+      "legacy_crosswalk": [
+        {
+          "created_at": "2026-07-14T00:00:00Z",
+          "legacy_crosswalk_id": "corrected-superseded-address-legacy_crosswalk-05",
+          "legacy_id": "legacy_crosswalk-legacy_id-001",
+          "source_field": "legacy_crosswalk-source_field-value",
+          "source_table": "legacy_crosswalk-source_table-value",
+          "target_entity": "legacy_crosswalk-target_entity-value",
+          "target_id": "legacy_crosswalk-target_id-001"
+        }
+      ],
+      "licence": [
+        {
+          "classification": "government-internal",
+          "licence_id": "corrected-superseded-address-licence-05",
+          "licence_name": "licence-licence_name-value",
+          "usage_restriction": "licence-usage_restriction-value"
+        }
+      ],
+      "locality": [
+        {
+          "administrative_unit_id": "corrected-superseded-address-administrative_unit-05",
+          "effective_from": "2026-07-14T00:00:00Z",
+          "lifecycle_state": "candidate",
+          "locality_id": "corrected-superseded-address-locality-05",
+          "locality_type": "informal_area",
+          "source_authority_id": "corrected-superseded-address-source_authority-05"
+        }
+      ],
+      "location_record": [
+        {
+          "classification": "government-internal",
+          "created_at": "2026-07-14T00:00:00Z",
+          "location_record_id": "corrected-superseded-address-location_record-05",
+          "record_type": "address"
+        }
+      ],
+      "location_record_assertion": [
+        {
+          "assertion_id": "corrected-superseded-address-location_record_assertion-05",
+          "classification": "government-internal",
+          "decision_event_id": "corrected-superseded-address-decision_event-05",
+          "evidence_object_id": "corrected-superseded-address-evidence_object-05",
+          "location_record_version_id": "corrected-superseded-address-location-record-version-v2",
+          "source_record_id": "corrected-superseded-address-source_record-05",
+          "target_entity": "location_record_assertion-target_entity-value",
+          "target_field": "location_record_assertion-target_field-value",
+          "value_json": {
+            "entity": "location_record_assertion",
+            "fixture": true
+          }
+        }
+      ],
+      "location_record_object_link": [
+        {
+          "cardinality_rank": 1,
+          "effective_from": "2026-01-01T00:00:00Z",
+          "effective_to": "2026-06-01T00:00:00Z",
+          "link_id": "corrected-superseded-address-location_record_object_link-05",
+          "location_record_version_id": "corrected-superseded-address-location-record-version-v1",
+          "object_role": "primary-subject",
+          "subject_id": "corrected-superseded-address-registry_subject-05"
+        },
+        {
+          "cardinality_rank": 1,
+          "effective_from": "2026-06-01T00:00:00Z",
+          "effective_to": null,
+          "link_id": "corrected-superseded-address-object-link-v2",
+          "location_record_version_id": "corrected-superseded-address-location-record-version-v2",
+          "object_role": "primary-subject",
+          "subject_id": "corrected-superseded-address-registry_subject-05"
+        }
+      ],
+      "location_record_relationship": [
+        {
+          "effective_from": "2026-07-14T00:00:00Z",
+          "from_location_record_id": "corrected-superseded-address-location_record-05",
+          "relationship_id": "corrected-superseded-address-location_record_relationship-05",
+          "relationship_type": "contains",
+          "source_decision_event_id": "corrected-superseded-address-decision_event-05",
+          "to_location_record_id": "corrected-superseded-address-location_record-05"
+        }
+      ],
+      "location_record_version": [
+        {
+          "administrative_unit_version_id": "corrected-superseded-address-administrative_unit_version-05",
+          "correction_case_id": "corrected-superseded-address-correction_case-05",
+          "display_label_es": "location_record_version-display_label_es-value",
+          "effective_from": "2026-01-01T00:00:00Z",
+          "effective_to": "2026-06-01T00:00:00Z",
+          "lifecycle_state": "corrected",
+          "locality_id": "corrected-superseded-address-locality-05",
+          "location_record_id": "corrected-superseded-address-location_record-05",
+          "location_record_version_id": "corrected-superseded-address-location-record-version-v1",
+          "recorded_at": "2026-01-02T00:00:00Z",
+          "recorded_to": "2026-06-02T00:00:00Z",
+          "source_decision_event_id": "corrected-superseded-address-decision_event-05",
+          "successor_version_id": "corrected-superseded-address-location-record-version-v2",
+          "version_number": 1
+        },
+        {
+          "administrative_unit_version_id": "corrected-superseded-address-administrative_unit_version-05",
+          "correction_case_id": "corrected-superseded-address-correction_case-05",
+          "display_label_es": "location_record_version-display_label_es-value",
+          "effective_from": "2026-06-01T00:00:00Z",
+          "effective_to": null,
+          "lifecycle_state": "active",
+          "locality_id": "corrected-superseded-address-locality-05",
+          "location_record_id": "corrected-superseded-address-location_record-05",
+          "location_record_version_id": "corrected-superseded-address-location-record-version-v2",
+          "predecessor_version_id": "corrected-superseded-address-location-record-version-v1",
+          "recorded_at": "2026-06-02T00:00:00Z",
+          "recorded_to": null,
+          "source_decision_event_id": "corrected-superseded-address-decision_event-05",
+          "version_number": 2
+        }
+      ],
+      "migration_exception": [
+        {
+          "batch_id": "migration_exception-batch_id-001",
+          "created_at": "2026-07-14T00:00:00Z",
+          "details_json": {
+            "entity": "migration_exception",
+            "fixture": true
+          },
+          "exception_type": "migration_exception-exception_type-value",
+          "migration_exception_id": "corrected-superseded-address-migration_exception-05",
+          "owner": "migration_exception-owner-value",
+          "severity": "migration_exception-severity-value",
+          "source_key": "migration_exception-source_key-value",
+          "source_table": "migration_exception-source_table-value"
+        }
+      ],
+      "name_record": [
+        {
+          "effective_from": "2026-07-14T00:00:00Z",
+          "language_code": "es",
+          "name_kind": "official-es",
+          "name_record_id": "corrected-superseded-address-name_record-05",
+          "name_status": "official-current",
+          "name_text": "corrected-superseded-address official name",
+          "normalized_text": "corrected superseded address",
+          "source_record_id": "corrected-superseded-address-source_record-05",
+          "subject_id": "corrected-superseded-address-registry_subject-05"
+        }
+      ],
+      "non_building_object": [
+        {
+          "effective_from": "2026-07-14T00:00:00Z",
+          "lifecycle_state": "candidate",
+          "object_id": "corrected-superseded-address-non_building_object-05",
+          "object_type": "utility-asset",
+          "source_authority_id": "corrected-superseded-address-source_authority-05"
+        }
+      ],
+      "operational_area": [
+        {
+          "area_type": "campaign",
+          "authority_owner": "operational_area-authority_owner-value",
+          "classification": "government-internal",
+          "effective_from": "2026-07-14T00:00:00Z",
+          "lifecycle_state": "planned",
+          "name_record_id": "corrected-superseded-address-name_record-05",
+          "operational_area_id": "corrected-superseded-address-operational_area-05",
+          "purpose": "operational_area-purpose-value"
+        }
+      ],
+      "operational_area_coverage": [
+        {
+          "administrative_unit_id": "corrected-superseded-address-administrative_unit-05",
+          "coverage_id": "corrected-superseded-address-operational_area_coverage-05",
+          "coverage_role": "context",
+          "effective_from": "2026-07-14T00:00:00Z",
+          "geometry_version_id": "corrected-superseded-address-geometry_version-05",
+          "operational_area_id": "corrected-superseded-address-operational_area-05"
+        }
+      ],
+      "parcel_reference": [
+        {
+          "classification": "government-internal",
+          "effective_from": "2026-07-14T00:00:00Z",
+          "external_parcel_id": "parcel_reference-external_parcel_id-001",
+          "parcel_reference_id": "corrected-superseded-address-parcel_reference-05",
+          "source_authority_id": "corrected-superseded-address-source_authority-05"
+        }
+      ],
+      "partner_projection": [
+        {
+          "classification": "government-internal",
+          "partner_projection_id": "corrected-superseded-address-partner_projection-05",
+          "partner_scope": "partner_projection-partner_scope-value",
+          "publication_release_item_id": "corrected-superseded-address-publication_release_item-05",
+          "response_field_set": {
+            "entity": "partner_projection",
+            "fixture": true
+          }
+        }
+      ],
+      "public_code_alias": [
+        {
+          "code_scheme": "public_code_alias-code_scheme-value",
+          "code_state": "active-public",
+          "location_record_id": "corrected-superseded-address-location_record-05",
+          "public_code": "public_code_alias-public_code-001",
+          "public_code_alias_id": "corrected-superseded-address-public_code_alias-05",
+          "reserved_at": "2026-07-14T00:00:00Z"
+        }
+      ],
+      "publication_release": [
+        {
+          "authority_reference": "publication_release-authority_reference-value",
+          "created_by_actor_id": "publication_release-created_by_actor_id-001",
+          "effective_at": "2026-07-14T00:00:00Z",
+          "immutable_manifest_hash": "publication_release-immutable_manifest_hash-value",
+          "manifest_storage_uri": "publication_release-manifest_storage_uri-value",
+          "projection_type": "operator-case-file",
+          "publication_release_id": "corrected-superseded-address-publication_release-05",
+          "recorded_at": "2026-07-14T00:00:00Z",
+          "release_state": "approved"
+        },
+        {
+          "authority_reference": "publication_release-authority_reference-value",
+          "created_by_actor_id": "publication_release-created_by_actor_id-001",
+          "effective_at": "2026-06-03T00:00:00Z",
+          "immutable_manifest_hash": "publication_release-immutable_manifest_hash-value",
+          "manifest_storage_uri": "publication_release-manifest_storage_uri-value",
+          "projection_type": "operator-case-file",
+          "publication_release_id": "corrected-superseded-address-publication-release-corrected",
+          "recorded_at": "2026-07-14T00:00:00Z",
+          "release_state": "published"
+        }
+      ],
+      "publication_release_item": [
+        {
+          "location_record_id": "corrected-superseded-address-location_record-05",
+          "location_record_version_id": "corrected-superseded-address-location-record-version-v2",
+          "projection_payload_hash": "publication_release_item-projection_payload_hash-value",
+          "projection_payload_json": {
+            "entity": "publication_release_item",
+            "fixture": true
+          },
+          "projection_state": "included",
+          "public_code_alias_id": "corrected-superseded-address-public_code_alias-05",
+          "publication_release_id": "corrected-superseded-address-publication_release-05",
+          "publication_release_item_id": "corrected-superseded-address-publication_release_item-05",
+          "published_geometry_policy": "publication_release_item-published_geometry_policy-value",
+          "published_label": "publication_release_item-published_label-value"
+        },
+        {
+          "location_record_id": "corrected-superseded-address-location_record-05",
+          "location_record_version_id": "corrected-superseded-address-location-record-version-v2",
+          "projection_payload_hash": "publication_release_item-projection_payload_hash-value",
+          "projection_payload_json": {
+            "entity": "publication_release_item",
+            "fixture": true
+          },
+          "projection_state": "included",
+          "public_code_alias_id": "corrected-superseded-address-public_code_alias-05",
+          "publication_release_id": "corrected-superseded-address-publication-release-corrected",
+          "publication_release_item_id": "corrected-superseded-address-publication-release-item-corrected",
+          "published_geometry_policy": "publication_release_item-published_geometry_policy-value",
+          "published_label": "publication_release_item-published_label-value"
+        }
+      ],
+      "registry_subject": [
+        {
+          "created_at": "2026-07-14T00:00:00Z",
+          "delete_policy": "retire-only",
+          "native_id": "corrected-superseded-address-location_record-05",
+          "subject_entity": "location_record",
+          "subject_id": "corrected-superseded-address-registry_subject-05",
+          "subject_state": "active"
+        }
+      ],
+      "road": [
+        {
+          "created_at": "2026-07-14T00:00:00Z",
+          "lifecycle_state": "candidate",
+          "road_class": "path",
+          "road_id": "corrected-superseded-address-road-05",
+          "source_authority_id": "corrected-superseded-address-source_authority-05"
+        }
+      ],
+      "road_segment": [
+        {
+          "effective_from": "2026-07-14T00:00:00Z",
+          "lifecycle_state": "draft",
+          "road_id": "corrected-superseded-address-road-05",
+          "road_segment_id": "corrected-superseded-address-road_segment-05"
+        }
+      ],
+      "source_authority": [
+        {
+          "authority_class": "citizen-submitted",
+          "authority_name": "source_authority-authority_name-value",
+          "source_authority_id": "corrected-superseded-address-source_authority-05",
+          "status": "candidate"
+        }
+      ],
+      "source_package": [
+        {
+          "licence_id": "corrected-superseded-address-licence-05",
+          "load_context": {
+            "entity": "source_package",
+            "fixture": true
+          },
+          "loaded_at": "2026-07-14T00:00:00Z",
+          "package_checksum": "source_package-package_checksum-value",
+          "package_name": "source_package-package_name-value",
+          "source_authority_id": "corrected-superseded-address-source_authority-05",
+          "source_package_id": "corrected-superseded-address-source_package-05"
+        }
+      ],
+      "source_payload_archive": [
+        {
+          "archive_id": "corrected-superseded-address-source_payload_archive-05",
+          "classification": "government-internal",
+          "created_at": "2026-07-14T00:00:00Z",
+          "payload_hash_sha256": "source_payload_archive-payload_hash_sha256-value",
+          "payload_uri": "source_payload_archive-payload_uri-value",
+          "retention_state": "active",
+          "source_record_id": "corrected-superseded-address-source_record-05"
+        }
+      ],
+      "source_record": [
+        {
+          "raw_payload_classification": "government-internal",
+          "raw_payload_hash": "source_record-raw_payload_hash-value",
+          "recorded_at": "2026-07-14T00:00:00Z",
+          "source_key": "source_record-source_key-value",
+          "source_package_id": "corrected-superseded-address-source_package-05",
+          "source_record_id": "corrected-superseded-address-source_record-05"
+        }
+      ],
+      "unit": [
+        {
+          "building_id": "corrected-superseded-address-building-05",
+          "classification": "government-internal",
+          "effective_from": "2026-07-14T00:00:00Z",
+          "lifecycle_state": "candidate",
+          "parent_unit_id": "corrected-superseded-address-unit-05",
+          "unit_id": "corrected-superseded-address-unit-05",
+          "unit_label": "unit-unit_label-value",
+          "unit_type": "apartment"
+        }
+      ]
+    },
+    "disputed-geometry": {
+      "administrative_code_history": [
+        {
+          "admin_code_history_id": "disputed-geometry-administrative_code_history-06",
+          "administrative_unit_id": "disputed-geometry-administrative_unit-06",
+          "code_scheme": "administrative_code_history-code_scheme-value",
+          "effective_from": "2026-07-14T00:00:00Z",
+          "official_code": "administrative_code_history-official_code-value",
+          "recorded_from": "2026-07-14T00:00:00Z",
+          "source_id": "disputed-geometry-source_record-06"
+        }
+      ],
+      "administrative_unit": [
+        {
+          "administrative_unit_id": "disputed-geometry-administrative_unit-06",
+          "country_id": "disputed-geometry-country-06",
+          "created_at": "2026-07-14T00:00:00Z"
+        }
+      ],
+      "administrative_unit_version": [
+        {
+          "admin_level": "country",
+          "administrative_unit_id": "disputed-geometry-administrative_unit-06",
+          "administrative_unit_version_id": "disputed-geometry-administrative_unit_version-06",
+          "classification": "government-internal",
+          "effective_from": "2026-07-14T00:00:00Z",
+          "lifecycle_state": "official",
+          "parent_administrative_unit_id": "disputed-geometry-administrative_unit-06",
+          "recorded_at": "2026-07-14T00:00:00Z",
+          "source_authority_id": "disputed-geometry-source_authority-06"
+        }
+      ],
+      "building": [
+        {
+          "building_id": "disputed-geometry-building-06",
+          "effective_from": "2026-07-14T00:00:00Z",
+          "lifecycle_state": "candidate",
+          "source_authority_id": "disputed-geometry-source_authority-06"
+        }
+      ],
+      "building_primary_entrance": [
+        {
+          "building_id": "disputed-geometry-building-06",
+          "building_primary_entrance_id": "disputed-geometry-building_primary_entrance-06",
+          "effective_from": "2026-07-14T00:00:00Z",
+          "entrance_id": "disputed-geometry-entrance-06"
+        }
+      ],
+      "correction_case": [
+        {
+          "case_state": "submitted",
+          "correction_case_id": "disputed-geometry-correction_case-06",
+          "correction_type": "administrative-context",
+          "resolution_event_id": "disputed-geometry-decision_event-06",
+          "submitted_at": "2026-07-14T00:00:00Z",
+          "target_location_record_id": "disputed-geometry-location_record-06"
+        }
+      ],
+      "country": [
+        {
+          "country_id": "disputed-geometry-country-06",
+          "created_at": "2026-07-14T00:00:00Z",
+          "iso2_code": "GQ",
+          "lifecycle_state": "active",
+          "official_name_en": "country-official_name_en-value",
+          "official_name_es": "country-official_name_es-value",
+          "source_authority_id": "disputed-geometry-source_authority-06"
+        }
+      ],
+      "decision_event": [
+        {
+          "actor_id": "decision_event-actor_id-001",
+          "authority_id": "disputed-geometry-source_authority-06",
+          "decision_event_id": "disputed-geometry-decision_event-06",
+          "decision_outcome": "approved",
+          "decision_type": "approve-geometry",
+          "details_json": {
+            "evidence_object_id": "disputed-geometry-evidence_object-06",
+            "institution_id": "national-gis-authority",
+            "permission_key": "geometry.promote",
+            "quality_authority_actor_id": "decision_event-actor_id-001",
+            "source_observation_id": "disputed-geometry-geometry_observation-06",
+            "territorial_scope": "national-gis-authority"
+          },
+          "effective_at": "2026-07-14T00:00:00Z",
+          "reason_code": "decision_event-reason_code-value",
+          "recorded_at": "2026-07-14T00:00:00Z"
+        }
+      ],
+      "dispute_case": [
+        {
+          "case_state": "resolved",
+          "dispute_case_id": "disputed-geometry-dispute_case-06",
+          "dispute_type": "authority",
+          "opened_at": "2026-07-14T00:00:00Z",
+          "resolution_event_id": "disputed-geometry-decision_event-06",
+          "subject_id": "disputed-geometry-registry_subject-06"
+        }
+      ],
+      "entrance": [
+        {
+          "building_id": "disputed-geometry-building-06",
+          "effective_from": "2026-07-14T00:00:00Z",
+          "entrance_id": "disputed-geometry-entrance-06",
+          "entrance_role": "main",
+          "lifecycle_state": "candidate"
+        }
+      ],
+      "evidence_object": [
+        {
+          "classification": "government-internal",
+          "content_hash": "evidence_object-content_hash-value",
+          "evidence_object_id": "disputed-geometry-evidence_object-06",
+          "media_type": "evidence_object-media_type-value",
+          "retention_state": "active",
+          "source_record_id": "disputed-geometry-source_record-06",
+          "storage_uri": "evidence_object-storage_uri-value"
+        }
+      ],
+      "field_assignment": [
+        {
+          "assignment_id": "disputed-geometry-field_assignment-06",
+          "assignment_state": "assigned",
+          "created_at": "2026-07-14T00:00:00Z",
+          "operational_area_id": "disputed-geometry-operational_area-06",
+          "priority": "field_assignment-priority-value",
+          "task_type": "field_assignment-task_type-value",
+          "team": "field_assignment-team-value"
+        }
+      ],
+      "field_observation": [
+        {
+          "assignment_id": "disputed-geometry-field_assignment-06",
+          "field_observation_id": "disputed-geometry-field_observation-06",
+          "geometry_observation_id": "disputed-geometry-geometry_observation-06",
+          "intake_case_id": "disputed-geometry-intake_case-06",
+          "notes_classification": "government-internal",
+          "observation_type": "field_observation-observation_type-value",
+          "recorded_at": "2026-07-14T00:00:00Z",
+          "source_record_id": "disputed-geometry-source_record-06",
+          "verification_state": "assigned"
+        }
+      ],
+      "geometry_observation": [
+        {
+          "capture_method": "browser-gps",
+          "classification": "government-internal",
+          "evidence_object_id": "disputed-geometry-evidence_object-06",
+          "geometry_observation_id": "disputed-geometry-geometry_observation-06",
+          "geometry_role": "location-point",
+          "licence_id": "disputed-geometry-licence-06",
+          "observed_at": "2026-07-14T00:00:00Z",
+          "observed_geom": "SRID=4326;POINT(8.78 3.75)",
+          "recorded_at": "2026-07-14T00:00:00Z",
+          "source_record_id": "disputed-geometry-source_record-06",
+          "subject_id": "disputed-geometry-registry_subject-06"
+        }
+      ],
+      "geometry_quality_assessment": [
+        {
+          "assessed_at": "2026-07-14T00:00:00Z",
+          "assessed_by_actor_id": "geometry_quality_assessment-assessed_by_actor_id-001",
+          "check_name": "geometry_quality_assessment-check_name-value",
+          "check_result": "passed",
+          "geometry_version_id": "disputed-geometry-geometry_version-06",
+          "measured_value_json": {
+            "entity": "geometry_quality_assessment",
+            "fixture": true
+          },
+          "quality_assessment_id": "disputed-geometry-geometry_quality_assessment-06",
+          "tolerance_json": {
+            "entity": "geometry_quality_assessment",
+            "fixture": true
+          }
+        }
+      ],
+      "geometry_transformation": [
+        {
+          "algorithm": "geometry_transformation-algorithm-value",
+          "algorithm_version": "geometry_transformation-algorithm_version-value",
+          "parameters_json": {
+            "entity": "geometry_transformation",
+            "fixture": true
+          },
+          "performed_at": "2026-07-14T00:00:00Z",
+          "source_crs": "geometry_transformation-source_crs-value",
+          "target_crs": "geometry_transformation-target_crs-value",
+          "transformation_id": "disputed-geometry-geometry_transformation-06"
+        }
+      ],
+      "geometry_version": [
+        {
+          "classification": "government-internal",
+          "dispute_case_id": "disputed-geometry-dispute_case-06",
+          "effective_from": "2026-07-14T00:00:00Z",
+          "geom": "SRID=4326;POINT(8.78 3.75)",
+          "geometry_role": "location-point",
+          "geometry_version_id": "disputed-geometry-geometry_version-06",
+          "promotion_authority_scope": "national-gis-authority",
+          "promotion_decision_event_id": "disputed-geometry-decision_event-06",
+          "promotion_evidence_object_id": "disputed-geometry-evidence_object-06",
+          "quality_state": "accepted-canonical",
+          "recorded_at": "2026-07-14T00:00:00Z",
+          "source_observation_id": "disputed-geometry-geometry_observation-06",
+          "subject_id": "disputed-geometry-registry_subject-06",
+          "transformation_id": "disputed-geometry-geometry_transformation-06",
+          "validated_by_actor_id": "decision_event-actor_id-001",
+          "validation_method": "geometry_version-validation_method-value"
+        }
+      ],
+      "intake_case": [
+        {
+          "created_at": "2026-07-14T00:00:00Z",
+          "intake_case_id": "disputed-geometry-intake_case-06",
+          "intake_state": "closed",
+          "source_record_id": "disputed-geometry-source_record-06",
+          "submitted_label": "intake_case-submitted_label-value"
+        }
+      ],
+      "landmark": [
+        {
+          "effective_from": "2026-07-14T00:00:00Z",
+          "landmark_id": "disputed-geometry-landmark-06",
+          "landmark_type": "school",
+          "lifecycle_state": "candidate",
+          "source_authority_id": "disputed-geometry-source_authority-06"
+        }
+      ],
+      "legacy_crosswalk": [
+        {
+          "created_at": "2026-07-14T00:00:00Z",
+          "legacy_crosswalk_id": "disputed-geometry-legacy_crosswalk-06",
+          "legacy_id": "legacy_crosswalk-legacy_id-001",
+          "source_field": "legacy_crosswalk-source_field-value",
+          "source_table": "legacy_crosswalk-source_table-value",
+          "target_entity": "legacy_crosswalk-target_entity-value",
+          "target_id": "legacy_crosswalk-target_id-001"
+        }
+      ],
+      "licence": [
+        {
+          "classification": "government-internal",
+          "licence_id": "disputed-geometry-licence-06",
+          "licence_name": "licence-licence_name-value",
+          "usage_restriction": "licence-usage_restriction-value"
+        }
+      ],
+      "locality": [
+        {
+          "administrative_unit_id": "disputed-geometry-administrative_unit-06",
+          "effective_from": "2026-07-14T00:00:00Z",
+          "lifecycle_state": "candidate",
+          "locality_id": "disputed-geometry-locality-06",
+          "locality_type": "informal_area",
+          "source_authority_id": "disputed-geometry-source_authority-06"
+        }
+      ],
+      "location_record": [
+        {
+          "classification": "government-internal",
+          "created_at": "2026-07-14T00:00:00Z",
+          "location_record_id": "disputed-geometry-location_record-06",
+          "record_type": "address"
+        }
+      ],
+      "location_record_assertion": [
+        {
+          "assertion_id": "disputed-geometry-location_record_assertion-06",
+          "classification": "government-internal",
+          "decision_event_id": "disputed-geometry-decision_event-06",
+          "evidence_object_id": "disputed-geometry-evidence_object-06",
+          "location_record_version_id": "disputed-geometry-location_record_version-06",
+          "source_record_id": "disputed-geometry-source_record-06",
+          "target_entity": "location_record_assertion-target_entity-value",
+          "target_field": "location_record_assertion-target_field-value",
+          "value_json": {
+            "entity": "location_record_assertion",
+            "fixture": true
+          }
+        }
+      ],
+      "location_record_object_link": [
+        {
+          "cardinality_rank": 1,
+          "effective_from": "2026-07-14T00:00:00Z",
+          "link_id": "disputed-geometry-location_record_object_link-06",
+          "location_record_version_id": "disputed-geometry-location_record_version-06",
+          "object_role": "primary-subject",
+          "subject_id": "disputed-geometry-registry_subject-06"
+        }
+      ],
+      "location_record_relationship": [
+        {
+          "effective_from": "2026-07-14T00:00:00Z",
+          "from_location_record_id": "disputed-geometry-location_record-06",
+          "relationship_id": "disputed-geometry-location_record_relationship-06",
+          "relationship_type": "contains",
+          "source_decision_event_id": "disputed-geometry-decision_event-06",
+          "to_location_record_id": "disputed-geometry-location_record-06"
+        }
+      ],
+      "location_record_version": [
+        {
+          "administrative_unit_version_id": "disputed-geometry-administrative_unit_version-06",
+          "correction_case_id": "disputed-geometry-correction_case-06",
+          "display_label_es": "location_record_version-display_label_es-value",
+          "effective_from": "2026-07-14T00:00:00Z",
+          "lifecycle_state": "active",
+          "locality_id": "disputed-geometry-locality-06",
+          "location_record_id": "disputed-geometry-location_record-06",
+          "location_record_version_id": "disputed-geometry-location_record_version-06",
+          "recorded_at": "2026-07-14T00:00:00Z",
+          "source_decision_event_id": "disputed-geometry-decision_event-06",
+          "version_number": 6
+        }
+      ],
+      "migration_exception": [
+        {
+          "batch_id": "migration_exception-batch_id-001",
+          "created_at": "2026-07-14T00:00:00Z",
+          "details_json": {
+            "entity": "migration_exception",
+            "fixture": true
+          },
+          "exception_type": "migration_exception-exception_type-value",
+          "migration_exception_id": "disputed-geometry-migration_exception-06",
+          "owner": "migration_exception-owner-value",
+          "severity": "migration_exception-severity-value",
+          "source_key": "migration_exception-source_key-value",
+          "source_table": "migration_exception-source_table-value"
+        }
+      ],
+      "name_record": [
+        {
+          "effective_from": "2026-07-14T00:00:00Z",
+          "language_code": "es",
+          "name_kind": "official-es",
+          "name_record_id": "disputed-geometry-name_record-06",
+          "name_status": "official-current",
+          "name_text": "disputed-geometry official name",
+          "normalized_text": "disputed geometry",
+          "source_record_id": "disputed-geometry-source_record-06",
+          "subject_id": "disputed-geometry-registry_subject-06"
+        }
+      ],
+      "non_building_object": [
+        {
+          "effective_from": "2026-07-14T00:00:00Z",
+          "lifecycle_state": "candidate",
+          "object_id": "disputed-geometry-non_building_object-06",
+          "object_type": "utility-asset",
+          "source_authority_id": "disputed-geometry-source_authority-06"
+        }
+      ],
+      "operational_area": [
+        {
+          "area_type": "campaign",
+          "authority_owner": "operational_area-authority_owner-value",
+          "classification": "government-internal",
+          "effective_from": "2026-07-14T00:00:00Z",
+          "lifecycle_state": "planned",
+          "name_record_id": "disputed-geometry-name_record-06",
+          "operational_area_id": "disputed-geometry-operational_area-06",
+          "purpose": "operational_area-purpose-value"
+        }
+      ],
+      "operational_area_coverage": [
+        {
+          "administrative_unit_id": "disputed-geometry-administrative_unit-06",
+          "coverage_id": "disputed-geometry-operational_area_coverage-06",
+          "coverage_role": "context",
+          "effective_from": "2026-07-14T00:00:00Z",
+          "geometry_version_id": "disputed-geometry-geometry_version-06",
+          "operational_area_id": "disputed-geometry-operational_area-06"
+        }
+      ],
+      "parcel_reference": [
+        {
+          "classification": "government-internal",
+          "effective_from": "2026-07-14T00:00:00Z",
+          "external_parcel_id": "parcel_reference-external_parcel_id-001",
+          "parcel_reference_id": "disputed-geometry-parcel_reference-06",
+          "source_authority_id": "disputed-geometry-source_authority-06"
+        }
+      ],
+      "partner_projection": [
+        {
+          "classification": "government-internal",
+          "partner_projection_id": "disputed-geometry-partner_projection-06",
+          "partner_scope": "partner_projection-partner_scope-value",
+          "publication_release_item_id": "disputed-geometry-publication_release_item-06",
+          "response_field_set": {
+            "entity": "partner_projection",
+            "fixture": true
+          }
+        }
+      ],
+      "public_code_alias": [
+        {
+          "code_scheme": "public_code_alias-code_scheme-value",
+          "code_state": "active-public",
+          "location_record_id": "disputed-geometry-location_record-06",
+          "public_code": "public_code_alias-public_code-001",
+          "public_code_alias_id": "disputed-geometry-public_code_alias-06",
+          "reserved_at": "2026-07-14T00:00:00Z"
+        }
+      ],
+      "publication_release": [
+        {
+          "authority_reference": "publication_release-authority_reference-value",
+          "created_by_actor_id": "publication_release-created_by_actor_id-001",
+          "effective_at": "2026-07-14T00:00:00Z",
+          "immutable_manifest_hash": "publication_release-immutable_manifest_hash-value",
+          "manifest_storage_uri": "publication_release-manifest_storage_uri-value",
+          "projection_type": "operator-case-file",
+          "publication_release_id": "disputed-geometry-publication_release-06",
+          "recorded_at": "2026-07-14T00:00:00Z",
+          "release_state": "approved"
+        }
+      ],
+      "publication_release_item": [
+        {
+          "location_record_id": "disputed-geometry-location_record-06",
+          "location_record_version_id": "disputed-geometry-location_record_version-06",
+          "projection_payload_hash": "publication_release_item-projection_payload_hash-value",
+          "projection_payload_json": {
+            "entity": "publication_release_item",
+            "fixture": true
+          },
+          "projection_state": "included",
+          "public_code_alias_id": "disputed-geometry-public_code_alias-06",
+          "publication_release_id": "disputed-geometry-publication_release-06",
+          "publication_release_item_id": "disputed-geometry-publication_release_item-06",
+          "published_geometry_policy": "publication_release_item-published_geometry_policy-value",
+          "published_label": "publication_release_item-published_label-value"
+        }
+      ],
+      "registry_subject": [
+        {
+          "created_at": "2026-07-14T00:00:00Z",
+          "delete_policy": "retire-only",
+          "native_id": "disputed-geometry-location_record-06",
+          "subject_entity": "location_record",
+          "subject_id": "disputed-geometry-registry_subject-06",
+          "subject_state": "active"
+        }
+      ],
+      "road": [
+        {
+          "created_at": "2026-07-14T00:00:00Z",
+          "lifecycle_state": "candidate",
+          "road_class": "path",
+          "road_id": "disputed-geometry-road-06",
+          "source_authority_id": "disputed-geometry-source_authority-06"
+        }
+      ],
+      "road_segment": [
+        {
+          "effective_from": "2026-07-14T00:00:00Z",
+          "lifecycle_state": "draft",
+          "road_id": "disputed-geometry-road-06",
+          "road_segment_id": "disputed-geometry-road_segment-06"
+        }
+      ],
+      "source_authority": [
+        {
+          "authority_class": "citizen-submitted",
+          "authority_name": "source_authority-authority_name-value",
+          "source_authority_id": "disputed-geometry-source_authority-06",
+          "status": "candidate"
+        }
+      ],
+      "source_package": [
+        {
+          "licence_id": "disputed-geometry-licence-06",
+          "load_context": {
+            "entity": "source_package",
+            "fixture": true
+          },
+          "loaded_at": "2026-07-14T00:00:00Z",
+          "package_checksum": "source_package-package_checksum-value",
+          "package_name": "source_package-package_name-value",
+          "source_authority_id": "disputed-geometry-source_authority-06",
+          "source_package_id": "disputed-geometry-source_package-06"
+        }
+      ],
+      "source_payload_archive": [
+        {
+          "archive_id": "disputed-geometry-source_payload_archive-06",
+          "classification": "government-internal",
+          "created_at": "2026-07-14T00:00:00Z",
+          "payload_hash_sha256": "source_payload_archive-payload_hash_sha256-value",
+          "payload_uri": "source_payload_archive-payload_uri-value",
+          "retention_state": "active",
+          "source_record_id": "disputed-geometry-source_record-06"
+        }
+      ],
+      "source_record": [
+        {
+          "raw_payload_classification": "government-internal",
+          "raw_payload_hash": "source_record-raw_payload_hash-value",
+          "recorded_at": "2026-07-14T00:00:00Z",
+          "source_key": "source_record-source_key-value",
+          "source_package_id": "disputed-geometry-source_package-06",
+          "source_record_id": "disputed-geometry-source_record-06"
+        }
+      ],
+      "unit": [
+        {
+          "building_id": "disputed-geometry-building-06",
+          "classification": "government-internal",
+          "effective_from": "2026-07-14T00:00:00Z",
+          "lifecycle_state": "candidate",
+          "parent_unit_id": "disputed-geometry-unit-06",
+          "unit_id": "disputed-geometry-unit-06",
+          "unit_label": "unit-unit_label-value",
+          "unit_type": "apartment"
+        }
+      ]
+    },
+    "multi-unit-building": {
+      "administrative_code_history": [
+        {
+          "admin_code_history_id": "multi-unit-building-administrative_code_history-03",
+          "administrative_unit_id": "multi-unit-building-administrative_unit-03",
+          "code_scheme": "administrative_code_history-code_scheme-value",
+          "effective_from": "2026-07-14T00:00:00Z",
+          "official_code": "administrative_code_history-official_code-value",
+          "recorded_from": "2026-07-14T00:00:00Z",
+          "source_id": "multi-unit-building-source_record-03"
+        }
+      ],
+      "administrative_unit": [
+        {
+          "administrative_unit_id": "multi-unit-building-administrative_unit-03",
+          "country_id": "multi-unit-building-country-03",
+          "created_at": "2026-07-14T00:00:00Z"
+        }
+      ],
+      "administrative_unit_version": [
+        {
+          "admin_level": "country",
+          "administrative_unit_id": "multi-unit-building-administrative_unit-03",
+          "administrative_unit_version_id": "multi-unit-building-administrative_unit_version-03",
+          "classification": "government-internal",
+          "effective_from": "2026-07-14T00:00:00Z",
+          "lifecycle_state": "official",
+          "parent_administrative_unit_id": "multi-unit-building-administrative_unit-03",
+          "recorded_at": "2026-07-14T00:00:00Z",
+          "source_authority_id": "multi-unit-building-source_authority-03"
+        }
+      ],
+      "building": [
+        {
+          "building_id": "multi-unit-building-building-03",
+          "effective_from": "2026-07-14T00:00:00Z",
+          "lifecycle_state": "candidate",
+          "source_authority_id": "multi-unit-building-source_authority-03"
+        }
+      ],
+      "building_primary_entrance": [
+        {
+          "building_id": "multi-unit-building-building-03",
+          "building_primary_entrance_id": "multi-unit-building-building_primary_entrance-03",
+          "effective_from": "2026-07-14T00:00:00Z",
+          "entrance_id": "multi-unit-building-entrance-03"
+        }
+      ],
+      "correction_case": [
+        {
+          "case_state": "submitted",
+          "correction_case_id": "multi-unit-building-correction_case-03",
+          "correction_type": "administrative-context",
+          "resolution_event_id": "multi-unit-building-decision_event-03",
+          "submitted_at": "2026-07-14T00:00:00Z",
+          "target_location_record_id": "multi-unit-building-location_record-03"
+        }
+      ],
+      "country": [
+        {
+          "country_id": "multi-unit-building-country-03",
+          "created_at": "2026-07-14T00:00:00Z",
+          "iso2_code": "GQ",
+          "lifecycle_state": "active",
+          "official_name_en": "country-official_name_en-value",
+          "official_name_es": "country-official_name_es-value",
+          "source_authority_id": "multi-unit-building-source_authority-03"
+        }
+      ],
+      "decision_event": [
+        {
+          "actor_id": "decision_event-actor_id-001",
+          "authority_id": "multi-unit-building-source_authority-03",
+          "decision_event_id": "multi-unit-building-decision_event-03",
+          "decision_outcome": "approved",
+          "decision_type": "approve-geometry",
+          "details_json": {
+            "evidence_object_id": "multi-unit-building-evidence_object-03",
+            "institution_id": "national-gis-authority",
+            "permission_key": "geometry.promote",
+            "quality_authority_actor_id": "decision_event-actor_id-001",
+            "source_observation_id": "multi-unit-building-geometry_observation-03",
+            "territorial_scope": "national-gis-authority"
+          },
+          "effective_at": "2026-07-14T00:00:00Z",
+          "reason_code": "decision_event-reason_code-value",
+          "recorded_at": "2026-07-14T00:00:00Z"
+        }
+      ],
+      "dispute_case": [
+        {
+          "case_state": "submitted",
+          "dispute_case_id": "multi-unit-building-dispute_case-03",
+          "dispute_type": "authority",
+          "opened_at": "2026-07-14T00:00:00Z",
+          "resolution_event_id": "multi-unit-building-decision_event-03",
+          "subject_id": "multi-unit-building-registry_subject-03"
+        }
+      ],
+      "entrance": [
+        {
+          "building_id": "multi-unit-building-building-03",
+          "effective_from": "2026-07-14T00:00:00Z",
+          "entrance_id": "multi-unit-building-entrance-03",
+          "entrance_role": "main",
+          "lifecycle_state": "candidate"
+        }
+      ],
+      "evidence_object": [
+        {
+          "classification": "government-internal",
+          "content_hash": "evidence_object-content_hash-value",
+          "evidence_object_id": "multi-unit-building-evidence_object-03",
+          "media_type": "evidence_object-media_type-value",
+          "retention_state": "active",
+          "source_record_id": "multi-unit-building-source_record-03",
+          "storage_uri": "evidence_object-storage_uri-value"
+        }
+      ],
+      "field_assignment": [
+        {
+          "assignment_id": "multi-unit-building-field_assignment-03",
+          "assignment_state": "assigned",
+          "created_at": "2026-07-14T00:00:00Z",
+          "operational_area_id": "multi-unit-building-operational_area-03",
+          "priority": "field_assignment-priority-value",
+          "task_type": "field_assignment-task_type-value",
+          "team": "field_assignment-team-value"
+        }
+      ],
+      "field_observation": [
+        {
+          "assignment_id": "multi-unit-building-field_assignment-03",
+          "field_observation_id": "multi-unit-building-field_observation-03",
+          "geometry_observation_id": "multi-unit-building-geometry_observation-03",
+          "intake_case_id": "multi-unit-building-intake_case-03",
+          "notes_classification": "government-internal",
+          "observation_type": "field_observation-observation_type-value",
+          "recorded_at": "2026-07-14T00:00:00Z",
+          "source_record_id": "multi-unit-building-source_record-03",
+          "verification_state": "assigned"
+        }
+      ],
+      "geometry_observation": [
+        {
+          "capture_method": "browser-gps",
+          "classification": "government-internal",
+          "evidence_object_id": "multi-unit-building-evidence_object-03",
+          "geometry_observation_id": "multi-unit-building-geometry_observation-03",
+          "geometry_role": "entrance-point",
+          "licence_id": "multi-unit-building-licence-03",
+          "observed_at": "2026-07-14T00:00:00Z",
+          "observed_geom": "SRID=4326;POINT(8.78 3.75)",
+          "recorded_at": "2026-07-14T00:00:00Z",
+          "source_record_id": "multi-unit-building-source_record-03",
+          "subject_id": "multi-unit-building-registry_subject-03"
+        }
+      ],
+      "geometry_quality_assessment": [
+        {
+          "assessed_at": "2026-07-14T00:00:00Z",
+          "assessed_by_actor_id": "geometry_quality_assessment-assessed_by_actor_id-001",
+          "check_name": "geometry_quality_assessment-check_name-value",
+          "check_result": "passed",
+          "geometry_version_id": "multi-unit-building-geometry_version-03",
+          "measured_value_json": {
+            "entity": "geometry_quality_assessment",
+            "fixture": true
+          },
+          "quality_assessment_id": "multi-unit-building-geometry_quality_assessment-03",
+          "tolerance_json": {
+            "entity": "geometry_quality_assessment",
+            "fixture": true
+          }
+        }
+      ],
+      "geometry_transformation": [
+        {
+          "algorithm": "geometry_transformation-algorithm-value",
+          "algorithm_version": "geometry_transformation-algorithm_version-value",
+          "parameters_json": {
+            "entity": "geometry_transformation",
+            "fixture": true
+          },
+          "performed_at": "2026-07-14T00:00:00Z",
+          "source_crs": "geometry_transformation-source_crs-value",
+          "target_crs": "geometry_transformation-target_crs-value",
+          "transformation_id": "multi-unit-building-geometry_transformation-03"
+        }
+      ],
+      "geometry_version": [
+        {
+          "classification": "government-internal",
+          "dispute_case_id": "multi-unit-building-dispute_case-03",
+          "effective_from": "2026-07-14T00:00:00Z",
+          "geom": "SRID=4326;POINT(8.78 3.75)",
+          "geometry_role": "entrance-point",
+          "geometry_version_id": "multi-unit-building-geometry_version-03",
+          "promotion_authority_scope": "national-gis-authority",
+          "promotion_decision_event_id": "multi-unit-building-decision_event-03",
+          "promotion_evidence_object_id": "multi-unit-building-evidence_object-03",
+          "quality_state": "accepted-canonical",
+          "recorded_at": "2026-07-14T00:00:00Z",
+          "source_observation_id": "multi-unit-building-geometry_observation-03",
+          "subject_id": "multi-unit-building-registry_subject-03",
+          "transformation_id": "multi-unit-building-geometry_transformation-03",
+          "validated_by_actor_id": "decision_event-actor_id-001",
+          "validation_method": "geometry_version-validation_method-value"
+        }
+      ],
+      "intake_case": [
+        {
+          "created_at": "2026-07-14T00:00:00Z",
+          "intake_case_id": "multi-unit-building-intake_case-03",
+          "intake_state": "closed",
+          "source_record_id": "multi-unit-building-source_record-03",
+          "submitted_label": "intake_case-submitted_label-value"
+        }
+      ],
+      "landmark": [
+        {
+          "effective_from": "2026-07-14T00:00:00Z",
+          "landmark_id": "multi-unit-building-landmark-03",
+          "landmark_type": "school",
+          "lifecycle_state": "candidate",
+          "source_authority_id": "multi-unit-building-source_authority-03"
+        }
+      ],
+      "legacy_crosswalk": [
+        {
+          "created_at": "2026-07-14T00:00:00Z",
+          "legacy_crosswalk_id": "multi-unit-building-legacy_crosswalk-03",
+          "legacy_id": "legacy_crosswalk-legacy_id-001",
+          "source_field": "legacy_crosswalk-source_field-value",
+          "source_table": "legacy_crosswalk-source_table-value",
+          "target_entity": "legacy_crosswalk-target_entity-value",
+          "target_id": "legacy_crosswalk-target_id-001"
+        }
+      ],
+      "licence": [
+        {
+          "classification": "government-internal",
+          "licence_id": "multi-unit-building-licence-03",
+          "licence_name": "licence-licence_name-value",
+          "usage_restriction": "licence-usage_restriction-value"
+        }
+      ],
+      "locality": [
+        {
+          "administrative_unit_id": "multi-unit-building-administrative_unit-03",
+          "effective_from": "2026-07-14T00:00:00Z",
+          "lifecycle_state": "candidate",
+          "locality_id": "multi-unit-building-locality-03",
+          "locality_type": "informal_area",
+          "source_authority_id": "multi-unit-building-source_authority-03"
+        }
+      ],
+      "location_record": [
+        {
+          "classification": "government-internal",
+          "created_at": "2026-07-14T00:00:00Z",
+          "location_record_id": "multi-unit-building-location_record-03",
+          "record_type": "unit"
+        },
+        {
+          "classification": "government-internal",
+          "created_at": "2026-07-14T00:00:00Z",
+          "location_record_id": "multi-unit-building-location-record-unit-02",
+          "record_type": "unit"
+        },
+        {
+          "classification": "government-internal",
+          "created_at": "2026-07-14T00:00:00Z",
+          "location_record_id": "multi-unit-building-location-record-building-positive",
+          "record_type": "building"
+        }
+      ],
+      "location_record_assertion": [
+        {
+          "assertion_id": "multi-unit-building-location_record_assertion-03",
+          "classification": "government-internal",
+          "decision_event_id": "multi-unit-building-decision_event-03",
+          "evidence_object_id": "multi-unit-building-evidence_object-03",
+          "location_record_version_id": "multi-unit-building-location_record_version-03",
+          "source_record_id": "multi-unit-building-source_record-03",
+          "target_entity": "location_record_assertion-target_entity-value",
+          "target_field": "location_record_assertion-target_field-value",
+          "value_json": {
+            "entity": "location_record_assertion",
+            "fixture": true
+          }
+        }
+      ],
+      "location_record_object_link": [
+        {
+          "cardinality_rank": 1,
+          "effective_from": "2026-07-14T00:00:00Z",
+          "link_id": "multi-unit-building-location_record_object_link-03",
+          "location_record_version_id": "multi-unit-building-location_record_version-03",
+          "object_role": "primary-subject",
+          "subject_id": "multi-unit-building-registry_subject-03"
+        },
+        {
+          "cardinality_rank": 1,
+          "effective_from": "2026-07-14T00:00:00Z",
+          "link_id": "multi-unit-building-object-link-parent-building",
+          "location_record_version_id": "multi-unit-building-location_record_version-03",
+          "object_role": "parent-building",
+          "subject_id": "multi-unit-building-registry-subject-parent-building"
+        },
+        {
+          "cardinality_rank": 1,
+          "effective_from": "2026-07-14T00:00:00Z",
+          "link_id": "multi-unit-building-object-link-unit-02-primary",
+          "location_record_version_id": "multi-unit-building-location-record-version-unit-02",
+          "object_role": "primary-subject",
+          "subject_id": "multi-unit-building-registry-subject-unit-02"
+        },
+        {
+          "cardinality_rank": 1,
+          "effective_from": "2026-07-14T00:00:00Z",
+          "link_id": "multi-unit-building-object-link-unit-02-parent-building",
+          "location_record_version_id": "multi-unit-building-location-record-version-unit-02",
+          "object_role": "parent-building",
+          "subject_id": "multi-unit-building-registry-subject-parent-building"
+        },
+        {
+          "cardinality_rank": 1,
+          "effective_from": "2026-07-14T00:00:00Z",
+          "link_id": "multi-unit-building-object-link-building-positive-primary",
+          "location_record_version_id": "multi-unit-building-location-record-version-building-positive",
+          "object_role": "primary-subject",
+          "subject_id": "multi-unit-building-registry-subject-building-positive"
+        }
+      ],
+      "location_record_relationship": [
+        {
+          "effective_from": "2026-07-14T00:00:00Z",
+          "from_location_record_id": "multi-unit-building-location_record-03",
+          "relationship_id": "multi-unit-building-location_record_relationship-03",
+          "relationship_type": "contains",
+          "source_decision_event_id": "multi-unit-building-decision_event-03",
+          "to_location_record_id": "multi-unit-building-location_record-03"
+        }
+      ],
+      "location_record_version": [
+        {
+          "administrative_unit_version_id": "multi-unit-building-administrative_unit_version-03",
+          "correction_case_id": "multi-unit-building-correction_case-03",
+          "display_label_es": "location_record_version-display_label_es-value",
+          "effective_from": "2026-07-14T00:00:00Z",
+          "lifecycle_state": "active",
+          "locality_id": "multi-unit-building-locality-03",
+          "location_record_id": "multi-unit-building-location_record-03",
+          "location_record_version_id": "multi-unit-building-location_record_version-03",
+          "recorded_at": "2026-07-14T00:00:00Z",
+          "source_decision_event_id": "multi-unit-building-decision_event-03",
+          "version_number": 3
+        },
+        {
+          "administrative_unit_version_id": "multi-unit-building-administrative_unit_version-03",
+          "correction_case_id": "multi-unit-building-correction_case-03",
+          "display_label_es": "location_record_version-display_label_es-value",
+          "effective_from": "2026-07-14T00:00:00Z",
+          "lifecycle_state": "active",
+          "locality_id": "multi-unit-building-locality-03",
+          "location_record_id": "multi-unit-building-location-record-unit-02",
+          "location_record_version_id": "multi-unit-building-location-record-version-unit-02",
+          "recorded_at": "2026-07-14T00:00:00Z",
+          "source_decision_event_id": "multi-unit-building-decision_event-03",
+          "version_number": 1
+        },
+        {
+          "administrative_unit_version_id": "multi-unit-building-administrative_unit_version-03",
+          "correction_case_id": "multi-unit-building-correction_case-03",
+          "display_label_es": "location_record_version-display_label_es-value",
+          "effective_from": "2026-07-14T00:00:00Z",
+          "lifecycle_state": "active",
+          "locality_id": "multi-unit-building-locality-03",
+          "location_record_id": "multi-unit-building-location-record-building-positive",
+          "location_record_version_id": "multi-unit-building-location-record-version-building-positive",
+          "recorded_at": "2026-07-14T00:00:00Z",
+          "source_decision_event_id": "multi-unit-building-decision_event-03",
+          "version_number": 1
+        }
+      ],
+      "migration_exception": [
+        {
+          "batch_id": "migration_exception-batch_id-001",
+          "created_at": "2026-07-14T00:00:00Z",
+          "details_json": {
+            "entity": "migration_exception",
+            "fixture": true
+          },
+          "exception_type": "migration_exception-exception_type-value",
+          "migration_exception_id": "multi-unit-building-migration_exception-03",
+          "owner": "migration_exception-owner-value",
+          "severity": "migration_exception-severity-value",
+          "source_key": "migration_exception-source_key-value",
+          "source_table": "migration_exception-source_table-value"
+        }
+      ],
+      "name_record": [
+        {
+          "effective_from": "2026-07-14T00:00:00Z",
+          "language_code": "es",
+          "name_kind": "official-es",
+          "name_record_id": "multi-unit-building-name_record-03",
+          "name_status": "official-current",
+          "name_text": "multi-unit-building official name",
+          "normalized_text": "multi unit building",
+          "source_record_id": "multi-unit-building-source_record-03",
+          "subject_id": "multi-unit-building-registry_subject-03"
+        }
+      ],
+      "non_building_object": [
+        {
+          "effective_from": "2026-07-14T00:00:00Z",
+          "lifecycle_state": "candidate",
+          "object_id": "multi-unit-building-non_building_object-03",
+          "object_type": "utility-asset",
+          "source_authority_id": "multi-unit-building-source_authority-03"
+        }
+      ],
+      "operational_area": [
+        {
+          "area_type": "campaign",
+          "authority_owner": "operational_area-authority_owner-value",
+          "classification": "government-internal",
+          "effective_from": "2026-07-14T00:00:00Z",
+          "lifecycle_state": "planned",
+          "name_record_id": "multi-unit-building-name_record-03",
+          "operational_area_id": "multi-unit-building-operational_area-03",
+          "purpose": "operational_area-purpose-value"
+        }
+      ],
+      "operational_area_coverage": [
+        {
+          "administrative_unit_id": "multi-unit-building-administrative_unit-03",
+          "coverage_id": "multi-unit-building-operational_area_coverage-03",
+          "coverage_role": "context",
+          "effective_from": "2026-07-14T00:00:00Z",
+          "geometry_version_id": "multi-unit-building-geometry_version-03",
+          "operational_area_id": "multi-unit-building-operational_area-03"
+        }
+      ],
+      "parcel_reference": [
+        {
+          "classification": "government-internal",
+          "effective_from": "2026-07-14T00:00:00Z",
+          "external_parcel_id": "parcel_reference-external_parcel_id-001",
+          "parcel_reference_id": "multi-unit-building-parcel_reference-03",
+          "source_authority_id": "multi-unit-building-source_authority-03"
+        }
+      ],
+      "partner_projection": [
+        {
+          "classification": "government-internal",
+          "partner_projection_id": "multi-unit-building-partner_projection-03",
+          "partner_scope": "partner_projection-partner_scope-value",
+          "publication_release_item_id": "multi-unit-building-publication_release_item-03",
+          "response_field_set": {
+            "entity": "partner_projection",
+            "fixture": true
+          }
+        }
+      ],
+      "public_code_alias": [
+        {
+          "code_scheme": "public_code_alias-code_scheme-value",
+          "code_state": "active-public",
+          "location_record_id": "multi-unit-building-location_record-03",
+          "public_code": "public_code_alias-public_code-001",
+          "public_code_alias_id": "multi-unit-building-public_code_alias-03",
+          "reserved_at": "2026-07-14T00:00:00Z"
+        },
+        {
+          "code_scheme": "public_code_alias-code_scheme-value",
+          "code_state": "active-public",
+          "location_record_id": "multi-unit-building-location-record-unit-02",
+          "public_code": "public_code_alias-public_code-002",
+          "public_code_alias_id": "multi-unit-building-public-code-alias-unit-02",
+          "reserved_at": "2026-07-14T00:00:00Z"
+        }
+      ],
+      "publication_release": [
+        {
+          "authority_reference": "publication_release-authority_reference-value",
+          "created_by_actor_id": "publication_release-created_by_actor_id-001",
+          "effective_at": "2026-07-14T00:00:00Z",
+          "immutable_manifest_hash": "publication_release-immutable_manifest_hash-value",
+          "manifest_storage_uri": "publication_release-manifest_storage_uri-value",
+          "projection_type": "operator-case-file",
+          "publication_release_id": "multi-unit-building-publication_release-03",
+          "recorded_at": "2026-07-14T00:00:00Z",
+          "release_state": "approved"
+        }
+      ],
+      "publication_release_item": [
+        {
+          "location_record_id": "multi-unit-building-location_record-03",
+          "location_record_version_id": "multi-unit-building-location_record_version-03",
+          "projection_payload_hash": "publication_release_item-projection_payload_hash-value",
+          "projection_payload_json": {
+            "entity": "publication_release_item",
+            "fixture": true
+          },
+          "projection_state": "included",
+          "public_code_alias_id": "multi-unit-building-public_code_alias-03",
+          "publication_release_id": "multi-unit-building-publication_release-03",
+          "publication_release_item_id": "multi-unit-building-publication_release_item-03",
+          "published_geometry_policy": "publication_release_item-published_geometry_policy-value",
+          "published_label": "publication_release_item-published_label-value"
+        },
+        {
+          "location_record_id": "multi-unit-building-location-record-unit-02",
+          "location_record_version_id": "multi-unit-building-location-record-version-unit-02",
+          "projection_payload_hash": "multi-unit-unit-b-projection-hash",
+          "projection_payload_json": {
+            "canonical_record": "multi-unit-building-location-record-unit-02",
+            "scenario": "multi-unit-building",
+            "unit": "B"
+          },
+          "projection_state": "included",
+          "public_code_alias_id": "multi-unit-building-public-code-alias-unit-02",
+          "publication_release_id": "multi-unit-building-publication_release-03",
+          "publication_release_item_id": "multi-unit-building-publication-release-item-unit-02",
+          "published_geometry_policy": "publication_release_item-published_geometry_policy-value",
+          "published_label": "Unit B"
+        }
+      ],
+      "registry_subject": [
+        {
+          "created_at": "2026-07-14T00:00:00Z",
+          "delete_policy": "retire-only",
+          "native_id": "multi-unit-building-unit-03",
+          "subject_entity": "unit",
+          "subject_id": "multi-unit-building-registry_subject-03",
+          "subject_state": "active"
+        },
+        {
+          "created_at": "2026-07-14T00:00:00Z",
+          "delete_policy": "retire-only",
+          "native_id": "multi-unit-building-unit-02",
+          "subject_entity": "unit",
+          "subject_id": "multi-unit-building-registry-subject-unit-02",
+          "subject_state": "active"
+        },
+        {
+          "created_at": "2026-07-14T00:00:00Z",
+          "delete_policy": "retire-only",
+          "native_id": "multi-unit-building-building-03",
+          "subject_entity": "building",
+          "subject_id": "multi-unit-building-registry-subject-parent-building",
+          "subject_state": "active"
+        },
+        {
+          "created_at": "2026-07-14T00:00:00Z",
+          "delete_policy": "retire-only",
+          "native_id": "multi-unit-building-building-03",
+          "subject_entity": "building",
+          "subject_id": "multi-unit-building-registry-subject-building-positive",
+          "subject_state": "active"
+        }
+      ],
+      "road": [
+        {
+          "created_at": "2026-07-14T00:00:00Z",
+          "lifecycle_state": "candidate",
+          "road_class": "path",
+          "road_id": "multi-unit-building-road-03",
+          "source_authority_id": "multi-unit-building-source_authority-03"
+        }
+      ],
+      "road_segment": [
+        {
+          "effective_from": "2026-07-14T00:00:00Z",
+          "lifecycle_state": "draft",
+          "road_id": "multi-unit-building-road-03",
+          "road_segment_id": "multi-unit-building-road_segment-03"
+        }
+      ],
+      "source_authority": [
+        {
+          "authority_class": "citizen-submitted",
+          "authority_name": "source_authority-authority_name-value",
+          "source_authority_id": "multi-unit-building-source_authority-03",
+          "status": "candidate"
+        }
+      ],
+      "source_package": [
+        {
+          "licence_id": "multi-unit-building-licence-03",
+          "load_context": {
+            "entity": "source_package",
+            "fixture": true
+          },
+          "loaded_at": "2026-07-14T00:00:00Z",
+          "package_checksum": "source_package-package_checksum-value",
+          "package_name": "source_package-package_name-value",
+          "source_authority_id": "multi-unit-building-source_authority-03",
+          "source_package_id": "multi-unit-building-source_package-03"
+        }
+      ],
+      "source_payload_archive": [
+        {
+          "archive_id": "multi-unit-building-source_payload_archive-03",
+          "classification": "government-internal",
+          "created_at": "2026-07-14T00:00:00Z",
+          "payload_hash_sha256": "source_payload_archive-payload_hash_sha256-value",
+          "payload_uri": "source_payload_archive-payload_uri-value",
+          "retention_state": "active",
+          "source_record_id": "multi-unit-building-source_record-03"
+        }
+      ],
+      "source_record": [
+        {
+          "raw_payload_classification": "government-internal",
+          "raw_payload_hash": "source_record-raw_payload_hash-value",
+          "recorded_at": "2026-07-14T00:00:00Z",
+          "source_key": "source_record-source_key-value",
+          "source_package_id": "multi-unit-building-source_package-03",
+          "source_record_id": "multi-unit-building-source_record-03"
+        }
+      ],
+      "unit": [
+        {
+          "building_id": "multi-unit-building-building-03",
+          "classification": "government-internal",
+          "effective_from": "2026-07-14T00:00:00Z",
+          "lifecycle_state": "candidate",
+          "parent_unit_id": "multi-unit-building-unit-03",
+          "unit_id": "multi-unit-building-unit-03",
+          "unit_label": "unit-unit_label-value",
+          "unit_type": "apartment"
+        },
+        {
+          "building_id": "multi-unit-building-building-03",
+          "classification": "government-internal",
+          "effective_from": "2026-07-14T00:00:00Z",
+          "lifecycle_state": "candidate",
+          "parent_unit_id": "multi-unit-building-unit-03",
+          "unit_id": "multi-unit-building-unit-02",
+          "unit_label": "Unit B",
+          "unit_type": "apartment"
+        }
+      ]
+    },
+    "no-formal-road-location": {
+      "administrative_code_history": [
+        {
+          "admin_code_history_id": "no-formal-road-location-administrative_code_history-04",
+          "administrative_unit_id": "no-formal-road-location-administrative_unit-04",
+          "code_scheme": "administrative_code_history-code_scheme-value",
+          "effective_from": "2026-07-14T00:00:00Z",
+          "official_code": "administrative_code_history-official_code-value",
+          "recorded_from": "2026-07-14T00:00:00Z",
+          "source_id": "no-formal-road-location-source_record-04"
+        }
+      ],
+      "administrative_unit": [
+        {
+          "administrative_unit_id": "no-formal-road-location-administrative_unit-04",
+          "country_id": "no-formal-road-location-country-04",
+          "created_at": "2026-07-14T00:00:00Z"
+        }
+      ],
+      "administrative_unit_version": [
+        {
+          "admin_level": "country",
+          "administrative_unit_id": "no-formal-road-location-administrative_unit-04",
+          "administrative_unit_version_id": "no-formal-road-location-administrative_unit_version-04",
+          "classification": "government-internal",
+          "effective_from": "2026-07-14T00:00:00Z",
+          "lifecycle_state": "official",
+          "parent_administrative_unit_id": "no-formal-road-location-administrative_unit-04",
+          "recorded_at": "2026-07-14T00:00:00Z",
+          "source_authority_id": "no-formal-road-location-source_authority-04"
+        }
+      ],
+      "building": [
+        {
+          "building_id": "no-formal-road-location-building-04",
+          "effective_from": "2026-07-14T00:00:00Z",
+          "lifecycle_state": "candidate",
+          "source_authority_id": "no-formal-road-location-source_authority-04"
+        }
+      ],
+      "building_primary_entrance": [
+        {
+          "building_id": "no-formal-road-location-building-04",
+          "building_primary_entrance_id": "no-formal-road-location-building_primary_entrance-04",
+          "effective_from": "2026-07-14T00:00:00Z",
+          "entrance_id": "no-formal-road-location-entrance-04"
+        }
+      ],
+      "correction_case": [
+        {
+          "case_state": "submitted",
+          "correction_case_id": "no-formal-road-location-correction_case-04",
+          "correction_type": "administrative-context",
+          "resolution_event_id": "no-formal-road-location-decision_event-04",
+          "submitted_at": "2026-07-14T00:00:00Z",
+          "target_location_record_id": "no-formal-road-location-location_record-04"
+        }
+      ],
+      "country": [
+        {
+          "country_id": "no-formal-road-location-country-04",
+          "created_at": "2026-07-14T00:00:00Z",
+          "iso2_code": "GQ",
+          "lifecycle_state": "active",
+          "official_name_en": "country-official_name_en-value",
+          "official_name_es": "country-official_name_es-value",
+          "source_authority_id": "no-formal-road-location-source_authority-04"
+        }
+      ],
+      "decision_event": [
+        {
+          "actor_id": "decision_event-actor_id-001",
+          "authority_id": "no-formal-road-location-source_authority-04",
+          "decision_event_id": "no-formal-road-location-decision_event-04",
+          "decision_outcome": "approved",
+          "decision_type": "approve-geometry",
+          "details_json": {
+            "evidence_object_id": "no-formal-road-location-evidence_object-04",
+            "institution_id": "national-gis-authority",
+            "permission_key": "geometry.promote",
+            "quality_authority_actor_id": "decision_event-actor_id-001",
+            "source_observation_id": "no-formal-road-location-geometry_observation-04",
+            "territorial_scope": "national-gis-authority"
+          },
+          "effective_at": "2026-07-14T00:00:00Z",
+          "reason_code": "decision_event-reason_code-value",
+          "recorded_at": "2026-07-14T00:00:00Z"
+        }
+      ],
+      "dispute_case": [
+        {
+          "case_state": "submitted",
+          "dispute_case_id": "no-formal-road-location-dispute_case-04",
+          "dispute_type": "authority",
+          "opened_at": "2026-07-14T00:00:00Z",
+          "resolution_event_id": "no-formal-road-location-decision_event-04",
+          "subject_id": "no-formal-road-location-registry_subject-04"
+        }
+      ],
+      "entrance": [
+        {
+          "building_id": "no-formal-road-location-building-04",
+          "effective_from": "2026-07-14T00:00:00Z",
+          "entrance_id": "no-formal-road-location-entrance-04",
+          "entrance_role": "main",
+          "lifecycle_state": "candidate"
+        }
+      ],
+      "evidence_object": [
+        {
+          "classification": "government-internal",
+          "content_hash": "evidence_object-content_hash-value",
+          "evidence_object_id": "no-formal-road-location-evidence_object-04",
+          "media_type": "evidence_object-media_type-value",
+          "retention_state": "active",
+          "source_record_id": "no-formal-road-location-source_record-04",
+          "storage_uri": "evidence_object-storage_uri-value"
+        }
+      ],
+      "field_assignment": [
+        {
+          "assignment_id": "no-formal-road-location-field_assignment-04",
+          "assignment_state": "assigned",
+          "created_at": "2026-07-14T00:00:00Z",
+          "operational_area_id": "no-formal-road-location-operational_area-04",
+          "priority": "field_assignment-priority-value",
+          "task_type": "field_assignment-task_type-value",
+          "team": "field_assignment-team-value"
+        }
+      ],
+      "field_observation": [
+        {
+          "assignment_id": "no-formal-road-location-field_assignment-04",
+          "field_observation_id": "no-formal-road-location-field_observation-04",
+          "geometry_observation_id": "no-formal-road-location-geometry_observation-04",
+          "intake_case_id": "no-formal-road-location-intake_case-04",
+          "notes_classification": "government-internal",
+          "observation_type": "field_observation-observation_type-value",
+          "recorded_at": "2026-07-14T00:00:00Z",
+          "source_record_id": "no-formal-road-location-source_record-04",
+          "verification_state": "assigned"
+        }
+      ],
+      "geometry_observation": [
+        {
+          "capture_method": "browser-gps",
+          "classification": "government-internal",
+          "evidence_object_id": "no-formal-road-location-evidence_object-04",
+          "geometry_observation_id": "no-formal-road-location-geometry_observation-04",
+          "geometry_role": "location-point",
+          "licence_id": "no-formal-road-location-licence-04",
+          "observed_at": "2026-07-14T00:00:00Z",
+          "observed_geom": "SRID=4326;POINT(8.78 3.75)",
+          "recorded_at": "2026-07-14T00:00:00Z",
+          "source_record_id": "no-formal-road-location-source_record-04",
+          "subject_id": "no-formal-road-location-registry_subject-04"
+        }
+      ],
+      "geometry_quality_assessment": [
+        {
+          "assessed_at": "2026-07-14T00:00:00Z",
+          "assessed_by_actor_id": "geometry_quality_assessment-assessed_by_actor_id-001",
+          "check_name": "geometry_quality_assessment-check_name-value",
+          "check_result": "passed",
+          "geometry_version_id": "no-formal-road-location-geometry_version-04",
+          "measured_value_json": {
+            "entity": "geometry_quality_assessment",
+            "fixture": true
+          },
+          "quality_assessment_id": "no-formal-road-location-geometry_quality_assessment-04",
+          "tolerance_json": {
+            "entity": "geometry_quality_assessment",
+            "fixture": true
+          }
+        }
+      ],
+      "geometry_transformation": [
+        {
+          "algorithm": "geometry_transformation-algorithm-value",
+          "algorithm_version": "geometry_transformation-algorithm_version-value",
+          "parameters_json": {
+            "entity": "geometry_transformation",
+            "fixture": true
+          },
+          "performed_at": "2026-07-14T00:00:00Z",
+          "source_crs": "geometry_transformation-source_crs-value",
+          "target_crs": "geometry_transformation-target_crs-value",
+          "transformation_id": "no-formal-road-location-geometry_transformation-04"
+        }
+      ],
+      "geometry_version": [
+        {
+          "classification": "government-internal",
+          "dispute_case_id": "no-formal-road-location-dispute_case-04",
+          "effective_from": "2026-07-14T00:00:00Z",
+          "geom": "SRID=4326;POINT(8.78 3.75)",
+          "geometry_role": "location-point",
+          "geometry_version_id": "no-formal-road-location-geometry_version-04",
+          "promotion_authority_scope": "national-gis-authority",
+          "promotion_decision_event_id": "no-formal-road-location-decision_event-04",
+          "promotion_evidence_object_id": "no-formal-road-location-evidence_object-04",
+          "quality_state": "accepted-canonical",
+          "recorded_at": "2026-07-14T00:00:00Z",
+          "source_observation_id": "no-formal-road-location-geometry_observation-04",
+          "subject_id": "no-formal-road-location-registry_subject-04",
+          "transformation_id": "no-formal-road-location-geometry_transformation-04",
+          "validated_by_actor_id": "decision_event-actor_id-001",
+          "validation_method": "geometry_version-validation_method-value"
+        }
+      ],
+      "intake_case": [
+        {
+          "created_at": "2026-07-14T00:00:00Z",
+          "intake_case_id": "no-formal-road-location-intake_case-04",
+          "intake_state": "closed",
+          "source_record_id": "no-formal-road-location-source_record-04",
+          "submitted_label": "intake_case-submitted_label-value"
+        }
+      ],
+      "landmark": [
+        {
+          "effective_from": "2026-07-14T00:00:00Z",
+          "landmark_id": "no-formal-road-location-landmark-04",
+          "landmark_type": "school",
+          "lifecycle_state": "candidate",
+          "source_authority_id": "no-formal-road-location-source_authority-04"
+        }
+      ],
+      "legacy_crosswalk": [
+        {
+          "created_at": "2026-07-14T00:00:00Z",
+          "legacy_crosswalk_id": "no-formal-road-location-legacy_crosswalk-04",
+          "legacy_id": "legacy_crosswalk-legacy_id-001",
+          "source_field": "legacy_crosswalk-source_field-value",
+          "source_table": "legacy_crosswalk-source_table-value",
+          "target_entity": "legacy_crosswalk-target_entity-value",
+          "target_id": "legacy_crosswalk-target_id-001"
+        }
+      ],
+      "licence": [
+        {
+          "classification": "government-internal",
+          "licence_id": "no-formal-road-location-licence-04",
+          "licence_name": "licence-licence_name-value",
+          "usage_restriction": "licence-usage_restriction-value"
+        }
+      ],
+      "locality": [
+        {
+          "administrative_unit_id": "no-formal-road-location-administrative_unit-04",
+          "effective_from": "2026-07-14T00:00:00Z",
+          "lifecycle_state": "candidate",
+          "locality_id": "no-formal-road-location-locality-04",
+          "locality_type": "informal_area",
+          "source_authority_id": "no-formal-road-location-source_authority-04"
+        }
+      ],
+      "location_record": [
+        {
+          "classification": "government-internal",
+          "created_at": "2026-07-14T00:00:00Z",
+          "location_record_id": "no-formal-road-location-location_record-04",
+          "record_type": "service-location"
+        },
+        {
+          "classification": "government-internal",
+          "created_at": "2026-07-14T00:00:00Z",
+          "location_record_id": "no-formal-road-location-location-record-non-building-object-positive",
+          "record_type": "non-building-object"
+        }
+      ],
+      "location_record_assertion": [
+        {
+          "assertion_id": "no-formal-road-location-location_record_assertion-04",
+          "classification": "government-internal",
+          "decision_event_id": "no-formal-road-location-decision_event-04",
+          "evidence_object_id": "no-formal-road-location-evidence_object-04",
+          "location_record_version_id": "no-formal-road-location-location_record_version-04",
+          "source_record_id": "no-formal-road-location-source_record-04",
+          "target_entity": "location_record_assertion-target_entity-value",
+          "target_field": "location_record_assertion-target_field-value",
+          "value_json": {
+            "entity": "location_record_assertion",
+            "fixture": true
+          }
+        }
+      ],
+      "location_record_object_link": [
+        {
+          "cardinality_rank": 1,
+          "effective_from": "2026-07-14T00:00:00Z",
+          "link_id": "no-formal-road-location-location_record_object_link-04",
+          "location_record_version_id": "no-formal-road-location-location_record_version-04",
+          "object_role": "primary-subject",
+          "subject_id": "no-formal-road-location-registry_subject-04"
+        },
+        {
+          "cardinality_rank": 1,
+          "effective_from": "2026-07-14T00:00:00Z",
+          "link_id": "no-formal-road-location-object-link-non-building-object-positive-primary",
+          "location_record_version_id": "no-formal-road-location-location-record-version-non-building-object-positive",
+          "object_role": "primary-subject",
+          "subject_id": "no-formal-road-location-registry-subject-non-building-object-positive"
+        }
+      ],
+      "location_record_relationship": [
+        {
+          "effective_from": "2026-07-14T00:00:00Z",
+          "from_location_record_id": "no-formal-road-location-location_record-04",
+          "relationship_id": "no-formal-road-location-location_record_relationship-04",
+          "relationship_type": "contains",
+          "source_decision_event_id": "no-formal-road-location-decision_event-04",
+          "to_location_record_id": "no-formal-road-location-location_record-04"
+        }
+      ],
+      "location_record_version": [
+        {
+          "administrative_unit_version_id": "no-formal-road-location-administrative_unit_version-04",
+          "correction_case_id": "no-formal-road-location-correction_case-04",
+          "display_label_es": "location_record_version-display_label_es-value",
+          "effective_from": "2026-07-14T00:00:00Z",
+          "lifecycle_state": "active",
+          "locality_id": "no-formal-road-location-locality-04",
+          "location_record_id": "no-formal-road-location-location_record-04",
+          "location_record_version_id": "no-formal-road-location-location_record_version-04",
+          "recorded_at": "2026-07-14T00:00:00Z",
+          "source_decision_event_id": "no-formal-road-location-decision_event-04",
+          "version_number": 4
+        },
+        {
+          "administrative_unit_version_id": "no-formal-road-location-administrative_unit_version-04",
+          "correction_case_id": "no-formal-road-location-correction_case-04",
+          "display_label_es": "location_record_version-display_label_es-value",
+          "effective_from": "2026-07-14T00:00:00Z",
+          "lifecycle_state": "active",
+          "locality_id": "no-formal-road-location-locality-04",
+          "location_record_id": "no-formal-road-location-location-record-non-building-object-positive",
+          "location_record_version_id": "no-formal-road-location-location-record-version-non-building-object-positive",
+          "recorded_at": "2026-07-14T00:00:00Z",
+          "source_decision_event_id": "no-formal-road-location-decision_event-04",
+          "version_number": 1
+        }
+      ],
+      "migration_exception": [
+        {
+          "batch_id": "migration_exception-batch_id-001",
+          "created_at": "2026-07-14T00:00:00Z",
+          "details_json": {
+            "entity": "migration_exception",
+            "fixture": true
+          },
+          "exception_type": "migration_exception-exception_type-value",
+          "migration_exception_id": "no-formal-road-location-migration_exception-04",
+          "owner": "migration_exception-owner-value",
+          "severity": "migration_exception-severity-value",
+          "source_key": "migration_exception-source_key-value",
+          "source_table": "migration_exception-source_table-value"
+        }
+      ],
+      "name_record": [
+        {
+          "effective_from": "2026-07-14T00:00:00Z",
+          "language_code": "es",
+          "name_kind": "official-es",
+          "name_record_id": "no-formal-road-location-name_record-04",
+          "name_status": "official-current",
+          "name_text": "no-formal-road-location official name",
+          "normalized_text": "no formal road location",
+          "source_record_id": "no-formal-road-location-source_record-04",
+          "subject_id": "no-formal-road-location-registry_subject-04"
+        }
+      ],
+      "non_building_object": [
+        {
+          "effective_from": "2026-07-14T00:00:00Z",
+          "lifecycle_state": "candidate",
+          "object_id": "no-formal-road-location-non_building_object-04",
+          "object_type": "utility-asset",
+          "source_authority_id": "no-formal-road-location-source_authority-04"
+        }
+      ],
+      "operational_area": [
+        {
+          "area_type": "campaign",
+          "authority_owner": "operational_area-authority_owner-value",
+          "classification": "government-internal",
+          "effective_from": "2026-07-14T00:00:00Z",
+          "lifecycle_state": "planned",
+          "name_record_id": "no-formal-road-location-name_record-04",
+          "operational_area_id": "no-formal-road-location-operational_area-04",
+          "purpose": "operational_area-purpose-value"
+        }
+      ],
+      "operational_area_coverage": [
+        {
+          "administrative_unit_id": "no-formal-road-location-administrative_unit-04",
+          "coverage_id": "no-formal-road-location-operational_area_coverage-04",
+          "coverage_role": "context",
+          "effective_from": "2026-07-14T00:00:00Z",
+          "geometry_version_id": "no-formal-road-location-geometry_version-04",
+          "operational_area_id": "no-formal-road-location-operational_area-04"
+        }
+      ],
+      "parcel_reference": [
+        {
+          "classification": "government-internal",
+          "effective_from": "2026-07-14T00:00:00Z",
+          "external_parcel_id": "parcel_reference-external_parcel_id-001",
+          "parcel_reference_id": "no-formal-road-location-parcel_reference-04",
+          "source_authority_id": "no-formal-road-location-source_authority-04"
+        }
+      ],
+      "partner_projection": [
+        {
+          "classification": "government-internal",
+          "partner_projection_id": "no-formal-road-location-partner_projection-04",
+          "partner_scope": "partner_projection-partner_scope-value",
+          "publication_release_item_id": "no-formal-road-location-publication_release_item-04",
+          "response_field_set": {
+            "entity": "partner_projection",
+            "fixture": true
+          }
+        }
+      ],
+      "public_code_alias": [
+        {
+          "code_scheme": "public_code_alias-code_scheme-value",
+          "code_state": "active-public",
+          "location_record_id": "no-formal-road-location-location_record-04",
+          "public_code": "public_code_alias-public_code-001",
+          "public_code_alias_id": "no-formal-road-location-public_code_alias-04",
+          "reserved_at": "2026-07-14T00:00:00Z"
+        }
+      ],
+      "publication_release": [
+        {
+          "authority_reference": "publication_release-authority_reference-value",
+          "created_by_actor_id": "publication_release-created_by_actor_id-001",
+          "effective_at": "2026-07-14T00:00:00Z",
+          "immutable_manifest_hash": "publication_release-immutable_manifest_hash-value",
+          "manifest_storage_uri": "publication_release-manifest_storage_uri-value",
+          "projection_type": "operator-case-file",
+          "publication_release_id": "no-formal-road-location-publication_release-04",
+          "recorded_at": "2026-07-14T00:00:00Z",
+          "release_state": "approved"
+        }
+      ],
+      "publication_release_item": [
+        {
+          "location_record_id": "no-formal-road-location-location_record-04",
+          "location_record_version_id": "no-formal-road-location-location_record_version-04",
+          "projection_payload_hash": "publication_release_item-projection_payload_hash-value",
+          "projection_payload_json": {
+            "entity": "publication_release_item",
+            "fixture": true
+          },
+          "projection_state": "included",
+          "public_code_alias_id": "no-formal-road-location-public_code_alias-04",
+          "publication_release_id": "no-formal-road-location-publication_release-04",
+          "publication_release_item_id": "no-formal-road-location-publication_release_item-04",
+          "published_geometry_policy": "publication_release_item-published_geometry_policy-value",
+          "published_label": "publication_release_item-published_label-value"
+        }
+      ],
+      "registry_subject": [
+        {
+          "created_at": "2026-07-14T00:00:00Z",
+          "delete_policy": "retire-only",
+          "native_id": "no-formal-road-location-location_record-04",
+          "subject_entity": "location_record",
+          "subject_id": "no-formal-road-location-registry_subject-04",
+          "subject_state": "active"
+        },
+        {
+          "created_at": "2026-07-14T00:00:00Z",
+          "delete_policy": "retire-only",
+          "native_id": "no-formal-road-location-non_building_object-04",
+          "subject_entity": "non_building_object",
+          "subject_id": "no-formal-road-location-registry-subject-non-building-object-positive",
+          "subject_state": "active"
+        }
+      ],
+      "road": [
+        {
+          "created_at": "2026-07-14T00:00:00Z",
+          "lifecycle_state": "candidate",
+          "road_class": "path",
+          "road_id": "no-formal-road-location-road-04",
+          "source_authority_id": "no-formal-road-location-source_authority-04"
+        }
+      ],
+      "road_segment": [
+        {
+          "effective_from": "2026-07-14T00:00:00Z",
+          "lifecycle_state": "draft",
+          "road_id": "no-formal-road-location-road-04",
+          "road_segment_id": "no-formal-road-location-road_segment-04"
+        }
+      ],
+      "source_authority": [
+        {
+          "authority_class": "citizen-submitted",
+          "authority_name": "source_authority-authority_name-value",
+          "source_authority_id": "no-formal-road-location-source_authority-04",
+          "status": "candidate"
+        }
+      ],
+      "source_package": [
+        {
+          "licence_id": "no-formal-road-location-licence-04",
+          "load_context": {
+            "entity": "source_package",
+            "fixture": true
+          },
+          "loaded_at": "2026-07-14T00:00:00Z",
+          "package_checksum": "source_package-package_checksum-value",
+          "package_name": "source_package-package_name-value",
+          "source_authority_id": "no-formal-road-location-source_authority-04",
+          "source_package_id": "no-formal-road-location-source_package-04"
+        }
+      ],
+      "source_payload_archive": [
+        {
+          "archive_id": "no-formal-road-location-source_payload_archive-04",
+          "classification": "government-internal",
+          "created_at": "2026-07-14T00:00:00Z",
+          "payload_hash_sha256": "source_payload_archive-payload_hash_sha256-value",
+          "payload_uri": "source_payload_archive-payload_uri-value",
+          "retention_state": "active",
+          "source_record_id": "no-formal-road-location-source_record-04"
+        }
+      ],
+      "source_record": [
+        {
+          "raw_payload_classification": "government-internal",
+          "raw_payload_hash": "source_record-raw_payload_hash-value",
+          "recorded_at": "2026-07-14T00:00:00Z",
+          "source_key": "source_record-source_key-value",
+          "source_package_id": "no-formal-road-location-source_package-04",
+          "source_record_id": "no-formal-road-location-source_record-04"
+        }
+      ],
+      "unit": [
+        {
+          "building_id": "no-formal-road-location-building-04",
+          "classification": "government-internal",
+          "effective_from": "2026-07-14T00:00:00Z",
+          "lifecycle_state": "candidate",
+          "parent_unit_id": "no-formal-road-location-unit-04",
+          "unit_id": "no-formal-road-location-unit-04",
+          "unit_label": "unit-unit_label-value",
+          "unit_type": "apartment"
+        }
+      ]
+    },
+    "rural-landmark-location": {
+      "administrative_code_history": [
+        {
+          "admin_code_history_id": "rural-landmark-location-administrative_code_history-02",
+          "administrative_unit_id": "rural-landmark-location-administrative_unit-02",
+          "code_scheme": "administrative_code_history-code_scheme-value",
+          "effective_from": "2026-07-14T00:00:00Z",
+          "official_code": "administrative_code_history-official_code-value",
+          "recorded_from": "2026-07-14T00:00:00Z",
+          "source_id": "rural-landmark-location-source_record-02"
+        }
+      ],
+      "administrative_unit": [
+        {
+          "administrative_unit_id": "rural-landmark-location-administrative_unit-02",
+          "country_id": "rural-landmark-location-country-02",
+          "created_at": "2026-07-14T00:00:00Z"
+        }
+      ],
+      "administrative_unit_version": [
+        {
+          "admin_level": "country",
+          "administrative_unit_id": "rural-landmark-location-administrative_unit-02",
+          "administrative_unit_version_id": "rural-landmark-location-administrative_unit_version-02",
+          "classification": "government-internal",
+          "effective_from": "2026-07-14T00:00:00Z",
+          "lifecycle_state": "official",
+          "parent_administrative_unit_id": "rural-landmark-location-administrative_unit-02",
+          "recorded_at": "2026-07-14T00:00:00Z",
+          "source_authority_id": "rural-landmark-location-source_authority-02"
+        }
+      ],
+      "building": [
+        {
+          "building_id": "rural-landmark-location-building-02",
+          "effective_from": "2026-07-14T00:00:00Z",
+          "lifecycle_state": "candidate",
+          "source_authority_id": "rural-landmark-location-source_authority-02"
+        }
+      ],
+      "building_primary_entrance": [
+        {
+          "building_id": "rural-landmark-location-building-02",
+          "building_primary_entrance_id": "rural-landmark-location-building_primary_entrance-02",
+          "effective_from": "2026-07-14T00:00:00Z",
+          "entrance_id": "rural-landmark-location-entrance-02"
+        }
+      ],
+      "correction_case": [
+        {
+          "case_state": "submitted",
+          "correction_case_id": "rural-landmark-location-correction_case-02",
+          "correction_type": "administrative-context",
+          "resolution_event_id": "rural-landmark-location-decision_event-02",
+          "submitted_at": "2026-07-14T00:00:00Z",
+          "target_location_record_id": "rural-landmark-location-location_record-02"
+        }
+      ],
+      "country": [
+        {
+          "country_id": "rural-landmark-location-country-02",
+          "created_at": "2026-07-14T00:00:00Z",
+          "iso2_code": "GQ",
+          "lifecycle_state": "active",
+          "official_name_en": "country-official_name_en-value",
+          "official_name_es": "country-official_name_es-value",
+          "source_authority_id": "rural-landmark-location-source_authority-02"
+        }
+      ],
+      "decision_event": [
+        {
+          "actor_id": "decision_event-actor_id-001",
+          "authority_id": "rural-landmark-location-source_authority-02",
+          "decision_event_id": "rural-landmark-location-decision_event-02",
+          "decision_outcome": "approved",
+          "decision_type": "approve-geometry",
+          "details_json": {
+            "evidence_object_id": "rural-landmark-location-evidence_object-02",
+            "institution_id": "national-gis-authority",
+            "permission_key": "geometry.promote",
+            "quality_authority_actor_id": "decision_event-actor_id-001",
+            "source_observation_id": "rural-landmark-location-geometry_observation-02",
+            "territorial_scope": "national-gis-authority"
+          },
+          "effective_at": "2026-07-14T00:00:00Z",
+          "reason_code": "decision_event-reason_code-value",
+          "recorded_at": "2026-07-14T00:00:00Z"
+        }
+      ],
+      "dispute_case": [
+        {
+          "case_state": "submitted",
+          "dispute_case_id": "rural-landmark-location-dispute_case-02",
+          "dispute_type": "authority",
+          "opened_at": "2026-07-14T00:00:00Z",
+          "resolution_event_id": "rural-landmark-location-decision_event-02",
+          "subject_id": "rural-landmark-location-registry_subject-02"
+        }
+      ],
+      "entrance": [
+        {
+          "building_id": "rural-landmark-location-building-02",
+          "effective_from": "2026-07-14T00:00:00Z",
+          "entrance_id": "rural-landmark-location-entrance-02",
+          "entrance_role": "main",
+          "lifecycle_state": "candidate"
+        }
+      ],
+      "evidence_object": [
+        {
+          "classification": "government-internal",
+          "content_hash": "evidence_object-content_hash-value",
+          "evidence_object_id": "rural-landmark-location-evidence_object-02",
+          "media_type": "evidence_object-media_type-value",
+          "retention_state": "active",
+          "source_record_id": "rural-landmark-location-source_record-02",
+          "storage_uri": "evidence_object-storage_uri-value"
+        }
+      ],
+      "field_assignment": [
+        {
+          "assignment_id": "rural-landmark-location-field_assignment-02",
+          "assignment_state": "assigned",
+          "created_at": "2026-07-14T00:00:00Z",
+          "operational_area_id": "rural-landmark-location-operational_area-02",
+          "priority": "field_assignment-priority-value",
+          "task_type": "field_assignment-task_type-value",
+          "team": "field_assignment-team-value"
+        }
+      ],
+      "field_observation": [
+        {
+          "assignment_id": "rural-landmark-location-field_assignment-02",
+          "field_observation_id": "rural-landmark-location-field_observation-02",
+          "geometry_observation_id": "rural-landmark-location-geometry_observation-02",
+          "intake_case_id": "rural-landmark-location-intake_case-02",
+          "notes_classification": "government-internal",
+          "observation_type": "field_observation-observation_type-value",
+          "recorded_at": "2026-07-14T00:00:00Z",
+          "source_record_id": "rural-landmark-location-source_record-02",
+          "verification_state": "assigned"
+        }
+      ],
+      "geometry_observation": [
+        {
+          "capture_method": "browser-gps",
+          "classification": "government-internal",
+          "evidence_object_id": "rural-landmark-location-evidence_object-02",
+          "geometry_observation_id": "rural-landmark-location-geometry_observation-02",
+          "geometry_role": "landmark-point",
+          "licence_id": "rural-landmark-location-licence-02",
+          "observed_at": "2026-07-14T00:00:00Z",
+          "observed_geom": "SRID=4326;POINT(8.78 3.75)",
+          "recorded_at": "2026-07-14T00:00:00Z",
+          "source_record_id": "rural-landmark-location-source_record-02",
+          "subject_id": "rural-landmark-location-registry_subject-02"
+        }
+      ],
+      "geometry_quality_assessment": [
+        {
+          "assessed_at": "2026-07-14T00:00:00Z",
+          "assessed_by_actor_id": "geometry_quality_assessment-assessed_by_actor_id-001",
+          "check_name": "geometry_quality_assessment-check_name-value",
+          "check_result": "passed",
+          "geometry_version_id": "rural-landmark-location-geometry_version-02",
+          "measured_value_json": {
+            "entity": "geometry_quality_assessment",
+            "fixture": true
+          },
+          "quality_assessment_id": "rural-landmark-location-geometry_quality_assessment-02",
+          "tolerance_json": {
+            "entity": "geometry_quality_assessment",
+            "fixture": true
+          }
+        }
+      ],
+      "geometry_transformation": [
+        {
+          "algorithm": "geometry_transformation-algorithm-value",
+          "algorithm_version": "geometry_transformation-algorithm_version-value",
+          "parameters_json": {
+            "entity": "geometry_transformation",
+            "fixture": true
+          },
+          "performed_at": "2026-07-14T00:00:00Z",
+          "source_crs": "geometry_transformation-source_crs-value",
+          "target_crs": "geometry_transformation-target_crs-value",
+          "transformation_id": "rural-landmark-location-geometry_transformation-02"
+        }
+      ],
+      "geometry_version": [
+        {
+          "classification": "government-internal",
+          "dispute_case_id": "rural-landmark-location-dispute_case-02",
+          "effective_from": "2026-07-14T00:00:00Z",
+          "geom": "SRID=4326;POINT(8.78 3.75)",
+          "geometry_role": "landmark-point",
+          "geometry_version_id": "rural-landmark-location-geometry_version-02",
+          "promotion_authority_scope": "national-gis-authority",
+          "promotion_decision_event_id": "rural-landmark-location-decision_event-02",
+          "promotion_evidence_object_id": "rural-landmark-location-evidence_object-02",
+          "quality_state": "accepted-canonical",
+          "recorded_at": "2026-07-14T00:00:00Z",
+          "source_observation_id": "rural-landmark-location-geometry_observation-02",
+          "subject_id": "rural-landmark-location-registry_subject-02",
+          "transformation_id": "rural-landmark-location-geometry_transformation-02",
+          "validated_by_actor_id": "decision_event-actor_id-001",
+          "validation_method": "geometry_version-validation_method-value"
+        }
+      ],
+      "intake_case": [
+        {
+          "created_at": "2026-07-14T00:00:00Z",
+          "intake_case_id": "rural-landmark-location-intake_case-02",
+          "intake_state": "closed",
+          "source_record_id": "rural-landmark-location-source_record-02",
+          "submitted_label": "intake_case-submitted_label-value"
+        }
+      ],
+      "landmark": [
+        {
+          "effective_from": "2026-07-14T00:00:00Z",
+          "landmark_id": "rural-landmark-location-landmark-02",
+          "landmark_type": "school",
+          "lifecycle_state": "candidate",
+          "source_authority_id": "rural-landmark-location-source_authority-02"
+        }
+      ],
+      "legacy_crosswalk": [
+        {
+          "created_at": "2026-07-14T00:00:00Z",
+          "legacy_crosswalk_id": "rural-landmark-location-legacy_crosswalk-02",
+          "legacy_id": "legacy_crosswalk-legacy_id-001",
+          "source_field": "legacy_crosswalk-source_field-value",
+          "source_table": "legacy_crosswalk-source_table-value",
+          "target_entity": "legacy_crosswalk-target_entity-value",
+          "target_id": "legacy_crosswalk-target_id-001"
+        }
+      ],
+      "licence": [
+        {
+          "classification": "government-internal",
+          "licence_id": "rural-landmark-location-licence-02",
+          "licence_name": "licence-licence_name-value",
+          "usage_restriction": "licence-usage_restriction-value"
+        }
+      ],
+      "locality": [
+        {
+          "administrative_unit_id": "rural-landmark-location-administrative_unit-02",
+          "effective_from": "2026-07-14T00:00:00Z",
+          "lifecycle_state": "candidate",
+          "locality_id": "rural-landmark-location-locality-02",
+          "locality_type": "informal_area",
+          "source_authority_id": "rural-landmark-location-source_authority-02"
+        }
+      ],
+      "location_record": [
+        {
+          "classification": "government-internal",
+          "created_at": "2026-07-14T00:00:00Z",
+          "location_record_id": "rural-landmark-location-location_record-02",
+          "record_type": "landmark"
+        }
+      ],
+      "location_record_assertion": [
+        {
+          "assertion_id": "rural-landmark-location-location_record_assertion-02",
+          "classification": "government-internal",
+          "decision_event_id": "rural-landmark-location-decision_event-02",
+          "evidence_object_id": "rural-landmark-location-evidence_object-02",
+          "location_record_version_id": "rural-landmark-location-location_record_version-02",
+          "source_record_id": "rural-landmark-location-source_record-02",
+          "target_entity": "location_record_assertion-target_entity-value",
+          "target_field": "location_record_assertion-target_field-value",
+          "value_json": {
+            "entity": "location_record_assertion",
+            "fixture": true
+          }
+        }
+      ],
+      "location_record_object_link": [
+        {
+          "cardinality_rank": 1,
+          "effective_from": "2026-07-14T00:00:00Z",
+          "link_id": "rural-landmark-location-location_record_object_link-02",
+          "location_record_version_id": "rural-landmark-location-location_record_version-02",
+          "object_role": "primary-subject",
+          "subject_id": "rural-landmark-location-registry_subject-02"
+        }
+      ],
+      "location_record_relationship": [
+        {
+          "effective_from": "2026-07-14T00:00:00Z",
+          "from_location_record_id": "rural-landmark-location-location_record-02",
+          "relationship_id": "rural-landmark-location-location_record_relationship-02",
+          "relationship_type": "contains",
+          "source_decision_event_id": "rural-landmark-location-decision_event-02",
+          "to_location_record_id": "rural-landmark-location-location_record-02"
+        }
+      ],
+      "location_record_version": [
+        {
+          "administrative_unit_version_id": "rural-landmark-location-administrative_unit_version-02",
+          "correction_case_id": "rural-landmark-location-correction_case-02",
+          "display_label_es": "location_record_version-display_label_es-value",
+          "effective_from": "2026-07-14T00:00:00Z",
+          "lifecycle_state": "active",
+          "locality_id": "rural-landmark-location-locality-02",
+          "location_record_id": "rural-landmark-location-location_record-02",
+          "location_record_version_id": "rural-landmark-location-location_record_version-02",
+          "recorded_at": "2026-07-14T00:00:00Z",
+          "source_decision_event_id": "rural-landmark-location-decision_event-02",
+          "version_number": 2
+        }
+      ],
+      "migration_exception": [
+        {
+          "batch_id": "migration_exception-batch_id-001",
+          "created_at": "2026-07-14T00:00:00Z",
+          "details_json": {
+            "entity": "migration_exception",
+            "fixture": true
+          },
+          "exception_type": "migration_exception-exception_type-value",
+          "migration_exception_id": "rural-landmark-location-migration_exception-02",
+          "owner": "migration_exception-owner-value",
+          "severity": "migration_exception-severity-value",
+          "source_key": "migration_exception-source_key-value",
+          "source_table": "migration_exception-source_table-value"
+        }
+      ],
+      "name_record": [
+        {
+          "effective_from": "2026-07-14T00:00:00Z",
+          "language_code": "es",
+          "name_kind": "official-es",
+          "name_record_id": "rural-landmark-location-name_record-02",
+          "name_status": "official-current",
+          "name_text": "rural-landmark-location official name",
+          "normalized_text": "rural landmark location",
+          "source_record_id": "rural-landmark-location-source_record-02",
+          "subject_id": "rural-landmark-location-registry_subject-02"
+        }
+      ],
+      "non_building_object": [
+        {
+          "effective_from": "2026-07-14T00:00:00Z",
+          "lifecycle_state": "candidate",
+          "object_id": "rural-landmark-location-non_building_object-02",
+          "object_type": "utility-asset",
+          "source_authority_id": "rural-landmark-location-source_authority-02"
+        }
+      ],
+      "operational_area": [
+        {
+          "area_type": "campaign",
+          "authority_owner": "operational_area-authority_owner-value",
+          "classification": "government-internal",
+          "effective_from": "2026-07-14T00:00:00Z",
+          "lifecycle_state": "planned",
+          "name_record_id": "rural-landmark-location-name_record-02",
+          "operational_area_id": "rural-landmark-location-operational_area-02",
+          "purpose": "operational_area-purpose-value"
+        }
+      ],
+      "operational_area_coverage": [
+        {
+          "administrative_unit_id": "rural-landmark-location-administrative_unit-02",
+          "coverage_id": "rural-landmark-location-operational_area_coverage-02",
+          "coverage_role": "context",
+          "effective_from": "2026-07-14T00:00:00Z",
+          "geometry_version_id": "rural-landmark-location-geometry_version-02",
+          "operational_area_id": "rural-landmark-location-operational_area-02"
+        }
+      ],
+      "parcel_reference": [
+        {
+          "classification": "government-internal",
+          "effective_from": "2026-07-14T00:00:00Z",
+          "external_parcel_id": "parcel_reference-external_parcel_id-001",
+          "parcel_reference_id": "rural-landmark-location-parcel_reference-02",
+          "source_authority_id": "rural-landmark-location-source_authority-02"
+        }
+      ],
+      "partner_projection": [
+        {
+          "classification": "government-internal",
+          "partner_projection_id": "rural-landmark-location-partner_projection-02",
+          "partner_scope": "partner_projection-partner_scope-value",
+          "publication_release_item_id": "rural-landmark-location-publication_release_item-02",
+          "response_field_set": {
+            "entity": "partner_projection",
+            "fixture": true
+          }
+        }
+      ],
+      "public_code_alias": [
+        {
+          "code_scheme": "public_code_alias-code_scheme-value",
+          "code_state": "active-public",
+          "location_record_id": "rural-landmark-location-location_record-02",
+          "public_code": "public_code_alias-public_code-001",
+          "public_code_alias_id": "rural-landmark-location-public_code_alias-02",
+          "reserved_at": "2026-07-14T00:00:00Z"
+        }
+      ],
+      "publication_release": [
+        {
+          "authority_reference": "publication_release-authority_reference-value",
+          "created_by_actor_id": "publication_release-created_by_actor_id-001",
+          "effective_at": "2026-07-14T00:00:00Z",
+          "immutable_manifest_hash": "publication_release-immutable_manifest_hash-value",
+          "manifest_storage_uri": "publication_release-manifest_storage_uri-value",
+          "projection_type": "operator-case-file",
+          "publication_release_id": "rural-landmark-location-publication_release-02",
+          "recorded_at": "2026-07-14T00:00:00Z",
+          "release_state": "approved"
+        }
+      ],
+      "publication_release_item": [
+        {
+          "location_record_id": "rural-landmark-location-location_record-02",
+          "location_record_version_id": "rural-landmark-location-location_record_version-02",
+          "projection_payload_hash": "publication_release_item-projection_payload_hash-value",
+          "projection_payload_json": {
+            "entity": "publication_release_item",
+            "fixture": true
+          },
+          "projection_state": "included",
+          "public_code_alias_id": "rural-landmark-location-public_code_alias-02",
+          "publication_release_id": "rural-landmark-location-publication_release-02",
+          "publication_release_item_id": "rural-landmark-location-publication_release_item-02",
+          "published_geometry_policy": "publication_release_item-published_geometry_policy-value",
+          "published_label": "publication_release_item-published_label-value"
+        }
+      ],
+      "registry_subject": [
+        {
+          "created_at": "2026-07-14T00:00:00Z",
+          "delete_policy": "retire-only",
+          "native_id": "rural-landmark-location-landmark-02",
+          "subject_entity": "landmark",
+          "subject_id": "rural-landmark-location-registry_subject-02",
+          "subject_state": "active"
+        }
+      ],
+      "road": [
+        {
+          "created_at": "2026-07-14T00:00:00Z",
+          "lifecycle_state": "candidate",
+          "road_class": "path",
+          "road_id": "rural-landmark-location-road-02",
+          "source_authority_id": "rural-landmark-location-source_authority-02"
+        }
+      ],
+      "road_segment": [
+        {
+          "effective_from": "2026-07-14T00:00:00Z",
+          "lifecycle_state": "draft",
+          "road_id": "rural-landmark-location-road-02",
+          "road_segment_id": "rural-landmark-location-road_segment-02"
+        }
+      ],
+      "source_authority": [
+        {
+          "authority_class": "citizen-submitted",
+          "authority_name": "source_authority-authority_name-value",
+          "source_authority_id": "rural-landmark-location-source_authority-02",
+          "status": "candidate"
+        }
+      ],
+      "source_package": [
+        {
+          "licence_id": "rural-landmark-location-licence-02",
+          "load_context": {
+            "entity": "source_package",
+            "fixture": true
+          },
+          "loaded_at": "2026-07-14T00:00:00Z",
+          "package_checksum": "source_package-package_checksum-value",
+          "package_name": "source_package-package_name-value",
+          "source_authority_id": "rural-landmark-location-source_authority-02",
+          "source_package_id": "rural-landmark-location-source_package-02"
+        }
+      ],
+      "source_payload_archive": [
+        {
+          "archive_id": "rural-landmark-location-source_payload_archive-02",
+          "classification": "government-internal",
+          "created_at": "2026-07-14T00:00:00Z",
+          "payload_hash_sha256": "source_payload_archive-payload_hash_sha256-value",
+          "payload_uri": "source_payload_archive-payload_uri-value",
+          "retention_state": "active",
+          "source_record_id": "rural-landmark-location-source_record-02"
+        }
+      ],
+      "source_record": [
+        {
+          "raw_payload_classification": "government-internal",
+          "raw_payload_hash": "source_record-raw_payload_hash-value",
+          "recorded_at": "2026-07-14T00:00:00Z",
+          "source_key": "source_record-source_key-value",
+          "source_package_id": "rural-landmark-location-source_package-02",
+          "source_record_id": "rural-landmark-location-source_record-02"
+        }
+      ],
+      "unit": [
+        {
+          "building_id": "rural-landmark-location-building-02",
+          "classification": "government-internal",
+          "effective_from": "2026-07-14T00:00:00Z",
+          "lifecycle_state": "candidate",
+          "parent_unit_id": "rural-landmark-location-unit-02",
+          "unit_id": "rural-landmark-location-unit-02",
+          "unit_label": "unit-unit_label-value",
+          "unit_type": "apartment"
+        }
+      ]
+    },
+    "urban-street-address": {
+      "administrative_code_history": [
+        {
+          "admin_code_history_id": "urban-street-address-administrative_code_history-01",
+          "administrative_unit_id": "urban-street-address-administrative_unit-01",
+          "code_scheme": "administrative_code_history-code_scheme-value",
+          "effective_from": "2026-07-14T00:00:00Z",
+          "official_code": "administrative_code_history-official_code-value",
+          "recorded_from": "2026-07-14T00:00:00Z",
+          "source_id": "urban-street-address-source_record-01"
+        }
+      ],
+      "administrative_unit": [
+        {
+          "administrative_unit_id": "urban-street-address-administrative_unit-01",
+          "country_id": "urban-street-address-country-01",
+          "created_at": "2026-07-14T00:00:00Z"
+        }
+      ],
+      "administrative_unit_version": [
+        {
+          "admin_level": "country",
+          "administrative_unit_id": "urban-street-address-administrative_unit-01",
+          "administrative_unit_version_id": "urban-street-address-administrative_unit_version-01",
+          "classification": "government-internal",
+          "effective_from": "2026-07-14T00:00:00Z",
+          "lifecycle_state": "official",
+          "parent_administrative_unit_id": "urban-street-address-administrative_unit-01",
+          "recorded_at": "2026-07-14T00:00:00Z",
+          "source_authority_id": "urban-street-address-source_authority-01"
+        }
+      ],
+      "building": [
+        {
+          "building_id": "urban-street-address-building-01",
+          "effective_from": "2026-07-14T00:00:00Z",
+          "lifecycle_state": "candidate",
+          "source_authority_id": "urban-street-address-source_authority-01"
+        }
+      ],
+      "building_primary_entrance": [
+        {
+          "building_id": "urban-street-address-building-01",
+          "building_primary_entrance_id": "urban-street-address-building_primary_entrance-01",
+          "effective_from": "2026-07-14T00:00:00Z",
+          "entrance_id": "urban-street-address-entrance-01"
+        }
+      ],
+      "correction_case": [
+        {
+          "case_state": "submitted",
+          "correction_case_id": "urban-street-address-correction_case-01",
+          "correction_type": "administrative-context",
+          "resolution_event_id": "urban-street-address-decision_event-01",
+          "submitted_at": "2026-07-14T00:00:00Z",
+          "target_location_record_id": "urban-street-address-location_record-01"
+        }
+      ],
+      "country": [
+        {
+          "country_id": "urban-street-address-country-01",
+          "created_at": "2026-07-14T00:00:00Z",
+          "iso2_code": "GQ",
+          "lifecycle_state": "active",
+          "official_name_en": "country-official_name_en-value",
+          "official_name_es": "country-official_name_es-value",
+          "source_authority_id": "urban-street-address-source_authority-01"
+        }
+      ],
+      "decision_event": [
+        {
+          "actor_id": "decision_event-actor_id-001",
+          "authority_id": "urban-street-address-source_authority-01",
+          "decision_event_id": "urban-street-address-decision_event-01",
+          "decision_outcome": "approved",
+          "decision_type": "approve-geometry",
+          "details_json": {
+            "evidence_object_id": "urban-street-address-evidence_object-01",
+            "institution_id": "national-gis-authority",
+            "permission_key": "geometry.promote",
+            "quality_authority_actor_id": "decision_event-actor_id-001",
+            "source_observation_id": "urban-street-address-geometry_observation-01",
+            "territorial_scope": "national-gis-authority"
+          },
+          "effective_at": "2026-07-14T00:00:00Z",
+          "reason_code": "decision_event-reason_code-value",
+          "recorded_at": "2026-07-14T00:00:00Z"
+        }
+      ],
+      "dispute_case": [
+        {
+          "case_state": "submitted",
+          "dispute_case_id": "urban-street-address-dispute_case-01",
+          "dispute_type": "authority",
+          "opened_at": "2026-07-14T00:00:00Z",
+          "resolution_event_id": "urban-street-address-decision_event-01",
+          "subject_id": "urban-street-address-registry_subject-01"
+        }
+      ],
+      "entrance": [
+        {
+          "building_id": "urban-street-address-building-01",
+          "effective_from": "2026-07-14T00:00:00Z",
+          "entrance_id": "urban-street-address-entrance-01",
+          "entrance_role": "main",
+          "lifecycle_state": "candidate"
+        }
+      ],
+      "evidence_object": [
+        {
+          "classification": "government-internal",
+          "content_hash": "evidence_object-content_hash-value",
+          "evidence_object_id": "urban-street-address-evidence_object-01",
+          "media_type": "evidence_object-media_type-value",
+          "retention_state": "active",
+          "source_record_id": "urban-street-address-source_record-01",
+          "storage_uri": "evidence_object-storage_uri-value"
+        }
+      ],
+      "field_assignment": [
+        {
+          "assignment_id": "urban-street-address-field_assignment-01",
+          "assignment_state": "assigned",
+          "created_at": "2026-07-14T00:00:00Z",
+          "operational_area_id": "urban-street-address-operational_area-01",
+          "priority": "field_assignment-priority-value",
+          "task_type": "field_assignment-task_type-value",
+          "team": "field_assignment-team-value"
+        }
+      ],
+      "field_observation": [
+        {
+          "assignment_id": "urban-street-address-field_assignment-01",
+          "field_observation_id": "urban-street-address-field_observation-01",
+          "geometry_observation_id": "urban-street-address-geometry_observation-01",
+          "intake_case_id": "urban-street-address-intake_case-01",
+          "notes_classification": "government-internal",
+          "observation_type": "field_observation-observation_type-value",
+          "recorded_at": "2026-07-14T00:00:00Z",
+          "source_record_id": "urban-street-address-source_record-01",
+          "verification_state": "assigned"
+        }
+      ],
+      "geometry_observation": [
+        {
+          "capture_method": "browser-gps",
+          "classification": "government-internal",
+          "evidence_object_id": "urban-street-address-evidence_object-01",
+          "geometry_observation_id": "urban-street-address-geometry_observation-01",
+          "geometry_role": "building-point",
+          "licence_id": "urban-street-address-licence-01",
+          "observed_at": "2026-07-14T00:00:00Z",
+          "observed_geom": "SRID=4326;POINT(8.78 3.75)",
+          "recorded_at": "2026-07-14T00:00:00Z",
+          "source_record_id": "urban-street-address-source_record-01",
+          "subject_id": "urban-street-address-registry_subject-01"
+        }
+      ],
+      "geometry_quality_assessment": [
+        {
+          "assessed_at": "2026-07-14T00:00:00Z",
+          "assessed_by_actor_id": "geometry_quality_assessment-assessed_by_actor_id-001",
+          "check_name": "geometry_quality_assessment-check_name-value",
+          "check_result": "passed",
+          "geometry_version_id": "urban-street-address-geometry_version-01",
+          "measured_value_json": {
+            "entity": "geometry_quality_assessment",
+            "fixture": true
+          },
+          "quality_assessment_id": "urban-street-address-geometry_quality_assessment-01",
+          "tolerance_json": {
+            "entity": "geometry_quality_assessment",
+            "fixture": true
+          }
+        }
+      ],
+      "geometry_transformation": [
+        {
+          "algorithm": "geometry_transformation-algorithm-value",
+          "algorithm_version": "geometry_transformation-algorithm_version-value",
+          "parameters_json": {
+            "entity": "geometry_transformation",
+            "fixture": true
+          },
+          "performed_at": "2026-07-14T00:00:00Z",
+          "source_crs": "geometry_transformation-source_crs-value",
+          "target_crs": "geometry_transformation-target_crs-value",
+          "transformation_id": "urban-street-address-geometry_transformation-01"
+        }
+      ],
+      "geometry_version": [
+        {
+          "classification": "government-internal",
+          "dispute_case_id": "urban-street-address-dispute_case-01",
+          "effective_from": "2026-07-14T00:00:00Z",
+          "geom": "SRID=4326;POINT(8.78 3.75)",
+          "geometry_role": "building-point",
+          "geometry_version_id": "urban-street-address-geometry_version-01",
+          "promotion_authority_scope": "national-gis-authority",
+          "promotion_decision_event_id": "urban-street-address-decision_event-01",
+          "promotion_evidence_object_id": "urban-street-address-evidence_object-01",
+          "quality_state": "accepted-canonical",
+          "recorded_at": "2026-07-14T00:00:00Z",
+          "source_observation_id": "urban-street-address-geometry_observation-01",
+          "subject_id": "urban-street-address-registry_subject-01",
+          "transformation_id": "urban-street-address-geometry_transformation-01",
+          "validated_by_actor_id": "decision_event-actor_id-001",
+          "validation_method": "geometry_version-validation_method-value"
+        }
+      ],
+      "intake_case": [
+        {
+          "created_at": "2026-07-14T00:00:00Z",
+          "intake_case_id": "urban-street-address-intake_case-01",
+          "intake_state": "closed",
+          "source_record_id": "urban-street-address-source_record-01",
+          "submitted_label": "intake_case-submitted_label-value"
+        }
+      ],
+      "landmark": [
+        {
+          "effective_from": "2026-07-14T00:00:00Z",
+          "landmark_id": "urban-street-address-landmark-01",
+          "landmark_type": "school",
+          "lifecycle_state": "candidate",
+          "source_authority_id": "urban-street-address-source_authority-01"
+        }
+      ],
+      "legacy_crosswalk": [
+        {
+          "created_at": "2026-07-14T00:00:00Z",
+          "legacy_crosswalk_id": "urban-street-address-legacy_crosswalk-01",
+          "legacy_id": "legacy_crosswalk-legacy_id-001",
+          "source_field": "legacy_crosswalk-source_field-value",
+          "source_table": "legacy_crosswalk-source_table-value",
+          "target_entity": "legacy_crosswalk-target_entity-value",
+          "target_id": "legacy_crosswalk-target_id-001"
+        }
+      ],
+      "licence": [
+        {
+          "classification": "government-internal",
+          "licence_id": "urban-street-address-licence-01",
+          "licence_name": "licence-licence_name-value",
+          "usage_restriction": "licence-usage_restriction-value"
+        }
+      ],
+      "locality": [
+        {
+          "administrative_unit_id": "urban-street-address-administrative_unit-01",
+          "effective_from": "2026-07-14T00:00:00Z",
+          "lifecycle_state": "candidate",
+          "locality_id": "urban-street-address-locality-01",
+          "locality_type": "informal_area",
+          "source_authority_id": "urban-street-address-source_authority-01"
+        }
+      ],
+      "location_record": [
+        {
+          "classification": "government-internal",
+          "created_at": "2026-07-14T00:00:00Z",
+          "location_record_id": "urban-street-address-location_record-01",
+          "record_type": "address"
+        },
+        {
+          "classification": "government-internal",
+          "created_at": "2026-07-14T00:00:00Z",
+          "location_record_id": "urban-street-address-location-record-entrance-positive",
+          "record_type": "entrance"
+        }
+      ],
+      "location_record_assertion": [
+        {
+          "assertion_id": "urban-street-address-location_record_assertion-01",
+          "classification": "government-internal",
+          "decision_event_id": "urban-street-address-decision_event-01",
+          "evidence_object_id": "urban-street-address-evidence_object-01",
+          "location_record_version_id": "urban-street-address-location_record_version-01",
+          "source_record_id": "urban-street-address-source_record-01",
+          "target_entity": "location_record_assertion-target_entity-value",
+          "target_field": "location_record_assertion-target_field-value",
+          "value_json": {
+            "entity": "location_record_assertion",
+            "fixture": true
+          }
+        }
+      ],
+      "location_record_object_link": [
+        {
+          "cardinality_rank": 1,
+          "effective_from": "2026-07-14T00:00:00Z",
+          "link_id": "urban-street-address-location_record_object_link-01",
+          "location_record_version_id": "urban-street-address-location_record_version-01",
+          "object_role": "primary-subject",
+          "subject_id": "urban-street-address-registry_subject-01"
+        },
+        {
+          "cardinality_rank": 1,
+          "effective_from": "2026-07-14T00:00:00Z",
+          "link_id": "urban-street-address-object-link-entrance-positive-primary",
+          "location_record_version_id": "urban-street-address-location-record-version-entrance-positive",
+          "object_role": "primary-subject",
+          "subject_id": "urban-street-address-registry-subject-entrance-positive"
+        }
+      ],
+      "location_record_relationship": [
+        {
+          "effective_from": "2026-07-14T00:00:00Z",
+          "from_location_record_id": "urban-street-address-location_record-01",
+          "relationship_id": "urban-street-address-location_record_relationship-01",
+          "relationship_type": "contains",
+          "source_decision_event_id": "urban-street-address-decision_event-01",
+          "to_location_record_id": "urban-street-address-location_record-01"
+        }
+      ],
+      "location_record_version": [
+        {
+          "administrative_unit_version_id": "urban-street-address-administrative_unit_version-01",
+          "correction_case_id": "urban-street-address-correction_case-01",
+          "display_label_es": "location_record_version-display_label_es-value",
+          "effective_from": "2026-07-14T00:00:00Z",
+          "lifecycle_state": "active",
+          "locality_id": "urban-street-address-locality-01",
+          "location_record_id": "urban-street-address-location_record-01",
+          "location_record_version_id": "urban-street-address-location_record_version-01",
+          "recorded_at": "2026-07-14T00:00:00Z",
+          "source_decision_event_id": "urban-street-address-decision_event-01",
+          "version_number": 1
+        },
+        {
+          "administrative_unit_version_id": "urban-street-address-administrative_unit_version-01",
+          "correction_case_id": "urban-street-address-correction_case-01",
+          "display_label_es": "location_record_version-display_label_es-value",
+          "effective_from": "2026-07-14T00:00:00Z",
+          "lifecycle_state": "active",
+          "locality_id": "urban-street-address-locality-01",
+          "location_record_id": "urban-street-address-location-record-entrance-positive",
+          "location_record_version_id": "urban-street-address-location-record-version-entrance-positive",
+          "recorded_at": "2026-07-14T00:00:00Z",
+          "source_decision_event_id": "urban-street-address-decision_event-01",
+          "version_number": 1
+        }
+      ],
+      "migration_exception": [
+        {
+          "batch_id": "migration_exception-batch_id-001",
+          "created_at": "2026-07-14T00:00:00Z",
+          "details_json": {
+            "entity": "migration_exception",
+            "fixture": true
+          },
+          "exception_type": "migration_exception-exception_type-value",
+          "migration_exception_id": "urban-street-address-migration_exception-01",
+          "owner": "migration_exception-owner-value",
+          "severity": "migration_exception-severity-value",
+          "source_key": "migration_exception-source_key-value",
+          "source_table": "migration_exception-source_table-value"
+        }
+      ],
+      "name_record": [
+        {
+          "effective_from": "2026-07-14T00:00:00Z",
+          "language_code": "es",
+          "name_kind": "official-es",
+          "name_record_id": "urban-street-address-name_record-01",
+          "name_status": "official-current",
+          "name_text": "urban-street-address official name",
+          "normalized_text": "urban street address",
+          "source_record_id": "urban-street-address-source_record-01",
+          "subject_id": "urban-street-address-registry_subject-01"
+        }
+      ],
+      "non_building_object": [
+        {
+          "effective_from": "2026-07-14T00:00:00Z",
+          "lifecycle_state": "candidate",
+          "object_id": "urban-street-address-non_building_object-01",
+          "object_type": "utility-asset",
+          "source_authority_id": "urban-street-address-source_authority-01"
+        }
+      ],
+      "operational_area": [
+        {
+          "area_type": "campaign",
+          "authority_owner": "operational_area-authority_owner-value",
+          "classification": "government-internal",
+          "effective_from": "2026-07-14T00:00:00Z",
+          "lifecycle_state": "planned",
+          "name_record_id": "urban-street-address-name_record-01",
+          "operational_area_id": "urban-street-address-operational_area-01",
+          "purpose": "operational_area-purpose-value"
+        }
+      ],
+      "operational_area_coverage": [
+        {
+          "administrative_unit_id": "urban-street-address-administrative_unit-01",
+          "coverage_id": "urban-street-address-operational_area_coverage-01",
+          "coverage_role": "context",
+          "effective_from": "2026-07-14T00:00:00Z",
+          "geometry_version_id": "urban-street-address-geometry_version-01",
+          "operational_area_id": "urban-street-address-operational_area-01"
+        }
+      ],
+      "parcel_reference": [
+        {
+          "classification": "government-internal",
+          "effective_from": "2026-07-14T00:00:00Z",
+          "external_parcel_id": "parcel_reference-external_parcel_id-001",
+          "parcel_reference_id": "urban-street-address-parcel_reference-01",
+          "source_authority_id": "urban-street-address-source_authority-01"
+        }
+      ],
+      "partner_projection": [
+        {
+          "classification": "government-internal",
+          "partner_projection_id": "urban-street-address-partner_projection-01",
+          "partner_scope": "partner_projection-partner_scope-value",
+          "publication_release_item_id": "urban-street-address-publication_release_item-01",
+          "response_field_set": {
+            "entity": "partner_projection",
+            "fixture": true
+          }
+        }
+      ],
+      "public_code_alias": [
+        {
+          "code_scheme": "public_code_alias-code_scheme-value",
+          "code_state": "active-public",
+          "location_record_id": "urban-street-address-location_record-01",
+          "public_code": "public_code_alias-public_code-001",
+          "public_code_alias_id": "urban-street-address-public_code_alias-01",
+          "reserved_at": "2026-07-14T00:00:00Z"
+        }
+      ],
+      "publication_release": [
+        {
+          "authority_reference": "publication_release-authority_reference-value",
+          "created_by_actor_id": "publication_release-created_by_actor_id-001",
+          "effective_at": "2026-07-14T00:00:00Z",
+          "immutable_manifest_hash": "publication_release-immutable_manifest_hash-value",
+          "manifest_storage_uri": "publication_release-manifest_storage_uri-value",
+          "projection_type": "operator-case-file",
+          "publication_release_id": "urban-street-address-publication_release-01",
+          "recorded_at": "2026-07-14T00:00:00Z",
+          "release_state": "approved"
+        }
+      ],
+      "publication_release_item": [
+        {
+          "location_record_id": "urban-street-address-location_record-01",
+          "location_record_version_id": "urban-street-address-location_record_version-01",
+          "projection_payload_hash": "publication_release_item-projection_payload_hash-value",
+          "projection_payload_json": {
+            "entity": "publication_release_item",
+            "fixture": true
+          },
+          "projection_state": "included",
+          "public_code_alias_id": "urban-street-address-public_code_alias-01",
+          "publication_release_id": "urban-street-address-publication_release-01",
+          "publication_release_item_id": "urban-street-address-publication_release_item-01",
+          "published_geometry_policy": "publication_release_item-published_geometry_policy-value",
+          "published_label": "publication_release_item-published_label-value"
+        }
+      ],
+      "registry_subject": [
+        {
+          "created_at": "2026-07-14T00:00:00Z",
+          "delete_policy": "retire-only",
+          "native_id": "urban-street-address-building-01",
+          "subject_entity": "building",
+          "subject_id": "urban-street-address-registry_subject-01",
+          "subject_state": "active"
+        },
+        {
+          "created_at": "2026-07-14T00:00:00Z",
+          "delete_policy": "retire-only",
+          "native_id": "urban-street-address-entrance-01",
+          "subject_entity": "entrance",
+          "subject_id": "urban-street-address-registry-subject-entrance-positive",
+          "subject_state": "active"
+        }
+      ],
+      "road": [
+        {
+          "created_at": "2026-07-14T00:00:00Z",
+          "lifecycle_state": "candidate",
+          "road_class": "path",
+          "road_id": "urban-street-address-road-01",
+          "source_authority_id": "urban-street-address-source_authority-01"
+        }
+      ],
+      "road_segment": [
+        {
+          "effective_from": "2026-07-14T00:00:00Z",
+          "lifecycle_state": "draft",
+          "road_id": "urban-street-address-road-01",
+          "road_segment_id": "urban-street-address-road_segment-01"
+        }
+      ],
+      "source_authority": [
+        {
+          "authority_class": "citizen-submitted",
+          "authority_name": "source_authority-authority_name-value",
+          "source_authority_id": "urban-street-address-source_authority-01",
+          "status": "candidate"
+        }
+      ],
+      "source_package": [
+        {
+          "licence_id": "urban-street-address-licence-01",
+          "load_context": {
+            "entity": "source_package",
+            "fixture": true
+          },
+          "loaded_at": "2026-07-14T00:00:00Z",
+          "package_checksum": "source_package-package_checksum-value",
+          "package_name": "source_package-package_name-value",
+          "source_authority_id": "urban-street-address-source_authority-01",
+          "source_package_id": "urban-street-address-source_package-01"
+        }
+      ],
+      "source_payload_archive": [
+        {
+          "archive_id": "urban-street-address-source_payload_archive-01",
+          "classification": "government-internal",
+          "created_at": "2026-07-14T00:00:00Z",
+          "payload_hash_sha256": "source_payload_archive-payload_hash_sha256-value",
+          "payload_uri": "source_payload_archive-payload_uri-value",
+          "retention_state": "active",
+          "source_record_id": "urban-street-address-source_record-01"
+        }
+      ],
+      "source_record": [
+        {
+          "raw_payload_classification": "government-internal",
+          "raw_payload_hash": "source_record-raw_payload_hash-value",
+          "recorded_at": "2026-07-14T00:00:00Z",
+          "source_key": "source_record-source_key-value",
+          "source_package_id": "urban-street-address-source_package-01",
+          "source_record_id": "urban-street-address-source_record-01"
+        }
+      ],
+      "unit": [
+        {
+          "building_id": "urban-street-address-building-01",
+          "classification": "government-internal",
+          "effective_from": "2026-07-14T00:00:00Z",
+          "lifecycle_state": "candidate",
+          "parent_unit_id": "urban-street-address-unit-01",
+          "unit_id": "urban-street-address-unit-01",
+          "unit_label": "unit-unit_label-value",
+          "unit_type": "apartment"
+        }
+      ]
+    }
+  }
+}

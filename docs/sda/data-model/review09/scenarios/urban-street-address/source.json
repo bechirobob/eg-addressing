@@ -1,0 +1,25 @@
+{
+  "entities": [
+    {
+      "attributes": {
+        "province": "BN",
+        "road": "Avenida de la Independencia"
+      },
+      "canonical_state": "active",
+      "effective_from": "2026-01-01",
+      "effective_to": null,
+      "entity_id": "urban-street-address-address-1",
+      "entity_type": "address",
+      "label": "Urban Street Address",
+      "operator_visible": true,
+      "public_release_date": "2026-07-01",
+      "public_visible": true,
+      "recorded_from": "2026-01-01T00:00:00Z",
+      "recorded_to": null
+    }
+  ],
+  "review_owner": "SDA scenario source owner",
+  "review_status": "approved-review10-scenario-source",
+  "scenario": "urban-street-address",
+  "version": "review10"
+}

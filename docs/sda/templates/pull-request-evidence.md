@@ -7,6 +7,8 @@
 **Prepared by:** `<agent/person>`
 
 > Do not delete sections. Use `NOT APPLICABLE` or `NOT PROVIDED` with a reason. A statement such as “done” is not evidence.
+>
+> Exact-head evidence-binding rule: a controlled file is not required to contain its own final commit SHA. Bind final evidence through PR metadata/body or immutable PR comment, exact-head workflow/job IDs, a later SDA review record naming the reviewed implementation SHA, and the review-record commit SHA after it is committed. Do not request or fabricate self-referential commit hashes inside tracked evidence files.
 
 ## 1. Outcome
 

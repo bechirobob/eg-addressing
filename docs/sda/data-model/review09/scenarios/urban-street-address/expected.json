@@ -1,0 +1,61 @@
+{
+  "expected": {
+    "canonical": [
+      {
+        "canonical_state": "active",
+        "entity_id": "urban-street-address-address-1",
+        "entity_type": "address",
+        "label": "Urban Street Address"
+      }
+    ],
+    "effective_as_of": [
+      {
+        "entity_id": "urban-street-address-address-1",
+        "label": "Urban Street Address"
+      }
+    ],
+    "expected_absences": {},
+    "operator_projection": [
+      {
+        "attributes": {
+          "province": "BN",
+          "road": "Avenida de la Independencia"
+        },
+        "canonical_state": "active",
+        "entity_id": "urban-street-address-address-1",
+        "entity_type": "address",
+        "label": "Urban Street Address"
+      }
+    ],
+    "public_release": [
+      {
+        "entity_id": "urban-street-address-address-1",
+        "label": "Urban Street Address"
+      }
+    ],
+    "recorded_as_of": [
+      {
+        "entity_id": "urban-street-address-address-1",
+        "label": "Urban Street Address"
+      }
+    ]
+  },
+  "expected_absence_queries": [
+    {
+      "name": "no-unreleased-public-rows",
+      "params": [
+        "urban-street-address"
+      ],
+      "sql": "SELECT entity_id FROM r10_scenario_entity WHERE scenario=%s AND public_visible=false AND public_release_date IS NOT NULL"
+    }
+  ],
+  "query_dates": {
+    "effective": "2026-07-14",
+    "public_release": "2026-07-14",
+    "recorded": "2026-07-14T00:00:00Z"
+  },
+  "review_owner": "SDA scenario expected-result owner",
+  "review_status": "approved-review10-scenario-expected-result",
+  "scenario": "urban-street-address",
+  "version": "review10"
+}

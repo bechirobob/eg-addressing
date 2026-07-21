@@ -1,0 +1,131 @@
+{
+  "cases": [
+    {
+      "case": "F06-positive-human-typed-authority-promotion",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": null,
+      "finding": "F06",
+      "observed": {
+        "promotion": "inserted"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F06-positive-service-identity-model-present",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": null,
+      "finding": "F06",
+      "observed": {
+        "service_identity": "service-geom"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F06-wrong-actor-membership",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": "actor institution membership invalid",
+      "finding": "F06",
+      "observed": {
+        "error": "actor institution membership invalid"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F06-wrong-permission",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": "permission denied",
+      "finding": "F06",
+      "observed": {
+        "error": "permission denied"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F06-wrong-territorial-scope",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": "scope mismatch",
+      "finding": "F06",
+      "observed": {
+        "error": "scope mismatch"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F06-wrong-data-scope",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": "scope mismatch",
+      "finding": "F06",
+      "observed": {
+        "error": "scope mismatch"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F06-decision-not-approved",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": "decision not approved",
+      "finding": "F06",
+      "observed": {
+        "error": "decision not approved"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F06-unrelated-observation",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": "evidence mismatch",
+      "finding": "F06",
+      "observed": {
+        "error": "evidence mismatch"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F06-unrelated-evidence",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": "evidence mismatch",
+      "finding": "F06",
+      "observed": {
+        "error": "evidence mismatch"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F06-unrelated-quality-assessment",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": "assessment mismatch",
+      "finding": "F06",
+      "observed": {
+        "error": "assessment mismatch"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F06-cross-subject-successor-cycle",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": "successor cycle",
+      "finding": "F06",
+      "observed": {
+        "error": "successor cycle"
+      },
+      "status": "passed"
+    }
+  ],
+  "summary": {
+    "cases": 11,
+    "errors": [],
+    "execution_mode": "review10-postgresql-typed-geometry-authority-execution",
+    "status": "passed"
+  }
+}

@@ -1,0 +1,446 @@
+{
+  "F04": {
+    "negative": {
+      "excessive-count": {
+        "error_class": "RaiseException",
+        "expected_message": "exceeds max count",
+        "status": "rejected-by-real-execution"
+      },
+      "invalid-entity": {
+        "error_class": "RaiseException",
+        "expected_message": "registry subject",
+        "status": "rejected-by-real-execution"
+      },
+      "invalid-role": {
+        "evidence_source": "object_role_cardinality_trg rejects roles absent from record_object_role_matrix",
+        "expected_message": "invalid object role",
+        "status": "passed"
+      },
+      "merge": {
+        "evidence_source": "record_object_role_matrix merge_behavior per role + successor chain checks",
+        "status": "passed"
+      },
+      "missing-role": {
+        "error_class": "RaiseException",
+        "expected_message": "registry subject",
+        "status": "rejected-by-real-execution"
+      },
+      "multilingual-name-history": {
+        "evidence_source": "current_official_name_trg + name_record scenario query history",
+        "status": "passed"
+      },
+      "retirement": {
+        "evidence_source": "record_object_role_matrix retirement_behavior per role + target rows preserve history",
+        "status": "passed"
+      }
+    },
+    "positive": {
+      "address": {
+        "evidence_source": "review08 scenario DB query + record_object_role_matrix",
+        "required_roles": "present in executed scenario/operator projection",
+        "status": "passed"
+      },
+      "building": {
+        "evidence_source": "review08 scenario DB query + record_object_role_matrix",
+        "required_roles": "present in executed scenario/operator projection",
+        "status": "passed"
+      },
+      "entrance": {
+        "evidence_source": "review08 scenario DB query + record_object_role_matrix",
+        "required_roles": "present in executed scenario/operator projection",
+        "status": "passed"
+      },
+      "landmark": {
+        "evidence_source": "review08 scenario DB query + record_object_role_matrix",
+        "required_roles": "present in executed scenario/operator projection",
+        "status": "passed"
+      },
+      "non-building-object": {
+        "evidence_source": "review08 scenario DB query + record_object_role_matrix",
+        "required_roles": "present in executed scenario/operator projection",
+        "status": "passed"
+      },
+      "service-location": {
+        "evidence_source": "review08 scenario DB query + record_object_role_matrix",
+        "required_roles": "present in executed scenario/operator projection",
+        "status": "passed"
+      },
+      "unit": {
+        "evidence_source": "review08 scenario DB query + record_object_role_matrix",
+        "required_roles": "present in executed scenario/operator projection",
+        "status": "passed"
+      }
+    }
+  },
+  "F05": {
+    "as_of_registry_queries": {
+      "evidence_source": "review08_scenario_query_results.historical_output.location_lifecycle_timeline",
+      "status": "passed"
+    },
+    "effective_reconstruction_queries": {
+      "evidence_source": "review08_scenario_query_results.historical_output.admin_effective_versions",
+      "status": "passed"
+    },
+    "negative_tests": {
+      "backdated": {
+        "evidence_source": "effective/recorded exclusion constraints and historical query report",
+        "status": "passed"
+      },
+      "cross-owner": {
+        "evidence_source": "chain trigger requires shared owner/location_record_id",
+        "status": "passed"
+      },
+      "cycle": {
+        "error_class": "RaiseException",
+        "expected_message": "cannot supersede itself",
+        "status": "rejected-by-real-execution"
+      },
+      "full-chain": {
+        "evidence_source": "location_record_version_chain_trg/public_code_alias_chain_trg",
+        "status": "passed"
+      },
+      "overlap": {
+        "error_class": "ExclusionViolation",
+        "expected_message": "conflicting key value violates exclusion constraint",
+        "status": "rejected-by-real-execution"
+      },
+      "reciprocal": {
+        "evidence_source": "predecessor/successor reciprocal trigger text and F12 mutation",
+        "status": "passed"
+      }
+    },
+    "public_reconstruction_queries": {
+      "evidence_source": "review08_scenario_query_results.public_projection",
+      "status": "passed"
+    },
+    "temporal_strategy_register": {
+      "administrative_code_history": {
+        "status": "passed",
+        "strategy": "recorded/effective reconstruction"
+      },
+      "administrative_unit_version": {
+        "status": "passed",
+        "strategy": "recorded/effective reconstruction"
+      },
+      "geometry_version": {
+        "status": "passed",
+        "strategy": "recorded/effective reconstruction"
+      },
+      "location_record_version": {
+        "status": "passed",
+        "strategy": "recorded/effective reconstruction"
+      },
+      "name_record": {
+        "status": "passed",
+        "strategy": "recorded/effective reconstruction"
+      },
+      "public_code_alias": {
+        "status": "passed",
+        "strategy": "recorded/effective reconstruction"
+      },
+      "publication_release_item": {
+        "status": "passed",
+        "strategy": "recorded/effective reconstruction"
+      }
+    }
+  },
+  "F06": {
+    "negative_tests": {
+      "invalid-geometry-decision-type": {
+        "error_class": "RaiseException",
+        "expected_message": "geometry promotion decision is not authorized",
+        "status": "rejected-by-real-execution"
+      },
+      "invalid-geometry-evidence-link": {
+        "error_class": "RaiseException",
+        "expected_message": "geometry decision evidence link mismatch",
+        "status": "rejected-by-real-execution"
+      },
+      "invalid-geometry-permission": {
+        "error_class": "RaiseException",
+        "expected_message": "geometry promotion actor lacks required permission",
+        "status": "rejected-by-real-execution"
+      },
+      "invalid-geometry-role-type": {
+        "error_class": "RaiseException",
+        "expected_message": "invalid geometry type",
+        "status": "rejected-by-real-execution"
+      },
+      "invalid-geometry-territorial-scope": {
+        "error_class": "RaiseException",
+        "expected_message": "geometry promotion institution or territorial scope mismatch",
+        "status": "rejected-by-real-execution"
+      }
+    },
+    "trigger_text_checks": {
+      "geometry decision evidence link mismatch": true,
+      "geometry promotion actor lacks required permission": true,
+      "geometry promotion institution or territorial scope mismatch": true,
+      "geometry quality authority actor mismatch": true
+    },
+    "typed_authority_connection": {
+      "actor": "decision_event.actor_id / geometry quality authority actor",
+      "evidence": "promotion_evidence_object_id must match observation/decision evidence",
+      "institution": "decision_event.institution_id / promotion_authority_scope",
+      "observation": "geometry_version.source_observation_id same-subject/same-role required",
+      "permission": "decision_event.details_json->>'permission_key' checked against geometry_role_matrix.promotion_permission",
+      "quality_assessment": "geometry quality authority actor mismatch trigger text present",
+      "status": "passed",
+      "territorial_scope": "decision_event.territorial_scope checked against geometry_version.promotion_authority_scope"
+    }
+  },
+  "F07": {
+    "graph_validation": {
+      "administrative_unit_lifecycle": {
+        "denial_status": "passed",
+        "edges": 4,
+        "executed_edges": 4,
+        "initial_states": [
+          "proposed"
+        ],
+        "reachability_status": "passed",
+        "terminal_edges": 2,
+        "terminality_status": "passed"
+      },
+      "building_lifecycle": {
+        "denial_status": "passed",
+        "edges": 4,
+        "executed_edges": 4,
+        "initial_states": [
+          "candidate"
+        ],
+        "reachability_status": "passed",
+        "terminal_edges": 3,
+        "terminality_status": "passed"
+      },
+      "canonical_record_lifecycle": {
+        "denial_status": "passed",
+        "edges": 7,
+        "executed_edges": 7,
+        "initial_states": [
+          "candidate"
+        ],
+        "reachability_status": "passed",
+        "terminal_edges": 2,
+        "terminality_status": "passed"
+      },
+      "case_lifecycle": {
+        "denial_status": "passed",
+        "edges": 8,
+        "executed_edges": 8,
+        "initial_states": [
+          "submitted"
+        ],
+        "reachability_status": "passed",
+        "terminal_edges": 2,
+        "terminality_status": "passed"
+      },
+      "country_lifecycle": {
+        "denial_status": "passed",
+        "edges": 1,
+        "executed_edges": 1,
+        "initial_states": [
+          "active"
+        ],
+        "reachability_status": "passed",
+        "terminal_edges": 1,
+        "terminality_status": "passed"
+      },
+      "entrance_lifecycle": {
+        "denial_status": "passed",
+        "edges": 3,
+        "executed_edges": 3,
+        "initial_states": [
+          "candidate"
+        ],
+        "reachability_status": "passed",
+        "terminal_edges": 2,
+        "terminality_status": "passed"
+      },
+      "field_verification_state": {
+        "denial_status": "passed",
+        "edges": 9,
+        "executed_edges": 9,
+        "initial_states": [
+          "assigned"
+        ],
+        "reachability_status": "passed",
+        "terminal_edges": 1,
+        "terminality_status": "passed"
+      },
+      "geometry_quality_state": {
+        "denial_status": "passed",
+        "edges": 8,
+        "executed_edges": 8,
+        "initial_states": [
+          "observed"
+        ],
+        "reachability_status": "passed",
+        "terminal_edges": 2,
+        "terminality_status": "passed"
+      },
+      "intake_state": {
+        "denial_status": "passed",
+        "edges": 9,
+        "executed_edges": 9,
+        "initial_states": [
+          "submitted"
+        ],
+        "reachability_status": "passed",
+        "terminal_edges": 3,
+        "terminality_status": "passed"
+      },
+      "landmark_lifecycle": {
+        "denial_status": "passed",
+        "edges": 3,
+        "executed_edges": 3,
+        "initial_states": [
+          "candidate"
+        ],
+        "reachability_status": "passed",
+        "terminal_edges": 2,
+        "terminality_status": "passed"
+      },
+      "locality_lifecycle": {
+        "denial_status": "passed",
+        "edges": 3,
+        "executed_edges": 3,
+        "initial_states": [
+          "candidate"
+        ],
+        "reachability_status": "passed",
+        "terminal_edges": 1,
+        "terminality_status": "passed"
+      },
+      "name_lifecycle": {
+        "denial_status": "passed",
+        "edges": 7,
+        "executed_edges": 7,
+        "initial_states": [
+          "candidate"
+        ],
+        "reachability_status": "passed",
+        "terminal_edges": 2,
+        "terminality_status": "passed"
+      },
+      "non_building_object_lifecycle": {
+        "denial_status": "passed",
+        "edges": 3,
+        "executed_edges": 3,
+        "initial_states": [
+          "candidate"
+        ],
+        "reachability_status": "passed",
+        "terminal_edges": 2,
+        "terminality_status": "passed"
+      },
+      "operational_area_lifecycle": {
+        "denial_status": "passed",
+        "edges": 5,
+        "executed_edges": 5,
+        "initial_states": [
+          "planned"
+        ],
+        "reachability_status": "passed",
+        "terminal_edges": 1,
+        "terminality_status": "passed"
+      },
+      "publication_lifecycle": {
+        "denial_status": "passed",
+        "edges": 7,
+        "executed_edges": 7,
+        "initial_states": [
+          "draft"
+        ],
+        "reachability_status": "passed",
+        "terminal_edges": 2,
+        "terminality_status": "passed"
+      },
+      "road_lifecycle": {
+        "denial_status": "passed",
+        "edges": 4,
+        "executed_edges": 4,
+        "initial_states": [
+          "candidate"
+        ],
+        "reachability_status": "passed",
+        "terminal_edges": 1,
+        "terminality_status": "passed"
+      },
+      "road_segment_lifecycle": {
+        "denial_status": "passed",
+        "edges": 3,
+        "executed_edges": 3,
+        "initial_states": [
+          "draft"
+        ],
+        "reachability_status": "passed",
+        "terminal_edges": 1,
+        "terminality_status": "passed"
+      },
+      "source_authority_lifecycle": {
+        "denial_status": "passed",
+        "edges": 4,
+        "executed_edges": 4,
+        "initial_states": [
+          "candidate"
+        ],
+        "reachability_status": "passed",
+        "terminal_edges": 2,
+        "terminality_status": "passed"
+      },
+      "unit_lifecycle": {
+        "denial_status": "passed",
+        "edges": 4,
+        "executed_edges": 4,
+        "initial_states": [
+          "candidate"
+        ],
+        "reachability_status": "passed",
+        "terminal_edges": 3,
+        "terminality_status": "passed"
+      }
+    },
+    "negative_tests": {
+      "conflicting-edge": {
+        "evidence_source": "lifecycle_transition_policy primary key prevents duplicate conflicting edge",
+        "status": "passed"
+      },
+      "denial": {
+        "error_class": "RaiseException",
+        "expected_message": "forbidden transition",
+        "status": "rejected-by-real-execution"
+      },
+      "evidence": {
+        "evidence_source": "every lifecycle edge has evidence metadata and executed assertion",
+        "status": "passed"
+      },
+      "orphan-state": {
+        "evidence_source": "every lifecycle field bound to vocabulary registry",
+        "status": "passed"
+      },
+      "permission": {
+        "error_class": "RaiseException",
+        "expected_message": "forbidden transition",
+        "status": "rejected-by-real-execution"
+      },
+      "re-entry": {
+        "evidence_source": "authored graph reachability/terminal metadata in this report",
+        "status": "passed"
+      },
+      "scope": {
+        "evidence_source": "lifecycle_transition_policy institutional_scope metadata + denial behavior",
+        "status": "passed"
+      }
+    }
+  },
+  "summary": {
+    "errors": [],
+    "execution_mode": "review08-integrity-report-from-executed-target-schema",
+    "f04_record_types": 7,
+    "f05_temporal_entities": 7,
+    "f06_negative_tests": 5,
+    "f07_lifecycle_edges": 96,
+    "status": "passed"
+  }
+}

@@ -1,0 +1,956 @@
+{
+  "execution_mode": "phase-a-canonical-target-application",
+  "foreign_key_count": 141,
+  "foreign_keys": [
+    {
+      "column_name": "administrative_unit_id",
+      "referenced_column": "administrative_unit_id",
+      "referenced_table": "proposed_administrative_unit",
+      "table_name": "proposed_administrative_code_history"
+    },
+    {
+      "column_name": "source_id",
+      "referenced_column": "source_record_id",
+      "referenced_table": "proposed_source_record",
+      "table_name": "proposed_administrative_code_history"
+    },
+    {
+      "column_name": "country_id",
+      "referenced_column": "country_id",
+      "referenced_table": "proposed_country",
+      "table_name": "proposed_administrative_unit"
+    },
+    {
+      "column_name": "admin_level",
+      "referenced_column": "value",
+      "referenced_table": "vocab_admin_level",
+      "table_name": "proposed_administrative_unit_version"
+    },
+    {
+      "column_name": "administrative_unit_id",
+      "referenced_column": "administrative_unit_id",
+      "referenced_table": "proposed_administrative_unit",
+      "table_name": "proposed_administrative_unit_version"
+    },
+    {
+      "column_name": "classification",
+      "referenced_column": "value",
+      "referenced_table": "vocab_classification",
+      "table_name": "proposed_administrative_unit_version"
+    },
+    {
+      "column_name": "lifecycle_state",
+      "referenced_column": "value",
+      "referenced_table": "vocab_administrative_unit_lifecycle",
+      "table_name": "proposed_administrative_unit_version"
+    },
+    {
+      "column_name": "parent_administrative_unit_id",
+      "referenced_column": "administrative_unit_id",
+      "referenced_table": "proposed_administrative_unit",
+      "table_name": "proposed_administrative_unit_version"
+    },
+    {
+      "column_name": "source_authority_id",
+      "referenced_column": "source_authority_id",
+      "referenced_table": "proposed_source_authority",
+      "table_name": "proposed_administrative_unit_version"
+    },
+    {
+      "column_name": "lifecycle_state",
+      "referenced_column": "value",
+      "referenced_table": "vocab_building_lifecycle",
+      "table_name": "proposed_building"
+    },
+    {
+      "column_name": "source_authority_id",
+      "referenced_column": "source_authority_id",
+      "referenced_table": "proposed_source_authority",
+      "table_name": "proposed_building"
+    },
+    {
+      "column_name": "building_id",
+      "referenced_column": "building_id",
+      "referenced_table": "proposed_building",
+      "table_name": "proposed_building_primary_entrance"
+    },
+    {
+      "column_name": "entrance_id",
+      "referenced_column": "entrance_id",
+      "referenced_table": "proposed_entrance",
+      "table_name": "proposed_building_primary_entrance"
+    },
+    {
+      "column_name": "case_state",
+      "referenced_column": "value",
+      "referenced_table": "vocab_case_lifecycle",
+      "table_name": "proposed_correction_case"
+    },
+    {
+      "column_name": "correction_type",
+      "referenced_column": "value",
+      "referenced_table": "vocab_correction_type",
+      "table_name": "proposed_correction_case"
+    },
+    {
+      "column_name": "resolution_event_id",
+      "referenced_column": "decision_event_id",
+      "referenced_table": "proposed_decision_event",
+      "table_name": "proposed_correction_case"
+    },
+    {
+      "column_name": "target_location_record_id",
+      "referenced_column": "location_record_id",
+      "referenced_table": "proposed_location_record",
+      "table_name": "proposed_correction_case"
+    },
+    {
+      "column_name": "lifecycle_state",
+      "referenced_column": "value",
+      "referenced_table": "vocab_country_lifecycle",
+      "table_name": "proposed_country"
+    },
+    {
+      "column_name": "source_authority_id",
+      "referenced_column": "source_authority_id",
+      "referenced_table": "proposed_source_authority",
+      "table_name": "proposed_country"
+    },
+    {
+      "column_name": "authority_id",
+      "referenced_column": "source_authority_id",
+      "referenced_table": "proposed_source_authority",
+      "table_name": "proposed_decision_event"
+    },
+    {
+      "column_name": "decision_type",
+      "referenced_column": "value",
+      "referenced_table": "vocab_decision_type",
+      "table_name": "proposed_decision_event"
+    },
+    {
+      "column_name": "case_state",
+      "referenced_column": "value",
+      "referenced_table": "vocab_case_lifecycle",
+      "table_name": "proposed_dispute_case"
+    },
+    {
+      "column_name": "dispute_type",
+      "referenced_column": "value",
+      "referenced_table": "vocab_dispute_type",
+      "table_name": "proposed_dispute_case"
+    },
+    {
+      "column_name": "resolution_event_id",
+      "referenced_column": "decision_event_id",
+      "referenced_table": "proposed_decision_event",
+      "table_name": "proposed_dispute_case"
+    },
+    {
+      "column_name": "subject_id",
+      "referenced_column": "subject_id",
+      "referenced_table": "proposed_registry_subject",
+      "table_name": "proposed_dispute_case"
+    },
+    {
+      "column_name": "building_id",
+      "referenced_column": "building_id",
+      "referenced_table": "proposed_building",
+      "table_name": "proposed_entrance"
+    },
+    {
+      "column_name": "entrance_role",
+      "referenced_column": "value",
+      "referenced_table": "vocab_entrance_role",
+      "table_name": "proposed_entrance"
+    },
+    {
+      "column_name": "lifecycle_state",
+      "referenced_column": "value",
+      "referenced_table": "vocab_entrance_lifecycle",
+      "table_name": "proposed_entrance"
+    },
+    {
+      "column_name": "classification",
+      "referenced_column": "value",
+      "referenced_table": "vocab_classification",
+      "table_name": "proposed_evidence_object"
+    },
+    {
+      "column_name": "retention_state",
+      "referenced_column": "value",
+      "referenced_table": "vocab_retention_state",
+      "table_name": "proposed_evidence_object"
+    },
+    {
+      "column_name": "source_record_id",
+      "referenced_column": "source_record_id",
+      "referenced_table": "proposed_source_record",
+      "table_name": "proposed_evidence_object"
+    },
+    {
+      "column_name": "assignment_state",
+      "referenced_column": "value",
+      "referenced_table": "vocab_field_verification_state",
+      "table_name": "proposed_field_assignment"
+    },
+    {
+      "column_name": "operational_area_id",
+      "referenced_column": "operational_area_id",
+      "referenced_table": "proposed_operational_area",
+      "table_name": "proposed_field_assignment"
+    },
+    {
+      "column_name": "assignment_id",
+      "referenced_column": "assignment_id",
+      "referenced_table": "proposed_field_assignment",
+      "table_name": "proposed_field_observation"
+    },
+    {
+      "column_name": "geometry_observation_id",
+      "referenced_column": "geometry_observation_id",
+      "referenced_table": "proposed_geometry_observation",
+      "table_name": "proposed_field_observation"
+    },
+    {
+      "column_name": "intake_case_id",
+      "referenced_column": "intake_case_id",
+      "referenced_table": "proposed_intake_case",
+      "table_name": "proposed_field_observation"
+    },
+    {
+      "column_name": "notes_classification",
+      "referenced_column": "value",
+      "referenced_table": "vocab_classification",
+      "table_name": "proposed_field_observation"
+    },
+    {
+      "column_name": "source_record_id",
+      "referenced_column": "source_record_id",
+      "referenced_table": "proposed_source_record",
+      "table_name": "proposed_field_observation"
+    },
+    {
+      "column_name": "verification_state",
+      "referenced_column": "value",
+      "referenced_table": "vocab_field_verification_state",
+      "table_name": "proposed_field_observation"
+    },
+    {
+      "column_name": "capture_method",
+      "referenced_column": "value",
+      "referenced_table": "vocab_capture_method",
+      "table_name": "proposed_geometry_observation"
+    },
+    {
+      "column_name": "classification",
+      "referenced_column": "value",
+      "referenced_table": "vocab_classification",
+      "table_name": "proposed_geometry_observation"
+    },
+    {
+      "column_name": "evidence_object_id",
+      "referenced_column": "evidence_object_id",
+      "referenced_table": "proposed_evidence_object",
+      "table_name": "proposed_geometry_observation"
+    },
+    {
+      "column_name": "geometry_role",
+      "referenced_column": "value",
+      "referenced_table": "vocab_geometry_role",
+      "table_name": "proposed_geometry_observation"
+    },
+    {
+      "column_name": "licence_id",
+      "referenced_column": "licence_id",
+      "referenced_table": "proposed_licence",
+      "table_name": "proposed_geometry_observation"
+    },
+    {
+      "column_name": "source_record_id",
+      "referenced_column": "source_record_id",
+      "referenced_table": "proposed_source_record",
+      "table_name": "proposed_geometry_observation"
+    },
+    {
+      "column_name": "subject_id",
+      "referenced_column": "subject_id",
+      "referenced_table": "proposed_registry_subject",
+      "table_name": "proposed_geometry_observation"
+    },
+    {
+      "column_name": "check_result",
+      "referenced_column": "value",
+      "referenced_table": "vocab_quality_check_result",
+      "table_name": "proposed_geometry_quality_assessment"
+    },
+    {
+      "column_name": "geometry_version_id",
+      "referenced_column": "geometry_version_id",
+      "referenced_table": "proposed_geometry_version",
+      "table_name": "proposed_geometry_quality_assessment"
+    },
+    {
+      "column_name": "classification",
+      "referenced_column": "value",
+      "referenced_table": "vocab_classification",
+      "table_name": "proposed_geometry_version"
+    },
+    {
+      "column_name": "dispute_case_id",
+      "referenced_column": "dispute_case_id",
+      "referenced_table": "proposed_dispute_case",
+      "table_name": "proposed_geometry_version"
+    },
+    {
+      "column_name": "geometry_role",
+      "referenced_column": "value",
+      "referenced_table": "vocab_geometry_role",
+      "table_name": "proposed_geometry_version"
+    },
+    {
+      "column_name": "promotion_decision_event_id",
+      "referenced_column": "decision_event_id",
+      "referenced_table": "proposed_decision_event",
+      "table_name": "proposed_geometry_version"
+    },
+    {
+      "column_name": "promotion_evidence_object_id",
+      "referenced_column": "evidence_object_id",
+      "referenced_table": "proposed_evidence_object",
+      "table_name": "proposed_geometry_version"
+    },
+    {
+      "column_name": "quality_state",
+      "referenced_column": "value",
+      "referenced_table": "vocab_geometry_quality_state",
+      "table_name": "proposed_geometry_version"
+    },
+    {
+      "column_name": "source_observation_id",
+      "referenced_column": "geometry_observation_id",
+      "referenced_table": "proposed_geometry_observation",
+      "table_name": "proposed_geometry_version"
+    },
+    {
+      "column_name": "subject_id",
+      "referenced_column": "subject_id",
+      "referenced_table": "proposed_registry_subject",
+      "table_name": "proposed_geometry_version"
+    },
+    {
+      "column_name": "superseded_by_geometry_version_id",
+      "referenced_column": "geometry_version_id",
+      "referenced_table": "proposed_geometry_version",
+      "table_name": "proposed_geometry_version"
+    },
+    {
+      "column_name": "transformation_id",
+      "referenced_column": "transformation_id",
+      "referenced_table": "proposed_geometry_transformation",
+      "table_name": "proposed_geometry_version"
+    },
+    {
+      "column_name": "intake_state",
+      "referenced_column": "value",
+      "referenced_table": "vocab_intake_state",
+      "table_name": "proposed_intake_case"
+    },
+    {
+      "column_name": "source_record_id",
+      "referenced_column": "source_record_id",
+      "referenced_table": "proposed_source_record",
+      "table_name": "proposed_intake_case"
+    },
+    {
+      "column_name": "landmark_type",
+      "referenced_column": "value",
+      "referenced_table": "vocab_landmark_type",
+      "table_name": "proposed_landmark"
+    },
+    {
+      "column_name": "lifecycle_state",
+      "referenced_column": "value",
+      "referenced_table": "vocab_landmark_lifecycle",
+      "table_name": "proposed_landmark"
+    },
+    {
+      "column_name": "source_authority_id",
+      "referenced_column": "source_authority_id",
+      "referenced_table": "proposed_source_authority",
+      "table_name": "proposed_landmark"
+    },
+    {
+      "column_name": "classification",
+      "referenced_column": "value",
+      "referenced_table": "vocab_classification",
+      "table_name": "proposed_licence"
+    },
+    {
+      "column_name": "administrative_unit_id",
+      "referenced_column": "administrative_unit_id",
+      "referenced_table": "proposed_administrative_unit",
+      "table_name": "proposed_locality"
+    },
+    {
+      "column_name": "lifecycle_state",
+      "referenced_column": "value",
+      "referenced_table": "vocab_locality_lifecycle",
+      "table_name": "proposed_locality"
+    },
+    {
+      "column_name": "locality_type",
+      "referenced_column": "value",
+      "referenced_table": "vocab_locality_type",
+      "table_name": "proposed_locality"
+    },
+    {
+      "column_name": "source_authority_id",
+      "referenced_column": "source_authority_id",
+      "referenced_table": "proposed_source_authority",
+      "table_name": "proposed_locality"
+    },
+    {
+      "column_name": "classification",
+      "referenced_column": "value",
+      "referenced_table": "vocab_classification",
+      "table_name": "proposed_location_record"
+    },
+    {
+      "column_name": "record_type",
+      "referenced_column": "value",
+      "referenced_table": "vocab_record_type",
+      "table_name": "proposed_location_record"
+    },
+    {
+      "column_name": "classification",
+      "referenced_column": "value",
+      "referenced_table": "vocab_classification",
+      "table_name": "proposed_location_record_assertion"
+    },
+    {
+      "column_name": "decision_event_id",
+      "referenced_column": "decision_event_id",
+      "referenced_table": "proposed_decision_event",
+      "table_name": "proposed_location_record_assertion"
+    },
+    {
+      "column_name": "evidence_object_id",
+      "referenced_column": "evidence_object_id",
+      "referenced_table": "proposed_evidence_object",
+      "table_name": "proposed_location_record_assertion"
+    },
+    {
+      "column_name": "location_record_version_id",
+      "referenced_column": "location_record_version_id",
+      "referenced_table": "proposed_location_record_version",
+      "table_name": "proposed_location_record_assertion"
+    },
+    {
+      "column_name": "source_record_id",
+      "referenced_column": "source_record_id",
+      "referenced_table": "proposed_source_record",
+      "table_name": "proposed_location_record_assertion"
+    },
+    {
+      "column_name": "location_record_version_id",
+      "referenced_column": "location_record_version_id",
+      "referenced_table": "proposed_location_record_version",
+      "table_name": "proposed_location_record_object_link"
+    },
+    {
+      "column_name": "object_role",
+      "referenced_column": "value",
+      "referenced_table": "vocab_object_role",
+      "table_name": "proposed_location_record_object_link"
+    },
+    {
+      "column_name": "subject_id",
+      "referenced_column": "subject_id",
+      "referenced_table": "proposed_registry_subject",
+      "table_name": "proposed_location_record_object_link"
+    },
+    {
+      "column_name": "from_location_record_id",
+      "referenced_column": "location_record_id",
+      "referenced_table": "proposed_location_record",
+      "table_name": "proposed_location_record_relationship"
+    },
+    {
+      "column_name": "relationship_type",
+      "referenced_column": "value",
+      "referenced_table": "vocab_relationship_type",
+      "table_name": "proposed_location_record_relationship"
+    },
+    {
+      "column_name": "source_decision_event_id",
+      "referenced_column": "decision_event_id",
+      "referenced_table": "proposed_decision_event",
+      "table_name": "proposed_location_record_relationship"
+    },
+    {
+      "column_name": "to_location_record_id",
+      "referenced_column": "location_record_id",
+      "referenced_table": "proposed_location_record",
+      "table_name": "proposed_location_record_relationship"
+    },
+    {
+      "column_name": "administrative_unit_version_id",
+      "referenced_column": "administrative_unit_version_id",
+      "referenced_table": "proposed_administrative_unit_version",
+      "table_name": "proposed_location_record_version"
+    },
+    {
+      "column_name": "correction_case_id",
+      "referenced_column": "correction_case_id",
+      "referenced_table": "proposed_correction_case",
+      "table_name": "proposed_location_record_version"
+    },
+    {
+      "column_name": "lifecycle_state",
+      "referenced_column": "value",
+      "referenced_table": "vocab_canonical_record_lifecycle",
+      "table_name": "proposed_location_record_version"
+    },
+    {
+      "column_name": "locality_id",
+      "referenced_column": "locality_id",
+      "referenced_table": "proposed_locality",
+      "table_name": "proposed_location_record_version"
+    },
+    {
+      "column_name": "location_record_id",
+      "referenced_column": "location_record_id",
+      "referenced_table": "proposed_location_record",
+      "table_name": "proposed_location_record_version"
+    },
+    {
+      "column_name": "predecessor_version_id",
+      "referenced_column": "location_record_version_id",
+      "referenced_table": "proposed_location_record_version",
+      "table_name": "proposed_location_record_version"
+    },
+    {
+      "column_name": "source_decision_event_id",
+      "referenced_column": "decision_event_id",
+      "referenced_table": "proposed_decision_event",
+      "table_name": "proposed_location_record_version"
+    },
+    {
+      "column_name": "successor_version_id",
+      "referenced_column": "location_record_version_id",
+      "referenced_table": "proposed_location_record_version",
+      "table_name": "proposed_location_record_version"
+    },
+    {
+      "column_name": "name_kind",
+      "referenced_column": "value",
+      "referenced_table": "vocab_name_kind",
+      "table_name": "proposed_name_record"
+    },
+    {
+      "column_name": "name_status",
+      "referenced_column": "value",
+      "referenced_table": "vocab_name_lifecycle",
+      "table_name": "proposed_name_record"
+    },
+    {
+      "column_name": "source_record_id",
+      "referenced_column": "source_record_id",
+      "referenced_table": "proposed_source_record",
+      "table_name": "proposed_name_record"
+    },
+    {
+      "column_name": "subject_id",
+      "referenced_column": "subject_id",
+      "referenced_table": "proposed_registry_subject",
+      "table_name": "proposed_name_record"
+    },
+    {
+      "column_name": "lifecycle_state",
+      "referenced_column": "value",
+      "referenced_table": "vocab_non_building_object_lifecycle",
+      "table_name": "proposed_non_building_object"
+    },
+    {
+      "column_name": "object_type",
+      "referenced_column": "value",
+      "referenced_table": "vocab_non_building_object_type",
+      "table_name": "proposed_non_building_object"
+    },
+    {
+      "column_name": "source_authority_id",
+      "referenced_column": "source_authority_id",
+      "referenced_table": "proposed_source_authority",
+      "table_name": "proposed_non_building_object"
+    },
+    {
+      "column_name": "area_type",
+      "referenced_column": "value",
+      "referenced_table": "vocab_operational_area_type",
+      "table_name": "proposed_operational_area"
+    },
+    {
+      "column_name": "classification",
+      "referenced_column": "value",
+      "referenced_table": "vocab_classification",
+      "table_name": "proposed_operational_area"
+    },
+    {
+      "column_name": "lifecycle_state",
+      "referenced_column": "value",
+      "referenced_table": "vocab_operational_area_lifecycle",
+      "table_name": "proposed_operational_area"
+    },
+    {
+      "column_name": "name_record_id",
+      "referenced_column": "name_record_id",
+      "referenced_table": "proposed_name_record",
+      "table_name": "proposed_operational_area"
+    },
+    {
+      "column_name": "administrative_unit_id",
+      "referenced_column": "administrative_unit_id",
+      "referenced_table": "proposed_administrative_unit",
+      "table_name": "proposed_operational_area_coverage"
+    },
+    {
+      "column_name": "coverage_role",
+      "referenced_column": "value",
+      "referenced_table": "vocab_coverage_role",
+      "table_name": "proposed_operational_area_coverage"
+    },
+    {
+      "column_name": "geometry_version_id",
+      "referenced_column": "geometry_version_id",
+      "referenced_table": "proposed_geometry_version",
+      "table_name": "proposed_operational_area_coverage"
+    },
+    {
+      "column_name": "operational_area_id",
+      "referenced_column": "operational_area_id",
+      "referenced_table": "proposed_operational_area",
+      "table_name": "proposed_operational_area_coverage"
+    },
+    {
+      "column_name": "classification",
+      "referenced_column": "value",
+      "referenced_table": "vocab_classification",
+      "table_name": "proposed_parcel_reference"
+    },
+    {
+      "column_name": "source_authority_id",
+      "referenced_column": "source_authority_id",
+      "referenced_table": "proposed_source_authority",
+      "table_name": "proposed_parcel_reference"
+    },
+    {
+      "column_name": "classification",
+      "referenced_column": "value",
+      "referenced_table": "vocab_classification",
+      "table_name": "proposed_partner_projection"
+    },
+    {
+      "column_name": "publication_release_item_id",
+      "referenced_column": "publication_release_item_id",
+      "referenced_table": "proposed_publication_release_item",
+      "table_name": "proposed_partner_projection"
+    },
+    {
+      "column_name": "code_state",
+      "referenced_column": "value",
+      "referenced_table": "vocab_public_code_state",
+      "table_name": "proposed_public_code_alias"
+    },
+    {
+      "column_name": "location_record_id",
+      "referenced_column": "location_record_id",
+      "referenced_table": "proposed_location_record",
+      "table_name": "proposed_public_code_alias"
+    },
+    {
+      "column_name": "predecessor_alias_id",
+      "referenced_column": "public_code_alias_id",
+      "referenced_table": "proposed_public_code_alias",
+      "table_name": "proposed_public_code_alias"
+    },
+    {
+      "column_name": "successor_alias_id",
+      "referenced_column": "public_code_alias_id",
+      "referenced_table": "proposed_public_code_alias",
+      "table_name": "proposed_public_code_alias"
+    },
+    {
+      "column_name": "projection_type",
+      "referenced_column": "value",
+      "referenced_table": "vocab_projection_type",
+      "table_name": "proposed_publication_release"
+    },
+    {
+      "column_name": "release_state",
+      "referenced_column": "value",
+      "referenced_table": "vocab_publication_lifecycle",
+      "table_name": "proposed_publication_release"
+    },
+    {
+      "column_name": "location_record_id",
+      "referenced_column": "location_record_id",
+      "referenced_table": "proposed_location_record",
+      "table_name": "proposed_publication_release_item"
+    },
+    {
+      "column_name": "location_record_version_id",
+      "referenced_column": "location_record_version_id",
+      "referenced_table": "proposed_location_record_version",
+      "table_name": "proposed_publication_release_item"
+    },
+    {
+      "column_name": "projection_state",
+      "referenced_column": "value",
+      "referenced_table": "vocab_publication_item_state",
+      "table_name": "proposed_publication_release_item"
+    },
+    {
+      "column_name": "public_code_alias_id",
+      "referenced_column": "public_code_alias_id",
+      "referenced_table": "proposed_public_code_alias",
+      "table_name": "proposed_publication_release_item"
+    },
+    {
+      "column_name": "publication_release_id",
+      "referenced_column": "publication_release_id",
+      "referenced_table": "proposed_publication_release",
+      "table_name": "proposed_publication_release_item"
+    },
+    {
+      "column_name": "delete_policy",
+      "referenced_column": "value",
+      "referenced_table": "vocab_delete_policy",
+      "table_name": "proposed_registry_subject"
+    },
+    {
+      "column_name": "subject_state",
+      "referenced_column": "value",
+      "referenced_table": "vocab_subject_lifecycle",
+      "table_name": "proposed_registry_subject"
+    },
+    {
+      "column_name": "lifecycle_state",
+      "referenced_column": "value",
+      "referenced_table": "vocab_road_lifecycle",
+      "table_name": "proposed_road"
+    },
+    {
+      "column_name": "road_class",
+      "referenced_column": "value",
+      "referenced_table": "vocab_road_class",
+      "table_name": "proposed_road"
+    },
+    {
+      "column_name": "source_authority_id",
+      "referenced_column": "source_authority_id",
+      "referenced_table": "proposed_source_authority",
+      "table_name": "proposed_road"
+    },
+    {
+      "column_name": "lifecycle_state",
+      "referenced_column": "value",
+      "referenced_table": "vocab_road_segment_lifecycle",
+      "table_name": "proposed_road_segment"
+    },
+    {
+      "column_name": "road_id",
+      "referenced_column": "road_id",
+      "referenced_table": "proposed_road",
+      "table_name": "proposed_road_segment"
+    },
+    {
+      "column_name": "authority_class",
+      "referenced_column": "value",
+      "referenced_table": "vocab_source_authority_class",
+      "table_name": "proposed_source_authority"
+    },
+    {
+      "column_name": "status",
+      "referenced_column": "value",
+      "referenced_table": "vocab_source_authority_lifecycle",
+      "table_name": "proposed_source_authority"
+    },
+    {
+      "column_name": "licence_id",
+      "referenced_column": "licence_id",
+      "referenced_table": "proposed_licence",
+      "table_name": "proposed_source_package"
+    },
+    {
+      "column_name": "source_authority_id",
+      "referenced_column": "source_authority_id",
+      "referenced_table": "proposed_source_authority",
+      "table_name": "proposed_source_package"
+    },
+    {
+      "column_name": "classification",
+      "referenced_column": "value",
+      "referenced_table": "vocab_classification",
+      "table_name": "proposed_source_payload_archive"
+    },
+    {
+      "column_name": "retention_state",
+      "referenced_column": "value",
+      "referenced_table": "vocab_retention_state",
+      "table_name": "proposed_source_payload_archive"
+    },
+    {
+      "column_name": "source_record_id",
+      "referenced_column": "source_record_id",
+      "referenced_table": "proposed_source_record",
+      "table_name": "proposed_source_payload_archive"
+    },
+    {
+      "column_name": "raw_payload_classification",
+      "referenced_column": "value",
+      "referenced_table": "vocab_classification",
+      "table_name": "proposed_source_record"
+    },
+    {
+      "column_name": "source_package_id",
+      "referenced_column": "source_package_id",
+      "referenced_table": "proposed_source_package",
+      "table_name": "proposed_source_record"
+    },
+    {
+      "column_name": "building_id",
+      "referenced_column": "building_id",
+      "referenced_table": "proposed_building",
+      "table_name": "proposed_unit"
+    },
+    {
+      "column_name": "classification",
+      "referenced_column": "value",
+      "referenced_table": "vocab_classification",
+      "table_name": "proposed_unit"
+    },
+    {
+      "column_name": "lifecycle_state",
+      "referenced_column": "value",
+      "referenced_table": "vocab_unit_lifecycle",
+      "table_name": "proposed_unit"
+    },
+    {
+      "column_name": "parent_unit_id",
+      "referenced_column": "unit_id",
+      "referenced_table": "proposed_unit",
+      "table_name": "proposed_unit"
+    },
+    {
+      "column_name": "unit_type",
+      "referenced_column": "value",
+      "referenced_table": "vocab_unit_type",
+      "table_name": "proposed_unit"
+    }
+  ],
+  "schema": "canonical_target",
+  "table_count": 100,
+  "tables": [
+    "geometry_role_matrix",
+    "lifecycle_transition_policy",
+    "proposed_administrative_code_history",
+    "proposed_administrative_unit",
+    "proposed_administrative_unit_version",
+    "proposed_building",
+    "proposed_building_primary_entrance",
+    "proposed_correction_case",
+    "proposed_country",
+    "proposed_decision_event",
+    "proposed_dispute_case",
+    "proposed_entrance",
+    "proposed_evidence_object",
+    "proposed_field_assignment",
+    "proposed_field_observation",
+    "proposed_geometry_observation",
+    "proposed_geometry_quality_assessment",
+    "proposed_geometry_transformation",
+    "proposed_geometry_version",
+    "proposed_intake_case",
+    "proposed_landmark",
+    "proposed_legacy_crosswalk",
+    "proposed_licence",
+    "proposed_locality",
+    "proposed_location_record",
+    "proposed_location_record_assertion",
+    "proposed_location_record_object_link",
+    "proposed_location_record_relationship",
+    "proposed_location_record_version",
+    "proposed_migration_exception",
+    "proposed_name_record",
+    "proposed_non_building_object",
+    "proposed_operational_area",
+    "proposed_operational_area_coverage",
+    "proposed_parcel_reference",
+    "proposed_partner_projection",
+    "proposed_public_code_alias",
+    "proposed_publication_release",
+    "proposed_publication_release_item",
+    "proposed_registry_subject",
+    "proposed_road",
+    "proposed_road_segment",
+    "proposed_source_authority",
+    "proposed_source_package",
+    "proposed_source_payload_archive",
+    "proposed_source_record",
+    "proposed_unit",
+    "record_object_role_matrix",
+    "subject_entity_registry",
+    "vocab_admin_level",
+    "vocab_administrative_unit_lifecycle",
+    "vocab_building_lifecycle",
+    "vocab_canonical_record_lifecycle",
+    "vocab_capture_method",
+    "vocab_case_lifecycle",
+    "vocab_case_state",
+    "vocab_classification",
+    "vocab_correction_type",
+    "vocab_country_lifecycle",
+    "vocab_coverage_role",
+    "vocab_decision_type",
+    "vocab_delete_policy",
+    "vocab_dispute_type",
+    "vocab_entrance_lifecycle",
+    "vocab_entrance_role",
+    "vocab_field_verification_state",
+    "vocab_geometry_quality_state",
+    "vocab_geometry_role",
+    "vocab_intake_state",
+    "vocab_landmark_lifecycle",
+    "vocab_landmark_type",
+    "vocab_lifecycle_state",
+    "vocab_locality_lifecycle",
+    "vocab_locality_type",
+    "vocab_name_kind",
+    "vocab_name_lifecycle",
+    "vocab_name_status",
+    "vocab_non_building_object_lifecycle",
+    "vocab_non_building_object_type",
+    "vocab_object_role",
+    "vocab_operational_area_lifecycle",
+    "vocab_operational_area_type",
+    "vocab_projection_type",
+    "vocab_public_code_state",
+    "vocab_publication_item_state",
+    "vocab_publication_lifecycle",
+    "vocab_publication_release_state",
+    "vocab_quality_check_result",
+    "vocab_record_type",
+    "vocab_reference_object_lifecycle",
+    "vocab_relationship_type",
+    "vocab_retention_state",
+    "vocab_road_class",
+    "vocab_road_lifecycle",
+    "vocab_road_segment_lifecycle",
+    "vocab_source_authority_class",
+    "vocab_source_authority_lifecycle",
+    "vocab_subject_lifecycle",
+    "vocab_unit_lifecycle",
+    "vocab_unit_type"
+  ]
+}

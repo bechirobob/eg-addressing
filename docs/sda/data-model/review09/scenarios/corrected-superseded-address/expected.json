@@ -1,0 +1,66 @@
+{
+  "expected": {
+    "canonical": [
+      {
+        "canonical_state": "superseded",
+        "entity_id": "corrected-superseded-address-address-1",
+        "entity_type": "address",
+        "label": "Old label"
+      },
+      {
+        "canonical_state": "active",
+        "entity_id": "corrected-superseded-address-address-2",
+        "entity_type": "address",
+        "label": "Corrected label"
+      }
+    ],
+    "effective_as_of": [
+      {
+        "entity_id": "corrected-superseded-address-address-2",
+        "label": "Corrected label"
+      }
+    ],
+    "expected_absences": {},
+    "operator_projection": [
+      {
+        "attributes": {
+          "replaces": "Old label"
+        },
+        "canonical_state": "active",
+        "entity_id": "corrected-superseded-address-address-2",
+        "entity_type": "address",
+        "label": "Corrected label"
+      }
+    ],
+    "public_release": [
+      {
+        "entity_id": "corrected-superseded-address-address-2",
+        "label": "Corrected label"
+      }
+    ],
+    "recorded_as_of": [
+      {
+        "entity_id": "corrected-superseded-address-address-2",
+        "label": "Corrected label"
+      }
+    ]
+  },
+  "expected_absence_queries": [
+    {
+      "name": "no-unreleased-public-rows",
+      "params": [
+        "corrected-superseded-address"
+      ],
+      "sql": "SELECT entity_id FROM r10_scenario_entity WHERE scenario=%s AND public_visible=false AND public_release_date IS NOT NULL"
+    }
+  ],
+  "query_dates": {
+    "effective": "2026-07-14",
+    "public_release": "2026-07-14",
+    "recorded": "2026-07-14T00:00:00Z"
+  },
+  "review_owner": "SDA scenario expected-result owner",
+  "review_status": "approved-review10-scenario-expected-result",
+  "scenario": "corrected-superseded-address",
+  "version": "review10"
+}

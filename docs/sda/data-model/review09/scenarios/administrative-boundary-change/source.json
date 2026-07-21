@@ -1,0 +1,40 @@
+{
+  "entities": [
+    {
+      "attributes": {
+        "successor": "Updated boundary sector"
+      },
+      "canonical_state": "retired",
+      "effective_from": "2026-01-01",
+      "effective_to": "2026-06-01",
+      "entity_id": "administrative-boundary-change-administrative_unit-1",
+      "entity_type": "administrative_unit",
+      "label": "Former boundary sector",
+      "operator_visible": false,
+      "public_release_date": null,
+      "public_visible": false,
+      "recorded_from": "2026-01-01T00:00:00Z",
+      "recorded_to": "2026-06-01T00:00:00Z"
+    },
+    {
+      "attributes": {
+        "predecessor": "Former boundary sector"
+      },
+      "canonical_state": "active",
+      "effective_from": "2026-01-01",
+      "effective_to": null,
+      "entity_id": "administrative-boundary-change-administrative_unit-2",
+      "entity_type": "administrative_unit",
+      "label": "Updated boundary sector",
+      "operator_visible": true,
+      "public_release_date": "2026-07-01",
+      "public_visible": true,
+      "recorded_from": "2026-01-01T00:00:00Z",
+      "recorded_to": null
+    }
+  ],
+  "review_owner": "SDA scenario source owner",
+  "review_status": "approved-review10-scenario-source",
+  "scenario": "administrative-boundary-change",
+  "version": "review10"
+}

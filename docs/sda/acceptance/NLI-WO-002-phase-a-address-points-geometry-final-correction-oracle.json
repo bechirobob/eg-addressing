@@ -1,0 +1,83 @@
+{
+  "control_id": "NLI-WO-002-PA-GEO-01-C2",
+  "control_status": "reviewer-owned-final-correction-oracle",
+  "implementation_must_not_modify": true,
+  "reviewed_implementation_head": "64ad44b8553dcd0f18bd7dd41363230fb492862b",
+  "scope": "Final C08-C10 acceptance-control corrections for the same address_points geometry slice only",
+  "required_transform_inputs": {
+    "allowed": [
+      "current_source.address_points queried row",
+      "the reviewed WO002-R06-geometry-observation-address_points transform-spec row",
+      "approved setup preconditions resolved from PostgreSQL"
+    ],
+    "forbidden": [
+      "docs/sda/acceptance/NLI-WO-002-phase-a-address-points-geometry-expected.json",
+      "docs/sda/acceptance/NLI-WO-002-phase-a-address-points-geometry-correction-oracle.json",
+      "docs/sda/acceptance/NLI-WO-002-phase-a-address-points-geometry-final-correction-oracle.json"
+    ],
+    "rule": "The observed-output producer must not read any reviewer-owned acceptance oracle. Acceptance oracles are comparator/test authority only."
+  },
+  "required_transform_spec": {
+    "transform_group_id": "WO002-R06-geometry-observation-address_points",
+    "implementation_unit": "impl_wo002_r06_geometry_observation_address_points",
+    "covered_source_fields": [
+      "address_points.accuracy_meters",
+      "address_points.latitude",
+      "address_points.longitude"
+    ],
+    "required_context_fields": [
+      "address_points.id",
+      "address_points.address_id",
+      "address_points.source_method",
+      "address_points.created_at"
+    ],
+    "target_entities": [
+      "geometry_observation"
+    ],
+    "source_method_translation": {
+      "phase-a address_points source_method": "derived-from-source"
+    },
+    "rule": "All values above must be declared by the actual reviewed transform-spec row and compared with this oracle before dispatch. The validator must not construct context fields or translations from this oracle and then compare them to themselves."
+  },
+  "required_failure_state_evidence": {
+    "every_database_mutation_test": [
+      "same_database_pre_test_rows",
+      "same_database_pre_test_hash",
+      "same_database_post_failure_rows",
+      "same_database_post_failure_hash",
+      "rollback_equality"
+    ],
+    "missing_source_test": "Must include measured same-database before/after evidence; state_unchanged=true without raw rows/hashes is prohibited",
+    "comparator_only_test": "May be classified comparator-only only when it performs no target or current-source write; classification and unchanged-state query must be explicit"
+  },
+  "required_tests": [
+    {
+      "test_id": "transform-acceptance-oracle-access-denied",
+      "mutation": "After spec validation but during direct transform execution, replace all three acceptance-oracle loaders with functions that raise if called",
+      "expected": "The transform succeeds because it obtains translation and context from the reviewed transform spec and does not access an acceptance oracle"
+    },
+    {
+      "test_id": "transform-spec-context-field-drift",
+      "mutation": "Change required_context_fields in a temporary transform-spec copy",
+      "expected_error": "address_points geometry transform specification binding mismatch"
+    },
+    {
+      "test_id": "transform-spec-source-method-translation-drift",
+      "mutation": "Change source_method_translation in a temporary transform-spec copy",
+      "expected_error": "address_points geometry transform specification binding mismatch"
+    },
+    {
+      "test_id": "missing-source-same-database-rollback-proof",
+      "mutation": "Remove the current_source.address_points row through the normal isolated test transaction",
+      "expected_error": "address_points source row not found",
+      "expected_state": "Measured pre-test and post-failure target rows and hashes match before any reset"
+    }
+  ],
+  "prohibited": [
+    "Modifying any reviewer-owned acceptance oracle",
+    "Implementing or modifying another transform group",
+    "Requesting broad Phase A reassessment or SDA Review 12",
+    "Modifying F04-F12",
+    "Modifying runtime application/frontend code, executable migrations, migration runner, Docker runtime, production/pilot data, secrets, .env files or PR #8"
+  ]
+}

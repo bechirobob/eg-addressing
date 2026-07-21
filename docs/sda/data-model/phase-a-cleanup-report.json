@@ -1,0 +1,14 @@
+{
+  "after": {},
+  "before": {
+    "canonical_target": 100,
+    "current_source": 25,
+    "test_control": 3
+  },
+  "execution_mode": "phase-a-cleanup",
+  "schemas_removed": [
+    "current_source",
+    "canonical_target",
+    "test_control"
+  ]
+}
