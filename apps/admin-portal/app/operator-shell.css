@@ -1,0 +1,752 @@
+/*
+ * NLI operator workspace foundation.
+ * Uses the frozen government-service tokens from globals.css; this file does not
+ * introduce a competing visual token system or change public workflow authority.
+ */
+
+body:has(.operator-workspace-shell) {
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+body:has(.operator-workspace-shell) .page-shell {
+  max-width: 1560px;
+  padding: 18px 18px 56px;
+}
+
+body:has(.operator-workspace-shell) .flag-ribbon {
+  height: 6px;
+  margin-bottom: 10px;
+  box-shadow: none;
+}
+
+body:has(.operator-workspace-shell) .staging-notice {
+  margin-bottom: 10px;
+  padding: 8px 12px;
+  font-size: 0.78rem;
+  line-height: 1.35;
+}
+
+body:has(.operator-workspace-shell) .masthead {
+  min-height: 0;
+  padding: 10px 0 14px;
+  gap: 16px;
+}
+
+body:has(.operator-workspace-shell) .masthead-content-grid {
+  display: block;
+}
+
+body:has(.operator-workspace-shell) .masthead-topline {
+  margin-bottom: 6px;
+}
+
+body:has(.operator-workspace-shell) .official-lockup {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+body:has(.operator-workspace-shell) .crest-frame {
+  width: 48px;
+  padding: 4px;
+  border-bottom-width: 2px;
+  box-shadow: none;
+}
+
+body:has(.operator-workspace-shell) .kicker {
+  margin: 0;
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+}
+
+body:has(.operator-workspace-shell) .masthead-copy {
+  max-width: 980px;
+}
+
+body:has(.operator-workspace-shell) .masthead-copy .eyebrow {
+  padding: 0 0 4px;
+  border: 0;
+  background: transparent;
+  color: var(--gov-muted);
+  font-size: 0.68rem;
+}
+
+body:has(.operator-workspace-shell) .masthead h1 {
+  margin-top: 2px;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: clamp(1.75rem, 2.6vw, 2.35rem);
+  line-height: 1.08;
+  letter-spacing: -0.025em;
+}
+
+body:has(.operator-workspace-shell) .masthead-subtitle {
+  max-width: 900px;
+  margin-top: 7px;
+  font-size: 0.9rem;
+  line-height: 1.45;
+}
+
+body:has(.operator-workspace-shell) .civic-hero-illustration {
+  display: none;
+}
+
+.operator-workspace-shell {
+  display: grid;
+  grid-template-columns: 246px minmax(0, 1fr);
+  gap: 22px;
+  align-items: start;
+  margin-top: 18px;
+}
+
+.operator-sidebar {
+  position: sticky;
+  top: 12px;
+  z-index: 20;
+  max-height: calc(100vh - 24px);
+  overflow-y: auto;
+  border-right: 1px solid var(--gov-line);
+  background: var(--gov-bg);
+  scrollbar-width: thin;
+}
+
+.operator-sidebar-identity {
+  padding: 0 18px 16px 0;
+  border-bottom: 1px solid var(--gov-line);
+}
+
+.operator-platform-link {
+  display: grid;
+  gap: 3px;
+  color: var(--gov-ink-strong);
+  text-decoration: none;
+}
+
+.operator-platform-link span {
+  color: var(--gov-muted);
+  font-size: 0.66rem;
+  font-weight: 750;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.operator-platform-link strong {
+  font-size: 0.98rem;
+  line-height: 1.25;
+}
+
+.operator-platform-link:focus-visible,
+.operator-platform-link:hover {
+  color: var(--gov-blue);
+}
+
+.operator-role-context {
+  display: grid;
+  gap: 2px;
+  margin-top: 14px;
+  padding-left: 10px;
+  border-left: 3px solid var(--gov-gold);
+}
+
+.operator-role-context span,
+.operator-role-context small {
+  color: var(--gov-muted);
+  font-size: 0.72rem;
+}
+
+.operator-role-context strong {
+  overflow: hidden;
+  font-size: 0.84rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.operator-sidebar .top-nav {
+  gap: 18px;
+  padding: 16px 18px 20px 0;
+}
+
+.operator-sidebar .nav-group {
+  display: grid;
+  gap: 5px;
+}
+
+.operator-sidebar .nav-group-label {
+  margin: 0 0 3px;
+  color: var(--gov-muted);
+  font-size: 0.66rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.operator-sidebar .nav-group-links {
+  display: grid;
+  gap: 2px;
+}
+
+.operator-sidebar .nav-link {
+  min-height: 38px;
+  padding: 8px 10px;
+  border: 0;
+  border-left: 3px solid transparent;
+  background: transparent;
+  color: var(--gov-ink);
+  font-size: 0.84rem;
+  font-weight: 650;
+}
+
+.operator-sidebar .nav-link:hover {
+  border-left-color: var(--gov-line-strong);
+  background: var(--gov-surface);
+  color: var(--gov-blue);
+}
+
+.operator-sidebar .nav-link-active {
+  border-left-color: var(--gov-blue);
+  background: var(--gov-blue-soft);
+  color: var(--gov-ink-strong);
+  font-weight: 780;
+}
+
+.operator-workspace-column {
+  min-width: 0;
+}
+
+.operator-utility-bar {
+  position: sticky;
+  top: 0;
+  z-index: 15;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  min-height: 48px;
+  margin: 0 0 14px;
+  padding: 7px 0 8px;
+  border-bottom: 1px solid var(--gov-line);
+  background: var(--gov-bg);
+}
+
+.operator-location-context {
+  display: flex;
+  align-items: baseline;
+  gap: 9px;
+  min-width: 0;
+}
+
+.operator-location-context span {
+  color: var(--gov-muted);
+  font-size: 0.7rem;
+  font-weight: 780;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.operator-location-context strong {
+  overflow: hidden;
+  color: var(--gov-ink-strong);
+  font-size: 0.94rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.operator-session-utility {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 0 0 auto;
+}
+
+.operator-session-utility > span {
+  color: var(--gov-muted);
+  font-size: 0.75rem;
+}
+
+.operator-session-utility button {
+  min-height: 34px;
+  padding: 6px 10px;
+  border: 1px solid var(--gov-line);
+  border-radius: 0;
+  background: var(--gov-surface-raised);
+  color: var(--gov-ink);
+  font: inherit;
+  font-size: 0.76rem;
+  font-weight: 720;
+  cursor: pointer;
+}
+
+.operator-session-utility button:hover,
+.operator-session-utility button:focus-visible {
+  border-color: var(--gov-blue);
+  color: var(--gov-blue);
+}
+
+.operator-mobile-menu,
+.operator-navigation-scrim {
+  display: none;
+}
+
+body:has(.operator-workspace-shell) .desktop-main-content {
+  min-width: 0;
+}
+
+body:has(.operator-workspace-shell) :is(.hero-card, .panel, .status-card, .public-task-panel) {
+  background: var(--gov-surface);
+  box-shadow: none;
+}
+
+body:has(.operator-workspace-shell) :is(.hero-card, .panel, .status-card)::before {
+  display: none;
+}
+
+body:has(.operator-workspace-shell) :is(.public-task-panel, .panel, .status-card) {
+  padding: 18px 20px;
+  border-color: var(--gov-line);
+}
+
+body:has(.operator-workspace-shell) .hero-card {
+  padding: 22px 24px;
+  border-left-width: 4px;
+}
+
+body:has(.operator-workspace-shell) .hero-card::after {
+  height: 2px;
+  background: var(--gov-line);
+}
+
+body:has(.operator-workspace-shell) :is(.hero-card h2, .panel h2, .public-task-panel h2) {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: clamp(1.3rem, 2vw, 1.75rem);
+  line-height: 1.2;
+}
+
+body:has(.operator-workspace-shell) :is(.panel h3, .public-task-panel h3, .status-card h3) {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: 1.08rem;
+  line-height: 1.25;
+}
+
+body:has(.operator-workspace-shell) :is(.hero-copy, .public-task-copy, .institutional-note) {
+  font-size: 0.88rem;
+  line-height: 1.55;
+}
+
+body:has(.operator-workspace-shell) .section-label {
+  margin-bottom: 5px;
+  font-size: 0.65rem;
+  letter-spacing: 0.09em;
+}
+
+body:has(.operator-workspace-shell) :is(.hero-grid, .section-grid) {
+  gap: 16px;
+  margin-top: 18px;
+}
+
+body:has(.operator-workspace-shell) .panel-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+  margin-bottom: 12px;
+}
+
+body:has(.operator-workspace-shell) .operator-summary-row {
+  gap: 8px 16px;
+  padding: 9px 0;
+  border-block: 1px solid var(--gov-line-soft);
+  font-size: 0.8rem;
+}
+
+body:has(.operator-workspace-shell) :is(.status-pill, .tag, .registry-result-count) {
+  padding: 2px 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: var(--gov-muted);
+  font-size: 0.7rem;
+  letter-spacing: 0.05em;
+}
+
+body:has(.operator-workspace-shell) .registry-job-tabs {
+  display: flex;
+  gap: 0;
+  overflow-x: auto;
+  margin-top: 14px;
+  border-bottom: 1px solid var(--gov-line);
+}
+
+body:has(.operator-workspace-shell) .registry-job-tabs button {
+  min-height: 40px;
+  padding: 8px 14px;
+  border: 0;
+  border-bottom: 3px solid transparent;
+  border-radius: 0;
+  background: transparent;
+  color: var(--gov-muted);
+  font: inherit;
+  font-size: 0.82rem;
+  font-weight: 720;
+  cursor: pointer;
+}
+
+body:has(.operator-workspace-shell) .registry-job-tabs button.active {
+  border-bottom-color: var(--gov-blue);
+  color: var(--gov-ink-strong);
+}
+
+body:has(.operator-workspace-shell) :is(.territory-input, .verification-input, input, select, textarea) {
+  border-radius: 0;
+}
+
+body:has(.operator-workspace-shell) :is(.territory-input, .verification-input) {
+  min-height: 40px;
+  padding: 8px 10px;
+  box-shadow: none;
+  font-size: 0.88rem;
+}
+
+body:has(.operator-workspace-shell) .territory-field {
+  gap: 5px;
+}
+
+body:has(.operator-workspace-shell) .territory-label {
+  font-size: 0.68rem;
+  letter-spacing: 0.06em;
+}
+
+body:has(.operator-workspace-shell) :is(.verification-button, .secondary-button, .button, .mini-action-button, .table-action) {
+  min-height: 38px;
+  padding: 8px 12px;
+  border-radius: 0;
+  box-shadow: none;
+  font-size: 0.8rem;
+}
+
+body:has(.operator-workspace-shell) .verification-button {
+  border-bottom-width: 2px;
+  background: var(--gov-blue);
+}
+
+body:has(.operator-workspace-shell) :is(.disclosure-panel, .quiet-disclosure, .inline-disclosure) {
+  border-radius: 0;
+  box-shadow: none;
+}
+
+body:has(.operator-workspace-shell) .disclosure-panel {
+  padding: 10px 12px;
+  border-left-width: 3px;
+}
+
+body:has(.operator-workspace-shell) :is(.disclosure-panel summary, .quiet-disclosure summary, .inline-disclosure summary) {
+  font-size: 0.82rem;
+}
+
+body:has(.operator-workspace-shell) .table-wrap {
+  border-block: 1px solid var(--gov-line);
+  overflow: auto;
+  background: var(--gov-surface-raised);
+}
+
+body:has(.operator-workspace-shell) .data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.8rem;
+  line-height: 1.35;
+}
+
+body:has(.operator-workspace-shell) .data-table caption {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+body:has(.operator-workspace-shell) .data-table th {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  padding: 9px 10px;
+  border-bottom: 1px solid var(--gov-line-strong);
+  background: var(--gov-surface);
+  color: var(--gov-muted);
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-align: left;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+body:has(.operator-workspace-shell) .data-table td {
+  padding: 9px 10px;
+  border-bottom: 1px solid var(--gov-line-soft);
+  vertical-align: top;
+}
+
+body:has(.operator-workspace-shell) .data-table tbody tr:hover {
+  background: var(--gov-blue-soft);
+}
+
+body:has(.operator-workspace-shell) .data-table .selected-row {
+  background: var(--gov-green-soft);
+  box-shadow: inset 3px 0 0 var(--gov-green);
+}
+
+body:has(.operator-workspace-shell) :is(.result-card, .assignment-card, .export-card, .territory-record, .registry-simple-row, .registry-selected-card) {
+  border-radius: 0;
+  box-shadow: none;
+}
+
+body:has(.operator-workspace-shell) :is(.result-card, .assignment-card, .export-card, .territory-record) {
+  padding: 12px 14px;
+  border-left-width: 3px;
+}
+
+body:has(.operator-workspace-shell) :is(.registry-simple-list, .mobile-card-list) {
+  gap: 4px;
+}
+
+body:has(.operator-workspace-shell) .registry-simple-row {
+  padding: 10px 12px;
+  border: 0;
+  border-left: 3px solid transparent;
+  border-bottom: 1px solid var(--gov-line-soft);
+  background: transparent;
+  text-align: left;
+}
+
+body:has(.operator-workspace-shell) .registry-simple-row:hover,
+body:has(.operator-workspace-shell) .registry-simple-row.active {
+  border-left-color: var(--gov-blue);
+  background: var(--gov-blue-soft);
+}
+
+body:has(.operator-workspace-shell) :is(.panel-state, .form-notice) {
+  padding: 10px 12px;
+  border: 0;
+  border-left: 3px solid var(--gov-line-strong);
+  background: var(--gov-surface);
+  font-size: 0.82rem;
+}
+
+body:has(.operator-workspace-shell) .form-notice.success {
+  border-left-color: var(--gov-green);
+}
+
+body:has(.operator-workspace-shell) .form-notice.error {
+  border-left-color: var(--gov-red);
+}
+
+body:has(.operator-workspace-shell) :is(.leaflet-container, .map-panel, .field-map, .registry-map) {
+  min-height: 420px;
+  border: 1px solid var(--gov-line);
+  border-radius: 0;
+  box-shadow: none;
+}
+
+body:has(.operator-workspace-shell) .mobile-control-nav {
+  display: none;
+}
+
+@media (max-width: 1040px) {
+  body:has(.operator-workspace-shell) .page-shell {
+    padding-inline: 14px;
+  }
+
+  .operator-workspace-shell {
+    grid-template-columns: 218px minmax(0, 1fr);
+    gap: 16px;
+  }
+
+  .operator-sidebar .nav-link {
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 860px) {
+  body:has(.operator-workspace-shell) .page-shell {
+    padding: 10px 12px 84px;
+  }
+
+  body:has(.operator-workspace-shell) .masthead {
+    padding-bottom: 10px;
+  }
+
+  body:has(.operator-workspace-shell) .masthead-subtitle {
+    max-width: 72ch;
+  }
+
+  .operator-workspace-shell {
+    display: block;
+    margin-top: 10px;
+  }
+
+  .operator-mobile-menu {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    min-height: 44px;
+    margin-bottom: 8px;
+    padding: 8px 10px;
+    border: 1px solid var(--gov-line);
+    border-radius: 0;
+    background: var(--gov-surface-raised);
+    color: var(--gov-ink-strong);
+    text-align: left;
+  }
+
+  .operator-mobile-menu > span {
+    position: relative;
+    width: 18px;
+    height: 12px;
+    border-block: 2px solid currentColor;
+  }
+
+  .operator-mobile-menu > span::after {
+    content: '';
+    position: absolute;
+    top: 4px;
+    left: 0;
+    width: 18px;
+    border-top: 2px solid currentColor;
+  }
+
+  .operator-sidebar {
+    position: fixed;
+    inset: 0 auto 0 0;
+    z-index: 60;
+    width: min(310px, 88vw);
+    max-height: none;
+    padding: 18px 16px 28px;
+    border-right: 1px solid var(--gov-line-strong);
+    background: var(--gov-bg);
+    transform: translateX(-102%);
+    transition: transform 160ms ease-out;
+  }
+
+  .operator-sidebar.is-open {
+    transform: translateX(0);
+  }
+
+  .operator-sidebar-identity,
+  .operator-sidebar .top-nav {
+    padding-right: 0;
+  }
+
+  .operator-navigation-scrim {
+    position: fixed;
+    inset: 0;
+    z-index: 50;
+    display: block;
+    border: 0;
+    background: rgba(13, 47, 79, 0.34);
+  }
+
+  .operator-utility-bar {
+    position: static;
+    min-height: 42px;
+    margin-bottom: 10px;
+  }
+
+  .operator-session-utility > span {
+    display: none;
+  }
+
+  body:has(.operator-workspace-shell) .mobile-control-nav {
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 45;
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    min-height: 62px;
+    border-top: 1px solid var(--gov-line-strong);
+    background: var(--gov-surface-raised);
+  }
+
+  body:has(.operator-workspace-shell) .mobile-control-nav-link {
+    display: grid;
+    place-items: center;
+    align-content: center;
+    gap: 3px;
+    min-width: 0;
+    padding: 7px 3px;
+    border-right: 1px solid var(--gov-line-soft);
+    color: var(--gov-muted);
+    font-size: 0.66rem;
+    text-decoration: none;
+  }
+
+  body:has(.operator-workspace-shell) .mobile-control-nav-link.active {
+    box-shadow: inset 0 3px 0 var(--gov-blue);
+    color: var(--gov-blue);
+  }
+
+  body:has(.operator-workspace-shell) .mobile-control-nav-link > span {
+    width: 14px;
+    height: 10px;
+    border: 1px solid currentColor;
+  }
+
+  body:has(.operator-workspace-shell) :is(.hero-grid, .section-grid, .registry-simple-layout) {
+    grid-template-columns: 1fr;
+  }
+
+  body:has(.operator-workspace-shell) .desktop-table-wrap {
+    display: none;
+  }
+
+  body:has(.operator-workspace-shell) .mobile-card-list {
+    display: grid;
+  }
+}
+
+@media (max-width: 560px) {
+  body:has(.operator-workspace-shell) .masthead h1 {
+    font-size: 1.55rem;
+  }
+
+  body:has(.operator-workspace-shell) .masthead-subtitle {
+    font-size: 0.82rem;
+  }
+
+  body:has(.operator-workspace-shell) .crest-frame {
+    width: 42px;
+  }
+
+  .operator-location-context span {
+    display: none;
+  }
+
+  body:has(.operator-workspace-shell) :is(.public-task-panel, .panel, .status-card) {
+    padding: 14px;
+  }
+
+  body:has(.operator-workspace-shell) .panel-head {
+    display: grid;
+  }
+
+  body:has(.operator-workspace-shell) :is(.verification-input-row, .territory-form-actions) {
+    display: grid;
+  }
+
+  body:has(.operator-workspace-shell) :is(.verification-button, .secondary-button, .button) {
+    width: 100%;
+  }
+
+  body:has(.operator-workspace-shell) :is(.leaflet-container, .map-panel, .field-map, .registry-map) {
+    min-height: 330px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .operator-sidebar {
+    transition: none;
+  }
+}
