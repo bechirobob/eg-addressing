@@ -100,14 +100,21 @@ body:has(.operator-workspace-shell) .civic-hero-illustration {
 }
 
 .operator-sidebar {
-  position: sticky;
-  top: 12px;
   z-index: 20;
-  max-height: calc(100vh - 24px);
   overflow-y: auto;
-  border-right: 1px solid var(--gov-line);
   background: var(--gov-bg);
   scrollbar-width: thin;
+}
+
+.operator-sidebar-desktop {
+  position: sticky;
+  top: 12px;
+  max-height: calc(100vh - 24px);
+  border-right: 1px solid var(--gov-line);
+}
+
+.operator-sidebar-mobile {
+  display: none;
 }
 
 .operator-sidebar-identity {
@@ -616,21 +623,21 @@ body:has(.operator-workspace-shell) .mobile-control-nav {
     border-top: 2px solid currentColor;
   }
 
-  .operator-sidebar {
+  .operator-sidebar-desktop {
+    display: none;
+  }
+
+  .operator-sidebar-mobile:not([hidden]) {
     position: fixed;
     inset: 0 auto 0 0;
     z-index: 60;
+    display: block;
     width: min(310px, 88vw);
     max-height: none;
     padding: 18px 16px 28px;
     border-right: 1px solid var(--gov-line-strong);
     background: var(--gov-bg);
-    transform: translateX(-102%);
-    transition: transform 160ms ease-out;
-  }
-
-  .operator-sidebar.is-open {
-    transform: translateX(0);
+    animation: operator-drawer-in 160ms ease-out;
   }
 
   .operator-sidebar-identity,
@@ -745,8 +752,18 @@ body:has(.operator-workspace-shell) .mobile-control-nav {
   }
 }
 
+@keyframes operator-drawer-in {
+  from {
+    transform: translateX(-102%);
+  }
+
+  to {
+    transform: translateX(0);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .operator-sidebar {
-    transition: none;
+  .operator-sidebar-mobile:not([hidden]) {
+    animation: none;
   }
 }
