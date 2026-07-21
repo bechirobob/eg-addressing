@@ -75,7 +75,7 @@ jobs:
         run: |
           set -o pipefail
           mkdir -p artifacts/operator-ui-browser-evidence
-          node scripts/operator-presentation-audit.mjs 2>&1 | tee artifacts/operator-ui-browser-evidence/execution.log
+          node scripts/operator-presentation-audit-runner.mjs 2>&1 | tee artifacts/operator-ui-browser-evidence/execution.log
 
       - name: Upload browser evidence
         if: always()
