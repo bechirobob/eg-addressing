@@ -57,7 +57,11 @@ function normalizedRoute(href: string) {
   return href.split(/[?#]/, 1)[0] || '/';
 }
 
-const STAFF_SESSION_ROUTES = new Set(['/field', '/registry', '/signage', '/reports', '/exports', '/territories', '/verify', '/records', '/admin/staff']);
+const STAFF_SESSION_ROUTES = ['/field', '/registry', '/signage', '/reports', '/exports', '/territories', '/verify', '/records', '/admin/staff'] as const;
+
+function isStaffSessionRoute(pathname: string) {
+  return STAFF_SESSION_ROUTES.some((route) => pathname === route || pathname.startsWith(`${route}/`));
+}
 
 export function RoleAwareChrome({ apiBaseUrl, children, skipSessionLookup = false }: RoleAwareChromeProps) {
   const { t } = useTranslation();
@@ -78,7 +82,7 @@ export function RoleAwareChrome({ apiBaseUrl, children, skipSessionLookup = fals
   const currentRoute = pathname || '/';
   const waitingForAccessResolution = effectiveSessionStatus === 'loading' && routeNeedsResolvedSession(currentRoute);
   const accessAllowed = effectiveSessionStatus === 'loading' ? true : isRouteAccessible(currentRoute, role);
-  const isProtectedWorkspace = role !== 'guest' && STAFF_SESSION_ROUTES.has(currentRoute);
+  const isProtectedWorkspace = role !== 'guest' && isStaffSessionRoute(currentRoute);
 
   const visibleItems = useMemo(
     () => navItems.filter((item) => item.visibleTo.includes(role) && (role === 'guest' ? item.group === 'public' : item.group !== 'public')),
@@ -140,8 +144,11 @@ export function RoleAwareChrome({ apiBaseUrl, children, skipSessionLookup = fals
   }, [browserApiBaseUrl, reloadSession, router]);
 
   const workspaceHref = defaultRouteForRole(role);
-  const staffSessionUser = effectiveSessionStatus === 'ready' && effectiveSessionUser && STAFF_SESSION_ROUTES.has(currentRoute) ? effectiveSessionUser : null;
-  const currentNavItem = visibleItems.find((item) => normalizedRoute(item.href) === currentRoute) ?? null;
+  const staffSessionUser = effectiveSessionStatus === 'ready' && effectiveSessionUser && isStaffSessionRoute(currentRoute) ? effectiveSessionUser : null;
+  const currentNavItem = visibleItems.find((item) => {
+    const route = normalizedRoute(item.href);
+    return route === currentRoute || currentRoute.startsWith(`${route}/`);
+  }) ?? null;
   const currentNavLabelKey = currentNavItem ? navLabelKey(normalizedRoute(currentNavItem.href)) : undefined;
   const currentSectionLabel = currentNavItem ? (currentNavLabelKey ? t(currentNavLabelKey) : currentNavItem.label) : t('navStaff');
   const controlNavItems = [
@@ -270,7 +277,10 @@ export function RoleAwareChrome({ apiBaseUrl, children, skipSessionLookup = fals
             className="operator-navigation-scrim"
             type="button"
             aria-label={t('navStaff')}
-            onClick={() => setMobileNavigationOpen(false)}
+            onClick={() => {
+              setMobileNavigationOpen(false);
+              mobileMenuButtonRef.current?.focus();
+            }}
           />
         ) : null}
 
