@@ -57,10 +57,6 @@ function normalizedRoute(href: string) {
   return href.split(/[?#]/, 1)[0] || '/';
 }
 
-function readableRole(role: OperatorRole) {
-  return role === 'agency_viewer' ? 'Agency viewer' : role.charAt(0).toUpperCase() + role.slice(1);
-}
-
 const STAFF_SESSION_ROUTES = new Set(['/field', '/registry', '/signage', '/reports', '/exports', '/territories', '/verify', '/records', '/admin/staff']);
 
 export function RoleAwareChrome({ apiBaseUrl, children, skipSessionLookup = false }: RoleAwareChromeProps) {
@@ -212,13 +208,13 @@ export function RoleAwareChrome({ apiBaseUrl, children, skipSessionLookup = fals
           <div className="operator-sidebar-identity">
             <Link href={workspaceHref} className="operator-platform-link">
               <span>{t('republic')}</span>
-              <strong>National Location Infrastructure</strong>
+              <strong>{t('homeTitle')}</strong>
             </Link>
             {staffSessionUser ? (
               <div className="operator-role-context">
                 <span>{t('signedInAs')}</span>
                 <strong>{staffSessionUser.full_name}</strong>
-                <small>{readableRole(role)}</small>
+                <small>{staffSessionUser.role}</small>
               </div>
             ) : null}
           </div>
@@ -242,7 +238,7 @@ export function RoleAwareChrome({ apiBaseUrl, children, skipSessionLookup = fals
             </div>
             {staffSessionUser ? (
               <div className="operator-session-utility" aria-live="polite">
-                <span>{readableRole(role)}</span>
+                <span>{staffSessionUser.role}</span>
                 <button type="button" onClick={() => void handleLogout()} disabled={isLoggingOut}>
                   {isLoggingOut ? t('signingOut') : t('signOut')}
                 </button>
