@@ -185,13 +185,16 @@ export function RoleAwareChrome({ apiBaseUrl, children, skipSessionLookup = fals
   const currentNavItem = visibleItems.find((item) => routeIsActive(normalizedRoute(item.href), currentRoute)) ?? null;
   const currentNavLabelKey = currentNavItem ? navLabelKey(normalizedRoute(currentNavItem.href)) : undefined;
   const currentSectionLabel = currentNavItem ? (currentNavLabelKey ? t(currentNavLabelKey) : currentNavItem.label) : t('navStaff');
-  const controlNavItems: Array<{ href: string; labelKey: TranslationKey; iconClass: string }> = [
+  const controlNavCandidates: Array<{ href: string; labelKey: TranslationKey; iconClass: string }> = [
     { href: '/field', labelKey: 'navFieldWork', iconClass: 'queue' },
     { href: '/registry', labelKey: 'navAddressRegistry', iconClass: 'case-files' },
     { href: '/signage', labelKey: 'navLocationReview', iconClass: 'signage' },
     { href: '/reports', labelKey: 'navReports', iconClass: 'reports' },
-    ...(role === 'admin' ? [{ href: '/admin/staff?from=mobile-staff-services', labelKey: 'navAdmin' as TranslationKey, iconClass: 'dashboard' }] : []),
-  ].filter((item) => isRouteAccessible(item.href, role));
+  ];
+  if (role === 'admin') {
+    controlNavCandidates.push({ href: '/admin/staff?from=mobile-staff-services', labelKey: 'navAdmin', iconClass: 'dashboard' });
+  }
+  const controlNavItems = controlNavCandidates.filter((item) => isRouteAccessible(item.href, role));
 
   const accessContent = waitingForAccessResolution ? (
     <section className="panel panel-state-grid">
