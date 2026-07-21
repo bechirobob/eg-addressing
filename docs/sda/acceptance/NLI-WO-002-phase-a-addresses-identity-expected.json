@@ -1,0 +1,259 @@
+{
+  "control_id": "NLI-WO-002-PA-ID-01",
+  "control_status": "reviewer-owned-acceptance-oracle",
+  "implementation_must_not_modify": true,
+  "scope": "One identity-foundation vertical slice only: current_source.addresses -> proposed_location_record + proposed_registry_subject + proposed_legacy_crosswalk",
+  "source_record": {
+    "schema": "current_source",
+    "table": "addresses",
+    "lookup": {
+      "id": "phase-a-addresses-id"
+    },
+    "required_values": {
+      "id": "phase-a-addresses-id",
+      "formatted": "Controlled Phase A address label",
+      "territory_id": "phase-a-territories-id",
+      "road_id": "phase-a-roads-id",
+      "building_id": "phase-a-buildings-id",
+      "province_code": "phase-a-provinces-code",
+      "public_code": "PHASE-A-NONOFFICIAL-001",
+      "issuance_method": "phase-a addresses issuance_method",
+      "source": "phase-a addresses source",
+      "verification_status": "phase-a addresses verification_status",
+      "superseded_by_address_id": null,
+      "status": "submitted",
+      "publication_state": "phase-a addresses publication_state",
+      "is_archived": false,
+      "created_at": "2026-07-15T00:00:00Z",
+      "updated_at": "2026-07-15T00:00:00Z"
+    }
+  },
+  "reviewed_transform": {
+    "transform_group_id": "WO002-R06-identity-crosswalk-addresses",
+    "implementation_unit": "impl_wo002_r06_identity_crosswalk_addresses",
+    "required_callable": "transform_addresses_identity_crosswalk",
+    "covered_source_fields": [
+      "addresses.id"
+    ],
+    "required_context_fields": [
+      "addresses.formatted",
+      "addresses.building_id",
+      "addresses.road_id",
+      "addresses.territory_id",
+      "addresses.superseded_by_address_id",
+      "addresses.public_code",
+      "addresses.status",
+      "addresses.publication_state",
+      "addresses.is_archived",
+      "addresses.created_at",
+      "addresses.updated_at"
+    ],
+    "source_record_key": "addresses:phase-a-addresses-id",
+    "idempotency_key": "addresses.phase-a-addresses-id::WO002-R06-identity-crosswalk-addresses",
+    "identity_rule": "addresses.id owns an internal address location identity; building_id, road_id, territory_id, superseded_by_address_id and public_code are context only and must not determine the target identity",
+    "target_identity_rule": {
+      "primary_fixture": {
+        "source_id": "phase-a-addresses-id",
+        "location_record_id": "phase-a-location-address-reference",
+        "subject_id": "phase-a-subject-phase-a-location-address-reference",
+        "legacy_crosswalk_id": "phase-a-crosswalk-addresses-id-to-location-record"
+      },
+      "second_fixture_rule": "For source id phase-a-addresses-<suffix>, use location_record_id phase-a-location-address-reference-<suffix>, subject_id phase-a-subject-phase-a-location-address-reference-<suffix>, and legacy_crosswalk_id phase-a-crosswalk-addresses-<suffix>-id-to-location-record. This is a design-harness rule only, not a production national identifier policy."
+    },
+    "target_entities": [
+      "location_record",
+      "registry_subject",
+      "legacy_crosswalk"
+    ],
+    "forbidden_input": "docs/sda/acceptance/NLI-WO-002-phase-a-addresses-identity-expected.json"
+  },
+  "lineage_preconditions": {
+    "source_record": {
+      "table": "proposed_source_record",
+      "primary_key": {
+        "source_record_id": "phase-a-source-record-addresses-001"
+      },
+      "required_values": {
+        "source_key": "addresses:phase-a-addresses-id",
+        "raw_payload_classification": "government-internal"
+      }
+    },
+    "evidence_object": {
+      "table": "proposed_evidence_object",
+      "primary_key": {
+        "evidence_object_id": "phase-a-evidence-addresses"
+      },
+      "required_values": {
+        "source_record_id": "phase-a-source-record-addresses-001",
+        "classification": "government-internal"
+      }
+    }
+  },
+  "expected_inserted_rows": [
+    {
+      "table": "proposed_location_record",
+      "primary_key": {
+        "location_record_id": "phase-a-location-address-reference"
+      },
+      "values": {
+        "location_record_id": "phase-a-location-address-reference",
+        "record_type": "address",
+        "created_at": "2026-07-15T00:00:00Z",
+        "retired_at": null,
+        "classification": "government-internal"
+      }
+    },
+    {
+      "table": "proposed_registry_subject",
+      "primary_key": {
+        "subject_id": "phase-a-subject-phase-a-location-address-reference"
+      },
+      "values": {
+        "subject_id": "phase-a-subject-phase-a-location-address-reference",
+        "subject_entity": "location_record",
+        "created_at": "2026-07-15T00:00:00Z",
+        "native_id": "phase-a-location-address-reference",
+        "subject_state": "active",
+        "retired_at": null,
+        "delete_policy": "retire-only"
+      }
+    },
+    {
+      "table": "proposed_legacy_crosswalk",
+      "primary_key": {
+        "legacy_crosswalk_id": "phase-a-crosswalk-addresses-id-to-location-record"
+      },
+      "values": {
+        "legacy_crosswalk_id": "phase-a-crosswalk-addresses-id-to-location-record",
+        "source_table": "addresses",
+        "source_field": "id",
+        "legacy_id": "phase-a-addresses-id",
+        "target_entity": "location_record",
+        "target_id": "phase-a-location-address-reference",
+        "created_at": "2026-07-15T00:00:00Z"
+      }
+    }
+  ],
+  "expected_absent_rows": [
+    {
+      "table": "proposed_migration_exception",
+      "where": "source_table = 'addresses' AND source_key = 'addresses:phase-a-addresses-id'",
+      "reason": "Reference and lifecycle fields are context only in this identity slice; their future resolution belongs to separately reviewed groups"
+    },
+    {
+      "table": "proposed_legacy_crosswalk",
+      "where": "source_table = 'addresses' AND source_field <> 'id'",
+      "reason": "Reference fields must not become alternate address identities"
+    },
+    {
+      "table": "proposed_location_record_version",
+      "where": "location_record_id = 'phase-a-location-address-reference'",
+      "reason": "Identity foundation creates the identity shell only; version creation requires a separate reviewed transform"
+    },
+    {
+      "table": "proposed_public_code_alias",
+      "where": "location_record_id = 'phase-a-location-address-reference'",
+      "reason": "The non-official fixture public_code must not create a public-code alias"
+    },
+    {
+      "table": "proposed_publication_release_item",
+      "where": "location_record_id = 'phase-a-location-address-reference'",
+      "reason": "Identity creation does not authorize publication"
+    },
+    {
+      "table": "proposed_geometry_observation",
+      "where": "subject_id = 'phase-a-subject-phase-a-location-address-reference'",
+      "reason": "Geometry output belongs to the separately accepted geometry transform"
+    }
+  ],
+  "semantic_uniqueness": {
+    "rule": "Because proposed_legacy_crosswalk has no lifecycle columns, (source_table, source_field, legacy_id, target_entity) is absolutely unique in this design. It must resolve to exactly one target_id or no row; multiple rows or multiple targets fail closed.",
+    "tuple": [
+      "source_table",
+      "source_field",
+      "legacy_id",
+      "target_entity"
+    ]
+  },
+  "required_tests": [
+    {
+      "test_id": "positive-authoritative-slice",
+      "expected": "The exact three inserted rows and all expected absences match this oracle"
+    },
+    {
+      "test_id": "second-run-idempotency",
+      "expected": "First run inserts three rows; second run inserts zero and updates zero"
+    },
+    {
+      "test_id": "source-record-classification",
+      "expected": "The resolved proposed_source_record is government-internal"
+    },
+    {
+      "test_id": "evidence-classification",
+      "expected": "The resolved proposed_evidence_object is government-internal"
+    },
+    {
+      "test_id": "missing-source-record",
+      "expected_error": "addresses source row not found"
+    },
+    {
+      "test_id": "missing-source-lineage",
+      "expected_error": "addresses source record lineage not found"
+    },
+    {
+      "test_id": "missing-evidence-object",
+      "expected_error": "addresses evidence object not found"
+    },
+    {
+      "test_id": "source-record-classification-drift",
+      "expected_error": "addresses source record must remain government-internal"
+    },
+    {
+      "test_id": "evidence-classification-drift",
+      "expected_error": "addresses evidence object must remain government-internal"
+    },
+    {
+      "test_id": "reference-field-identity-substitution",
+      "expected_error": "addresses identity must derive from addresses.id"
+    },
+    {
+      "test_id": "wrong-target-identity-implementation",
+      "expected_error": "addresses identity rows differ from reviewer-owned expected target identity"
+    },
+    {
+      "test_id": "unexpected-extra-crosswalk",
+      "expected_error": "unexpected addresses identity-foundation target row"
+    },
+    {
+      "test_id": "semantic-duplicate-crosswalk",
+      "expected_error": "addresses identity crosswalk semantic uniqueness violated"
+    },
+    {
+      "test_id": "transform-spec-binding-drift",
+      "expected_error": "addresses identity transform specification binding mismatch"
+    },
+    {
+      "test_id": "second-source-identity",
+      "expected": "Two addresses source identities create two location records, two active subjects and two distinct crosswalks with zero semantic duplicates or multiple target resolution"
+    },
+    {
+      "test_id": "read-only-complete-set-comparison",
+      "expected": "A separate read-only comparator compares all attributable location-record, subject and crosswalk rows in both directions and rejects target writes"
+    },
+    {
+      "test_id": "same-database-rollback-proof",
+      "expected": "Every failing database mutation preserves identical pre-test and post-rollback attributable rows and hash before reset"
+    }
+  ],
+  "prohibited": [
+    "Modifying this reviewer-owned oracle",
+    "Implementing address_points, address_records, citizen_geotag_submissions or any additional identity group",
+    "Creating location-record versions, geometry, public-code aliases, publication items or migration exceptions in this slice",
+    "Using building_id, road_id, territory_id, superseded_by_address_id, public_code, labels or status fields as the address identity",
+    "Modifying accepted geometry controls",
+    "Requesting broad Phase A reassessment or SDA Review 12",
+    "Closing F02 or F14 or modifying F04-F12",
+    "Modifying runtime application/frontend code, executable migrations, migration runner, Docker runtime, production/pilot data, secrets, .env files, publication, certificates, signage, partner release or PR #8"
+  ],
+  "reviewed_mapping_head": "908bc8b5a57e278314a05ebdc384513b85209f62"
+}

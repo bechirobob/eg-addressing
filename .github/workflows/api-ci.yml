@@ -25,6 +25,174 @@ on:
       - '.github/workflows/api-ci.yml'
 
 jobs:
+  sda-design-model:
+    name: sda-design-model
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgis/postgis:16-3.4
+        env:
+          POSTGRES_DB: addressing_design
+          POSTGRES_USER: addressing
+          POSTGRES_PASSWORD: ci_password
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U addressing -d addressing_design"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install design validation dependencies
+        run: python -m pip install -r services/api/requirements.txt
+
+      - name: Regenerate and validate NLI-WO-002 Review 04 design pack
+        env:
+          PYTHONPATH: services/api
+          DATABASE_URL: postgresql://addressing@127.0.0.1:5432/addressing_design
+          PGPASSWORD: ci_password
+        run: |
+          python3 docs/sda/data-model/scripts/review04_design_pipeline.py
+          python3 docs/sda/data-model/scripts/design_consistency_check.py
+          git diff --exit-code docs/sda/data-model docs/sda/adrs docs/sda/rfis docs/sda/evidence docs/sda/implementation-plans docs/sda/reviews
+
+      - name: Run non-authoritative NLI-WO-002 Phase A harness checkpoint
+        env:
+          PYTHONPATH: services/api
+          DATABASE_URL: postgresql://addressing:ci_password@127.0.0.1:5432/addressing_phase_a
+          PGPASSWORD: ci_password
+        run: |
+          python3 - <<'PY'
+          import psycopg
+          conn = psycopg.connect(host='127.0.0.1', port=5432, dbname='postgres', user='addressing', password='ci_password')
+          conn.autocommit = True
+          with conn.cursor() as cur:
+              cur.execute("SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE datname='addressing_phase_a'")
+              cur.execute('DROP DATABASE IF EXISTS addressing_phase_a')
+              cur.execute('CREATE DATABASE addressing_phase_a')
+          conn.close()
+          PY
+          python3 docs/sda/data-model/scripts/authoritative_harness.py phase-a-all
+          python3 - <<'PY'
+          import psycopg
+          conn = psycopg.connect(host='127.0.0.1', port=5432, dbname='postgres', user='addressing', password='ci_password')
+          conn.autocommit = True
+          with conn.cursor() as cur:
+              cur.execute("SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE datname='addressing_phase_a'")
+              cur.execute('DROP DATABASE IF EXISTS addressing_phase_a')
+              cur.execute('CREATE DATABASE addressing_phase_a')
+          conn.close()
+          PY
+          python3 docs/sda/data-model/scripts/authoritative_harness.py address-points-geometry-slice
+          python3 - <<'PY'
+          import psycopg
+          conn = psycopg.connect(host='127.0.0.1', port=5432, dbname='postgres', user='addressing', password='ci_password')
+          conn.autocommit = True
+          with conn.cursor() as cur:
+              cur.execute("SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE datname='addressing_phase_a'")
+              cur.execute('DROP DATABASE IF EXISTS addressing_phase_a')
+              cur.execute('CREATE DATABASE addressing_phase_a')
+          conn.close()
+          PY
+          python3 docs/sda/data-model/scripts/authoritative_harness.py address-records-geometry-slice
+          python3 - <<'PY'
+          import psycopg
+          conn = psycopg.connect(host='127.0.0.1', port=5432, dbname='postgres', user='addressing', password='ci_password')
+          conn.autocommit = True
+          with conn.cursor() as cur:
+              cur.execute("SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE datname='addressing_phase_a'")
+              cur.execute('DROP DATABASE IF EXISTS addressing_phase_a')
+              cur.execute('CREATE DATABASE addressing_phase_a')
+          conn.close()
+          PY
+          python3 docs/sda/data-model/scripts/authoritative_harness.py citizen-geotag-geometry-slice
+          python3 - <<'PY'
+          import psycopg
+          conn = psycopg.connect(host='127.0.0.1', port=5432, dbname='postgres', user='addressing', password='ci_password')
+          conn.autocommit = True
+          with conn.cursor() as cur:
+              cur.execute("SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE datname='addressing_phase_a'")
+              cur.execute('DROP DATABASE IF EXISTS addressing_phase_a')
+              cur.execute('CREATE DATABASE addressing_phase_a')
+          conn.close()
+          PY
+          python3 docs/sda/data-model/scripts/authoritative_harness.py addresses-identity-slice
+          python3 - <<'PY'
+          import psycopg
+          conn = psycopg.connect(host='127.0.0.1', port=5432, dbname='postgres', user='addressing', password='ci_password')
+          conn.autocommit = True
+          with conn.cursor() as cur:
+              cur.execute("SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE datname='addressing_phase_a'")
+              cur.execute('DROP DATABASE IF EXISTS addressing_phase_a')
+              cur.execute('CREATE DATABASE addressing_phase_a')
+          conn.close()
+          PY
+          python3 docs/sda/data-model/scripts/authoritative_harness.py address-points-observation-crosswalk-slice
+          python3 - <<'PY'
+          import psycopg
+          conn = psycopg.connect(host='127.0.0.1', port=5432, dbname='postgres', user='addressing', password='ci_password')
+          conn.autocommit = True
+          with conn.cursor() as cur:
+              cur.execute("SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE datname='addressing_phase_a'")
+              cur.execute('DROP DATABASE IF EXISTS addressing_phase_a')
+              cur.execute('CREATE DATABASE addressing_phase_a')
+          conn.close()
+          PY
+          python3 docs/sda/data-model/scripts/authoritative_harness.py address-records-identity-slice
+          python3 - <<'PY'
+          import psycopg
+          conn = psycopg.connect(host='127.0.0.1', port=5432, dbname='postgres', user='addressing', password='ci_password')
+          conn.autocommit = True
+          with conn.cursor() as cur:
+              cur.execute("SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE datname='addressing_phase_a'")
+              cur.execute('DROP DATABASE IF EXISTS addressing_phase_a')
+              cur.execute('CREATE DATABASE addressing_phase_a')
+          conn.close()
+          PY
+          python3 docs/sda/data-model/scripts/authoritative_harness.py citizen-geotag-identity-slice
+          python3 - <<'PY'
+          import psycopg
+          conn = psycopg.connect(host='127.0.0.1', port=5432, dbname='postgres', user='addressing', password='ci_password')
+          conn.autocommit = True
+          with conn.cursor() as cur:
+              cur.execute("SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE datname='addressing_phase_a'")
+              cur.execute('DROP DATABASE IF EXISTS addressing_phase_a')
+              cur.execute('CREATE DATABASE addressing_phase_a')
+          conn.close()
+          PY
+          python3 docs/sda/data-model/scripts/authoritative_harness.py admin-units-identity-shell-slice
+          python3 - <<'PY'
+          import psycopg
+          conn = psycopg.connect(host='127.0.0.1', port=5432, dbname='postgres', user='addressing', password='ci_password')
+          conn.autocommit = True
+          with conn.cursor() as cur:
+              cur.execute("SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE datname='addressing_phase_a'")
+              cur.execute('DROP DATABASE IF EXISTS addressing_phase_a')
+              cur.execute('CREATE DATABASE addressing_phase_a')
+          conn.close()
+          PY
+          python3 docs/sda/data-model/scripts/authoritative_harness.py accepted-family-convergence
+          python3 - <<'PY'
+          import psycopg
+          conn = psycopg.connect(host='127.0.0.1', port=5432, dbname='postgres', user='addressing', password='ci_password')
+          conn.autocommit = True
+          with conn.cursor() as cur:
+              cur.execute("SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE datname='addressing_phase_a'")
+              cur.execute('DROP DATABASE IF EXISTS addressing_phase_a')
+              cur.execute('CREATE DATABASE addressing_phase_a')
+          conn.close()
+          PY
+          python3 docs/sda/data-model/scripts/authoritative_harness.py accepted-family-admin-extension-convergence
+          git diff --exit-code docs/sda/data-model
+
   api-tests:
     name: api-tests
     runs-on: ubuntu-latest

@@ -1,0 +1,277 @@
+{
+  "accepted_pattern_control_id": "NLI-WO-002-PA-GEO-PATTERN-01",
+  "control_id": "NLI-WO-002-PA-GEO-02",
+  "control_status": "reviewer-owned-acceptance-oracle",
+  "expected_absent_rows": [
+    {
+      "reason": "No canonical geometry promotion is authorized in this slice",
+      "table": "proposed_geometry_version"
+    },
+    {
+      "reason": "Quality approval is outside this slice",
+      "table": "proposed_geometry_quality_assessment"
+    },
+    {
+      "reason": "Current address_records.geom is derived in EPSG:4326 and must only be used as a parity check",
+      "table": "proposed_geometry_transformation"
+    },
+    {
+      "reason": "Per-field assertions must not substitute for the grouped geometry observation",
+      "table": "proposed_location_record_assertion",
+      "where": "value_json->>'current_field' IN ('address_records.latitude','address_records.longitude','address_records.accuracy_meters','address_records.geom')"
+    },
+    {
+      "reason": "source_submission_id is provenance only and must not replace the address_records identity",
+      "table": "proposed_geometry_observation",
+      "where": "subject_id = 'phase-a-subject-phase-a-location-geotag'"
+    }
+  ],
+  "expected_inserted_rows": [
+    {
+      "primary_key": {
+        "geometry_observation_id": "phase-a-geometry-address-records-phase-a-address-records-id"
+      },
+      "table": "proposed_geometry_observation",
+      "values": {
+        "capture_method": "address-record-derived",
+        "classification": "restricted",
+        "evidence_object_id": "phase-a-evidence-address-records",
+        "geometry_observation_id": "phase-a-geometry-address-records-phase-a-address-records-id",
+        "geometry_role": "location-point",
+        "horizontal_accuracy_m": "4.50",
+        "licence_id": null,
+        "observed_at": "2026-07-15T00:00:00Z",
+        "observed_geom_srid": 4326,
+        "observed_geom_wkt": "POINT(8.783 3.752)",
+        "recorded_at": "2026-07-15T00:00:00Z",
+        "source_record_id": "phase-a-source-record-address-records-001",
+        "subject_id": "phase-a-subject-phase-a-location-address-records-id"
+      }
+    },
+    {
+      "primary_key": {
+        "migration_exception_id": "phase-a-exception-geometry-authority-address-records-phase-a-address-records-id"
+      },
+      "table": "proposed_migration_exception",
+      "values": {
+        "batch_id": "phase-a-address-records-geometry-slice",
+        "created_at": "2026-07-15T00:00:00Z",
+        "details_json": {
+          "non_official": true,
+          "open_authority_rfi": "geometry-promotion-authority",
+          "reason": "Canonical geometry promotion authority unresolved; address_records observation preserved without canonical promotion",
+          "target_entity": "geometry_observation",
+          "target_id": "phase-a-geometry-address-records-phase-a-address-records-id"
+        },
+        "exception_type": "authority-rfi",
+        "migration_exception_id": "phase-a-exception-geometry-authority-address-records-phase-a-address-records-id",
+        "owner": "SDA",
+        "resolved_at": null,
+        "severity": "medium",
+        "source_field": null,
+        "source_key": "address_records:phase-a-address-records-id",
+        "source_table": "address_records"
+      }
+    }
+  ],
+  "implementation_must_not_modify": true,
+  "preconditions": {
+    "address_record_identity_crosswalk": {
+      "owner_transform_group": "WO002-R06-identity-crosswalk-address_records",
+      "table": "proposed_legacy_crosswalk",
+      "values": {
+        "created_at": "2026-07-15T00:00:00Z",
+        "legacy_crosswalk_id": "phase-a-crosswalk-address-records-id-to-location-record",
+        "legacy_id": "phase-a-address-records-id",
+        "source_field": "id",
+        "source_table": "address_records",
+        "target_entity": "location_record",
+        "target_id": "phase-a-location-address-records-id"
+      }
+    },
+    "evidence_object": {
+      "primary_key": {
+        "evidence_object_id": "phase-a-evidence-address-records"
+      },
+      "required_values": {
+        "source_record_id": "phase-a-source-record-address-records-001"
+      },
+      "table": "proposed_evidence_object"
+    },
+    "source_record": {
+      "primary_key": {
+        "source_record_id": "phase-a-source-record-address-records-001"
+      },
+      "required_values": {
+        "source_key": "address_records:phase-a-address-records-id"
+      },
+      "table": "proposed_source_record"
+    },
+    "target_location_record": {
+      "primary_key": {
+        "location_record_id": "phase-a-location-address-records-id"
+      },
+      "required_values": {
+        "classification": "government-internal",
+        "record_type": "address"
+      },
+      "table": "proposed_location_record"
+    },
+    "target_subject": {
+      "primary_key": {
+        "subject_id": "phase-a-subject-phase-a-location-address-records-id"
+      },
+      "required_values": {
+        "native_id": "phase-a-location-address-records-id",
+        "subject_entity": "location_record",
+        "subject_state": "active"
+      },
+      "table": "proposed_registry_subject"
+    }
+  },
+  "prohibited": [
+    "Modifying this reviewer-owned oracle",
+    "Implementing citizen_geotag_submissions or any other transform group",
+    "Using source_submission_id as the address_records geometry subject identity",
+    "Treating address_records.geom as an independent conflicting authority instead of a derived parity check",
+    "Creating canonical geometry versions, quality approvals, CRS transforms or substitute per-field assertions",
+    "Requesting broad Phase A reassessment or SDA Review 12",
+    "Modifying F04-F12",
+    "Modifying runtime application/frontend code, executable migrations, migration runner, Docker runtime, production/pilot data, secrets, .env files or PR #8"
+  ],
+  "required_tests": [
+    {
+      "expected": "exact inserted and absent rows match this oracle",
+      "test_id": "positive-authoritative-slice"
+    },
+    {
+      "expected": "zero inserts, zero updates, one geometry observation",
+      "test_id": "second-run-idempotency"
+    },
+    {
+      "expected": "typed PostGIS insertion preserves higher-precision temporary coordinates",
+      "test_id": "precision-preservation"
+    },
+    {
+      "expected": "current_source geom WKT/SRID matches numeric longitude/latitude and allows transformation",
+      "test_id": "geom-parity-positive"
+    },
+    {
+      "expected_error": "address_records geom does not match latitude/longitude",
+      "test_id": "geom-numeric-mismatch"
+    },
+    {
+      "expected_error": "geometry observation does not match reviewer-owned expected WKT",
+      "test_id": "wrong-longitude-transform-implementation"
+    },
+    {
+      "expected_error": "coordinate out of range",
+      "test_id": "invalid-coordinate-current-source"
+    },
+    {
+      "expected_error": "address_records source row not found",
+      "test_id": "missing-source-record"
+    },
+    {
+      "expected_error": "address_records.id cannot resolve target location record",
+      "test_id": "missing-address-record-crosswalk"
+    },
+    {
+      "expected_error": "address_records geometry subject must resolve through address_records.id",
+      "test_id": "wrong-subject-through-source-submission"
+    },
+    {
+      "expected_error": "address_records evidence object not found",
+      "test_id": "missing-evidence-object"
+    },
+    {
+      "expected_error": "observed geometry differs from reviewer-owned expected geometry",
+      "test_id": "wrong-independent-expected-geometry"
+    },
+    {
+      "expected_error": "unexpected address_records geometry slice target row",
+      "test_id": "unexpected-extra-target-row"
+    },
+    {
+      "expected_error": "address_records geometry transform specification binding mismatch",
+      "test_id": "transform-spec-binding-drift"
+    },
+    {
+      "expected": "two address_records identities create two geometry observations, two authority exceptions and two distinct identity crosswalks with no duplicates",
+      "test_id": "second-source-identity"
+    },
+    {
+      "expected": "every failing database mutation has identical pre-test and post-rollback target rows and hash before reset",
+      "test_id": "same-database-rollback-proof"
+    }
+  ],
+  "reviewed_mapping_head": "838845f7bbbb72b41df0955a7a3902dc198b46d2",
+  "reviewed_transform": {
+    "capture_method_rule": {
+      "type": "reviewed-constant-after-source-parity",
+      "value": "address-record-derived"
+    },
+    "classification_rule": "restricted",
+    "coordinate_authority": {
+      "geom_role": "derived-parity-check",
+      "mismatch_behavior": "fail closed before target writes with address_records geom does not match latitude/longitude",
+      "primary": [
+        "address_records.longitude",
+        "address_records.latitude"
+      ],
+      "required_geom_srid": 4326,
+      "source_crs": "EPSG:4326"
+    },
+    "covered_source_fields": [
+      "address_records.accuracy_meters",
+      "address_records.latitude",
+      "address_records.longitude"
+    ],
+    "forbidden_input": "docs/sda/acceptance/NLI-WO-002-phase-a-address-records-geometry-expected.json",
+    "implementation_unit": "impl_wo002_r06_geometry_observation_address_records",
+    "observed_at_rule": "address_records.created_at",
+    "recorded_at_rule": "address_records.updated_at",
+    "required_callable": "transform_address_records_geometry",
+    "required_context_fields": [
+      "address_records.id",
+      "address_records.source_submission_id",
+      "address_records.created_at",
+      "address_records.updated_at",
+      "address_records.status",
+      "address_records.publication_state",
+      "address_records.geom"
+    ],
+    "source_submission_role": "provenance-only; must not determine the geometry subject identity",
+    "transform_group_id": "WO002-R06-geometry-observation-address_records"
+  },
+  "scope": "One authoritative vertical slice only: current_source.address_records -> canonical_target.proposed_geometry_observation",
+  "source_record": {
+    "lookup": {
+      "id": "phase-a-address-records-id"
+    },
+    "required_values": {
+      "accuracy_meters": 4.5,
+      "address_code": "PHASE-A-NONOFFICIAL-001",
+      "address_label": "Controlled Phase A address label",
+      "created_at": "2026-07-15T00:00:00Z",
+      "geom_srid": 4326,
+      "geom_wkt": "POINT(8.783 3.752)",
+      "id": "phase-a-address-records-id",
+      "is_archived": false,
+      "latitude": 3.752,
+      "longitude": 8.783,
+      "province_code": "phase-a-provinces-code",
+      "publication_state": "phase-a address_records publication_state",
+      "record_bundle": {
+        "phase_a_value": "phase-a address_records record_bundle"
+      },
+      "search_text": "phase-a address_records search_text",
+      "source_submission_id": "phase-a-geotag-001",
+      "status": "submitted",
+      "territory_id": "phase-a-territories-id",
+      "updated_at": "2026-07-15T00:00:00Z"
+    },
+    "schema": "current_source",
+    "table": "address_records"
+  }
+}

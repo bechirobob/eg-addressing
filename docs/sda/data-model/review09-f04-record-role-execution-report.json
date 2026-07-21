@@ -1,0 +1,683 @@
+{
+  "cases": [
+    {
+      "case": "F04-valid-required-optional-roles-address",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": null,
+      "finding": "F04",
+      "observed": {
+        "link_count": 5,
+        "linked_roles": [
+          "access-point",
+          "context-locality",
+          "context-road",
+          "nearby-landmark",
+          "primary-subject"
+        ],
+        "record_type": "address"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F04-missing-required-role-address",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": "missing required role",
+      "finding": "F04",
+      "observed": {
+        "error": "missing required role"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F04-invalid-role-address",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": "invalid role",
+      "finding": "F04",
+      "observed": {
+        "error": "invalid role"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F04-invalid-subject-entity-address",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": "invalid subject entity",
+      "finding": "F04",
+      "observed": {
+        "error": "invalid subject entity"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F04-maximum-count-address-access-point",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": "maximum count exceeded",
+      "finding": "F04",
+      "observed": {
+        "error": "maximum count exceeded"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F04-retired-subject-address",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": "retired subject cannot be linked",
+      "finding": "F04",
+      "observed": {
+        "error": "retired subject cannot be linked"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F04-deleted-subject-address",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": "deleted subject cannot be linked",
+      "finding": "F04",
+      "observed": {
+        "error": "deleted subject cannot be linked"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F04-merged-successor-behavior-address",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": null,
+      "finding": "F04",
+      "observed": {
+        "successor_subject_id": "address-successor-subject"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F04-valid-required-optional-roles-building",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": null,
+      "finding": "F04",
+      "observed": {
+        "link_count": 2,
+        "linked_roles": [
+          "access-point",
+          "primary-subject"
+        ],
+        "record_type": "building"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F04-missing-required-role-building",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": "missing required role",
+      "finding": "F04",
+      "observed": {
+        "error": "missing required role"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F04-invalid-role-building",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": "invalid role",
+      "finding": "F04",
+      "observed": {
+        "error": "invalid role"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F04-invalid-subject-entity-building",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": "invalid subject entity",
+      "finding": "F04",
+      "observed": {
+        "error": "invalid subject entity"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F04-maximum-count-building-access-point",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": "maximum count exceeded",
+      "finding": "F04",
+      "observed": {
+        "error": "maximum count exceeded"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F04-retired-subject-building",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": "retired subject cannot be linked",
+      "finding": "F04",
+      "observed": {
+        "error": "retired subject cannot be linked"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F04-deleted-subject-building",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": "deleted subject cannot be linked",
+      "finding": "F04",
+      "observed": {
+        "error": "deleted subject cannot be linked"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F04-merged-successor-behavior-building",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": null,
+      "finding": "F04",
+      "observed": {
+        "successor_subject_id": "building-successor-subject"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F04-valid-required-optional-roles-entrance",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": null,
+      "finding": "F04",
+      "observed": {
+        "link_count": 1,
+        "linked_roles": [
+          "primary-subject"
+        ],
+        "record_type": "entrance"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F04-missing-required-role-entrance",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": "missing required role",
+      "finding": "F04",
+      "observed": {
+        "error": "missing required role"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F04-invalid-role-entrance",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": "invalid role",
+      "finding": "F04",
+      "observed": {
+        "error": "invalid role"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F04-invalid-subject-entity-entrance",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": "invalid subject entity",
+      "finding": "F04",
+      "observed": {
+        "error": "invalid subject entity"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F04-maximum-count-entrance-primary-subject",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": "maximum count exceeded",
+      "finding": "F04",
+      "observed": {
+        "error": "maximum count exceeded"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F04-retired-subject-entrance",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": "retired subject cannot be linked",
+      "finding": "F04",
+      "observed": {
+        "error": "retired subject cannot be linked"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F04-deleted-subject-entrance",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": "deleted subject cannot be linked",
+      "finding": "F04",
+      "observed": {
+        "error": "deleted subject cannot be linked"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F04-merged-successor-behavior-entrance",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": null,
+      "finding": "F04",
+      "observed": {
+        "successor_subject_id": "entrance-successor-subject"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F04-valid-required-optional-roles-landmark",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": null,
+      "finding": "F04",
+      "observed": {
+        "link_count": 1,
+        "linked_roles": [
+          "primary-subject"
+        ],
+        "record_type": "landmark"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F04-missing-required-role-landmark",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": "missing required role",
+      "finding": "F04",
+      "observed": {
+        "error": "missing required role"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F04-invalid-role-landmark",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": "invalid role",
+      "finding": "F04",
+      "observed": {
+        "error": "invalid role"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F04-invalid-subject-entity-landmark",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": "invalid subject entity",
+      "finding": "F04",
+      "observed": {
+        "error": "invalid subject entity"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F04-maximum-count-landmark-primary-subject",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": "maximum count exceeded",
+      "finding": "F04",
+      "observed": {
+        "error": "maximum count exceeded"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F04-retired-subject-landmark",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": "retired subject cannot be linked",
+      "finding": "F04",
+      "observed": {
+        "error": "retired subject cannot be linked"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F04-deleted-subject-landmark",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": "deleted subject cannot be linked",
+      "finding": "F04",
+      "observed": {
+        "error": "deleted subject cannot be linked"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F04-merged-successor-behavior-landmark",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": null,
+      "finding": "F04",
+      "observed": {
+        "successor_subject_id": "landmark-successor-subject"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F04-valid-required-optional-roles-non-building-object",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": null,
+      "finding": "F04",
+      "observed": {
+        "link_count": 1,
+        "linked_roles": [
+          "primary-subject"
+        ],
+        "record_type": "non-building-object"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F04-missing-required-role-non-building-object",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": "missing required role",
+      "finding": "F04",
+      "observed": {
+        "error": "missing required role"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F04-invalid-role-non-building-object",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": "invalid role",
+      "finding": "F04",
+      "observed": {
+        "error": "invalid role"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F04-invalid-subject-entity-non-building-object",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": "invalid subject entity",
+      "finding": "F04",
+      "observed": {
+        "error": "invalid subject entity"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F04-maximum-count-non-building-object-primary-subject",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": "maximum count exceeded",
+      "finding": "F04",
+      "observed": {
+        "error": "maximum count exceeded"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F04-retired-subject-non-building-object",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": "retired subject cannot be linked",
+      "finding": "F04",
+      "observed": {
+        "error": "retired subject cannot be linked"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F04-deleted-subject-non-building-object",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": "deleted subject cannot be linked",
+      "finding": "F04",
+      "observed": {
+        "error": "deleted subject cannot be linked"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F04-merged-successor-behavior-non-building-object",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": null,
+      "finding": "F04",
+      "observed": {
+        "successor_subject_id": "non-building-object-successor-subject"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F04-valid-required-optional-roles-service-location",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": null,
+      "finding": "F04",
+      "observed": {
+        "link_count": 2,
+        "linked_roles": [
+          "external-parcel-reference",
+          "primary-subject"
+        ],
+        "record_type": "service-location"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F04-missing-required-role-service-location",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": "missing required role",
+      "finding": "F04",
+      "observed": {
+        "error": "missing required role"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F04-invalid-role-service-location",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": "invalid role",
+      "finding": "F04",
+      "observed": {
+        "error": "invalid role"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F04-invalid-subject-entity-service-location",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": "invalid subject entity",
+      "finding": "F04",
+      "observed": {
+        "error": "invalid subject entity"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F04-maximum-count-service-location-external-parcel-reference",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": "maximum count exceeded",
+      "finding": "F04",
+      "observed": {
+        "error": "maximum count exceeded"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F04-retired-subject-service-location",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": "retired subject cannot be linked",
+      "finding": "F04",
+      "observed": {
+        "error": "retired subject cannot be linked"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F04-deleted-subject-service-location",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": "deleted subject cannot be linked",
+      "finding": "F04",
+      "observed": {
+        "error": "deleted subject cannot be linked"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F04-merged-successor-behavior-service-location",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": null,
+      "finding": "F04",
+      "observed": {
+        "successor_subject_id": "service-location-successor-subject"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F04-valid-required-optional-roles-unit",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": null,
+      "finding": "F04",
+      "observed": {
+        "link_count": 2,
+        "linked_roles": [
+          "parent-building",
+          "primary-subject"
+        ],
+        "record_type": "unit"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F04-missing-required-role-unit",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": "missing required role",
+      "finding": "F04",
+      "observed": {
+        "error": "missing required role"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F04-invalid-role-unit",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": "invalid role",
+      "finding": "F04",
+      "observed": {
+        "error": "invalid role"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F04-invalid-subject-entity-unit",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": "invalid subject entity",
+      "finding": "F04",
+      "observed": {
+        "error": "invalid subject entity"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F04-maximum-count-unit-parent-building",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": "maximum count exceeded",
+      "finding": "F04",
+      "observed": {
+        "error": "maximum count exceeded"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F04-retired-subject-unit",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": "retired subject cannot be linked",
+      "finding": "F04",
+      "observed": {
+        "error": "retired subject cannot be linked"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F04-deleted-subject-unit",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": "deleted subject cannot be linked",
+      "finding": "F04",
+      "observed": {
+        "error": "deleted subject cannot be linked"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F04-merged-successor-behavior-unit",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": null,
+      "finding": "F04",
+      "observed": {
+        "successor_subject_id": "unit-successor-subject"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F04-spanish-english-current-and-historical-official-names",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": null,
+      "finding": "F04",
+      "observed": {
+        "current_official_names": [
+          {
+            "language_code": "en",
+            "name_text": "Government Building"
+          },
+          {
+            "language_code": "es",
+            "name_text": "Edificio Nacional"
+          }
+        ],
+        "historical_replacements": 1
+      },
+      "status": "passed"
+    }
+  ],
+  "summary": {
+    "cases": 57,
+    "errors": [],
+    "execution_mode": "review10-postgresql-record-role-transaction-matrix",
+    "record_types": 7,
+    "status": "passed"
+  }
+}

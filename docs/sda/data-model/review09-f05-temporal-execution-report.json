@@ -1,0 +1,607 @@
+{
+  "cases": [
+    {
+      "case": "F05-reviewed-strategy-administrative_code_history",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": null,
+      "finding": "F05",
+      "observed": {
+        "entity": "administrative_code_history",
+        "strategy": "recorded-time versioned"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F05-reviewed-strategy-administrative_unit",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": null,
+      "finding": "F05",
+      "observed": {
+        "entity": "administrative_unit",
+        "strategy": "recorded-time versioned"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F05-reviewed-strategy-administrative_unit_version",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": null,
+      "finding": "F05",
+      "observed": {
+        "entity": "administrative_unit_version",
+        "strategy": "bitemporal"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F05-reviewed-strategy-building",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": null,
+      "finding": "F05",
+      "observed": {
+        "entity": "building",
+        "strategy": "effective-only"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F05-reviewed-strategy-building_primary_entrance",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": null,
+      "finding": "F05",
+      "observed": {
+        "entity": "building_primary_entrance",
+        "strategy": "effective-only"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F05-reviewed-strategy-correction_case",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": null,
+      "finding": "F05",
+      "observed": {
+        "entity": "correction_case",
+        "strategy": "recorded-time versioned"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F05-reviewed-strategy-country",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": null,
+      "finding": "F05",
+      "observed": {
+        "entity": "country",
+        "strategy": "recorded-time versioned"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F05-reviewed-strategy-decision_event",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": null,
+      "finding": "F05",
+      "observed": {
+        "entity": "decision_event",
+        "strategy": "bitemporal"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F05-reviewed-strategy-dispute_case",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": null,
+      "finding": "F05",
+      "observed": {
+        "entity": "dispute_case",
+        "strategy": "recorded-time versioned"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F05-reviewed-strategy-entrance",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": null,
+      "finding": "F05",
+      "observed": {
+        "entity": "entrance",
+        "strategy": "effective-only"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F05-reviewed-strategy-evidence_object",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": null,
+      "finding": "F05",
+      "observed": {
+        "entity": "evidence_object",
+        "strategy": "recorded-time versioned"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F05-reviewed-strategy-field_assignment",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": null,
+      "finding": "F05",
+      "observed": {
+        "entity": "field_assignment",
+        "strategy": "recorded-time versioned"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F05-reviewed-strategy-field_observation",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": null,
+      "finding": "F05",
+      "observed": {
+        "entity": "field_observation",
+        "strategy": "recorded-time versioned"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F05-reviewed-strategy-geometry_observation",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": null,
+      "finding": "F05",
+      "observed": {
+        "entity": "geometry_observation",
+        "strategy": "recorded-time versioned"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F05-reviewed-strategy-geometry_quality_assessment",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": null,
+      "finding": "F05",
+      "observed": {
+        "entity": "geometry_quality_assessment",
+        "strategy": "recorded-time versioned"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F05-reviewed-strategy-geometry_transformation",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": null,
+      "finding": "F05",
+      "observed": {
+        "entity": "geometry_transformation",
+        "strategy": "recorded-time versioned"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F05-reviewed-strategy-geometry_version",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": null,
+      "finding": "F05",
+      "observed": {
+        "entity": "geometry_version",
+        "strategy": "bitemporal"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F05-reviewed-strategy-intake_case",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": null,
+      "finding": "F05",
+      "observed": {
+        "entity": "intake_case",
+        "strategy": "recorded-time versioned"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F05-reviewed-strategy-landmark",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": null,
+      "finding": "F05",
+      "observed": {
+        "entity": "landmark",
+        "strategy": "effective-only"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F05-reviewed-strategy-legacy_crosswalk",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": null,
+      "finding": "F05",
+      "observed": {
+        "entity": "legacy_crosswalk",
+        "strategy": "recorded-time versioned"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F05-reviewed-strategy-licence",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": null,
+      "finding": "F05",
+      "observed": {
+        "entity": "licence",
+        "strategy": "recorded-time versioned"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F05-reviewed-strategy-locality",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": null,
+      "finding": "F05",
+      "observed": {
+        "entity": "locality",
+        "strategy": "effective-only"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F05-reviewed-strategy-location_record",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": null,
+      "finding": "F05",
+      "observed": {
+        "entity": "location_record",
+        "strategy": "recorded-time versioned"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F05-reviewed-strategy-location_record_assertion",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": null,
+      "finding": "F05",
+      "observed": {
+        "entity": "location_record_assertion",
+        "strategy": "recorded-time versioned"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F05-reviewed-strategy-location_record_object_link",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": null,
+      "finding": "F05",
+      "observed": {
+        "entity": "location_record_object_link",
+        "strategy": "bitemporal"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F05-reviewed-strategy-location_record_relationship",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": null,
+      "finding": "F05",
+      "observed": {
+        "entity": "location_record_relationship",
+        "strategy": "effective-only"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F05-reviewed-strategy-location_record_version",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": null,
+      "finding": "F05",
+      "observed": {
+        "entity": "location_record_version",
+        "strategy": "bitemporal"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F05-reviewed-strategy-migration_exception",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": null,
+      "finding": "F05",
+      "observed": {
+        "entity": "migration_exception",
+        "strategy": "recorded-time versioned"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F05-reviewed-strategy-name_record",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": null,
+      "finding": "F05",
+      "observed": {
+        "entity": "name_record",
+        "strategy": "bitemporal"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F05-reviewed-strategy-non_building_object",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": null,
+      "finding": "F05",
+      "observed": {
+        "entity": "non_building_object",
+        "strategy": "effective-only"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F05-reviewed-strategy-operational_area",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": null,
+      "finding": "F05",
+      "observed": {
+        "entity": "operational_area",
+        "strategy": "effective-only"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F05-reviewed-strategy-operational_area_coverage",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": null,
+      "finding": "F05",
+      "observed": {
+        "entity": "operational_area_coverage",
+        "strategy": "effective-only"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F05-reviewed-strategy-parcel_reference",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": null,
+      "finding": "F05",
+      "observed": {
+        "entity": "parcel_reference",
+        "strategy": "effective-only"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F05-reviewed-strategy-partner_projection",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": null,
+      "finding": "F05",
+      "observed": {
+        "entity": "partner_projection",
+        "strategy": "recorded-time versioned"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F05-reviewed-strategy-public_code_alias",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": null,
+      "finding": "F05",
+      "observed": {
+        "entity": "public_code_alias",
+        "strategy": "recorded-time versioned"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F05-reviewed-strategy-publication_release",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": null,
+      "finding": "F05",
+      "observed": {
+        "entity": "publication_release",
+        "strategy": "bitemporal"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F05-reviewed-strategy-publication_release_item",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": null,
+      "finding": "F05",
+      "observed": {
+        "entity": "publication_release_item",
+        "strategy": "recorded-time versioned"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F05-reviewed-strategy-registry_subject",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": null,
+      "finding": "F05",
+      "observed": {
+        "entity": "registry_subject",
+        "strategy": "recorded-time versioned"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F05-reviewed-strategy-road",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": null,
+      "finding": "F05",
+      "observed": {
+        "entity": "road",
+        "strategy": "recorded-time versioned"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F05-reviewed-strategy-road_segment",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": null,
+      "finding": "F05",
+      "observed": {
+        "entity": "road_segment",
+        "strategy": "effective-only"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F05-registry-as-recorded-named-date",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": null,
+      "finding": "F05",
+      "observed": {
+        "value": "old"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F05-effective-as-of-named-date",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": null,
+      "finding": "F05",
+      "observed": {
+        "value": "new"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F05-public-release-named-date",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": null,
+      "finding": "F05",
+      "observed": {
+        "value": "old"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F05-two-node-cycle",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": null,
+      "finding": "F05",
+      "observed": {
+        "negative_case": "two-node-cycle",
+        "observed_policy_result": "rejected-by-temporal-policy"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F05-multi-node-cycle",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": null,
+      "finding": "F05",
+      "observed": {
+        "negative_case": "multi-node-cycle",
+        "observed_policy_result": "rejected-by-temporal-policy"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F05-reciprocal-mismatch",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": null,
+      "finding": "F05",
+      "observed": {
+        "negative_case": "reciprocal-mismatch",
+        "observed_policy_result": "rejected-by-temporal-policy"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F05-cross-owner-links",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": null,
+      "finding": "F05",
+      "observed": {
+        "negative_case": "cross-owner-links",
+        "observed_policy_result": "rejected-by-temporal-policy"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F05-overlap",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": null,
+      "finding": "F05",
+      "observed": {
+        "negative_case": "overlap",
+        "observed_policy_result": "rejected-by-temporal-policy"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F05-backdated-correction",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": null,
+      "finding": "F05",
+      "observed": {
+        "negative_case": "backdated-correction",
+        "observed_policy_result": "rejected-by-temporal-policy"
+      },
+      "status": "passed"
+    },
+    {
+      "case": "F05-dependent-interval-containment",
+      "errors": [],
+      "evidence_source": "review10-postgresql-transaction-observed-outcome",
+      "expected_error": null,
+      "finding": "F05",
+      "observed": {
+        "negative_case": "dependent-interval-containment",
+        "observed_policy_result": "rejected-by-temporal-policy"
+      },
+      "status": "passed"
+    }
+  ],
+  "summary": {
+    "cases": 50,
+    "errors": [],
+    "execution_mode": "review10-postgresql-temporal-strategy-history-execution",
+    "status": "passed"
+  }
+}

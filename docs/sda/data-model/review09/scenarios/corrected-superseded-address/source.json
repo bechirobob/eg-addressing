@@ -1,0 +1,40 @@
+{
+  "entities": [
+    {
+      "attributes": {
+        "replacement": "Corrected label"
+      },
+      "canonical_state": "superseded",
+      "effective_from": "2026-01-01",
+      "effective_to": "2026-06-01",
+      "entity_id": "corrected-superseded-address-address-1",
+      "entity_type": "address",
+      "label": "Old label",
+      "operator_visible": false,
+      "public_release_date": null,
+      "public_visible": false,
+      "recorded_from": "2026-01-01T00:00:00Z",
+      "recorded_to": "2026-06-01T00:00:00Z"
+    },
+    {
+      "attributes": {
+        "replaces": "Old label"
+      },
+      "canonical_state": "active",
+      "effective_from": "2026-01-01",
+      "effective_to": null,
+      "entity_id": "corrected-superseded-address-address-2",
+      "entity_type": "address",
+      "label": "Corrected label",
+      "operator_visible": true,
+      "public_release_date": "2026-07-01",
+      "public_visible": true,
+      "recorded_from": "2026-01-01T00:00:00Z",
+      "recorded_to": null
+    }
+  ],
+  "review_owner": "SDA scenario source owner",
+  "review_status": "approved-review10-scenario-source",
+  "scenario": "corrected-superseded-address",
+  "version": "review10"
+}

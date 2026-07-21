@@ -1,0 +1,25 @@
+{
+  "entities": [
+    {
+      "attributes": {
+        "field_review": "required",
+        "locality": "Nsok rural area"
+      },
+      "canonical_state": "active",
+      "effective_from": "2026-01-01",
+      "effective_to": null,
+      "entity_id": "rural-landmark-location-landmark-1",
+      "entity_type": "landmark",
+      "label": "Rural Clinic Landmark",
+      "operator_visible": true,
+      "public_release_date": null,
+      "public_visible": false,
+      "recorded_from": "2026-01-01T00:00:00Z",
+      "recorded_to": null
+    }
+  ],
+  "review_owner": "SDA scenario source owner",
+  "review_status": "approved-review10-scenario-source",
+  "scenario": "rural-landmark-location",
+  "version": "review10"
+}

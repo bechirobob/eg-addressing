@@ -1,0 +1,17 @@
+{
+  "reports": [
+    "review09-f04-record-role-execution-report.json",
+    "review09-f05-temporal-execution-report.json",
+    "review09-f06-typed-geometry-authority-report.json",
+    "review09-f07-lifecycle-graph-report.json"
+  ],
+  "summary": {
+    "errors": [],
+    "execution_mode": "review10-f04-f07-postgresql-executed-test-suite",
+    "f04_cases": 57,
+    "f05_cases": 50,
+    "f06_cases": 11,
+    "f07_cases": 133,
+    "status": "passed"
+  }
+}

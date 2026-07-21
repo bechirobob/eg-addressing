@@ -1,0 +1,55 @@
+{
+  "expected": {
+    "canonical": [
+      {
+        "canonical_state": "under-dispute",
+        "entity_id": "disputed-geometry-address-1",
+        "entity_type": "address",
+        "label": "Disputed parcel edge"
+      }
+    ],
+    "effective_as_of": [
+      {
+        "entity_id": "disputed-geometry-address-1",
+        "label": "Disputed parcel edge"
+      }
+    ],
+    "expected_absences": {},
+    "operator_projection": [
+      {
+        "attributes": {
+          "dispute_case": "geometry overlap"
+        },
+        "canonical_state": "under-dispute",
+        "entity_id": "disputed-geometry-address-1",
+        "entity_type": "address",
+        "label": "Disputed parcel edge"
+      }
+    ],
+    "public_release": [],
+    "recorded_as_of": [
+      {
+        "entity_id": "disputed-geometry-address-1",
+        "label": "Disputed parcel edge"
+      }
+    ]
+  },
+  "expected_absence_queries": [
+    {
+      "name": "no-unreleased-public-rows",
+      "params": [
+        "disputed-geometry"
+      ],
+      "sql": "SELECT entity_id FROM r10_scenario_entity WHERE scenario=%s AND public_visible=false AND public_release_date IS NOT NULL"
+    }
+  ],
+  "query_dates": {
+    "effective": "2026-07-14",
+    "public_release": "2026-07-14",
+    "recorded": "2026-07-14T00:00:00Z"
+  },
+  "review_owner": "SDA scenario expected-result owner",
+  "review_status": "approved-review10-scenario-expected-result",
+  "scenario": "disputed-geometry",
+  "version": "review10"
+}

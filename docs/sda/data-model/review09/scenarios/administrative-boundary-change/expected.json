@@ -1,0 +1,66 @@
+{
+  "expected": {
+    "canonical": [
+      {
+        "canonical_state": "retired",
+        "entity_id": "administrative-boundary-change-administrative_unit-1",
+        "entity_type": "administrative_unit",
+        "label": "Former boundary sector"
+      },
+      {
+        "canonical_state": "active",
+        "entity_id": "administrative-boundary-change-administrative_unit-2",
+        "entity_type": "administrative_unit",
+        "label": "Updated boundary sector"
+      }
+    ],
+    "effective_as_of": [
+      {
+        "entity_id": "administrative-boundary-change-administrative_unit-2",
+        "label": "Updated boundary sector"
+      }
+    ],
+    "expected_absences": {},
+    "operator_projection": [
+      {
+        "attributes": {
+          "predecessor": "Former boundary sector"
+        },
+        "canonical_state": "active",
+        "entity_id": "administrative-boundary-change-administrative_unit-2",
+        "entity_type": "administrative_unit",
+        "label": "Updated boundary sector"
+      }
+    ],
+    "public_release": [
+      {
+        "entity_id": "administrative-boundary-change-administrative_unit-2",
+        "label": "Updated boundary sector"
+      }
+    ],
+    "recorded_as_of": [
+      {
+        "entity_id": "administrative-boundary-change-administrative_unit-2",
+        "label": "Updated boundary sector"
+      }
+    ]
+  },
+  "expected_absence_queries": [
+    {
+      "name": "no-unreleased-public-rows",
+      "params": [
+        "administrative-boundary-change"
+      ],
+      "sql": "SELECT entity_id FROM r10_scenario_entity WHERE scenario=%s AND public_visible=false AND public_release_date IS NOT NULL"
+    }
+  ],
+  "query_dates": {
+    "effective": "2026-07-14",
+    "public_release": "2026-07-14",
+    "recorded": "2026-07-14T00:00:00Z"
+  },
+  "review_owner": "SDA scenario expected-result owner",
+  "review_status": "approved-review10-scenario-expected-result",
+  "scenario": "administrative-boundary-change",
+  "version": "review10"
+}

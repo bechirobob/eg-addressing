@@ -1,0 +1,1362 @@
+{
+  "accepted_geometry_compatibility_test": {
+    "checks": {
+      "capture_translation_unchanged": true,
+      "geometry_callable_resolved_identity_location": true,
+      "geometry_callable_resolved_identity_subject": true,
+      "geometry_callable_unchanged": true,
+      "geometry_oracle_matched": true,
+      "geometry_oracle_unchanged": true,
+      "geometry_rows_before_geometry_callable": true,
+      "identity_rows_created_before_geometry": true,
+      "privacy_rule_unchanged": true,
+      "timing_rule_unchanged": true
+    },
+    "geometry_comparison": {
+      "source_key": "citizen_geotag_submissions:phase-a-geotag-001",
+      "tables": [
+        "proposed_geometry_observation",
+        "proposed_migration_exception"
+      ]
+    },
+    "geometry_output_not_counted_as_identity_slice_output": true,
+    "resolved_identity": {
+      "legacy_crosswalk_id": "phase-a-crosswalk-citizen-geotag-id-to-location-record",
+      "legacy_id": "phase-a-geotag-001",
+      "location_classification": "restricted",
+      "location_record_id": "phase-a-location-citizen-geotag-001",
+      "location_retired_at": null,
+      "native_id": "phase-a-location-citizen-geotag-001",
+      "record_type": "address",
+      "source_field": "id",
+      "source_table": "citizen_geotag_submissions",
+      "subject_entity": "location_record",
+      "subject_id": "phase-a-subject-phase-a-location-citizen-geotag-001",
+      "subject_retired_at": null,
+      "subject_state": "active",
+      "target_entity": "location_record",
+      "target_id": "phase-a-location-citizen-geotag-001"
+    },
+    "status": "passed",
+    "test_id": "accepted-geometry-compatibility"
+  },
+  "accepted_geometry_controls_changed": false,
+  "accepted_identity_controls_changed": false,
+  "all_non_id_source_field_crosswalks": 0,
+  "alternate_field_crosswalks_created": 0,
+  "binding_validation": {
+    "callable": true,
+    "covered_source_fields": true,
+    "idempotency_key": true,
+    "identity_rule": true,
+    "implementation_unit": true,
+    "no_migration_exception": true,
+    "required_context_fields": true,
+    "source_record_key": true,
+    "target_entities": true,
+    "target_identity_rule": true,
+    "transform_group_id": true
+  },
+  "broad_expected_fixture_changed": false,
+  "code_aliases_created": 0,
+  "command": "citizen-geotag-identity-slice",
+  "comparator_connection": {
+    "separate_connection": true,
+    "transaction_read_only": "on"
+  },
+  "comparator_connection_read_only_proof": {
+    "separate_connection": true,
+    "target_write_blocked": true,
+    "transaction_read_only": "on",
+    "write_error": "cannot execute INSERT in a read-only transaction"
+  },
+  "complete_field_name_evidence": [
+    "id",
+    "territory_id",
+    "address_label",
+    "citizen_name",
+    "citizen_contact",
+    "dip_last4",
+    "identity_verification_status",
+    "identity_document_verified",
+    "identity_verified_at",
+    "landmark",
+    "latitude",
+    "longitude",
+    "accuracy_meters",
+    "capture_method",
+    "grid_code",
+    "status",
+    "duplicate_hint",
+    "reviewer_note",
+    "suggested_road_name",
+    "suggested_local_area",
+    "suggested_place_name",
+    "map_display_name",
+    "road_suggestion_source",
+    "road_suggestion_attribution",
+    "road_suggestion_status",
+    "reviewed_road_name",
+    "field_submission_id",
+    "field_status",
+    "field_note",
+    "field_verified_at",
+    "signage_batch",
+    "created_at",
+    "updated_at"
+  ],
+  "complete_source_query": "SELECT id,territory_id,address_label,citizen_name,citizen_contact,dip_last4,identity_verification_status, identity_document_verified,identity_verified_at,landmark,latitude,longitude,accuracy_meters, capture_method,grid_code,status,duplicate_hint,reviewer_note,suggested_road_name,suggested_local_area, suggested_place_name,map_display_name,road_suggestion_source,road_suggestion_attribution, road_suggestion_status,reviewed_road_name,field_submission_id,field_status,field_note, field_verified_at,signage_batch,created_at,updated_at FROM current_source.citizen_geotag_submissions WHERE id = %s",
+  "complete_target_set_comparison": {
+    "actual_rows": 3,
+    "actual_rows_detail": [
+      {
+        "primary_key": {
+          "legacy_crosswalk_id": "phase-a-crosswalk-citizen-geotag-id-to-location-record"
+        },
+        "table": "proposed_legacy_crosswalk",
+        "values": {
+          "created_at": "2026-07-15T00:00:00Z",
+          "legacy_crosswalk_id": "phase-a-crosswalk-citizen-geotag-id-to-location-record",
+          "legacy_id": "phase-a-geotag-001",
+          "source_field": "id",
+          "source_table": "citizen_geotag_submissions",
+          "target_entity": "location_record",
+          "target_id": "phase-a-location-citizen-geotag-001"
+        }
+      },
+      {
+        "primary_key": {
+          "location_record_id": "phase-a-location-citizen-geotag-001"
+        },
+        "table": "proposed_location_record",
+        "values": {
+          "classification": "restricted",
+          "created_at": "2026-07-15T00:00:00Z",
+          "location_record_id": "phase-a-location-citizen-geotag-001",
+          "record_type": "address",
+          "retired_at": null
+        }
+      },
+      {
+        "primary_key": {
+          "subject_id": "phase-a-subject-phase-a-location-citizen-geotag-001"
+        },
+        "table": "proposed_registry_subject",
+        "values": {
+          "created_at": "2026-07-15T00:00:00Z",
+          "delete_policy": "retire-only",
+          "native_id": "phase-a-location-citizen-geotag-001",
+          "retired_at": null,
+          "subject_entity": "location_record",
+          "subject_id": "phase-a-subject-phase-a-location-citizen-geotag-001",
+          "subject_state": "active"
+        }
+      }
+    ],
+    "all_non_id_source_field_crosswalks": 0,
+    "comparator_connection": {
+      "separate_connection": true,
+      "transaction_read_only": "on"
+    },
+    "comparator_read_only_proof": {
+      "separate_connection": true,
+      "target_write_blocked": true,
+      "transaction_read_only": "on",
+      "write_error": "cannot execute INSERT in a read-only transaction"
+    },
+    "complete_target_set_query": {
+      "legacy_id": "phase-a-geotag-001",
+      "source_field": "id",
+      "source_table": "citizen_geotag_submissions",
+      "tables": [
+        "proposed_location_record",
+        "proposed_registry_subject",
+        "proposed_legacy_crosswalk"
+      ]
+    },
+    "expected_absent_rows": [
+      {
+        "count": 0,
+        "reason": "identity migration exception",
+        "table": "proposed_migration_exception",
+        "where": "source_table = 'citizen_geotag_submissions' AND source_key = 'citizen_geotag_submissions:phase-a-geotag-001' AND batch_id LIKE '%identity%'"
+      },
+      {
+        "count": 0,
+        "reason": "all non-id source-field crosswalks",
+        "table": "proposed_legacy_crosswalk",
+        "where": "source_table = 'citizen_geotag_submissions' AND source_field <> 'id'"
+      },
+      {
+        "count": 0,
+        "reason": "location-record version",
+        "table": "proposed_location_record_version",
+        "where": "location_record_id LIKE 'phase-a-location-citizen-geotag%'"
+      },
+      {
+        "count": 0,
+        "reason": "geometry output",
+        "table": "proposed_geometry_observation",
+        "where": "geometry_observation_id LIKE 'phase-a-geometry-citizen-geotag%'"
+      },
+      {
+        "count": 0,
+        "reason": "geometry version output",
+        "table": "proposed_geometry_version",
+        "where": "geometry_version_id LIKE 'phase-a-geometry-citizen-geotag%'"
+      },
+      {
+        "count": 0,
+        "reason": "geometry quality output",
+        "table": "proposed_geometry_quality_assessment",
+        "where": "geometry_version_id LIKE 'phase-a-geometry-citizen-geotag%'"
+      },
+      {
+        "count": 0,
+        "reason": "public-code alias",
+        "table": "proposed_public_code_alias",
+        "where": "location_record_id LIKE 'phase-a-location-citizen-geotag%'"
+      },
+      {
+        "count": 0,
+        "reason": "publication release item",
+        "table": "proposed_publication_release_item",
+        "where": "location_record_id LIKE 'phase-a-location-citizen-geotag%'"
+      },
+      {
+        "count": 0,
+        "reason": "public classification",
+        "table": "proposed_location_record",
+        "where": "location_record_id LIKE 'phase-a-location-citizen-geotag%' AND classification <> 'restricted'"
+      }
+    ],
+    "expected_rows": 3,
+    "id_crosswalk_count": 1,
+    "semantic_uniqueness": {
+      "duplicates": [],
+      "query": "absolute uniqueness on (source_table, source_field, legacy_id, target_entity)",
+      "semantic_duplicate_count": 0
+    }
+  },
+  "evidence_resolution": {
+    "classification": "restricted",
+    "evidence_object_id": "phase-a-evidence-citizen-geotag-submissions",
+    "source_record_id": "phase-a-source-record-citizen-geotag-submissions-001"
+  },
+  "exact_function_implemented": "transform_citizen_geotag_identity_crosswalk",
+  "exact_registry_binding": {
+    "impl_wo002_r06_identity_crosswalk_citizen_geotag_submissions": "transform_citizen_geotag_identity_crosswalk"
+  },
+  "expected_absent_rows_verified": [
+    {
+      "count": 0,
+      "reason": "identity migration exception",
+      "table": "proposed_migration_exception",
+      "where": "source_table = 'citizen_geotag_submissions' AND source_key = 'citizen_geotag_submissions:phase-a-geotag-001' AND batch_id LIKE '%identity%'"
+    },
+    {
+      "count": 0,
+      "reason": "all non-id source-field crosswalks",
+      "table": "proposed_legacy_crosswalk",
+      "where": "source_table = 'citizen_geotag_submissions' AND source_field <> 'id'"
+    },
+    {
+      "count": 0,
+      "reason": "location-record version",
+      "table": "proposed_location_record_version",
+      "where": "location_record_id LIKE 'phase-a-location-citizen-geotag%'"
+    },
+    {
+      "count": 0,
+      "reason": "geometry output",
+      "table": "proposed_geometry_observation",
+      "where": "geometry_observation_id LIKE 'phase-a-geometry-citizen-geotag%'"
+    },
+    {
+      "count": 0,
+      "reason": "geometry version output",
+      "table": "proposed_geometry_version",
+      "where": "geometry_version_id LIKE 'phase-a-geometry-citizen-geotag%'"
+    },
+    {
+      "count": 0,
+      "reason": "geometry quality output",
+      "table": "proposed_geometry_quality_assessment",
+      "where": "geometry_version_id LIKE 'phase-a-geometry-citizen-geotag%'"
+    },
+    {
+      "count": 0,
+      "reason": "public-code alias",
+      "table": "proposed_public_code_alias",
+      "where": "location_record_id LIKE 'phase-a-location-citizen-geotag%'"
+    },
+    {
+      "count": 0,
+      "reason": "publication release item",
+      "table": "proposed_publication_release_item",
+      "where": "location_record_id LIKE 'phase-a-location-citizen-geotag%'"
+    },
+    {
+      "count": 0,
+      "reason": "public classification",
+      "table": "proposed_location_record",
+      "where": "location_record_id LIKE 'phase-a-location-citizen-geotag%' AND classification <> 'restricted'"
+    }
+  ],
+  "external_effects": "none",
+  "fields_consumed": [
+    "citizen_geotag_submissions.id",
+    "citizen_geotag_submissions.territory_id",
+    "citizen_geotag_submissions.address_label",
+    "citizen_geotag_submissions.citizen_name",
+    "citizen_geotag_submissions.citizen_contact",
+    "citizen_geotag_submissions.dip_last4",
+    "citizen_geotag_submissions.identity_verification_status",
+    "citizen_geotag_submissions.identity_document_verified",
+    "citizen_geotag_submissions.identity_verified_at",
+    "citizen_geotag_submissions.landmark",
+    "citizen_geotag_submissions.latitude",
+    "citizen_geotag_submissions.longitude",
+    "citizen_geotag_submissions.accuracy_meters",
+    "citizen_geotag_submissions.capture_method",
+    "citizen_geotag_submissions.grid_code",
+    "citizen_geotag_submissions.status",
+    "citizen_geotag_submissions.duplicate_hint",
+    "citizen_geotag_submissions.reviewer_note",
+    "citizen_geotag_submissions.suggested_road_name",
+    "citizen_geotag_submissions.suggested_local_area",
+    "citizen_geotag_submissions.suggested_place_name",
+    "citizen_geotag_submissions.map_display_name",
+    "citizen_geotag_submissions.road_suggestion_source",
+    "citizen_geotag_submissions.road_suggestion_attribution",
+    "citizen_geotag_submissions.road_suggestion_status",
+    "citizen_geotag_submissions.reviewed_road_name",
+    "citizen_geotag_submissions.field_submission_id",
+    "citizen_geotag_submissions.field_status",
+    "citizen_geotag_submissions.field_note",
+    "citizen_geotag_submissions.field_verified_at",
+    "citizen_geotag_submissions.signage_batch",
+    "citizen_geotag_submissions.created_at",
+    "citizen_geotag_submissions.updated_at"
+  ],
+  "first_run_inserts": 3,
+  "frozen_broad_spec_changed": false,
+  "generic_transform_group_used_for_slice": false,
+  "geometry_rows_created_by_identity_path": 0,
+  "identity_exceptions_created": 0,
+  "legacy_crosswalk_row": {
+    "primary_key": {
+      "legacy_crosswalk_id": "phase-a-crosswalk-citizen-geotag-id-to-location-record"
+    },
+    "table": "proposed_legacy_crosswalk",
+    "values": {
+      "created_at": "2026-07-15T00:00:00Z",
+      "legacy_crosswalk_id": "phase-a-crosswalk-citizen-geotag-id-to-location-record",
+      "legacy_id": "phase-a-geotag-001",
+      "source_field": "id",
+      "source_table": "citizen_geotag_submissions",
+      "target_entity": "location_record",
+      "target_id": "phase-a-location-citizen-geotag-001"
+    }
+  },
+  "location_record_row": {
+    "primary_key": {
+      "location_record_id": "phase-a-location-citizen-geotag-001"
+    },
+    "table": "proposed_location_record",
+    "values": {
+      "classification": "restricted",
+      "created_at": "2026-07-15T00:00:00Z",
+      "location_record_id": "phase-a-location-citizen-geotag-001",
+      "record_type": "address",
+      "retired_at": null
+    }
+  },
+  "non_id_source_field_used_as_identity": false,
+  "normative_proposal_changed": false,
+  "oracle_git_blob": "61fb777a2af5a917b4ea7bbff0d6c7dff09241ba",
+  "oracle_sha256": "65e4f2511f70ed1e94562f4973fbbb1ab072592d3b27b94f2a459843647af45e",
+  "privacy_output_boundary_test": {
+    "actual_redacted_source_evidence_builder": "build_citizen_geotag_redacted_source_evidence",
+    "actual_report_builder": "build_citizen_geotag_identity_report_core",
+    "boolean_values_covered_by_differential": true,
+    "checked_excluded_fields": [
+      "territory_id",
+      "address_label",
+      "citizen_name",
+      "citizen_contact",
+      "dip_last4",
+      "identity_verification_status",
+      "identity_document_verified",
+      "identity_verified_at",
+      "landmark",
+      "latitude",
+      "longitude",
+      "accuracy_meters",
+      "capture_method",
+      "grid_code",
+      "status",
+      "duplicate_hint",
+      "reviewer_note",
+      "suggested_road_name",
+      "suggested_local_area",
+      "suggested_place_name",
+      "map_display_name",
+      "road_suggestion_source",
+      "road_suggestion_attribution",
+      "road_suggestion_status",
+      "reviewed_road_name",
+      "field_submission_id",
+      "field_status",
+      "field_note",
+      "field_verified_at",
+      "signage_batch",
+      "created_at",
+      "updated_at"
+    ],
+    "differential_leakage_mutation_detected": true,
+    "differential_leakage_mutation_result": "rejected",
+    "differential_redaction_passed": true,
+    "forbidden_report_paths": [],
+    "forbidden_value_hits": 0,
+    "normalized_reports_equal": true,
+    "numeric_values_covered_by_differential": true,
+    "raw_source_values_in_committed_report": false,
+    "sensitive_values_redacted": true,
+    "source_hashes_differ": true,
+    "status": "passed",
+    "structural_allowlist_passed": true,
+    "test_id": "privacy-output-boundary",
+    "text_values_covered_by_differential": true,
+    "timestamp_values_covered_by_differential": true,
+    "unknown_path_mutation_result": "rejected",
+    "variant_a_report_generated_independently": true,
+    "variant_a_source_row_hash_sha256": "77752eaf1d5a327563fcd6e690b62a62b5aa4f6fff3a08707a0366f503ad14ce",
+    "variant_b_report_generated_independently": true,
+    "variant_b_source_row_hash_sha256": "0997905542cbc73b6b8e470ad0f26c7c049c29f37c140de7c2b2098814b9e1d3",
+    "variant_sentinel_hits": []
+  },
+  "prohibited_outputs_created": {
+    "proposed_geometry_observation:geometry_observation_id LIKE 'phase-a-geometry-citizen-geotag%'": 0,
+    "proposed_geometry_quality_assessment:geometry_version_id LIKE 'phase-a-geometry-citizen-geotag%'": 0,
+    "proposed_geometry_version:geometry_version_id LIKE 'phase-a-geometry-citizen-geotag%'": 0,
+    "proposed_legacy_crosswalk:source_table = 'citizen_geotag_submissions' AND source_field <> 'id'": 0,
+    "proposed_location_record:location_record_id LIKE 'phase-a-location-citizen-geotag%' AND classification <> 'restricted'": 0,
+    "proposed_location_record_version:location_record_id LIKE 'phase-a-location-citizen-geotag%'": 0,
+    "proposed_migration_exception:source_table = 'citizen_geotag_submissions' AND source_key = 'citizen_geotag_submissions:phase-a-geotag-001' AND batch_id LIKE '%identity%'": 0,
+    "proposed_public_code_alias:location_record_id LIKE 'phase-a-location-citizen-geotag%'": 0,
+    "proposed_publication_release_item:location_record_id LIKE 'phase-a-location-citizen-geotag%'": 0
+  },
+  "proposal_git_blob": "0eaf7a8bc4c479d2d0b3efc8fe6c24c35b819a7d",
+  "publication_rows_created": 0,
+  "queried_source_id": "phase-a-geotag-001",
+  "raw_source_values_in_committed_report": false,
+  "registry_subject_row": {
+    "primary_key": {
+      "subject_id": "phase-a-subject-phase-a-location-citizen-geotag-001"
+    },
+    "table": "proposed_registry_subject",
+    "values": {
+      "created_at": "2026-07-15T00:00:00Z",
+      "delete_policy": "retire-only",
+      "native_id": "phase-a-location-citizen-geotag-001",
+      "retired_at": null,
+      "subject_entity": "location_record",
+      "subject_id": "phase-a-subject-phase-a-location-citizen-geotag-001",
+      "subject_state": "active"
+    }
+  },
+  "reviewed_transform_spec_row": {
+    "archive_behavior": "archive required when registry target/archive_object requires source_payload_archive; operational-control records retain typed disposition otherwise",
+    "conditional_authority_rfi_status": [
+      "none"
+    ],
+    "covered_source_fields": [
+      "citizen_geotag_submissions.id"
+    ],
+    "crosswalk_algorithm": "source table + source key + target entity -> proposed_legacy_crosswalk when registry declares identity/crosswalk target",
+    "dispositions": [
+      "structured-transform"
+    ],
+    "exception_behavior": "no migration exception in this identity slice; non-id source fields are excluded from identity and retained only as context/evidence/provenance/geometry/operational inputs",
+    "id_algorithm": "phase-a deterministic slug(source table/group/current field)",
+    "idempotency_key": "citizen_geotag_submissions.phase-a-geotag-001::WO002-R06-identity-crosswalk-citizen_geotag_submissions",
+    "identity_exclusion_roles": {
+      "accuracy_meters": "geometry input only",
+      "address_label": "descriptive context only",
+      "capture_method": "geometry input only",
+      "citizen_contact": "restricted evidence/contact context only",
+      "citizen_name": "restricted evidence context only",
+      "created_at": "timestamp context only; may populate created_at but not identity",
+      "dip_last4": "restricted identity-verification context only",
+      "duplicate_hint": "operational review context only",
+      "field_note": "field verification context only",
+      "field_status": "field verification context only",
+      "field_submission_id": "provenance reference only",
+      "field_verified_at": "field verification context only",
+      "grid_code": "non-official fixture/reference context only",
+      "identity_document_verified": "verification context only",
+      "identity_verification_status": "verification context only",
+      "identity_verified_at": "verification timing context only",
+      "landmark": "descriptive context only",
+      "latitude": "geometry input only",
+      "longitude": "geometry input only",
+      "map_display_name": "display context only",
+      "reviewed_road_name": "restricted/source attribution context only",
+      "reviewer_note": "operational review context only",
+      "road_suggestion_attribution": "restricted/source attribution context only",
+      "road_suggestion_source": "restricted/source attribution context only",
+      "road_suggestion_status": "restricted/source attribution context only",
+      "signage_batch": "signage context only; no signage effect authorized",
+      "status": "operational context only",
+      "suggested_local_area": "restricted/source attribution context only",
+      "suggested_place_name": "restricted/source attribution context only",
+      "suggested_road_name": "restricted/source attribution context only",
+      "territory_id": "territorial context only",
+      "updated_at": "timestamp context only"
+    },
+    "identity_rule": "citizen_geotag_submissions.id owns the restricted provisional location identity; every other source field is context, restricted evidence, verification, provenance, geometry input, or operational context only",
+    "implementation_unit": "impl_wo002_r06_identity_crosswalk_citizen_geotag_submissions",
+    "operation": "registry-disposition-to-canonical-target-evidence",
+    "required_context_fields": [
+      "citizen_geotag_submissions.territory_id",
+      "citizen_geotag_submissions.address_label",
+      "citizen_geotag_submissions.citizen_name",
+      "citizen_geotag_submissions.citizen_contact",
+      "citizen_geotag_submissions.dip_last4",
+      "citizen_geotag_submissions.identity_verification_status",
+      "citizen_geotag_submissions.identity_document_verified",
+      "citizen_geotag_submissions.identity_verified_at",
+      "citizen_geotag_submissions.landmark",
+      "citizen_geotag_submissions.latitude",
+      "citizen_geotag_submissions.longitude",
+      "citizen_geotag_submissions.accuracy_meters",
+      "citizen_geotag_submissions.capture_method",
+      "citizen_geotag_submissions.grid_code",
+      "citizen_geotag_submissions.status",
+      "citizen_geotag_submissions.duplicate_hint",
+      "citizen_geotag_submissions.reviewer_note",
+      "citizen_geotag_submissions.suggested_road_name",
+      "citizen_geotag_submissions.suggested_local_area",
+      "citizen_geotag_submissions.suggested_place_name",
+      "citizen_geotag_submissions.map_display_name",
+      "citizen_geotag_submissions.road_suggestion_source",
+      "citizen_geotag_submissions.road_suggestion_attribution",
+      "citizen_geotag_submissions.road_suggestion_status",
+      "citizen_geotag_submissions.reviewed_road_name",
+      "citizen_geotag_submissions.field_submission_id",
+      "citizen_geotag_submissions.field_status",
+      "citizen_geotag_submissions.field_note",
+      "citizen_geotag_submissions.field_verified_at",
+      "citizen_geotag_submissions.signage_batch",
+      "citizen_geotag_submissions.created_at",
+      "citizen_geotag_submissions.updated_at"
+    ],
+    "source_record_key": "citizen_geotag_submissions:phase-a-geotag-001",
+    "source_table": "citizen_geotag_submissions",
+    "target_entities": [
+      "location_record",
+      "registry_subject",
+      "legacy_crosswalk"
+    ],
+    "target_fields": [
+      "location_record.location_record_id",
+      "registry_subject.subject_id",
+      "legacy_crosswalk.legacy_id"
+    ],
+    "target_identity_rule": {
+      "primary_fixture": {
+        "legacy_crosswalk_id": "phase-a-crosswalk-citizen-geotag-id-to-location-record",
+        "location_record_id": "phase-a-location-citizen-geotag-001",
+        "source_id": "phase-a-geotag-001",
+        "subject_id": "phase-a-subject-phase-a-location-citizen-geotag-001"
+      },
+      "second_fixture_rule": "For synthetic citizen_geotag_submissions source IDs, derive a distinct restricted provisional location, active subject and id crosswalk from the queried id. Design harness only; no real citizen data."
+    },
+    "transform_group_id": "WO002-R06-identity-crosswalk-citizen_geotag_submissions"
+  },
+  "reviewer_owned_oracle_changed": false,
+  "rollback_equality_all": true,
+  "rollback_evidence_count": 21,
+  "second_run_inserts": 0,
+  "second_run_updates": 0,
+  "second_source_identity_test": {
+    "active_registry_subjects": 2,
+    "checks": {
+      "active_registry_subjects": true,
+      "distinct_id_crosswalks": true,
+      "identity_migration_exceptions": true,
+      "identity_path_geometry_observations": true,
+      "identity_path_geometry_versions": true,
+      "identity_path_quality_approvals": true,
+      "multiple_target_resolution": true,
+      "non_id_crosswalks": true,
+      "non_restricted_identity_rows": true,
+      "public_code_aliases": true,
+      "publication_release_items": true,
+      "restricted_location_records": true,
+      "second_source_key": true,
+      "semantic_duplicate_crosswalks": true,
+      "source_records": true
+    },
+    "citizen_geotag_source_identities": 2,
+    "distinct_crosswalks": 2,
+    "first_rows": [
+      {
+        "primary_key": {
+          "legacy_crosswalk_id": "phase-a-crosswalk-citizen-geotag-id-to-location-record"
+        },
+        "table": "proposed_legacy_crosswalk",
+        "values": {
+          "created_at": "2026-07-15T00:00:00Z",
+          "legacy_crosswalk_id": "phase-a-crosswalk-citizen-geotag-id-to-location-record",
+          "legacy_id": "phase-a-geotag-001",
+          "source_field": "id",
+          "source_table": "citizen_geotag_submissions",
+          "target_entity": "location_record",
+          "target_id": "phase-a-location-citizen-geotag-001"
+        }
+      },
+      {
+        "primary_key": {
+          "location_record_id": "phase-a-location-citizen-geotag-001"
+        },
+        "table": "proposed_location_record",
+        "values": {
+          "classification": "restricted",
+          "created_at": "2026-07-15T00:00:00Z",
+          "location_record_id": "phase-a-location-citizen-geotag-001",
+          "record_type": "address",
+          "retired_at": null
+        }
+      },
+      {
+        "primary_key": {
+          "subject_id": "phase-a-subject-phase-a-location-citizen-geotag-001"
+        },
+        "table": "proposed_registry_subject",
+        "values": {
+          "created_at": "2026-07-15T00:00:00Z",
+          "delete_policy": "retire-only",
+          "native_id": "phase-a-location-citizen-geotag-001",
+          "retired_at": null,
+          "subject_entity": "location_record",
+          "subject_id": "phase-a-subject-phase-a-location-citizen-geotag-001",
+          "subject_state": "active"
+        }
+      }
+    ],
+    "first_transform_lineage": {
+      "derived_source_key": "citizen_geotag_submissions:phase-a-geotag-001",
+      "evidence_resolution": {
+        "classification": "restricted",
+        "evidence_object_id": "phase-a-evidence-citizen-geotag-submissions",
+        "source_record_id": "phase-a-source-record-citizen-geotag-submissions-001"
+      },
+      "source_record_resolution": {
+        "raw_payload_classification": "restricted",
+        "source_key": "citizen_geotag_submissions:phase-a-geotag-001",
+        "source_record_id": "phase-a-source-record-citizen-geotag-submissions-001"
+      }
+    },
+    "identity_migration_exceptions": 0,
+    "identity_path_geometry_observations": 0,
+    "identity_path_geometry_versions": 0,
+    "identity_path_quality_approvals": 0,
+    "multiple_target_resolutions": 0,
+    "non_id_crosswalks": 0,
+    "non_restricted_identity_rows": 0,
+    "public_boundary_counts": {
+      "identity_migration_exceptions": 0,
+      "identity_path_geometry_observations": 0,
+      "identity_path_geometry_versions": 0,
+      "identity_path_quality_approvals": 0,
+      "non_id_crosswalks": 0,
+      "non_restricted_identity_rows": 0,
+      "public_code_aliases": 0,
+      "publication_release_items": 0
+    },
+    "public_code_aliases": 0,
+    "publication_release_items": 0,
+    "restricted_location_records": 2,
+    "second_rows": [
+      {
+        "primary_key": {
+          "legacy_crosswalk_id": "phase-a-crosswalk-citizen-geotag-002-to-location-record"
+        },
+        "table": "proposed_legacy_crosswalk",
+        "values": {
+          "created_at": "2026-07-15T00:00:00Z",
+          "legacy_crosswalk_id": "phase-a-crosswalk-citizen-geotag-002-to-location-record",
+          "legacy_id": "phase-a-geotag-002",
+          "source_field": "id",
+          "source_table": "citizen_geotag_submissions",
+          "target_entity": "location_record",
+          "target_id": "phase-a-location-citizen-geotag-002"
+        }
+      },
+      {
+        "primary_key": {
+          "location_record_id": "phase-a-location-citizen-geotag-002"
+        },
+        "table": "proposed_location_record",
+        "values": {
+          "classification": "restricted",
+          "created_at": "2026-07-15T00:00:00Z",
+          "location_record_id": "phase-a-location-citizen-geotag-002",
+          "record_type": "address",
+          "retired_at": null
+        }
+      },
+      {
+        "primary_key": {
+          "subject_id": "phase-a-subject-phase-a-location-citizen-geotag-002"
+        },
+        "table": "proposed_registry_subject",
+        "values": {
+          "created_at": "2026-07-15T00:00:00Z",
+          "delete_policy": "retire-only",
+          "native_id": "phase-a-location-citizen-geotag-002",
+          "retired_at": null,
+          "subject_entity": "location_record",
+          "subject_id": "phase-a-subject-phase-a-location-citizen-geotag-002",
+          "subject_state": "active"
+        }
+      }
+    ],
+    "second_transform_lineage": {
+      "derived_source_key": "citizen_geotag_submissions:phase-a-geotag-002",
+      "evidence_resolution": {
+        "classification": "restricted",
+        "evidence_object_id": "phase-a-evidence-citizen-geotag-submissions-002",
+        "source_record_id": "phase-a-source-record-citizen-geotag-submissions-002"
+      },
+      "source_record_resolution": {
+        "raw_payload_classification": "restricted",
+        "source_key": "citizen_geotag_submissions:phase-a-geotag-002",
+        "source_record_id": "phase-a-source-record-citizen-geotag-submissions-002"
+      }
+    },
+    "semantic_duplicate_crosswalks": 0,
+    "status": "passed",
+    "test_id": "second-source-identity"
+  },
+  "semantic_uniqueness_query_result": {
+    "duplicates": [],
+    "query": "absolute uniqueness on (source_table, source_field, legacy_id, target_entity)",
+    "semantic_duplicate_count": 0
+  },
+  "sensitive_values_redacted": true,
+  "source_key_derivation": {
+    "rule": "citizen_geotag_submissions:<queried id>",
+    "value": "citizen_geotag_submissions:phase-a-geotag-001"
+  },
+  "source_record_resolution": {
+    "raw_payload_classification": "restricted",
+    "source_key": "citizen_geotag_submissions:phase-a-geotag-001",
+    "source_record_id": "phase-a-source-record-citizen-geotag-submissions-001"
+  },
+  "source_row_hash_sha256": "9db3b03e96ab937c24a9206bd87ef85be491a27b19ebb641d86dee61bd5c4749",
+  "status": "passed",
+  "tests": [
+    {
+      "status": "passed",
+      "test_id": "positive-authoritative-slice"
+    },
+    {
+      "first_run_inserts": 3,
+      "second_run_inserts": 0,
+      "second_run_updates": 0,
+      "status": "passed",
+      "test_id": "second-run-idempotency"
+    },
+    {
+      "comparison": {
+        "legacy_id": "phase-a-geotag-001",
+        "source_field": "id",
+        "source_table": "citizen_geotag_submissions",
+        "tables": [
+          "proposed_location_record",
+          "proposed_registry_subject",
+          "proposed_legacy_crosswalk"
+        ]
+      },
+      "status": "passed",
+      "test_id": "read-only-complete-set-comparison"
+    },
+    {
+      "active_registry_subjects": 2,
+      "checks": {
+        "active_registry_subjects": true,
+        "distinct_id_crosswalks": true,
+        "identity_migration_exceptions": true,
+        "identity_path_geometry_observations": true,
+        "identity_path_geometry_versions": true,
+        "identity_path_quality_approvals": true,
+        "multiple_target_resolution": true,
+        "non_id_crosswalks": true,
+        "non_restricted_identity_rows": true,
+        "public_code_aliases": true,
+        "publication_release_items": true,
+        "restricted_location_records": true,
+        "second_source_key": true,
+        "semantic_duplicate_crosswalks": true,
+        "source_records": true
+      },
+      "citizen_geotag_source_identities": 2,
+      "distinct_crosswalks": 2,
+      "first_rows": [
+        {
+          "primary_key": {
+            "legacy_crosswalk_id": "phase-a-crosswalk-citizen-geotag-id-to-location-record"
+          },
+          "table": "proposed_legacy_crosswalk",
+          "values": {
+            "created_at": "2026-07-15T00:00:00Z",
+            "legacy_crosswalk_id": "phase-a-crosswalk-citizen-geotag-id-to-location-record",
+            "legacy_id": "phase-a-geotag-001",
+            "source_field": "id",
+            "source_table": "citizen_geotag_submissions",
+            "target_entity": "location_record",
+            "target_id": "phase-a-location-citizen-geotag-001"
+          }
+        },
+        {
+          "primary_key": {
+            "location_record_id": "phase-a-location-citizen-geotag-001"
+          },
+          "table": "proposed_location_record",
+          "values": {
+            "classification": "restricted",
+            "created_at": "2026-07-15T00:00:00Z",
+            "location_record_id": "phase-a-location-citizen-geotag-001",
+            "record_type": "address",
+            "retired_at": null
+          }
+        },
+        {
+          "primary_key": {
+            "subject_id": "phase-a-subject-phase-a-location-citizen-geotag-001"
+          },
+          "table": "proposed_registry_subject",
+          "values": {
+            "created_at": "2026-07-15T00:00:00Z",
+            "delete_policy": "retire-only",
+            "native_id": "phase-a-location-citizen-geotag-001",
+            "retired_at": null,
+            "subject_entity": "location_record",
+            "subject_id": "phase-a-subject-phase-a-location-citizen-geotag-001",
+            "subject_state": "active"
+          }
+        }
+      ],
+      "first_transform_lineage": {
+        "derived_source_key": "citizen_geotag_submissions:phase-a-geotag-001",
+        "evidence_resolution": {
+          "classification": "restricted",
+          "evidence_object_id": "phase-a-evidence-citizen-geotag-submissions",
+          "source_record_id": "phase-a-source-record-citizen-geotag-submissions-001"
+        },
+        "source_record_resolution": {
+          "raw_payload_classification": "restricted",
+          "source_key": "citizen_geotag_submissions:phase-a-geotag-001",
+          "source_record_id": "phase-a-source-record-citizen-geotag-submissions-001"
+        }
+      },
+      "identity_migration_exceptions": 0,
+      "identity_path_geometry_observations": 0,
+      "identity_path_geometry_versions": 0,
+      "identity_path_quality_approvals": 0,
+      "multiple_target_resolutions": 0,
+      "non_id_crosswalks": 0,
+      "non_restricted_identity_rows": 0,
+      "public_boundary_counts": {
+        "identity_migration_exceptions": 0,
+        "identity_path_geometry_observations": 0,
+        "identity_path_geometry_versions": 0,
+        "identity_path_quality_approvals": 0,
+        "non_id_crosswalks": 0,
+        "non_restricted_identity_rows": 0,
+        "public_code_aliases": 0,
+        "publication_release_items": 0
+      },
+      "public_code_aliases": 0,
+      "publication_release_items": 0,
+      "restricted_location_records": 2,
+      "second_rows": [
+        {
+          "primary_key": {
+            "legacy_crosswalk_id": "phase-a-crosswalk-citizen-geotag-002-to-location-record"
+          },
+          "table": "proposed_legacy_crosswalk",
+          "values": {
+            "created_at": "2026-07-15T00:00:00Z",
+            "legacy_crosswalk_id": "phase-a-crosswalk-citizen-geotag-002-to-location-record",
+            "legacy_id": "phase-a-geotag-002",
+            "source_field": "id",
+            "source_table": "citizen_geotag_submissions",
+            "target_entity": "location_record",
+            "target_id": "phase-a-location-citizen-geotag-002"
+          }
+        },
+        {
+          "primary_key": {
+            "location_record_id": "phase-a-location-citizen-geotag-002"
+          },
+          "table": "proposed_location_record",
+          "values": {
+            "classification": "restricted",
+            "created_at": "2026-07-15T00:00:00Z",
+            "location_record_id": "phase-a-location-citizen-geotag-002",
+            "record_type": "address",
+            "retired_at": null
+          }
+        },
+        {
+          "primary_key": {
+            "subject_id": "phase-a-subject-phase-a-location-citizen-geotag-002"
+          },
+          "table": "proposed_registry_subject",
+          "values": {
+            "created_at": "2026-07-15T00:00:00Z",
+            "delete_policy": "retire-only",
+            "native_id": "phase-a-location-citizen-geotag-002",
+            "retired_at": null,
+            "subject_entity": "location_record",
+            "subject_id": "phase-a-subject-phase-a-location-citizen-geotag-002",
+            "subject_state": "active"
+          }
+        }
+      ],
+      "second_transform_lineage": {
+        "derived_source_key": "citizen_geotag_submissions:phase-a-geotag-002",
+        "evidence_resolution": {
+          "classification": "restricted",
+          "evidence_object_id": "phase-a-evidence-citizen-geotag-submissions-002",
+          "source_record_id": "phase-a-source-record-citizen-geotag-submissions-002"
+        },
+        "source_record_resolution": {
+          "raw_payload_classification": "restricted",
+          "source_key": "citizen_geotag_submissions:phase-a-geotag-002",
+          "source_record_id": "phase-a-source-record-citizen-geotag-submissions-002"
+        }
+      },
+      "semantic_duplicate_crosswalks": 0,
+      "status": "passed",
+      "test_id": "second-source-identity"
+    },
+    {
+      "checks": {
+        "capture_translation_unchanged": true,
+        "geometry_callable_resolved_identity_location": true,
+        "geometry_callable_resolved_identity_subject": true,
+        "geometry_callable_unchanged": true,
+        "geometry_oracle_matched": true,
+        "geometry_oracle_unchanged": true,
+        "geometry_rows_before_geometry_callable": true,
+        "identity_rows_created_before_geometry": true,
+        "privacy_rule_unchanged": true,
+        "timing_rule_unchanged": true
+      },
+      "geometry_comparison": {
+        "source_key": "citizen_geotag_submissions:phase-a-geotag-001",
+        "tables": [
+          "proposed_geometry_observation",
+          "proposed_migration_exception"
+        ]
+      },
+      "geometry_output_not_counted_as_identity_slice_output": true,
+      "resolved_identity": {
+        "legacy_crosswalk_id": "phase-a-crosswalk-citizen-geotag-id-to-location-record",
+        "legacy_id": "phase-a-geotag-001",
+        "location_classification": "restricted",
+        "location_record_id": "phase-a-location-citizen-geotag-001",
+        "location_retired_at": null,
+        "native_id": "phase-a-location-citizen-geotag-001",
+        "record_type": "address",
+        "source_field": "id",
+        "source_table": "citizen_geotag_submissions",
+        "subject_entity": "location_record",
+        "subject_id": "phase-a-subject-phase-a-location-citizen-geotag-001",
+        "subject_retired_at": null,
+        "subject_state": "active",
+        "target_entity": "location_record",
+        "target_id": "phase-a-location-citizen-geotag-001"
+      },
+      "status": "passed",
+      "test_id": "accepted-geometry-compatibility"
+    },
+    {
+      "expected_error": "citizen_geotag_submissions source row not found",
+      "observed_error": "citizen_geotag_submissions source row not found",
+      "rollback_equality": true,
+      "same_database_post_failure_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_post_failure_rows": [],
+      "same_database_pre_test_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_pre_test_rows": [],
+      "state_unchanged": true,
+      "status": "passed",
+      "test_id": "missing-source-record"
+    },
+    {
+      "expected_error": "citizen_geotag_submissions source record lineage not found",
+      "observed_error": "citizen_geotag_submissions source record lineage not found",
+      "rollback_equality": true,
+      "same_database_post_failure_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_post_failure_rows": [],
+      "same_database_pre_test_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_pre_test_rows": [],
+      "state_unchanged": true,
+      "status": "passed",
+      "test_id": "missing-source-lineage"
+    },
+    {
+      "expected_error": "citizen_geotag_submissions evidence object not found",
+      "observed_error": "citizen_geotag_submissions evidence object not found",
+      "rollback_equality": true,
+      "same_database_post_failure_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_post_failure_rows": [],
+      "same_database_pre_test_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_pre_test_rows": [],
+      "state_unchanged": true,
+      "status": "passed",
+      "test_id": "missing-evidence-object"
+    },
+    {
+      "expected_error": "citizen_geotag_submissions source record must remain restricted",
+      "observed_error": "citizen_geotag_submissions source record must remain restricted",
+      "rollback_equality": true,
+      "same_database_post_failure_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_post_failure_rows": [],
+      "same_database_pre_test_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_pre_test_rows": [],
+      "state_unchanged": true,
+      "status": "passed",
+      "test_id": "source-record-classification-drift"
+    },
+    {
+      "expected_error": "citizen_geotag_submissions evidence object must remain restricted",
+      "observed_error": "citizen_geotag_submissions evidence object must remain restricted",
+      "rollback_equality": true,
+      "same_database_post_failure_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_post_failure_rows": [],
+      "same_database_pre_test_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_pre_test_rows": [],
+      "state_unchanged": true,
+      "status": "passed",
+      "test_id": "evidence-classification-drift"
+    },
+    {
+      "expected_error": "citizen_geotag_submissions identity must derive from citizen_geotag_submissions.id",
+      "observed_error": "citizen_geotag_submissions identity must derive from citizen_geotag_submissions.id",
+      "rollback_equality": true,
+      "same_database_post_failure_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_post_failure_rows": [],
+      "same_database_pre_test_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_pre_test_rows": [],
+      "state_unchanged": true,
+      "status": "passed",
+      "test_id": "citizen-name-identity-substitution"
+    },
+    {
+      "expected_error": "citizen_geotag_submissions identity must derive from citizen_geotag_submissions.id",
+      "observed_error": "citizen_geotag_submissions identity must derive from citizen_geotag_submissions.id",
+      "rollback_equality": true,
+      "same_database_post_failure_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_post_failure_rows": [],
+      "same_database_pre_test_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_pre_test_rows": [],
+      "state_unchanged": true,
+      "status": "passed",
+      "test_id": "citizen-contact-identity-substitution"
+    },
+    {
+      "expected_error": "citizen_geotag_submissions identity must derive from citizen_geotag_submissions.id",
+      "observed_error": "citizen_geotag_submissions identity must derive from citizen_geotag_submissions.id",
+      "rollback_equality": true,
+      "same_database_post_failure_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_post_failure_rows": [],
+      "same_database_pre_test_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_pre_test_rows": [],
+      "state_unchanged": true,
+      "status": "passed",
+      "test_id": "identity-fragment-identity-substitution"
+    },
+    {
+      "expected_error": "citizen_geotag_submissions identity must derive from citizen_geotag_submissions.id",
+      "observed_error": "citizen_geotag_submissions identity must derive from citizen_geotag_submissions.id",
+      "rollback_equality": true,
+      "same_database_post_failure_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_post_failure_rows": [],
+      "same_database_pre_test_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_pre_test_rows": [],
+      "state_unchanged": true,
+      "status": "passed",
+      "test_id": "grid-code-identity-substitution"
+    },
+    {
+      "expected_error": "citizen_geotag_submissions identity must derive from citizen_geotag_submissions.id",
+      "observed_error": "citizen_geotag_submissions identity must derive from citizen_geotag_submissions.id",
+      "rollback_equality": true,
+      "same_database_post_failure_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_post_failure_rows": [],
+      "same_database_pre_test_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_pre_test_rows": [],
+      "state_unchanged": true,
+      "status": "passed",
+      "test_id": "field-submission-identity-substitution"
+    },
+    {
+      "expected_error": "citizen_geotag_submissions identity must derive from citizen_geotag_submissions.id",
+      "observed_error": "citizen_geotag_submissions identity must derive from citizen_geotag_submissions.id",
+      "rollback_equality": true,
+      "same_database_post_failure_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_post_failure_rows": [],
+      "same_database_pre_test_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_pre_test_rows": [],
+      "state_unchanged": true,
+      "status": "passed",
+      "test_id": "territory-identity-substitution"
+    },
+    {
+      "expected_error": "citizen_geotag_submissions identity rows differ from reviewer-owned expected target identity",
+      "observed_error": "citizen_geotag_submissions identity rows differ from reviewer-owned expected target identity",
+      "rollback_equality": true,
+      "same_database_post_failure_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_post_failure_rows": [],
+      "same_database_pre_test_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_pre_test_rows": [],
+      "state_unchanged": true,
+      "status": "passed",
+      "test_id": "wrong-target-identity-implementation"
+    },
+    {
+      "expected_error": "citizen_geotag_submissions identity rows differ from reviewer-owned expected target identity",
+      "observed_error": "citizen_geotag_submissions identity rows differ from reviewer-owned expected target identity",
+      "rollback_equality": true,
+      "same_database_post_failure_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_post_failure_rows": [],
+      "same_database_pre_test_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_pre_test_rows": [],
+      "state_unchanged": true,
+      "status": "passed",
+      "test_id": "existing-location-conflict"
+    },
+    {
+      "expected_error": "citizen_geotag_submissions identity rows differ from reviewer-owned expected target identity",
+      "observed_error": "citizen_geotag_submissions identity rows differ from reviewer-owned expected target identity",
+      "rollback_equality": true,
+      "same_database_post_failure_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_post_failure_rows": [],
+      "same_database_pre_test_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_pre_test_rows": [],
+      "state_unchanged": true,
+      "status": "passed",
+      "test_id": "existing-subject-conflict"
+    },
+    {
+      "expected_error": "citizen_geotag_submissions identity rows differ from reviewer-owned expected target identity",
+      "observed_error": "citizen_geotag_submissions identity rows differ from reviewer-owned expected target identity",
+      "rollback_equality": true,
+      "same_database_post_failure_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_post_failure_rows": [],
+      "same_database_pre_test_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_pre_test_rows": [],
+      "state_unchanged": true,
+      "status": "passed",
+      "test_id": "existing-crosswalk-conflict"
+    },
+    {
+      "expected_error": "unexpected citizen_geotag_submissions identity-foundation target row",
+      "observed_error": "unexpected citizen_geotag_submissions identity-foundation target row",
+      "rollback_equality": true,
+      "same_database_post_failure_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_post_failure_rows": [],
+      "same_database_pre_test_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_pre_test_rows": [],
+      "state_unchanged": true,
+      "status": "passed",
+      "test_id": "unexpected-extra-crosswalk"
+    },
+    {
+      "expected_error": "unexpected citizen_geotag_submissions identity-foundation target row",
+      "observed_error": "unexpected citizen_geotag_submissions identity-foundation target row",
+      "rollback_equality": true,
+      "same_database_post_failure_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_post_failure_rows": [],
+      "same_database_pre_test_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_pre_test_rows": [],
+      "state_unchanged": true,
+      "status": "passed",
+      "test_id": "unexpected-unlisted-alternate-field-crosswalk"
+    },
+    {
+      "expected_error": "unexpected citizen_geotag_submissions identity-foundation target row",
+      "observed_error": "unexpected citizen_geotag_submissions identity-foundation target row",
+      "rollback_equality": true,
+      "same_database_post_failure_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_post_failure_rows": [],
+      "same_database_pre_test_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_pre_test_rows": [],
+      "state_unchanged": true,
+      "status": "passed",
+      "test_id": "unexpected-extra-location-record"
+    },
+    {
+      "expected_error": "unexpected citizen_geotag_submissions identity-foundation target row",
+      "observed_error": "unexpected citizen_geotag_submissions identity-foundation target row",
+      "rollback_equality": true,
+      "same_database_post_failure_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_post_failure_rows": [],
+      "same_database_pre_test_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_pre_test_rows": [],
+      "state_unchanged": true,
+      "status": "passed",
+      "test_id": "unexpected-extra-registry-subject"
+    },
+    {
+      "expected_error": "citizen_geotag_submissions identity crosswalk semantic uniqueness violated",
+      "observed_error": "citizen_geotag_submissions identity crosswalk semantic uniqueness violated",
+      "rollback_equality": true,
+      "same_database_post_failure_hash": "8fd0bc9a3550831276207a352d467c3930ca98cffbddefc1d006628f36f7df02",
+      "same_database_post_failure_rows": [
+        {
+          "primary_key": {
+            "legacy_crosswalk_id": "phase-a-crosswalk-citizen-geotag-id-to-location-record-duplicate"
+          },
+          "table": "proposed_legacy_crosswalk",
+          "values": {
+            "created_at": "2026-07-15T00:00:00Z",
+            "legacy_crosswalk_id": "phase-a-crosswalk-citizen-geotag-id-to-location-record-duplicate",
+            "legacy_id": "phase-a-geotag-001",
+            "source_field": "id",
+            "source_table": "citizen_geotag_submissions",
+            "target_entity": "location_record",
+            "target_id": "phase-a-location-citizen-geotag-duplicate"
+          }
+        },
+        {
+          "primary_key": {
+            "location_record_id": "phase-a-location-citizen-geotag-duplicate"
+          },
+          "table": "proposed_location_record",
+          "values": {
+            "classification": "restricted",
+            "created_at": "2026-07-15T00:00:00Z",
+            "location_record_id": "phase-a-location-citizen-geotag-duplicate",
+            "record_type": "address",
+            "retired_at": null
+          }
+        }
+      ],
+      "same_database_pre_test_hash": "8fd0bc9a3550831276207a352d467c3930ca98cffbddefc1d006628f36f7df02",
+      "same_database_pre_test_rows": [
+        {
+          "primary_key": {
+            "legacy_crosswalk_id": "phase-a-crosswalk-citizen-geotag-id-to-location-record-duplicate"
+          },
+          "table": "proposed_legacy_crosswalk",
+          "values": {
+            "created_at": "2026-07-15T00:00:00Z",
+            "legacy_crosswalk_id": "phase-a-crosswalk-citizen-geotag-id-to-location-record-duplicate",
+            "legacy_id": "phase-a-geotag-001",
+            "source_field": "id",
+            "source_table": "citizen_geotag_submissions",
+            "target_entity": "location_record",
+            "target_id": "phase-a-location-citizen-geotag-duplicate"
+          }
+        },
+        {
+          "primary_key": {
+            "location_record_id": "phase-a-location-citizen-geotag-duplicate"
+          },
+          "table": "proposed_location_record",
+          "values": {
+            "classification": "restricted",
+            "created_at": "2026-07-15T00:00:00Z",
+            "location_record_id": "phase-a-location-citizen-geotag-duplicate",
+            "record_type": "address",
+            "retired_at": null
+          }
+        }
+      ],
+      "state_unchanged": true,
+      "status": "passed",
+      "test_id": "semantic-duplicate-crosswalk"
+    },
+    {
+      "expected_error": "citizen_geotag_submissions identity transform specification binding mismatch",
+      "observed_error": "citizen_geotag_submissions identity transform specification binding mismatch: {'transform_group_id': True, 'implementation_unit': False, 'callable': False, 'covered_source_fields': True, 'required_context_fields': True, 'source_record_key': True, 'idempotency_key': True, 'identity_rule': True, 'target_entities': True, 'target_identity_rule': True, 'no_migration_exception': True}",
+      "rollback_equality": true,
+      "same_database_post_failure_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_post_failure_rows": [],
+      "same_database_pre_test_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_pre_test_rows": [],
+      "state_unchanged": true,
+      "status": "passed",
+      "test_id": "transform-spec-binding-drift"
+    },
+    {
+      "actual_redacted_source_evidence_builder": "build_citizen_geotag_redacted_source_evidence",
+      "actual_report_builder": "build_citizen_geotag_identity_report_core",
+      "boolean_values_covered_by_differential": true,
+      "checked_excluded_fields": [
+        "territory_id",
+        "address_label",
+        "citizen_name",
+        "citizen_contact",
+        "dip_last4",
+        "identity_verification_status",
+        "identity_document_verified",
+        "identity_verified_at",
+        "landmark",
+        "latitude",
+        "longitude",
+        "accuracy_meters",
+        "capture_method",
+        "grid_code",
+        "status",
+        "duplicate_hint",
+        "reviewer_note",
+        "suggested_road_name",
+        "suggested_local_area",
+        "suggested_place_name",
+        "map_display_name",
+        "road_suggestion_source",
+        "road_suggestion_attribution",
+        "road_suggestion_status",
+        "reviewed_road_name",
+        "field_submission_id",
+        "field_status",
+        "field_note",
+        "field_verified_at",
+        "signage_batch",
+        "created_at",
+        "updated_at"
+      ],
+      "differential_leakage_mutation_detected": true,
+      "differential_leakage_mutation_result": "rejected",
+      "differential_redaction_passed": true,
+      "forbidden_report_paths": [],
+      "forbidden_value_hits": 0,
+      "normalized_reports_equal": true,
+      "numeric_values_covered_by_differential": true,
+      "raw_source_values_in_committed_report": false,
+      "sensitive_values_redacted": true,
+      "source_hashes_differ": true,
+      "status": "passed",
+      "structural_allowlist_passed": true,
+      "test_id": "privacy-output-boundary",
+      "text_values_covered_by_differential": true,
+      "timestamp_values_covered_by_differential": true,
+      "unknown_path_mutation_result": "rejected",
+      "variant_a_report_generated_independently": true,
+      "variant_a_source_row_hash_sha256": "77752eaf1d5a327563fcd6e690b62a62b5aa4f6fff3a08707a0366f503ad14ce",
+      "variant_b_report_generated_independently": true,
+      "variant_b_source_row_hash_sha256": "0997905542cbc73b6b8e470ad0f26c7c049c29f37c140de7c2b2098814b9e1d3",
+      "variant_sentinel_hits": []
+    }
+  ],
+  "transform_reads_expected_oracle": false,
+  "versions_created": 0
+}

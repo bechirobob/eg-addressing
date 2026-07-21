@@ -1,0 +1,56 @@
+{
+  "expected": {
+    "canonical": [
+      {
+        "canonical_state": "active",
+        "entity_id": "no-formal-road-location-address-1",
+        "entity_type": "address",
+        "label": "Residence near market without formal road"
+      }
+    ],
+    "effective_as_of": [
+      {
+        "entity_id": "no-formal-road-location-address-1",
+        "label": "Residence near market without formal road"
+      }
+    ],
+    "expected_absences": {},
+    "operator_projection": [
+      {
+        "attributes": {
+          "landmark": "central market",
+          "road_status": "no formal road"
+        },
+        "canonical_state": "active",
+        "entity_id": "no-formal-road-location-address-1",
+        "entity_type": "address",
+        "label": "Residence near market without formal road"
+      }
+    ],
+    "public_release": [],
+    "recorded_as_of": [
+      {
+        "entity_id": "no-formal-road-location-address-1",
+        "label": "Residence near market without formal road"
+      }
+    ]
+  },
+  "expected_absence_queries": [
+    {
+      "name": "no-unreleased-public-rows",
+      "params": [
+        "no-formal-road-location"
+      ],
+      "sql": "SELECT entity_id FROM r10_scenario_entity WHERE scenario=%s AND public_visible=false AND public_release_date IS NOT NULL"
+    }
+  ],
+  "query_dates": {
+    "effective": "2026-07-14",
+    "public_release": "2026-07-14",
+    "recorded": "2026-07-14T00:00:00Z"
+  },
+  "review_owner": "SDA scenario expected-result owner",
+  "review_status": "approved-review10-scenario-expected-result",
+  "scenario": "no-formal-road-location",
+  "version": "review10"
+}

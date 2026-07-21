@@ -1,0 +1,942 @@
+{
+  "accepted_geometry_controls_changed": false,
+  "accepted_identity_controls_changed": false,
+  "binding_validation": {
+    "callable": true,
+    "covered_source_fields": true,
+    "idempotency_key": true,
+    "identity_rule": true,
+    "implementation_unit": true,
+    "no_migration_exception": true,
+    "required_context_fields": true,
+    "source_record_key": true,
+    "target_entities": true,
+    "target_identity_rule": true,
+    "transform_group_id": true
+  },
+  "broad_expected_fixture_changed": false,
+  "command": "address-records-identity-slice",
+  "comparator_connection": {
+    "separate_connection": true,
+    "transaction_read_only": "on"
+  },
+  "comparator_connection_read_only_proof": {
+    "separate_connection": true,
+    "target_write_blocked": true,
+    "transaction_read_only": "on",
+    "write_error": "cannot execute INSERT in a read-only transaction"
+  },
+  "complete_target_set_comparison": {
+    "actual_rows": 3,
+    "actual_rows_detail": [
+      {
+        "primary_key": {
+          "legacy_crosswalk_id": "phase-a-crosswalk-address-records-id-to-location-record"
+        },
+        "table": "proposed_legacy_crosswalk",
+        "values": {
+          "created_at": "2026-07-15T00:00:00Z",
+          "legacy_crosswalk_id": "phase-a-crosswalk-address-records-id-to-location-record",
+          "legacy_id": "phase-a-address-records-id",
+          "source_field": "id",
+          "source_table": "address_records",
+          "target_entity": "location_record",
+          "target_id": "phase-a-location-address-records-id"
+        }
+      },
+      {
+        "primary_key": {
+          "location_record_id": "phase-a-location-address-records-id"
+        },
+        "table": "proposed_location_record",
+        "values": {
+          "classification": "government-internal",
+          "created_at": "2026-07-15T00:00:00Z",
+          "location_record_id": "phase-a-location-address-records-id",
+          "record_type": "address",
+          "retired_at": null
+        }
+      },
+      {
+        "primary_key": {
+          "subject_id": "phase-a-subject-phase-a-location-address-records-id"
+        },
+        "table": "proposed_registry_subject",
+        "values": {
+          "created_at": "2026-07-15T00:00:00Z",
+          "delete_policy": "retire-only",
+          "native_id": "phase-a-location-address-records-id",
+          "retired_at": null,
+          "subject_entity": "location_record",
+          "subject_id": "phase-a-subject-phase-a-location-address-records-id",
+          "subject_state": "active"
+        }
+      }
+    ],
+    "comparator_connection": {
+      "separate_connection": true,
+      "transaction_read_only": "on"
+    },
+    "comparator_read_only_proof": {
+      "separate_connection": true,
+      "target_write_blocked": true,
+      "transaction_read_only": "on",
+      "write_error": "cannot execute INSERT in a read-only transaction"
+    },
+    "complete_target_set_query": {
+      "legacy_id": "phase-a-address-records-id",
+      "source_field": "id",
+      "source_table": "address_records",
+      "tables": [
+        "proposed_location_record",
+        "proposed_registry_subject",
+        "proposed_legacy_crosswalk"
+      ]
+    },
+    "expected_absent_rows": [
+      {
+        "count": 0,
+        "reason": "identity migration exception",
+        "table": "proposed_migration_exception",
+        "where": "source_table = 'address_records' AND source_key = 'address_records:phase-a-address-records-id' AND batch_id LIKE '%identity%'"
+      },
+      {
+        "count": 0,
+        "reason": "source_submission_id or territory crosswalk",
+        "table": "proposed_legacy_crosswalk",
+        "where": "source_table = 'address_records' AND source_field IN ('source_submission_id','territory_id')"
+      },
+      {
+        "count": 0,
+        "reason": "location-record version",
+        "table": "proposed_location_record_version",
+        "where": "location_record_id LIKE 'phase-a-location-address-records%'"
+      },
+      {
+        "count": 0,
+        "reason": "new geometry observation",
+        "table": "proposed_geometry_observation",
+        "where": "geometry_observation_id LIKE 'phase-a-geometry-address-records%'"
+      },
+      {
+        "count": 0,
+        "reason": "public-code alias",
+        "table": "proposed_public_code_alias",
+        "where": "location_record_id LIKE 'phase-a-location-address-records%'"
+      },
+      {
+        "count": 0,
+        "reason": "publication release item",
+        "table": "proposed_publication_release_item",
+        "where": "location_record_id LIKE 'phase-a-location-address-records%'"
+      }
+    ],
+    "expected_rows": 3,
+    "semantic_uniqueness": {
+      "duplicates": [],
+      "query": "absolute uniqueness on (source_table, source_field, legacy_id, target_entity)",
+      "semantic_duplicate_count": 0
+    }
+  },
+  "evidence_resolution": {
+    "classification": "government-internal",
+    "evidence_object_id": "phase-a-evidence-address-records",
+    "source_record_id": "phase-a-source-record-address-records-001"
+  },
+  "exact_function_implemented": "transform_address_records_identity_crosswalk",
+  "exact_registry_binding": {
+    "impl_wo002_r06_identity_crosswalk_address_records": "transform_address_records_identity_crosswalk"
+  },
+  "expected_absent_rows_verified": [
+    {
+      "count": 0,
+      "reason": "identity migration exception",
+      "table": "proposed_migration_exception",
+      "where": "source_table = 'address_records' AND source_key = 'address_records:phase-a-address-records-id' AND batch_id LIKE '%identity%'"
+    },
+    {
+      "count": 0,
+      "reason": "source_submission_id or territory crosswalk",
+      "table": "proposed_legacy_crosswalk",
+      "where": "source_table = 'address_records' AND source_field IN ('source_submission_id','territory_id')"
+    },
+    {
+      "count": 0,
+      "reason": "location-record version",
+      "table": "proposed_location_record_version",
+      "where": "location_record_id LIKE 'phase-a-location-address-records%'"
+    },
+    {
+      "count": 0,
+      "reason": "new geometry observation",
+      "table": "proposed_geometry_observation",
+      "where": "geometry_observation_id LIKE 'phase-a-geometry-address-records%'"
+    },
+    {
+      "count": 0,
+      "reason": "public-code alias",
+      "table": "proposed_public_code_alias",
+      "where": "location_record_id LIKE 'phase-a-location-address-records%'"
+    },
+    {
+      "count": 0,
+      "reason": "publication release item",
+      "table": "proposed_publication_release_item",
+      "where": "location_record_id LIKE 'phase-a-location-address-records%'"
+    }
+  ],
+  "fields_consumed": [
+    "address_records.id",
+    "address_records.address_code",
+    "address_records.source_submission_id",
+    "address_records.province_code",
+    "address_records.territory_id",
+    "address_records.address_label",
+    "address_records.status",
+    "address_records.publication_state",
+    "address_records.is_archived",
+    "address_records.created_at",
+    "address_records.updated_at"
+  ],
+  "first_run_inserts": 3,
+  "frozen_broad_spec_changed": false,
+  "generic_transform_group_used_for_slice": false,
+  "geometry_rows_created": 0,
+  "legacy_crosswalk_row": {
+    "primary_key": {
+      "legacy_crosswalk_id": "phase-a-crosswalk-address-records-id-to-location-record"
+    },
+    "table": "proposed_legacy_crosswalk",
+    "values": {
+      "created_at": "2026-07-15T00:00:00Z",
+      "legacy_crosswalk_id": "phase-a-crosswalk-address-records-id-to-location-record",
+      "legacy_id": "phase-a-address-records-id",
+      "source_field": "id",
+      "source_table": "address_records",
+      "target_entity": "location_record",
+      "target_id": "phase-a-location-address-records-id"
+    }
+  },
+  "location_record_row": {
+    "primary_key": {
+      "location_record_id": "phase-a-location-address-records-id"
+    },
+    "table": "proposed_location_record",
+    "values": {
+      "classification": "government-internal",
+      "created_at": "2026-07-15T00:00:00Z",
+      "location_record_id": "phase-a-location-address-records-id",
+      "record_type": "address",
+      "retired_at": null
+    }
+  },
+  "migration_exceptions_created": 0,
+  "prohibited_outputs_created": {
+    "proposed_geometry_observation:geometry_observation_id LIKE 'phase-a-geometry-address-records%'": 0,
+    "proposed_legacy_crosswalk:source_table = 'address_records' AND source_field IN ('source_submission_id','territory_id')": 0,
+    "proposed_location_record_version:location_record_id LIKE 'phase-a-location-address-records%'": 0,
+    "proposed_migration_exception:source_table = 'address_records' AND source_key = 'address_records:phase-a-address-records-id' AND batch_id LIKE '%identity%'": 0,
+    "proposed_public_code_alias:location_record_id LIKE 'phase-a-location-address-records%'": 0,
+    "proposed_publication_release_item:location_record_id LIKE 'phase-a-location-address-records%'": 0
+  },
+  "public_code_aliases_created": 0,
+  "publication_rows_created": 0,
+  "reference_fields_used_as_identity": false,
+  "registry_subject_row": {
+    "primary_key": {
+      "subject_id": "phase-a-subject-phase-a-location-address-records-id"
+    },
+    "table": "proposed_registry_subject",
+    "values": {
+      "created_at": "2026-07-15T00:00:00Z",
+      "delete_policy": "retire-only",
+      "native_id": "phase-a-location-address-records-id",
+      "retired_at": null,
+      "subject_entity": "location_record",
+      "subject_id": "phase-a-subject-phase-a-location-address-records-id",
+      "subject_state": "active"
+    }
+  },
+  "reviewed_transform_spec_row": {
+    "archive_behavior": "archive required when registry target/archive_object requires source_payload_archive; operational-control records retain typed disposition otherwise",
+    "conditional_authority_rfi_status": [
+      "none"
+    ],
+    "covered_source_fields": [
+      "address_records.id"
+    ],
+    "crosswalk_algorithm": "source table + source key + target entity -> proposed_legacy_crosswalk when registry declares identity/crosswalk target",
+    "dispositions": [
+      "structured-transform"
+    ],
+    "exception_behavior": "no migration exception in this identity slice; provenance/territory/publication/geometry fields are context only",
+    "id_algorithm": "phase-a deterministic slug(source table/group/current field)",
+    "idempotency_key": "address_records.phase-a-address-records-id::WO002-R06-identity-crosswalk-address_records",
+    "identity_rule": "address_records.id owns the identity; source_submission_id, territory_id, address_code, publication and geometry fields are context only",
+    "implementation_unit": "impl_wo002_r06_identity_crosswalk_address_records",
+    "operation": "registry-disposition-to-canonical-target-evidence",
+    "required_context_fields": [
+      "address_records.address_code",
+      "address_records.source_submission_id",
+      "address_records.province_code",
+      "address_records.territory_id",
+      "address_records.address_label",
+      "address_records.status",
+      "address_records.publication_state",
+      "address_records.is_archived",
+      "address_records.created_at",
+      "address_records.updated_at"
+    ],
+    "source_record_key": "address_records:phase-a-address-records-id",
+    "source_table": "address_records",
+    "target_entities": [
+      "location_record",
+      "registry_subject",
+      "legacy_crosswalk"
+    ],
+    "target_fields": [
+      "location_record.location_record_id",
+      "registry_subject.subject_id",
+      "legacy_crosswalk.legacy_id"
+    ],
+    "target_identity_rule": {
+      "primary_fixture": {
+        "legacy_crosswalk_id": "phase-a-crosswalk-address-records-id-to-location-record",
+        "location_record_id": "phase-a-location-address-records-id",
+        "source_id": "phase-a-address-records-id",
+        "subject_id": "phase-a-subject-phase-a-location-address-records-id"
+      },
+      "second_fixture_rule": "For phase-a-address-records-<suffix>, use matching location, subject and crosswalk IDs ending in <suffix>. Design harness only."
+    },
+    "transform_group_id": "WO002-R06-identity-crosswalk-address_records"
+  },
+  "reviewer_owned_oracle_changed": false,
+  "reviewer_owned_oracle_sha256": "16d1034b786a77d31b6863774807e66d87a337fa78c1a4202e401fbcddecd06e",
+  "rollback_equality_all": true,
+  "rollback_evidence_count": 16,
+  "second_run_inserts": 0,
+  "second_run_updates": 0,
+  "second_source_identity_test": {
+    "active_registry_subjects": 2,
+    "address_records_source_identities": 2,
+    "checks": {
+      "active_registry_subjects": true,
+      "distinct_crosswalks": true,
+      "geometry_rows_created_by_identity_slice": true,
+      "internal_location_records": true,
+      "multiple_target_resolution": true,
+      "second_source_key": true,
+      "semantic_duplicate_crosswalks": true,
+      "source_records": true
+    },
+    "distinct_crosswalks": 2,
+    "first_rows": [
+      {
+        "primary_key": {
+          "legacy_crosswalk_id": "phase-a-crosswalk-address-records-id-to-location-record"
+        },
+        "table": "proposed_legacy_crosswalk",
+        "values": {
+          "created_at": "2026-07-15T00:00:00Z",
+          "legacy_crosswalk_id": "phase-a-crosswalk-address-records-id-to-location-record",
+          "legacy_id": "phase-a-address-records-id",
+          "source_field": "id",
+          "source_table": "address_records",
+          "target_entity": "location_record",
+          "target_id": "phase-a-location-address-records-id"
+        }
+      },
+      {
+        "primary_key": {
+          "location_record_id": "phase-a-location-address-records-id"
+        },
+        "table": "proposed_location_record",
+        "values": {
+          "classification": "government-internal",
+          "created_at": "2026-07-15T00:00:00Z",
+          "location_record_id": "phase-a-location-address-records-id",
+          "record_type": "address",
+          "retired_at": null
+        }
+      },
+      {
+        "primary_key": {
+          "subject_id": "phase-a-subject-phase-a-location-address-records-id"
+        },
+        "table": "proposed_registry_subject",
+        "values": {
+          "created_at": "2026-07-15T00:00:00Z",
+          "delete_policy": "retire-only",
+          "native_id": "phase-a-location-address-records-id",
+          "retired_at": null,
+          "subject_entity": "location_record",
+          "subject_id": "phase-a-subject-phase-a-location-address-records-id",
+          "subject_state": "active"
+        }
+      }
+    ],
+    "first_transform_lineage": {
+      "derived_source_key": "address_records:phase-a-address-records-id",
+      "evidence_params": [
+        "phase-a-source-record-address-records-001"
+      ],
+      "evidence_query": "SELECT evidence_object_id, source_record_id, classification FROM canonical_target.proposed_evidence_object WHERE source_record_id = %s ORDER BY evidence_object_id",
+      "evidence_row": {
+        "classification": "government-internal",
+        "evidence_object_id": "phase-a-evidence-address-records",
+        "source_record_id": "phase-a-source-record-address-records-001"
+      },
+      "source_params": [
+        "address_records:phase-a-address-records-id"
+      ],
+      "source_query": "SELECT source_record_id, source_key, raw_payload_classification FROM canonical_target.proposed_source_record WHERE source_key = %s ORDER BY source_record_id",
+      "source_row": {
+        "raw_payload_classification": "government-internal",
+        "source_key": "address_records:phase-a-address-records-id",
+        "source_record_id": "phase-a-source-record-address-records-001"
+      }
+    },
+    "geometry_rows_created_by_identity_slice": 0,
+    "internal_location_records": 2,
+    "multiple_target_resolutions": 0,
+    "second_rows": [
+      {
+        "primary_key": {
+          "legacy_crosswalk_id": "phase-a-crosswalk-address-records-002-to-location-record"
+        },
+        "table": "proposed_legacy_crosswalk",
+        "values": {
+          "created_at": "2026-07-15T00:00:00Z",
+          "legacy_crosswalk_id": "phase-a-crosswalk-address-records-002-to-location-record",
+          "legacy_id": "phase-a-address-records-002",
+          "source_field": "id",
+          "source_table": "address_records",
+          "target_entity": "location_record",
+          "target_id": "phase-a-location-address-records-002"
+        }
+      },
+      {
+        "primary_key": {
+          "location_record_id": "phase-a-location-address-records-002"
+        },
+        "table": "proposed_location_record",
+        "values": {
+          "classification": "government-internal",
+          "created_at": "2026-07-15T00:00:00Z",
+          "location_record_id": "phase-a-location-address-records-002",
+          "record_type": "address",
+          "retired_at": null
+        }
+      },
+      {
+        "primary_key": {
+          "subject_id": "phase-a-subject-phase-a-location-address-records-002"
+        },
+        "table": "proposed_registry_subject",
+        "values": {
+          "created_at": "2026-07-15T00:00:00Z",
+          "delete_policy": "retire-only",
+          "native_id": "phase-a-location-address-records-002",
+          "retired_at": null,
+          "subject_entity": "location_record",
+          "subject_id": "phase-a-subject-phase-a-location-address-records-002",
+          "subject_state": "active"
+        }
+      }
+    ],
+    "second_transform_lineage": {
+      "derived_source_key": "address_records:phase-a-address-records-002",
+      "evidence_params": [
+        "phase-a-source-record-address-records-002"
+      ],
+      "evidence_query": "SELECT evidence_object_id, source_record_id, classification FROM canonical_target.proposed_evidence_object WHERE source_record_id = %s ORDER BY evidence_object_id",
+      "evidence_row": {
+        "classification": "government-internal",
+        "evidence_object_id": "phase-a-evidence-address-records-002",
+        "source_record_id": "phase-a-source-record-address-records-002"
+      },
+      "source_params": [
+        "address_records:phase-a-address-records-002"
+      ],
+      "source_query": "SELECT source_record_id, source_key, raw_payload_classification FROM canonical_target.proposed_source_record WHERE source_key = %s ORDER BY source_record_id",
+      "source_row": {
+        "raw_payload_classification": "government-internal",
+        "source_key": "address_records:phase-a-address-records-002",
+        "source_record_id": "phase-a-source-record-address-records-002"
+      }
+    },
+    "semantic_duplicate_crosswalks": 0,
+    "status": "passed",
+    "test_id": "second-source-identity"
+  },
+  "semantic_uniqueness_query_result": {
+    "duplicates": [],
+    "query": "absolute uniqueness on (source_table, source_field, legacy_id, target_entity)",
+    "semantic_duplicate_count": 0
+  },
+  "source_key_derivation": {
+    "rule": "address_records:<queried id>",
+    "value": "address_records:phase-a-address-records-id"
+  },
+  "source_record_resolution": {
+    "raw_payload_classification": "government-internal",
+    "source_key": "address_records:phase-a-address-records-id",
+    "source_record_id": "phase-a-source-record-address-records-001"
+  },
+  "source_row_query": "SELECT id,address_code,source_submission_id,province_code,territory_id,address_label,status,publication_state, latitude,longitude,accuracy_meters,search_text,record_bundle,is_archived,created_at,updated_at, ST_AsText(geom::geometry) AS geom_wkt, ST_SRID(geom::geometry) AS geom_srid FROM current_source.address_records WHERE id = %s",
+  "source_row_returned": {
+    "accuracy_meters": 4.5,
+    "address_code": "PHASE-A-NONOFFICIAL-001",
+    "address_label": "Controlled Phase A address label",
+    "created_at": "2026-07-15T00:00:00Z",
+    "geom_srid": 4326,
+    "geom_wkt": "POINT(8.783 3.752)",
+    "id": "phase-a-address-records-id",
+    "is_archived": false,
+    "latitude": 3.752,
+    "longitude": 8.783,
+    "province_code": "phase-a-provinces-code",
+    "publication_state": "phase-a address_records publication_state",
+    "record_bundle": {
+      "phase_a_value": "phase-a address_records record_bundle"
+    },
+    "search_text": "phase-a address_records search_text",
+    "source_submission_id": "phase-a-geotag-001",
+    "status": "submitted",
+    "territory_id": "phase-a-territories-id",
+    "updated_at": "2026-07-15T00:00:00Z"
+  },
+  "status": "passed",
+  "tests": [
+    {
+      "status": "passed",
+      "test_id": "positive-authoritative-slice"
+    },
+    {
+      "first_run_inserts": 3,
+      "second_run_inserts": 0,
+      "second_run_updates": 0,
+      "status": "passed",
+      "test_id": "second-run-idempotency"
+    },
+    {
+      "comparison": {
+        "legacy_id": "phase-a-address-records-id",
+        "source_field": "id",
+        "source_table": "address_records",
+        "tables": [
+          "proposed_location_record",
+          "proposed_registry_subject",
+          "proposed_legacy_crosswalk"
+        ]
+      },
+      "status": "passed",
+      "test_id": "read-only-complete-set-comparison"
+    },
+    {
+      "active_registry_subjects": 2,
+      "address_records_source_identities": 2,
+      "checks": {
+        "active_registry_subjects": true,
+        "distinct_crosswalks": true,
+        "geometry_rows_created_by_identity_slice": true,
+        "internal_location_records": true,
+        "multiple_target_resolution": true,
+        "second_source_key": true,
+        "semantic_duplicate_crosswalks": true,
+        "source_records": true
+      },
+      "distinct_crosswalks": 2,
+      "first_rows": [
+        {
+          "primary_key": {
+            "legacy_crosswalk_id": "phase-a-crosswalk-address-records-id-to-location-record"
+          },
+          "table": "proposed_legacy_crosswalk",
+          "values": {
+            "created_at": "2026-07-15T00:00:00Z",
+            "legacy_crosswalk_id": "phase-a-crosswalk-address-records-id-to-location-record",
+            "legacy_id": "phase-a-address-records-id",
+            "source_field": "id",
+            "source_table": "address_records",
+            "target_entity": "location_record",
+            "target_id": "phase-a-location-address-records-id"
+          }
+        },
+        {
+          "primary_key": {
+            "location_record_id": "phase-a-location-address-records-id"
+          },
+          "table": "proposed_location_record",
+          "values": {
+            "classification": "government-internal",
+            "created_at": "2026-07-15T00:00:00Z",
+            "location_record_id": "phase-a-location-address-records-id",
+            "record_type": "address",
+            "retired_at": null
+          }
+        },
+        {
+          "primary_key": {
+            "subject_id": "phase-a-subject-phase-a-location-address-records-id"
+          },
+          "table": "proposed_registry_subject",
+          "values": {
+            "created_at": "2026-07-15T00:00:00Z",
+            "delete_policy": "retire-only",
+            "native_id": "phase-a-location-address-records-id",
+            "retired_at": null,
+            "subject_entity": "location_record",
+            "subject_id": "phase-a-subject-phase-a-location-address-records-id",
+            "subject_state": "active"
+          }
+        }
+      ],
+      "first_transform_lineage": {
+        "derived_source_key": "address_records:phase-a-address-records-id",
+        "evidence_params": [
+          "phase-a-source-record-address-records-001"
+        ],
+        "evidence_query": "SELECT evidence_object_id, source_record_id, classification FROM canonical_target.proposed_evidence_object WHERE source_record_id = %s ORDER BY evidence_object_id",
+        "evidence_row": {
+          "classification": "government-internal",
+          "evidence_object_id": "phase-a-evidence-address-records",
+          "source_record_id": "phase-a-source-record-address-records-001"
+        },
+        "source_params": [
+          "address_records:phase-a-address-records-id"
+        ],
+        "source_query": "SELECT source_record_id, source_key, raw_payload_classification FROM canonical_target.proposed_source_record WHERE source_key = %s ORDER BY source_record_id",
+        "source_row": {
+          "raw_payload_classification": "government-internal",
+          "source_key": "address_records:phase-a-address-records-id",
+          "source_record_id": "phase-a-source-record-address-records-001"
+        }
+      },
+      "geometry_rows_created_by_identity_slice": 0,
+      "internal_location_records": 2,
+      "multiple_target_resolutions": 0,
+      "second_rows": [
+        {
+          "primary_key": {
+            "legacy_crosswalk_id": "phase-a-crosswalk-address-records-002-to-location-record"
+          },
+          "table": "proposed_legacy_crosswalk",
+          "values": {
+            "created_at": "2026-07-15T00:00:00Z",
+            "legacy_crosswalk_id": "phase-a-crosswalk-address-records-002-to-location-record",
+            "legacy_id": "phase-a-address-records-002",
+            "source_field": "id",
+            "source_table": "address_records",
+            "target_entity": "location_record",
+            "target_id": "phase-a-location-address-records-002"
+          }
+        },
+        {
+          "primary_key": {
+            "location_record_id": "phase-a-location-address-records-002"
+          },
+          "table": "proposed_location_record",
+          "values": {
+            "classification": "government-internal",
+            "created_at": "2026-07-15T00:00:00Z",
+            "location_record_id": "phase-a-location-address-records-002",
+            "record_type": "address",
+            "retired_at": null
+          }
+        },
+        {
+          "primary_key": {
+            "subject_id": "phase-a-subject-phase-a-location-address-records-002"
+          },
+          "table": "proposed_registry_subject",
+          "values": {
+            "created_at": "2026-07-15T00:00:00Z",
+            "delete_policy": "retire-only",
+            "native_id": "phase-a-location-address-records-002",
+            "retired_at": null,
+            "subject_entity": "location_record",
+            "subject_id": "phase-a-subject-phase-a-location-address-records-002",
+            "subject_state": "active"
+          }
+        }
+      ],
+      "second_transform_lineage": {
+        "derived_source_key": "address_records:phase-a-address-records-002",
+        "evidence_params": [
+          "phase-a-source-record-address-records-002"
+        ],
+        "evidence_query": "SELECT evidence_object_id, source_record_id, classification FROM canonical_target.proposed_evidence_object WHERE source_record_id = %s ORDER BY evidence_object_id",
+        "evidence_row": {
+          "classification": "government-internal",
+          "evidence_object_id": "phase-a-evidence-address-records-002",
+          "source_record_id": "phase-a-source-record-address-records-002"
+        },
+        "source_params": [
+          "address_records:phase-a-address-records-002"
+        ],
+        "source_query": "SELECT source_record_id, source_key, raw_payload_classification FROM canonical_target.proposed_source_record WHERE source_key = %s ORDER BY source_record_id",
+        "source_row": {
+          "raw_payload_classification": "government-internal",
+          "source_key": "address_records:phase-a-address-records-002",
+          "source_record_id": "phase-a-source-record-address-records-002"
+        }
+      },
+      "semantic_duplicate_crosswalks": 0,
+      "status": "passed",
+      "test_id": "second-source-identity"
+    },
+    {
+      "expected_error": "address_records source row not found",
+      "observed_error": "address_records source row not found",
+      "rollback_equality": true,
+      "same_database_post_failure_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_post_failure_rows": [],
+      "same_database_pre_test_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_pre_test_rows": [],
+      "state_unchanged": true,
+      "status": "passed",
+      "test_id": "missing-source-record"
+    },
+    {
+      "expected_error": "address_records source record lineage not found",
+      "observed_error": "address_records source record lineage not found",
+      "rollback_equality": true,
+      "same_database_post_failure_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_post_failure_rows": [],
+      "same_database_pre_test_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_pre_test_rows": [],
+      "state_unchanged": true,
+      "status": "passed",
+      "test_id": "missing-source-lineage"
+    },
+    {
+      "expected_error": "address_records evidence object not found",
+      "observed_error": "address_records evidence object not found",
+      "rollback_equality": true,
+      "same_database_post_failure_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_post_failure_rows": [],
+      "same_database_pre_test_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_pre_test_rows": [],
+      "state_unchanged": true,
+      "status": "passed",
+      "test_id": "missing-evidence-object"
+    },
+    {
+      "expected_error": "address_records source record must remain government-internal",
+      "observed_error": "address_records source record must remain government-internal",
+      "rollback_equality": true,
+      "same_database_post_failure_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_post_failure_rows": [],
+      "same_database_pre_test_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_pre_test_rows": [],
+      "state_unchanged": true,
+      "status": "passed",
+      "test_id": "source-record-classification-drift"
+    },
+    {
+      "expected_error": "address_records evidence object must remain government-internal",
+      "observed_error": "address_records evidence object must remain government-internal",
+      "rollback_equality": true,
+      "same_database_post_failure_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_post_failure_rows": [],
+      "same_database_pre_test_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_pre_test_rows": [],
+      "state_unchanged": true,
+      "status": "passed",
+      "test_id": "evidence-classification-drift"
+    },
+    {
+      "expected_error": "address_records identity must derive from address_records.id",
+      "observed_error": "address_records identity must derive from address_records.id",
+      "rollback_equality": true,
+      "same_database_post_failure_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_post_failure_rows": [],
+      "same_database_pre_test_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_pre_test_rows": [],
+      "state_unchanged": true,
+      "status": "passed",
+      "test_id": "source-submission-identity-substitution"
+    },
+    {
+      "expected_error": "address_records identity must derive from address_records.id",
+      "observed_error": "address_records identity must derive from address_records.id",
+      "rollback_equality": true,
+      "same_database_post_failure_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_post_failure_rows": [],
+      "same_database_pre_test_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_pre_test_rows": [],
+      "state_unchanged": true,
+      "status": "passed",
+      "test_id": "territory-identity-substitution"
+    },
+    {
+      "expected_error": "address_records identity rows differ from reviewer-owned expected target identity",
+      "observed_error": "address_records identity rows differ from reviewer-owned expected target identity",
+      "rollback_equality": true,
+      "same_database_post_failure_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_post_failure_rows": [],
+      "same_database_pre_test_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_pre_test_rows": [],
+      "state_unchanged": true,
+      "status": "passed",
+      "test_id": "wrong-target-identity-implementation"
+    },
+    {
+      "expected_error": "address_records identity rows differ from reviewer-owned expected target identity",
+      "observed_error": "address_records identity rows differ from reviewer-owned expected target identity",
+      "rollback_equality": true,
+      "same_database_post_failure_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_post_failure_rows": [],
+      "same_database_pre_test_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_pre_test_rows": [],
+      "state_unchanged": true,
+      "status": "passed",
+      "test_id": "existing-location-conflict"
+    },
+    {
+      "expected_error": "address_records identity rows differ from reviewer-owned expected target identity",
+      "observed_error": "address_records identity rows differ from reviewer-owned expected target identity",
+      "rollback_equality": true,
+      "same_database_post_failure_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_post_failure_rows": [],
+      "same_database_pre_test_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_pre_test_rows": [],
+      "state_unchanged": true,
+      "status": "passed",
+      "test_id": "existing-subject-conflict"
+    },
+    {
+      "expected_error": "address_records identity rows differ from reviewer-owned expected target identity",
+      "observed_error": "address_records identity rows differ from reviewer-owned expected target identity",
+      "rollback_equality": true,
+      "same_database_post_failure_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_post_failure_rows": [],
+      "same_database_pre_test_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_pre_test_rows": [],
+      "state_unchanged": true,
+      "status": "passed",
+      "test_id": "existing-crosswalk-conflict"
+    },
+    {
+      "expected_error": "unexpected address_records identity-foundation target row",
+      "observed_error": "unexpected address_records identity-foundation target row",
+      "rollback_equality": true,
+      "same_database_post_failure_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_post_failure_rows": [],
+      "same_database_pre_test_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_pre_test_rows": [],
+      "state_unchanged": true,
+      "status": "passed",
+      "test_id": "unexpected-extra-crosswalk"
+    },
+    {
+      "expected_error": "unexpected address_records identity-foundation target row",
+      "observed_error": "unexpected address_records identity-foundation target row",
+      "rollback_equality": true,
+      "same_database_post_failure_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_post_failure_rows": [],
+      "same_database_pre_test_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_pre_test_rows": [],
+      "state_unchanged": true,
+      "status": "passed",
+      "test_id": "unexpected-extra-location-record"
+    },
+    {
+      "expected_error": "unexpected address_records identity-foundation target row",
+      "observed_error": "unexpected address_records identity-foundation target row",
+      "rollback_equality": true,
+      "same_database_post_failure_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_post_failure_rows": [],
+      "same_database_pre_test_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_pre_test_rows": [],
+      "state_unchanged": true,
+      "status": "passed",
+      "test_id": "unexpected-extra-registry-subject"
+    },
+    {
+      "expected_error": "address_records identity crosswalk semantic uniqueness violated",
+      "observed_error": "address_records identity crosswalk semantic uniqueness violated",
+      "rollback_equality": true,
+      "same_database_post_failure_hash": "39cfd4d484529e0d6f8797d3ef793a016e1a19886ca4f3b4a9f21679e276177d",
+      "same_database_post_failure_rows": [
+        {
+          "primary_key": {
+            "legacy_crosswalk_id": "phase-a-crosswalk-address-records-id-to-location-record-duplicate"
+          },
+          "table": "proposed_legacy_crosswalk",
+          "values": {
+            "created_at": "2026-07-15T00:00:00Z",
+            "legacy_crosswalk_id": "phase-a-crosswalk-address-records-id-to-location-record-duplicate",
+            "legacy_id": "phase-a-address-records-id",
+            "source_field": "id",
+            "source_table": "address_records",
+            "target_entity": "location_record",
+            "target_id": "phase-a-location-address-records-duplicate"
+          }
+        },
+        {
+          "primary_key": {
+            "location_record_id": "phase-a-location-address-records-duplicate"
+          },
+          "table": "proposed_location_record",
+          "values": {
+            "classification": "government-internal",
+            "created_at": "2026-07-15T00:00:00Z",
+            "location_record_id": "phase-a-location-address-records-duplicate",
+            "record_type": "address",
+            "retired_at": null
+          }
+        }
+      ],
+      "same_database_pre_test_hash": "39cfd4d484529e0d6f8797d3ef793a016e1a19886ca4f3b4a9f21679e276177d",
+      "same_database_pre_test_rows": [
+        {
+          "primary_key": {
+            "legacy_crosswalk_id": "phase-a-crosswalk-address-records-id-to-location-record-duplicate"
+          },
+          "table": "proposed_legacy_crosswalk",
+          "values": {
+            "created_at": "2026-07-15T00:00:00Z",
+            "legacy_crosswalk_id": "phase-a-crosswalk-address-records-id-to-location-record-duplicate",
+            "legacy_id": "phase-a-address-records-id",
+            "source_field": "id",
+            "source_table": "address_records",
+            "target_entity": "location_record",
+            "target_id": "phase-a-location-address-records-duplicate"
+          }
+        },
+        {
+          "primary_key": {
+            "location_record_id": "phase-a-location-address-records-duplicate"
+          },
+          "table": "proposed_location_record",
+          "values": {
+            "classification": "government-internal",
+            "created_at": "2026-07-15T00:00:00Z",
+            "location_record_id": "phase-a-location-address-records-duplicate",
+            "record_type": "address",
+            "retired_at": null
+          }
+        }
+      ],
+      "state_unchanged": true,
+      "status": "passed",
+      "test_id": "semantic-duplicate-crosswalk"
+    },
+    {
+      "expected_error": "address_records identity transform specification binding mismatch",
+      "observed_error": "address_records identity transform specification binding mismatch: {'transform_group_id': True, 'implementation_unit': False, 'callable': False, 'covered_source_fields': True, 'required_context_fields': True, 'source_record_key': True, 'idempotency_key': True, 'identity_rule': True, 'target_entities': True, 'target_identity_rule': True, 'no_migration_exception': True}",
+      "rollback_equality": true,
+      "same_database_post_failure_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_post_failure_rows": [],
+      "same_database_pre_test_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "same_database_pre_test_rows": [],
+      "state_unchanged": true,
+      "status": "passed",
+      "test_id": "transform-spec-binding-drift"
+    }
+  ],
+  "transform_reads_expected_oracle": false,
+  "versions_created": 0
+}

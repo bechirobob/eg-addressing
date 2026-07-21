@@ -1,0 +1,14 @@
+{
+  "crosswalk_target_validation": {
+    "crosswalks_checked": 21,
+    "failures": []
+  },
+  "target_counts": {
+    "archives": 23,
+    "crosswalks": 21,
+    "exceptions": 17,
+    "target_child_rows": 17,
+    "target_entities": 135,
+    "target_relationships": 1
+  }
+}

@@ -1,0 +1,56 @@
+{
+  "expected": {
+    "canonical": [
+      {
+        "canonical_state": "active",
+        "entity_id": "rural-landmark-location-landmark-1",
+        "entity_type": "landmark",
+        "label": "Rural Clinic Landmark"
+      }
+    ],
+    "effective_as_of": [
+      {
+        "entity_id": "rural-landmark-location-landmark-1",
+        "label": "Rural Clinic Landmark"
+      }
+    ],
+    "expected_absences": {},
+    "operator_projection": [
+      {
+        "attributes": {
+          "field_review": "required",
+          "locality": "Nsok rural area"
+        },
+        "canonical_state": "active",
+        "entity_id": "rural-landmark-location-landmark-1",
+        "entity_type": "landmark",
+        "label": "Rural Clinic Landmark"
+      }
+    ],
+    "public_release": [],
+    "recorded_as_of": [
+      {
+        "entity_id": "rural-landmark-location-landmark-1",
+        "label": "Rural Clinic Landmark"
+      }
+    ]
+  },
+  "expected_absence_queries": [
+    {
+      "name": "no-unreleased-public-rows",
+      "params": [
+        "rural-landmark-location"
+      ],
+      "sql": "SELECT entity_id FROM r10_scenario_entity WHERE scenario=%s AND public_visible=false AND public_release_date IS NOT NULL"
+    }
+  ],
+  "query_dates": {
+    "effective": "2026-07-14",
+    "public_release": "2026-07-14",
+    "recorded": "2026-07-14T00:00:00Z"
+  },
+  "review_owner": "SDA scenario expected-result owner",
+  "review_status": "approved-review10-scenario-expected-result",
+  "scenario": "rural-landmark-location",
+  "version": "review10"
+}

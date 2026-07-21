@@ -1,0 +1,1 @@
+{"control_id":"NLI-WO-002-PA-ADMIN-ID-SHELL-01","reviewed_head":"68404c0f46245840a1c809b186198831ea7beb1c","decision":"OPTION_A_ORACLE_PREPARATION_AUTHORIZED","source":"admin_units.id:phase-a-admin-units-id","lineage_model":"L1","subject_model":"S1","owned_rows":3,"official_hierarchy":false,"implementation_authorized":false}

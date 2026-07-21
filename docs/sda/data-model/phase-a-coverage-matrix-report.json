@@ -1,0 +1,16 @@
+{
+  "current_pg_catalog_fields": 237,
+  "duplicate_conflicting_execution_count": 0,
+  "duplicate_conflicting_executions": [],
+  "executable_implementations_invoked": 90,
+  "executable_implementations_resolved": 90,
+  "executed_field_dispositions": 237,
+  "execution_mode": "phase-a-real-transform-telemetry-coverage",
+  "extra_fields": [],
+  "missing_field_count": 0,
+  "missing_fields": [],
+  "reviewed_current_fields": 237,
+  "reviewed_groups": 90,
+  "unexecuted_group_count": 0,
+  "unexecuted_groups": []
+}

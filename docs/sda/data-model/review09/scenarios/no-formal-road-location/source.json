@@ -1,0 +1,25 @@
+{
+  "entities": [
+    {
+      "attributes": {
+        "landmark": "central market",
+        "road_status": "no formal road"
+      },
+      "canonical_state": "active",
+      "effective_from": "2026-01-01",
+      "effective_to": null,
+      "entity_id": "no-formal-road-location-address-1",
+      "entity_type": "address",
+      "label": "Residence near market without formal road",
+      "operator_visible": true,
+      "public_release_date": null,
+      "public_visible": false,
+      "recorded_from": "2026-01-01T00:00:00Z",
+      "recorded_to": null
+    }
+  ],
+  "review_owner": "SDA scenario source owner",
+  "review_status": "approved-review10-scenario-source",
+  "scenario": "no-formal-road-location",
+  "version": "review10"
+}

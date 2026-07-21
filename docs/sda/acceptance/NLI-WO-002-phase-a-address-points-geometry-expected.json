@@ -1,0 +1,186 @@
+{
+  "control_id": "NLI-WO-002-PA-GEO-01",
+  "control_status": "reviewer-owned-acceptance-oracle",
+  "implementation_must_not_modify": true,
+  "reviewed_baseline_head": "9bc824c0fff1ed4d968c5b886218bfd99fa4f740",
+  "scope": "One authoritative vertical slice only: current_source.address_points -> canonical_target.proposed_geometry_observation",
+  "source_record": {
+    "schema": "current_source",
+    "table": "address_points",
+    "lookup": {
+      "id": "phase-a-address-points-id"
+    },
+    "required_values": {
+      "id": "phase-a-address-points-id",
+      "address_id": "phase-a-addresses-id",
+      "latitude": 3.752,
+      "longitude": 8.783,
+      "accuracy_meters": 4.5,
+      "source_method": "phase-a address_points source_method",
+      "is_active": false,
+      "created_at": "2026-07-15T00:00:00Z",
+      "updated_at": "2026-07-15T00:00:00Z"
+    }
+  },
+  "reviewed_transform": {
+    "transform_group_id": "WO002-R06-geometry-observation-address_points",
+    "implementation_unit": "impl_wo002_r06_geometry_observation_address_points",
+    "required_callable": "transform_address_points_geometry",
+    "covered_source_fields": [
+      "address_points.accuracy_meters",
+      "address_points.latitude",
+      "address_points.longitude"
+    ],
+    "required_context_fields": [
+      "address_points.id",
+      "address_points.address_id",
+      "address_points.source_method",
+      "address_points.created_at"
+    ],
+    "source_method_translation": {
+      "phase-a address_points source_method": "derived-from-source"
+    },
+    "forbidden_input": "docs/sda/acceptance/NLI-WO-002-phase-a-address-points-geometry-expected.json"
+  },
+  "preconditions": {
+    "address_identity_crosswalk": {
+      "table": "proposed_legacy_crosswalk",
+      "values": {
+        "legacy_crosswalk_id": "phase-a-crosswalk-addresses-id-to-location-record",
+        "source_table": "addresses",
+        "source_field": "id",
+        "legacy_id": "phase-a-addresses-id",
+        "target_entity": "location_record",
+        "target_id": "phase-a-location-address-reference",
+        "created_at": "2026-07-15T00:00:00Z"
+      }
+    },
+    "target_subject": {
+      "table": "proposed_registry_subject",
+      "primary_key": {
+        "subject_id": "phase-a-subject-phase-a-location-address-reference"
+      },
+      "required_values": {
+        "native_id": "phase-a-location-address-reference",
+        "subject_entity": "location_record",
+        "subject_state": "active"
+      }
+    },
+    "source_record": {
+      "table": "proposed_source_record",
+      "primary_key": {
+        "source_record_id": "phase-a-source-record-address-points-001"
+      }
+    },
+    "evidence_object": {
+      "table": "proposed_evidence_object",
+      "primary_key": {
+        "evidence_object_id": "phase-a-evidence-address-points"
+      },
+      "required_values": {
+        "source_record_id": "phase-a-source-record-address-points-001"
+      }
+    }
+  },
+  "expected_inserted_rows": [
+    {
+      "table": "proposed_geometry_observation",
+      "primary_key": {
+        "geometry_observation_id": "phase-a-geometry-address-points-phase-a-address-points-id"
+      },
+      "values": {
+        "geometry_observation_id": "phase-a-geometry-address-points-phase-a-address-points-id",
+        "subject_id": "phase-a-subject-phase-a-location-address-reference",
+        "geometry_role": "location-point",
+        "observed_geom_wkt": "POINT(8.783 3.752)",
+        "observed_geom_srid": 4326,
+        "capture_method": "derived-from-source",
+        "horizontal_accuracy_m": "4.50",
+        "source_record_id": "phase-a-source-record-address-points-001",
+        "evidence_object_id": "phase-a-evidence-address-points",
+        "licence_id": null,
+        "observed_at": "2026-07-15T00:00:00Z",
+        "recorded_at": "2026-07-15T00:00:00Z",
+        "classification": "restricted"
+      }
+    },
+    {
+      "table": "proposed_migration_exception",
+      "primary_key": {
+        "migration_exception_id": "phase-a-exception-geometry-authority-address-points-phase-a-address-points-id"
+      },
+      "values": {
+        "migration_exception_id": "phase-a-exception-geometry-authority-address-points-phase-a-address-points-id",
+        "batch_id": "phase-a-address-points-geometry-slice",
+        "source_table": "address_points",
+        "source_field": null,
+        "source_key": "address_points:phase-a-address-points-001",
+        "exception_type": "authority-rfi",
+        "severity": "medium",
+        "owner": "SDA",
+        "created_at": "2026-07-15T00:00:00Z",
+        "resolved_at": null,
+        "details_json": {
+          "target_entity": "geometry_observation",
+          "target_id": "phase-a-geometry-address-points-phase-a-address-points-id",
+          "reason": "Canonical geometry promotion authority unresolved; observation preserved without canonical promotion",
+          "open_authority_rfi": "geometry-promotion-authority",
+          "non_official": true
+        }
+      }
+    }
+  ],
+  "expected_absent_rows": [
+    {
+      "table": "proposed_geometry_version",
+      "reason": "No canonical geometry promotion is authorized in this slice"
+    },
+    {
+      "table": "proposed_geometry_quality_assessment",
+      "reason": "Quality approval is outside this slice"
+    },
+    {
+      "table": "proposed_geometry_transformation",
+      "reason": "Source coordinates are already WGS84 and no CRS transformation is required"
+    },
+    {
+      "table": "proposed_location_record_assertion",
+      "where": "value_json->>'current_field' IN ('address_points.latitude','address_points.longitude','address_points.accuracy_meters')",
+      "reason": "Per-field assertions must not substitute for the grouped geometry observation"
+    }
+  ],
+  "required_tests": [
+    {
+      "test_id": "positive-authoritative-slice",
+      "expected": "exact inserted and absent rows match this oracle"
+    },
+    {
+      "test_id": "second-run-idempotency",
+      "expected": "zero inserts, zero updates, one geometry observation"
+    },
+    {
+      "test_id": "wrong-longitude-implementation",
+      "expected_error": "geometry observation does not match reviewer-owned expected WKT"
+    },
+    {
+      "test_id": "invalid-coordinate-source",
+      "expected_error": "coordinate out of range"
+    },
+    {
+      "test_id": "missing-source-record",
+      "expected_error": "address_points source row not found"
+    },
+    {
+      "test_id": "missing-address-crosswalk",
+      "expected_error": "address_points.address_id cannot resolve target location record"
+    },
+    {
+      "test_id": "missing-evidence-object",
+      "expected_error": "address_points evidence object not found"
+    },
+    {
+      "test_id": "wrong-independent-expected-geometry",
+      "expected_error": "observed geometry differs from reviewer-owned expected geometry"
+    }
+  ]
+}
