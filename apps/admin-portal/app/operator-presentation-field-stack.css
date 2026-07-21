@@ -1,0 +1,47 @@
+/* Presentation-critical: major field task sections must never share a narrow row. */
+@media (min-width: 1100px) {
+  html body:has(.operator-workspace-shell) article.field-intake-panel form.human-field-form {
+    display: block !important;
+    width: 100% !important;
+  }
+
+  html body:has(.operator-workspace-shell) article.field-intake-panel form.human-field-form > * {
+    position: static !important;
+    float: none !important;
+    clear: both !important;
+    width: 100% !important;
+    max-width: none !important;
+    margin-top: 18px !important;
+  }
+
+  html body:has(.operator-workspace-shell) article.field-intake-panel form.human-field-form > .field-checklist {
+    margin-top: 0 !important;
+  }
+
+  html body:has(.operator-workspace-shell) article.field-intake-panel form.human-field-form > .human-form-grid,
+  html body:has(.operator-workspace-shell) article.field-intake-panel form.human-field-form > .evidence-reference-fields .human-form-grid {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 14px 18px !important;
+  }
+
+  html body:has(.operator-workspace-shell) article.field-intake-panel form.human-field-form > .spatial-evidence-capture,
+  html body:has(.operator-workspace-shell) article.field-intake-panel form.human-field-form > label.territory-field-wide,
+  html body:has(.operator-workspace-shell) article.field-intake-panel form.human-field-form > .territory-form-actions {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+
+  html body:has(.operator-workspace-shell) article.field-intake-panel form.human-field-form > .spatial-evidence-capture > * {
+    grid-column: 1 !important;
+    width: 100% !important;
+    max-width: none !important;
+  }
+
+  html body:has(.operator-workspace-shell) article.field-intake-panel form.human-field-form > label.territory-field-wide textarea {
+    display: block !important;
+    width: 100% !important;
+    height: 104px !important;
+    min-height: 104px !important;
+  }
+}
