@@ -23,7 +23,7 @@ jobs:
   browser-evidence:
     name: browser-evidence
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 35
     env:
       NEXT_PUBLIC_APP_ENV: staging
       NEXT_PUBLIC_DEPLOYMENT_LABEL: CI BROWSER EVIDENCE / NOT OFFICIAL PRODUCTION
@@ -69,13 +69,13 @@ jobs:
           cat /tmp/operator-ui-next.log
           exit 1
 
-      - name: Capture role and viewport evidence
+      - name: Audit independent desktop and mobile presentation
         env:
           OPERATOR_UI_COMMIT: ${{ github.event.pull_request.head.sha || github.sha }}
         run: |
           set -o pipefail
           mkdir -p artifacts/operator-ui-browser-evidence
-          node scripts/operator-shell-browser-evidence.mjs 2>&1 | tee artifacts/operator-ui-browser-evidence/execution.log
+          node scripts/operator-presentation-audit.mjs 2>&1 | tee artifacts/operator-ui-browser-evidence/execution.log
 
       - name: Upload browser evidence
         if: always()
