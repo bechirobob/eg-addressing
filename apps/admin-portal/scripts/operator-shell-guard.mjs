@@ -21,6 +21,8 @@ for (const marker of [
   'operator-utility-bar',
   'operator-mobile-menu',
   'operator-navigation-scrim',
+  'operator-sidebar-mobile',
+  'hidden={!mobileNavigationOpen}',
   'mobile-control-nav',
   'normalizedRoute',
 ]) {
@@ -51,7 +53,7 @@ for (const forbidden of [
 }
 
 assert(css.includes('grid-template-columns: 246px minmax(0, 1fr);'), 'desktop operator layout must retain a stable navigation rail');
-assert(css.includes('position: fixed;') && css.includes('transform: translateX(-102%);'), 'mobile operator navigation must use an off-canvas drawer');
+assert(css.includes('.operator-sidebar-mobile:not([hidden])') && css.includes('position: fixed;') && css.includes('@keyframes operator-drawer-in'), 'mobile operator navigation must use a hidden, keyboard-safe off-canvas drawer');
 assert(css.includes('.desktop-table-wrap') && css.includes('.mobile-card-list'), 'responsive table and mobile record alternatives must remain explicit');
 
 console.log('operator-shell-guard passed');
