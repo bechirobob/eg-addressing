@@ -23,13 +23,15 @@ type RoleAwareChromeProps = {
   skipSessionLookup?: boolean;
 };
 
+type TranslationKey = Parameters<ReturnType<typeof useTranslation>['t']>[0];
+
 function roleFromSession(role: Exclude<OperatorRole, 'guest'> | undefined, status: 'loading' | 'ready' | 'guest'): OperatorRole {
   if (status === 'guest' || !role) return 'guest';
   return role;
 }
 
 function navLabelKey(href: string) {
-  const labels: Record<string, Parameters<ReturnType<typeof useTranslation>['t']>[0]> = {
+  const labels: Record<string, TranslationKey> = {
     '/': 'navNationalPlatform',
     '/geotag': 'navRegisterLocation',
     '/issue': 'navVerifyAddress',
@@ -45,7 +47,7 @@ function navLabelKey(href: string) {
 }
 
 function navGroupKey(group: keyof typeof navGroupLabels) {
-  const labels: Record<keyof typeof navGroupLabels, Parameters<ReturnType<typeof useTranslation>['t']>[0]> = {
+  const labels: Record<keyof typeof navGroupLabels, TranslationKey> = {
     public: 'navPublic',
     staff: 'navStaff',
     admin: 'navAdmin',
@@ -55,6 +57,18 @@ function navGroupKey(group: keyof typeof navGroupLabels) {
 
 function normalizedRoute(href: string) {
   return href.split(/[?#]/, 1)[0] || '/';
+}
+
+function routeIsActive(route: string, currentRoute: string) {
+  return route === currentRoute || (route !== '/' && currentRoute.startsWith(`${route}/`));
+}
+
+function humanizeRole(role: string) {
+  return role
+    .split('_')
+    .filter(Boolean)
+    .map((part) => `${part.charAt(0).toUpperCase()}${part.slice(1)}`)
+    .join(' ');
 }
 
 const STAFF_SESSION_ROUTES = ['/field', '/registry', '/signage', '/reports', '/exports', '/territories', '/verify', '/records', '/admin/staff'] as const;
@@ -104,17 +118,40 @@ export function RoleAwareChrome({ apiBaseUrl, children, skipSessionLookup = fals
   useEffect(() => {
     if (!mobileNavigationOpen) return;
 
-    const focusTarget = mobileNavigationRef.current?.querySelector<HTMLElement>('a[href]');
-    focusTarget?.focus();
+    const navigation = mobileNavigationRef.current;
+    const focusable = Array.from(
+      navigation?.querySelectorAll<HTMLElement>('a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])') ?? [],
+    );
+    const firstFocusable = focusable[0];
+    const lastFocusable = focusable[focusable.length - 1];
+    const previousBodyOverflow = document.body.style.overflow;
 
-    function closeOnEscape(event: KeyboardEvent) {
-      if (event.key !== 'Escape') return;
-      setMobileNavigationOpen(false);
-      mobileMenuButtonRef.current?.focus();
+    document.body.style.overflow = 'hidden';
+    firstFocusable?.focus();
+
+    function handleDrawerKeyDown(event: KeyboardEvent) {
+      if (event.key === 'Escape') {
+        event.preventDefault();
+        setMobileNavigationOpen(false);
+        mobileMenuButtonRef.current?.focus();
+        return;
+      }
+
+      if (event.key !== 'Tab' || !firstFocusable || !lastFocusable) return;
+      if (event.shiftKey && document.activeElement === firstFocusable) {
+        event.preventDefault();
+        lastFocusable.focus();
+      } else if (!event.shiftKey && document.activeElement === lastFocusable) {
+        event.preventDefault();
+        firstFocusable.focus();
+      }
     }
 
-    document.addEventListener('keydown', closeOnEscape);
-    return () => document.removeEventListener('keydown', closeOnEscape);
+    document.addEventListener('keydown', handleDrawerKeyDown);
+    return () => {
+      document.removeEventListener('keydown', handleDrawerKeyDown);
+      document.body.style.overflow = previousBodyOverflow;
+    };
   }, [mobileNavigationOpen]);
 
   useEffect(() => {
@@ -145,18 +182,15 @@ export function RoleAwareChrome({ apiBaseUrl, children, skipSessionLookup = fals
 
   const workspaceHref = defaultRouteForRole(role);
   const staffSessionUser = effectiveSessionStatus === 'ready' && effectiveSessionUser && isStaffSessionRoute(currentRoute) ? effectiveSessionUser : null;
-  const currentNavItem = visibleItems.find((item) => {
-    const route = normalizedRoute(item.href);
-    return route === currentRoute || currentRoute.startsWith(`${route}/`);
-  }) ?? null;
+  const currentNavItem = visibleItems.find((item) => routeIsActive(normalizedRoute(item.href), currentRoute)) ?? null;
   const currentNavLabelKey = currentNavItem ? navLabelKey(normalizedRoute(currentNavItem.href)) : undefined;
   const currentSectionLabel = currentNavItem ? (currentNavLabelKey ? t(currentNavLabelKey) : currentNavItem.label) : t('navStaff');
-  const controlNavItems = [
-    { href: '/field', label: 'Field', iconClass: 'queue' },
-    { href: '/registry', label: 'Registry', iconClass: 'case-files' },
-    { href: '/signage', label: 'Signage', iconClass: 'signage' },
-    { href: '/reports', label: 'Reports', iconClass: 'reports' },
-    ...(role === 'admin' ? [{ href: '/admin/staff?from=mobile-staff-services', label: 'Admin', iconClass: 'dashboard' }] : []),
+  const controlNavItems: Array<{ href: string; labelKey: TranslationKey; iconClass: string }> = [
+    { href: '/field', labelKey: 'navFieldWork', iconClass: 'queue' },
+    { href: '/registry', labelKey: 'navAddressRegistry', iconClass: 'case-files' },
+    { href: '/signage', labelKey: 'navLocationReview', iconClass: 'signage' },
+    { href: '/reports', labelKey: 'navReports', iconClass: 'reports' },
+    ...(role === 'admin' ? [{ href: '/admin/staff?from=mobile-staff-services', labelKey: 'navAdmin' as TranslationKey, iconClass: 'dashboard' }] : []),
   ].filter((item) => isRouteAccessible(item.href, role));
 
   const accessContent = waitingForAccessResolution ? (
@@ -179,7 +213,7 @@ export function RoleAwareChrome({ apiBaseUrl, children, skipSessionLookup = fals
 
   function renderNavigation() {
     return (
-      <nav className="top-nav grouped-top-nav" aria-label="Main platform navigation">
+      <nav className="top-nav grouped-top-nav" aria-label={t(role === 'guest' ? 'navPublic' : 'navStaff')}>
         {(Object.keys(navGroupLabels) as Array<keyof typeof navGroupLabels>).map((group) => {
           const items = groupedItems[group] ?? [];
           if (!items.length) return null;
@@ -189,7 +223,7 @@ export function RoleAwareChrome({ apiBaseUrl, children, skipSessionLookup = fals
               <div className="nav-group-links">
                 {items.map((item) => {
                   const itemRoute = normalizedRoute(item.href);
-                  const isActive = itemRoute === currentRoute;
+                  const isActive = routeIsActive(itemRoute, currentRoute);
                   const labelKey = navLabelKey(itemRoute);
                   return (
                     <Link
@@ -242,7 +276,7 @@ export function RoleAwareChrome({ apiBaseUrl, children, skipSessionLookup = fals
               <div className="operator-role-context">
                 <span>{t('signedInAs')}</span>
                 <strong>{staffSessionUser.full_name}</strong>
-                <small>{staffSessionUser.role}</small>
+                <small>{humanizeRole(staffSessionUser.role)}</small>
               </div>
             ) : null}
           </div>
@@ -265,7 +299,7 @@ export function RoleAwareChrome({ apiBaseUrl, children, skipSessionLookup = fals
               <div className="operator-role-context">
                 <span>{t('signedInAs')}</span>
                 <strong>{staffSessionUser.full_name}</strong>
-                <small>{staffSessionUser.role}</small>
+                <small>{humanizeRole(staffSessionUser.role)}</small>
               </div>
             ) : null}
           </div>
@@ -292,7 +326,7 @@ export function RoleAwareChrome({ apiBaseUrl, children, skipSessionLookup = fals
             </div>
             {staffSessionUser ? (
               <div className="operator-session-utility" aria-live="polite">
-                <span>{staffSessionUser.role}</span>
+                <span>{humanizeRole(staffSessionUser.role)}</span>
                 <button type="button" onClick={() => void handleLogout()} disabled={isLoggingOut}>
                   {isLoggingOut ? t('signingOut') : t('signOut')}
                 </button>
@@ -303,13 +337,18 @@ export function RoleAwareChrome({ apiBaseUrl, children, skipSessionLookup = fals
           {accessContent}
 
           {controlNavItems.length ? (
-            <nav className="mobile-control-nav" aria-label="Operator control navigation">
+            <nav
+              className="mobile-control-nav"
+              aria-label={t('navStaff')}
+              style={{ gridTemplateColumns: `repeat(${controlNavItems.length}, minmax(0, 1fr))` }}
+            >
               {controlNavItems.map((item) => {
-                const isActive = currentRoute === normalizedRoute(item.href);
+                const itemRoute = normalizedRoute(item.href);
+                const isActive = routeIsActive(itemRoute, currentRoute);
                 return (
                   <Link key={item.href} href={item.href} className={`mobile-control-nav-link mobile-control-nav-${item.iconClass} ${isActive ? 'active' : ''}`} aria-current={isActive ? 'page' : undefined}>
                     <span aria-hidden="true" />
-                    <strong>{item.label}</strong>
+                    <strong>{t(item.labelKey)}</strong>
                   </Link>
                 );
               })}
@@ -326,7 +365,7 @@ export function RoleAwareChrome({ apiBaseUrl, children, skipSessionLookup = fals
         <div className="nav-cluster grouped-nav-cluster">
           {currentRoute !== '/' ? (
             <Link href="/" className="platform-overview-link">
-              <span className="platform-overview-title">Home</span>
+              <span className="platform-overview-title">{t('platformOverview')}</span>
             </Link>
           ) : null}
           {renderNavigation()}
@@ -334,7 +373,7 @@ export function RoleAwareChrome({ apiBaseUrl, children, skipSessionLookup = fals
 
         {staffSessionUser ? (
           <div className="chrome-session-card chrome-session-utility" aria-live="polite">
-            <span className="session-utility-role">{staffSessionUser.role}</span>
+            <span className="session-utility-role">{humanizeRole(staffSessionUser.role)}</span>
             <button className="session-utility-logout" type="button" onClick={() => void handleLogout()} disabled={isLoggingOut}>
               {isLoggingOut ? t('signingOut') : t('signOut')}
             </button>
