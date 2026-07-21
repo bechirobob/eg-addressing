@@ -35,6 +35,41 @@ function jsonResponse(body, status = 200) {
   };
 }
 
+const emptyReportingSummary = {
+  totals: {
+    territories: 0,
+    submissions: 0,
+    review_queue: 0,
+    published_addresses: 0,
+    import_jobs: 0,
+    public_corrections: 0,
+    correction_queue: 0,
+    citizen_geotags: 0,
+    geotag_queue: 0,
+  },
+  territories_by_province: [],
+  review_breakdown: [],
+  publication_breakdown: [],
+  correction_breakdown: [],
+  geotag_breakdown: [],
+  filters: {
+    province: null,
+    territory: null,
+    status: null,
+    date_from: null,
+    date_to: null,
+  },
+};
+
+const emptyReadinessSummary = {
+  readiness_status: 'pilot-prep',
+  passed_gates: 0,
+  total_gates: 0,
+  gates: [],
+  recent_audit_events: [],
+  boundaries: ['Automated browser evidence only — not an operational readiness claim.'],
+};
+
 async function installApiFixtures(page, role) {
   const user = role ? userForRole(role) : null;
 
@@ -74,17 +109,13 @@ async function installApiFixtures(page, role) {
       return;
     }
 
+    if (pathname.endsWith('/api/v1/reporting/summary')) {
+      await route.fulfill(jsonResponse(emptyReportingSummary));
+      return;
+    }
+
     if (pathname.endsWith('/api/v1/pilot-readiness/summary')) {
-      await route.fulfill(
-        jsonResponse({
-          readiness_status: 'pilot-prep',
-          passed_gates: 0,
-          total_gates: 0,
-          gates: [],
-          totals: {},
-          boundaries: ['Automated browser evidence only — not an operational readiness claim.'],
-        }),
-      );
+      await route.fulfill(jsonResponse(emptyReadinessSummary));
       return;
     }
 
