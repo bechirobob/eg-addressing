@@ -1,0 +1,162 @@
+/* Final presentation corrections after full-route screenshot review. */
+
+.operator-sidebar .nav-link-title {
+  color: #f7fbfe !important;
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.16);
+}
+
+.operator-sidebar .operator-platform-link span,
+.operator-sidebar .operator-role-context span,
+.operator-sidebar .operator-role-context small,
+.operator-sidebar .nav-group-label {
+  color: #c5d4df !important;
+}
+
+.operator-sidebar .operator-platform-link strong,
+.operator-sidebar .operator-role-context strong {
+  font-weight: 760 !important;
+}
+
+.operator-sidebar .nav-link::before,
+.operator-sidebar .nav-link::after {
+  color: #8fc7e9 !important;
+  border-color: currentColor !important;
+  opacity: 1 !important;
+}
+
+.operator-sidebar .nav-link-active::before,
+.operator-sidebar .nav-link-active::after {
+  color: #f4cc69 !important;
+}
+
+@media (min-width: 1100px) {
+  /* The field capture is a horizontal desktop workbench, but each task remains readable. */
+  .field-intake-panel .spatial-evidence-capture {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) !important;
+    gap: 12px !important;
+    width: 100% !important;
+  }
+
+  .field-intake-panel .spatial-evidence-capture > *,
+  .field-intake-panel .nested-field,
+  .field-intake-panel .territory-field-wide,
+  .field-intake-panel .territory-form-actions {
+    grid-column: 1 / -1 !important;
+    width: 100% !important;
+  }
+
+  .field-intake-panel .territory-textarea {
+    min-height: 88px !important;
+    height: auto !important;
+  }
+
+  .field-intake-panel > details > form {
+    width: 100% !important;
+  }
+
+  .field-intake-panel .human-evidence-summary {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) !important;
+    gap: 5px !important;
+    max-width: none !important;
+  }
+
+  .field-intake-panel .guided-primary-action {
+    width: max-content !important;
+    min-width: 180px !important;
+  }
+
+  /* Empty review desks should remain compact and deliberate during a presentation. */
+  .operator-review-desk,
+  .review-layout {
+    min-height: 0 !important;
+  }
+
+  .operator-review-desk .request-list-panel,
+  .operator-review-desk .request-detail-panel,
+  .review-layout .request-list-panel,
+  .review-layout .request-detail-panel {
+    min-height: 180px !important;
+    height: auto !important;
+  }
+
+  .operator-review-desk .request-detail-panel > .panel-state,
+  .review-layout .request-detail-panel > .panel-state {
+    min-height: 160px !important;
+  }
+
+  .signage-export-panel {
+    margin-top: 0 !important;
+  }
+
+  .verification-workspace .verification-queue-panel,
+  .verification-workspace .verification-trust-panel {
+    align-self: start !important;
+  }
+
+  .verification-workspace .verification-trust-panel .result-card {
+    grid-template-columns: auto minmax(0, 1fr) !important;
+  }
+
+  .reports-service-grid .panel-head > :last-child,
+  .staff-admin-workspace .panel-head > :last-child,
+  .publication-operations-grid .panel-head > :last-child {
+    justify-self: start !important;
+    text-align: left !important;
+  }
+
+  .reports-service-grid .reports-intro-panel .panel-head,
+  .reports-service-grid .reports-summary-panel .panel-head,
+  .reports-service-grid .reports-filter-panel .panel-head,
+  .reports-service-grid .reports-readiness-panel .panel-head {
+    grid-template-columns: 1fr !important;
+    gap: 5px !important;
+  }
+
+  .reports-service-grid .reports-action-strip > div,
+  .publication-summary-list > div,
+  .admin-readiness-summary > div,
+  .field-summary-ledger > div,
+  .field-today-summary > div {
+    min-width: 0 !important;
+  }
+
+  .registry-simple-hero .registry-section-row span,
+  .registry-simple-hero .registry-section-row small {
+    overflow-wrap: normal !important;
+    word-break: normal !important;
+  }
+}
+
+@media (min-width: 861px) and (max-width: 1099px) {
+  .field-intake-panel .spatial-evidence-capture,
+  .field-intake-panel .human-form-grid,
+  .field-intake-panel .evidence-reference-fields .human-form-grid {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+
+  .field-intake-panel .spatial-evidence-capture > *,
+  .field-intake-panel .human-form-grid > *,
+  .field-intake-panel .evidence-reference-fields .human-form-grid > * {
+    grid-column: 1 !important;
+  }
+}
+
+@media (max-width: 860px) {
+  .operator-sidebar-mobile .nav-link-title {
+    font-size: 0.92rem !important;
+  }
+
+  .operator-sidebar-mobile .operator-platform-link span,
+  .operator-sidebar-mobile .operator-role-context span,
+  .operator-sidebar-mobile .operator-role-context small,
+  .operator-sidebar-mobile .nav-group-label {
+    color: #d5e0e8 !important;
+  }
+
+  .field-intake-panel .territory-textarea {
+    min-height: 104px !important;
+    height: auto !important;
+  }
+}
