@@ -1,5 +1,6 @@
 import 'leaflet/dist/leaflet.css';
 import './globals.css';
+import './operator-shell.css';
 import type { Metadata } from 'next';
 import type { ReactNode } from 'react';
 
