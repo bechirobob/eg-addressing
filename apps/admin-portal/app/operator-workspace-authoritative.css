@@ -1,0 +1,294 @@
+/* Authoritative protected-route presentation. Public routes are unaffected. */
+
+html body:has(.operator-workspace-shell) {
+  background: #eef2f4 !important;
+  color: #132431 !important;
+}
+
+html body:has(.operator-workspace-shell) .page-shell {
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+html body:has(.operator-workspace-shell) .flag-ribbon {
+  height: 5px !important;
+  margin: 0 !important;
+}
+
+html body:has(.operator-workspace-shell) .staging-notice {
+  min-height: 34px !important;
+  margin: 0 !important;
+  padding: 7px 24px !important;
+  border: 0 !important;
+  background: #f2ead8 !important;
+  color: #593c0a !important;
+}
+
+html body:has(.operator-workspace-shell) .masthead {
+  display: grid !important;
+  grid-template-columns: 220px minmax(0, 1fr) !important;
+  align-items: center !important;
+  gap: 26px !important;
+  min-height: 104px !important;
+  margin: 0 !important;
+  padding: 16px 30px !important;
+  border: 0 !important;
+  background: #0b2f50 !important;
+  color: #fff !important;
+}
+
+html body:has(.operator-workspace-shell) .masthead-topline {
+  margin: 0 !important;
+}
+
+html body:has(.operator-workspace-shell) .official-lockup {
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+}
+
+html body:has(.operator-workspace-shell) .crest-frame {
+  width: 52px !important;
+  padding: 3px !important;
+  border: 0 !important;
+  background: #fff !important;
+  box-shadow: none !important;
+}
+
+html body:has(.operator-workspace-shell) .kicker {
+  max-width: 130px !important;
+  margin: 0 !important;
+  color: #fff !important;
+  font-size: 0.62rem !important;
+  line-height: 1.35 !important;
+}
+
+html body:has(.operator-workspace-shell) .masthead-content-grid,
+html body:has(.operator-workspace-shell) .masthead-copy {
+  display: block !important;
+  max-width: none !important;
+}
+
+html body:has(.operator-workspace-shell) .masthead-copy .eyebrow {
+  margin-bottom: 5px !important;
+  padding: 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+  color: #bfccd6 !important;
+  font-size: 0.64rem !important;
+}
+
+html body:has(.operator-workspace-shell) .masthead h1 {
+  margin: 0 !important;
+  color: #fff !important;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Arial, sans-serif !important;
+  font-size: clamp(1.55rem, 2.2vw, 2.05rem) !important;
+  font-weight: 720 !important;
+  line-height: 1.12 !important;
+}
+
+html body:has(.operator-workspace-shell) .masthead-subtitle {
+  max-width: 900px !important;
+  margin: 6px 0 0 !important;
+  color: #d8e1e8 !important;
+  font-size: 0.84rem !important;
+  line-height: 1.45 !important;
+}
+
+html body:has(.operator-workspace-shell) .civic-hero-illustration {
+  display: none !important;
+}
+
+html body:has(.operator-workspace-shell) .operator-workspace-shell {
+  display: grid !important;
+  grid-template-columns: 232px minmax(0, 1fr) !important;
+  gap: 0 !important;
+  align-items: stretch !important;
+  min-height: calc(100vh - 143px) !important;
+  margin: 0 !important;
+}
+
+html body:has(.operator-workspace-shell) .operator-sidebar-desktop {
+  position: sticky !important;
+  top: 0 !important;
+  align-self: start !important;
+  min-height: calc(100vh - 143px) !important;
+  max-height: 100vh !important;
+  padding: 24px 18px 40px !important;
+  border: 0 !important;
+  background: #08243d !important;
+  color: #fff !important;
+}
+
+html body:has(.operator-workspace-shell) .operator-sidebar-identity {
+  padding: 0 4px 20px !important;
+  border: 0 !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.16) !important;
+}
+
+html body:has(.operator-workspace-shell) .operator-platform-link,
+html body:has(.operator-workspace-shell) .operator-platform-link strong {
+  color: #fff !important;
+}
+
+html body:has(.operator-workspace-shell) .operator-platform-link span,
+html body:has(.operator-workspace-shell) .operator-role-context span,
+html body:has(.operator-workspace-shell) .operator-role-context small {
+  color: #aebdca !important;
+}
+
+html body:has(.operator-workspace-shell) .operator-role-context strong {
+  color: #fff !important;
+}
+
+html body:has(.operator-workspace-shell) .operator-sidebar .nav-group-label {
+  color: #8296a7 !important;
+}
+
+html body:has(.operator-workspace-shell) .operator-sidebar .nav-link {
+  border: 0 !important;
+  border-left: 2px solid transparent !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  color: #dbe4eb !important;
+}
+
+html body:has(.operator-workspace-shell) .operator-sidebar .nav-link:hover,
+html body:has(.operator-workspace-shell) .operator-sidebar .nav-link:focus-visible {
+  border-left-color: #8197a8 !important;
+  background: rgba(255, 255, 255, 0.07) !important;
+  color: #fff !important;
+}
+
+html body:has(.operator-workspace-shell) .operator-sidebar .nav-link-active {
+  border-left-color: #c49a43 !important;
+  background: rgba(255, 255, 255, 0.11) !important;
+  color: #fff !important;
+}
+
+html body:has(.operator-workspace-shell) .operator-workspace-column {
+  min-width: 0 !important;
+  padding: 0 32px 56px !important;
+  background: #fff !important;
+}
+
+html body:has(.operator-workspace-shell) .operator-utility-bar {
+  position: sticky !important;
+  top: 0 !important;
+  min-height: 52px !important;
+  margin: 0 -32px 28px !important;
+  padding: 9px 32px !important;
+  border: 0 !important;
+  border-bottom: 1px solid #d7dee3 !important;
+  background: rgba(255, 255, 255, 0.97) !important;
+}
+
+html body:has(.operator-workspace-shell) .desktop-main-content {
+  width: 100% !important;
+  max-width: 1240px !important;
+  margin: 0 auto !important;
+}
+
+html body:has(.operator-workspace-shell) :is(.hero-card, .panel, .status-card, .public-task-panel) {
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+html body:has(.operator-workspace-shell) :is(.hero-card, .panel, .status-card, .public-task-panel)::before,
+html body:has(.operator-workspace-shell) :is(.hero-card, .panel, .status-card, .public-task-panel)::after {
+  display: none !important;
+}
+
+html body:has(.operator-workspace-shell) :is(.panel, .status-card, .public-task-panel) {
+  padding: 0 !important;
+}
+
+html body:has(.operator-workspace-shell) .section-grid {
+  gap: 32px 28px !important;
+  margin-top: 0 !important;
+}
+
+html body:has(.operator-workspace-shell) .field-workspace {
+  grid-template-columns: minmax(260px, 0.72fr) minmax(0, 1.55fr) !important;
+}
+
+html body:has(.operator-workspace-shell) .field-assignments-panel,
+html body:has(.operator-workspace-shell) .live-intake-panel {
+  grid-column: 1 / -1 !important;
+}
+
+html body:has(.operator-workspace-shell) .field-location-checks-panel {
+  grid-column: 1 !important;
+}
+
+html body:has(.operator-workspace-shell) .field-intake-panel {
+  grid-column: 2 !important;
+}
+
+html body:has(.operator-workspace-shell) .workbench-panel-disclosure > summary {
+  margin-bottom: 16px !important;
+  padding: 0 0 12px !important;
+  border: 0 !important;
+  border-bottom: 2px solid #0b2f50 !important;
+}
+
+html body:has(.operator-workspace-shell) :is(input, select, textarea, .territory-input, .verification-input) {
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+
+html body:has(.operator-workspace-shell) :is(.verification-button, .primary-action, .guided-primary-action) {
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: #0b2f50 !important;
+  box-shadow: none !important;
+}
+
+html body:has(.operator-workspace-shell) :is(.status-pill, .tag, .registry-result-count) {
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+}
+
+@media (max-width: 860px) {
+  html body:has(.operator-workspace-shell) .masthead {
+    display: block !important;
+    min-height: 0 !important;
+    padding: 14px 16px 16px !important;
+  }
+
+  html body:has(.operator-workspace-shell) .operator-workspace-shell {
+    display: block !important;
+    min-height: 0 !important;
+  }
+
+  html body:has(.operator-workspace-shell) .operator-workspace-column {
+    padding: 12px 14px 88px !important;
+  }
+
+  html body:has(.operator-workspace-shell) .operator-sidebar-mobile:not([hidden]) {
+    padding: 22px 18px 30px !important;
+    border: 0 !important;
+    background: #08243d !important;
+    color: #fff !important;
+  }
+
+  html body:has(.operator-workspace-shell) .operator-utility-bar {
+    position: static !important;
+    margin: 0 0 22px !important;
+    padding: 7px 0 10px !important;
+  }
+
+  html body:has(.operator-workspace-shell) .field-workspace,
+  html body:has(.operator-workspace-shell) :is(.hero-grid, .section-grid, .registry-simple-layout) {
+    grid-template-columns: 1fr !important;
+  }
+
+  html body:has(.operator-workspace-shell) :is(.field-assignments-panel, .field-location-checks-panel, .field-intake-panel, .live-intake-panel) {
+    grid-column: 1 !important;
+  }
+}
