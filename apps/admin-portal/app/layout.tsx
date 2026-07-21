@@ -4,6 +4,7 @@ import './operator-shell.css';
 import './operator-workspace-redesign.css';
 import './operator-workspace-authoritative.css';
 import './operator-workspace-overflow.css';
+import './operator-presentation-polish.css';
 import type { Metadata } from 'next';
 import type { ReactNode } from 'react';
 
