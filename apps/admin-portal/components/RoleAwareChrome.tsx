@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import type { ReactNode } from 'react';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { clearStoredToken } from './demoAuth';
 import { useTranslation } from './i18n';
@@ -68,6 +68,8 @@ export function RoleAwareChrome({ apiBaseUrl, children, skipSessionLookup = fals
   const [isLoggingOut, setIsLoggingOut] = useState(false);
   const [forcedGuest, setForcedGuest] = useState(false);
   const [mobileNavigationOpen, setMobileNavigationOpen] = useState(false);
+  const mobileMenuButtonRef = useRef<HTMLButtonElement>(null);
+  const mobileNavigationRef = useRef<HTMLElement>(null);
 
   const effectiveSessionUser = forcedGuest ? null : sessionUser;
   const effectiveSessionStatus = forcedGuest ? 'guest' : sessionStatus;
@@ -94,6 +96,22 @@ export function RoleAwareChrome({ apiBaseUrl, children, skipSessionLookup = fals
   useEffect(() => {
     setMobileNavigationOpen(false);
   }, [currentRoute]);
+
+  useEffect(() => {
+    if (!mobileNavigationOpen) return;
+
+    const focusTarget = mobileNavigationRef.current?.querySelector<HTMLElement>('a[href]');
+    focusTarget?.focus();
+
+    function closeOnEscape(event: KeyboardEvent) {
+      if (event.key !== 'Escape') return;
+      setMobileNavigationOpen(false);
+      mobileMenuButtonRef.current?.focus();
+    }
+
+    document.addEventListener('keydown', closeOnEscape);
+    return () => document.removeEventListener('keydown', closeOnEscape);
+  }, [mobileNavigationOpen]);
 
   useEffect(() => {
     if (effectiveSessionStatus === 'loading' || accessAllowed) {
@@ -152,48 +170,51 @@ export function RoleAwareChrome({ apiBaseUrl, children, skipSessionLookup = fals
     children
   );
 
-  const navigation = (
-    <nav className="top-nav grouped-top-nav" aria-label="Main platform navigation">
-      {(Object.keys(navGroupLabels) as Array<keyof typeof navGroupLabels>).map((group) => {
-        const items = groupedItems[group] ?? [];
-        if (!items.length) return null;
-        return (
-          <section className="nav-group" key={group} aria-labelledby={`nav-group-${group}`}>
-            <p className="nav-group-label" id={`nav-group-${group}`}>{t(navGroupKey(group))}</p>
-            <div className="nav-group-links">
-              {items.map((item) => {
-                const itemRoute = normalizedRoute(item.href);
-                const isActive = itemRoute === currentRoute;
-                const labelKey = navLabelKey(itemRoute);
-                return (
-                  <Link
-                    key={item.href}
-                    href={item.href}
-                    className={`nav-link ${isActive ? 'nav-link-active' : ''}`}
-                    aria-current={isActive ? 'page' : undefined}
-                  >
-                    {item.href === '/login' ? (
-                      <>
-                        <span className="nav-link-title">{t('navAccount')}</span>
-                        <span className="nav-link-subtitle">{labelKey ? t(labelKey) : item.label}</span>
-                      </>
-                    ) : (
-                      <span className="nav-link-title">{labelKey ? t(labelKey) : item.label}</span>
-                    )}
-                  </Link>
-                );
-              })}
-            </div>
-          </section>
-        );
-      })}
-    </nav>
-  );
+  function renderNavigation() {
+    return (
+      <nav className="top-nav grouped-top-nav" aria-label="Main platform navigation">
+        {(Object.keys(navGroupLabels) as Array<keyof typeof navGroupLabels>).map((group) => {
+          const items = groupedItems[group] ?? [];
+          if (!items.length) return null;
+          return (
+            <section className="nav-group" key={group} aria-label={t(navGroupKey(group))}>
+              <p className="nav-group-label">{t(navGroupKey(group))}</p>
+              <div className="nav-group-links">
+                {items.map((item) => {
+                  const itemRoute = normalizedRoute(item.href);
+                  const isActive = itemRoute === currentRoute;
+                  const labelKey = navLabelKey(itemRoute);
+                  return (
+                    <Link
+                      key={item.href}
+                      href={item.href}
+                      className={`nav-link ${isActive ? 'nav-link-active' : ''}`}
+                      aria-current={isActive ? 'page' : undefined}
+                    >
+                      {item.href === '/login' ? (
+                        <>
+                          <span className="nav-link-title">{t('navAccount')}</span>
+                          <span className="nav-link-subtitle">{labelKey ? t(labelKey) : item.label}</span>
+                        </>
+                      ) : (
+                        <span className="nav-link-title">{labelKey ? t(labelKey) : item.label}</span>
+                      )}
+                    </Link>
+                  );
+                })}
+              </div>
+            </section>
+          );
+        })}
+      </nav>
+    );
+  }
 
   if (isProtectedWorkspace) {
     return (
       <div className={`operator-workspace-shell chrome-role-${role}`}>
         <button
+          ref={mobileMenuButtonRef}
           className="operator-mobile-menu"
           type="button"
           aria-expanded={mobileNavigationOpen}
@@ -204,7 +225,7 @@ export function RoleAwareChrome({ apiBaseUrl, children, skipSessionLookup = fals
           <strong>{currentSectionLabel}</strong>
         </button>
 
-        <aside id="operator-primary-navigation" className={`operator-sidebar ${mobileNavigationOpen ? 'is-open' : ''}`}>
+        <aside className="operator-sidebar operator-sidebar-desktop" aria-label={t('navStaff')}>
           <div className="operator-sidebar-identity">
             <Link href={workspaceHref} className="operator-platform-link">
               <span>{t('republic')}</span>
@@ -218,7 +239,30 @@ export function RoleAwareChrome({ apiBaseUrl, children, skipSessionLookup = fals
               </div>
             ) : null}
           </div>
-          {navigation}
+          {renderNavigation()}
+        </aside>
+
+        <aside
+          id="operator-primary-navigation"
+          ref={mobileNavigationRef}
+          className="operator-sidebar operator-sidebar-mobile"
+          aria-label={t('navStaff')}
+          hidden={!mobileNavigationOpen}
+        >
+          <div className="operator-sidebar-identity">
+            <Link href={workspaceHref} className="operator-platform-link">
+              <span>{t('republic')}</span>
+              <strong>{t('homeTitle')}</strong>
+            </Link>
+            {staffSessionUser ? (
+              <div className="operator-role-context">
+                <span>{t('signedInAs')}</span>
+                <strong>{staffSessionUser.full_name}</strong>
+                <small>{staffSessionUser.role}</small>
+              </div>
+            ) : null}
+          </div>
+          {renderNavigation()}
         </aside>
 
         {mobileNavigationOpen ? (
@@ -275,7 +319,7 @@ export function RoleAwareChrome({ apiBaseUrl, children, skipSessionLookup = fals
               <span className="platform-overview-title">Home</span>
             </Link>
           ) : null}
-          {navigation}
+          {renderNavigation()}
         </div>
 
         {staffSessionUser ? (
