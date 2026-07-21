@@ -25,6 +25,12 @@ for (const marker of [
   'hidden={!mobileNavigationOpen}',
   'mobile-control-nav',
   'normalizedRoute',
+  'routeIsActive',
+  'humanizeRole',
+  "document.body.style.overflow = 'hidden'",
+  "event.key !== 'Tab'",
+  "labelKey: 'navFieldWork'",
+  'gridTemplateColumns',
 ]) {
   assert(chrome.includes(marker), `RoleAwareChrome missing operator shell marker: ${marker}`);
 }
