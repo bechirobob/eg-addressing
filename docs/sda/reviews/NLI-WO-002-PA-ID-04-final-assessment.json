@@ -1,0 +1,7 @@
+{
+  "control_id": "NLI-WO-002-PA-ID-04-ASSESSMENT",
+  "reviewed_head": "dd717d6c77e1890170d33775532f25a9eff3258b",
+  "decision": "CORRECTION_REQUIRED",
+  "findings": ["C21", "C22", "C23"],
+  "scope": "proof-hardening-only"
+}

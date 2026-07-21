@@ -1,0 +1,5040 @@
+{
+  "observed_operations": [
+    {
+      "evidence_source": "review10-current-fastapi-openapi-observation",
+      "handler": "root__get",
+      "method": "GET",
+      "operation_id": "root__get",
+      "path": "/",
+      "request_fields": [],
+      "response_fields": [
+        {
+          "direction": "response:200",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body",
+          "required": "true",
+          "type": "object"
+        }
+      ]
+    },
+    {
+      "evidence_source": "review10-current-fastapi-openapi-observation",
+      "handler": "address_corrections_api_v1_address_corrections_get",
+      "method": "GET",
+      "operation_id": "address_corrections_api_v1_address_corrections_get",
+      "path": "/api/v1/address-corrections",
+      "request_fields": [
+        {
+          "direction": "request:header",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "authorization",
+          "required": "false",
+          "type": "union"
+        },
+        {
+          "direction": "request:parameter",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "status",
+          "required": "false",
+          "type": "union"
+        }
+      ],
+      "response_fields": [
+        {
+          "direction": "response:200",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body",
+          "required": "true",
+          "type": "object"
+        },
+        {
+          "direction": "response:422",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body.detail",
+          "required": "false",
+          "type": "array"
+        }
+      ]
+    },
+    {
+      "evidence_source": "review10-current-fastapi-openapi-observation",
+      "handler": "reject_address_correction_api_v1_address_corrections__correction_id__reject_post",
+      "method": "POST",
+      "operation_id": "reject_address_correction_api_v1_address_corrections__correction_id__reject_post",
+      "path": "/api/v1/address-corrections/{correction_id}/reject",
+      "request_fields": [
+        {
+          "direction": "request:body",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "request.body.reviewer_note",
+          "required": "false",
+          "type": "string"
+        },
+        {
+          "direction": "request:header",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "authorization",
+          "required": "false",
+          "type": "union"
+        },
+        {
+          "direction": "request:parameter",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "correction_id",
+          "required": "true",
+          "type": "string"
+        }
+      ],
+      "response_fields": [
+        {
+          "direction": "response:200",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body",
+          "required": "true",
+          "type": "object"
+        },
+        {
+          "direction": "response:422",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body.detail",
+          "required": "false",
+          "type": "array"
+        }
+      ]
+    },
+    {
+      "evidence_source": "review10-current-fastapi-openapi-observation",
+      "handler": "resolve_address_correction_api_v1_address_corrections__correction_id__resolve_post",
+      "method": "POST",
+      "operation_id": "resolve_address_correction_api_v1_address_corrections__correction_id__resolve_post",
+      "path": "/api/v1/address-corrections/{correction_id}/resolve",
+      "request_fields": [
+        {
+          "direction": "request:body",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "request.body.reviewer_note",
+          "required": "false",
+          "type": "string"
+        },
+        {
+          "direction": "request:header",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "authorization",
+          "required": "false",
+          "type": "union"
+        },
+        {
+          "direction": "request:parameter",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "correction_id",
+          "required": "true",
+          "type": "string"
+        }
+      ],
+      "response_fields": [
+        {
+          "direction": "response:200",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body",
+          "required": "true",
+          "type": "object"
+        },
+        {
+          "direction": "response:422",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body.detail",
+          "required": "false",
+          "type": "array"
+        }
+      ]
+    },
+    {
+      "evidence_source": "review10-current-fastapi-openapi-observation",
+      "handler": "mark_address_correction_under_review_api_v1_address_corrections__correction_id__under_review_post",
+      "method": "POST",
+      "operation_id": "mark_address_correction_under_review_api_v1_address_corrections__correction_id__under_review_post",
+      "path": "/api/v1/address-corrections/{correction_id}/under-review",
+      "request_fields": [
+        {
+          "direction": "request:body",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "request.body.reviewer_note",
+          "required": "false",
+          "type": "string"
+        },
+        {
+          "direction": "request:header",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "authorization",
+          "required": "false",
+          "type": "union"
+        },
+        {
+          "direction": "request:parameter",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "correction_id",
+          "required": "true",
+          "type": "string"
+        }
+      ],
+      "response_fields": [
+        {
+          "direction": "response:200",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body",
+          "required": "true",
+          "type": "object"
+        },
+        {
+          "direction": "response:422",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body.detail",
+          "required": "false",
+          "type": "array"
+        }
+      ]
+    },
+    {
+      "evidence_source": "review10-current-fastapi-openapi-observation",
+      "handler": "address_records_export_endpoint_api_v1_address_records_export_get",
+      "method": "GET",
+      "operation_id": "address_records_export_endpoint_api_v1_address_records_export_get",
+      "path": "/api/v1/address-records/export",
+      "request_fields": [
+        {
+          "direction": "request:header",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "authorization",
+          "required": "false",
+          "type": "union"
+        },
+        {
+          "direction": "request:parameter",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "status",
+          "required": "false",
+          "type": "string"
+        }
+      ],
+      "response_fields": [
+        {
+          "direction": "response:200",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body",
+          "required": "true",
+          "type": "object"
+        },
+        {
+          "direction": "response:422",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body.detail",
+          "required": "false",
+          "type": "array"
+        }
+      ]
+    },
+    {
+      "evidence_source": "review10-current-fastapi-openapi-observation",
+      "handler": "address_record_holds_endpoint_api_v1_address_records_holds_get",
+      "method": "GET",
+      "operation_id": "address_record_holds_endpoint_api_v1_address_records_holds_get",
+      "path": "/api/v1/address-records/holds",
+      "request_fields": [
+        {
+          "direction": "request:header",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "authorization",
+          "required": "false",
+          "type": "union"
+        },
+        {
+          "direction": "request:parameter",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "limit",
+          "required": "false",
+          "type": "union"
+        },
+        {
+          "direction": "request:parameter",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "status",
+          "required": "false",
+          "type": "union"
+        }
+      ],
+      "response_fields": [
+        {
+          "direction": "response:200",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body",
+          "required": "true",
+          "type": "object"
+        },
+        {
+          "direction": "response:422",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body.detail",
+          "required": "false",
+          "type": "array"
+        }
+      ]
+    },
+    {
+      "evidence_source": "review10-current-fastapi-openapi-observation",
+      "handler": "address_records_nearby_endpoint_api_v1_address_records_nearby_get",
+      "method": "GET",
+      "operation_id": "address_records_nearby_endpoint_api_v1_address_records_nearby_get",
+      "path": "/api/v1/address-records/nearby",
+      "request_fields": [
+        {
+          "direction": "request:header",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "authorization",
+          "required": "false",
+          "type": "union"
+        },
+        {
+          "direction": "request:parameter",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "latitude",
+          "required": "false",
+          "type": "union"
+        },
+        {
+          "direction": "request:parameter",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "limit",
+          "required": "false",
+          "type": "integer"
+        },
+        {
+          "direction": "request:parameter",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "longitude",
+          "required": "false",
+          "type": "union"
+        },
+        {
+          "direction": "request:parameter",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "radius_meters",
+          "required": "false",
+          "type": "number"
+        }
+      ],
+      "response_fields": [
+        {
+          "direction": "response:200",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body",
+          "required": "true",
+          "type": "object"
+        },
+        {
+          "direction": "response:422",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body.detail",
+          "required": "false",
+          "type": "array"
+        }
+      ]
+    },
+    {
+      "evidence_source": "review10-current-fastapi-openapi-observation",
+      "handler": "address_record_search_api_v1_address_records_search_get",
+      "method": "GET",
+      "operation_id": "address_record_search_api_v1_address_records_search_get",
+      "path": "/api/v1/address-records/search",
+      "request_fields": [
+        {
+          "direction": "request:header",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "authorization",
+          "required": "false",
+          "type": "union"
+        },
+        {
+          "direction": "request:parameter",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "limit",
+          "required": "false",
+          "type": "integer"
+        },
+        {
+          "direction": "request:parameter",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "province_code",
+          "required": "false",
+          "type": "union"
+        },
+        {
+          "direction": "request:parameter",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "q",
+          "required": "false",
+          "type": "union"
+        },
+        {
+          "direction": "request:parameter",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "status",
+          "required": "false",
+          "type": "union"
+        }
+      ],
+      "response_fields": [
+        {
+          "direction": "response:200",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body",
+          "required": "true",
+          "type": "object"
+        },
+        {
+          "direction": "response:422",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body.detail",
+          "required": "false",
+          "type": "array"
+        }
+      ]
+    },
+    {
+      "evidence_source": "review10-current-fastapi-openapi-observation",
+      "handler": "address_record_case_file_api_v1_address_records__address_code__get",
+      "method": "GET",
+      "operation_id": "address_record_case_file_api_v1_address_records__address_code__get",
+      "path": "/api/v1/address-records/{address_code}",
+      "request_fields": [
+        {
+          "direction": "request:header",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "authorization",
+          "required": "false",
+          "type": "union"
+        },
+        {
+          "direction": "request:parameter",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "address_code",
+          "required": "true",
+          "type": "string"
+        }
+      ],
+      "response_fields": [
+        {
+          "direction": "response:200",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body",
+          "required": "true",
+          "type": "object"
+        },
+        {
+          "direction": "response:422",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body.detail",
+          "required": "false",
+          "type": "array"
+        }
+      ]
+    },
+    {
+      "evidence_source": "review10-current-fastapi-openapi-observation",
+      "handler": "address_record_certificate_endpoint_api_v1_address_records__address_code__certificate_get",
+      "method": "GET",
+      "operation_id": "address_record_certificate_endpoint_api_v1_address_records__address_code__certificate_get",
+      "path": "/api/v1/address-records/{address_code}/certificate",
+      "request_fields": [
+        {
+          "direction": "request:header",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "authorization",
+          "required": "false",
+          "type": "union"
+        },
+        {
+          "direction": "request:parameter",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "address_code",
+          "required": "true",
+          "type": "string"
+        }
+      ],
+      "response_fields": [
+        {
+          "direction": "response:200",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body",
+          "required": "true",
+          "type": "object"
+        },
+        {
+          "direction": "response:422",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body.detail",
+          "required": "false",
+          "type": "array"
+        }
+      ]
+    },
+    {
+      "evidence_source": "review10-current-fastapi-openapi-observation",
+      "handler": "list_addresses_api_v1_addresses_get",
+      "method": "GET",
+      "operation_id": "list_addresses_api_v1_addresses_get",
+      "path": "/api/v1/addresses",
+      "request_fields": [
+        {
+          "direction": "request:header",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "authorization",
+          "required": "false",
+          "type": "union"
+        },
+        {
+          "direction": "request:parameter",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "include_archived",
+          "required": "false",
+          "type": "boolean"
+        },
+        {
+          "direction": "request:parameter",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "page",
+          "required": "false",
+          "type": "integer"
+        },
+        {
+          "direction": "request:parameter",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "per_page",
+          "required": "false",
+          "type": "integer"
+        },
+        {
+          "direction": "request:parameter",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "q",
+          "required": "false",
+          "type": "union"
+        },
+        {
+          "direction": "request:parameter",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "status",
+          "required": "false",
+          "type": "union"
+        },
+        {
+          "direction": "request:parameter",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "territory_id",
+          "required": "false",
+          "type": "union"
+        }
+      ],
+      "response_fields": [
+        {
+          "direction": "response:200",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body",
+          "required": "true",
+          "type": "object"
+        },
+        {
+          "direction": "response:422",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body.detail",
+          "required": "false",
+          "type": "array"
+        }
+      ]
+    },
+    {
+      "evidence_source": "review10-current-fastapi-openapi-observation",
+      "handler": "create_address_endpoint_api_v1_addresses_post",
+      "method": "POST",
+      "operation_id": "create_address_endpoint_api_v1_addresses_post",
+      "path": "/api/v1/addresses",
+      "request_fields": [
+        {
+          "direction": "request:body",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "request.body.accuracy_meters",
+          "required": "false",
+          "type": "union"
+        },
+        {
+          "direction": "request:body",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "request.body.building_id",
+          "required": "true",
+          "type": "string"
+        },
+        {
+          "direction": "request:body",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "request.body.formatted",
+          "required": "true",
+          "type": "string"
+        },
+        {
+          "direction": "request:body",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "request.body.issuance_method",
+          "required": "false",
+          "type": "string"
+        },
+        {
+          "direction": "request:body",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "request.body.latitude",
+          "required": "false",
+          "type": "union"
+        },
+        {
+          "direction": "request:body",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "request.body.longitude",
+          "required": "false",
+          "type": "union"
+        },
+        {
+          "direction": "request:body",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "request.body.point_source_method",
+          "required": "false",
+          "type": "union"
+        },
+        {
+          "direction": "request:body",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "request.body.public_code",
+          "required": "false",
+          "type": "union"
+        },
+        {
+          "direction": "request:body",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "request.body.publication_state",
+          "required": "false",
+          "type": "string"
+        },
+        {
+          "direction": "request:body",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "request.body.road_id",
+          "required": "true",
+          "type": "string"
+        },
+        {
+          "direction": "request:body",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "request.body.source",
+          "required": "false",
+          "type": "string"
+        },
+        {
+          "direction": "request:body",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "request.body.status",
+          "required": "true",
+          "type": "string"
+        },
+        {
+          "direction": "request:body",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "request.body.superseded_by_address_id",
+          "required": "false",
+          "type": "union"
+        },
+        {
+          "direction": "request:body",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "request.body.territory_id",
+          "required": "true",
+          "type": "string"
+        },
+        {
+          "direction": "request:body",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "request.body.verification_status",
+          "required": "false",
+          "type": "string"
+        },
+        {
+          "direction": "request:header",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "authorization",
+          "required": "false",
+          "type": "union"
+        }
+      ],
+      "response_fields": [
+        {
+          "direction": "response:201",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body",
+          "required": "true",
+          "type": "object"
+        },
+        {
+          "direction": "response:422",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body.detail",
+          "required": "false",
+          "type": "array"
+        }
+      ]
+    },
+    {
+      "evidence_source": "review10-current-fastapi-openapi-observation",
+      "handler": "archive_address_endpoint_api_v1_addresses__address_id__delete",
+      "method": "DELETE",
+      "operation_id": "archive_address_endpoint_api_v1_addresses__address_id__delete",
+      "path": "/api/v1/addresses/{address_id}",
+      "request_fields": [
+        {
+          "direction": "request:header",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "authorization",
+          "required": "false",
+          "type": "union"
+        },
+        {
+          "direction": "request:parameter",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "address_id",
+          "required": "true",
+          "type": "string"
+        }
+      ],
+      "response_fields": [
+        {
+          "direction": "response:200",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body",
+          "required": "true",
+          "type": "object"
+        },
+        {
+          "direction": "response:422",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body.detail",
+          "required": "false",
+          "type": "array"
+        }
+      ]
+    },
+    {
+      "evidence_source": "review10-current-fastapi-openapi-observation",
+      "handler": "address_detail_api_v1_addresses__address_id__get",
+      "method": "GET",
+      "operation_id": "address_detail_api_v1_addresses__address_id__get",
+      "path": "/api/v1/addresses/{address_id}",
+      "request_fields": [
+        {
+          "direction": "request:header",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "authorization",
+          "required": "false",
+          "type": "union"
+        },
+        {
+          "direction": "request:parameter",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "address_id",
+          "required": "true",
+          "type": "string"
+        }
+      ],
+      "response_fields": [
+        {
+          "direction": "response:200",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body",
+          "required": "true",
+          "type": "object"
+        },
+        {
+          "direction": "response:422",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body.detail",
+          "required": "false",
+          "type": "array"
+        }
+      ]
+    },
+    {
+      "evidence_source": "review10-current-fastapi-openapi-observation",
+      "handler": "update_address_endpoint_api_v1_addresses__address_id__patch",
+      "method": "PATCH",
+      "operation_id": "update_address_endpoint_api_v1_addresses__address_id__patch",
+      "path": "/api/v1/addresses/{address_id}",
+      "request_fields": [
+        {
+          "direction": "request:body",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "request.body.accuracy_meters",
+          "required": "false",
+          "type": "union"
+        },
+        {
+          "direction": "request:body",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "request.body.building_id",
+          "required": "true",
+          "type": "string"
+        },
+        {
+          "direction": "request:body",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "request.body.formatted",
+          "required": "true",
+          "type": "string"
+        },
+        {
+          "direction": "request:body",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "request.body.issuance_method",
+          "required": "false",
+          "type": "string"
+        },
+        {
+          "direction": "request:body",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "request.body.latitude",
+          "required": "false",
+          "type": "union"
+        },
+        {
+          "direction": "request:body",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "request.body.longitude",
+          "required": "false",
+          "type": "union"
+        },
+        {
+          "direction": "request:body",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "request.body.point_source_method",
+          "required": "false",
+          "type": "union"
+        },
+        {
+          "direction": "request:body",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "request.body.public_code",
+          "required": "false",
+          "type": "union"
+        },
+        {
+          "direction": "request:body",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "request.body.publication_state",
+          "required": "false",
+          "type": "string"
+        },
+        {
+          "direction": "request:body",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "request.body.road_id",
+          "required": "true",
+          "type": "string"
+        },
+        {
+          "direction": "request:body",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "request.body.source",
+          "required": "false",
+          "type": "string"
+        },
+        {
+          "direction": "request:body",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "request.body.status",
+          "required": "true",
+          "type": "string"
+        },
+        {
+          "direction": "request:body",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "request.body.superseded_by_address_id",
+          "required": "false",
+          "type": "union"
+        },
+        {
+          "direction": "request:body",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "request.body.territory_id",
+          "required": "true",
+          "type": "string"
+        },
+        {
+          "direction": "request:body",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "request.body.verification_status",
+          "required": "false",
+          "type": "string"
+        },
+        {
+          "direction": "request:header",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "authorization",
+          "required": "false",
+          "type": "union"
+        },
+        {
+          "direction": "request:parameter",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "address_id",
+          "required": "true",
+          "type": "string"
+        }
+      ],
+      "response_fields": [
+        {
+          "direction": "response:200",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body",
+          "required": "true",
+          "type": "object"
+        },
+        {
+          "direction": "response:422",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body.detail",
+          "required": "false",
+          "type": "array"
+        }
+      ]
+    },
+    {
+      "evidence_source": "review10-current-fastapi-openapi-observation",
+      "handler": "admin_units_api_v1_admin_units_get",
+      "method": "GET",
+      "operation_id": "admin_units_api_v1_admin_units_get",
+      "path": "/api/v1/admin-units",
+      "request_fields": [
+        {
+          "direction": "request:parameter",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "level",
+          "required": "false",
+          "type": "union"
+        },
+        {
+          "direction": "request:parameter",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "parent_id",
+          "required": "false",
+          "type": "union"
+        },
+        {
+          "direction": "request:parameter",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "province_code",
+          "required": "false",
+          "type": "union"
+        }
+      ],
+      "response_fields": [
+        {
+          "direction": "response:200",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body",
+          "required": "true",
+          "type": "object"
+        },
+        {
+          "direction": "response:422",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body.detail",
+          "required": "false",
+          "type": "array"
+        }
+      ]
+    },
+    {
+      "evidence_source": "review10-current-fastapi-openapi-observation",
+      "handler": "admin_list_users_api_v1_admin_users_get",
+      "method": "GET",
+      "operation_id": "admin_list_users_api_v1_admin_users_get",
+      "path": "/api/v1/admin/users",
+      "request_fields": [
+        {
+          "direction": "request:header",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "authorization",
+          "required": "false",
+          "type": "union"
+        }
+      ],
+      "response_fields": [
+        {
+          "direction": "response:200",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body",
+          "required": "true",
+          "type": "object"
+        },
+        {
+          "direction": "response:422",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body.detail",
+          "required": "false",
+          "type": "array"
+        }
+      ]
+    },
+    {
+      "evidence_source": "review10-current-fastapi-openapi-observation",
+      "handler": "admin_create_user_api_v1_admin_users_post",
+      "method": "POST",
+      "operation_id": "admin_create_user_api_v1_admin_users_post",
+      "path": "/api/v1/admin/users",
+      "request_fields": [
+        {
+          "direction": "request:body",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "request.body.full_name",
+          "required": "true",
+          "type": "string"
+        },
+        {
+          "direction": "request:body",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "request.body.password",
+          "required": "true",
+          "type": "string"
+        },
+        {
+          "direction": "request:body",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "request.body.role",
+          "required": "true",
+          "type": "string"
+        },
+        {
+          "direction": "request:body",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "request.body.username",
+          "required": "true",
+          "type": "string"
+        },
+        {
+          "direction": "request:header",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "authorization",
+          "required": "false",
+          "type": "union"
+        }
+      ],
+      "response_fields": [
+        {
+          "direction": "response:201",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body",
+          "required": "true",
+          "type": "object"
+        },
+        {
+          "direction": "response:422",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body.detail",
+          "required": "false",
+          "type": "array"
+        }
+      ]
+    },
+    {
+      "evidence_source": "review10-current-fastapi-openapi-observation",
+      "handler": "admin_update_user_api_v1_admin_users__user_id__patch",
+      "method": "PATCH",
+      "operation_id": "admin_update_user_api_v1_admin_users__user_id__patch",
+      "path": "/api/v1/admin/users/{user_id}",
+      "request_fields": [
+        {
+          "direction": "request:body",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "request.body.full_name",
+          "required": "false",
+          "type": "union"
+        },
+        {
+          "direction": "request:body",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "request.body.is_active",
+          "required": "false",
+          "type": "union"
+        },
+        {
+          "direction": "request:body",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "request.body.password",
+          "required": "false",
+          "type": "union"
+        },
+        {
+          "direction": "request:body",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "request.body.role",
+          "required": "false",
+          "type": "union"
+        },
+        {
+          "direction": "request:header",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "authorization",
+          "required": "false",
+          "type": "union"
+        },
+        {
+          "direction": "request:parameter",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "user_id",
+          "required": "true",
+          "type": "string"
+        }
+      ],
+      "response_fields": [
+        {
+          "direction": "response:200",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body",
+          "required": "true",
+          "type": "object"
+        },
+        {
+          "direction": "response:422",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body.detail",
+          "required": "false",
+          "type": "array"
+        }
+      ]
+    },
+    {
+      "evidence_source": "review10-current-fastapi-openapi-observation",
+      "handler": "admin_disable_user_api_v1_admin_users__user_id__disable_post",
+      "method": "POST",
+      "operation_id": "admin_disable_user_api_v1_admin_users__user_id__disable_post",
+      "path": "/api/v1/admin/users/{user_id}/disable",
+      "request_fields": [
+        {
+          "direction": "request:header",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "authorization",
+          "required": "false",
+          "type": "union"
+        },
+        {
+          "direction": "request:parameter",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "user_id",
+          "required": "true",
+          "type": "string"
+        }
+      ],
+      "response_fields": [
+        {
+          "direction": "response:200",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body",
+          "required": "true",
+          "type": "object"
+        },
+        {
+          "direction": "response:422",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body.detail",
+          "required": "false",
+          "type": "array"
+        }
+      ]
+    },
+    {
+      "evidence_source": "review10-current-fastapi-openapi-observation",
+      "handler": "admin_revoke_user_sessions_api_v1_admin_users__user_id__revoke_sessions_post",
+      "method": "POST",
+      "operation_id": "admin_revoke_user_sessions_api_v1_admin_users__user_id__revoke_sessions_post",
+      "path": "/api/v1/admin/users/{user_id}/revoke-sessions",
+      "request_fields": [
+        {
+          "direction": "request:header",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "authorization",
+          "required": "false",
+          "type": "union"
+        },
+        {
+          "direction": "request:parameter",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "user_id",
+          "required": "true",
+          "type": "string"
+        }
+      ],
+      "response_fields": [
+        {
+          "direction": "response:200",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body",
+          "required": "true",
+          "type": "object"
+        },
+        {
+          "direction": "response:422",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body.detail",
+          "required": "false",
+          "type": "array"
+        }
+      ]
+    },
+    {
+      "evidence_source": "review10-current-fastapi-openapi-observation",
+      "handler": "audit_logs_api_v1_audit_logs_get",
+      "method": "GET",
+      "operation_id": "audit_logs_api_v1_audit_logs_get",
+      "path": "/api/v1/audit-logs",
+      "request_fields": [
+        {
+          "direction": "request:header",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "authorization",
+          "required": "false",
+          "type": "union"
+        },
+        {
+          "direction": "request:parameter",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "entity_id",
+          "required": "false",
+          "type": "union"
+        },
+        {
+          "direction": "request:parameter",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "entity_type",
+          "required": "false",
+          "type": "union"
+        },
+        {
+          "direction": "request:parameter",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "page",
+          "required": "false",
+          "type": "integer"
+        },
+        {
+          "direction": "request:parameter",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "per_page",
+          "required": "false",
+          "type": "integer"
+        }
+      ],
+      "response_fields": [
+        {
+          "direction": "response:200",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body",
+          "required": "true",
+          "type": "object"
+        },
+        {
+          "direction": "response:422",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body.detail",
+          "required": "false",
+          "type": "array"
+        }
+      ]
+    },
+    {
+      "evidence_source": "review10-current-fastapi-openapi-observation",
+      "handler": "login_api_v1_auth_login_post",
+      "method": "POST",
+      "operation_id": "login_api_v1_auth_login_post",
+      "path": "/api/v1/auth/login",
+      "request_fields": [
+        {
+          "direction": "request:body",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "request.body.password",
+          "required": "true",
+          "type": "string"
+        },
+        {
+          "direction": "request:body",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "request.body.username",
+          "required": "true",
+          "type": "string"
+        }
+      ],
+      "response_fields": [
+        {
+          "direction": "response:200",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body",
+          "required": "true",
+          "type": "object"
+        },
+        {
+          "direction": "response:422",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body.detail",
+          "required": "false",
+          "type": "array"
+        }
+      ]
+    },
+    {
+      "evidence_source": "review10-current-fastapi-openapi-observation",
+      "handler": "auth_logout_api_v1_auth_logout_post",
+      "method": "POST",
+      "operation_id": "auth_logout_api_v1_auth_logout_post",
+      "path": "/api/v1/auth/logout",
+      "request_fields": [
+        {
+          "direction": "request:header",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "authorization",
+          "required": "false",
+          "type": "union"
+        },
+        {
+          "direction": "request:parameter",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "eg_addressing_session",
+          "required": "false",
+          "type": "union"
+        }
+      ],
+      "response_fields": [
+        {
+          "direction": "response:204",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.no_body",
+          "required": "true",
+          "type": "none"
+        },
+        {
+          "direction": "response:422",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body.detail",
+          "required": "false",
+          "type": "array"
+        }
+      ]
+    },
+    {
+      "evidence_source": "review10-current-fastapi-openapi-observation",
+      "handler": "auth_me_api_v1_auth_me_get",
+      "method": "GET",
+      "operation_id": "auth_me_api_v1_auth_me_get",
+      "path": "/api/v1/auth/me",
+      "request_fields": [
+        {
+          "direction": "request:header",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "authorization",
+          "required": "false",
+          "type": "union"
+        },
+        {
+          "direction": "request:parameter",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "eg_addressing_session",
+          "required": "false",
+          "type": "union"
+        }
+      ],
+      "response_fields": [
+        {
+          "direction": "response:200",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body",
+          "required": "true",
+          "type": "object"
+        },
+        {
+          "direction": "response:422",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body.detail",
+          "required": "false",
+          "type": "array"
+        }
+      ]
+    },
+    {
+      "evidence_source": "review10-current-fastapi-openapi-observation",
+      "handler": "list_buildings_api_v1_buildings_get",
+      "method": "GET",
+      "operation_id": "list_buildings_api_v1_buildings_get",
+      "path": "/api/v1/buildings",
+      "request_fields": [
+        {
+          "direction": "request:header",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "authorization",
+          "required": "false",
+          "type": "union"
+        },
+        {
+          "direction": "request:parameter",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "include_archived",
+          "required": "false",
+          "type": "boolean"
+        },
+        {
+          "direction": "request:parameter",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "page",
+          "required": "false",
+          "type": "integer"
+        },
+        {
+          "direction": "request:parameter",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "per_page",
+          "required": "false",
+          "type": "integer"
+        },
+        {
+          "direction": "request:parameter",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "q",
+          "required": "false",
+          "type": "union"
+        },
+        {
+          "direction": "request:parameter",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "territory_id",
+          "required": "false",
+          "type": "union"
+        }
+      ],
+      "response_fields": [
+        {
+          "direction": "response:200",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body",
+          "required": "true",
+          "type": "object"
+        },
+        {
+          "direction": "response:422",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body.detail",
+          "required": "false",
+          "type": "array"
+        }
+      ]
+    },
+    {
+      "evidence_source": "review10-current-fastapi-openapi-observation",
+      "handler": "create_building_endpoint_api_v1_buildings_post",
+      "method": "POST",
+      "operation_id": "create_building_endpoint_api_v1_buildings_post",
+      "path": "/api/v1/buildings",
+      "request_fields": [
+        {
+          "direction": "request:body",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "request.body.label",
+          "required": "true",
+          "type": "string"
+        },
+        {
+          "direction": "request:body",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "request.body.road_id",
+          "required": "true",
+          "type": "string"
+        },
+        {
+          "direction": "request:body",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "request.body.status",
+          "required": "true",
+          "type": "string"
+        },
+        {
+          "direction": "request:body",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "request.body.territory_id",
+          "required": "true",
+          "type": "string"
+        },
+        {
+          "direction": "request:body",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "request.body.usage",
+          "required": "true",
+          "type": "string"
+        },
+        {
+          "direction": "request:header",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "authorization",
+          "required": "false",
+          "type": "union"
+        }
+      ],
+      "response_fields": [
+        {
+          "direction": "response:201",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body",
+          "required": "true",
+          "type": "object"
+        },
+        {
+          "direction": "response:422",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body.detail",
+          "required": "false",
+          "type": "array"
+        }
+      ]
+    },
+    {
+      "evidence_source": "review10-current-fastapi-openapi-observation",
+      "handler": "archive_building_endpoint_api_v1_buildings__building_id__delete",
+      "method": "DELETE",
+      "operation_id": "archive_building_endpoint_api_v1_buildings__building_id__delete",
+      "path": "/api/v1/buildings/{building_id}",
+      "request_fields": [
+        {
+          "direction": "request:header",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "authorization",
+          "required": "false",
+          "type": "union"
+        },
+        {
+          "direction": "request:parameter",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "building_id",
+          "required": "true",
+          "type": "string"
+        }
+      ],
+      "response_fields": [
+        {
+          "direction": "response:200",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body",
+          "required": "true",
+          "type": "object"
+        },
+        {
+          "direction": "response:422",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body.detail",
+          "required": "false",
+          "type": "array"
+        }
+      ]
+    },
+    {
+      "evidence_source": "review10-current-fastapi-openapi-observation",
+      "handler": "building_detail_api_v1_buildings__building_id__get",
+      "method": "GET",
+      "operation_id": "building_detail_api_v1_buildings__building_id__get",
+      "path": "/api/v1/buildings/{building_id}",
+      "request_fields": [
+        {
+          "direction": "request:header",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "authorization",
+          "required": "false",
+          "type": "union"
+        },
+        {
+          "direction": "request:parameter",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "building_id",
+          "required": "true",
+          "type": "string"
+        }
+      ],
+      "response_fields": [
+        {
+          "direction": "response:200",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body",
+          "required": "true",
+          "type": "object"
+        },
+        {
+          "direction": "response:422",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body.detail",
+          "required": "false",
+          "type": "array"
+        }
+      ]
+    },
+    {
+      "evidence_source": "review10-current-fastapi-openapi-observation",
+      "handler": "update_building_endpoint_api_v1_buildings__building_id__patch",
+      "method": "PATCH",
+      "operation_id": "update_building_endpoint_api_v1_buildings__building_id__patch",
+      "path": "/api/v1/buildings/{building_id}",
+      "request_fields": [
+        {
+          "direction": "request:body",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "request.body.label",
+          "required": "true",
+          "type": "string"
+        },
+        {
+          "direction": "request:body",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "request.body.road_id",
+          "required": "true",
+          "type": "string"
+        },
+        {
+          "direction": "request:body",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "request.body.status",
+          "required": "true",
+          "type": "string"
+        },
+        {
+          "direction": "request:body",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "request.body.territory_id",
+          "required": "true",
+          "type": "string"
+        },
+        {
+          "direction": "request:body",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "request.body.usage",
+          "required": "true",
+          "type": "string"
+        },
+        {
+          "direction": "request:header",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "authorization",
+          "required": "false",
+          "type": "union"
+        },
+        {
+          "direction": "request:parameter",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "building_id",
+          "required": "true",
+          "type": "string"
+        }
+      ],
+      "response_fields": [
+        {
+          "direction": "response:200",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body",
+          "required": "true",
+          "type": "object"
+        },
+        {
+          "direction": "response:422",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body.detail",
+          "required": "false",
+          "type": "array"
+        }
+      ]
+    },
+    {
+      "evidence_source": "review10-current-fastapi-openapi-observation",
+      "handler": "field_assignments_api_v1_field_assignments_get",
+      "method": "GET",
+      "operation_id": "field_assignments_api_v1_field_assignments_get",
+      "path": "/api/v1/field/assignments",
+      "request_fields": [
+        {
+          "direction": "request:header",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "authorization",
+          "required": "false",
+          "type": "union"
+        }
+      ],
+      "response_fields": [
+        {
+          "direction": "response:200",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body",
+          "required": "true",
+          "type": "object"
+        },
+        {
+          "direction": "response:422",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body.detail",
+          "required": "false",
+          "type": "array"
+        }
+      ]
+    },
+    {
+      "evidence_source": "review10-current-fastapi-openapi-observation",
+      "handler": "field_geotag_tasks_api_v1_field_geotag_tasks_get",
+      "method": "GET",
+      "operation_id": "field_geotag_tasks_api_v1_field_geotag_tasks_get",
+      "path": "/api/v1/field/geotag-tasks",
+      "request_fields": [
+        {
+          "direction": "request:header",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "authorization",
+          "required": "false",
+          "type": "union"
+        },
+        {
+          "direction": "request:parameter",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "status",
+          "required": "false",
+          "type": "union"
+        },
+        {
+          "direction": "request:parameter",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "territory_id",
+          "required": "false",
+          "type": "union"
+        }
+      ],
+      "response_fields": [
+        {
+          "direction": "response:200",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body",
+          "required": "true",
+          "type": "object"
+        },
+        {
+          "direction": "response:422",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body.detail",
+          "required": "false",
+          "type": "array"
+        }
+      ]
+    },
+    {
+      "evidence_source": "review10-current-fastapi-openapi-observation",
+      "handler": "record_field_geotag_task_evidence_api_v1_field_geotag_tasks__submission_id__evidence_post",
+      "method": "POST",
+      "operation_id": "record_field_geotag_task_evidence_api_v1_field_geotag_tasks__submission_id__evidence_post",
+      "path": "/api/v1/field/geotag-tasks/{submission_id}/evidence",
+      "request_fields": [
+        {
+          "direction": "request:body",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "request.body.evidence_note",
+          "required": "false",
+          "type": "string"
+        },
+        {
+          "direction": "request:body",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "request.body.evidence_reference",
+          "required": "true",
+          "type": "string"
+        },
+        {
+          "direction": "request:body",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "request.body.evidence_type",
+          "required": "true",
+          "type": "string"
+        },
+        {
+          "direction": "request:header",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "authorization",
+          "required": "false",
+          "type": "union"
+        },
+        {
+          "direction": "request:parameter",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "submission_id",
+          "required": "true",
+          "type": "string"
+        }
+      ],
+      "response_fields": [
+        {
+          "direction": "response:200",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body",
+          "required": "true",
+          "type": "object"
+        },
+        {
+          "direction": "response:422",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body.detail",
+          "required": "false",
+          "type": "array"
+        }
+      ]
+    },
+    {
+      "evidence_source": "review10-current-fastapi-openapi-observation",
+      "handler": "update_field_geotag_task_status_api_v1_field_geotag_tasks__submission_id__status_post",
+      "method": "POST",
+      "operation_id": "update_field_geotag_task_status_api_v1_field_geotag_tasks__submission_id__status_post",
+      "path": "/api/v1/field/geotag-tasks/{submission_id}/status",
+      "request_fields": [
+        {
+          "direction": "request:body",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "request.body.field_note",
+          "required": "false",
+          "type": "string"
+        },
+        {
+          "direction": "request:body",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "request.body.field_status",
+          "required": "true",
+          "type": "string"
+        },
+        {
+          "direction": "request:header",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "authorization",
+          "required": "false",
+          "type": "union"
+        },
+        {
+          "direction": "request:parameter",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "submission_id",
+          "required": "true",
+          "type": "string"
+        }
+      ],
+      "response_fields": [
+        {
+          "direction": "response:200",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body",
+          "required": "true",
+          "type": "object"
+        },
+        {
+          "direction": "response:422",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body.detail",
+          "required": "false",
+          "type": "array"
+        }
+      ]
+    },
+    {
+      "evidence_source": "review10-current-fastapi-openapi-observation",
+      "handler": "enrich_field_spatial_evidence_endpoint_api_v1_field_spatial_evidence_enrich_post",
+      "method": "POST",
+      "operation_id": "enrich_field_spatial_evidence_endpoint_api_v1_field_spatial_evidence_enrich_post",
+      "path": "/api/v1/field/spatial-evidence/enrich",
+      "request_fields": [
+        {
+          "direction": "request:body",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "request.body.spatial_evidence",
+          "required": "true",
+          "type": "object"
+        },
+        {
+          "direction": "request:body",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "request.body.submission_type",
+          "required": "true",
+          "type": "string"
+        },
+        {
+          "direction": "request:body",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "request.body.territory_id",
+          "required": "true",
+          "type": "string"
+        },
+        {
+          "direction": "request:header",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "authorization",
+          "required": "false",
+          "type": "union"
+        }
+      ],
+      "response_fields": [
+        {
+          "direction": "response:200",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body",
+          "required": "true",
+          "type": "object"
+        },
+        {
+          "direction": "response:422",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body.detail",
+          "required": "false",
+          "type": "array"
+        }
+      ]
+    },
+    {
+      "evidence_source": "review10-current-fastapi-openapi-observation",
+      "handler": "field_submissions_api_v1_field_submissions_get",
+      "method": "GET",
+      "operation_id": "field_submissions_api_v1_field_submissions_get",
+      "path": "/api/v1/field/submissions",
+      "request_fields": [
+        {
+          "direction": "request:header",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "authorization",
+          "required": "false",
+          "type": "union"
+        },
+        {
+          "direction": "request:parameter",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "page",
+          "required": "false",
+          "type": "integer"
+        },
+        {
+          "direction": "request:parameter",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "per_page",
+          "required": "false",
+          "type": "integer"
+        },
+        {
+          "direction": "request:parameter",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "review_status",
+          "required": "false",
+          "type": "union"
+        },
+        {
+          "direction": "request:parameter",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "territory_id",
+          "required": "false",
+          "type": "union"
+        }
+      ],
+      "response_fields": [
+        {
+          "direction": "response:200",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body",
+          "required": "true",
+          "type": "object"
+        },
+        {
+          "direction": "response:422",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body.detail",
+          "required": "false",
+          "type": "array"
+        }
+      ]
+    },
+    {
+      "evidence_source": "review10-current-fastapi-openapi-observation",
+      "handler": "create_field_submission_endpoint_api_v1_field_submissions_post",
+      "method": "POST",
+      "operation_id": "create_field_submission_endpoint_api_v1_field_submissions_post",
+      "path": "/api/v1/field/submissions",
+      "request_fields": [
+        {
+          "direction": "request:body",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "request.body.assignment_id",
+          "required": "false",
+          "type": "union"
+        },
+        {
+          "direction": "request:body",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "request.body.candidate_name",
+          "required": "true",
+          "type": "string"
+        },
+        {
+          "direction": "request:body",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "request.body.candidate_status",
+          "required": "true",
+          "type": "string"
+        },
+        {
+          "direction": "request:body",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "request.body.notes",
+          "required": "false",
+          "type": "string"
+        },
+        {
+          "direction": "request:body",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "request.body.spatial_evidence",
+          "required": "false",
+          "type": "union"
+        },
+        {
+          "direction": "request:body",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "request.body.submission_type",
+          "required": "true",
+          "type": "string"
+        },
+        {
+          "direction": "request:body",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "request.body.submitted_by",
+          "required": "true",
+          "type": "string"
+        },
+        {
+          "direction": "request:body",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "request.body.territory_id",
+          "required": "true",
+          "type": "string"
+        },
+        {
+          "direction": "request:header",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "authorization",
+          "required": "false",
+          "type": "union"
+        }
+      ],
+      "response_fields": [
+        {
+          "direction": "response:201",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body",
+          "required": "true",
+          "type": "object"
+        },
+        {
+          "direction": "response:422",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body.detail",
+          "required": "false",
+          "type": "array"
+        }
+      ]
+    },
+    {
+      "evidence_source": "review10-current-fastapi-openapi-observation",
+      "handler": "approve_submission_endpoint_api_v1_field_submissions__submission_id__approve_post",
+      "method": "POST",
+      "operation_id": "approve_submission_endpoint_api_v1_field_submissions__submission_id__approve_post",
+      "path": "/api/v1/field/submissions/{submission_id}/approve",
+      "request_fields": [
+        {
+          "direction": "request:header",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "authorization",
+          "required": "false",
+          "type": "union"
+        },
+        {
+          "direction": "request:parameter",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "submission_id",
+          "required": "true",
+          "type": "string"
+        }
+      ],
+      "response_fields": [
+        {
+          "direction": "response:200",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body",
+          "required": "true",
+          "type": "object"
+        },
+        {
+          "direction": "response:422",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body.detail",
+          "required": "false",
+          "type": "array"
+        }
+      ]
+    },
+    {
+      "evidence_source": "review10-current-fastapi-openapi-observation",
+      "handler": "upload_field_submission_evidence_file_api_v1_field_submissions__submission_id__evidence_files_post",
+      "method": "POST",
+      "operation_id": "upload_field_submission_evidence_file_api_v1_field_submissions__submission_id__evidence_files_post",
+      "path": "/api/v1/field/submissions/{submission_id}/evidence-files",
+      "request_fields": [
+        {
+          "direction": "request:header",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "authorization",
+          "required": "false",
+          "type": "union"
+        },
+        {
+          "direction": "request:parameter",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "attachment_index",
+          "required": "false",
+          "type": "integer"
+        },
+        {
+          "direction": "request:parameter",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "file_name",
+          "required": "true",
+          "type": "string"
+        },
+        {
+          "direction": "request:parameter",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "submission_id",
+          "required": "true",
+          "type": "string"
+        }
+      ],
+      "response_fields": [
+        {
+          "direction": "response:201",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body",
+          "required": "true",
+          "type": "object"
+        },
+        {
+          "direction": "response:422",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body.detail",
+          "required": "false",
+          "type": "array"
+        }
+      ]
+    },
+    {
+      "evidence_source": "review10-current-fastapi-openapi-observation",
+      "handler": "download_field_submission_evidence_file_api_v1_field_submissions__submission_id__evidence_files__file_id__get",
+      "method": "GET",
+      "operation_id": "download_field_submission_evidence_file_api_v1_field_submissions__submission_id__evidence_files__file_id__get",
+      "path": "/api/v1/field/submissions/{submission_id}/evidence-files/{file_id}",
+      "request_fields": [
+        {
+          "direction": "request:header",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "authorization",
+          "required": "false",
+          "type": "union"
+        },
+        {
+          "direction": "request:parameter",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "file_id",
+          "required": "true",
+          "type": "string"
+        },
+        {
+          "direction": "request:parameter",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "submission_id",
+          "required": "true",
+          "type": "string"
+        }
+      ],
+      "response_fields": [
+        {
+          "direction": "response:200",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body",
+          "required": "true",
+          "type": "object"
+        },
+        {
+          "direction": "response:422",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body.detail",
+          "required": "false",
+          "type": "array"
+        }
+      ]
+    },
+    {
+      "evidence_source": "review10-current-fastapi-openapi-observation",
+      "handler": "field_submission_evidence_history_api_v1_field_submissions__submission_id__evidence_history_get",
+      "method": "GET",
+      "operation_id": "field_submission_evidence_history_api_v1_field_submissions__submission_id__evidence_history_get",
+      "path": "/api/v1/field/submissions/{submission_id}/evidence-history",
+      "request_fields": [
+        {
+          "direction": "request:header",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "authorization",
+          "required": "false",
+          "type": "union"
+        },
+        {
+          "direction": "request:parameter",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "limit",
+          "required": "false",
+          "type": "integer"
+        },
+        {
+          "direction": "request:parameter",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "submission_id",
+          "required": "true",
+          "type": "string"
+        }
+      ],
+      "response_fields": [
+        {
+          "direction": "response:200",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body",
+          "required": "true",
+          "type": "object"
+        },
+        {
+          "direction": "response:422",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body.detail",
+          "required": "false",
+          "type": "array"
+        }
+      ]
+    },
+    {
+      "evidence_source": "review10-current-fastapi-openapi-observation",
+      "handler": "review_field_submission_evidence_endpoint_api_v1_field_submissions__submission_id__evidence_review_post",
+      "method": "POST",
+      "operation_id": "review_field_submission_evidence_endpoint_api_v1_field_submissions__submission_id__evidence_review_post",
+      "path": "/api/v1/field/submissions/{submission_id}/evidence-review",
+      "request_fields": [
+        {
+          "direction": "request:body",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "request.body.attachment_index",
+          "required": "false",
+          "type": "integer"
+        },
+        {
+          "direction": "request:body",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "request.body.decision",
+          "required": "true",
+          "type": "string"
+        },
+        {
+          "direction": "request:body",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "request.body.file_id",
+          "required": "false",
+          "type": "union"
+        },
+        {
+          "direction": "request:body",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "request.body.reviewer_note",
+          "required": "false",
+          "type": "string"
+        },
+        {
+          "direction": "request:header",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "authorization",
+          "required": "false",
+          "type": "union"
+        },
+        {
+          "direction": "request:parameter",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "submission_id",
+          "required": "true",
+          "type": "string"
+        }
+      ],
+      "response_fields": [
+        {
+          "direction": "response:200",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body",
+          "required": "true",
+          "type": "object"
+        },
+        {
+          "direction": "response:422",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body.detail",
+          "required": "false",
+          "type": "array"
+        }
+      ]
+    },
+    {
+      "evidence_source": "review10-current-fastapi-openapi-observation",
+      "handler": "reject_submission_endpoint_api_v1_field_submissions__submission_id__reject_post",
+      "method": "POST",
+      "operation_id": "reject_submission_endpoint_api_v1_field_submissions__submission_id__reject_post",
+      "path": "/api/v1/field/submissions/{submission_id}/reject",
+      "request_fields": [
+        {
+          "direction": "request:body",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "request.body.reviewer_note",
+          "required": "false",
+          "type": "string"
+        },
+        {
+          "direction": "request:header",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "authorization",
+          "required": "false",
+          "type": "union"
+        },
+        {
+          "direction": "request:parameter",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "submission_id",
+          "required": "true",
+          "type": "string"
+        }
+      ],
+      "response_fields": [
+        {
+          "direction": "response:200",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body",
+          "required": "true",
+          "type": "object"
+        },
+        {
+          "direction": "response:422",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body.detail",
+          "required": "false",
+          "type": "array"
+        }
+      ]
+    },
+    {
+      "evidence_source": "review10-current-fastapi-openapi-observation",
+      "handler": "rework_submission_endpoint_api_v1_field_submissions__submission_id__rework_post",
+      "method": "POST",
+      "operation_id": "rework_submission_endpoint_api_v1_field_submissions__submission_id__rework_post",
+      "path": "/api/v1/field/submissions/{submission_id}/rework",
+      "request_fields": [
+        {
+          "direction": "request:body",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "request.body.reviewer_note",
+          "required": "false",
+          "type": "string"
+        },
+        {
+          "direction": "request:header",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "authorization",
+          "required": "false",
+          "type": "union"
+        },
+        {
+          "direction": "request:parameter",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "submission_id",
+          "required": "true",
+          "type": "string"
+        }
+      ],
+      "response_fields": [
+        {
+          "direction": "response:200",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body",
+          "required": "true",
+          "type": "object"
+        },
+        {
+          "direction": "response:422",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body.detail",
+          "required": "false",
+          "type": "array"
+        }
+      ]
+    },
+    {
+      "evidence_source": "review10-current-fastapi-openapi-observation",
+      "handler": "mark_submission_under_review_api_v1_field_submissions__submission_id__under_review_post",
+      "method": "POST",
+      "operation_id": "mark_submission_under_review_api_v1_field_submissions__submission_id__under_review_post",
+      "path": "/api/v1/field/submissions/{submission_id}/under-review",
+      "request_fields": [
+        {
+          "direction": "request:body",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "request.body.reviewer_note",
+          "required": "false",
+          "type": "string"
+        },
+        {
+          "direction": "request:header",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "authorization",
+          "required": "false",
+          "type": "union"
+        },
+        {
+          "direction": "request:parameter",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "submission_id",
+          "required": "true",
+          "type": "string"
+        }
+      ],
+      "response_fields": [
+        {
+          "direction": "response:200",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body",
+          "required": "true",
+          "type": "object"
+        },
+        {
+          "direction": "response:422",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body.detail",
+          "required": "false",
+          "type": "array"
+        }
+      ]
+    },
+    {
+      "evidence_source": "review10-current-fastapi-openapi-observation",
+      "handler": "geotag_submissions_api_v1_geotag_submissions_get",
+      "method": "GET",
+      "operation_id": "geotag_submissions_api_v1_geotag_submissions_get",
+      "path": "/api/v1/geotag-submissions",
+      "request_fields": [
+        {
+          "direction": "request:header",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "authorization",
+          "required": "false",
+          "type": "union"
+        },
+        {
+          "direction": "request:parameter",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "status",
+          "required": "false",
+          "type": "union"
+        },
+        {
+          "direction": "request:parameter",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "territory_id",
+          "required": "false",
+          "type": "union"
+        }
+      ],
+      "response_fields": [
+        {
+          "direction": "response:200",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body",
+          "required": "true",
+          "type": "object"
+        },
+        {
+          "direction": "response:422",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body.detail",
+          "required": "false",
+          "type": "array"
+        }
+      ]
+    },
+    {
+      "evidence_source": "review10-current-fastapi-openapi-observation",
+      "handler": "geotag_sla_drilldown_api_v1_geotag_submissions_automation_sla_drilldown_get",
+      "method": "GET",
+      "operation_id": "geotag_sla_drilldown_api_v1_geotag_submissions_automation_sla_drilldown_get",
+      "path": "/api/v1/geotag-submissions/automation/sla-drilldown",
+      "request_fields": [
+        {
+          "direction": "request:header",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "authorization",
+          "required": "false",
+          "type": "union"
+        },
+        {
+          "direction": "request:parameter",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "state",
+          "required": "false",
+          "type": "union"
+        }
+      ],
+      "response_fields": [
+        {
+          "direction": "response:200",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body",
+          "required": "true",
+          "type": "object"
+        },
+        {
+          "direction": "response:422",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body.detail",
+          "required": "false",
+          "type": "array"
+        }
+      ]
+    },
+    {
+      "evidence_source": "review10-current-fastapi-openapi-observation",
+      "handler": "geotag_automation_summary_api_v1_geotag_submissions_automation_summary_get",
+      "method": "GET",
+      "operation_id": "geotag_automation_summary_api_v1_geotag_submissions_automation_summary_get",
+      "path": "/api/v1/geotag-submissions/automation/summary",
+      "request_fields": [
+        {
+          "direction": "request:header",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "authorization",
+          "required": "false",
+          "type": "union"
+        }
+      ],
+      "response_fields": [
+        {
+          "direction": "response:200",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body",
+          "required": "true",
+          "type": "object"
+        },
+        {
+          "direction": "response:422",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body.detail",
+          "required": "false",
+          "type": "array"
+        }
+      ]
+    },
+    {
+      "evidence_source": "review10-current-fastapi-openapi-observation",
+      "handler": "geotag_duplicates_summary_api_v1_geotag_submissions_duplicates_summary_get",
+      "method": "GET",
+      "operation_id": "geotag_duplicates_summary_api_v1_geotag_submissions_duplicates_summary_get",
+      "path": "/api/v1/geotag-submissions/duplicates/summary",
+      "request_fields": [
+        {
+          "direction": "request:header",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "authorization",
+          "required": "false",
+          "type": "union"
+        }
+      ],
+      "response_fields": [
+        {
+          "direction": "response:200",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body",
+          "required": "true",
+          "type": "object"
+        },
+        {
+          "direction": "response:422",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body.detail",
+          "required": "false",
+          "type": "array"
+        }
+      ]
+    },
+    {
+      "evidence_source": "review10-current-fastapi-openapi-observation",
+      "handler": "geotag_certificate_api_v1_geotag_submissions__submission_id__certificate_get",
+      "method": "GET",
+      "operation_id": "geotag_certificate_api_v1_geotag_submissions__submission_id__certificate_get",
+      "path": "/api/v1/geotag-submissions/{submission_id}/certificate",
+      "request_fields": [
+        {
+          "direction": "request:header",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "authorization",
+          "required": "false",
+          "type": "union"
+        },
+        {
+          "direction": "request:parameter",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "submission_id",
+          "required": "true",
+          "type": "string"
+        }
+      ],
+      "response_fields": [
+        {
+          "direction": "response:200",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body",
+          "required": "true",
+          "type": "object"
+        },
+        {
+          "direction": "response:422",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body.detail",
+          "required": "false",
+          "type": "array"
+        }
+      ]
+    },
+    {
+      "evidence_source": "review10-current-fastapi-openapi-observation",
+      "handler": "geotag_duplicate_decision_api_v1_geotag_submissions__submission_id__duplicate_decision_post",
+      "method": "POST",
+      "operation_id": "geotag_duplicate_decision_api_v1_geotag_submissions__submission_id__duplicate_decision_post",
+      "path": "/api/v1/geotag-submissions/{submission_id}/duplicate-decision",
+      "request_fields": [
+        {
+          "direction": "request:body",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "request.body.duplicate_action",
+          "required": "true",
+          "type": "string"
+        },
+        {
+          "direction": "request:body",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "request.body.reviewer_note",
+          "required": "false",
+          "type": "string"
+        },
+        {
+          "direction": "request:header",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "authorization",
+          "required": "false",
+          "type": "union"
+        },
+        {
+          "direction": "request:parameter",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "submission_id",
+          "required": "true",
+          "type": "string"
+        }
+      ],
+      "response_fields": [
+        {
+          "direction": "response:200",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body",
+          "required": "true",
+          "type": "object"
+        },
+        {
+          "direction": "response:422",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body.detail",
+          "required": "false",
+          "type": "array"
+        }
+      ]
+    },
+    {
+      "evidence_source": "review10-current-fastapi-openapi-observation",
+      "handler": "send_geotag_to_field_check_api_v1_geotag_submissions__submission_id__field_check_post",
+      "method": "POST",
+      "operation_id": "send_geotag_to_field_check_api_v1_geotag_submissions__submission_id__field_check_post",
+      "path": "/api/v1/geotag-submissions/{submission_id}/field-check",
+      "request_fields": [
+        {
+          "direction": "request:body",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "request.body.reviewer_note",
+          "required": "false",
+          "type": "string"
+        },
+        {
+          "direction": "request:header",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "authorization",
+          "required": "false",
+          "type": "union"
+        },
+        {
+          "direction": "request:parameter",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "submission_id",
+          "required": "true",
+          "type": "string"
+        }
+      ],
+      "response_fields": [
+        {
+          "direction": "response:200",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body",
+          "required": "true",
+          "type": "object"
+        },
+        {
+          "direction": "response:422",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body.detail",
+          "required": "false",
+          "type": "array"
+        }
+      ]
+    },
+    {
+      "evidence_source": "review10-current-fastapi-openapi-observation",
+      "handler": "geotag_submission_history_api_v1_geotag_submissions__submission_id__history_get",
+      "method": "GET",
+      "operation_id": "geotag_submission_history_api_v1_geotag_submissions__submission_id__history_get",
+      "path": "/api/v1/geotag-submissions/{submission_id}/history",
+      "request_fields": [
+        {
+          "direction": "request:header",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "authorization",
+          "required": "false",
+          "type": "union"
+        },
+        {
+          "direction": "request:parameter",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "submission_id",
+          "required": "true",
+          "type": "string"
+        }
+      ],
+      "response_fields": [
+        {
+          "direction": "response:200",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body",
+          "required": "true",
+          "type": "object"
+        },
+        {
+          "direction": "response:422",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body.detail",
+          "required": "false",
+          "type": "array"
+        }
+      ]
+    },
+    {
+      "evidence_source": "review10-current-fastapi-openapi-observation",
+      "handler": "geotag_identity_review_api_v1_geotag_submissions__submission_id__identity_post",
+      "method": "POST",
+      "operation_id": "geotag_identity_review_api_v1_geotag_submissions__submission_id__identity_post",
+      "path": "/api/v1/geotag-submissions/{submission_id}/identity",
+      "request_fields": [
+        {
+          "direction": "request:body",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "request.body.dip_full",
+          "required": "true",
+          "type": "string"
+        },
+        {
+          "direction": "request:body",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "request.body.identity_document_verified",
+          "required": "false",
+          "type": "boolean"
+        },
+        {
+          "direction": "request:body",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "request.body.reviewer_note",
+          "required": "false",
+          "type": "string"
+        },
+        {
+          "direction": "request:header",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "authorization",
+          "required": "false",
+          "type": "union"
+        },
+        {
+          "direction": "request:parameter",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "submission_id",
+          "required": "true",
+          "type": "string"
+        }
+      ],
+      "response_fields": [
+        {
+          "direction": "response:200",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body",
+          "required": "true",
+          "type": "object"
+        },
+        {
+          "direction": "response:422",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body.detail",
+          "required": "false",
+          "type": "array"
+        }
+      ]
+    },
+    {
+      "evidence_source": "review10-current-fastapi-openapi-observation",
+      "handler": "simulate_geotag_publication_api_v1_geotag_submissions__submission_id__publication_simulation_post",
+      "method": "POST",
+      "operation_id": "simulate_geotag_publication_api_v1_geotag_submissions__submission_id__publication_simulation_post",
+      "path": "/api/v1/geotag-submissions/{submission_id}/publication-simulation",
+      "request_fields": [
+        {
+          "direction": "request:body",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "request.body.reviewer_note",
+          "required": "false",
+          "type": "string"
+        },
+        {
+          "direction": "request:header",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "authorization",
+          "required": "false",
+          "type": "union"
+        },
+        {
+          "direction": "request:parameter",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "submission_id",
+          "required": "true",
+          "type": "string"
+        }
+      ],
+      "response_fields": [
+        {
+          "direction": "response:200",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body",
+          "required": "true",
+          "type": "object"
+        },
+        {
+          "direction": "response:422",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body.detail",
+          "required": "false",
+          "type": "array"
+        }
+      ]
+    },
+    {
+      "evidence_source": "review10-current-fastapi-openapi-observation",
+      "handler": "publish_geotag_case_file_api_v1_geotag_submissions__submission_id__publish_post",
+      "method": "POST",
+      "operation_id": "publish_geotag_case_file_api_v1_geotag_submissions__submission_id__publish_post",
+      "path": "/api/v1/geotag-submissions/{submission_id}/publish",
+      "request_fields": [
+        {
+          "direction": "request:body",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "request.body.reviewer_note",
+          "required": "false",
+          "type": "string"
+        },
+        {
+          "direction": "request:header",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "authorization",
+          "required": "false",
+          "type": "union"
+        },
+        {
+          "direction": "request:parameter",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "submission_id",
+          "required": "true",
+          "type": "string"
+        }
+      ],
+      "response_fields": [
+        {
+          "direction": "response:200",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body",
+          "required": "true",
+          "type": "object"
+        },
+        {
+          "direction": "response:422",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body.detail",
+          "required": "false",
+          "type": "array"
+        }
+      ]
+    },
+    {
+      "evidence_source": "review10-current-fastapi-openapi-observation",
+      "handler": "mark_geotag_registry_ready_api_v1_geotag_submissions__submission_id__registry_ready_post",
+      "method": "POST",
+      "operation_id": "mark_geotag_registry_ready_api_v1_geotag_submissions__submission_id__registry_ready_post",
+      "path": "/api/v1/geotag-submissions/{submission_id}/registry-ready",
+      "request_fields": [
+        {
+          "direction": "request:body",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "request.body.reviewer_note",
+          "required": "false",
+          "type": "string"
+        },
+        {
+          "direction": "request:header",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "authorization",
+          "required": "false",
+          "type": "union"
+        },
+        {
+          "direction": "request:parameter",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "submission_id",
+          "required": "true",
+          "type": "string"
+        }
+      ],
+      "response_fields": [
+        {
+          "direction": "response:200",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body",
+          "required": "true",
+          "type": "object"
+        },
+        {
+          "direction": "response:422",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body.detail",
+          "required": "false",
+          "type": "array"
+        }
+      ]
+    },
+    {
+      "evidence_source": "review10-current-fastapi-openapi-observation",
+      "handler": "reject_geotag_submission_api_v1_geotag_submissions__submission_id__reject_post",
+      "method": "POST",
+      "operation_id": "reject_geotag_submission_api_v1_geotag_submissions__submission_id__reject_post",
+      "path": "/api/v1/geotag-submissions/{submission_id}/reject",
+      "request_fields": [
+        {
+          "direction": "request:body",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "request.body.reviewer_note",
+          "required": "false",
+          "type": "string"
+        },
+        {
+          "direction": "request:header",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "authorization",
+          "required": "false",
+          "type": "union"
+        },
+        {
+          "direction": "request:parameter",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "submission_id",
+          "required": "true",
+          "type": "string"
+        }
+      ],
+      "response_fields": [
+        {
+          "direction": "response:200",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body",
+          "required": "true",
+          "type": "object"
+        },
+        {
+          "direction": "response:422",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body.detail",
+          "required": "false",
+          "type": "array"
+        }
+      ]
+    },
+    {
+      "evidence_source": "review10-current-fastapi-openapi-observation",
+      "handler": "geotag_road_suggestion_review_api_v1_geotag_submissions__submission_id__road_suggestion_post",
+      "method": "POST",
+      "operation_id": "geotag_road_suggestion_review_api_v1_geotag_submissions__submission_id__road_suggestion_post",
+      "path": "/api/v1/geotag-submissions/{submission_id}/road-suggestion",
+      "request_fields": [
+        {
+          "direction": "request:body",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "request.body.action",
+          "required": "true",
+          "type": "string"
+        },
+        {
+          "direction": "request:body",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "request.body.reviewed_road_name",
+          "required": "false",
+          "type": "union"
+        },
+        {
+          "direction": "request:body",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "request.body.reviewer_note",
+          "required": "false",
+          "type": "string"
+        },
+        {
+          "direction": "request:header",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "authorization",
+          "required": "false",
+          "type": "union"
+        },
+        {
+          "direction": "request:parameter",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "submission_id",
+          "required": "true",
+          "type": "string"
+        }
+      ],
+      "response_fields": [
+        {
+          "direction": "response:200",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body",
+          "required": "true",
+          "type": "object"
+        },
+        {
+          "direction": "response:422",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body.detail",
+          "required": "false",
+          "type": "array"
+        }
+      ]
+    },
+    {
+      "evidence_source": "review10-current-fastapi-openapi-observation",
+      "handler": "mark_geotag_under_review_api_v1_geotag_submissions__submission_id__under_review_post",
+      "method": "POST",
+      "operation_id": "mark_geotag_under_review_api_v1_geotag_submissions__submission_id__under_review_post",
+      "path": "/api/v1/geotag-submissions/{submission_id}/under-review",
+      "request_fields": [
+        {
+          "direction": "request:body",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "request.body.reviewer_note",
+          "required": "false",
+          "type": "string"
+        },
+        {
+          "direction": "request:header",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "authorization",
+          "required": "false",
+          "type": "union"
+        },
+        {
+          "direction": "request:parameter",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "submission_id",
+          "required": "true",
+          "type": "string"
+        }
+      ],
+      "response_fields": [
+        {
+          "direction": "response:200",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body",
+          "required": "true",
+          "type": "object"
+        },
+        {
+          "direction": "response:422",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body.detail",
+          "required": "false",
+          "type": "array"
+        }
+      ]
+    },
+    {
+      "evidence_source": "review10-current-fastapi-openapi-observation",
+      "handler": "health_api_v1_health_get",
+      "method": "GET",
+      "operation_id": "health_api_v1_health_get",
+      "path": "/api/v1/health",
+      "request_fields": [],
+      "response_fields": [
+        {
+          "direction": "response:200",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body",
+          "required": "true",
+          "type": "object"
+        }
+      ]
+    },
+    {
+      "evidence_source": "review10-current-fastapi-openapi-observation",
+      "handler": "import_jobs_api_v1_imports_jobs_get",
+      "method": "GET",
+      "operation_id": "import_jobs_api_v1_imports_jobs_get",
+      "path": "/api/v1/imports/jobs",
+      "request_fields": [
+        {
+          "direction": "request:header",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "authorization",
+          "required": "false",
+          "type": "union"
+        }
+      ],
+      "response_fields": [
+        {
+          "direction": "response:200",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body",
+          "required": "true",
+          "type": "object"
+        },
+        {
+          "direction": "response:422",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body.detail",
+          "required": "false",
+          "type": "array"
+        }
+      ]
+    },
+    {
+      "evidence_source": "review10-current-fastapi-openapi-observation",
+      "handler": "create_import_job_endpoint_api_v1_imports_jobs_post",
+      "method": "POST",
+      "operation_id": "create_import_job_endpoint_api_v1_imports_jobs_post",
+      "path": "/api/v1/imports/jobs",
+      "request_fields": [
+        {
+          "direction": "request:body",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "request.body.name",
+          "required": "true",
+          "type": "string"
+        },
+        {
+          "direction": "request:body",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "request.body.rows",
+          "required": "true",
+          "type": "array"
+        },
+        {
+          "direction": "request:body",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "request.body.source_name",
+          "required": "true",
+          "type": "string"
+        },
+        {
+          "direction": "request:header",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "authorization",
+          "required": "false",
+          "type": "union"
+        }
+      ],
+      "response_fields": [
+        {
+          "direction": "response:201",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body",
+          "required": "true",
+          "type": "object"
+        },
+        {
+          "direction": "response:422",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body.detail",
+          "required": "false",
+          "type": "array"
+        }
+      ]
+    },
+    {
+      "evidence_source": "review10-current-fastapi-openapi-observation",
+      "handler": "commit_import_job_endpoint_api_v1_imports_jobs__job_id__commit_post",
+      "method": "POST",
+      "operation_id": "commit_import_job_endpoint_api_v1_imports_jobs__job_id__commit_post",
+      "path": "/api/v1/imports/jobs/{job_id}/commit",
+      "request_fields": [
+        {
+          "direction": "request:header",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "authorization",
+          "required": "false",
+          "type": "union"
+        },
+        {
+          "direction": "request:parameter",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "job_id",
+          "required": "true",
+          "type": "string"
+        }
+      ],
+      "response_fields": [
+        {
+          "direction": "response:200",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body",
+          "required": "true",
+          "type": "object"
+        },
+        {
+          "direction": "response:422",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body.detail",
+          "required": "false",
+          "type": "array"
+        }
+      ]
+    },
+    {
+      "evidence_source": "review10-current-fastapi-openapi-observation",
+      "handler": "import_rows_api_v1_imports_jobs__job_id__rows_get",
+      "method": "GET",
+      "operation_id": "import_rows_api_v1_imports_jobs__job_id__rows_get",
+      "path": "/api/v1/imports/jobs/{job_id}/rows",
+      "request_fields": [
+        {
+          "direction": "request:header",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "authorization",
+          "required": "false",
+          "type": "union"
+        },
+        {
+          "direction": "request:parameter",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "job_id",
+          "required": "true",
+          "type": "string"
+        }
+      ],
+      "response_fields": [
+        {
+          "direction": "response:200",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body",
+          "required": "true",
+          "type": "object"
+        },
+        {
+          "direction": "response:422",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body.detail",
+          "required": "false",
+          "type": "array"
+        }
+      ]
+    },
+    {
+      "evidence_source": "review10-current-fastapi-openapi-observation",
+      "handler": "meta_api_v1_meta_get",
+      "method": "GET",
+      "operation_id": "meta_api_v1_meta_get",
+      "path": "/api/v1/meta",
+      "request_fields": [],
+      "response_fields": [
+        {
+          "direction": "response:200",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body",
+          "required": "true",
+          "type": "object"
+        }
+      ]
+    },
+    {
+      "evidence_source": "review10-current-fastapi-openapi-observation",
+      "handler": "operator_command_center_api_v1_operator_command_center_get",
+      "method": "GET",
+      "operation_id": "operator_command_center_api_v1_operator_command_center_get",
+      "path": "/api/v1/operator/command-center",
+      "request_fields": [
+        {
+          "direction": "request:header",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "authorization",
+          "required": "false",
+          "type": "union"
+        }
+      ],
+      "response_fields": [
+        {
+          "direction": "response:200",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body",
+          "required": "true",
+          "type": "object"
+        },
+        {
+          "direction": "response:422",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body.detail",
+          "required": "false",
+          "type": "array"
+        }
+      ]
+    },
+    {
+      "evidence_source": "review10-current-fastapi-openapi-observation",
+      "handler": "operator_demo_fixture_cleanup_api_v1_operator_demo_fixtures_cleanup_post",
+      "method": "POST",
+      "operation_id": "operator_demo_fixture_cleanup_api_v1_operator_demo_fixtures_cleanup_post",
+      "path": "/api/v1/operator/demo-fixtures/cleanup",
+      "request_fields": [
+        {
+          "direction": "request:header",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "authorization",
+          "required": "false",
+          "type": "union"
+        }
+      ],
+      "response_fields": [
+        {
+          "direction": "response:200",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body",
+          "required": "true",
+          "type": "object"
+        },
+        {
+          "direction": "response:422",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body.detail",
+          "required": "false",
+          "type": "array"
+        }
+      ]
+    },
+    {
+      "evidence_source": "review10-current-fastapi-openapi-observation",
+      "handler": "operator_demo_fixture_status_api_v1_operator_demo_fixtures_status_get",
+      "method": "GET",
+      "operation_id": "operator_demo_fixture_status_api_v1_operator_demo_fixtures_status_get",
+      "path": "/api/v1/operator/demo-fixtures/status",
+      "request_fields": [
+        {
+          "direction": "request:header",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "authorization",
+          "required": "false",
+          "type": "union"
+        }
+      ],
+      "response_fields": [
+        {
+          "direction": "response:200",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body",
+          "required": "true",
+          "type": "object"
+        },
+        {
+          "direction": "response:422",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body.detail",
+          "required": "false",
+          "type": "array"
+        }
+      ]
+    },
+    {
+      "evidence_source": "review10-current-fastapi-openapi-observation",
+      "handler": "operator_migration_status_api_v1_operator_migrations_status_get",
+      "method": "GET",
+      "operation_id": "operator_migration_status_api_v1_operator_migrations_status_get",
+      "path": "/api/v1/operator/migrations/status",
+      "request_fields": [
+        {
+          "direction": "request:header",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "authorization",
+          "required": "false",
+          "type": "union"
+        }
+      ],
+      "response_fields": [
+        {
+          "direction": "response:200",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body",
+          "required": "true",
+          "type": "object"
+        },
+        {
+          "direction": "response:422",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body.detail",
+          "required": "false",
+          "type": "array"
+        }
+      ]
+    },
+    {
+      "evidence_source": "review10-current-fastapi-openapi-observation",
+      "handler": "operator_postgis_readiness_api_v1_operator_postgis_readiness_get",
+      "method": "GET",
+      "operation_id": "operator_postgis_readiness_api_v1_operator_postgis_readiness_get",
+      "path": "/api/v1/operator/postgis/readiness",
+      "request_fields": [
+        {
+          "direction": "request:header",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "authorization",
+          "required": "false",
+          "type": "union"
+        }
+      ],
+      "response_fields": [
+        {
+          "direction": "response:200",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body",
+          "required": "true",
+          "type": "object"
+        },
+        {
+          "direction": "response:422",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body.detail",
+          "required": "false",
+          "type": "array"
+        }
+      ]
+    },
+    {
+      "evidence_source": "review10-current-fastapi-openapi-observation",
+      "handler": "operator_production_readiness_api_v1_operator_production_readiness_get",
+      "method": "GET",
+      "operation_id": "operator_production_readiness_api_v1_operator_production_readiness_get",
+      "path": "/api/v1/operator/production-readiness",
+      "request_fields": [
+        {
+          "direction": "request:header",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "authorization",
+          "required": "false",
+          "type": "union"
+        }
+      ],
+      "response_fields": [
+        {
+          "direction": "response:200",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body",
+          "required": "true",
+          "type": "object"
+        },
+        {
+          "direction": "response:422",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body.detail",
+          "required": "false",
+          "type": "array"
+        }
+      ]
+    },
+    {
+      "evidence_source": "review10-current-fastapi-openapi-observation",
+      "handler": "operator_restore_drill_latest_api_v1_operator_restore_drill_latest_get",
+      "method": "GET",
+      "operation_id": "operator_restore_drill_latest_api_v1_operator_restore_drill_latest_get",
+      "path": "/api/v1/operator/restore-drill/latest",
+      "request_fields": [
+        {
+          "direction": "request:header",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "authorization",
+          "required": "false",
+          "type": "union"
+        }
+      ],
+      "response_fields": [
+        {
+          "direction": "response:200",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body",
+          "required": "true",
+          "type": "object"
+        },
+        {
+          "direction": "response:422",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body.detail",
+          "required": "false",
+          "type": "array"
+        }
+      ]
+    },
+    {
+      "evidence_source": "review10-current-fastapi-openapi-observation",
+      "handler": "pilot_readiness_summary_endpoint_api_v1_pilot_readiness_summary_get",
+      "method": "GET",
+      "operation_id": "pilot_readiness_summary_endpoint_api_v1_pilot_readiness_summary_get",
+      "path": "/api/v1/pilot-readiness/summary",
+      "request_fields": [
+        {
+          "direction": "request:header",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "authorization",
+          "required": "false",
+          "type": "union"
+        }
+      ],
+      "response_fields": [
+        {
+          "direction": "response:200",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body",
+          "required": "true",
+          "type": "object"
+        },
+        {
+          "direction": "response:422",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body.detail",
+          "required": "false",
+          "type": "array"
+        }
+      ]
+    },
+    {
+      "evidence_source": "review10-current-fastapi-openapi-observation",
+      "handler": "list_public_provinces_api_v1_provinces_get",
+      "method": "GET",
+      "operation_id": "list_public_provinces_api_v1_provinces_get",
+      "path": "/api/v1/provinces",
+      "request_fields": [],
+      "response_fields": [
+        {
+          "direction": "response:200",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body",
+          "required": "true",
+          "type": "object"
+        }
+      ]
+    },
+    {
+      "evidence_source": "review10-current-fastapi-openapi-observation",
+      "handler": "public_address_code_lookup_api_v1_public_address_code__code__get",
+      "method": "GET",
+      "operation_id": "public_address_code_lookup_api_v1_public_address_code__code__get",
+      "path": "/api/v1/public/address-code/{code}",
+      "request_fields": [
+        {
+          "direction": "request:parameter",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "code",
+          "required": "true",
+          "type": "string"
+        }
+      ],
+      "response_fields": [
+        {
+          "direction": "response:200",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body",
+          "required": "true",
+          "type": "object"
+        },
+        {
+          "direction": "response:422",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body.detail",
+          "required": "false",
+          "type": "array"
+        }
+      ]
+    },
+    {
+      "evidence_source": "review10-current-fastapi-openapi-observation",
+      "handler": "public_address_code_record_api_v1_public_address_code__code__record_get",
+      "method": "GET",
+      "operation_id": "public_address_code_record_api_v1_public_address_code__code__record_get",
+      "path": "/api/v1/public/address-code/{code}/record",
+      "request_fields": [
+        {
+          "direction": "request:parameter",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "code",
+          "required": "true",
+          "type": "string"
+        }
+      ],
+      "response_fields": [
+        {
+          "direction": "response:200",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body",
+          "required": "true",
+          "type": "object"
+        },
+        {
+          "direction": "response:422",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body.detail",
+          "required": "false",
+          "type": "array"
+        }
+      ]
+    },
+    {
+      "evidence_source": "review10-current-fastapi-openapi-observation",
+      "handler": "create_public_correction_api_v1_public_corrections_post",
+      "method": "POST",
+      "operation_id": "create_public_correction_api_v1_public_corrections_post",
+      "path": "/api/v1/public/corrections",
+      "request_fields": [
+        {
+          "direction": "request:body",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "request.body.address_id",
+          "required": "false",
+          "type": "union"
+        },
+        {
+          "direction": "request:body",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "request.body.correction_type",
+          "required": "true",
+          "type": "string"
+        },
+        {
+          "direction": "request:body",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "request.body.note",
+          "required": "false",
+          "type": "string"
+        },
+        {
+          "direction": "request:body",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "request.body.privacy_notice_acknowledged",
+          "required": "false",
+          "type": "boolean"
+        },
+        {
+          "direction": "request:body",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "request.body.public_code",
+          "required": "false",
+          "type": "union"
+        },
+        {
+          "direction": "request:body",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "request.body.query",
+          "required": "true",
+          "type": "string"
+        },
+        {
+          "direction": "request:body",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "request.body.reason",
+          "required": "true",
+          "type": "string"
+        },
+        {
+          "direction": "request:body",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "request.body.reporter_contact",
+          "required": "false",
+          "type": "union"
+        },
+        {
+          "direction": "request:body",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "request.body.reporter_name",
+          "required": "false",
+          "type": "union"
+        }
+      ],
+      "response_fields": [
+        {
+          "direction": "response:201",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body",
+          "required": "true",
+          "type": "object"
+        },
+        {
+          "direction": "response:422",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body.detail",
+          "required": "false",
+          "type": "array"
+        }
+      ]
+    },
+    {
+      "evidence_source": "review10-current-fastapi-openapi-observation",
+      "handler": "create_public_geotag_submission_api_v1_public_geotag_submissions_post",
+      "method": "POST",
+      "operation_id": "create_public_geotag_submission_api_v1_public_geotag_submissions_post",
+      "path": "/api/v1/public/geotag-submissions",
+      "request_fields": [
+        {
+          "direction": "request:body",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "request.body.accuracy_meters",
+          "required": "false",
+          "type": "union"
+        },
+        {
+          "direction": "request:body",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "request.body.address_label",
+          "required": "true",
+          "type": "string"
+        },
+        {
+          "direction": "request:body",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "request.body.capture_method",
+          "required": "false",
+          "type": "string"
+        },
+        {
+          "direction": "request:body",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "request.body.citizen_contact",
+          "required": "false",
+          "type": "union"
+        },
+        {
+          "direction": "request:body",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "request.body.citizen_name",
+          "required": "false",
+          "type": "union"
+        },
+        {
+          "direction": "request:body",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "request.body.dip_last4",
+          "required": "false",
+          "type": "union"
+        },
+        {
+          "direction": "request:body",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "request.body.grid_code",
+          "required": "false",
+          "type": "union"
+        },
+        {
+          "direction": "request:body",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "request.body.landmark",
+          "required": "false",
+          "type": "string"
+        },
+        {
+          "direction": "request:body",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "request.body.latitude",
+          "required": "true",
+          "type": "number"
+        },
+        {
+          "direction": "request:body",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "request.body.longitude",
+          "required": "true",
+          "type": "number"
+        },
+        {
+          "direction": "request:body",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "request.body.map_display_name",
+          "required": "false",
+          "type": "union"
+        },
+        {
+          "direction": "request:body",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "request.body.privacy_notice_acknowledged",
+          "required": "false",
+          "type": "boolean"
+        },
+        {
+          "direction": "request:body",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "request.body.province_code",
+          "required": "false",
+          "type": "union"
+        },
+        {
+          "direction": "request:body",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "request.body.road_suggestion_attribution",
+          "required": "false",
+          "type": "union"
+        },
+        {
+          "direction": "request:body",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "request.body.road_suggestion_source",
+          "required": "false",
+          "type": "union"
+        },
+        {
+          "direction": "request:body",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "request.body.suggested_local_area",
+          "required": "false",
+          "type": "union"
+        },
+        {
+          "direction": "request:body",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "request.body.suggested_place_name",
+          "required": "false",
+          "type": "union"
+        },
+        {
+          "direction": "request:body",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "request.body.suggested_road_name",
+          "required": "false",
+          "type": "union"
+        },
+        {
+          "direction": "request:body",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "request.body.territory_id",
+          "required": "false",
+          "type": "union"
+        }
+      ],
+      "response_fields": [
+        {
+          "direction": "response:201",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body",
+          "required": "true",
+          "type": "object"
+        },
+        {
+          "direction": "response:422",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body.detail",
+          "required": "false",
+          "type": "array"
+        }
+      ]
+    },
+    {
+      "evidence_source": "review10-current-fastapi-openapi-observation",
+      "handler": "public_geotag_submission_tracking_api_v1_public_geotag_submissions__submission_id__tracking_get",
+      "method": "GET",
+      "operation_id": "public_geotag_submission_tracking_api_v1_public_geotag_submissions__submission_id__tracking_get",
+      "path": "/api/v1/public/geotag-submissions/{submission_id}/tracking",
+      "request_fields": [
+        {
+          "direction": "request:parameter",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "submission_id",
+          "required": "true",
+          "type": "string"
+        }
+      ],
+      "response_fields": [
+        {
+          "direction": "response:200",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body",
+          "required": "true",
+          "type": "object"
+        },
+        {
+          "direction": "response:422",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body.detail",
+          "required": "false",
+          "type": "array"
+        }
+      ]
+    },
+    {
+      "evidence_source": "review10-current-fastapi-openapi-observation",
+      "handler": "public_geotag_preview_api_v1_public_geotag_preview_post",
+      "method": "POST",
+      "operation_id": "public_geotag_preview_api_v1_public_geotag_preview_post",
+      "path": "/api/v1/public/geotag/preview",
+      "request_fields": [
+        {
+          "direction": "request:body",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "request.body.latitude",
+          "required": "true",
+          "type": "number"
+        },
+        {
+          "direction": "request:body",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "request.body.longitude",
+          "required": "true",
+          "type": "number"
+        },
+        {
+          "direction": "request:body",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "request.body.province_code",
+          "required": "false",
+          "type": "union"
+        },
+        {
+          "direction": "request:body",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "request.body.territory_id",
+          "required": "false",
+          "type": "union"
+        }
+      ],
+      "response_fields": [
+        {
+          "direction": "response:200",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body",
+          "required": "true",
+          "type": "object"
+        },
+        {
+          "direction": "response:422",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body.detail",
+          "required": "false",
+          "type": "array"
+        }
+      ]
+    },
+    {
+      "evidence_source": "review10-current-fastapi-openapi-observation",
+      "handler": "public_road_suggestion_api_v1_public_geotag_road_suggestion_post",
+      "method": "POST",
+      "operation_id": "public_road_suggestion_api_v1_public_geotag_road_suggestion_post",
+      "path": "/api/v1/public/geotag/road-suggestion",
+      "request_fields": [
+        {
+          "direction": "request:body",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "request.body.latitude",
+          "required": "true",
+          "type": "number"
+        },
+        {
+          "direction": "request:body",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "request.body.longitude",
+          "required": "true",
+          "type": "number"
+        }
+      ],
+      "response_fields": [
+        {
+          "direction": "response:200",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body",
+          "required": "true",
+          "type": "object"
+        },
+        {
+          "direction": "response:422",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body.detail",
+          "required": "false",
+          "type": "array"
+        }
+      ]
+    },
+    {
+      "evidence_source": "review10-current-fastapi-openapi-observation",
+      "handler": "public_issuance_lookup_api_v1_public_issuance__query__get",
+      "method": "GET",
+      "operation_id": "public_issuance_lookup_api_v1_public_issuance__query__get",
+      "path": "/api/v1/public/issuance/{query}",
+      "request_fields": [
+        {
+          "direction": "request:parameter",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "query",
+          "required": "true",
+          "type": "string"
+        }
+      ],
+      "response_fields": [
+        {
+          "direction": "response:200",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body",
+          "required": "true",
+          "type": "object"
+        },
+        {
+          "direction": "response:422",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body.detail",
+          "required": "false",
+          "type": "array"
+        }
+      ]
+    },
+    {
+      "evidence_source": "review10-current-fastapi-openapi-observation",
+      "handler": "public_territory_options_api_v1_public_territory_options_get",
+      "method": "GET",
+      "operation_id": "public_territory_options_api_v1_public_territory_options_get",
+      "path": "/api/v1/public/territory-options",
+      "request_fields": [
+        {
+          "direction": "request:parameter",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "province_code",
+          "required": "false",
+          "type": "union"
+        }
+      ],
+      "response_fields": [
+        {
+          "direction": "response:200",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body",
+          "required": "true",
+          "type": "object"
+        },
+        {
+          "direction": "response:422",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body.detail",
+          "required": "false",
+          "type": "array"
+        }
+      ]
+    },
+    {
+      "evidence_source": "review10-current-fastapi-openapi-observation",
+      "handler": "public_tracking_lookup_api_v1_public_tracking__lookup_code__get",
+      "method": "GET",
+      "operation_id": "public_tracking_lookup_api_v1_public_tracking__lookup_code__get",
+      "path": "/api/v1/public/tracking/{lookup_code}",
+      "request_fields": [
+        {
+          "direction": "request:parameter",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "lookup_code",
+          "required": "true",
+          "type": "string"
+        }
+      ],
+      "response_fields": [
+        {
+          "direction": "response:200",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body",
+          "required": "true",
+          "type": "object"
+        },
+        {
+          "direction": "response:422",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body.detail",
+          "required": "false",
+          "type": "array"
+        }
+      ]
+    },
+    {
+      "evidence_source": "review10-current-fastapi-openapi-observation",
+      "handler": "public_verification_lookup_api_v1_public_verification__query__get",
+      "method": "GET",
+      "operation_id": "public_verification_lookup_api_v1_public_verification__query__get",
+      "path": "/api/v1/public/verification/{query}",
+      "request_fields": [
+        {
+          "direction": "request:parameter",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "query",
+          "required": "true",
+          "type": "string"
+        }
+      ],
+      "response_fields": [
+        {
+          "direction": "response:200",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body",
+          "required": "true",
+          "type": "object"
+        },
+        {
+          "direction": "response:422",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body.detail",
+          "required": "false",
+          "type": "array"
+        }
+      ]
+    },
+    {
+      "evidence_source": "review10-current-fastapi-openapi-observation",
+      "handler": "publication_packs_api_v1_publication_packs_get",
+      "method": "GET",
+      "operation_id": "publication_packs_api_v1_publication_packs_get",
+      "path": "/api/v1/publication/packs",
+      "request_fields": [
+        {
+          "direction": "request:header",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "authorization",
+          "required": "false",
+          "type": "union"
+        }
+      ],
+      "response_fields": [
+        {
+          "direction": "response:200",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body",
+          "required": "true",
+          "type": "object"
+        },
+        {
+          "direction": "response:422",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body.detail",
+          "required": "false",
+          "type": "array"
+        }
+      ]
+    },
+    {
+      "evidence_source": "review10-current-fastapi-openapi-observation",
+      "handler": "create_publication_pack_endpoint_api_v1_publication_packs_post",
+      "method": "POST",
+      "operation_id": "create_publication_pack_endpoint_api_v1_publication_packs_post",
+      "path": "/api/v1/publication/packs",
+      "request_fields": [
+        {
+          "direction": "request:body",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "request.body.address_ids",
+          "required": "true",
+          "type": "array"
+        },
+        {
+          "direction": "request:body",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "request.body.audience",
+          "required": "true",
+          "type": "string"
+        },
+        {
+          "direction": "request:body",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "request.body.name",
+          "required": "true",
+          "type": "string"
+        },
+        {
+          "direction": "request:body",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "request.body.status",
+          "required": "false",
+          "type": "string"
+        },
+        {
+          "direction": "request:header",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "authorization",
+          "required": "false",
+          "type": "union"
+        }
+      ],
+      "response_fields": [
+        {
+          "direction": "response:201",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body",
+          "required": "true",
+          "type": "object"
+        },
+        {
+          "direction": "response:422",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body.detail",
+          "required": "false",
+          "type": "array"
+        }
+      ]
+    },
+    {
+      "evidence_source": "review10-current-fastapi-openapi-observation",
+      "handler": "publish_publication_pack_endpoint_api_v1_publication_packs__pack_id__publish_post",
+      "method": "POST",
+      "operation_id": "publish_publication_pack_endpoint_api_v1_publication_packs__pack_id__publish_post",
+      "path": "/api/v1/publication/packs/{pack_id}/publish",
+      "request_fields": [
+        {
+          "direction": "request:header",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "authorization",
+          "required": "false",
+          "type": "union"
+        },
+        {
+          "direction": "request:parameter",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "pack_id",
+          "required": "true",
+          "type": "string"
+        }
+      ],
+      "response_fields": [
+        {
+          "direction": "response:200",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body",
+          "required": "true",
+          "type": "object"
+        },
+        {
+          "direction": "response:422",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body.detail",
+          "required": "false",
+          "type": "array"
+        }
+      ]
+    },
+    {
+      "evidence_source": "review10-current-fastapi-openapi-observation",
+      "handler": "reporting_summary_endpoint_api_v1_reporting_summary_get",
+      "method": "GET",
+      "operation_id": "reporting_summary_endpoint_api_v1_reporting_summary_get",
+      "path": "/api/v1/reporting/summary",
+      "request_fields": [
+        {
+          "direction": "request:header",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "authorization",
+          "required": "false",
+          "type": "union"
+        },
+        {
+          "direction": "request:parameter",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "date_from",
+          "required": "false",
+          "type": "union"
+        },
+        {
+          "direction": "request:parameter",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "date_to",
+          "required": "false",
+          "type": "union"
+        },
+        {
+          "direction": "request:parameter",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "province",
+          "required": "false",
+          "type": "union"
+        },
+        {
+          "direction": "request:parameter",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "status_filter",
+          "required": "false",
+          "type": "union"
+        },
+        {
+          "direction": "request:parameter",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "territory",
+          "required": "false",
+          "type": "union"
+        }
+      ],
+      "response_fields": [
+        {
+          "direction": "response:200",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body",
+          "required": "true",
+          "type": "object"
+        },
+        {
+          "direction": "response:422",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body.detail",
+          "required": "false",
+          "type": "array"
+        }
+      ]
+    },
+    {
+      "evidence_source": "review10-current-fastapi-openapi-observation",
+      "handler": "list_roads_api_v1_roads_get",
+      "method": "GET",
+      "operation_id": "list_roads_api_v1_roads_get",
+      "path": "/api/v1/roads",
+      "request_fields": [
+        {
+          "direction": "request:header",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "authorization",
+          "required": "false",
+          "type": "union"
+        },
+        {
+          "direction": "request:parameter",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "include_archived",
+          "required": "false",
+          "type": "boolean"
+        },
+        {
+          "direction": "request:parameter",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "page",
+          "required": "false",
+          "type": "integer"
+        },
+        {
+          "direction": "request:parameter",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "per_page",
+          "required": "false",
+          "type": "integer"
+        },
+        {
+          "direction": "request:parameter",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "q",
+          "required": "false",
+          "type": "union"
+        },
+        {
+          "direction": "request:parameter",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "territory_id",
+          "required": "false",
+          "type": "union"
+        }
+      ],
+      "response_fields": [
+        {
+          "direction": "response:200",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body",
+          "required": "true",
+          "type": "object"
+        },
+        {
+          "direction": "response:422",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body.detail",
+          "required": "false",
+          "type": "array"
+        }
+      ]
+    },
+    {
+      "evidence_source": "review10-current-fastapi-openapi-observation",
+      "handler": "create_road_endpoint_api_v1_roads_post",
+      "method": "POST",
+      "operation_id": "create_road_endpoint_api_v1_roads_post",
+      "path": "/api/v1/roads",
+      "request_fields": [
+        {
+          "direction": "request:body",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "request.body.length_km",
+          "required": "true",
+          "type": "string"
+        },
+        {
+          "direction": "request:body",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "request.body.name",
+          "required": "true",
+          "type": "string"
+        },
+        {
+          "direction": "request:body",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "request.body.status",
+          "required": "true",
+          "type": "string"
+        },
+        {
+          "direction": "request:body",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "request.body.territory_id",
+          "required": "true",
+          "type": "string"
+        },
+        {
+          "direction": "request:header",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "authorization",
+          "required": "false",
+          "type": "union"
+        }
+      ],
+      "response_fields": [
+        {
+          "direction": "response:201",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body",
+          "required": "true",
+          "type": "object"
+        },
+        {
+          "direction": "response:422",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body.detail",
+          "required": "false",
+          "type": "array"
+        }
+      ]
+    },
+    {
+      "evidence_source": "review10-current-fastapi-openapi-observation",
+      "handler": "archive_road_endpoint_api_v1_roads__road_id__delete",
+      "method": "DELETE",
+      "operation_id": "archive_road_endpoint_api_v1_roads__road_id__delete",
+      "path": "/api/v1/roads/{road_id}",
+      "request_fields": [
+        {
+          "direction": "request:header",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "authorization",
+          "required": "false",
+          "type": "union"
+        },
+        {
+          "direction": "request:parameter",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "road_id",
+          "required": "true",
+          "type": "string"
+        }
+      ],
+      "response_fields": [
+        {
+          "direction": "response:200",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body",
+          "required": "true",
+          "type": "object"
+        },
+        {
+          "direction": "response:422",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body.detail",
+          "required": "false",
+          "type": "array"
+        }
+      ]
+    },
+    {
+      "evidence_source": "review10-current-fastapi-openapi-observation",
+      "handler": "road_detail_api_v1_roads__road_id__get",
+      "method": "GET",
+      "operation_id": "road_detail_api_v1_roads__road_id__get",
+      "path": "/api/v1/roads/{road_id}",
+      "request_fields": [
+        {
+          "direction": "request:header",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "authorization",
+          "required": "false",
+          "type": "union"
+        },
+        {
+          "direction": "request:parameter",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "road_id",
+          "required": "true",
+          "type": "string"
+        }
+      ],
+      "response_fields": [
+        {
+          "direction": "response:200",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body",
+          "required": "true",
+          "type": "object"
+        },
+        {
+          "direction": "response:422",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body.detail",
+          "required": "false",
+          "type": "array"
+        }
+      ]
+    },
+    {
+      "evidence_source": "review10-current-fastapi-openapi-observation",
+      "handler": "update_road_endpoint_api_v1_roads__road_id__patch",
+      "method": "PATCH",
+      "operation_id": "update_road_endpoint_api_v1_roads__road_id__patch",
+      "path": "/api/v1/roads/{road_id}",
+      "request_fields": [
+        {
+          "direction": "request:body",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "request.body.length_km",
+          "required": "true",
+          "type": "string"
+        },
+        {
+          "direction": "request:body",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "request.body.name",
+          "required": "true",
+          "type": "string"
+        },
+        {
+          "direction": "request:body",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "request.body.status",
+          "required": "true",
+          "type": "string"
+        },
+        {
+          "direction": "request:body",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "request.body.territory_id",
+          "required": "true",
+          "type": "string"
+        },
+        {
+          "direction": "request:header",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "authorization",
+          "required": "false",
+          "type": "union"
+        },
+        {
+          "direction": "request:parameter",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "road_id",
+          "required": "true",
+          "type": "string"
+        }
+      ],
+      "response_fields": [
+        {
+          "direction": "response:200",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body",
+          "required": "true",
+          "type": "object"
+        },
+        {
+          "direction": "response:422",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body.detail",
+          "required": "false",
+          "type": "array"
+        }
+      ]
+    },
+    {
+      "evidence_source": "review10-current-fastapi-openapi-observation",
+      "handler": "signage_export_endpoint_api_v1_signage_export_get",
+      "method": "GET",
+      "operation_id": "signage_export_endpoint_api_v1_signage_export_get",
+      "path": "/api/v1/signage/export",
+      "request_fields": [
+        {
+          "direction": "request:header",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "authorization",
+          "required": "false",
+          "type": "union"
+        },
+        {
+          "direction": "request:parameter",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "status",
+          "required": "false",
+          "type": "string"
+        }
+      ],
+      "response_fields": [
+        {
+          "direction": "response:200",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body",
+          "required": "true",
+          "type": "object"
+        },
+        {
+          "direction": "response:422",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body.detail",
+          "required": "false",
+          "type": "array"
+        }
+      ]
+    },
+    {
+      "evidence_source": "review10-current-fastapi-openapi-observation",
+      "handler": "signage_pack_endpoint_api_v1_signage_pack_get",
+      "method": "GET",
+      "operation_id": "signage_pack_endpoint_api_v1_signage_pack_get",
+      "path": "/api/v1/signage/pack",
+      "request_fields": [
+        {
+          "direction": "request:header",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "authorization",
+          "required": "false",
+          "type": "union"
+        },
+        {
+          "direction": "request:parameter",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "status",
+          "required": "false",
+          "type": "string"
+        }
+      ],
+      "response_fields": [
+        {
+          "direction": "response:200",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body",
+          "required": "true",
+          "type": "object"
+        },
+        {
+          "direction": "response:422",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body.detail",
+          "required": "false",
+          "type": "array"
+        }
+      ]
+    },
+    {
+      "evidence_source": "review10-current-fastapi-openapi-observation",
+      "handler": "list_territories_api_v1_territories_get",
+      "method": "GET",
+      "operation_id": "list_territories_api_v1_territories_get",
+      "path": "/api/v1/territories",
+      "request_fields": [
+        {
+          "direction": "request:header",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "authorization",
+          "required": "false",
+          "type": "union"
+        },
+        {
+          "direction": "request:parameter",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "include_archived",
+          "required": "false",
+          "type": "boolean"
+        },
+        {
+          "direction": "request:parameter",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "page",
+          "required": "false",
+          "type": "integer"
+        },
+        {
+          "direction": "request:parameter",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "per_page",
+          "required": "false",
+          "type": "integer"
+        },
+        {
+          "direction": "request:parameter",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "province_code",
+          "required": "false",
+          "type": "union"
+        },
+        {
+          "direction": "request:parameter",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "q",
+          "required": "false",
+          "type": "union"
+        },
+        {
+          "direction": "request:parameter",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "readiness",
+          "required": "false",
+          "type": "union"
+        }
+      ],
+      "response_fields": [
+        {
+          "direction": "response:200",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body",
+          "required": "true",
+          "type": "object"
+        },
+        {
+          "direction": "response:422",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body.detail",
+          "required": "false",
+          "type": "array"
+        }
+      ]
+    },
+    {
+      "evidence_source": "review10-current-fastapi-openapi-observation",
+      "handler": "create_territory_endpoint_api_v1_territories_post",
+      "method": "POST",
+      "operation_id": "create_territory_endpoint_api_v1_territories_post",
+      "path": "/api/v1/territories",
+      "request_fields": [
+        {
+          "direction": "request:body",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "request.body.admin_unit_id",
+          "required": "false",
+          "type": "union"
+        },
+        {
+          "direction": "request:body",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "request.body.name",
+          "required": "true",
+          "type": "string"
+        },
+        {
+          "direction": "request:body",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "request.body.province_code",
+          "required": "true",
+          "type": "string"
+        },
+        {
+          "direction": "request:body",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "request.body.readiness",
+          "required": "true",
+          "type": "string"
+        },
+        {
+          "direction": "request:body",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "request.body.type",
+          "required": "true",
+          "type": "string"
+        },
+        {
+          "direction": "request:header",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "authorization",
+          "required": "false",
+          "type": "union"
+        }
+      ],
+      "response_fields": [
+        {
+          "direction": "response:201",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body",
+          "required": "true",
+          "type": "object"
+        },
+        {
+          "direction": "response:422",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body.detail",
+          "required": "false",
+          "type": "array"
+        }
+      ]
+    },
+    {
+      "evidence_source": "review10-current-fastapi-openapi-observation",
+      "handler": "list_provinces_api_v1_territories_provinces_get",
+      "method": "GET",
+      "operation_id": "list_provinces_api_v1_territories_provinces_get",
+      "path": "/api/v1/territories/provinces",
+      "request_fields": [],
+      "response_fields": [
+        {
+          "direction": "response:200",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body",
+          "required": "true",
+          "type": "object"
+        }
+      ]
+    },
+    {
+      "evidence_source": "review10-current-fastapi-openapi-observation",
+      "handler": "archive_territory_endpoint_api_v1_territories__territory_id__delete",
+      "method": "DELETE",
+      "operation_id": "archive_territory_endpoint_api_v1_territories__territory_id__delete",
+      "path": "/api/v1/territories/{territory_id}",
+      "request_fields": [
+        {
+          "direction": "request:header",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "authorization",
+          "required": "false",
+          "type": "union"
+        },
+        {
+          "direction": "request:parameter",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "territory_id",
+          "required": "true",
+          "type": "string"
+        }
+      ],
+      "response_fields": [
+        {
+          "direction": "response:200",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body",
+          "required": "true",
+          "type": "object"
+        },
+        {
+          "direction": "response:422",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body.detail",
+          "required": "false",
+          "type": "array"
+        }
+      ]
+    },
+    {
+      "evidence_source": "review10-current-fastapi-openapi-observation",
+      "handler": "territory_detail_api_v1_territories__territory_id__get",
+      "method": "GET",
+      "operation_id": "territory_detail_api_v1_territories__territory_id__get",
+      "path": "/api/v1/territories/{territory_id}",
+      "request_fields": [
+        {
+          "direction": "request:header",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "authorization",
+          "required": "false",
+          "type": "union"
+        },
+        {
+          "direction": "request:parameter",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "territory_id",
+          "required": "true",
+          "type": "string"
+        }
+      ],
+      "response_fields": [
+        {
+          "direction": "response:200",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body",
+          "required": "true",
+          "type": "object"
+        },
+        {
+          "direction": "response:422",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body.detail",
+          "required": "false",
+          "type": "array"
+        }
+      ]
+    },
+    {
+      "evidence_source": "review10-current-fastapi-openapi-observation",
+      "handler": "update_territory_endpoint_api_v1_territories__territory_id__patch",
+      "method": "PATCH",
+      "operation_id": "update_territory_endpoint_api_v1_territories__territory_id__patch",
+      "path": "/api/v1/territories/{territory_id}",
+      "request_fields": [
+        {
+          "direction": "request:body",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "request.body.admin_unit_id",
+          "required": "false",
+          "type": "union"
+        },
+        {
+          "direction": "request:body",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "request.body.name",
+          "required": "true",
+          "type": "string"
+        },
+        {
+          "direction": "request:body",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "request.body.province_code",
+          "required": "true",
+          "type": "string"
+        },
+        {
+          "direction": "request:body",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "request.body.readiness",
+          "required": "true",
+          "type": "string"
+        },
+        {
+          "direction": "request:body",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "request.body.type",
+          "required": "true",
+          "type": "string"
+        },
+        {
+          "direction": "request:header",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "authorization",
+          "required": "false",
+          "type": "union"
+        },
+        {
+          "direction": "request:parameter",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "territory_id",
+          "required": "true",
+          "type": "string"
+        }
+      ],
+      "response_fields": [
+        {
+          "direction": "response:200",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body",
+          "required": "true",
+          "type": "object"
+        },
+        {
+          "direction": "response:422",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body.detail",
+          "required": "false",
+          "type": "array"
+        }
+      ]
+    },
+    {
+      "evidence_source": "review10-current-fastapi-openapi-observation",
+      "handler": "verification_lookup_api_v1_verification_lookup_get",
+      "method": "GET",
+      "operation_id": "verification_lookup_api_v1_verification_lookup_get",
+      "path": "/api/v1/verification/lookup",
+      "request_fields": [
+        {
+          "direction": "request:parameter",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "query",
+          "required": "true",
+          "type": "string"
+        }
+      ],
+      "response_fields": [
+        {
+          "direction": "response:200",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body",
+          "required": "true",
+          "type": "object"
+        },
+        {
+          "direction": "response:422",
+          "evidence_source": "review10-fastapi-openapi-operation-schema",
+          "field": "response.body.detail",
+          "required": "false",
+          "type": "array"
+        }
+      ]
+    }
+  ],
+  "version": "review10"
+}

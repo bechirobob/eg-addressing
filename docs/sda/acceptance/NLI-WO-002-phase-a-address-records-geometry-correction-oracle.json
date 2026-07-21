@@ -1,0 +1,86 @@
+{
+  "control_id": "NLI-WO-002-PA-GEO-02-C1",
+  "control_status": "reviewer-owned-correction-oracle",
+  "implementation_must_not_modify": true,
+  "parent_control_id": "NLI-WO-002-PA-GEO-02",
+  "prohibited": [
+    "Modifying the parent address_records oracle",
+    "Adding address-record-derived to the target vocabulary during this correction",
+    "Inserting or repairing controlled vocabulary rows from the harness",
+    "Implementing citizen_geotag_submissions or any other transform group",
+    "Changing the accepted address_points callable, spec row, oracles or pattern contract",
+    "Requesting broad Phase A reassessment or SDA Review 12",
+    "Modifying F04-F12",
+    "Modifying runtime application/frontend code, executable migrations, migration runner, Docker runtime, production/pilot data, secrets, .env files or PR #8"
+  ],
+  "required_corrections": {
+    "C12_authoritative_capture_method": {
+      "expected": "The value exists immediately after apply_target and the slice passes without any harness insertion into vocab_capture_method.",
+      "expected_observed_value": "derived-from-source",
+      "remove_direct_insert": "INSERT INTO canonical_target.vocab_capture_method",
+      "remove_harness_function": "ensure_address_records_capture_method_vocab",
+      "required_test": "capture-method-resolves-from-authoritative-target-vocabulary",
+      "transform_spec_value": "derived-from-source"
+    },
+    "C13_invalid_coordinate_current_source": {
+      "expected_error": "coordinate out of range",
+      "mutation": "UPDATE current_source.address_records SET latitude = 91.0 WHERE id = <source id> inside the isolated test transaction",
+      "normal_path": "Invoke query_complete_address_records_row and transform_address_records_geometry without an in-memory coordinate override",
+      "rollback": "Measure identical pre-test and post-failure target rows and hash before reset."
+    },
+    "C14_distinct_timing_rule_execution": {
+      "expected_target_values": {
+        "observed_at": "2026-07-15T00:00:00Z",
+        "recorded_at": "2026-07-15T01:23:45Z"
+      },
+      "required_tests": [
+        "distinct-created-updated-timing",
+        "swapped-timing-transform-implementation"
+      ],
+      "rule": "A test with unequal timestamps must prove observed_at follows created_at and recorded_at follows updated_at. Swapping the implementation must fail the independent comparison.",
+      "source_values": {
+        "created_at": "2026-07-15T00:00:00Z",
+        "updated_at": "2026-07-15T01:23:45Z"
+      }
+    }
+  },
+  "required_spec_binding": {
+    "capture_method_rule": {
+      "type": "reviewed-constant-after-source-parity",
+      "value": "derived-from-source"
+    },
+    "observed_at_rule": "address_records.created_at",
+    "recorded_at_rule": "address_records.updated_at"
+  },
+  "required_tests": [
+    {
+      "expected": "derived-from-source is present from the applied canonical target schema; the harness creates no capture-method vocabulary row",
+      "test_id": "capture-method-resolves-from-authoritative-target-vocabulary"
+    },
+    {
+      "expected_error": "coordinate out of range",
+      "expected_state": "Measured same-database rollback equality before reset",
+      "test_id": "invalid-coordinate-current-source"
+    },
+    {
+      "expected": "observed_at=2026-07-15T00:00:00Z and recorded_at=2026-07-15T01:23:45Z",
+      "test_id": "distinct-created-updated-timing"
+    },
+    {
+      "expected_error": "address_records geometry slice observed rows differ from reviewer-owned timing expectation",
+      "test_id": "swapped-timing-transform-implementation"
+    }
+  ],
+  "reviewed_implementation_head": "85ebbc931bc7090c0446657e01c94886fe17209b",
+  "scope": "Final corrections to the same address_records geometry slice only; citizen_geotag_submissions and every other transform group remain unauthorized",
+  "sda_decision_correction": {
+    "capture_method": {
+      "authoritative_value": "derived-from-source",
+      "authoritative_vocabulary_source": "docs/sda/data-model/target-model.json#vocabularies.capture_method",
+      "generated_schema_source": "docs/sda/data-model/draft-physical-schema.sql#vocab_capture_method",
+      "harness_vocab_insertion_prohibited": true,
+      "reason": "The canonical target capture_method vocabulary already defines derived-from-source. Source-table specificity belongs in source_record/evidence lineage, not a test-only vocabulary value.",
+      "superseded_value": "address-record-derived"
+    }
+  }
+}

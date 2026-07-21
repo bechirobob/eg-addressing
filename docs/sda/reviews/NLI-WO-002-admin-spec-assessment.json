@@ -1,0 +1,1 @@
+{"reviewed_head":"04afd26e1897ca1794f0cdac1dcdd11bbfdc9bf5","decision":"CORRECTION_REQUIRED","finding":"C41","scope":"one live spec field only","required":{"conditional_authority_rfi_status":["none"]},"implementation_authorized":false}

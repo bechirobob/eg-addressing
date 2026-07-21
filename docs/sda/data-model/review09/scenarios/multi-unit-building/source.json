@@ -1,0 +1,40 @@
+{
+  "entities": [
+    {
+      "attributes": {
+        "units": "2"
+      },
+      "canonical_state": "active",
+      "effective_from": "2026-01-01",
+      "effective_to": null,
+      "entity_id": "multi-unit-building-building-1",
+      "entity_type": "building",
+      "label": "Malabo Mixed-Use Building",
+      "operator_visible": true,
+      "public_release_date": "2026-07-01",
+      "public_visible": true,
+      "recorded_from": "2026-01-01T00:00:00Z",
+      "recorded_to": null
+    },
+    {
+      "attributes": {
+        "parent": "Malabo Mixed-Use Building"
+      },
+      "canonical_state": "active",
+      "effective_from": "2026-01-01",
+      "effective_to": null,
+      "entity_id": "multi-unit-building-unit-2",
+      "entity_type": "unit",
+      "label": "Unit 2A",
+      "operator_visible": true,
+      "public_release_date": null,
+      "public_visible": false,
+      "recorded_from": "2026-01-01T00:00:00Z",
+      "recorded_to": null
+    }
+  ],
+  "review_owner": "SDA scenario source owner",
+  "review_status": "approved-review10-scenario-source",
+  "scenario": "multi-unit-building",
+  "version": "review10"
+}

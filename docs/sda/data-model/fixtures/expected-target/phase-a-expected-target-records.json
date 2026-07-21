@@ -1,0 +1,4581 @@
+{
+  "conditions": [
+    "Expected fixture is not read by transform execution; comparator-only after observed rows exist."
+  ],
+  "expected_counts_by_table": {
+    "proposed_administrative_unit": 1,
+    "proposed_administrative_unit_version": 1,
+    "proposed_correction_case": 1,
+    "proposed_country": 1,
+    "proposed_decision_event": 25,
+    "proposed_evidence_object": 25,
+    "proposed_geometry_observation": 3,
+    "proposed_legacy_crosswalk": 21,
+    "proposed_location_record": 2,
+    "proposed_location_record_object_link": 2,
+    "proposed_location_record_relationship": 1,
+    "proposed_location_record_version": 2,
+    "proposed_migration_exception": 17,
+    "proposed_name_record": 15,
+    "proposed_public_code_alias": 4,
+    "proposed_registry_subject": 2,
+    "proposed_source_authority": 3,
+    "proposed_source_package": 25,
+    "proposed_source_payload_archive": 23,
+    "proposed_source_record": 25
+  },
+  "expected_hashes": {
+    "target_state_hash": "1e9d364c62cc19648dfc72a0948c69bebd357c267b5578e87254ef3958298051"
+  },
+  "expected_rows": [
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "administrative_unit_id": "phase-a-admin-bioko-norte"
+      },
+      "table": "proposed_administrative_unit",
+      "values": {
+        "administrative_unit_id": "phase-a-admin-bioko-norte",
+        "country_id": "phase-a-country-gq",
+        "created_at": "2026-07-15T00:00:00Z",
+        "retired_at": null
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "administrative_unit_version_id": "phase-a-admin-bioko-norte-v1"
+      },
+      "table": "proposed_administrative_unit_version",
+      "values": {
+        "admin_level": "province",
+        "administrative_unit_id": "phase-a-admin-bioko-norte",
+        "administrative_unit_version_id": "phase-a-admin-bioko-norte-v1",
+        "classification": "public-after-release",
+        "effective_from": "2026-07-15T00:00:00Z",
+        "effective_to": null,
+        "lifecycle_state": "proposed",
+        "parent_administrative_unit_id": null,
+        "recorded_at": "2026-07-15T00:00:00Z",
+        "recorded_to": null,
+        "source_authority_id": "phase-a-authority-conditional-admin-reference"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "archive_id": "phase-a-archive-wo002-r06-correction-case-archive-address-corrections"
+      },
+      "table": "proposed_source_payload_archive",
+      "values": {
+        "archive_id": "phase-a-archive-wo002-r06-correction-case-archive-address-corrections",
+        "classification": "restricted",
+        "created_at": "2026-07-15T00:00:00Z",
+        "payload_hash_sha256": "997b50a859e4e94ff3939b075eb395595d2b91828800797bcdb469a5f6413433",
+        "payload_uri": "phase-a://archive/WO002-R06-correction-case-archive-address_corrections",
+        "retention_state": "active",
+        "source_record_id": "phase-a-source-record-address-corrections-001"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "archive_id": "phase-a-archive-wo002-r06-source-archive-address-corrections"
+      },
+      "table": "proposed_source_payload_archive",
+      "values": {
+        "archive_id": "phase-a-archive-wo002-r06-source-archive-address-corrections",
+        "classification": "restricted",
+        "created_at": "2026-07-15T00:00:00Z",
+        "payload_hash_sha256": "c6e4fe0fc971ef9332543f05d08ad9860cb0c8c4142ea35dd2310fea73b0f035",
+        "payload_uri": "phase-a://archive/WO002-R06-source-archive-address_corrections",
+        "retention_state": "active",
+        "source_record_id": "phase-a-source-record-address-corrections-001"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "archive_id": "phase-a-archive-wo002-r06-source-archive-address-points"
+      },
+      "table": "proposed_source_payload_archive",
+      "values": {
+        "archive_id": "phase-a-archive-wo002-r06-source-archive-address-points",
+        "classification": "restricted",
+        "created_at": "2026-07-15T00:00:00Z",
+        "payload_hash_sha256": "011ba29b57731c601ec3e70a732e48c0c039cd6d92980b4aacef09b82a484c17",
+        "payload_uri": "phase-a://archive/WO002-R06-source-archive-address_points",
+        "retention_state": "active",
+        "source_record_id": "phase-a-source-record-address-points-001"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "archive_id": "phase-a-archive-wo002-r06-source-archive-address-record-events"
+      },
+      "table": "proposed_source_payload_archive",
+      "values": {
+        "archive_id": "phase-a-archive-wo002-r06-source-archive-address-record-events",
+        "classification": "restricted",
+        "created_at": "2026-07-15T00:00:00Z",
+        "payload_hash_sha256": "9a86a5feff92aab492895235b588dd677fc30ee43788f18085ffdeda2f290f70",
+        "payload_uri": "phase-a://archive/WO002-R06-source-archive-address_record_events",
+        "retention_state": "active",
+        "source_record_id": "phase-a-source-record-address-record-events-001"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "archive_id": "phase-a-archive-wo002-r06-source-archive-address-records"
+      },
+      "table": "proposed_source_payload_archive",
+      "values": {
+        "archive_id": "phase-a-archive-wo002-r06-source-archive-address-records",
+        "classification": "restricted",
+        "created_at": "2026-07-15T00:00:00Z",
+        "payload_hash_sha256": "73b761552adfa607323f26b58de7ea25b6526bf24837fd6788127659595f17a2",
+        "payload_uri": "phase-a://archive/WO002-R06-source-archive-address_records",
+        "retention_state": "active",
+        "source_record_id": "phase-a-source-record-address-records-001"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "archive_id": "phase-a-archive-wo002-r06-source-archive-addresses"
+      },
+      "table": "proposed_source_payload_archive",
+      "values": {
+        "archive_id": "phase-a-archive-wo002-r06-source-archive-addresses",
+        "classification": "restricted",
+        "created_at": "2026-07-15T00:00:00Z",
+        "payload_hash_sha256": "a0d1c0449f5e6dc2bb84c878a1b06a47e4582819f1c582a01e4f09624c7bf9fd",
+        "payload_uri": "phase-a://archive/WO002-R06-source-archive-addresses",
+        "retention_state": "active",
+        "source_record_id": "phase-a-source-record-addresses-001"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "archive_id": "phase-a-archive-wo002-r06-source-archive-admin-units"
+      },
+      "table": "proposed_source_payload_archive",
+      "values": {
+        "archive_id": "phase-a-archive-wo002-r06-source-archive-admin-units",
+        "classification": "restricted",
+        "created_at": "2026-07-15T00:00:00Z",
+        "payload_hash_sha256": "6e3b0735f0fa4c7adb2a6beca91800d8388b43090a7a7d3b72c37b2180361190",
+        "payload_uri": "phase-a://archive/WO002-R06-source-archive-admin_units",
+        "retention_state": "active",
+        "source_record_id": "phase-a-source-record-admin-units-001"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "archive_id": "phase-a-archive-wo002-r06-source-archive-audit-logs"
+      },
+      "table": "proposed_source_payload_archive",
+      "values": {
+        "archive_id": "phase-a-archive-wo002-r06-source-archive-audit-logs",
+        "classification": "restricted",
+        "created_at": "2026-07-15T00:00:00Z",
+        "payload_hash_sha256": "473109f07754afa27490075a47d8d0d67b6f71a8d9a7ce396f25e5bf61e611f3",
+        "payload_uri": "phase-a://archive/WO002-R06-source-archive-audit_logs",
+        "retention_state": "active",
+        "source_record_id": "phase-a-source-record-audit-logs-001"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "archive_id": "phase-a-archive-wo002-r06-source-archive-auth-tokens"
+      },
+      "table": "proposed_source_payload_archive",
+      "values": {
+        "archive_id": "phase-a-archive-wo002-r06-source-archive-auth-tokens",
+        "classification": "restricted",
+        "created_at": "2026-07-15T00:00:00Z",
+        "payload_hash_sha256": "8a9322741ac19859372978c22a2fee275a3b169ffc8a6f3224ad17ba8d004809",
+        "payload_uri": "phase-a://archive/WO002-R06-source-archive-auth_tokens",
+        "retention_state": "active",
+        "source_record_id": "phase-a-source-record-auth-tokens-001"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "archive_id": "phase-a-archive-wo002-r06-source-archive-buildings"
+      },
+      "table": "proposed_source_payload_archive",
+      "values": {
+        "archive_id": "phase-a-archive-wo002-r06-source-archive-buildings",
+        "classification": "restricted",
+        "created_at": "2026-07-15T00:00:00Z",
+        "payload_hash_sha256": "54137a6728a17c1484228875661387a7358c2b6381c31027e22ab59a0fa4d5ad",
+        "payload_uri": "phase-a://archive/WO002-R06-source-archive-buildings",
+        "retention_state": "active",
+        "source_record_id": "phase-a-source-record-buildings-001"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "archive_id": "phase-a-archive-wo002-r06-source-archive-citizen-geotag-submissions"
+      },
+      "table": "proposed_source_payload_archive",
+      "values": {
+        "archive_id": "phase-a-archive-wo002-r06-source-archive-citizen-geotag-submissions",
+        "classification": "restricted",
+        "created_at": "2026-07-15T00:00:00Z",
+        "payload_hash_sha256": "8367a8e356a9c4ddd91382c88f116a53d0af52734341d92eee2606b27dc92b7b",
+        "payload_uri": "phase-a://archive/WO002-R06-source-archive-citizen_geotag_submissions",
+        "retention_state": "active",
+        "source_record_id": "phase-a-source-record-citizen-geotag-submissions-001"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "archive_id": "phase-a-archive-wo002-r06-source-archive-development-fixture-batches"
+      },
+      "table": "proposed_source_payload_archive",
+      "values": {
+        "archive_id": "phase-a-archive-wo002-r06-source-archive-development-fixture-batches",
+        "classification": "restricted",
+        "created_at": "2026-07-15T00:00:00Z",
+        "payload_hash_sha256": "cd3f200b6aa8a429f0e84697e6621c2bd113cb9f713098f96502415e9239a264",
+        "payload_uri": "phase-a://archive/WO002-R06-source-archive-development_fixture_batches",
+        "retention_state": "active",
+        "source_record_id": "phase-a-source-record-development-fixture-batches-001"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "archive_id": "phase-a-archive-wo002-r06-source-archive-field-assignments"
+      },
+      "table": "proposed_source_payload_archive",
+      "values": {
+        "archive_id": "phase-a-archive-wo002-r06-source-archive-field-assignments",
+        "classification": "restricted",
+        "created_at": "2026-07-15T00:00:00Z",
+        "payload_hash_sha256": "225e34aa5ae7721f74ca06498b5dd882874017f40096651f9d62a141ab2bf763",
+        "payload_uri": "phase-a://archive/WO002-R06-source-archive-field_assignments",
+        "retention_state": "active",
+        "source_record_id": "phase-a-source-record-field-assignments-001"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "archive_id": "phase-a-archive-wo002-r06-source-archive-field-submissions"
+      },
+      "table": "proposed_source_payload_archive",
+      "values": {
+        "archive_id": "phase-a-archive-wo002-r06-source-archive-field-submissions",
+        "classification": "restricted",
+        "created_at": "2026-07-15T00:00:00Z",
+        "payload_hash_sha256": "2b081a13a6f87e8867c5c7a34bd907af04b6d915219257bddf22e7541cf8bf16",
+        "payload_uri": "phase-a://archive/WO002-R06-source-archive-field_submissions",
+        "retention_state": "active",
+        "source_record_id": "phase-a-source-record-field-submissions-001"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "archive_id": "phase-a-archive-wo002-r06-source-archive-import-jobs"
+      },
+      "table": "proposed_source_payload_archive",
+      "values": {
+        "archive_id": "phase-a-archive-wo002-r06-source-archive-import-jobs",
+        "classification": "restricted",
+        "created_at": "2026-07-15T00:00:00Z",
+        "payload_hash_sha256": "bc014417959c663158e011cb81962c2a1e2fbbc6d52ef15ac5f7c5473e229b62",
+        "payload_uri": "phase-a://archive/WO002-R06-source-archive-import_jobs",
+        "retention_state": "active",
+        "source_record_id": "phase-a-source-record-import-jobs-001"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "archive_id": "phase-a-archive-wo002-r06-source-archive-import-rows"
+      },
+      "table": "proposed_source_payload_archive",
+      "values": {
+        "archive_id": "phase-a-archive-wo002-r06-source-archive-import-rows",
+        "classification": "restricted",
+        "created_at": "2026-07-15T00:00:00Z",
+        "payload_hash_sha256": "79f602d487aa38a86ca2c580b472f8d57d7fa9dd21865207e70479da623b3205",
+        "payload_uri": "phase-a://archive/WO002-R06-source-archive-import_rows",
+        "retention_state": "active",
+        "source_record_id": "phase-a-source-record-import-rows-001"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "archive_id": "phase-a-archive-wo002-r06-source-archive-publication-packs"
+      },
+      "table": "proposed_source_payload_archive",
+      "values": {
+        "archive_id": "phase-a-archive-wo002-r06-source-archive-publication-packs",
+        "classification": "restricted",
+        "created_at": "2026-07-15T00:00:00Z",
+        "payload_hash_sha256": "c7e327b5ca7b3b22b7941c61eda81cf5e96425bced370283a926188796987134",
+        "payload_uri": "phase-a://archive/WO002-R06-source-archive-publication_packs",
+        "retention_state": "active",
+        "source_record_id": "phase-a-source-record-publication-packs-001"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "archive_id": "phase-a-archive-wo002-r06-source-archive-reference-data-load-history"
+      },
+      "table": "proposed_source_payload_archive",
+      "values": {
+        "archive_id": "phase-a-archive-wo002-r06-source-archive-reference-data-load-history",
+        "classification": "restricted",
+        "created_at": "2026-07-15T00:00:00Z",
+        "payload_hash_sha256": "ca28274797fdd4dc97544e47b0e922b1d05ea0d6370b7794abf2699608271d82",
+        "payload_uri": "phase-a://archive/WO002-R06-source-archive-reference_data_load_history",
+        "retention_state": "active",
+        "source_record_id": "phase-a-source-record-reference-data-load-history-001"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "archive_id": "phase-a-archive-wo002-r06-source-archive-reference-data-loads"
+      },
+      "table": "proposed_source_payload_archive",
+      "values": {
+        "archive_id": "phase-a-archive-wo002-r06-source-archive-reference-data-loads",
+        "classification": "restricted",
+        "created_at": "2026-07-15T00:00:00Z",
+        "payload_hash_sha256": "829685a797ca9583798cc4f7a09d87d6d0dab8d69b44417e56e595e14803a244",
+        "payload_uri": "phase-a://archive/WO002-R06-source-archive-reference_data_loads",
+        "retention_state": "active",
+        "source_record_id": "phase-a-source-record-reference-data-loads-001"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "archive_id": "phase-a-archive-wo002-r06-source-archive-roads"
+      },
+      "table": "proposed_source_payload_archive",
+      "values": {
+        "archive_id": "phase-a-archive-wo002-r06-source-archive-roads",
+        "classification": "restricted",
+        "created_at": "2026-07-15T00:00:00Z",
+        "payload_hash_sha256": "62328389607209aba3e62ac2b2241ea033be1864f113140504569c8275be3b16",
+        "payload_uri": "phase-a://archive/WO002-R06-source-archive-roads",
+        "retention_state": "active",
+        "source_record_id": "phase-a-source-record-roads-001"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "archive_id": "phase-a-archive-wo002-r06-source-archive-schema-migrations"
+      },
+      "table": "proposed_source_payload_archive",
+      "values": {
+        "archive_id": "phase-a-archive-wo002-r06-source-archive-schema-migrations",
+        "classification": "restricted",
+        "created_at": "2026-07-15T00:00:00Z",
+        "payload_hash_sha256": "da5637f6de1f0024b86e386ff4f81d59f2b11428c3d5918b113b5bf132791e83",
+        "payload_uri": "phase-a://archive/WO002-R06-source-archive-schema_migrations",
+        "retention_state": "active",
+        "source_record_id": "phase-a-source-record-schema-migrations-001"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "archive_id": "phase-a-archive-wo002-r06-source-archive-territories"
+      },
+      "table": "proposed_source_payload_archive",
+      "values": {
+        "archive_id": "phase-a-archive-wo002-r06-source-archive-territories",
+        "classification": "restricted",
+        "created_at": "2026-07-15T00:00:00Z",
+        "payload_hash_sha256": "7cc6a363384bce0e70624e8f8ba92aef9e13975105aba0cfcff7ef748e670426",
+        "payload_uri": "phase-a://archive/WO002-R06-source-archive-territories",
+        "retention_state": "active",
+        "source_record_id": "phase-a-source-record-territories-001"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "archive_id": "phase-a-archive-wo002-r06-source-archive-users"
+      },
+      "table": "proposed_source_payload_archive",
+      "values": {
+        "archive_id": "phase-a-archive-wo002-r06-source-archive-users",
+        "classification": "restricted",
+        "created_at": "2026-07-15T00:00:00Z",
+        "payload_hash_sha256": "261e0b2f43c6636c0a810378676b415234ce7d8398dc5de18d27bf3c91a74b4b",
+        "payload_uri": "phase-a://archive/WO002-R06-source-archive-users",
+        "retention_state": "active",
+        "source_record_id": "phase-a-source-record-users-001"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "correction_case_id": "phase-a-correction-case-001"
+      },
+      "table": "proposed_correction_case",
+      "values": {
+        "case_state": "submitted",
+        "correction_case_id": "phase-a-correction-case-001",
+        "correction_type": "label",
+        "resolution_event_id": null,
+        "resolved_at": null,
+        "submitted_at": "2026-07-15T00:05:00Z",
+        "target_location_record_id": "phase-a-location-geotag",
+        "target_public_code": "PHASE-A-NONOFFICIAL-001"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "country_id": "phase-a-country-gq"
+      },
+      "table": "proposed_country",
+      "values": {
+        "country_id": "phase-a-country-gq",
+        "created_at": "2026-07-15T00:00:00Z",
+        "iso2_code": "GQ",
+        "lifecycle_state": "active",
+        "official_name_en": "Equatorial Guinea",
+        "official_name_es": "Guinea Ecuatorial",
+        "source_authority_id": "phase-a-authority-conditional-admin-reference"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "decision_event_id": "phase-a-decision-correction-001"
+      },
+      "table": "proposed_decision_event",
+      "values": {
+        "actor_id": "phase-a-actor-ref",
+        "authority_id": "phase-a-authority-operational-control",
+        "decision_event_id": "phase-a-decision-correction-001",
+        "decision_outcome": "approved",
+        "decision_type": "correct-record",
+        "details_json": {
+          "source_record": "phase-a-source-record-address-corrections-001"
+        },
+        "effective_at": "2026-07-15T00:05:00Z",
+        "reason_code": "phase-a-correction-source-lineage",
+        "recorded_at": "2026-07-15T00:05:00Z"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "decision_event_id": "phase-a-decision-phase-a-location-address-reference"
+      },
+      "table": "proposed_decision_event",
+      "values": {
+        "actor_id": "phase-a-actor-ref",
+        "authority_id": "phase-a-authority-conditional-admin-reference",
+        "decision_event_id": "phase-a-decision-phase-a-location-address-reference",
+        "decision_outcome": "approved",
+        "decision_type": "promote-record",
+        "details_json": {
+          "non_official": true,
+          "open_authority_rfi": "administrative-authority"
+        },
+        "effective_at": "2026-07-15T00:00:00Z",
+        "reason_code": "phase-a-controlled-transform",
+        "recorded_at": "2026-07-15T00:00:00Z"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "decision_event_id": "phase-a-decision-phase-a-location-geotag"
+      },
+      "table": "proposed_decision_event",
+      "values": {
+        "actor_id": "phase-a-actor-ref",
+        "authority_id": "phase-a-authority-conditional-admin-reference",
+        "decision_event_id": "phase-a-decision-phase-a-location-geotag",
+        "decision_outcome": "approved",
+        "decision_type": "promote-record",
+        "details_json": {
+          "non_official": true,
+          "open_authority_rfi": "administrative-authority"
+        },
+        "effective_at": "2026-07-15T00:00:00Z",
+        "reason_code": "phase-a-controlled-transform",
+        "recorded_at": "2026-07-15T00:00:00Z"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "decision_event_id": "phase-a-decision-wo002-r06-recorded-time-address-corrections"
+      },
+      "table": "proposed_decision_event",
+      "values": {
+        "actor_id": "phase-a-actor-ref",
+        "authority_id": "phase-a-authority-operational-control",
+        "decision_event_id": "phase-a-decision-wo002-r06-recorded-time-address-corrections",
+        "decision_outcome": "approved",
+        "decision_type": "promote-record",
+        "details_json": {
+          "fields": [
+            "address_corrections.created_at",
+            "address_corrections.updated_at"
+          ],
+          "source_record": "phase-a-source-record-address-corrections-001"
+        },
+        "effective_at": "2026-07-15T00:05:00Z",
+        "reason_code": "phase-a-typed-source-lineage",
+        "recorded_at": "2026-07-15T00:05:00Z"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "decision_event_id": "phase-a-decision-wo002-r06-recorded-time-address-points"
+      },
+      "table": "proposed_decision_event",
+      "values": {
+        "actor_id": "phase-a-actor-ref",
+        "authority_id": "phase-a-authority-operational-control",
+        "decision_event_id": "phase-a-decision-wo002-r06-recorded-time-address-points",
+        "decision_outcome": "approved",
+        "decision_type": "promote-record",
+        "details_json": {
+          "fields": [
+            "address_points.created_at",
+            "address_points.updated_at"
+          ],
+          "source_record": "phase-a-source-record-address-points-001"
+        },
+        "effective_at": "2026-07-15T00:00:00Z",
+        "reason_code": "phase-a-typed-source-lineage",
+        "recorded_at": "2026-07-15T00:00:00Z"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "decision_event_id": "phase-a-decision-wo002-r06-recorded-time-address-record-events"
+      },
+      "table": "proposed_decision_event",
+      "values": {
+        "actor_id": "phase-a-actor-ref",
+        "authority_id": "phase-a-authority-operational-control",
+        "decision_event_id": "phase-a-decision-wo002-r06-recorded-time-address-record-events",
+        "decision_outcome": "approved",
+        "decision_type": "promote-record",
+        "details_json": {
+          "fields": [
+            "address_record_events.created_at"
+          ],
+          "source_record": "phase-a-source-record-address-record-events-001"
+        },
+        "effective_at": "2026-07-15T00:00:00Z",
+        "reason_code": "phase-a-typed-source-lineage",
+        "recorded_at": "2026-07-15T00:00:00Z"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "decision_event_id": "phase-a-decision-wo002-r06-recorded-time-address-records"
+      },
+      "table": "proposed_decision_event",
+      "values": {
+        "actor_id": "phase-a-actor-ref",
+        "authority_id": "phase-a-authority-operational-control",
+        "decision_event_id": "phase-a-decision-wo002-r06-recorded-time-address-records",
+        "decision_outcome": "approved",
+        "decision_type": "promote-record",
+        "details_json": {
+          "fields": [
+            "address_records.created_at",
+            "address_records.updated_at"
+          ],
+          "source_record": "phase-a-source-record-address-records-001"
+        },
+        "effective_at": "2026-07-15T00:00:00Z",
+        "reason_code": "phase-a-typed-source-lineage",
+        "recorded_at": "2026-07-15T00:00:00Z"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "decision_event_id": "phase-a-decision-wo002-r06-recorded-time-addresses"
+      },
+      "table": "proposed_decision_event",
+      "values": {
+        "actor_id": "phase-a-actor-ref",
+        "authority_id": "phase-a-authority-operational-control",
+        "decision_event_id": "phase-a-decision-wo002-r06-recorded-time-addresses",
+        "decision_outcome": "approved",
+        "decision_type": "promote-record",
+        "details_json": {
+          "fields": [
+            "addresses.created_at",
+            "addresses.updated_at"
+          ],
+          "source_record": "phase-a-source-record-addresses-001"
+        },
+        "effective_at": "2026-07-15T00:00:00Z",
+        "reason_code": "phase-a-typed-source-lineage",
+        "recorded_at": "2026-07-15T00:00:00Z"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "decision_event_id": "phase-a-decision-wo002-r06-recorded-time-admin-units"
+      },
+      "table": "proposed_decision_event",
+      "values": {
+        "actor_id": "phase-a-actor-ref",
+        "authority_id": "phase-a-authority-operational-control",
+        "decision_event_id": "phase-a-decision-wo002-r06-recorded-time-admin-units",
+        "decision_outcome": "approved",
+        "decision_type": "promote-record",
+        "details_json": {
+          "fields": [
+            "admin_units.created_at",
+            "admin_units.updated_at"
+          ],
+          "source_record": "phase-a-source-record-admin-units-001"
+        },
+        "effective_at": "2026-07-15T00:00:00Z",
+        "reason_code": "phase-a-typed-source-lineage",
+        "recorded_at": "2026-07-15T00:00:00Z"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "decision_event_id": "phase-a-decision-wo002-r06-recorded-time-audit-logs"
+      },
+      "table": "proposed_decision_event",
+      "values": {
+        "actor_id": "phase-a-actor-ref",
+        "authority_id": "phase-a-authority-operational-control",
+        "decision_event_id": "phase-a-decision-wo002-r06-recorded-time-audit-logs",
+        "decision_outcome": "approved",
+        "decision_type": "promote-record",
+        "details_json": {
+          "fields": [
+            "audit_logs.created_at"
+          ],
+          "source_record": "phase-a-source-record-audit-logs-001"
+        },
+        "effective_at": "2026-07-15T00:00:00Z",
+        "reason_code": "phase-a-typed-source-lineage",
+        "recorded_at": "2026-07-15T00:00:00Z"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "decision_event_id": "phase-a-decision-wo002-r06-recorded-time-auth-tokens"
+      },
+      "table": "proposed_decision_event",
+      "values": {
+        "actor_id": "phase-a-actor-ref",
+        "authority_id": "phase-a-authority-operational-control",
+        "decision_event_id": "phase-a-decision-wo002-r06-recorded-time-auth-tokens",
+        "decision_outcome": "approved",
+        "decision_type": "promote-record",
+        "details_json": {
+          "fields": [
+            "auth_tokens.created_at",
+            "auth_tokens.expires_at",
+            "auth_tokens.last_seen_at",
+            "auth_tokens.revoked_at"
+          ],
+          "source_record": "phase-a-source-record-auth-tokens-001"
+        },
+        "effective_at": "2026-07-15T00:00:00Z",
+        "reason_code": "phase-a-typed-source-lineage",
+        "recorded_at": "2026-07-15T00:00:00Z"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "decision_event_id": "phase-a-decision-wo002-r06-recorded-time-buildings"
+      },
+      "table": "proposed_decision_event",
+      "values": {
+        "actor_id": "phase-a-actor-ref",
+        "authority_id": "phase-a-authority-operational-control",
+        "decision_event_id": "phase-a-decision-wo002-r06-recorded-time-buildings",
+        "decision_outcome": "approved",
+        "decision_type": "promote-record",
+        "details_json": {
+          "fields": [
+            "buildings.created_at",
+            "buildings.updated_at"
+          ],
+          "source_record": "phase-a-source-record-buildings-001"
+        },
+        "effective_at": "2026-07-15T00:00:00Z",
+        "reason_code": "phase-a-typed-source-lineage",
+        "recorded_at": "2026-07-15T00:00:00Z"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "decision_event_id": "phase-a-decision-wo002-r06-recorded-time-citizen-geotag-submissions"
+      },
+      "table": "proposed_decision_event",
+      "values": {
+        "actor_id": "phase-a-actor-ref",
+        "authority_id": "phase-a-authority-operational-control",
+        "decision_event_id": "phase-a-decision-wo002-r06-recorded-time-citizen-geotag-submissions",
+        "decision_outcome": "approved",
+        "decision_type": "promote-record",
+        "details_json": {
+          "fields": [
+            "citizen_geotag_submissions.created_at",
+            "citizen_geotag_submissions.field_verified_at",
+            "citizen_geotag_submissions.identity_verified_at",
+            "citizen_geotag_submissions.updated_at"
+          ],
+          "source_record": "phase-a-source-record-citizen-geotag-submissions-001"
+        },
+        "effective_at": "2026-07-15T00:00:00Z",
+        "reason_code": "phase-a-typed-source-lineage",
+        "recorded_at": "2026-07-15T00:00:00Z"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "decision_event_id": "phase-a-decision-wo002-r06-recorded-time-development-fixture-batches"
+      },
+      "table": "proposed_decision_event",
+      "values": {
+        "actor_id": "phase-a-actor-ref",
+        "authority_id": "phase-a-authority-operational-control",
+        "decision_event_id": "phase-a-decision-wo002-r06-recorded-time-development-fixture-batches",
+        "decision_outcome": "approved",
+        "decision_type": "promote-record",
+        "details_json": {
+          "fields": [
+            "development_fixture_batches.cleaned_at",
+            "development_fixture_batches.loaded_at"
+          ],
+          "source_record": "phase-a-source-record-development-fixture-batches-001"
+        },
+        "effective_at": "2026-07-15T00:00:00Z",
+        "reason_code": "phase-a-typed-source-lineage",
+        "recorded_at": "2026-07-15T00:00:00Z"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "decision_event_id": "phase-a-decision-wo002-r06-recorded-time-development-fixture-records"
+      },
+      "table": "proposed_decision_event",
+      "values": {
+        "actor_id": "phase-a-actor-ref",
+        "authority_id": "phase-a-authority-operational-control",
+        "decision_event_id": "phase-a-decision-wo002-r06-recorded-time-development-fixture-records",
+        "decision_outcome": "approved",
+        "decision_type": "promote-record",
+        "details_json": {
+          "fields": [
+            "development_fixture_records.created_by_batch",
+            "development_fixture_records.recorded_at"
+          ],
+          "source_record": "phase-a-source-record-development-fixture-records-001"
+        },
+        "effective_at": "2026-07-15T00:00:00Z",
+        "reason_code": "phase-a-typed-source-lineage",
+        "recorded_at": "2026-07-15T00:00:00Z"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "decision_event_id": "phase-a-decision-wo002-r06-recorded-time-field-assignments"
+      },
+      "table": "proposed_decision_event",
+      "values": {
+        "actor_id": "phase-a-actor-ref",
+        "authority_id": "phase-a-authority-operational-control",
+        "decision_event_id": "phase-a-decision-wo002-r06-recorded-time-field-assignments",
+        "decision_outcome": "approved",
+        "decision_type": "promote-record",
+        "details_json": {
+          "fields": [
+            "field_assignments.created_at"
+          ],
+          "source_record": "phase-a-source-record-field-assignments-001"
+        },
+        "effective_at": "2026-07-15T00:00:00Z",
+        "reason_code": "phase-a-typed-source-lineage",
+        "recorded_at": "2026-07-15T00:00:00Z"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "decision_event_id": "phase-a-decision-wo002-r06-recorded-time-field-submissions"
+      },
+      "table": "proposed_decision_event",
+      "values": {
+        "actor_id": "phase-a-actor-ref",
+        "authority_id": "phase-a-authority-operational-control",
+        "decision_event_id": "phase-a-decision-wo002-r06-recorded-time-field-submissions",
+        "decision_outcome": "approved",
+        "decision_type": "promote-record",
+        "details_json": {
+          "fields": [
+            "field_submissions.created_at",
+            "field_submissions.submitted_by",
+            "field_submissions.updated_at"
+          ],
+          "source_record": "phase-a-source-record-field-submissions-001"
+        },
+        "effective_at": "2026-07-15T00:00:00Z",
+        "reason_code": "phase-a-typed-source-lineage",
+        "recorded_at": "2026-07-15T00:00:00Z"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "decision_event_id": "phase-a-decision-wo002-r06-recorded-time-import-jobs"
+      },
+      "table": "proposed_decision_event",
+      "values": {
+        "actor_id": "phase-a-actor-ref",
+        "authority_id": "phase-a-authority-operational-control",
+        "decision_event_id": "phase-a-decision-wo002-r06-recorded-time-import-jobs",
+        "decision_outcome": "approved",
+        "decision_type": "promote-record",
+        "details_json": {
+          "fields": [
+            "import_jobs.created_at",
+            "import_jobs.updated_at"
+          ],
+          "source_record": "phase-a-source-record-import-jobs-001"
+        },
+        "effective_at": "2026-07-15T00:00:00Z",
+        "reason_code": "phase-a-typed-source-lineage",
+        "recorded_at": "2026-07-15T00:00:00Z"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "decision_event_id": "phase-a-decision-wo002-r06-recorded-time-provinces"
+      },
+      "table": "proposed_decision_event",
+      "values": {
+        "actor_id": "phase-a-actor-ref",
+        "authority_id": "phase-a-authority-operational-control",
+        "decision_event_id": "phase-a-decision-wo002-r06-recorded-time-provinces",
+        "decision_outcome": "approved",
+        "decision_type": "promote-record",
+        "details_json": {
+          "fields": [
+            "provinces.created_at"
+          ],
+          "source_record": "phase-a-source-record-provinces-001"
+        },
+        "effective_at": "2026-07-15T00:00:00Z",
+        "reason_code": "phase-a-typed-source-lineage",
+        "recorded_at": "2026-07-15T00:00:00Z"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "decision_event_id": "phase-a-decision-wo002-r06-recorded-time-publication-packs"
+      },
+      "table": "proposed_decision_event",
+      "values": {
+        "actor_id": "phase-a-actor-ref",
+        "authority_id": "phase-a-authority-operational-control",
+        "decision_event_id": "phase-a-decision-wo002-r06-recorded-time-publication-packs",
+        "decision_outcome": "approved",
+        "decision_type": "promote-record",
+        "details_json": {
+          "fields": [
+            "publication_packs.created_at",
+            "publication_packs.updated_at"
+          ],
+          "source_record": "phase-a-source-record-publication-packs-001"
+        },
+        "effective_at": "2026-07-15T00:00:00Z",
+        "reason_code": "phase-a-typed-source-lineage",
+        "recorded_at": "2026-07-15T00:00:00Z"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "decision_event_id": "phase-a-decision-wo002-r06-recorded-time-reference-data-load-history"
+      },
+      "table": "proposed_decision_event",
+      "values": {
+        "actor_id": "phase-a-actor-ref",
+        "authority_id": "phase-a-authority-operational-control",
+        "decision_event_id": "phase-a-decision-wo002-r06-recorded-time-reference-data-load-history",
+        "decision_outcome": "approved",
+        "decision_type": "promote-record",
+        "details_json": {
+          "fields": [
+            "reference_data_load_history.loaded_at"
+          ],
+          "source_record": "phase-a-source-record-reference-data-load-history-001"
+        },
+        "effective_at": "2026-07-15T00:00:00Z",
+        "reason_code": "phase-a-typed-source-lineage",
+        "recorded_at": "2026-07-15T00:00:00Z"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "decision_event_id": "phase-a-decision-wo002-r06-recorded-time-reference-data-loads"
+      },
+      "table": "proposed_decision_event",
+      "values": {
+        "actor_id": "phase-a-actor-ref",
+        "authority_id": "phase-a-authority-operational-control",
+        "decision_event_id": "phase-a-decision-wo002-r06-recorded-time-reference-data-loads",
+        "decision_outcome": "approved",
+        "decision_type": "promote-record",
+        "details_json": {
+          "fields": [
+            "reference_data_loads.loaded_at"
+          ],
+          "source_record": "phase-a-source-record-reference-data-loads-001"
+        },
+        "effective_at": "2026-07-15T00:00:00Z",
+        "reason_code": "phase-a-typed-source-lineage",
+        "recorded_at": "2026-07-15T00:00:00Z"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "decision_event_id": "phase-a-decision-wo002-r06-recorded-time-roads"
+      },
+      "table": "proposed_decision_event",
+      "values": {
+        "actor_id": "phase-a-actor-ref",
+        "authority_id": "phase-a-authority-operational-control",
+        "decision_event_id": "phase-a-decision-wo002-r06-recorded-time-roads",
+        "decision_outcome": "approved",
+        "decision_type": "promote-record",
+        "details_json": {
+          "fields": [
+            "roads.created_at",
+            "roads.updated_at"
+          ],
+          "source_record": "phase-a-source-record-roads-001"
+        },
+        "effective_at": "2026-07-15T00:00:00Z",
+        "reason_code": "phase-a-typed-source-lineage",
+        "recorded_at": "2026-07-15T00:00:00Z"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "decision_event_id": "phase-a-decision-wo002-r06-recorded-time-territories"
+      },
+      "table": "proposed_decision_event",
+      "values": {
+        "actor_id": "phase-a-actor-ref",
+        "authority_id": "phase-a-authority-operational-control",
+        "decision_event_id": "phase-a-decision-wo002-r06-recorded-time-territories",
+        "decision_outcome": "approved",
+        "decision_type": "promote-record",
+        "details_json": {
+          "fields": [
+            "territories.created_at",
+            "territories.updated_at"
+          ],
+          "source_record": "phase-a-source-record-territories-001"
+        },
+        "effective_at": "2026-07-15T00:00:00Z",
+        "reason_code": "phase-a-typed-source-lineage",
+        "recorded_at": "2026-07-15T00:00:00Z"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "decision_event_id": "phase-a-decision-wo002-r06-recorded-time-users"
+      },
+      "table": "proposed_decision_event",
+      "values": {
+        "actor_id": "phase-a-actor-ref",
+        "authority_id": "phase-a-authority-operational-control",
+        "decision_event_id": "phase-a-decision-wo002-r06-recorded-time-users",
+        "decision_outcome": "approved",
+        "decision_type": "promote-record",
+        "details_json": {
+          "fields": [
+            "users.created_at"
+          ],
+          "source_record": "phase-a-source-record-users-001"
+        },
+        "effective_at": "2026-07-15T00:00:00Z",
+        "reason_code": "phase-a-typed-source-lineage",
+        "recorded_at": "2026-07-15T00:00:00Z"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "evidence_object_id": "phase-a-evidence-address-corrections"
+      },
+      "table": "proposed_evidence_object",
+      "values": {
+        "captured_at": "2026-07-15T00:05:00Z",
+        "classification": "government-internal",
+        "content_hash": "9b67566b8a0a422c98feb716848b1f0ce3151a91e108f60d7356f81acf8cebae",
+        "evidence_object_id": "phase-a-evidence-address-corrections",
+        "media_type": "application/json",
+        "retention_state": "active",
+        "source_record_id": "phase-a-source-record-address-corrections-001",
+        "storage_uri": "phase-a://evidence/address_corrections:phase-a-address-corrections-001"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "evidence_object_id": "phase-a-evidence-address-points"
+      },
+      "table": "proposed_evidence_object",
+      "values": {
+        "captured_at": "2026-07-15T00:00:00Z",
+        "classification": "government-internal",
+        "content_hash": "57a135a2d82e8182e1dd0eb00c7de1498064fe393d176255c745b7a528e376a6",
+        "evidence_object_id": "phase-a-evidence-address-points",
+        "media_type": "application/json",
+        "retention_state": "active",
+        "source_record_id": "phase-a-source-record-address-points-001",
+        "storage_uri": "phase-a://evidence/address_points:phase-a-address-points-001"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "evidence_object_id": "phase-a-evidence-address-record-events"
+      },
+      "table": "proposed_evidence_object",
+      "values": {
+        "captured_at": "2026-07-15T00:00:00Z",
+        "classification": "government-internal",
+        "content_hash": "46e3b51f4e774379862225da34a6e543eeb4f334e0c93d378c5ee95dafd9d66f",
+        "evidence_object_id": "phase-a-evidence-address-record-events",
+        "media_type": "application/json",
+        "retention_state": "active",
+        "source_record_id": "phase-a-source-record-address-record-events-001",
+        "storage_uri": "phase-a://evidence/address_record_events:phase-a-address-record-events-001"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "evidence_object_id": "phase-a-evidence-address-records"
+      },
+      "table": "proposed_evidence_object",
+      "values": {
+        "captured_at": "2026-07-15T00:00:00Z",
+        "classification": "government-internal",
+        "content_hash": "c464d3ea23f1a75592d1245ac2bff759917b8f704ea374afc2fd1e31618316b1",
+        "evidence_object_id": "phase-a-evidence-address-records",
+        "media_type": "application/json",
+        "retention_state": "active",
+        "source_record_id": "phase-a-source-record-address-records-001",
+        "storage_uri": "phase-a://evidence/address_records:phase-a-address-records-001"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "evidence_object_id": "phase-a-evidence-addresses"
+      },
+      "table": "proposed_evidence_object",
+      "values": {
+        "captured_at": "2026-07-15T00:00:00Z",
+        "classification": "government-internal",
+        "content_hash": "aff4417a8f1c0dc61697d8d81fada0ccaeb85f7aaa87f39cedae02ca4b5c4576",
+        "evidence_object_id": "phase-a-evidence-addresses",
+        "media_type": "application/json",
+        "retention_state": "active",
+        "source_record_id": "phase-a-source-record-addresses-001",
+        "storage_uri": "phase-a://evidence/addresses:phase-a-addresses-001"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "evidence_object_id": "phase-a-evidence-admin-units"
+      },
+      "table": "proposed_evidence_object",
+      "values": {
+        "captured_at": "2026-07-15T00:00:00Z",
+        "classification": "government-internal",
+        "content_hash": "9eaf7f3c59593dcec1fba87d252a51ab7e379d26747c1eb01e6fb2746495eb6a",
+        "evidence_object_id": "phase-a-evidence-admin-units",
+        "media_type": "application/json",
+        "retention_state": "active",
+        "source_record_id": "phase-a-source-record-admin-units-001",
+        "storage_uri": "phase-a://evidence/admin_units:phase-a-admin-units-001"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "evidence_object_id": "phase-a-evidence-audit-logs"
+      },
+      "table": "proposed_evidence_object",
+      "values": {
+        "captured_at": "2026-07-15T00:00:00Z",
+        "classification": "government-internal",
+        "content_hash": "80707cc8646d3a7fbb855155bf1e7cea08b54308d8b5b0b26f9e30ce9dbe41b0",
+        "evidence_object_id": "phase-a-evidence-audit-logs",
+        "media_type": "application/json",
+        "retention_state": "active",
+        "source_record_id": "phase-a-source-record-audit-logs-001",
+        "storage_uri": "phase-a://evidence/audit_logs:phase-a-audit-logs-001"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "evidence_object_id": "phase-a-evidence-auth-tokens"
+      },
+      "table": "proposed_evidence_object",
+      "values": {
+        "captured_at": "2026-07-15T00:00:00Z",
+        "classification": "restricted",
+        "content_hash": "a0683c0b04e7749a26d129cd49185ea4f5949d7c6ec9598f1adb23287eed83fb",
+        "evidence_object_id": "phase-a-evidence-auth-tokens",
+        "media_type": "application/json",
+        "retention_state": "active",
+        "source_record_id": "phase-a-source-record-auth-tokens-001",
+        "storage_uri": "phase-a://evidence/auth_tokens:phase-a-auth-tokens-001"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "evidence_object_id": "phase-a-evidence-buildings"
+      },
+      "table": "proposed_evidence_object",
+      "values": {
+        "captured_at": "2026-07-15T00:00:00Z",
+        "classification": "government-internal",
+        "content_hash": "6363f63a124ce5ca383929b7124a5c557fedbadc611a6bd4b7257e0d0fdfaa68",
+        "evidence_object_id": "phase-a-evidence-buildings",
+        "media_type": "application/json",
+        "retention_state": "active",
+        "source_record_id": "phase-a-source-record-buildings-001",
+        "storage_uri": "phase-a://evidence/buildings:phase-a-buildings-001"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "evidence_object_id": "phase-a-evidence-citizen-geotag-submissions"
+      },
+      "table": "proposed_evidence_object",
+      "values": {
+        "captured_at": "2026-07-15T00:00:00Z",
+        "classification": "restricted",
+        "content_hash": "834e81cd335ef2fa58583af733fc4d34cccd19499f22a6e09cda53e373facb9c",
+        "evidence_object_id": "phase-a-evidence-citizen-geotag-submissions",
+        "media_type": "application/json",
+        "retention_state": "active",
+        "source_record_id": "phase-a-source-record-citizen-geotag-submissions-001",
+        "storage_uri": "phase-a://evidence/citizen_geotag_submissions:phase-a-citizen-geotag-submissions-001"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "evidence_object_id": "phase-a-evidence-development-fixture-batches"
+      },
+      "table": "proposed_evidence_object",
+      "values": {
+        "captured_at": "2026-07-15T00:00:00Z",
+        "classification": "government-internal",
+        "content_hash": "7d1fe805675d08d4715375e0bfd14355f666d1d13e6b844f9e934b53ffce550a",
+        "evidence_object_id": "phase-a-evidence-development-fixture-batches",
+        "media_type": "application/json",
+        "retention_state": "active",
+        "source_record_id": "phase-a-source-record-development-fixture-batches-001",
+        "storage_uri": "phase-a://evidence/development_fixture_batches:phase-a-development-fixture-batches-001"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "evidence_object_id": "phase-a-evidence-development-fixture-records"
+      },
+      "table": "proposed_evidence_object",
+      "values": {
+        "captured_at": "2026-07-15T00:00:00Z",
+        "classification": "government-internal",
+        "content_hash": "012c351f219ac61cc45318e0b564ab7eada0e71982eeeeedf011d31621344361",
+        "evidence_object_id": "phase-a-evidence-development-fixture-records",
+        "media_type": "application/json",
+        "retention_state": "active",
+        "source_record_id": "phase-a-source-record-development-fixture-records-001",
+        "storage_uri": "phase-a://evidence/development_fixture_records:phase-a-development-fixture-records-001"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "evidence_object_id": "phase-a-evidence-field-assignments"
+      },
+      "table": "proposed_evidence_object",
+      "values": {
+        "captured_at": "2026-07-15T00:00:00Z",
+        "classification": "government-internal",
+        "content_hash": "744c3a1696d91d1c1925cbb63f2dab07a7515bbe1ec65e369a0fb9ec2463981f",
+        "evidence_object_id": "phase-a-evidence-field-assignments",
+        "media_type": "application/json",
+        "retention_state": "active",
+        "source_record_id": "phase-a-source-record-field-assignments-001",
+        "storage_uri": "phase-a://evidence/field_assignments:phase-a-field-assignments-001"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "evidence_object_id": "phase-a-evidence-field-submissions"
+      },
+      "table": "proposed_evidence_object",
+      "values": {
+        "captured_at": "2026-07-15T00:00:00Z",
+        "classification": "government-internal",
+        "content_hash": "cda74ed69df1a86a31454303ef0ed8ee041388976a312e7c4ec5cdb0e9b224d2",
+        "evidence_object_id": "phase-a-evidence-field-submissions",
+        "media_type": "application/json",
+        "retention_state": "active",
+        "source_record_id": "phase-a-source-record-field-submissions-001",
+        "storage_uri": "phase-a://evidence/field_submissions:phase-a-field-submissions-001"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "evidence_object_id": "phase-a-evidence-import-jobs"
+      },
+      "table": "proposed_evidence_object",
+      "values": {
+        "captured_at": "2026-07-15T00:00:00Z",
+        "classification": "government-internal",
+        "content_hash": "feb33fd4f933e8fdd36ee37a2148762fddf103be88e0792917d29a7b896beee4",
+        "evidence_object_id": "phase-a-evidence-import-jobs",
+        "media_type": "application/json",
+        "retention_state": "active",
+        "source_record_id": "phase-a-source-record-import-jobs-001",
+        "storage_uri": "phase-a://evidence/import_jobs:phase-a-import-jobs-001"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "evidence_object_id": "phase-a-evidence-import-rows"
+      },
+      "table": "proposed_evidence_object",
+      "values": {
+        "captured_at": "2026-07-15T00:00:00Z",
+        "classification": "government-internal",
+        "content_hash": "027d408ca06e0d886a789228ad4b0aeda05a74826b5dea13e34fdf1be8a8ebc2",
+        "evidence_object_id": "phase-a-evidence-import-rows",
+        "media_type": "application/json",
+        "retention_state": "active",
+        "source_record_id": "phase-a-source-record-import-rows-001",
+        "storage_uri": "phase-a://evidence/import_rows:phase-a-import-rows-001"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "evidence_object_id": "phase-a-evidence-provinces"
+      },
+      "table": "proposed_evidence_object",
+      "values": {
+        "captured_at": "2026-07-15T00:00:00Z",
+        "classification": "government-internal",
+        "content_hash": "b97c22f82fa5231aefa59dc9010724c502d70c3bd812d0bf627eb1cbf1103f37",
+        "evidence_object_id": "phase-a-evidence-provinces",
+        "media_type": "application/json",
+        "retention_state": "active",
+        "source_record_id": "phase-a-source-record-provinces-001",
+        "storage_uri": "phase-a://evidence/provinces:phase-a-provinces-001"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "evidence_object_id": "phase-a-evidence-publication-pack-addresses"
+      },
+      "table": "proposed_evidence_object",
+      "values": {
+        "captured_at": "2026-07-15T00:00:00Z",
+        "classification": "government-internal",
+        "content_hash": "826d89950e30e64f2d1a4ab5693f86e777f89980b6a38f6fb76fd28794dfd314",
+        "evidence_object_id": "phase-a-evidence-publication-pack-addresses",
+        "media_type": "application/json",
+        "retention_state": "active",
+        "source_record_id": "phase-a-source-record-publication-pack-addresses-001",
+        "storage_uri": "phase-a://evidence/publication_pack_addresses:phase-a-publication-pack-addresses-001"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "evidence_object_id": "phase-a-evidence-publication-packs"
+      },
+      "table": "proposed_evidence_object",
+      "values": {
+        "captured_at": "2026-07-15T00:00:00Z",
+        "classification": "government-internal",
+        "content_hash": "f5869c45d85a1a460b6d31273b4229580265d473a397bf505c6c809f3155f242",
+        "evidence_object_id": "phase-a-evidence-publication-packs",
+        "media_type": "application/json",
+        "retention_state": "active",
+        "source_record_id": "phase-a-source-record-publication-packs-001",
+        "storage_uri": "phase-a://evidence/publication_packs:phase-a-publication-packs-001"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "evidence_object_id": "phase-a-evidence-reference-data-load-history"
+      },
+      "table": "proposed_evidence_object",
+      "values": {
+        "captured_at": "2026-07-15T00:00:00Z",
+        "classification": "government-internal",
+        "content_hash": "c332cd8e5e9683aafefa2d25c6aa0b92464525d1cdfc8009cf7f31c360c41265",
+        "evidence_object_id": "phase-a-evidence-reference-data-load-history",
+        "media_type": "application/json",
+        "retention_state": "active",
+        "source_record_id": "phase-a-source-record-reference-data-load-history-001",
+        "storage_uri": "phase-a://evidence/reference_data_load_history:phase-a-reference-data-load-history-001"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "evidence_object_id": "phase-a-evidence-reference-data-loads"
+      },
+      "table": "proposed_evidence_object",
+      "values": {
+        "captured_at": "2026-07-15T00:00:00Z",
+        "classification": "government-internal",
+        "content_hash": "ac26b119b6281245708b0b3ceacaf79cf4c27798ecddedb6f4a54bbb550811e7",
+        "evidence_object_id": "phase-a-evidence-reference-data-loads",
+        "media_type": "application/json",
+        "retention_state": "active",
+        "source_record_id": "phase-a-source-record-reference-data-loads-001",
+        "storage_uri": "phase-a://evidence/reference_data_loads:phase-a-reference-data-loads-001"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "evidence_object_id": "phase-a-evidence-roads"
+      },
+      "table": "proposed_evidence_object",
+      "values": {
+        "captured_at": "2026-07-15T00:00:00Z",
+        "classification": "government-internal",
+        "content_hash": "d6b0544675c8fea5eaeea3fe9d90f5cc0d75e67e52d410239b36ecb704f4a04c",
+        "evidence_object_id": "phase-a-evidence-roads",
+        "media_type": "application/json",
+        "retention_state": "active",
+        "source_record_id": "phase-a-source-record-roads-001",
+        "storage_uri": "phase-a://evidence/roads:phase-a-roads-001"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "evidence_object_id": "phase-a-evidence-schema-migrations"
+      },
+      "table": "proposed_evidence_object",
+      "values": {
+        "captured_at": "2026-07-15T00:00:00Z",
+        "classification": "government-internal",
+        "content_hash": "57a5c3c14878ae8efeb79b15c7569067e743daf91ae55b44fe97caed392c4a71",
+        "evidence_object_id": "phase-a-evidence-schema-migrations",
+        "media_type": "application/json",
+        "retention_state": "active",
+        "source_record_id": "phase-a-source-record-schema-migrations-001",
+        "storage_uri": "phase-a://evidence/schema_migrations:phase-a-schema-migrations-001"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "evidence_object_id": "phase-a-evidence-territories"
+      },
+      "table": "proposed_evidence_object",
+      "values": {
+        "captured_at": "2026-07-15T00:00:00Z",
+        "classification": "government-internal",
+        "content_hash": "f2655dce2f0caecf771b780b2131ea6d9db7f25657d8b159965d6281420657ac",
+        "evidence_object_id": "phase-a-evidence-territories",
+        "media_type": "application/json",
+        "retention_state": "active",
+        "source_record_id": "phase-a-source-record-territories-001",
+        "storage_uri": "phase-a://evidence/territories:phase-a-territories-001"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "evidence_object_id": "phase-a-evidence-users"
+      },
+      "table": "proposed_evidence_object",
+      "values": {
+        "captured_at": "2026-07-15T00:00:00Z",
+        "classification": "restricted",
+        "content_hash": "ff0446ea944f2737741de5d7f47ac0cd32355c691e8878d064aca3f7563bad61",
+        "evidence_object_id": "phase-a-evidence-users",
+        "media_type": "application/json",
+        "retention_state": "active",
+        "source_record_id": "phase-a-source-record-users-001",
+        "storage_uri": "phase-a://evidence/users:phase-a-users-001"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "geometry_observation_id": "phase-a-geometry-wo002-r06-geometry-observation-address-points"
+      },
+      "table": "proposed_geometry_observation",
+      "values": {
+        "capture_method": "derived-from-source",
+        "classification": "restricted",
+        "evidence_object_id": "phase-a-evidence-address-points",
+        "geometry_observation_id": "phase-a-geometry-wo002-r06-geometry-observation-address-points",
+        "geometry_role": "location-point",
+        "horizontal_accuracy_m": "4.50",
+        "licence_id": null,
+        "observed_at": "2026-07-15T00:00:00Z",
+        "observed_geom": "POINT(8.783 3.752)",
+        "recorded_at": "2026-07-15T00:00:00Z",
+        "source_record_id": "phase-a-source-record-address-points-001",
+        "subject_id": "phase-a-subject-phase-a-location-geotag"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "geometry_observation_id": "phase-a-geometry-wo002-r06-geometry-observation-address-records"
+      },
+      "table": "proposed_geometry_observation",
+      "values": {
+        "capture_method": "derived-from-source",
+        "classification": "restricted",
+        "evidence_object_id": "phase-a-evidence-address-records",
+        "geometry_observation_id": "phase-a-geometry-wo002-r06-geometry-observation-address-records",
+        "geometry_role": "location-point",
+        "horizontal_accuracy_m": "4.50",
+        "licence_id": null,
+        "observed_at": "2026-07-15T00:00:00Z",
+        "observed_geom": "POINT(8.783 3.752)",
+        "recorded_at": "2026-07-15T00:00:00Z",
+        "source_record_id": "phase-a-source-record-address-records-001",
+        "subject_id": "phase-a-subject-phase-a-location-geotag"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "geometry_observation_id": "phase-a-geometry-wo002-r06-geometry-observation-citizen-geotag-submissions"
+      },
+      "table": "proposed_geometry_observation",
+      "values": {
+        "capture_method": "derived-from-source",
+        "classification": "restricted",
+        "evidence_object_id": "phase-a-evidence-citizen-geotag-submissions",
+        "geometry_observation_id": "phase-a-geometry-wo002-r06-geometry-observation-citizen-geotag-submissions",
+        "geometry_role": "location-point",
+        "horizontal_accuracy_m": "4.50",
+        "licence_id": null,
+        "observed_at": "2026-07-15T00:00:00Z",
+        "observed_geom": "POINT(8.783 3.752)",
+        "recorded_at": "2026-07-15T00:00:00Z",
+        "source_record_id": "phase-a-source-record-citizen-geotag-submissions-001",
+        "subject_id": "phase-a-subject-phase-a-location-geotag"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "legacy_crosswalk_id": "phase-a-crosswalk-address-corrections-correction-case"
+      },
+      "table": "proposed_legacy_crosswalk",
+      "values": {
+        "created_at": "2026-07-15T00:00:00Z",
+        "legacy_crosswalk_id": "phase-a-crosswalk-address-corrections-correction-case",
+        "legacy_id": "phase-a-correction-001",
+        "source_field": "id",
+        "source_table": "address_corrections",
+        "target_entity": "correction_case",
+        "target_id": "phase-a-correction-case-001"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "legacy_crosswalk_id": "phase-a-crosswalk-wo002-r06-identity-crosswalk-address-corrections"
+      },
+      "table": "proposed_legacy_crosswalk",
+      "values": {
+        "created_at": "2026-07-15T00:00:00Z",
+        "legacy_crosswalk_id": "phase-a-crosswalk-wo002-r06-identity-crosswalk-address-corrections",
+        "legacy_id": "phase-a-correction-001",
+        "source_field": "id",
+        "source_table": "address_corrections",
+        "target_entity": "location_record",
+        "target_id": "phase-a-location-geotag"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "legacy_crosswalk_id": "phase-a-crosswalk-wo002-r06-identity-crosswalk-address-points"
+      },
+      "table": "proposed_legacy_crosswalk",
+      "values": {
+        "created_at": "2026-07-15T00:00:00Z",
+        "legacy_crosswalk_id": "phase-a-crosswalk-wo002-r06-identity-crosswalk-address-points",
+        "legacy_id": "phase-a-address-points-id",
+        "source_field": "id",
+        "source_table": "address_points",
+        "target_entity": "location_record",
+        "target_id": "phase-a-location-geotag"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "legacy_crosswalk_id": "phase-a-crosswalk-wo002-r06-identity-crosswalk-address-record-events"
+      },
+      "table": "proposed_legacy_crosswalk",
+      "values": {
+        "created_at": "2026-07-15T00:00:00Z",
+        "legacy_crosswalk_id": "phase-a-crosswalk-wo002-r06-identity-crosswalk-address-record-events",
+        "legacy_id": "phase-a-address-record-events-id",
+        "source_field": "id",
+        "source_table": "address_record_events",
+        "target_entity": "location_record",
+        "target_id": "phase-a-location-geotag"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "legacy_crosswalk_id": "phase-a-crosswalk-wo002-r06-identity-crosswalk-address-records"
+      },
+      "table": "proposed_legacy_crosswalk",
+      "values": {
+        "created_at": "2026-07-15T00:00:00Z",
+        "legacy_crosswalk_id": "phase-a-crosswalk-wo002-r06-identity-crosswalk-address-records",
+        "legacy_id": "phase-a-address-records-id",
+        "source_field": "id",
+        "source_table": "address_records",
+        "target_entity": "location_record",
+        "target_id": "phase-a-location-geotag"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "legacy_crosswalk_id": "phase-a-crosswalk-wo002-r06-identity-crosswalk-addresses"
+      },
+      "table": "proposed_legacy_crosswalk",
+      "values": {
+        "created_at": "2026-07-15T00:00:00Z",
+        "legacy_crosswalk_id": "phase-a-crosswalk-wo002-r06-identity-crosswalk-addresses",
+        "legacy_id": "phase-a-addresses-id",
+        "source_field": "id",
+        "source_table": "addresses",
+        "target_entity": "location_record",
+        "target_id": "phase-a-location-geotag"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "legacy_crosswalk_id": "phase-a-crosswalk-wo002-r06-identity-crosswalk-admin-units"
+      },
+      "table": "proposed_legacy_crosswalk",
+      "values": {
+        "created_at": "2026-07-15T00:00:00Z",
+        "legacy_crosswalk_id": "phase-a-crosswalk-wo002-r06-identity-crosswalk-admin-units",
+        "legacy_id": "phase-a-admin-units-id",
+        "source_field": "id",
+        "source_table": "admin_units",
+        "target_entity": "location_record",
+        "target_id": "phase-a-location-geotag"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "legacy_crosswalk_id": "phase-a-crosswalk-wo002-r06-identity-crosswalk-audit-logs"
+      },
+      "table": "proposed_legacy_crosswalk",
+      "values": {
+        "created_at": "2026-07-15T00:00:00Z",
+        "legacy_crosswalk_id": "phase-a-crosswalk-wo002-r06-identity-crosswalk-audit-logs",
+        "legacy_id": "1",
+        "source_field": "id",
+        "source_table": "audit_logs",
+        "target_entity": "location_record",
+        "target_id": "phase-a-location-geotag"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "legacy_crosswalk_id": "phase-a-crosswalk-wo002-r06-identity-crosswalk-auth-tokens"
+      },
+      "table": "proposed_legacy_crosswalk",
+      "values": {
+        "created_at": "2026-07-15T00:00:00Z",
+        "legacy_crosswalk_id": "phase-a-crosswalk-wo002-r06-identity-crosswalk-auth-tokens",
+        "legacy_id": "auth_tokens:phase-a-auth-tokens-001",
+        "source_field": "id",
+        "source_table": "auth_tokens",
+        "target_entity": "location_record",
+        "target_id": "phase-a-location-geotag"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "legacy_crosswalk_id": "phase-a-crosswalk-wo002-r06-identity-crosswalk-buildings"
+      },
+      "table": "proposed_legacy_crosswalk",
+      "values": {
+        "created_at": "2026-07-15T00:00:00Z",
+        "legacy_crosswalk_id": "phase-a-crosswalk-wo002-r06-identity-crosswalk-buildings",
+        "legacy_id": "phase-a-buildings-id",
+        "source_field": "id",
+        "source_table": "buildings",
+        "target_entity": "location_record",
+        "target_id": "phase-a-location-geotag"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "legacy_crosswalk_id": "phase-a-crosswalk-wo002-r06-identity-crosswalk-citizen-geotag-submissions"
+      },
+      "table": "proposed_legacy_crosswalk",
+      "values": {
+        "created_at": "2026-07-15T00:00:00Z",
+        "legacy_crosswalk_id": "phase-a-crosswalk-wo002-r06-identity-crosswalk-citizen-geotag-submissions",
+        "legacy_id": "phase-a-geotag-001",
+        "source_field": "id",
+        "source_table": "citizen_geotag_submissions",
+        "target_entity": "location_record",
+        "target_id": "phase-a-location-geotag"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "legacy_crosswalk_id": "phase-a-crosswalk-wo002-r06-identity-crosswalk-field-assignments"
+      },
+      "table": "proposed_legacy_crosswalk",
+      "values": {
+        "created_at": "2026-07-15T00:00:00Z",
+        "legacy_crosswalk_id": "phase-a-crosswalk-wo002-r06-identity-crosswalk-field-assignments",
+        "legacy_id": "field_assignments:phase-a-field-assignments-001",
+        "source_field": "id",
+        "source_table": "field_assignments",
+        "target_entity": "location_record",
+        "target_id": "phase-a-location-geotag"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "legacy_crosswalk_id": "phase-a-crosswalk-wo002-r06-identity-crosswalk-field-submissions"
+      },
+      "table": "proposed_legacy_crosswalk",
+      "values": {
+        "created_at": "2026-07-15T00:00:00Z",
+        "legacy_crosswalk_id": "phase-a-crosswalk-wo002-r06-identity-crosswalk-field-submissions",
+        "legacy_id": "phase-a-field-submissions-id",
+        "source_field": "id",
+        "source_table": "field_submissions",
+        "target_entity": "location_record",
+        "target_id": "phase-a-location-geotag"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "legacy_crosswalk_id": "phase-a-crosswalk-wo002-r06-identity-crosswalk-import-jobs"
+      },
+      "table": "proposed_legacy_crosswalk",
+      "values": {
+        "created_at": "2026-07-15T00:00:00Z",
+        "legacy_crosswalk_id": "phase-a-crosswalk-wo002-r06-identity-crosswalk-import-jobs",
+        "legacy_id": "phase-a-import-jobs-id",
+        "source_field": "id",
+        "source_table": "import_jobs",
+        "target_entity": "location_record",
+        "target_id": "phase-a-location-geotag"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "legacy_crosswalk_id": "phase-a-crosswalk-wo002-r06-identity-crosswalk-import-rows"
+      },
+      "table": "proposed_legacy_crosswalk",
+      "values": {
+        "created_at": "2026-07-15T00:00:00Z",
+        "legacy_crosswalk_id": "phase-a-crosswalk-wo002-r06-identity-crosswalk-import-rows",
+        "legacy_id": "import_rows:phase-a-import-rows-001",
+        "source_field": "id",
+        "source_table": "import_rows",
+        "target_entity": "location_record",
+        "target_id": "phase-a-location-geotag"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "legacy_crosswalk_id": "phase-a-crosswalk-wo002-r06-identity-crosswalk-publication-pack-addresses"
+      },
+      "table": "proposed_legacy_crosswalk",
+      "values": {
+        "created_at": "2026-07-15T00:00:00Z",
+        "legacy_crosswalk_id": "phase-a-crosswalk-wo002-r06-identity-crosswalk-publication-pack-addresses",
+        "legacy_id": "publication_pack_addresses:phase-a-publication-pack-addresses-001",
+        "source_field": "id",
+        "source_table": "publication_pack_addresses",
+        "target_entity": "location_record",
+        "target_id": "phase-a-location-geotag"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "legacy_crosswalk_id": "phase-a-crosswalk-wo002-r06-identity-crosswalk-publication-packs"
+      },
+      "table": "proposed_legacy_crosswalk",
+      "values": {
+        "created_at": "2026-07-15T00:00:00Z",
+        "legacy_crosswalk_id": "phase-a-crosswalk-wo002-r06-identity-crosswalk-publication-packs",
+        "legacy_id": "phase-a-publication-packs-id",
+        "source_field": "id",
+        "source_table": "publication_packs",
+        "target_entity": "location_record",
+        "target_id": "phase-a-location-geotag"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "legacy_crosswalk_id": "phase-a-crosswalk-wo002-r06-identity-crosswalk-reference-data-load-history"
+      },
+      "table": "proposed_legacy_crosswalk",
+      "values": {
+        "created_at": "2026-07-15T00:00:00Z",
+        "legacy_crosswalk_id": "phase-a-crosswalk-wo002-r06-identity-crosswalk-reference-data-load-history",
+        "legacy_id": "1",
+        "source_field": "id",
+        "source_table": "reference_data_load_history",
+        "target_entity": "location_record",
+        "target_id": "phase-a-location-geotag"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "legacy_crosswalk_id": "phase-a-crosswalk-wo002-r06-identity-crosswalk-roads"
+      },
+      "table": "proposed_legacy_crosswalk",
+      "values": {
+        "created_at": "2026-07-15T00:00:00Z",
+        "legacy_crosswalk_id": "phase-a-crosswalk-wo002-r06-identity-crosswalk-roads",
+        "legacy_id": "phase-a-roads-id",
+        "source_field": "id",
+        "source_table": "roads",
+        "target_entity": "location_record",
+        "target_id": "phase-a-location-geotag"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "legacy_crosswalk_id": "phase-a-crosswalk-wo002-r06-identity-crosswalk-territories"
+      },
+      "table": "proposed_legacy_crosswalk",
+      "values": {
+        "created_at": "2026-07-15T00:00:00Z",
+        "legacy_crosswalk_id": "phase-a-crosswalk-wo002-r06-identity-crosswalk-territories",
+        "legacy_id": "phase-a-territories-id",
+        "source_field": "id",
+        "source_table": "territories",
+        "target_entity": "location_record",
+        "target_id": "phase-a-location-geotag"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "legacy_crosswalk_id": "phase-a-crosswalk-wo002-r06-identity-crosswalk-users"
+      },
+      "table": "proposed_legacy_crosswalk",
+      "values": {
+        "created_at": "2026-07-15T00:00:00Z",
+        "legacy_crosswalk_id": "phase-a-crosswalk-wo002-r06-identity-crosswalk-users",
+        "legacy_id": "phase-a-users-id",
+        "source_field": "id",
+        "source_table": "users",
+        "target_entity": "location_record",
+        "target_id": "phase-a-location-geotag"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "link_id": "phase-a-link-phase-a-location-address-reference-primary-subject"
+      },
+      "table": "proposed_location_record_object_link",
+      "values": {
+        "cardinality_rank": 1,
+        "effective_from": "2026-07-15T00:00:00Z",
+        "effective_to": null,
+        "link_id": "phase-a-link-phase-a-location-address-reference-primary-subject",
+        "location_record_version_id": "phase-a-version-phase-a-location-address-reference",
+        "object_role": "primary-subject",
+        "subject_id": "phase-a-subject-phase-a-location-address-reference"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "link_id": "phase-a-link-phase-a-location-geotag-primary-subject"
+      },
+      "table": "proposed_location_record_object_link",
+      "values": {
+        "cardinality_rank": 1,
+        "effective_from": "2026-07-15T00:00:00Z",
+        "effective_to": null,
+        "link_id": "phase-a-link-phase-a-location-geotag-primary-subject",
+        "location_record_version_id": "phase-a-version-phase-a-location-geotag",
+        "object_role": "primary-subject",
+        "subject_id": "phase-a-subject-phase-a-location-geotag"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "location_record_id": "phase-a-location-address-reference"
+      },
+      "table": "proposed_location_record",
+      "values": {
+        "classification": "government-internal",
+        "created_at": "2026-07-15T00:00:00Z",
+        "location_record_id": "phase-a-location-address-reference",
+        "record_type": "address",
+        "retired_at": null
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "location_record_id": "phase-a-location-geotag"
+      },
+      "table": "proposed_location_record",
+      "values": {
+        "classification": "government-internal",
+        "created_at": "2026-07-15T00:00:00Z",
+        "location_record_id": "phase-a-location-geotag",
+        "record_type": "address",
+        "retired_at": null
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "location_record_version_id": "phase-a-version-phase-a-location-address-reference"
+      },
+      "table": "proposed_location_record_version",
+      "values": {
+        "administrative_unit_version_id": "phase-a-admin-bioko-norte-v1",
+        "correction_case_id": null,
+        "display_label_en": "Controlled Phase A address reference",
+        "display_label_es": "Controlled Phase A address reference",
+        "effective_from": "2026-07-15T00:00:00Z",
+        "effective_to": null,
+        "lifecycle_state": "candidate",
+        "locality_id": null,
+        "location_record_id": "phase-a-location-address-reference",
+        "location_record_version_id": "phase-a-version-phase-a-location-address-reference",
+        "predecessor_version_id": null,
+        "recorded_at": "2026-07-15T00:00:00Z",
+        "recorded_to": null,
+        "source_decision_event_id": "phase-a-decision-phase-a-location-address-reference",
+        "successor_version_id": null,
+        "supersession_reason": null,
+        "version_number": 1
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "location_record_version_id": "phase-a-version-phase-a-location-geotag"
+      },
+      "table": "proposed_location_record_version",
+      "values": {
+        "administrative_unit_version_id": "phase-a-admin-bioko-norte-v1",
+        "correction_case_id": null,
+        "display_label_en": "Controlled Phase A geotag observation",
+        "display_label_es": "Controlled Phase A geotag observation",
+        "effective_from": "2026-07-15T00:00:00Z",
+        "effective_to": null,
+        "lifecycle_state": "candidate",
+        "locality_id": null,
+        "location_record_id": "phase-a-location-geotag",
+        "location_record_version_id": "phase-a-version-phase-a-location-geotag",
+        "predecessor_version_id": null,
+        "recorded_at": "2026-07-15T00:00:00Z",
+        "recorded_to": null,
+        "source_decision_event_id": "phase-a-decision-phase-a-location-geotag",
+        "successor_version_id": null,
+        "supersession_reason": null,
+        "version_number": 1
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "migration_exception_id": "phase-a-exception-geometry-authority-wo002-r06-geometry-observation-address-points"
+      },
+      "table": "proposed_migration_exception",
+      "values": {
+        "batch_id": "phase-a-execution-correction",
+        "created_at": "2026-07-15T00:00:00Z",
+        "details_json": {
+          "non_official": true,
+          "open_authority_rfi": "geometry-promotion-authority",
+          "reason": "Canonical geometry promotion authority unresolved; observation preserved only",
+          "target_entity": "geometry_observation",
+          "target_id": "phase-a-geometry-wo002-r06-geometry-observation-address-points"
+        },
+        "exception_type": "authority-rfi",
+        "migration_exception_id": "phase-a-exception-geometry-authority-wo002-r06-geometry-observation-address-points",
+        "owner": "SDA",
+        "resolved_at": null,
+        "severity": "medium",
+        "source_field": null,
+        "source_key": "address_points:phase-a-address-points-001",
+        "source_table": "address_points"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "migration_exception_id": "phase-a-exception-geometry-authority-wo002-r06-geometry-observation-address-records"
+      },
+      "table": "proposed_migration_exception",
+      "values": {
+        "batch_id": "phase-a-execution-correction",
+        "created_at": "2026-07-15T00:00:00Z",
+        "details_json": {
+          "non_official": true,
+          "open_authority_rfi": "geometry-promotion-authority",
+          "reason": "Canonical geometry promotion authority unresolved; observation preserved only",
+          "target_entity": "geometry_observation",
+          "target_id": "phase-a-geometry-wo002-r06-geometry-observation-address-records"
+        },
+        "exception_type": "authority-rfi",
+        "migration_exception_id": "phase-a-exception-geometry-authority-wo002-r06-geometry-observation-address-records",
+        "owner": "SDA",
+        "resolved_at": null,
+        "severity": "medium",
+        "source_field": null,
+        "source_key": "address_records:phase-a-address-records-001",
+        "source_table": "address_records"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "migration_exception_id": "phase-a-exception-geometry-authority-wo002-r06-geometry-observation-citizen-geotag-submissions"
+      },
+      "table": "proposed_migration_exception",
+      "values": {
+        "batch_id": "phase-a-execution-correction",
+        "created_at": "2026-07-15T00:00:00Z",
+        "details_json": {
+          "non_official": true,
+          "open_authority_rfi": "geometry-promotion-authority",
+          "reason": "Canonical geometry promotion authority unresolved; observation preserved only",
+          "target_entity": "geometry_observation",
+          "target_id": "phase-a-geometry-wo002-r06-geometry-observation-citizen-geotag-submissions"
+        },
+        "exception_type": "authority-rfi",
+        "migration_exception_id": "phase-a-exception-geometry-authority-wo002-r06-geometry-observation-citizen-geotag-submissions",
+        "owner": "SDA",
+        "resolved_at": null,
+        "severity": "medium",
+        "source_field": null,
+        "source_key": "citizen_geotag_submissions:phase-a-citizen-geotag-submissions-001",
+        "source_table": "citizen_geotag_submissions"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "migration_exception_id": "phase-a-exception-wo002-r06-identity-crosswalk-address-record-events"
+      },
+      "table": "proposed_migration_exception",
+      "values": {
+        "batch_id": "phase-a-execution-correction",
+        "created_at": "2026-07-15T00:00:00Z",
+        "details_json": {
+          "covered_fields": [
+            "address_record_events.actor_id",
+            "address_record_events.address_record_id",
+            "address_record_events.id"
+          ],
+          "reason": "Reviewed disposition requires owned unresolved/conditional exception",
+          "target_entity": "legacy_crosswalk",
+          "target_id": "phase-a-target-wo002-r06-identity-crosswalk-address-record-events",
+          "transform_group_id": "WO002-R06-identity-crosswalk-address_record_events"
+        },
+        "exception_type": "unresolved-reference",
+        "migration_exception_id": "phase-a-exception-wo002-r06-identity-crosswalk-address-record-events",
+        "owner": "SDA",
+        "resolved_at": null,
+        "severity": "medium",
+        "source_field": null,
+        "source_key": "address_record_events:phase-a-address-record-events-001",
+        "source_table": "address_record_events"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "migration_exception_id": "phase-a-exception-wo002-r06-identity-crosswalk-address-records"
+      },
+      "table": "proposed_migration_exception",
+      "values": {
+        "batch_id": "phase-a-execution-correction",
+        "created_at": "2026-07-15T00:00:00Z",
+        "details_json": {
+          "covered_fields": [
+            "address_records.id",
+            "address_records.source_submission_id",
+            "address_records.territory_id"
+          ],
+          "reason": "Reviewed disposition requires owned unresolved/conditional exception",
+          "target_entity": "legacy_crosswalk",
+          "target_id": "phase-a-target-wo002-r06-identity-crosswalk-address-records",
+          "transform_group_id": "WO002-R06-identity-crosswalk-address_records"
+        },
+        "exception_type": "unresolved-reference",
+        "migration_exception_id": "phase-a-exception-wo002-r06-identity-crosswalk-address-records",
+        "owner": "SDA",
+        "resolved_at": null,
+        "severity": "medium",
+        "source_field": null,
+        "source_key": "address_records:phase-a-address-records-001",
+        "source_table": "address_records"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "migration_exception_id": "phase-a-exception-wo002-r06-identity-crosswalk-addresses"
+      },
+      "table": "proposed_migration_exception",
+      "values": {
+        "batch_id": "phase-a-execution-correction",
+        "created_at": "2026-07-15T00:00:00Z",
+        "details_json": {
+          "covered_fields": [
+            "addresses.building_id",
+            "addresses.id",
+            "addresses.road_id",
+            "addresses.superseded_by_address_id",
+            "addresses.territory_id"
+          ],
+          "reason": "Reviewed disposition requires owned unresolved/conditional exception",
+          "target_entity": "legacy_crosswalk",
+          "target_id": "phase-a-target-wo002-r06-identity-crosswalk-addresses",
+          "transform_group_id": "WO002-R06-identity-crosswalk-addresses"
+        },
+        "exception_type": "unresolved-reference",
+        "migration_exception_id": "phase-a-exception-wo002-r06-identity-crosswalk-addresses",
+        "owner": "SDA",
+        "resolved_at": null,
+        "severity": "medium",
+        "source_field": null,
+        "source_key": "addresses:phase-a-addresses-001",
+        "source_table": "addresses"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "migration_exception_id": "phase-a-exception-wo002-r06-identity-crosswalk-admin-units"
+      },
+      "table": "proposed_migration_exception",
+      "values": {
+        "batch_id": "phase-a-execution-correction",
+        "created_at": "2026-07-15T00:00:00Z",
+        "details_json": {
+          "covered_fields": [
+            "admin_units.id",
+            "admin_units.parent_id"
+          ],
+          "reason": "Reviewed disposition requires owned unresolved/conditional exception",
+          "target_entity": "legacy_crosswalk",
+          "target_id": "phase-a-target-wo002-r06-identity-crosswalk-admin-units",
+          "transform_group_id": "WO002-R06-identity-crosswalk-admin_units"
+        },
+        "exception_type": "unresolved-reference",
+        "migration_exception_id": "phase-a-exception-wo002-r06-identity-crosswalk-admin-units",
+        "owner": "SDA",
+        "resolved_at": null,
+        "severity": "medium",
+        "source_field": null,
+        "source_key": "admin_units:phase-a-admin-units-001",
+        "source_table": "admin_units"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "migration_exception_id": "phase-a-exception-wo002-r06-identity-crosswalk-audit-logs"
+      },
+      "table": "proposed_migration_exception",
+      "values": {
+        "batch_id": "phase-a-execution-correction",
+        "created_at": "2026-07-15T00:00:00Z",
+        "details_json": {
+          "covered_fields": [
+            "audit_logs.actor_user_id",
+            "audit_logs.entity_id",
+            "audit_logs.id"
+          ],
+          "reason": "Reviewed disposition requires owned unresolved/conditional exception",
+          "target_entity": "legacy_crosswalk",
+          "target_id": "phase-a-target-wo002-r06-identity-crosswalk-audit-logs",
+          "transform_group_id": "WO002-R06-identity-crosswalk-audit_logs"
+        },
+        "exception_type": "unresolved-reference",
+        "migration_exception_id": "phase-a-exception-wo002-r06-identity-crosswalk-audit-logs",
+        "owner": "SDA",
+        "resolved_at": null,
+        "severity": "medium",
+        "source_field": null,
+        "source_key": "audit_logs:phase-a-audit-logs-001",
+        "source_table": "audit_logs"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "migration_exception_id": "phase-a-exception-wo002-r06-identity-crosswalk-citizen-geotag-submissions"
+      },
+      "table": "proposed_migration_exception",
+      "values": {
+        "batch_id": "phase-a-execution-correction",
+        "created_at": "2026-07-15T00:00:00Z",
+        "details_json": {
+          "covered_fields": [
+            "citizen_geotag_submissions.field_submission_id",
+            "citizen_geotag_submissions.id",
+            "citizen_geotag_submissions.territory_id"
+          ],
+          "reason": "Reviewed disposition requires owned unresolved/conditional exception",
+          "target_entity": "legacy_crosswalk",
+          "target_id": "phase-a-target-wo002-r06-identity-crosswalk-citizen-geotag-submissions",
+          "transform_group_id": "WO002-R06-identity-crosswalk-citizen_geotag_submissions"
+        },
+        "exception_type": "unresolved-reference",
+        "migration_exception_id": "phase-a-exception-wo002-r06-identity-crosswalk-citizen-geotag-submissions",
+        "owner": "SDA",
+        "resolved_at": null,
+        "severity": "medium",
+        "source_field": null,
+        "source_key": "citizen_geotag_submissions:phase-a-citizen-geotag-submissions-001",
+        "source_table": "citizen_geotag_submissions"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "migration_exception_id": "phase-a-exception-wo002-r06-identity-crosswalk-development-fixture-batches"
+      },
+      "table": "proposed_migration_exception",
+      "values": {
+        "batch_id": "phase-a-execution-correction",
+        "created_at": "2026-07-15T00:00:00Z",
+        "details_json": {
+          "covered_fields": [
+            "development_fixture_batches.batch_id"
+          ],
+          "reason": "Reviewed disposition requires owned unresolved/conditional exception",
+          "target_entity": "migration_exception",
+          "target_id": "phase-a-target-wo002-r06-identity-crosswalk-development-fixture-batches",
+          "transform_group_id": "WO002-R06-identity-crosswalk-development_fixture_batches"
+        },
+        "exception_type": "unresolved-reference",
+        "migration_exception_id": "phase-a-exception-wo002-r06-identity-crosswalk-development-fixture-batches",
+        "owner": "SDA",
+        "resolved_at": null,
+        "severity": "medium",
+        "source_field": null,
+        "source_key": "development_fixture_batches:phase-a-development-fixture-batches-001",
+        "source_table": "development_fixture_batches"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "migration_exception_id": "phase-a-exception-wo002-r06-identity-crosswalk-development-fixture-records"
+      },
+      "table": "proposed_migration_exception",
+      "values": {
+        "batch_id": "phase-a-execution-correction",
+        "created_at": "2026-07-15T00:00:00Z",
+        "details_json": {
+          "covered_fields": [
+            "development_fixture_records.batch_id",
+            "development_fixture_records.record_id"
+          ],
+          "reason": "Reviewed disposition requires owned unresolved/conditional exception",
+          "target_entity": "migration_exception",
+          "target_id": "phase-a-target-wo002-r06-identity-crosswalk-development-fixture-records",
+          "transform_group_id": "WO002-R06-identity-crosswalk-development_fixture_records"
+        },
+        "exception_type": "unresolved-reference",
+        "migration_exception_id": "phase-a-exception-wo002-r06-identity-crosswalk-development-fixture-records",
+        "owner": "SDA",
+        "resolved_at": null,
+        "severity": "medium",
+        "source_field": null,
+        "source_key": "development_fixture_records:phase-a-development-fixture-records-001",
+        "source_table": "development_fixture_records"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "migration_exception_id": "phase-a-exception-wo002-r06-identity-crosswalk-field-assignments"
+      },
+      "table": "proposed_migration_exception",
+      "values": {
+        "batch_id": "phase-a-execution-correction",
+        "created_at": "2026-07-15T00:00:00Z",
+        "details_json": {
+          "covered_fields": [
+            "field_assignments.assignment_id",
+            "field_assignments.territory_id"
+          ],
+          "reason": "Reviewed disposition requires owned unresolved/conditional exception",
+          "target_entity": "legacy_crosswalk",
+          "target_id": "phase-a-target-wo002-r06-identity-crosswalk-field-assignments",
+          "transform_group_id": "WO002-R06-identity-crosswalk-field_assignments"
+        },
+        "exception_type": "unresolved-reference",
+        "migration_exception_id": "phase-a-exception-wo002-r06-identity-crosswalk-field-assignments",
+        "owner": "SDA",
+        "resolved_at": null,
+        "severity": "medium",
+        "source_field": null,
+        "source_key": "field_assignments:phase-a-field-assignments-001",
+        "source_table": "field_assignments"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "migration_exception_id": "phase-a-exception-wo002-r06-identity-crosswalk-field-submissions"
+      },
+      "table": "proposed_migration_exception",
+      "values": {
+        "batch_id": "phase-a-execution-correction",
+        "created_at": "2026-07-15T00:00:00Z",
+        "details_json": {
+          "covered_fields": [
+            "field_submissions.assignment_id",
+            "field_submissions.id",
+            "field_submissions.registry_entity_id",
+            "field_submissions.territory_id"
+          ],
+          "reason": "Reviewed disposition requires owned unresolved/conditional exception",
+          "target_entity": "legacy_crosswalk",
+          "target_id": "phase-a-target-wo002-r06-identity-crosswalk-field-submissions",
+          "transform_group_id": "WO002-R06-identity-crosswalk-field_submissions"
+        },
+        "exception_type": "unresolved-reference",
+        "migration_exception_id": "phase-a-exception-wo002-r06-identity-crosswalk-field-submissions",
+        "owner": "SDA",
+        "resolved_at": null,
+        "severity": "medium",
+        "source_field": null,
+        "source_key": "field_submissions:phase-a-field-submissions-001",
+        "source_table": "field_submissions"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "migration_exception_id": "phase-a-exception-wo002-r06-identity-crosswalk-import-rows"
+      },
+      "table": "proposed_migration_exception",
+      "values": {
+        "batch_id": "phase-a-execution-correction",
+        "created_at": "2026-07-15T00:00:00Z",
+        "details_json": {
+          "covered_fields": [
+            "import_rows.committed_submission_id",
+            "import_rows.job_id",
+            "import_rows.territory_id"
+          ],
+          "reason": "Reviewed disposition requires owned unresolved/conditional exception",
+          "target_entity": "legacy_crosswalk",
+          "target_id": "phase-a-target-wo002-r06-identity-crosswalk-import-rows",
+          "transform_group_id": "WO002-R06-identity-crosswalk-import_rows"
+        },
+        "exception_type": "unresolved-reference",
+        "migration_exception_id": "phase-a-exception-wo002-r06-identity-crosswalk-import-rows",
+        "owner": "SDA",
+        "resolved_at": null,
+        "severity": "medium",
+        "source_field": null,
+        "source_key": "import_rows:phase-a-import-rows-001",
+        "source_table": "import_rows"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "migration_exception_id": "phase-a-exception-wo002-r06-identity-crosswalk-publication-pack-addresses"
+      },
+      "table": "proposed_migration_exception",
+      "values": {
+        "batch_id": "phase-a-execution-correction",
+        "created_at": "2026-07-15T00:00:00Z",
+        "details_json": {
+          "covered_fields": [
+            "publication_pack_addresses.address_id",
+            "publication_pack_addresses.publication_pack_id"
+          ],
+          "reason": "Reviewed disposition requires owned unresolved/conditional exception",
+          "target_entity": "legacy_crosswalk",
+          "target_id": "phase-a-target-wo002-r06-identity-crosswalk-publication-pack-addresses",
+          "transform_group_id": "WO002-R06-identity-crosswalk-publication_pack_addresses"
+        },
+        "exception_type": "unresolved-reference",
+        "migration_exception_id": "phase-a-exception-wo002-r06-identity-crosswalk-publication-pack-addresses",
+        "owner": "SDA",
+        "resolved_at": null,
+        "severity": "medium",
+        "source_field": null,
+        "source_key": "publication_pack_addresses:phase-a-publication-pack-addresses-001",
+        "source_table": "publication_pack_addresses"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "migration_exception_id": "phase-a-exception-wo002-r06-identity-crosswalk-reference-data-load-history"
+      },
+      "table": "proposed_migration_exception",
+      "values": {
+        "batch_id": "phase-a-execution-correction",
+        "created_at": "2026-07-15T00:00:00Z",
+        "details_json": {
+          "covered_fields": [
+            "reference_data_load_history.id",
+            "reference_data_load_history.package_id"
+          ],
+          "reason": "Reviewed disposition requires owned unresolved/conditional exception",
+          "target_entity": "legacy_crosswalk",
+          "target_id": "phase-a-target-wo002-r06-identity-crosswalk-reference-data-load-history",
+          "transform_group_id": "WO002-R06-identity-crosswalk-reference_data_load_history"
+        },
+        "exception_type": "unresolved-reference",
+        "migration_exception_id": "phase-a-exception-wo002-r06-identity-crosswalk-reference-data-load-history",
+        "owner": "SDA",
+        "resolved_at": null,
+        "severity": "medium",
+        "source_field": null,
+        "source_key": "reference_data_load_history:phase-a-reference-data-load-history-001",
+        "source_table": "reference_data_load_history"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "migration_exception_id": "phase-a-exception-wo002-r06-identity-crosswalk-reference-data-loads"
+      },
+      "table": "proposed_migration_exception",
+      "values": {
+        "batch_id": "phase-a-execution-correction",
+        "created_at": "2026-07-15T00:00:00Z",
+        "details_json": {
+          "covered_fields": [
+            "reference_data_loads.package_id"
+          ],
+          "reason": "Reviewed disposition requires owned unresolved/conditional exception",
+          "target_entity": "migration_exception",
+          "target_id": "phase-a-target-wo002-r06-identity-crosswalk-reference-data-loads",
+          "transform_group_id": "WO002-R06-identity-crosswalk-reference_data_loads"
+        },
+        "exception_type": "unresolved-reference",
+        "migration_exception_id": "phase-a-exception-wo002-r06-identity-crosswalk-reference-data-loads",
+        "owner": "SDA",
+        "resolved_at": null,
+        "severity": "medium",
+        "source_field": null,
+        "source_key": "reference_data_loads:phase-a-reference-data-loads-001",
+        "source_table": "reference_data_loads"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "name_record_id": "phase-a-name-wo002-r06-name-record-address-record-events"
+      },
+      "table": "proposed_name_record",
+      "values": {
+        "effective_from": "2026-07-15T00:00:00Z",
+        "effective_to": null,
+        "language_code": "es",
+        "name_kind": "alternate",
+        "name_record_id": "phase-a-name-wo002-r06-name-record-address-record-events",
+        "name_status": "candidate",
+        "name_text": "phase-a address_record_events actor_username (address_record_events)",
+        "normalized_text": "phase-a-address-record-events-actor-username-address-record-events",
+        "source_record_id": "phase-a-source-record-address-record-events-001",
+        "subject_id": "phase-a-subject-phase-a-location-geotag"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "name_record_id": "phase-a-name-wo002-r06-name-record-address-records"
+      },
+      "table": "proposed_name_record",
+      "values": {
+        "effective_from": "2026-07-15T00:00:00Z",
+        "effective_to": null,
+        "language_code": "es",
+        "name_kind": "alternate",
+        "name_record_id": "phase-a-name-wo002-r06-name-record-address-records",
+        "name_status": "candidate",
+        "name_text": "Controlled Phase A address label (address_records)",
+        "normalized_text": "controlled-phase-a-address-label-address-records",
+        "source_record_id": "phase-a-source-record-address-records-001",
+        "subject_id": "phase-a-subject-phase-a-location-geotag"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "name_record_id": "phase-a-name-wo002-r06-name-record-admin-units"
+      },
+      "table": "proposed_name_record",
+      "values": {
+        "effective_from": "2026-07-15T00:00:00Z",
+        "effective_to": null,
+        "language_code": "es",
+        "name_kind": "alternate",
+        "name_record_id": "phase-a-name-wo002-r06-name-record-admin-units",
+        "name_status": "candidate",
+        "name_text": "phase-a admin_units name_en (admin_units)",
+        "normalized_text": "phase-a-admin-units-name-en-admin-units",
+        "source_record_id": "phase-a-source-record-admin-units-001",
+        "subject_id": "phase-a-subject-phase-a-location-geotag"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "name_record_id": "phase-a-name-wo002-r06-name-record-audit-logs"
+      },
+      "table": "proposed_name_record",
+      "values": {
+        "effective_from": "2026-07-15T00:00:00Z",
+        "effective_to": null,
+        "language_code": "es",
+        "name_kind": "alternate",
+        "name_record_id": "phase-a-name-wo002-r06-name-record-audit-logs",
+        "name_status": "candidate",
+        "name_text": "phase-a audit_logs actor_username (audit_logs)",
+        "normalized_text": "phase-a-audit-logs-actor-username-audit-logs",
+        "source_record_id": "phase-a-source-record-audit-logs-001",
+        "subject_id": "phase-a-subject-phase-a-location-geotag"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "name_record_id": "phase-a-name-wo002-r06-name-record-buildings"
+      },
+      "table": "proposed_name_record",
+      "values": {
+        "effective_from": "2026-07-15T00:00:00Z",
+        "effective_to": null,
+        "language_code": "es",
+        "name_kind": "alternate",
+        "name_record_id": "phase-a-name-wo002-r06-name-record-buildings",
+        "name_status": "candidate",
+        "name_text": "Controlled Phase A address label (buildings)",
+        "normalized_text": "controlled-phase-a-address-label-buildings",
+        "source_record_id": "phase-a-source-record-buildings-001",
+        "subject_id": "phase-a-subject-phase-a-location-geotag"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "name_record_id": "phase-a-name-wo002-r06-name-record-citizen-geotag-submissions"
+      },
+      "table": "proposed_name_record",
+      "values": {
+        "effective_from": "2026-07-15T00:00:00Z",
+        "effective_to": null,
+        "language_code": "es",
+        "name_kind": "alternate",
+        "name_record_id": "phase-a-name-wo002-r06-name-record-citizen-geotag-submissions",
+        "name_status": "candidate",
+        "name_text": "Controlled Phase A household near Malabo civic office (citizen_geotag_submissions)",
+        "normalized_text": "controlled-phase-a-household-near-malabo-civic-office-citizen-geotag-submissions",
+        "source_record_id": "phase-a-source-record-citizen-geotag-submissions-001",
+        "subject_id": "phase-a-subject-phase-a-location-geotag"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "name_record_id": "phase-a-name-wo002-r06-name-record-development-fixture-records"
+      },
+      "table": "proposed_name_record",
+      "values": {
+        "effective_from": "2026-07-15T00:00:00Z",
+        "effective_to": null,
+        "language_code": "es",
+        "name_kind": "alternate",
+        "name_record_id": "phase-a-name-wo002-r06-name-record-development-fixture-records",
+        "name_status": "candidate",
+        "name_text": "phase-a development_fixture_records table_name (development_fixture_records)",
+        "normalized_text": "phase-a-development-fixture-records-table-name-development-fixture-records",
+        "source_record_id": "phase-a-source-record-development-fixture-records-001",
+        "subject_id": "phase-a-subject-phase-a-location-geotag"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "name_record_id": "phase-a-name-wo002-r06-name-record-field-submissions"
+      },
+      "table": "proposed_name_record",
+      "values": {
+        "effective_from": "2026-07-15T00:00:00Z",
+        "effective_to": null,
+        "language_code": "es",
+        "name_kind": "alternate",
+        "name_record_id": "phase-a-name-wo002-r06-name-record-field-submissions",
+        "name_status": "candidate",
+        "name_text": "phase-a field_submissions candidate_name (field_submissions)",
+        "normalized_text": "phase-a-field-submissions-candidate-name-field-submissions",
+        "source_record_id": "phase-a-source-record-field-submissions-001",
+        "subject_id": "phase-a-subject-phase-a-location-geotag"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "name_record_id": "phase-a-name-wo002-r06-name-record-import-jobs"
+      },
+      "table": "proposed_name_record",
+      "values": {
+        "effective_from": "2026-07-15T00:00:00Z",
+        "effective_to": null,
+        "language_code": "es",
+        "name_kind": "alternate",
+        "name_record_id": "phase-a-name-wo002-r06-name-record-import-jobs",
+        "name_status": "candidate",
+        "name_text": "Phase A import_jobs (import_jobs)",
+        "normalized_text": "phase-a-import-jobs-import-jobs",
+        "source_record_id": "phase-a-source-record-import-jobs-001",
+        "subject_id": "phase-a-subject-phase-a-location-geotag"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "name_record_id": "phase-a-name-wo002-r06-name-record-import-rows"
+      },
+      "table": "proposed_name_record",
+      "values": {
+        "effective_from": "2026-07-15T00:00:00Z",
+        "effective_to": null,
+        "language_code": "es",
+        "name_kind": "alternate",
+        "name_record_id": "phase-a-name-wo002-r06-name-record-import-rows",
+        "name_status": "candidate",
+        "name_text": "phase-a import_rows candidate_name (import_rows)",
+        "normalized_text": "phase-a-import-rows-candidate-name-import-rows",
+        "source_record_id": "phase-a-source-record-import-rows-001",
+        "subject_id": "phase-a-subject-phase-a-location-geotag"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "name_record_id": "phase-a-name-wo002-r06-name-record-provinces"
+      },
+      "table": "proposed_name_record",
+      "values": {
+        "effective_from": "2026-07-15T00:00:00Z",
+        "effective_to": null,
+        "language_code": "es",
+        "name_kind": "alternate",
+        "name_record_id": "phase-a-name-wo002-r06-name-record-provinces",
+        "name_status": "candidate",
+        "name_text": "Phase A provinces (provinces)",
+        "normalized_text": "phase-a-provinces-provinces",
+        "source_record_id": "phase-a-source-record-provinces-001",
+        "subject_id": "phase-a-subject-phase-a-location-geotag"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "name_record_id": "phase-a-name-wo002-r06-name-record-publication-packs"
+      },
+      "table": "proposed_name_record",
+      "values": {
+        "effective_from": "2026-07-15T00:00:00Z",
+        "effective_to": null,
+        "language_code": "es",
+        "name_kind": "alternate",
+        "name_record_id": "phase-a-name-wo002-r06-name-record-publication-packs",
+        "name_status": "candidate",
+        "name_text": "Phase A publication_packs (publication_packs)",
+        "normalized_text": "phase-a-publication-packs-publication-packs",
+        "source_record_id": "phase-a-source-record-publication-packs-001",
+        "subject_id": "phase-a-subject-phase-a-location-geotag"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "name_record_id": "phase-a-name-wo002-r06-name-record-roads"
+      },
+      "table": "proposed_name_record",
+      "values": {
+        "effective_from": "2026-07-15T00:00:00Z",
+        "effective_to": null,
+        "language_code": "es",
+        "name_kind": "alternate",
+        "name_record_id": "phase-a-name-wo002-r06-name-record-roads",
+        "name_status": "candidate",
+        "name_text": "Phase A roads (roads)",
+        "normalized_text": "phase-a-roads-roads",
+        "source_record_id": "phase-a-source-record-roads-001",
+        "subject_id": "phase-a-subject-phase-a-location-geotag"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "name_record_id": "phase-a-name-wo002-r06-name-record-territories"
+      },
+      "table": "proposed_name_record",
+      "values": {
+        "effective_from": "2026-07-15T00:00:00Z",
+        "effective_to": null,
+        "language_code": "es",
+        "name_kind": "alternate",
+        "name_record_id": "phase-a-name-wo002-r06-name-record-territories",
+        "name_status": "candidate",
+        "name_text": "Phase A territories (territories)",
+        "normalized_text": "phase-a-territories-territories",
+        "source_record_id": "phase-a-source-record-territories-001",
+        "subject_id": "phase-a-subject-phase-a-location-geotag"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "name_record_id": "phase-a-name-wo002-r06-name-record-users"
+      },
+      "table": "proposed_name_record",
+      "values": {
+        "effective_from": "2026-07-15T00:00:00Z",
+        "effective_to": null,
+        "language_code": "es",
+        "name_kind": "alternate",
+        "name_record_id": "phase-a-name-wo002-r06-name-record-users",
+        "name_status": "candidate",
+        "name_text": "phase-a users full_name (users)",
+        "normalized_text": "phase-a-users-full-name-users",
+        "source_record_id": "phase-a-source-record-users-001",
+        "subject_id": "phase-a-subject-phase-a-location-geotag"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "public_code_alias_id": "phase-a-alias-geotag"
+      },
+      "table": "proposed_public_code_alias",
+      "values": {
+        "code_scheme": "controlled-phase-a-simulation",
+        "code_state": "reserved-internal",
+        "issued_at": null,
+        "location_record_id": "phase-a-location-geotag",
+        "predecessor_alias_id": null,
+        "public_code": "PHASE-A-NONOFFICIAL-001",
+        "public_code_alias_id": "phase-a-alias-geotag",
+        "reserved_at": "2026-07-15T00:00:00Z",
+        "retired_at": null,
+        "successor_alias_id": null
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "public_code_alias_id": "phase-a-alias-wo002-r06-public-code-alias-addresses"
+      },
+      "table": "proposed_public_code_alias",
+      "values": {
+        "code_scheme": "controlled-phase-a-simulation",
+        "code_state": "reserved-internal",
+        "issued_at": null,
+        "location_record_id": "phase-a-location-geotag",
+        "predecessor_alias_id": null,
+        "public_code": "PHASE-A-NONOFFICIAL-001",
+        "public_code_alias_id": "phase-a-alias-wo002-r06-public-code-alias-addresses",
+        "reserved_at": "2026-07-15T00:00:00Z",
+        "retired_at": null,
+        "successor_alias_id": null
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "public_code_alias_id": "phase-a-alias-wo002-r06-public-code-alias-admin-units"
+      },
+      "table": "proposed_public_code_alias",
+      "values": {
+        "code_scheme": "controlled-phase-a-simulation",
+        "code_state": "reserved-internal",
+        "issued_at": null,
+        "location_record_id": "phase-a-location-geotag",
+        "predecessor_alias_id": null,
+        "public_code": "phase-a-admin-units-code",
+        "public_code_alias_id": "phase-a-alias-wo002-r06-public-code-alias-admin-units",
+        "reserved_at": "2026-07-15T00:00:00Z",
+        "retired_at": null,
+        "successor_alias_id": null
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "public_code_alias_id": "phase-a-alias-wo002-r06-public-code-alias-provinces"
+      },
+      "table": "proposed_public_code_alias",
+      "values": {
+        "code_scheme": "controlled-phase-a-simulation",
+        "code_state": "reserved-internal",
+        "issued_at": null,
+        "location_record_id": "phase-a-location-geotag",
+        "predecessor_alias_id": null,
+        "public_code": "phase-a-provinces-code",
+        "public_code_alias_id": "phase-a-alias-wo002-r06-public-code-alias-provinces",
+        "reserved_at": "2026-07-15T00:00:00Z",
+        "retired_at": null,
+        "successor_alias_id": null
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "relationship_id": "phase-a-relationship-geotag-near-address-reference"
+      },
+      "table": "proposed_location_record_relationship",
+      "values": {
+        "effective_from": "2026-07-15T00:00:00Z",
+        "effective_to": null,
+        "from_location_record_id": "phase-a-location-geotag",
+        "relationship_id": "phase-a-relationship-geotag-near-address-reference",
+        "relationship_type": "near",
+        "source_decision_event_id": "phase-a-decision-phase-a-location-geotag",
+        "to_location_record_id": "phase-a-location-address-reference"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "source_authority_id": "phase-a-authority-citizen-evidence"
+      },
+      "table": "proposed_source_authority",
+      "values": {
+        "authority_class": "citizen-submitted",
+        "authority_name": "Phase A citizen-submitted evidence authority",
+        "legal_basis": "Controlled Phase A fixture; non_official=true",
+        "source_authority_id": "phase-a-authority-citizen-evidence",
+        "status": "candidate"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "source_authority_id": "phase-a-authority-conditional-admin-reference"
+      },
+      "table": "proposed_source_authority",
+      "values": {
+        "authority_class": "registry-authority",
+        "authority_name": "Phase A conditional administrative reference authority",
+        "legal_basis": "Conditional/provisional non-official government reference fixture linked to authority RFI",
+        "source_authority_id": "phase-a-authority-conditional-admin-reference",
+        "status": "candidate"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "source_authority_id": "phase-a-authority-operational-control"
+      },
+      "table": "proposed_source_authority",
+      "values": {
+        "authority_class": "derived-system",
+        "authority_name": "Phase A retained operational-control authority",
+        "legal_basis": "Operational-control/non-migrated disposition fixture; no public effect",
+        "source_authority_id": "phase-a-authority-operational-control",
+        "status": "candidate"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "source_package_id": "phase-a-source-package-address-corrections"
+      },
+      "table": "proposed_source_package",
+      "values": {
+        "licence_id": null,
+        "load_context": {
+          "phase": "A",
+          "source_table": "address_corrections"
+        },
+        "loaded_at": "2026-07-15T00:00:00Z",
+        "package_checksum": "9b67566b8a0a422c98feb716848b1f0ce3151a91e108f60d7356f81acf8cebae",
+        "package_name": "Phase A source package address_corrections",
+        "source_authority_id": "phase-a-authority-operational-control",
+        "source_package_id": "phase-a-source-package-address-corrections"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "source_package_id": "phase-a-source-package-address-points"
+      },
+      "table": "proposed_source_package",
+      "values": {
+        "licence_id": null,
+        "load_context": {
+          "phase": "A",
+          "source_table": "address_points"
+        },
+        "loaded_at": "2026-07-15T00:00:00Z",
+        "package_checksum": "57a135a2d82e8182e1dd0eb00c7de1498064fe393d176255c745b7a528e376a6",
+        "package_name": "Phase A source package address_points",
+        "source_authority_id": "phase-a-authority-operational-control",
+        "source_package_id": "phase-a-source-package-address-points"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "source_package_id": "phase-a-source-package-address-record-events"
+      },
+      "table": "proposed_source_package",
+      "values": {
+        "licence_id": null,
+        "load_context": {
+          "phase": "A",
+          "source_table": "address_record_events"
+        },
+        "loaded_at": "2026-07-15T00:00:00Z",
+        "package_checksum": "46e3b51f4e774379862225da34a6e543eeb4f334e0c93d378c5ee95dafd9d66f",
+        "package_name": "Phase A source package address_record_events",
+        "source_authority_id": "phase-a-authority-operational-control",
+        "source_package_id": "phase-a-source-package-address-record-events"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "source_package_id": "phase-a-source-package-address-records"
+      },
+      "table": "proposed_source_package",
+      "values": {
+        "licence_id": null,
+        "load_context": {
+          "phase": "A",
+          "source_table": "address_records"
+        },
+        "loaded_at": "2026-07-15T00:00:00Z",
+        "package_checksum": "c464d3ea23f1a75592d1245ac2bff759917b8f704ea374afc2fd1e31618316b1",
+        "package_name": "Phase A source package address_records",
+        "source_authority_id": "phase-a-authority-operational-control",
+        "source_package_id": "phase-a-source-package-address-records"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "source_package_id": "phase-a-source-package-addresses"
+      },
+      "table": "proposed_source_package",
+      "values": {
+        "licence_id": null,
+        "load_context": {
+          "phase": "A",
+          "source_table": "addresses"
+        },
+        "loaded_at": "2026-07-15T00:00:00Z",
+        "package_checksum": "aff4417a8f1c0dc61697d8d81fada0ccaeb85f7aaa87f39cedae02ca4b5c4576",
+        "package_name": "Phase A source package addresses",
+        "source_authority_id": "phase-a-authority-operational-control",
+        "source_package_id": "phase-a-source-package-addresses"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "source_package_id": "phase-a-source-package-admin-units"
+      },
+      "table": "proposed_source_package",
+      "values": {
+        "licence_id": null,
+        "load_context": {
+          "phase": "A",
+          "source_table": "admin_units"
+        },
+        "loaded_at": "2026-07-15T00:00:00Z",
+        "package_checksum": "9eaf7f3c59593dcec1fba87d252a51ab7e379d26747c1eb01e6fb2746495eb6a",
+        "package_name": "Phase A source package admin_units",
+        "source_authority_id": "phase-a-authority-conditional-admin-reference",
+        "source_package_id": "phase-a-source-package-admin-units"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "source_package_id": "phase-a-source-package-audit-logs"
+      },
+      "table": "proposed_source_package",
+      "values": {
+        "licence_id": null,
+        "load_context": {
+          "phase": "A",
+          "source_table": "audit_logs"
+        },
+        "loaded_at": "2026-07-15T00:00:00Z",
+        "package_checksum": "80707cc8646d3a7fbb855155bf1e7cea08b54308d8b5b0b26f9e30ce9dbe41b0",
+        "package_name": "Phase A source package audit_logs",
+        "source_authority_id": "phase-a-authority-operational-control",
+        "source_package_id": "phase-a-source-package-audit-logs"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "source_package_id": "phase-a-source-package-auth-tokens"
+      },
+      "table": "proposed_source_package",
+      "values": {
+        "licence_id": null,
+        "load_context": {
+          "phase": "A",
+          "source_table": "auth_tokens"
+        },
+        "loaded_at": "2026-07-15T00:00:00Z",
+        "package_checksum": "a0683c0b04e7749a26d129cd49185ea4f5949d7c6ec9598f1adb23287eed83fb",
+        "package_name": "Phase A source package auth_tokens",
+        "source_authority_id": "phase-a-authority-operational-control",
+        "source_package_id": "phase-a-source-package-auth-tokens"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "source_package_id": "phase-a-source-package-buildings"
+      },
+      "table": "proposed_source_package",
+      "values": {
+        "licence_id": null,
+        "load_context": {
+          "phase": "A",
+          "source_table": "buildings"
+        },
+        "loaded_at": "2026-07-15T00:00:00Z",
+        "package_checksum": "6363f63a124ce5ca383929b7124a5c557fedbadc611a6bd4b7257e0d0fdfaa68",
+        "package_name": "Phase A source package buildings",
+        "source_authority_id": "phase-a-authority-operational-control",
+        "source_package_id": "phase-a-source-package-buildings"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "source_package_id": "phase-a-source-package-citizen-geotag-submissions"
+      },
+      "table": "proposed_source_package",
+      "values": {
+        "licence_id": null,
+        "load_context": {
+          "phase": "A",
+          "source_table": "citizen_geotag_submissions"
+        },
+        "loaded_at": "2026-07-15T00:00:00Z",
+        "package_checksum": "834e81cd335ef2fa58583af733fc4d34cccd19499f22a6e09cda53e373facb9c",
+        "package_name": "Phase A source package citizen_geotag_submissions",
+        "source_authority_id": "phase-a-authority-citizen-evidence",
+        "source_package_id": "phase-a-source-package-citizen-geotag-submissions"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "source_package_id": "phase-a-source-package-development-fixture-batches"
+      },
+      "table": "proposed_source_package",
+      "values": {
+        "licence_id": null,
+        "load_context": {
+          "phase": "A",
+          "source_table": "development_fixture_batches"
+        },
+        "loaded_at": "2026-07-15T00:00:00Z",
+        "package_checksum": "7d1fe805675d08d4715375e0bfd14355f666d1d13e6b844f9e934b53ffce550a",
+        "package_name": "Phase A source package development_fixture_batches",
+        "source_authority_id": "phase-a-authority-operational-control",
+        "source_package_id": "phase-a-source-package-development-fixture-batches"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "source_package_id": "phase-a-source-package-development-fixture-records"
+      },
+      "table": "proposed_source_package",
+      "values": {
+        "licence_id": null,
+        "load_context": {
+          "phase": "A",
+          "source_table": "development_fixture_records"
+        },
+        "loaded_at": "2026-07-15T00:00:00Z",
+        "package_checksum": "012c351f219ac61cc45318e0b564ab7eada0e71982eeeeedf011d31621344361",
+        "package_name": "Phase A source package development_fixture_records",
+        "source_authority_id": "phase-a-authority-operational-control",
+        "source_package_id": "phase-a-source-package-development-fixture-records"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "source_package_id": "phase-a-source-package-field-assignments"
+      },
+      "table": "proposed_source_package",
+      "values": {
+        "licence_id": null,
+        "load_context": {
+          "phase": "A",
+          "source_table": "field_assignments"
+        },
+        "loaded_at": "2026-07-15T00:00:00Z",
+        "package_checksum": "744c3a1696d91d1c1925cbb63f2dab07a7515bbe1ec65e369a0fb9ec2463981f",
+        "package_name": "Phase A source package field_assignments",
+        "source_authority_id": "phase-a-authority-operational-control",
+        "source_package_id": "phase-a-source-package-field-assignments"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "source_package_id": "phase-a-source-package-field-submissions"
+      },
+      "table": "proposed_source_package",
+      "values": {
+        "licence_id": null,
+        "load_context": {
+          "phase": "A",
+          "source_table": "field_submissions"
+        },
+        "loaded_at": "2026-07-15T00:00:00Z",
+        "package_checksum": "cda74ed69df1a86a31454303ef0ed8ee041388976a312e7c4ec5cdb0e9b224d2",
+        "package_name": "Phase A source package field_submissions",
+        "source_authority_id": "phase-a-authority-operational-control",
+        "source_package_id": "phase-a-source-package-field-submissions"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "source_package_id": "phase-a-source-package-import-jobs"
+      },
+      "table": "proposed_source_package",
+      "values": {
+        "licence_id": null,
+        "load_context": {
+          "phase": "A",
+          "source_table": "import_jobs"
+        },
+        "loaded_at": "2026-07-15T00:00:00Z",
+        "package_checksum": "feb33fd4f933e8fdd36ee37a2148762fddf103be88e0792917d29a7b896beee4",
+        "package_name": "Phase A source package import_jobs",
+        "source_authority_id": "phase-a-authority-operational-control",
+        "source_package_id": "phase-a-source-package-import-jobs"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "source_package_id": "phase-a-source-package-import-rows"
+      },
+      "table": "proposed_source_package",
+      "values": {
+        "licence_id": null,
+        "load_context": {
+          "phase": "A",
+          "source_table": "import_rows"
+        },
+        "loaded_at": "2026-07-15T00:00:00Z",
+        "package_checksum": "027d408ca06e0d886a789228ad4b0aeda05a74826b5dea13e34fdf1be8a8ebc2",
+        "package_name": "Phase A source package import_rows",
+        "source_authority_id": "phase-a-authority-operational-control",
+        "source_package_id": "phase-a-source-package-import-rows"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "source_package_id": "phase-a-source-package-provinces"
+      },
+      "table": "proposed_source_package",
+      "values": {
+        "licence_id": null,
+        "load_context": {
+          "phase": "A",
+          "source_table": "provinces"
+        },
+        "loaded_at": "2026-07-15T00:00:00Z",
+        "package_checksum": "b97c22f82fa5231aefa59dc9010724c502d70c3bd812d0bf627eb1cbf1103f37",
+        "package_name": "Phase A source package provinces",
+        "source_authority_id": "phase-a-authority-conditional-admin-reference",
+        "source_package_id": "phase-a-source-package-provinces"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "source_package_id": "phase-a-source-package-publication-pack-addresses"
+      },
+      "table": "proposed_source_package",
+      "values": {
+        "licence_id": null,
+        "load_context": {
+          "phase": "A",
+          "source_table": "publication_pack_addresses"
+        },
+        "loaded_at": "2026-07-15T00:00:00Z",
+        "package_checksum": "826d89950e30e64f2d1a4ab5693f86e777f89980b6a38f6fb76fd28794dfd314",
+        "package_name": "Phase A source package publication_pack_addresses",
+        "source_authority_id": "phase-a-authority-operational-control",
+        "source_package_id": "phase-a-source-package-publication-pack-addresses"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "source_package_id": "phase-a-source-package-publication-packs"
+      },
+      "table": "proposed_source_package",
+      "values": {
+        "licence_id": null,
+        "load_context": {
+          "phase": "A",
+          "source_table": "publication_packs"
+        },
+        "loaded_at": "2026-07-15T00:00:00Z",
+        "package_checksum": "f5869c45d85a1a460b6d31273b4229580265d473a397bf505c6c809f3155f242",
+        "package_name": "Phase A source package publication_packs",
+        "source_authority_id": "phase-a-authority-operational-control",
+        "source_package_id": "phase-a-source-package-publication-packs"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "source_package_id": "phase-a-source-package-reference-data-load-history"
+      },
+      "table": "proposed_source_package",
+      "values": {
+        "licence_id": null,
+        "load_context": {
+          "phase": "A",
+          "source_table": "reference_data_load_history"
+        },
+        "loaded_at": "2026-07-15T00:00:00Z",
+        "package_checksum": "c332cd8e5e9683aafefa2d25c6aa0b92464525d1cdfc8009cf7f31c360c41265",
+        "package_name": "Phase A source package reference_data_load_history",
+        "source_authority_id": "phase-a-authority-conditional-admin-reference",
+        "source_package_id": "phase-a-source-package-reference-data-load-history"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "source_package_id": "phase-a-source-package-reference-data-loads"
+      },
+      "table": "proposed_source_package",
+      "values": {
+        "licence_id": null,
+        "load_context": {
+          "phase": "A",
+          "source_table": "reference_data_loads"
+        },
+        "loaded_at": "2026-07-15T00:00:00Z",
+        "package_checksum": "ac26b119b6281245708b0b3ceacaf79cf4c27798ecddedb6f4a54bbb550811e7",
+        "package_name": "Phase A source package reference_data_loads",
+        "source_authority_id": "phase-a-authority-conditional-admin-reference",
+        "source_package_id": "phase-a-source-package-reference-data-loads"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "source_package_id": "phase-a-source-package-roads"
+      },
+      "table": "proposed_source_package",
+      "values": {
+        "licence_id": null,
+        "load_context": {
+          "phase": "A",
+          "source_table": "roads"
+        },
+        "loaded_at": "2026-07-15T00:00:00Z",
+        "package_checksum": "d6b0544675c8fea5eaeea3fe9d90f5cc0d75e67e52d410239b36ecb704f4a04c",
+        "package_name": "Phase A source package roads",
+        "source_authority_id": "phase-a-authority-operational-control",
+        "source_package_id": "phase-a-source-package-roads"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "source_package_id": "phase-a-source-package-schema-migrations"
+      },
+      "table": "proposed_source_package",
+      "values": {
+        "licence_id": null,
+        "load_context": {
+          "phase": "A",
+          "source_table": "schema_migrations"
+        },
+        "loaded_at": "2026-07-15T00:00:00Z",
+        "package_checksum": "57a5c3c14878ae8efeb79b15c7569067e743daf91ae55b44fe97caed392c4a71",
+        "package_name": "Phase A source package schema_migrations",
+        "source_authority_id": "phase-a-authority-operational-control",
+        "source_package_id": "phase-a-source-package-schema-migrations"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "source_package_id": "phase-a-source-package-territories"
+      },
+      "table": "proposed_source_package",
+      "values": {
+        "licence_id": null,
+        "load_context": {
+          "phase": "A",
+          "source_table": "territories"
+        },
+        "loaded_at": "2026-07-15T00:00:00Z",
+        "package_checksum": "f2655dce2f0caecf771b780b2131ea6d9db7f25657d8b159965d6281420657ac",
+        "package_name": "Phase A source package territories",
+        "source_authority_id": "phase-a-authority-operational-control",
+        "source_package_id": "phase-a-source-package-territories"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "source_package_id": "phase-a-source-package-users"
+      },
+      "table": "proposed_source_package",
+      "values": {
+        "licence_id": null,
+        "load_context": {
+          "phase": "A",
+          "source_table": "users"
+        },
+        "loaded_at": "2026-07-15T00:00:00Z",
+        "package_checksum": "ff0446ea944f2737741de5d7f47ac0cd32355c691e8878d064aca3f7563bad61",
+        "package_name": "Phase A source package users",
+        "source_authority_id": "phase-a-authority-operational-control",
+        "source_package_id": "phase-a-source-package-users"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "source_record_id": "phase-a-source-record-address-corrections-001"
+      },
+      "table": "proposed_source_record",
+      "values": {
+        "raw_payload_classification": "government-internal",
+        "raw_payload_hash": "9b67566b8a0a422c98feb716848b1f0ce3151a91e108f60d7356f81acf8cebae",
+        "recorded_at": "2026-07-15T00:05:00Z",
+        "source_key": "address_corrections:phase-a-address-corrections-001",
+        "source_package_id": "phase-a-source-package-address-corrections",
+        "source_record_id": "phase-a-source-record-address-corrections-001"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "source_record_id": "phase-a-source-record-address-points-001"
+      },
+      "table": "proposed_source_record",
+      "values": {
+        "raw_payload_classification": "government-internal",
+        "raw_payload_hash": "57a135a2d82e8182e1dd0eb00c7de1498064fe393d176255c745b7a528e376a6",
+        "recorded_at": "2026-07-15T00:00:00Z",
+        "source_key": "address_points:phase-a-address-points-001",
+        "source_package_id": "phase-a-source-package-address-points",
+        "source_record_id": "phase-a-source-record-address-points-001"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "source_record_id": "phase-a-source-record-address-record-events-001"
+      },
+      "table": "proposed_source_record",
+      "values": {
+        "raw_payload_classification": "government-internal",
+        "raw_payload_hash": "46e3b51f4e774379862225da34a6e543eeb4f334e0c93d378c5ee95dafd9d66f",
+        "recorded_at": "2026-07-15T00:00:00Z",
+        "source_key": "address_record_events:phase-a-address-record-events-001",
+        "source_package_id": "phase-a-source-package-address-record-events",
+        "source_record_id": "phase-a-source-record-address-record-events-001"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "source_record_id": "phase-a-source-record-address-records-001"
+      },
+      "table": "proposed_source_record",
+      "values": {
+        "raw_payload_classification": "government-internal",
+        "raw_payload_hash": "c464d3ea23f1a75592d1245ac2bff759917b8f704ea374afc2fd1e31618316b1",
+        "recorded_at": "2026-07-15T00:00:00Z",
+        "source_key": "address_records:phase-a-address-records-001",
+        "source_package_id": "phase-a-source-package-address-records",
+        "source_record_id": "phase-a-source-record-address-records-001"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "source_record_id": "phase-a-source-record-addresses-001"
+      },
+      "table": "proposed_source_record",
+      "values": {
+        "raw_payload_classification": "government-internal",
+        "raw_payload_hash": "aff4417a8f1c0dc61697d8d81fada0ccaeb85f7aaa87f39cedae02ca4b5c4576",
+        "recorded_at": "2026-07-15T00:00:00Z",
+        "source_key": "addresses:phase-a-addresses-001",
+        "source_package_id": "phase-a-source-package-addresses",
+        "source_record_id": "phase-a-source-record-addresses-001"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "source_record_id": "phase-a-source-record-admin-units-001"
+      },
+      "table": "proposed_source_record",
+      "values": {
+        "raw_payload_classification": "government-internal",
+        "raw_payload_hash": "9eaf7f3c59593dcec1fba87d252a51ab7e379d26747c1eb01e6fb2746495eb6a",
+        "recorded_at": "2026-07-15T00:00:00Z",
+        "source_key": "admin_units:phase-a-admin-units-001",
+        "source_package_id": "phase-a-source-package-admin-units",
+        "source_record_id": "phase-a-source-record-admin-units-001"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "source_record_id": "phase-a-source-record-audit-logs-001"
+      },
+      "table": "proposed_source_record",
+      "values": {
+        "raw_payload_classification": "government-internal",
+        "raw_payload_hash": "80707cc8646d3a7fbb855155bf1e7cea08b54308d8b5b0b26f9e30ce9dbe41b0",
+        "recorded_at": "2026-07-15T00:00:00Z",
+        "source_key": "audit_logs:phase-a-audit-logs-001",
+        "source_package_id": "phase-a-source-package-audit-logs",
+        "source_record_id": "phase-a-source-record-audit-logs-001"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "source_record_id": "phase-a-source-record-auth-tokens-001"
+      },
+      "table": "proposed_source_record",
+      "values": {
+        "raw_payload_classification": "restricted",
+        "raw_payload_hash": "a0683c0b04e7749a26d129cd49185ea4f5949d7c6ec9598f1adb23287eed83fb",
+        "recorded_at": "2026-07-15T00:00:00Z",
+        "source_key": "auth_tokens:phase-a-auth-tokens-001",
+        "source_package_id": "phase-a-source-package-auth-tokens",
+        "source_record_id": "phase-a-source-record-auth-tokens-001"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "source_record_id": "phase-a-source-record-buildings-001"
+      },
+      "table": "proposed_source_record",
+      "values": {
+        "raw_payload_classification": "government-internal",
+        "raw_payload_hash": "6363f63a124ce5ca383929b7124a5c557fedbadc611a6bd4b7257e0d0fdfaa68",
+        "recorded_at": "2026-07-15T00:00:00Z",
+        "source_key": "buildings:phase-a-buildings-001",
+        "source_package_id": "phase-a-source-package-buildings",
+        "source_record_id": "phase-a-source-record-buildings-001"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "source_record_id": "phase-a-source-record-citizen-geotag-submissions-001"
+      },
+      "table": "proposed_source_record",
+      "values": {
+        "raw_payload_classification": "restricted",
+        "raw_payload_hash": "834e81cd335ef2fa58583af733fc4d34cccd19499f22a6e09cda53e373facb9c",
+        "recorded_at": "2026-07-15T00:00:00Z",
+        "source_key": "citizen_geotag_submissions:phase-a-citizen-geotag-submissions-001",
+        "source_package_id": "phase-a-source-package-citizen-geotag-submissions",
+        "source_record_id": "phase-a-source-record-citizen-geotag-submissions-001"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "source_record_id": "phase-a-source-record-development-fixture-batches-001"
+      },
+      "table": "proposed_source_record",
+      "values": {
+        "raw_payload_classification": "government-internal",
+        "raw_payload_hash": "7d1fe805675d08d4715375e0bfd14355f666d1d13e6b844f9e934b53ffce550a",
+        "recorded_at": "2026-07-15T00:00:00Z",
+        "source_key": "development_fixture_batches:phase-a-development-fixture-batches-001",
+        "source_package_id": "phase-a-source-package-development-fixture-batches",
+        "source_record_id": "phase-a-source-record-development-fixture-batches-001"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "source_record_id": "phase-a-source-record-development-fixture-records-001"
+      },
+      "table": "proposed_source_record",
+      "values": {
+        "raw_payload_classification": "government-internal",
+        "raw_payload_hash": "012c351f219ac61cc45318e0b564ab7eada0e71982eeeeedf011d31621344361",
+        "recorded_at": "2026-07-15T00:00:00Z",
+        "source_key": "development_fixture_records:phase-a-development-fixture-records-001",
+        "source_package_id": "phase-a-source-package-development-fixture-records",
+        "source_record_id": "phase-a-source-record-development-fixture-records-001"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "source_record_id": "phase-a-source-record-field-assignments-001"
+      },
+      "table": "proposed_source_record",
+      "values": {
+        "raw_payload_classification": "government-internal",
+        "raw_payload_hash": "744c3a1696d91d1c1925cbb63f2dab07a7515bbe1ec65e369a0fb9ec2463981f",
+        "recorded_at": "2026-07-15T00:00:00Z",
+        "source_key": "field_assignments:phase-a-field-assignments-001",
+        "source_package_id": "phase-a-source-package-field-assignments",
+        "source_record_id": "phase-a-source-record-field-assignments-001"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "source_record_id": "phase-a-source-record-field-submissions-001"
+      },
+      "table": "proposed_source_record",
+      "values": {
+        "raw_payload_classification": "government-internal",
+        "raw_payload_hash": "cda74ed69df1a86a31454303ef0ed8ee041388976a312e7c4ec5cdb0e9b224d2",
+        "recorded_at": "2026-07-15T00:00:00Z",
+        "source_key": "field_submissions:phase-a-field-submissions-001",
+        "source_package_id": "phase-a-source-package-field-submissions",
+        "source_record_id": "phase-a-source-record-field-submissions-001"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "source_record_id": "phase-a-source-record-import-jobs-001"
+      },
+      "table": "proposed_source_record",
+      "values": {
+        "raw_payload_classification": "government-internal",
+        "raw_payload_hash": "feb33fd4f933e8fdd36ee37a2148762fddf103be88e0792917d29a7b896beee4",
+        "recorded_at": "2026-07-15T00:00:00Z",
+        "source_key": "import_jobs:phase-a-import-jobs-001",
+        "source_package_id": "phase-a-source-package-import-jobs",
+        "source_record_id": "phase-a-source-record-import-jobs-001"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "source_record_id": "phase-a-source-record-import-rows-001"
+      },
+      "table": "proposed_source_record",
+      "values": {
+        "raw_payload_classification": "government-internal",
+        "raw_payload_hash": "027d408ca06e0d886a789228ad4b0aeda05a74826b5dea13e34fdf1be8a8ebc2",
+        "recorded_at": "2026-07-15T00:00:00Z",
+        "source_key": "import_rows:phase-a-import-rows-001",
+        "source_package_id": "phase-a-source-package-import-rows",
+        "source_record_id": "phase-a-source-record-import-rows-001"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "source_record_id": "phase-a-source-record-provinces-001"
+      },
+      "table": "proposed_source_record",
+      "values": {
+        "raw_payload_classification": "government-internal",
+        "raw_payload_hash": "b97c22f82fa5231aefa59dc9010724c502d70c3bd812d0bf627eb1cbf1103f37",
+        "recorded_at": "2026-07-15T00:00:00Z",
+        "source_key": "provinces:phase-a-provinces-001",
+        "source_package_id": "phase-a-source-package-provinces",
+        "source_record_id": "phase-a-source-record-provinces-001"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "source_record_id": "phase-a-source-record-publication-pack-addresses-001"
+      },
+      "table": "proposed_source_record",
+      "values": {
+        "raw_payload_classification": "government-internal",
+        "raw_payload_hash": "826d89950e30e64f2d1a4ab5693f86e777f89980b6a38f6fb76fd28794dfd314",
+        "recorded_at": "2026-07-15T00:00:00Z",
+        "source_key": "publication_pack_addresses:phase-a-publication-pack-addresses-001",
+        "source_package_id": "phase-a-source-package-publication-pack-addresses",
+        "source_record_id": "phase-a-source-record-publication-pack-addresses-001"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "source_record_id": "phase-a-source-record-publication-packs-001"
+      },
+      "table": "proposed_source_record",
+      "values": {
+        "raw_payload_classification": "government-internal",
+        "raw_payload_hash": "f5869c45d85a1a460b6d31273b4229580265d473a397bf505c6c809f3155f242",
+        "recorded_at": "2026-07-15T00:00:00Z",
+        "source_key": "publication_packs:phase-a-publication-packs-001",
+        "source_package_id": "phase-a-source-package-publication-packs",
+        "source_record_id": "phase-a-source-record-publication-packs-001"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "source_record_id": "phase-a-source-record-reference-data-load-history-001"
+      },
+      "table": "proposed_source_record",
+      "values": {
+        "raw_payload_classification": "government-internal",
+        "raw_payload_hash": "c332cd8e5e9683aafefa2d25c6aa0b92464525d1cdfc8009cf7f31c360c41265",
+        "recorded_at": "2026-07-15T00:00:00Z",
+        "source_key": "reference_data_load_history:phase-a-reference-data-load-history-001",
+        "source_package_id": "phase-a-source-package-reference-data-load-history",
+        "source_record_id": "phase-a-source-record-reference-data-load-history-001"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "source_record_id": "phase-a-source-record-reference-data-loads-001"
+      },
+      "table": "proposed_source_record",
+      "values": {
+        "raw_payload_classification": "government-internal",
+        "raw_payload_hash": "ac26b119b6281245708b0b3ceacaf79cf4c27798ecddedb6f4a54bbb550811e7",
+        "recorded_at": "2026-07-15T00:00:00Z",
+        "source_key": "reference_data_loads:phase-a-reference-data-loads-001",
+        "source_package_id": "phase-a-source-package-reference-data-loads",
+        "source_record_id": "phase-a-source-record-reference-data-loads-001"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "source_record_id": "phase-a-source-record-roads-001"
+      },
+      "table": "proposed_source_record",
+      "values": {
+        "raw_payload_classification": "government-internal",
+        "raw_payload_hash": "d6b0544675c8fea5eaeea3fe9d90f5cc0d75e67e52d410239b36ecb704f4a04c",
+        "recorded_at": "2026-07-15T00:00:00Z",
+        "source_key": "roads:phase-a-roads-001",
+        "source_package_id": "phase-a-source-package-roads",
+        "source_record_id": "phase-a-source-record-roads-001"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "source_record_id": "phase-a-source-record-schema-migrations-001"
+      },
+      "table": "proposed_source_record",
+      "values": {
+        "raw_payload_classification": "government-internal",
+        "raw_payload_hash": "57a5c3c14878ae8efeb79b15c7569067e743daf91ae55b44fe97caed392c4a71",
+        "recorded_at": "2026-07-15T00:00:00Z",
+        "source_key": "schema_migrations:phase-a-schema-migrations-001",
+        "source_package_id": "phase-a-source-package-schema-migrations",
+        "source_record_id": "phase-a-source-record-schema-migrations-001"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "source_record_id": "phase-a-source-record-territories-001"
+      },
+      "table": "proposed_source_record",
+      "values": {
+        "raw_payload_classification": "government-internal",
+        "raw_payload_hash": "f2655dce2f0caecf771b780b2131ea6d9db7f25657d8b159965d6281420657ac",
+        "recorded_at": "2026-07-15T00:00:00Z",
+        "source_key": "territories:phase-a-territories-001",
+        "source_package_id": "phase-a-source-package-territories",
+        "source_record_id": "phase-a-source-record-territories-001"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "source_record_id": "phase-a-source-record-users-001"
+      },
+      "table": "proposed_source_record",
+      "values": {
+        "raw_payload_classification": "restricted",
+        "raw_payload_hash": "ff0446ea944f2737741de5d7f47ac0cd32355c691e8878d064aca3f7563bad61",
+        "recorded_at": "2026-07-15T00:00:00Z",
+        "source_key": "users:phase-a-users-001",
+        "source_package_id": "phase-a-source-package-users",
+        "source_record_id": "phase-a-source-record-users-001"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "subject_id": "phase-a-subject-phase-a-location-address-reference"
+      },
+      "table": "proposed_registry_subject",
+      "values": {
+        "created_at": "2026-07-15T00:00:00Z",
+        "delete_policy": "retire-only",
+        "native_id": "phase-a-location-address-reference",
+        "retired_at": null,
+        "subject_entity": "location_record",
+        "subject_id": "phase-a-subject-phase-a-location-address-reference",
+        "subject_state": "active"
+      }
+    },
+    {
+      "conditions": {
+        "non_official": true,
+        "phase": "A2/A3 real execution"
+      },
+      "expected_absent_fields": [],
+      "primary_key": {
+        "subject_id": "phase-a-subject-phase-a-location-geotag"
+      },
+      "table": "proposed_registry_subject",
+      "values": {
+        "created_at": "2026-07-15T00:00:00Z",
+        "delete_policy": "retire-only",
+        "native_id": "phase-a-location-geotag",
+        "retired_at": null,
+        "subject_entity": "location_record",
+        "subject_id": "phase-a-subject-phase-a-location-geotag",
+        "subject_state": "active"
+      }
+    }
+  ],
+  "fixture_authority": "SDA Review 11 Phase A execution correction expected-target authority \u2014 comparator-only independently reviewed rows",
+  "review_status": "phase-a-execution-correction-independent-expected-target-fixture"
+}

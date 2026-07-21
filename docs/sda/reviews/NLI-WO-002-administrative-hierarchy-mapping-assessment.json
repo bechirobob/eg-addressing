@@ -1,0 +1,1 @@
+{"reviewed_head":"2a14a74e472eda04a06f89f754a145b4450a77f9","decision":"CORRECTION_REQUIRED","findings":["C38","C39","C40"],"scope":"mapping-only","closed_gates":["reviewer oracle","administrative implementation","broad Phase A","F02","F14","Review 12","Phase B","publication","deployment","merge"]}

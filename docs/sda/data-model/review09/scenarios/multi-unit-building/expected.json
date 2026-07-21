@@ -1,0 +1,83 @@
+{
+  "expected": {
+    "canonical": [
+      {
+        "canonical_state": "active",
+        "entity_id": "multi-unit-building-building-1",
+        "entity_type": "building",
+        "label": "Malabo Mixed-Use Building"
+      },
+      {
+        "canonical_state": "active",
+        "entity_id": "multi-unit-building-unit-2",
+        "entity_type": "unit",
+        "label": "Unit 2A"
+      }
+    ],
+    "effective_as_of": [
+      {
+        "entity_id": "multi-unit-building-building-1",
+        "label": "Malabo Mixed-Use Building"
+      },
+      {
+        "entity_id": "multi-unit-building-unit-2",
+        "label": "Unit 2A"
+      }
+    ],
+    "expected_absences": {},
+    "operator_projection": [
+      {
+        "attributes": {
+          "units": "2"
+        },
+        "canonical_state": "active",
+        "entity_id": "multi-unit-building-building-1",
+        "entity_type": "building",
+        "label": "Malabo Mixed-Use Building"
+      },
+      {
+        "attributes": {
+          "parent": "Malabo Mixed-Use Building"
+        },
+        "canonical_state": "active",
+        "entity_id": "multi-unit-building-unit-2",
+        "entity_type": "unit",
+        "label": "Unit 2A"
+      }
+    ],
+    "public_release": [
+      {
+        "entity_id": "multi-unit-building-building-1",
+        "label": "Malabo Mixed-Use Building"
+      }
+    ],
+    "recorded_as_of": [
+      {
+        "entity_id": "multi-unit-building-building-1",
+        "label": "Malabo Mixed-Use Building"
+      },
+      {
+        "entity_id": "multi-unit-building-unit-2",
+        "label": "Unit 2A"
+      }
+    ]
+  },
+  "expected_absence_queries": [
+    {
+      "name": "no-unreleased-public-rows",
+      "params": [
+        "multi-unit-building"
+      ],
+      "sql": "SELECT entity_id FROM r10_scenario_entity WHERE scenario=%s AND public_visible=false AND public_release_date IS NOT NULL"
+    }
+  ],
+  "query_dates": {
+    "effective": "2026-07-14",
+    "public_release": "2026-07-14",
+    "recorded": "2026-07-14T00:00:00Z"
+  },
+  "review_owner": "SDA scenario expected-result owner",
+  "review_status": "approved-review10-scenario-expected-result",
+  "scenario": "multi-unit-building",
+  "version": "review10"
+}

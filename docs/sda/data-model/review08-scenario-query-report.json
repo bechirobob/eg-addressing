@@ -1,0 +1,2857 @@
+{
+  "scenarios": {
+    "administrative-boundary-change": {
+      "assertions": {
+        "F10-administrative-boundary-change-entities-and-identifiers": {
+          "evidence_source": "review08-disposable-target-db-query",
+          "finding": "F10",
+          "status": "passed"
+        },
+        "F10-administrative-boundary-change-evidence-and-authority": {
+          "evidence_source": "review08-disposable-target-db-query",
+          "finding": "F10",
+          "status": "passed"
+        },
+        "F10-administrative-boundary-change-geometry-and-provenance": {
+          "evidence_source": "review08-disposable-target-db-query",
+          "finding": "F10",
+          "status": "passed"
+        },
+        "F10-administrative-boundary-change-historical-output": {
+          "evidence_source": "review08-disposable-target-db-query",
+          "finding": "F10",
+          "status": "passed"
+        },
+        "F10-administrative-boundary-change-lifecycle-timeline": {
+          "evidence_source": "review08-disposable-target-db-query",
+          "finding": "F10",
+          "status": "passed"
+        },
+        "F10-administrative-boundary-change-operator-projection": {
+          "evidence_source": "review08-disposable-target-db-query",
+          "finding": "F10",
+          "status": "passed"
+        },
+        "F10-administrative-boundary-change-public-projection": {
+          "evidence_source": "review08-disposable-target-db-query",
+          "finding": "F10",
+          "status": "passed"
+        },
+        "F10-administrative-boundary-change-publication-release": {
+          "evidence_source": "review08-disposable-target-db-query",
+          "finding": "F10",
+          "status": "passed"
+        },
+        "F10-administrative-boundary-change-versions-and-relationships": {
+          "evidence_source": "review08-disposable-target-db-query",
+          "finding": "F10",
+          "status": "passed"
+        }
+      },
+      "entity_counts": {
+        "administrative_code_history": 1,
+        "administrative_unit": 1,
+        "administrative_unit_version": 2,
+        "building": 1,
+        "building_primary_entrance": 1,
+        "correction_case": 1,
+        "country": 1,
+        "decision_event": 1,
+        "dispute_case": 1,
+        "entrance": 1,
+        "evidence_object": 1,
+        "field_assignment": 1,
+        "field_observation": 1,
+        "geometry_observation": 1,
+        "geometry_quality_assessment": 1,
+        "geometry_transformation": 1,
+        "geometry_version": 1,
+        "intake_case": 1,
+        "landmark": 1,
+        "legacy_crosswalk": 1,
+        "licence": 1,
+        "locality": 1,
+        "location_record": 1,
+        "location_record_assertion": 1,
+        "location_record_object_link": 1,
+        "location_record_relationship": 1,
+        "location_record_version": 1,
+        "migration_exception": 1,
+        "name_record": 1,
+        "non_building_object": 1,
+        "operational_area": 1,
+        "operational_area_coverage": 1,
+        "parcel_reference": 1,
+        "partner_projection": 1,
+        "public_code_alias": 1,
+        "publication_release": 1,
+        "publication_release_item": 1,
+        "registry_subject": 1,
+        "road": 1,
+        "road_segment": 1,
+        "source_authority": 1,
+        "source_package": 1,
+        "source_payload_archive": 1,
+        "source_record": 1,
+        "unit": 1
+      },
+      "entity_ids": {
+        "administrative_code_history": [
+          "administrative-boundary-change-administrative_code_history-07"
+        ],
+        "administrative_unit": [
+          "administrative-boundary-change-administrative_unit-07"
+        ],
+        "administrative_unit_version": [
+          "administrative-boundary-change-admin-version-new",
+          "administrative-boundary-change-admin-version-old"
+        ],
+        "building": [
+          "administrative-boundary-change-building-07"
+        ],
+        "building_primary_entrance": [
+          "administrative-boundary-change-building_primary_entrance-07"
+        ],
+        "correction_case": [
+          "administrative-boundary-change-correction_case-07"
+        ],
+        "country": [
+          "administrative-boundary-change-country-07"
+        ],
+        "decision_event": [
+          "administrative-boundary-change-decision_event-07"
+        ],
+        "dispute_case": [
+          "administrative-boundary-change-dispute_case-07"
+        ],
+        "entrance": [
+          "administrative-boundary-change-entrance-07"
+        ],
+        "evidence_object": [
+          "administrative-boundary-change-evidence_object-07"
+        ],
+        "field_assignment": [
+          "administrative-boundary-change-field_assignment-07"
+        ],
+        "field_observation": [
+          "administrative-boundary-change-field_observation-07"
+        ],
+        "geometry_observation": [
+          "administrative-boundary-change-geometry_observation-07"
+        ],
+        "geometry_quality_assessment": [
+          "administrative-boundary-change-geometry_quality_assessment-07"
+        ],
+        "geometry_transformation": [
+          "administrative-boundary-change-geometry_transformation-07"
+        ],
+        "geometry_version": [
+          "administrative-boundary-change-geometry_version-07"
+        ],
+        "intake_case": [
+          "administrative-boundary-change-intake_case-07"
+        ],
+        "landmark": [
+          "administrative-boundary-change-landmark-07"
+        ],
+        "legacy_crosswalk": [
+          "administrative-boundary-change-legacy_crosswalk-07"
+        ],
+        "licence": [
+          "administrative-boundary-change-licence-07"
+        ],
+        "locality": [
+          "administrative-boundary-change-locality-07"
+        ],
+        "location_record": [
+          "administrative-boundary-change-location_record-07"
+        ],
+        "location_record_assertion": [
+          "administrative-boundary-change-location_record_assertion-07"
+        ],
+        "location_record_object_link": [
+          "administrative-boundary-change-location_record_object_link-07"
+        ],
+        "location_record_relationship": [
+          "administrative-boundary-change-location_record_relationship-07"
+        ],
+        "location_record_version": [
+          "administrative-boundary-change-location_record_version-07"
+        ],
+        "migration_exception": [
+          "administrative-boundary-change-migration_exception-07"
+        ],
+        "name_record": [
+          "administrative-boundary-change-name_record-07"
+        ],
+        "non_building_object": [
+          "administrative-boundary-change-non_building_object-07"
+        ],
+        "operational_area": [
+          "administrative-boundary-change-operational_area-07"
+        ],
+        "operational_area_coverage": [
+          "administrative-boundary-change-operational_area_coverage-07"
+        ],
+        "parcel_reference": [
+          "administrative-boundary-change-parcel_reference-07"
+        ],
+        "partner_projection": [
+          "administrative-boundary-change-partner_projection-07"
+        ],
+        "public_code_alias": [
+          "administrative-boundary-change-public_code_alias-07"
+        ],
+        "publication_release": [
+          "administrative-boundary-change-publication_release-07"
+        ],
+        "publication_release_item": [
+          "administrative-boundary-change-publication_release_item-07"
+        ],
+        "registry_subject": [
+          "administrative-boundary-change-registry_subject-07"
+        ],
+        "road": [
+          "administrative-boundary-change-road-07"
+        ],
+        "road_segment": [
+          "administrative-boundary-change-road_segment-07"
+        ],
+        "source_authority": [
+          "administrative-boundary-change-source_authority-07"
+        ],
+        "source_package": [
+          "administrative-boundary-change-source_package-07"
+        ],
+        "source_payload_archive": [
+          "administrative-boundary-change-source_payload_archive-07"
+        ],
+        "source_record": [
+          "administrative-boundary-change-source_record-07"
+        ],
+        "unit": [
+          "administrative-boundary-change-unit-07"
+        ]
+      },
+      "expected_fixture_rows": 46,
+      "failed_assertions": [],
+      "geometry_and_provenance": {
+        "authority_decisions": [
+          {
+            "actor_id": "decision_event-actor_id-001",
+            "decision_event_id": "administrative-boundary-change-decision_event-07",
+            "decision_outcome": "approved",
+            "decision_type": "approve-geometry",
+            "details_json": "{'institution_id': 'national-gis-authority', 'permission_key': 'geometry.promote', 'territorial_scope': 'national-gis-authority', 'evidence_object_id': 'administrative-boundary-change-evidence_object-07', 'source_observation_id': 'administrative-boundary-change-geometry_observation-07', 'quality_authority_actor_id': 'decision_event-actor_id-001'}"
+          }
+        ],
+        "evidence_objects": [
+          {
+            "classification": "government-internal",
+            "content_hash": "evidence_object-content_hash-value",
+            "evidence_object_id": "administrative-boundary-change-evidence_object-07"
+          }
+        ],
+        "geometry_versions": [
+          {
+            "geometry_role": "admin-boundary",
+            "geometry_version_id": "administrative-boundary-change-geometry_version-07",
+            "promotion_authority_scope": "national-gis-authority",
+            "promotion_decision_event_id": "administrative-boundary-change-decision_event-07",
+            "promotion_evidence_object_id": "administrative-boundary-change-evidence_object-07",
+            "quality_state": "accepted-canonical",
+            "validated_by_actor_id": "decision_event-actor_id-001"
+          }
+        ],
+        "observations": [
+          {
+            "capture_method": "browser-gps",
+            "geometry_observation_id": "administrative-boundary-change-geometry_observation-07",
+            "geometry_role": "admin-boundary"
+          }
+        ]
+      },
+      "historical_output": {
+        "admin_effective_versions": [
+          {
+            "admin_level": "country",
+            "administrative_unit_version_id": "administrative-boundary-change-admin-version-new",
+            "effective_from": "2026-07-01 00:00:00+00:00",
+            "effective_to": null,
+            "lifecycle_state": "official",
+            "recorded_at": "2026-07-14 00:00:00+00:00"
+          },
+          {
+            "admin_level": "country",
+            "administrative_unit_version_id": "administrative-boundary-change-admin-version-old",
+            "effective_from": "2020-01-01 00:00:00+00:00",
+            "effective_to": "2026-07-01 00:00:00+00:00",
+            "lifecycle_state": "historical",
+            "recorded_at": "2026-07-14 00:00:00+00:00"
+          }
+        ],
+        "location_lifecycle_timeline": [
+          {
+            "effective_from": "2026-07-14 00:00:00+00:00",
+            "effective_to": null,
+            "lifecycle_state": "active",
+            "location_record_version_id": "administrative-boundary-change-location_record_version-07",
+            "recorded_at": "2026-07-14 00:00:00+00:00",
+            "recorded_to": null
+          }
+        ],
+        "publication_versions": [
+          {
+            "location_record_version_id": "administrative-boundary-change-location_record_version-07",
+            "projection_state": "included",
+            "published_label": "publication_release_item-published_label-value"
+          }
+        ]
+      },
+      "operator_projection": {
+        "decision_count": 1,
+        "evidence_count": 1,
+        "geometry": [
+          {
+            "geometry_role": "admin-boundary",
+            "geometry_version_id": "administrative-boundary-change-geometry_version-07",
+            "promotion_decision_event_id": "administrative-boundary-change-decision_event-07",
+            "promotion_evidence_object_id": "administrative-boundary-change-evidence_object-07",
+            "quality_state": "accepted-canonical"
+          }
+        ],
+        "location_versions": [
+          {
+            "effective_from": "2026-07-14 00:00:00+00:00",
+            "effective_to": null,
+            "lifecycle_state": "active",
+            "location_record_id": "administrative-boundary-change-location_record-07",
+            "location_record_version_id": "administrative-boundary-change-location_record_version-07",
+            "recorded_at": "2026-07-14 00:00:00+00:00",
+            "version_number": "7"
+          }
+        ],
+        "names": [
+          {
+            "effective_from": "2026-07-14 00:00:00+00:00",
+            "effective_to": null,
+            "language_code": "es",
+            "name_kind": "official-es",
+            "name_record_id": "administrative-boundary-change-name_record-07",
+            "name_status": "official-current",
+            "name_text": "administrative-boundary-change official name"
+          }
+        ],
+        "object_links": [
+          {
+            "cardinality_rank": "1",
+            "link_id": "administrative-boundary-change-location_record_object_link-07",
+            "location_record_version_id": "administrative-boundary-change-location_record_version-07",
+            "object_role": "primary-subject",
+            "subject_id": "administrative-boundary-change-registry_subject-07"
+          }
+        ]
+      },
+      "public_projection": [
+        {
+          "location_record_id": "administrative-boundary-change-location_record-07",
+          "location_record_version_id": "administrative-boundary-change-location_record_version-07",
+          "projection_payload_hash": "publication_release_item-projection_payload_hash-value",
+          "projection_payload_json": "{'entity': 'publication_release_item', 'fixture': True}",
+          "projection_state": "included",
+          "public_code_alias_id": "administrative-boundary-change-public_code_alias-07",
+          "published_label": "publication_release_item-published_label-value"
+        }
+      ],
+      "publication_releases": [
+        {
+          "publication_release_id": "administrative-boundary-change-publication_release-07",
+          "release_state": "approved"
+        }
+      ],
+      "queried_fixture_rows": 46,
+      "relationship_edges": [
+        {
+          "link_id": "administrative-boundary-change-location_record_object_link-07",
+          "location_record_version_id": "administrative-boundary-change-location_record_version-07",
+          "object_role": "primary-subject",
+          "subject_id": "administrative-boundary-change-registry_subject-07"
+        }
+      ],
+      "scenario": "administrative-boundary-change",
+      "status": "passed"
+    },
+    "corrected-superseded-address": {
+      "assertions": {
+        "F10-corrected-superseded-address-entities-and-identifiers": {
+          "evidence_source": "review08-disposable-target-db-query",
+          "finding": "F10",
+          "status": "passed"
+        },
+        "F10-corrected-superseded-address-evidence-and-authority": {
+          "evidence_source": "review08-disposable-target-db-query",
+          "finding": "F10",
+          "status": "passed"
+        },
+        "F10-corrected-superseded-address-geometry-and-provenance": {
+          "evidence_source": "review08-disposable-target-db-query",
+          "finding": "F10",
+          "status": "passed"
+        },
+        "F10-corrected-superseded-address-historical-output": {
+          "evidence_source": "review08-disposable-target-db-query",
+          "finding": "F10",
+          "status": "passed"
+        },
+        "F10-corrected-superseded-address-lifecycle-timeline": {
+          "evidence_source": "review08-disposable-target-db-query",
+          "finding": "F10",
+          "status": "passed"
+        },
+        "F10-corrected-superseded-address-operator-projection": {
+          "evidence_source": "review08-disposable-target-db-query",
+          "finding": "F10",
+          "status": "passed"
+        },
+        "F10-corrected-superseded-address-public-projection": {
+          "evidence_source": "review08-disposable-target-db-query",
+          "finding": "F10",
+          "status": "passed"
+        },
+        "F10-corrected-superseded-address-publication-release": {
+          "evidence_source": "review08-disposable-target-db-query",
+          "finding": "F10",
+          "status": "passed"
+        },
+        "F10-corrected-superseded-address-versions-and-relationships": {
+          "evidence_source": "review08-disposable-target-db-query",
+          "finding": "F10",
+          "status": "passed"
+        }
+      },
+      "entity_counts": {
+        "administrative_code_history": 1,
+        "administrative_unit": 1,
+        "administrative_unit_version": 1,
+        "building": 1,
+        "building_primary_entrance": 1,
+        "correction_case": 1,
+        "country": 1,
+        "decision_event": 1,
+        "dispute_case": 1,
+        "entrance": 1,
+        "evidence_object": 1,
+        "field_assignment": 1,
+        "field_observation": 1,
+        "geometry_observation": 1,
+        "geometry_quality_assessment": 1,
+        "geometry_transformation": 1,
+        "geometry_version": 1,
+        "intake_case": 1,
+        "landmark": 1,
+        "legacy_crosswalk": 1,
+        "licence": 1,
+        "locality": 1,
+        "location_record": 1,
+        "location_record_assertion": 1,
+        "location_record_object_link": 2,
+        "location_record_relationship": 1,
+        "location_record_version": 2,
+        "migration_exception": 1,
+        "name_record": 1,
+        "non_building_object": 1,
+        "operational_area": 1,
+        "operational_area_coverage": 1,
+        "parcel_reference": 1,
+        "partner_projection": 1,
+        "public_code_alias": 1,
+        "publication_release": 2,
+        "publication_release_item": 2,
+        "registry_subject": 1,
+        "road": 1,
+        "road_segment": 1,
+        "source_authority": 1,
+        "source_package": 1,
+        "source_payload_archive": 1,
+        "source_record": 1,
+        "unit": 1
+      },
+      "entity_ids": {
+        "administrative_code_history": [
+          "corrected-superseded-address-administrative_code_history-05"
+        ],
+        "administrative_unit": [
+          "corrected-superseded-address-administrative_unit-05"
+        ],
+        "administrative_unit_version": [
+          "corrected-superseded-address-administrative_unit_version-05"
+        ],
+        "building": [
+          "corrected-superseded-address-building-05"
+        ],
+        "building_primary_entrance": [
+          "corrected-superseded-address-building_primary_entrance-05"
+        ],
+        "correction_case": [
+          "corrected-superseded-address-correction_case-05"
+        ],
+        "country": [
+          "corrected-superseded-address-country-05"
+        ],
+        "decision_event": [
+          "corrected-superseded-address-decision_event-05"
+        ],
+        "dispute_case": [
+          "corrected-superseded-address-dispute_case-05"
+        ],
+        "entrance": [
+          "corrected-superseded-address-entrance-05"
+        ],
+        "evidence_object": [
+          "corrected-superseded-address-evidence_object-05"
+        ],
+        "field_assignment": [
+          "corrected-superseded-address-field_assignment-05"
+        ],
+        "field_observation": [
+          "corrected-superseded-address-field_observation-05"
+        ],
+        "geometry_observation": [
+          "corrected-superseded-address-geometry_observation-05"
+        ],
+        "geometry_quality_assessment": [
+          "corrected-superseded-address-geometry_quality_assessment-05"
+        ],
+        "geometry_transformation": [
+          "corrected-superseded-address-geometry_transformation-05"
+        ],
+        "geometry_version": [
+          "corrected-superseded-address-geometry_version-05"
+        ],
+        "intake_case": [
+          "corrected-superseded-address-intake_case-05"
+        ],
+        "landmark": [
+          "corrected-superseded-address-landmark-05"
+        ],
+        "legacy_crosswalk": [
+          "corrected-superseded-address-legacy_crosswalk-05"
+        ],
+        "licence": [
+          "corrected-superseded-address-licence-05"
+        ],
+        "locality": [
+          "corrected-superseded-address-locality-05"
+        ],
+        "location_record": [
+          "corrected-superseded-address-location_record-05"
+        ],
+        "location_record_assertion": [
+          "corrected-superseded-address-location_record_assertion-05"
+        ],
+        "location_record_object_link": [
+          "corrected-superseded-address-location_record_object_link-05",
+          "corrected-superseded-address-object-link-v2"
+        ],
+        "location_record_relationship": [
+          "corrected-superseded-address-location_record_relationship-05"
+        ],
+        "location_record_version": [
+          "corrected-superseded-address-location-record-version-v1",
+          "corrected-superseded-address-location-record-version-v2"
+        ],
+        "migration_exception": [
+          "corrected-superseded-address-migration_exception-05"
+        ],
+        "name_record": [
+          "corrected-superseded-address-name_record-05"
+        ],
+        "non_building_object": [
+          "corrected-superseded-address-non_building_object-05"
+        ],
+        "operational_area": [
+          "corrected-superseded-address-operational_area-05"
+        ],
+        "operational_area_coverage": [
+          "corrected-superseded-address-operational_area_coverage-05"
+        ],
+        "parcel_reference": [
+          "corrected-superseded-address-parcel_reference-05"
+        ],
+        "partner_projection": [
+          "corrected-superseded-address-partner_projection-05"
+        ],
+        "public_code_alias": [
+          "corrected-superseded-address-public_code_alias-05"
+        ],
+        "publication_release": [
+          "corrected-superseded-address-publication_release-05",
+          "corrected-superseded-address-publication-release-corrected"
+        ],
+        "publication_release_item": [
+          "corrected-superseded-address-publication_release_item-05",
+          "corrected-superseded-address-publication-release-item-corrected"
+        ],
+        "registry_subject": [
+          "corrected-superseded-address-registry_subject-05"
+        ],
+        "road": [
+          "corrected-superseded-address-road-05"
+        ],
+        "road_segment": [
+          "corrected-superseded-address-road_segment-05"
+        ],
+        "source_authority": [
+          "corrected-superseded-address-source_authority-05"
+        ],
+        "source_package": [
+          "corrected-superseded-address-source_package-05"
+        ],
+        "source_payload_archive": [
+          "corrected-superseded-address-source_payload_archive-05"
+        ],
+        "source_record": [
+          "corrected-superseded-address-source_record-05"
+        ],
+        "unit": [
+          "corrected-superseded-address-unit-05"
+        ]
+      },
+      "expected_fixture_rows": 49,
+      "failed_assertions": [],
+      "geometry_and_provenance": {
+        "authority_decisions": [
+          {
+            "actor_id": "decision_event-actor_id-001",
+            "decision_event_id": "corrected-superseded-address-decision_event-05",
+            "decision_outcome": "approved",
+            "decision_type": "approve-geometry",
+            "details_json": "{'institution_id': 'national-gis-authority', 'permission_key': 'geometry.promote', 'territorial_scope': 'national-gis-authority', 'evidence_object_id': 'corrected-superseded-address-evidence_object-05', 'source_observation_id': 'corrected-superseded-address-geometry_observation-05', 'quality_authority_actor_id': 'decision_event-actor_id-001'}"
+          }
+        ],
+        "evidence_objects": [
+          {
+            "classification": "government-internal",
+            "content_hash": "evidence_object-content_hash-value",
+            "evidence_object_id": "corrected-superseded-address-evidence_object-05"
+          }
+        ],
+        "geometry_versions": [
+          {
+            "geometry_role": "location-point",
+            "geometry_version_id": "corrected-superseded-address-geometry_version-05",
+            "promotion_authority_scope": "national-gis-authority",
+            "promotion_decision_event_id": "corrected-superseded-address-decision_event-05",
+            "promotion_evidence_object_id": "corrected-superseded-address-evidence_object-05",
+            "quality_state": "accepted-canonical",
+            "validated_by_actor_id": "decision_event-actor_id-001"
+          }
+        ],
+        "observations": [
+          {
+            "capture_method": "browser-gps",
+            "geometry_observation_id": "corrected-superseded-address-geometry_observation-05",
+            "geometry_role": "location-point"
+          }
+        ]
+      },
+      "historical_output": {
+        "admin_effective_versions": [
+          {
+            "admin_level": "country",
+            "administrative_unit_version_id": "corrected-superseded-address-administrative_unit_version-05",
+            "effective_from": "2026-07-14 00:00:00+00:00",
+            "effective_to": null,
+            "lifecycle_state": "official",
+            "recorded_at": "2026-07-14 00:00:00+00:00"
+          }
+        ],
+        "location_lifecycle_timeline": [
+          {
+            "effective_from": "2026-01-01 00:00:00+00:00",
+            "effective_to": "2026-06-01 00:00:00+00:00",
+            "lifecycle_state": "corrected",
+            "location_record_version_id": "corrected-superseded-address-location-record-version-v1",
+            "recorded_at": "2026-01-02 00:00:00+00:00",
+            "recorded_to": "2026-06-02 00:00:00+00:00"
+          },
+          {
+            "effective_from": "2026-06-01 00:00:00+00:00",
+            "effective_to": null,
+            "lifecycle_state": "active",
+            "location_record_version_id": "corrected-superseded-address-location-record-version-v2",
+            "recorded_at": "2026-06-02 00:00:00+00:00",
+            "recorded_to": null
+          }
+        ],
+        "publication_versions": [
+          {
+            "location_record_version_id": "corrected-superseded-address-location-record-version-v2",
+            "projection_state": "included",
+            "published_label": "publication_release_item-published_label-value"
+          },
+          {
+            "location_record_version_id": "corrected-superseded-address-location-record-version-v2",
+            "projection_state": "included",
+            "published_label": "publication_release_item-published_label-value"
+          }
+        ]
+      },
+      "operator_projection": {
+        "decision_count": 1,
+        "evidence_count": 1,
+        "geometry": [
+          {
+            "geometry_role": "location-point",
+            "geometry_version_id": "corrected-superseded-address-geometry_version-05",
+            "promotion_decision_event_id": "corrected-superseded-address-decision_event-05",
+            "promotion_evidence_object_id": "corrected-superseded-address-evidence_object-05",
+            "quality_state": "accepted-canonical"
+          }
+        ],
+        "location_versions": [
+          {
+            "effective_from": "2026-01-01 00:00:00+00:00",
+            "effective_to": "2026-06-01 00:00:00+00:00",
+            "lifecycle_state": "corrected",
+            "location_record_id": "corrected-superseded-address-location_record-05",
+            "location_record_version_id": "corrected-superseded-address-location-record-version-v1",
+            "recorded_at": "2026-01-02 00:00:00+00:00",
+            "version_number": "1"
+          },
+          {
+            "effective_from": "2026-06-01 00:00:00+00:00",
+            "effective_to": null,
+            "lifecycle_state": "active",
+            "location_record_id": "corrected-superseded-address-location_record-05",
+            "location_record_version_id": "corrected-superseded-address-location-record-version-v2",
+            "recorded_at": "2026-06-02 00:00:00+00:00",
+            "version_number": "2"
+          }
+        ],
+        "names": [
+          {
+            "effective_from": "2026-07-14 00:00:00+00:00",
+            "effective_to": null,
+            "language_code": "es",
+            "name_kind": "official-es",
+            "name_record_id": "corrected-superseded-address-name_record-05",
+            "name_status": "official-current",
+            "name_text": "corrected-superseded-address official name"
+          }
+        ],
+        "object_links": [
+          {
+            "cardinality_rank": "1",
+            "link_id": "corrected-superseded-address-location_record_object_link-05",
+            "location_record_version_id": "corrected-superseded-address-location-record-version-v1",
+            "object_role": "primary-subject",
+            "subject_id": "corrected-superseded-address-registry_subject-05"
+          },
+          {
+            "cardinality_rank": "1",
+            "link_id": "corrected-superseded-address-object-link-v2",
+            "location_record_version_id": "corrected-superseded-address-location-record-version-v2",
+            "object_role": "primary-subject",
+            "subject_id": "corrected-superseded-address-registry_subject-05"
+          }
+        ]
+      },
+      "public_projection": [
+        {
+          "location_record_id": "corrected-superseded-address-location_record-05",
+          "location_record_version_id": "corrected-superseded-address-location-record-version-v2",
+          "projection_payload_hash": "publication_release_item-projection_payload_hash-value",
+          "projection_payload_json": "{'entity': 'publication_release_item', 'fixture': True}",
+          "projection_state": "included",
+          "public_code_alias_id": "corrected-superseded-address-public_code_alias-05",
+          "published_label": "publication_release_item-published_label-value"
+        },
+        {
+          "location_record_id": "corrected-superseded-address-location_record-05",
+          "location_record_version_id": "corrected-superseded-address-location-record-version-v2",
+          "projection_payload_hash": "publication_release_item-projection_payload_hash-value",
+          "projection_payload_json": "{'entity': 'publication_release_item', 'fixture': True}",
+          "projection_state": "included",
+          "public_code_alias_id": "corrected-superseded-address-public_code_alias-05",
+          "published_label": "publication_release_item-published_label-value"
+        }
+      ],
+      "publication_releases": [
+        {
+          "publication_release_id": "corrected-superseded-address-publication_release-05",
+          "release_state": "approved"
+        },
+        {
+          "publication_release_id": "corrected-superseded-address-publication-release-corrected",
+          "release_state": "published"
+        }
+      ],
+      "queried_fixture_rows": 49,
+      "relationship_edges": [
+        {
+          "link_id": "corrected-superseded-address-location_record_object_link-05",
+          "location_record_version_id": "corrected-superseded-address-location-record-version-v1",
+          "object_role": "primary-subject",
+          "subject_id": "corrected-superseded-address-registry_subject-05"
+        },
+        {
+          "link_id": "corrected-superseded-address-object-link-v2",
+          "location_record_version_id": "corrected-superseded-address-location-record-version-v2",
+          "object_role": "primary-subject",
+          "subject_id": "corrected-superseded-address-registry_subject-05"
+        }
+      ],
+      "scenario": "corrected-superseded-address",
+      "status": "passed"
+    },
+    "disputed-geometry": {
+      "assertions": {
+        "F10-disputed-geometry-entities-and-identifiers": {
+          "evidence_source": "review08-disposable-target-db-query",
+          "finding": "F10",
+          "status": "passed"
+        },
+        "F10-disputed-geometry-evidence-and-authority": {
+          "evidence_source": "review08-disposable-target-db-query",
+          "finding": "F10",
+          "status": "passed"
+        },
+        "F10-disputed-geometry-geometry-and-provenance": {
+          "evidence_source": "review08-disposable-target-db-query",
+          "finding": "F10",
+          "status": "passed"
+        },
+        "F10-disputed-geometry-historical-output": {
+          "evidence_source": "review08-disposable-target-db-query",
+          "finding": "F10",
+          "status": "passed"
+        },
+        "F10-disputed-geometry-lifecycle-timeline": {
+          "evidence_source": "review08-disposable-target-db-query",
+          "finding": "F10",
+          "status": "passed"
+        },
+        "F10-disputed-geometry-operator-projection": {
+          "evidence_source": "review08-disposable-target-db-query",
+          "finding": "F10",
+          "status": "passed"
+        },
+        "F10-disputed-geometry-public-projection": {
+          "evidence_source": "review08-disposable-target-db-query",
+          "finding": "F10",
+          "status": "passed"
+        },
+        "F10-disputed-geometry-publication-release": {
+          "evidence_source": "review08-disposable-target-db-query",
+          "finding": "F10",
+          "status": "passed"
+        },
+        "F10-disputed-geometry-versions-and-relationships": {
+          "evidence_source": "review08-disposable-target-db-query",
+          "finding": "F10",
+          "status": "passed"
+        }
+      },
+      "entity_counts": {
+        "administrative_code_history": 1,
+        "administrative_unit": 1,
+        "administrative_unit_version": 1,
+        "building": 1,
+        "building_primary_entrance": 1,
+        "correction_case": 1,
+        "country": 1,
+        "decision_event": 1,
+        "dispute_case": 1,
+        "entrance": 1,
+        "evidence_object": 1,
+        "field_assignment": 1,
+        "field_observation": 1,
+        "geometry_observation": 1,
+        "geometry_quality_assessment": 1,
+        "geometry_transformation": 1,
+        "geometry_version": 1,
+        "intake_case": 1,
+        "landmark": 1,
+        "legacy_crosswalk": 1,
+        "licence": 1,
+        "locality": 1,
+        "location_record": 1,
+        "location_record_assertion": 1,
+        "location_record_object_link": 1,
+        "location_record_relationship": 1,
+        "location_record_version": 1,
+        "migration_exception": 1,
+        "name_record": 1,
+        "non_building_object": 1,
+        "operational_area": 1,
+        "operational_area_coverage": 1,
+        "parcel_reference": 1,
+        "partner_projection": 1,
+        "public_code_alias": 1,
+        "publication_release": 1,
+        "publication_release_item": 1,
+        "registry_subject": 1,
+        "road": 1,
+        "road_segment": 1,
+        "source_authority": 1,
+        "source_package": 1,
+        "source_payload_archive": 1,
+        "source_record": 1,
+        "unit": 1
+      },
+      "entity_ids": {
+        "administrative_code_history": [
+          "disputed-geometry-administrative_code_history-06"
+        ],
+        "administrative_unit": [
+          "disputed-geometry-administrative_unit-06"
+        ],
+        "administrative_unit_version": [
+          "disputed-geometry-administrative_unit_version-06"
+        ],
+        "building": [
+          "disputed-geometry-building-06"
+        ],
+        "building_primary_entrance": [
+          "disputed-geometry-building_primary_entrance-06"
+        ],
+        "correction_case": [
+          "disputed-geometry-correction_case-06"
+        ],
+        "country": [
+          "disputed-geometry-country-06"
+        ],
+        "decision_event": [
+          "disputed-geometry-decision_event-06"
+        ],
+        "dispute_case": [
+          "disputed-geometry-dispute_case-06"
+        ],
+        "entrance": [
+          "disputed-geometry-entrance-06"
+        ],
+        "evidence_object": [
+          "disputed-geometry-evidence_object-06"
+        ],
+        "field_assignment": [
+          "disputed-geometry-field_assignment-06"
+        ],
+        "field_observation": [
+          "disputed-geometry-field_observation-06"
+        ],
+        "geometry_observation": [
+          "disputed-geometry-geometry_observation-06"
+        ],
+        "geometry_quality_assessment": [
+          "disputed-geometry-geometry_quality_assessment-06"
+        ],
+        "geometry_transformation": [
+          "disputed-geometry-geometry_transformation-06"
+        ],
+        "geometry_version": [
+          "disputed-geometry-geometry_version-06"
+        ],
+        "intake_case": [
+          "disputed-geometry-intake_case-06"
+        ],
+        "landmark": [
+          "disputed-geometry-landmark-06"
+        ],
+        "legacy_crosswalk": [
+          "disputed-geometry-legacy_crosswalk-06"
+        ],
+        "licence": [
+          "disputed-geometry-licence-06"
+        ],
+        "locality": [
+          "disputed-geometry-locality-06"
+        ],
+        "location_record": [
+          "disputed-geometry-location_record-06"
+        ],
+        "location_record_assertion": [
+          "disputed-geometry-location_record_assertion-06"
+        ],
+        "location_record_object_link": [
+          "disputed-geometry-location_record_object_link-06"
+        ],
+        "location_record_relationship": [
+          "disputed-geometry-location_record_relationship-06"
+        ],
+        "location_record_version": [
+          "disputed-geometry-location_record_version-06"
+        ],
+        "migration_exception": [
+          "disputed-geometry-migration_exception-06"
+        ],
+        "name_record": [
+          "disputed-geometry-name_record-06"
+        ],
+        "non_building_object": [
+          "disputed-geometry-non_building_object-06"
+        ],
+        "operational_area": [
+          "disputed-geometry-operational_area-06"
+        ],
+        "operational_area_coverage": [
+          "disputed-geometry-operational_area_coverage-06"
+        ],
+        "parcel_reference": [
+          "disputed-geometry-parcel_reference-06"
+        ],
+        "partner_projection": [
+          "disputed-geometry-partner_projection-06"
+        ],
+        "public_code_alias": [
+          "disputed-geometry-public_code_alias-06"
+        ],
+        "publication_release": [
+          "disputed-geometry-publication_release-06"
+        ],
+        "publication_release_item": [
+          "disputed-geometry-publication_release_item-06"
+        ],
+        "registry_subject": [
+          "disputed-geometry-registry_subject-06"
+        ],
+        "road": [
+          "disputed-geometry-road-06"
+        ],
+        "road_segment": [
+          "disputed-geometry-road_segment-06"
+        ],
+        "source_authority": [
+          "disputed-geometry-source_authority-06"
+        ],
+        "source_package": [
+          "disputed-geometry-source_package-06"
+        ],
+        "source_payload_archive": [
+          "disputed-geometry-source_payload_archive-06"
+        ],
+        "source_record": [
+          "disputed-geometry-source_record-06"
+        ],
+        "unit": [
+          "disputed-geometry-unit-06"
+        ]
+      },
+      "expected_fixture_rows": 45,
+      "failed_assertions": [],
+      "geometry_and_provenance": {
+        "authority_decisions": [
+          {
+            "actor_id": "decision_event-actor_id-001",
+            "decision_event_id": "disputed-geometry-decision_event-06",
+            "decision_outcome": "approved",
+            "decision_type": "approve-geometry",
+            "details_json": "{'institution_id': 'national-gis-authority', 'permission_key': 'geometry.promote', 'territorial_scope': 'national-gis-authority', 'evidence_object_id': 'disputed-geometry-evidence_object-06', 'source_observation_id': 'disputed-geometry-geometry_observation-06', 'quality_authority_actor_id': 'decision_event-actor_id-001'}"
+          }
+        ],
+        "evidence_objects": [
+          {
+            "classification": "government-internal",
+            "content_hash": "evidence_object-content_hash-value",
+            "evidence_object_id": "disputed-geometry-evidence_object-06"
+          }
+        ],
+        "geometry_versions": [
+          {
+            "geometry_role": "location-point",
+            "geometry_version_id": "disputed-geometry-geometry_version-06",
+            "promotion_authority_scope": "national-gis-authority",
+            "promotion_decision_event_id": "disputed-geometry-decision_event-06",
+            "promotion_evidence_object_id": "disputed-geometry-evidence_object-06",
+            "quality_state": "accepted-canonical",
+            "validated_by_actor_id": "decision_event-actor_id-001"
+          }
+        ],
+        "observations": [
+          {
+            "capture_method": "browser-gps",
+            "geometry_observation_id": "disputed-geometry-geometry_observation-06",
+            "geometry_role": "location-point"
+          }
+        ]
+      },
+      "historical_output": {
+        "admin_effective_versions": [
+          {
+            "admin_level": "country",
+            "administrative_unit_version_id": "disputed-geometry-administrative_unit_version-06",
+            "effective_from": "2026-07-14 00:00:00+00:00",
+            "effective_to": null,
+            "lifecycle_state": "official",
+            "recorded_at": "2026-07-14 00:00:00+00:00"
+          }
+        ],
+        "location_lifecycle_timeline": [
+          {
+            "effective_from": "2026-07-14 00:00:00+00:00",
+            "effective_to": null,
+            "lifecycle_state": "active",
+            "location_record_version_id": "disputed-geometry-location_record_version-06",
+            "recorded_at": "2026-07-14 00:00:00+00:00",
+            "recorded_to": null
+          }
+        ],
+        "publication_versions": [
+          {
+            "location_record_version_id": "disputed-geometry-location_record_version-06",
+            "projection_state": "included",
+            "published_label": "publication_release_item-published_label-value"
+          }
+        ]
+      },
+      "operator_projection": {
+        "decision_count": 1,
+        "evidence_count": 1,
+        "geometry": [
+          {
+            "geometry_role": "location-point",
+            "geometry_version_id": "disputed-geometry-geometry_version-06",
+            "promotion_decision_event_id": "disputed-geometry-decision_event-06",
+            "promotion_evidence_object_id": "disputed-geometry-evidence_object-06",
+            "quality_state": "accepted-canonical"
+          }
+        ],
+        "location_versions": [
+          {
+            "effective_from": "2026-07-14 00:00:00+00:00",
+            "effective_to": null,
+            "lifecycle_state": "active",
+            "location_record_id": "disputed-geometry-location_record-06",
+            "location_record_version_id": "disputed-geometry-location_record_version-06",
+            "recorded_at": "2026-07-14 00:00:00+00:00",
+            "version_number": "6"
+          }
+        ],
+        "names": [
+          {
+            "effective_from": "2026-07-14 00:00:00+00:00",
+            "effective_to": null,
+            "language_code": "es",
+            "name_kind": "official-es",
+            "name_record_id": "disputed-geometry-name_record-06",
+            "name_status": "official-current",
+            "name_text": "disputed-geometry official name"
+          }
+        ],
+        "object_links": [
+          {
+            "cardinality_rank": "1",
+            "link_id": "disputed-geometry-location_record_object_link-06",
+            "location_record_version_id": "disputed-geometry-location_record_version-06",
+            "object_role": "primary-subject",
+            "subject_id": "disputed-geometry-registry_subject-06"
+          }
+        ]
+      },
+      "public_projection": [
+        {
+          "location_record_id": "disputed-geometry-location_record-06",
+          "location_record_version_id": "disputed-geometry-location_record_version-06",
+          "projection_payload_hash": "publication_release_item-projection_payload_hash-value",
+          "projection_payload_json": "{'entity': 'publication_release_item', 'fixture': True}",
+          "projection_state": "included",
+          "public_code_alias_id": "disputed-geometry-public_code_alias-06",
+          "published_label": "publication_release_item-published_label-value"
+        }
+      ],
+      "publication_releases": [
+        {
+          "publication_release_id": "disputed-geometry-publication_release-06",
+          "release_state": "approved"
+        }
+      ],
+      "queried_fixture_rows": 45,
+      "relationship_edges": [
+        {
+          "link_id": "disputed-geometry-location_record_object_link-06",
+          "location_record_version_id": "disputed-geometry-location_record_version-06",
+          "object_role": "primary-subject",
+          "subject_id": "disputed-geometry-registry_subject-06"
+        }
+      ],
+      "scenario": "disputed-geometry",
+      "status": "passed"
+    },
+    "multi-unit-building": {
+      "assertions": {
+        "F10-multi-unit-building-entities-and-identifiers": {
+          "evidence_source": "review08-disposable-target-db-query",
+          "finding": "F10",
+          "status": "passed"
+        },
+        "F10-multi-unit-building-evidence-and-authority": {
+          "evidence_source": "review08-disposable-target-db-query",
+          "finding": "F10",
+          "status": "passed"
+        },
+        "F10-multi-unit-building-geometry-and-provenance": {
+          "evidence_source": "review08-disposable-target-db-query",
+          "finding": "F10",
+          "status": "passed"
+        },
+        "F10-multi-unit-building-historical-output": {
+          "evidence_source": "review08-disposable-target-db-query",
+          "finding": "F10",
+          "status": "passed"
+        },
+        "F10-multi-unit-building-lifecycle-timeline": {
+          "evidence_source": "review08-disposable-target-db-query",
+          "finding": "F10",
+          "status": "passed"
+        },
+        "F10-multi-unit-building-operator-projection": {
+          "evidence_source": "review08-disposable-target-db-query",
+          "finding": "F10",
+          "status": "passed"
+        },
+        "F10-multi-unit-building-public-projection": {
+          "evidence_source": "review08-disposable-target-db-query",
+          "finding": "F10",
+          "status": "passed"
+        },
+        "F10-multi-unit-building-publication-release": {
+          "evidence_source": "review08-disposable-target-db-query",
+          "finding": "F10",
+          "status": "passed"
+        },
+        "F10-multi-unit-building-versions-and-relationships": {
+          "evidence_source": "review08-disposable-target-db-query",
+          "finding": "F10",
+          "status": "passed"
+        }
+      },
+      "entity_counts": {
+        "administrative_code_history": 1,
+        "administrative_unit": 1,
+        "administrative_unit_version": 1,
+        "building": 1,
+        "building_primary_entrance": 1,
+        "correction_case": 1,
+        "country": 1,
+        "decision_event": 1,
+        "dispute_case": 1,
+        "entrance": 1,
+        "evidence_object": 1,
+        "field_assignment": 1,
+        "field_observation": 1,
+        "geometry_observation": 1,
+        "geometry_quality_assessment": 1,
+        "geometry_transformation": 1,
+        "geometry_version": 1,
+        "intake_case": 1,
+        "landmark": 1,
+        "legacy_crosswalk": 1,
+        "licence": 1,
+        "locality": 1,
+        "location_record": 3,
+        "location_record_assertion": 1,
+        "location_record_object_link": 5,
+        "location_record_relationship": 1,
+        "location_record_version": 3,
+        "migration_exception": 1,
+        "name_record": 1,
+        "non_building_object": 1,
+        "operational_area": 1,
+        "operational_area_coverage": 1,
+        "parcel_reference": 1,
+        "partner_projection": 1,
+        "public_code_alias": 2,
+        "publication_release": 1,
+        "publication_release_item": 2,
+        "registry_subject": 4,
+        "road": 1,
+        "road_segment": 1,
+        "source_authority": 1,
+        "source_package": 1,
+        "source_payload_archive": 1,
+        "source_record": 1,
+        "unit": 2
+      },
+      "entity_ids": {
+        "administrative_code_history": [
+          "multi-unit-building-administrative_code_history-03"
+        ],
+        "administrative_unit": [
+          "multi-unit-building-administrative_unit-03"
+        ],
+        "administrative_unit_version": [
+          "multi-unit-building-administrative_unit_version-03"
+        ],
+        "building": [
+          "multi-unit-building-building-03"
+        ],
+        "building_primary_entrance": [
+          "multi-unit-building-building_primary_entrance-03"
+        ],
+        "correction_case": [
+          "multi-unit-building-correction_case-03"
+        ],
+        "country": [
+          "multi-unit-building-country-03"
+        ],
+        "decision_event": [
+          "multi-unit-building-decision_event-03"
+        ],
+        "dispute_case": [
+          "multi-unit-building-dispute_case-03"
+        ],
+        "entrance": [
+          "multi-unit-building-entrance-03"
+        ],
+        "evidence_object": [
+          "multi-unit-building-evidence_object-03"
+        ],
+        "field_assignment": [
+          "multi-unit-building-field_assignment-03"
+        ],
+        "field_observation": [
+          "multi-unit-building-field_observation-03"
+        ],
+        "geometry_observation": [
+          "multi-unit-building-geometry_observation-03"
+        ],
+        "geometry_quality_assessment": [
+          "multi-unit-building-geometry_quality_assessment-03"
+        ],
+        "geometry_transformation": [
+          "multi-unit-building-geometry_transformation-03"
+        ],
+        "geometry_version": [
+          "multi-unit-building-geometry_version-03"
+        ],
+        "intake_case": [
+          "multi-unit-building-intake_case-03"
+        ],
+        "landmark": [
+          "multi-unit-building-landmark-03"
+        ],
+        "legacy_crosswalk": [
+          "multi-unit-building-legacy_crosswalk-03"
+        ],
+        "licence": [
+          "multi-unit-building-licence-03"
+        ],
+        "locality": [
+          "multi-unit-building-locality-03"
+        ],
+        "location_record": [
+          "multi-unit-building-location_record-03",
+          "multi-unit-building-location-record-building-positive",
+          "multi-unit-building-location-record-unit-02"
+        ],
+        "location_record_assertion": [
+          "multi-unit-building-location_record_assertion-03"
+        ],
+        "location_record_object_link": [
+          "multi-unit-building-location_record_object_link-03",
+          "multi-unit-building-object-link-building-positive-primary",
+          "multi-unit-building-object-link-parent-building",
+          "multi-unit-building-object-link-unit-02-parent-building",
+          "multi-unit-building-object-link-unit-02-primary"
+        ],
+        "location_record_relationship": [
+          "multi-unit-building-location_record_relationship-03"
+        ],
+        "location_record_version": [
+          "multi-unit-building-location_record_version-03",
+          "multi-unit-building-location-record-version-building-positive",
+          "multi-unit-building-location-record-version-unit-02"
+        ],
+        "migration_exception": [
+          "multi-unit-building-migration_exception-03"
+        ],
+        "name_record": [
+          "multi-unit-building-name_record-03"
+        ],
+        "non_building_object": [
+          "multi-unit-building-non_building_object-03"
+        ],
+        "operational_area": [
+          "multi-unit-building-operational_area-03"
+        ],
+        "operational_area_coverage": [
+          "multi-unit-building-operational_area_coverage-03"
+        ],
+        "parcel_reference": [
+          "multi-unit-building-parcel_reference-03"
+        ],
+        "partner_projection": [
+          "multi-unit-building-partner_projection-03"
+        ],
+        "public_code_alias": [
+          "multi-unit-building-public_code_alias-03",
+          "multi-unit-building-public-code-alias-unit-02"
+        ],
+        "publication_release": [
+          "multi-unit-building-publication_release-03"
+        ],
+        "publication_release_item": [
+          "multi-unit-building-publication_release_item-03",
+          "multi-unit-building-publication-release-item-unit-02"
+        ],
+        "registry_subject": [
+          "multi-unit-building-registry_subject-03",
+          "multi-unit-building-registry-subject-building-positive",
+          "multi-unit-building-registry-subject-parent-building",
+          "multi-unit-building-registry-subject-unit-02"
+        ],
+        "road": [
+          "multi-unit-building-road-03"
+        ],
+        "road_segment": [
+          "multi-unit-building-road_segment-03"
+        ],
+        "source_authority": [
+          "multi-unit-building-source_authority-03"
+        ],
+        "source_package": [
+          "multi-unit-building-source_package-03"
+        ],
+        "source_payload_archive": [
+          "multi-unit-building-source_payload_archive-03"
+        ],
+        "source_record": [
+          "multi-unit-building-source_record-03"
+        ],
+        "unit": [
+          "multi-unit-building-unit-02",
+          "multi-unit-building-unit-03"
+        ]
+      },
+      "expected_fixture_rows": 59,
+      "failed_assertions": [],
+      "geometry_and_provenance": {
+        "authority_decisions": [
+          {
+            "actor_id": "decision_event-actor_id-001",
+            "decision_event_id": "multi-unit-building-decision_event-03",
+            "decision_outcome": "approved",
+            "decision_type": "approve-geometry",
+            "details_json": "{'institution_id': 'national-gis-authority', 'permission_key': 'geometry.promote', 'territorial_scope': 'national-gis-authority', 'evidence_object_id': 'multi-unit-building-evidence_object-03', 'source_observation_id': 'multi-unit-building-geometry_observation-03', 'quality_authority_actor_id': 'decision_event-actor_id-001'}"
+          }
+        ],
+        "evidence_objects": [
+          {
+            "classification": "government-internal",
+            "content_hash": "evidence_object-content_hash-value",
+            "evidence_object_id": "multi-unit-building-evidence_object-03"
+          }
+        ],
+        "geometry_versions": [
+          {
+            "geometry_role": "entrance-point",
+            "geometry_version_id": "multi-unit-building-geometry_version-03",
+            "promotion_authority_scope": "national-gis-authority",
+            "promotion_decision_event_id": "multi-unit-building-decision_event-03",
+            "promotion_evidence_object_id": "multi-unit-building-evidence_object-03",
+            "quality_state": "accepted-canonical",
+            "validated_by_actor_id": "decision_event-actor_id-001"
+          }
+        ],
+        "observations": [
+          {
+            "capture_method": "browser-gps",
+            "geometry_observation_id": "multi-unit-building-geometry_observation-03",
+            "geometry_role": "entrance-point"
+          }
+        ]
+      },
+      "historical_output": {
+        "admin_effective_versions": [
+          {
+            "admin_level": "country",
+            "administrative_unit_version_id": "multi-unit-building-administrative_unit_version-03",
+            "effective_from": "2026-07-14 00:00:00+00:00",
+            "effective_to": null,
+            "lifecycle_state": "official",
+            "recorded_at": "2026-07-14 00:00:00+00:00"
+          }
+        ],
+        "location_lifecycle_timeline": [
+          {
+            "effective_from": "2026-07-14 00:00:00+00:00",
+            "effective_to": null,
+            "lifecycle_state": "active",
+            "location_record_version_id": "multi-unit-building-location_record_version-03",
+            "recorded_at": "2026-07-14 00:00:00+00:00",
+            "recorded_to": null
+          },
+          {
+            "effective_from": "2026-07-14 00:00:00+00:00",
+            "effective_to": null,
+            "lifecycle_state": "active",
+            "location_record_version_id": "multi-unit-building-location-record-version-building-positive",
+            "recorded_at": "2026-07-14 00:00:00+00:00",
+            "recorded_to": null
+          },
+          {
+            "effective_from": "2026-07-14 00:00:00+00:00",
+            "effective_to": null,
+            "lifecycle_state": "active",
+            "location_record_version_id": "multi-unit-building-location-record-version-unit-02",
+            "recorded_at": "2026-07-14 00:00:00+00:00",
+            "recorded_to": null
+          }
+        ],
+        "publication_versions": [
+          {
+            "location_record_version_id": "multi-unit-building-location_record_version-03",
+            "projection_state": "included",
+            "published_label": "publication_release_item-published_label-value"
+          },
+          {
+            "location_record_version_id": "multi-unit-building-location-record-version-unit-02",
+            "projection_state": "included",
+            "published_label": "Unit B"
+          }
+        ]
+      },
+      "operator_projection": {
+        "decision_count": 1,
+        "evidence_count": 1,
+        "geometry": [
+          {
+            "geometry_role": "entrance-point",
+            "geometry_version_id": "multi-unit-building-geometry_version-03",
+            "promotion_decision_event_id": "multi-unit-building-decision_event-03",
+            "promotion_evidence_object_id": "multi-unit-building-evidence_object-03",
+            "quality_state": "accepted-canonical"
+          }
+        ],
+        "location_versions": [
+          {
+            "effective_from": "2026-07-14 00:00:00+00:00",
+            "effective_to": null,
+            "lifecycle_state": "active",
+            "location_record_id": "multi-unit-building-location_record-03",
+            "location_record_version_id": "multi-unit-building-location_record_version-03",
+            "recorded_at": "2026-07-14 00:00:00+00:00",
+            "version_number": "3"
+          },
+          {
+            "effective_from": "2026-07-14 00:00:00+00:00",
+            "effective_to": null,
+            "lifecycle_state": "active",
+            "location_record_id": "multi-unit-building-location-record-building-positive",
+            "location_record_version_id": "multi-unit-building-location-record-version-building-positive",
+            "recorded_at": "2026-07-14 00:00:00+00:00",
+            "version_number": "1"
+          },
+          {
+            "effective_from": "2026-07-14 00:00:00+00:00",
+            "effective_to": null,
+            "lifecycle_state": "active",
+            "location_record_id": "multi-unit-building-location-record-unit-02",
+            "location_record_version_id": "multi-unit-building-location-record-version-unit-02",
+            "recorded_at": "2026-07-14 00:00:00+00:00",
+            "version_number": "1"
+          }
+        ],
+        "names": [
+          {
+            "effective_from": "2026-07-14 00:00:00+00:00",
+            "effective_to": null,
+            "language_code": "es",
+            "name_kind": "official-es",
+            "name_record_id": "multi-unit-building-name_record-03",
+            "name_status": "official-current",
+            "name_text": "multi-unit-building official name"
+          }
+        ],
+        "object_links": [
+          {
+            "cardinality_rank": "1",
+            "link_id": "multi-unit-building-location_record_object_link-03",
+            "location_record_version_id": "multi-unit-building-location_record_version-03",
+            "object_role": "primary-subject",
+            "subject_id": "multi-unit-building-registry_subject-03"
+          },
+          {
+            "cardinality_rank": "1",
+            "link_id": "multi-unit-building-object-link-building-positive-primary",
+            "location_record_version_id": "multi-unit-building-location-record-version-building-positive",
+            "object_role": "primary-subject",
+            "subject_id": "multi-unit-building-registry-subject-building-positive"
+          },
+          {
+            "cardinality_rank": "1",
+            "link_id": "multi-unit-building-object-link-parent-building",
+            "location_record_version_id": "multi-unit-building-location_record_version-03",
+            "object_role": "parent-building",
+            "subject_id": "multi-unit-building-registry-subject-parent-building"
+          },
+          {
+            "cardinality_rank": "1",
+            "link_id": "multi-unit-building-object-link-unit-02-parent-building",
+            "location_record_version_id": "multi-unit-building-location-record-version-unit-02",
+            "object_role": "parent-building",
+            "subject_id": "multi-unit-building-registry-subject-parent-building"
+          },
+          {
+            "cardinality_rank": "1",
+            "link_id": "multi-unit-building-object-link-unit-02-primary",
+            "location_record_version_id": "multi-unit-building-location-record-version-unit-02",
+            "object_role": "primary-subject",
+            "subject_id": "multi-unit-building-registry-subject-unit-02"
+          }
+        ]
+      },
+      "public_projection": [
+        {
+          "location_record_id": "multi-unit-building-location_record-03",
+          "location_record_version_id": "multi-unit-building-location_record_version-03",
+          "projection_payload_hash": "publication_release_item-projection_payload_hash-value",
+          "projection_payload_json": "{'entity': 'publication_release_item', 'fixture': True}",
+          "projection_state": "included",
+          "public_code_alias_id": "multi-unit-building-public_code_alias-03",
+          "published_label": "publication_release_item-published_label-value"
+        },
+        {
+          "location_record_id": "multi-unit-building-location-record-unit-02",
+          "location_record_version_id": "multi-unit-building-location-record-version-unit-02",
+          "projection_payload_hash": "multi-unit-unit-b-projection-hash",
+          "projection_payload_json": "{'unit': 'B', 'scenario': 'multi-unit-building', 'canonical_record': 'multi-unit-building-location-record-unit-02'}",
+          "projection_state": "included",
+          "public_code_alias_id": "multi-unit-building-public-code-alias-unit-02",
+          "published_label": "Unit B"
+        }
+      ],
+      "publication_releases": [
+        {
+          "publication_release_id": "multi-unit-building-publication_release-03",
+          "release_state": "approved"
+        }
+      ],
+      "queried_fixture_rows": 59,
+      "relationship_edges": [
+        {
+          "link_id": "multi-unit-building-location_record_object_link-03",
+          "location_record_version_id": "multi-unit-building-location_record_version-03",
+          "object_role": "primary-subject",
+          "subject_id": "multi-unit-building-registry_subject-03"
+        },
+        {
+          "link_id": "multi-unit-building-object-link-building-positive-primary",
+          "location_record_version_id": "multi-unit-building-location-record-version-building-positive",
+          "object_role": "primary-subject",
+          "subject_id": "multi-unit-building-registry-subject-building-positive"
+        },
+        {
+          "link_id": "multi-unit-building-object-link-parent-building",
+          "location_record_version_id": "multi-unit-building-location_record_version-03",
+          "object_role": "parent-building",
+          "subject_id": "multi-unit-building-registry-subject-parent-building"
+        },
+        {
+          "link_id": "multi-unit-building-object-link-unit-02-parent-building",
+          "location_record_version_id": "multi-unit-building-location-record-version-unit-02",
+          "object_role": "parent-building",
+          "subject_id": "multi-unit-building-registry-subject-parent-building"
+        },
+        {
+          "link_id": "multi-unit-building-object-link-unit-02-primary",
+          "location_record_version_id": "multi-unit-building-location-record-version-unit-02",
+          "object_role": "primary-subject",
+          "subject_id": "multi-unit-building-registry-subject-unit-02"
+        }
+      ],
+      "scenario": "multi-unit-building",
+      "status": "passed"
+    },
+    "no-formal-road-location": {
+      "assertions": {
+        "F10-no-formal-road-location-entities-and-identifiers": {
+          "evidence_source": "review08-disposable-target-db-query",
+          "finding": "F10",
+          "status": "passed"
+        },
+        "F10-no-formal-road-location-evidence-and-authority": {
+          "evidence_source": "review08-disposable-target-db-query",
+          "finding": "F10",
+          "status": "passed"
+        },
+        "F10-no-formal-road-location-geometry-and-provenance": {
+          "evidence_source": "review08-disposable-target-db-query",
+          "finding": "F10",
+          "status": "passed"
+        },
+        "F10-no-formal-road-location-historical-output": {
+          "evidence_source": "review08-disposable-target-db-query",
+          "finding": "F10",
+          "status": "passed"
+        },
+        "F10-no-formal-road-location-lifecycle-timeline": {
+          "evidence_source": "review08-disposable-target-db-query",
+          "finding": "F10",
+          "status": "passed"
+        },
+        "F10-no-formal-road-location-operator-projection": {
+          "evidence_source": "review08-disposable-target-db-query",
+          "finding": "F10",
+          "status": "passed"
+        },
+        "F10-no-formal-road-location-public-projection": {
+          "evidence_source": "review08-disposable-target-db-query",
+          "finding": "F10",
+          "status": "passed"
+        },
+        "F10-no-formal-road-location-publication-release": {
+          "evidence_source": "review08-disposable-target-db-query",
+          "finding": "F10",
+          "status": "passed"
+        },
+        "F10-no-formal-road-location-versions-and-relationships": {
+          "evidence_source": "review08-disposable-target-db-query",
+          "finding": "F10",
+          "status": "passed"
+        }
+      },
+      "entity_counts": {
+        "administrative_code_history": 1,
+        "administrative_unit": 1,
+        "administrative_unit_version": 1,
+        "building": 1,
+        "building_primary_entrance": 1,
+        "correction_case": 1,
+        "country": 1,
+        "decision_event": 1,
+        "dispute_case": 1,
+        "entrance": 1,
+        "evidence_object": 1,
+        "field_assignment": 1,
+        "field_observation": 1,
+        "geometry_observation": 1,
+        "geometry_quality_assessment": 1,
+        "geometry_transformation": 1,
+        "geometry_version": 1,
+        "intake_case": 1,
+        "landmark": 1,
+        "legacy_crosswalk": 1,
+        "licence": 1,
+        "locality": 1,
+        "location_record": 2,
+        "location_record_assertion": 1,
+        "location_record_object_link": 2,
+        "location_record_relationship": 1,
+        "location_record_version": 2,
+        "migration_exception": 1,
+        "name_record": 1,
+        "non_building_object": 1,
+        "operational_area": 1,
+        "operational_area_coverage": 1,
+        "parcel_reference": 1,
+        "partner_projection": 1,
+        "public_code_alias": 1,
+        "publication_release": 1,
+        "publication_release_item": 1,
+        "registry_subject": 2,
+        "road": 1,
+        "road_segment": 1,
+        "source_authority": 1,
+        "source_package": 1,
+        "source_payload_archive": 1,
+        "source_record": 1,
+        "unit": 1
+      },
+      "entity_ids": {
+        "administrative_code_history": [
+          "no-formal-road-location-administrative_code_history-04"
+        ],
+        "administrative_unit": [
+          "no-formal-road-location-administrative_unit-04"
+        ],
+        "administrative_unit_version": [
+          "no-formal-road-location-administrative_unit_version-04"
+        ],
+        "building": [
+          "no-formal-road-location-building-04"
+        ],
+        "building_primary_entrance": [
+          "no-formal-road-location-building_primary_entrance-04"
+        ],
+        "correction_case": [
+          "no-formal-road-location-correction_case-04"
+        ],
+        "country": [
+          "no-formal-road-location-country-04"
+        ],
+        "decision_event": [
+          "no-formal-road-location-decision_event-04"
+        ],
+        "dispute_case": [
+          "no-formal-road-location-dispute_case-04"
+        ],
+        "entrance": [
+          "no-formal-road-location-entrance-04"
+        ],
+        "evidence_object": [
+          "no-formal-road-location-evidence_object-04"
+        ],
+        "field_assignment": [
+          "no-formal-road-location-field_assignment-04"
+        ],
+        "field_observation": [
+          "no-formal-road-location-field_observation-04"
+        ],
+        "geometry_observation": [
+          "no-formal-road-location-geometry_observation-04"
+        ],
+        "geometry_quality_assessment": [
+          "no-formal-road-location-geometry_quality_assessment-04"
+        ],
+        "geometry_transformation": [
+          "no-formal-road-location-geometry_transformation-04"
+        ],
+        "geometry_version": [
+          "no-formal-road-location-geometry_version-04"
+        ],
+        "intake_case": [
+          "no-formal-road-location-intake_case-04"
+        ],
+        "landmark": [
+          "no-formal-road-location-landmark-04"
+        ],
+        "legacy_crosswalk": [
+          "no-formal-road-location-legacy_crosswalk-04"
+        ],
+        "licence": [
+          "no-formal-road-location-licence-04"
+        ],
+        "locality": [
+          "no-formal-road-location-locality-04"
+        ],
+        "location_record": [
+          "no-formal-road-location-location_record-04",
+          "no-formal-road-location-location-record-non-building-object-positive"
+        ],
+        "location_record_assertion": [
+          "no-formal-road-location-location_record_assertion-04"
+        ],
+        "location_record_object_link": [
+          "no-formal-road-location-location_record_object_link-04",
+          "no-formal-road-location-object-link-non-building-object-positive-primary"
+        ],
+        "location_record_relationship": [
+          "no-formal-road-location-location_record_relationship-04"
+        ],
+        "location_record_version": [
+          "no-formal-road-location-location_record_version-04",
+          "no-formal-road-location-location-record-version-non-building-object-positive"
+        ],
+        "migration_exception": [
+          "no-formal-road-location-migration_exception-04"
+        ],
+        "name_record": [
+          "no-formal-road-location-name_record-04"
+        ],
+        "non_building_object": [
+          "no-formal-road-location-non_building_object-04"
+        ],
+        "operational_area": [
+          "no-formal-road-location-operational_area-04"
+        ],
+        "operational_area_coverage": [
+          "no-formal-road-location-operational_area_coverage-04"
+        ],
+        "parcel_reference": [
+          "no-formal-road-location-parcel_reference-04"
+        ],
+        "partner_projection": [
+          "no-formal-road-location-partner_projection-04"
+        ],
+        "public_code_alias": [
+          "no-formal-road-location-public_code_alias-04"
+        ],
+        "publication_release": [
+          "no-formal-road-location-publication_release-04"
+        ],
+        "publication_release_item": [
+          "no-formal-road-location-publication_release_item-04"
+        ],
+        "registry_subject": [
+          "no-formal-road-location-registry_subject-04",
+          "no-formal-road-location-registry-subject-non-building-object-positive"
+        ],
+        "road": [
+          "no-formal-road-location-road-04"
+        ],
+        "road_segment": [
+          "no-formal-road-location-road_segment-04"
+        ],
+        "source_authority": [
+          "no-formal-road-location-source_authority-04"
+        ],
+        "source_package": [
+          "no-formal-road-location-source_package-04"
+        ],
+        "source_payload_archive": [
+          "no-formal-road-location-source_payload_archive-04"
+        ],
+        "source_record": [
+          "no-formal-road-location-source_record-04"
+        ],
+        "unit": [
+          "no-formal-road-location-unit-04"
+        ]
+      },
+      "expected_fixture_rows": 49,
+      "failed_assertions": [],
+      "geometry_and_provenance": {
+        "authority_decisions": [
+          {
+            "actor_id": "decision_event-actor_id-001",
+            "decision_event_id": "no-formal-road-location-decision_event-04",
+            "decision_outcome": "approved",
+            "decision_type": "approve-geometry",
+            "details_json": "{'institution_id': 'national-gis-authority', 'permission_key': 'geometry.promote', 'territorial_scope': 'national-gis-authority', 'evidence_object_id': 'no-formal-road-location-evidence_object-04', 'source_observation_id': 'no-formal-road-location-geometry_observation-04', 'quality_authority_actor_id': 'decision_event-actor_id-001'}"
+          }
+        ],
+        "evidence_objects": [
+          {
+            "classification": "government-internal",
+            "content_hash": "evidence_object-content_hash-value",
+            "evidence_object_id": "no-formal-road-location-evidence_object-04"
+          }
+        ],
+        "geometry_versions": [
+          {
+            "geometry_role": "location-point",
+            "geometry_version_id": "no-formal-road-location-geometry_version-04",
+            "promotion_authority_scope": "national-gis-authority",
+            "promotion_decision_event_id": "no-formal-road-location-decision_event-04",
+            "promotion_evidence_object_id": "no-formal-road-location-evidence_object-04",
+            "quality_state": "accepted-canonical",
+            "validated_by_actor_id": "decision_event-actor_id-001"
+          }
+        ],
+        "observations": [
+          {
+            "capture_method": "browser-gps",
+            "geometry_observation_id": "no-formal-road-location-geometry_observation-04",
+            "geometry_role": "location-point"
+          }
+        ]
+      },
+      "historical_output": {
+        "admin_effective_versions": [
+          {
+            "admin_level": "country",
+            "administrative_unit_version_id": "no-formal-road-location-administrative_unit_version-04",
+            "effective_from": "2026-07-14 00:00:00+00:00",
+            "effective_to": null,
+            "lifecycle_state": "official",
+            "recorded_at": "2026-07-14 00:00:00+00:00"
+          }
+        ],
+        "location_lifecycle_timeline": [
+          {
+            "effective_from": "2026-07-14 00:00:00+00:00",
+            "effective_to": null,
+            "lifecycle_state": "active",
+            "location_record_version_id": "no-formal-road-location-location_record_version-04",
+            "recorded_at": "2026-07-14 00:00:00+00:00",
+            "recorded_to": null
+          },
+          {
+            "effective_from": "2026-07-14 00:00:00+00:00",
+            "effective_to": null,
+            "lifecycle_state": "active",
+            "location_record_version_id": "no-formal-road-location-location-record-version-non-building-object-positive",
+            "recorded_at": "2026-07-14 00:00:00+00:00",
+            "recorded_to": null
+          }
+        ],
+        "publication_versions": [
+          {
+            "location_record_version_id": "no-formal-road-location-location_record_version-04",
+            "projection_state": "included",
+            "published_label": "publication_release_item-published_label-value"
+          }
+        ]
+      },
+      "operator_projection": {
+        "decision_count": 1,
+        "evidence_count": 1,
+        "geometry": [
+          {
+            "geometry_role": "location-point",
+            "geometry_version_id": "no-formal-road-location-geometry_version-04",
+            "promotion_decision_event_id": "no-formal-road-location-decision_event-04",
+            "promotion_evidence_object_id": "no-formal-road-location-evidence_object-04",
+            "quality_state": "accepted-canonical"
+          }
+        ],
+        "location_versions": [
+          {
+            "effective_from": "2026-07-14 00:00:00+00:00",
+            "effective_to": null,
+            "lifecycle_state": "active",
+            "location_record_id": "no-formal-road-location-location_record-04",
+            "location_record_version_id": "no-formal-road-location-location_record_version-04",
+            "recorded_at": "2026-07-14 00:00:00+00:00",
+            "version_number": "4"
+          },
+          {
+            "effective_from": "2026-07-14 00:00:00+00:00",
+            "effective_to": null,
+            "lifecycle_state": "active",
+            "location_record_id": "no-formal-road-location-location-record-non-building-object-positive",
+            "location_record_version_id": "no-formal-road-location-location-record-version-non-building-object-positive",
+            "recorded_at": "2026-07-14 00:00:00+00:00",
+            "version_number": "1"
+          }
+        ],
+        "names": [
+          {
+            "effective_from": "2026-07-14 00:00:00+00:00",
+            "effective_to": null,
+            "language_code": "es",
+            "name_kind": "official-es",
+            "name_record_id": "no-formal-road-location-name_record-04",
+            "name_status": "official-current",
+            "name_text": "no-formal-road-location official name"
+          }
+        ],
+        "object_links": [
+          {
+            "cardinality_rank": "1",
+            "link_id": "no-formal-road-location-location_record_object_link-04",
+            "location_record_version_id": "no-formal-road-location-location_record_version-04",
+            "object_role": "primary-subject",
+            "subject_id": "no-formal-road-location-registry_subject-04"
+          },
+          {
+            "cardinality_rank": "1",
+            "link_id": "no-formal-road-location-object-link-non-building-object-positive-primary",
+            "location_record_version_id": "no-formal-road-location-location-record-version-non-building-object-positive",
+            "object_role": "primary-subject",
+            "subject_id": "no-formal-road-location-registry-subject-non-building-object-positive"
+          }
+        ]
+      },
+      "public_projection": [
+        {
+          "location_record_id": "no-formal-road-location-location_record-04",
+          "location_record_version_id": "no-formal-road-location-location_record_version-04",
+          "projection_payload_hash": "publication_release_item-projection_payload_hash-value",
+          "projection_payload_json": "{'entity': 'publication_release_item', 'fixture': True}",
+          "projection_state": "included",
+          "public_code_alias_id": "no-formal-road-location-public_code_alias-04",
+          "published_label": "publication_release_item-published_label-value"
+        }
+      ],
+      "publication_releases": [
+        {
+          "publication_release_id": "no-formal-road-location-publication_release-04",
+          "release_state": "approved"
+        }
+      ],
+      "queried_fixture_rows": 49,
+      "relationship_edges": [
+        {
+          "link_id": "no-formal-road-location-location_record_object_link-04",
+          "location_record_version_id": "no-formal-road-location-location_record_version-04",
+          "object_role": "primary-subject",
+          "subject_id": "no-formal-road-location-registry_subject-04"
+        },
+        {
+          "link_id": "no-formal-road-location-object-link-non-building-object-positive-primary",
+          "location_record_version_id": "no-formal-road-location-location-record-version-non-building-object-positive",
+          "object_role": "primary-subject",
+          "subject_id": "no-formal-road-location-registry-subject-non-building-object-positive"
+        }
+      ],
+      "scenario": "no-formal-road-location",
+      "status": "passed"
+    },
+    "rural-landmark-location": {
+      "assertions": {
+        "F10-rural-landmark-location-entities-and-identifiers": {
+          "evidence_source": "review08-disposable-target-db-query",
+          "finding": "F10",
+          "status": "passed"
+        },
+        "F10-rural-landmark-location-evidence-and-authority": {
+          "evidence_source": "review08-disposable-target-db-query",
+          "finding": "F10",
+          "status": "passed"
+        },
+        "F10-rural-landmark-location-geometry-and-provenance": {
+          "evidence_source": "review08-disposable-target-db-query",
+          "finding": "F10",
+          "status": "passed"
+        },
+        "F10-rural-landmark-location-historical-output": {
+          "evidence_source": "review08-disposable-target-db-query",
+          "finding": "F10",
+          "status": "passed"
+        },
+        "F10-rural-landmark-location-lifecycle-timeline": {
+          "evidence_source": "review08-disposable-target-db-query",
+          "finding": "F10",
+          "status": "passed"
+        },
+        "F10-rural-landmark-location-operator-projection": {
+          "evidence_source": "review08-disposable-target-db-query",
+          "finding": "F10",
+          "status": "passed"
+        },
+        "F10-rural-landmark-location-public-projection": {
+          "evidence_source": "review08-disposable-target-db-query",
+          "finding": "F10",
+          "status": "passed"
+        },
+        "F10-rural-landmark-location-publication-release": {
+          "evidence_source": "review08-disposable-target-db-query",
+          "finding": "F10",
+          "status": "passed"
+        },
+        "F10-rural-landmark-location-versions-and-relationships": {
+          "evidence_source": "review08-disposable-target-db-query",
+          "finding": "F10",
+          "status": "passed"
+        }
+      },
+      "entity_counts": {
+        "administrative_code_history": 1,
+        "administrative_unit": 1,
+        "administrative_unit_version": 1,
+        "building": 1,
+        "building_primary_entrance": 1,
+        "correction_case": 1,
+        "country": 1,
+        "decision_event": 1,
+        "dispute_case": 1,
+        "entrance": 1,
+        "evidence_object": 1,
+        "field_assignment": 1,
+        "field_observation": 1,
+        "geometry_observation": 1,
+        "geometry_quality_assessment": 1,
+        "geometry_transformation": 1,
+        "geometry_version": 1,
+        "intake_case": 1,
+        "landmark": 1,
+        "legacy_crosswalk": 1,
+        "licence": 1,
+        "locality": 1,
+        "location_record": 1,
+        "location_record_assertion": 1,
+        "location_record_object_link": 1,
+        "location_record_relationship": 1,
+        "location_record_version": 1,
+        "migration_exception": 1,
+        "name_record": 1,
+        "non_building_object": 1,
+        "operational_area": 1,
+        "operational_area_coverage": 1,
+        "parcel_reference": 1,
+        "partner_projection": 1,
+        "public_code_alias": 1,
+        "publication_release": 1,
+        "publication_release_item": 1,
+        "registry_subject": 1,
+        "road": 1,
+        "road_segment": 1,
+        "source_authority": 1,
+        "source_package": 1,
+        "source_payload_archive": 1,
+        "source_record": 1,
+        "unit": 1
+      },
+      "entity_ids": {
+        "administrative_code_history": [
+          "rural-landmark-location-administrative_code_history-02"
+        ],
+        "administrative_unit": [
+          "rural-landmark-location-administrative_unit-02"
+        ],
+        "administrative_unit_version": [
+          "rural-landmark-location-administrative_unit_version-02"
+        ],
+        "building": [
+          "rural-landmark-location-building-02"
+        ],
+        "building_primary_entrance": [
+          "rural-landmark-location-building_primary_entrance-02"
+        ],
+        "correction_case": [
+          "rural-landmark-location-correction_case-02"
+        ],
+        "country": [
+          "rural-landmark-location-country-02"
+        ],
+        "decision_event": [
+          "rural-landmark-location-decision_event-02"
+        ],
+        "dispute_case": [
+          "rural-landmark-location-dispute_case-02"
+        ],
+        "entrance": [
+          "rural-landmark-location-entrance-02"
+        ],
+        "evidence_object": [
+          "rural-landmark-location-evidence_object-02"
+        ],
+        "field_assignment": [
+          "rural-landmark-location-field_assignment-02"
+        ],
+        "field_observation": [
+          "rural-landmark-location-field_observation-02"
+        ],
+        "geometry_observation": [
+          "rural-landmark-location-geometry_observation-02"
+        ],
+        "geometry_quality_assessment": [
+          "rural-landmark-location-geometry_quality_assessment-02"
+        ],
+        "geometry_transformation": [
+          "rural-landmark-location-geometry_transformation-02"
+        ],
+        "geometry_version": [
+          "rural-landmark-location-geometry_version-02"
+        ],
+        "intake_case": [
+          "rural-landmark-location-intake_case-02"
+        ],
+        "landmark": [
+          "rural-landmark-location-landmark-02"
+        ],
+        "legacy_crosswalk": [
+          "rural-landmark-location-legacy_crosswalk-02"
+        ],
+        "licence": [
+          "rural-landmark-location-licence-02"
+        ],
+        "locality": [
+          "rural-landmark-location-locality-02"
+        ],
+        "location_record": [
+          "rural-landmark-location-location_record-02"
+        ],
+        "location_record_assertion": [
+          "rural-landmark-location-location_record_assertion-02"
+        ],
+        "location_record_object_link": [
+          "rural-landmark-location-location_record_object_link-02"
+        ],
+        "location_record_relationship": [
+          "rural-landmark-location-location_record_relationship-02"
+        ],
+        "location_record_version": [
+          "rural-landmark-location-location_record_version-02"
+        ],
+        "migration_exception": [
+          "rural-landmark-location-migration_exception-02"
+        ],
+        "name_record": [
+          "rural-landmark-location-name_record-02"
+        ],
+        "non_building_object": [
+          "rural-landmark-location-non_building_object-02"
+        ],
+        "operational_area": [
+          "rural-landmark-location-operational_area-02"
+        ],
+        "operational_area_coverage": [
+          "rural-landmark-location-operational_area_coverage-02"
+        ],
+        "parcel_reference": [
+          "rural-landmark-location-parcel_reference-02"
+        ],
+        "partner_projection": [
+          "rural-landmark-location-partner_projection-02"
+        ],
+        "public_code_alias": [
+          "rural-landmark-location-public_code_alias-02"
+        ],
+        "publication_release": [
+          "rural-landmark-location-publication_release-02"
+        ],
+        "publication_release_item": [
+          "rural-landmark-location-publication_release_item-02"
+        ],
+        "registry_subject": [
+          "rural-landmark-location-registry_subject-02"
+        ],
+        "road": [
+          "rural-landmark-location-road-02"
+        ],
+        "road_segment": [
+          "rural-landmark-location-road_segment-02"
+        ],
+        "source_authority": [
+          "rural-landmark-location-source_authority-02"
+        ],
+        "source_package": [
+          "rural-landmark-location-source_package-02"
+        ],
+        "source_payload_archive": [
+          "rural-landmark-location-source_payload_archive-02"
+        ],
+        "source_record": [
+          "rural-landmark-location-source_record-02"
+        ],
+        "unit": [
+          "rural-landmark-location-unit-02"
+        ]
+      },
+      "expected_fixture_rows": 45,
+      "failed_assertions": [],
+      "geometry_and_provenance": {
+        "authority_decisions": [
+          {
+            "actor_id": "decision_event-actor_id-001",
+            "decision_event_id": "rural-landmark-location-decision_event-02",
+            "decision_outcome": "approved",
+            "decision_type": "approve-geometry",
+            "details_json": "{'institution_id': 'national-gis-authority', 'permission_key': 'geometry.promote', 'territorial_scope': 'national-gis-authority', 'evidence_object_id': 'rural-landmark-location-evidence_object-02', 'source_observation_id': 'rural-landmark-location-geometry_observation-02', 'quality_authority_actor_id': 'decision_event-actor_id-001'}"
+          }
+        ],
+        "evidence_objects": [
+          {
+            "classification": "government-internal",
+            "content_hash": "evidence_object-content_hash-value",
+            "evidence_object_id": "rural-landmark-location-evidence_object-02"
+          }
+        ],
+        "geometry_versions": [
+          {
+            "geometry_role": "landmark-point",
+            "geometry_version_id": "rural-landmark-location-geometry_version-02",
+            "promotion_authority_scope": "national-gis-authority",
+            "promotion_decision_event_id": "rural-landmark-location-decision_event-02",
+            "promotion_evidence_object_id": "rural-landmark-location-evidence_object-02",
+            "quality_state": "accepted-canonical",
+            "validated_by_actor_id": "decision_event-actor_id-001"
+          }
+        ],
+        "observations": [
+          {
+            "capture_method": "browser-gps",
+            "geometry_observation_id": "rural-landmark-location-geometry_observation-02",
+            "geometry_role": "landmark-point"
+          }
+        ]
+      },
+      "historical_output": {
+        "admin_effective_versions": [
+          {
+            "admin_level": "country",
+            "administrative_unit_version_id": "rural-landmark-location-administrative_unit_version-02",
+            "effective_from": "2026-07-14 00:00:00+00:00",
+            "effective_to": null,
+            "lifecycle_state": "official",
+            "recorded_at": "2026-07-14 00:00:00+00:00"
+          }
+        ],
+        "location_lifecycle_timeline": [
+          {
+            "effective_from": "2026-07-14 00:00:00+00:00",
+            "effective_to": null,
+            "lifecycle_state": "active",
+            "location_record_version_id": "rural-landmark-location-location_record_version-02",
+            "recorded_at": "2026-07-14 00:00:00+00:00",
+            "recorded_to": null
+          }
+        ],
+        "publication_versions": [
+          {
+            "location_record_version_id": "rural-landmark-location-location_record_version-02",
+            "projection_state": "included",
+            "published_label": "publication_release_item-published_label-value"
+          }
+        ]
+      },
+      "operator_projection": {
+        "decision_count": 1,
+        "evidence_count": 1,
+        "geometry": [
+          {
+            "geometry_role": "landmark-point",
+            "geometry_version_id": "rural-landmark-location-geometry_version-02",
+            "promotion_decision_event_id": "rural-landmark-location-decision_event-02",
+            "promotion_evidence_object_id": "rural-landmark-location-evidence_object-02",
+            "quality_state": "accepted-canonical"
+          }
+        ],
+        "location_versions": [
+          {
+            "effective_from": "2026-07-14 00:00:00+00:00",
+            "effective_to": null,
+            "lifecycle_state": "active",
+            "location_record_id": "rural-landmark-location-location_record-02",
+            "location_record_version_id": "rural-landmark-location-location_record_version-02",
+            "recorded_at": "2026-07-14 00:00:00+00:00",
+            "version_number": "2"
+          }
+        ],
+        "names": [
+          {
+            "effective_from": "2026-07-14 00:00:00+00:00",
+            "effective_to": null,
+            "language_code": "es",
+            "name_kind": "official-es",
+            "name_record_id": "rural-landmark-location-name_record-02",
+            "name_status": "official-current",
+            "name_text": "rural-landmark-location official name"
+          }
+        ],
+        "object_links": [
+          {
+            "cardinality_rank": "1",
+            "link_id": "rural-landmark-location-location_record_object_link-02",
+            "location_record_version_id": "rural-landmark-location-location_record_version-02",
+            "object_role": "primary-subject",
+            "subject_id": "rural-landmark-location-registry_subject-02"
+          }
+        ]
+      },
+      "public_projection": [
+        {
+          "location_record_id": "rural-landmark-location-location_record-02",
+          "location_record_version_id": "rural-landmark-location-location_record_version-02",
+          "projection_payload_hash": "publication_release_item-projection_payload_hash-value",
+          "projection_payload_json": "{'entity': 'publication_release_item', 'fixture': True}",
+          "projection_state": "included",
+          "public_code_alias_id": "rural-landmark-location-public_code_alias-02",
+          "published_label": "publication_release_item-published_label-value"
+        }
+      ],
+      "publication_releases": [
+        {
+          "publication_release_id": "rural-landmark-location-publication_release-02",
+          "release_state": "approved"
+        }
+      ],
+      "queried_fixture_rows": 45,
+      "relationship_edges": [
+        {
+          "link_id": "rural-landmark-location-location_record_object_link-02",
+          "location_record_version_id": "rural-landmark-location-location_record_version-02",
+          "object_role": "primary-subject",
+          "subject_id": "rural-landmark-location-registry_subject-02"
+        }
+      ],
+      "scenario": "rural-landmark-location",
+      "status": "passed"
+    },
+    "urban-street-address": {
+      "assertions": {
+        "F10-urban-street-address-entities-and-identifiers": {
+          "evidence_source": "review08-disposable-target-db-query",
+          "finding": "F10",
+          "status": "passed"
+        },
+        "F10-urban-street-address-evidence-and-authority": {
+          "evidence_source": "review08-disposable-target-db-query",
+          "finding": "F10",
+          "status": "passed"
+        },
+        "F10-urban-street-address-geometry-and-provenance": {
+          "evidence_source": "review08-disposable-target-db-query",
+          "finding": "F10",
+          "status": "passed"
+        },
+        "F10-urban-street-address-historical-output": {
+          "evidence_source": "review08-disposable-target-db-query",
+          "finding": "F10",
+          "status": "passed"
+        },
+        "F10-urban-street-address-lifecycle-timeline": {
+          "evidence_source": "review08-disposable-target-db-query",
+          "finding": "F10",
+          "status": "passed"
+        },
+        "F10-urban-street-address-operator-projection": {
+          "evidence_source": "review08-disposable-target-db-query",
+          "finding": "F10",
+          "status": "passed"
+        },
+        "F10-urban-street-address-public-projection": {
+          "evidence_source": "review08-disposable-target-db-query",
+          "finding": "F10",
+          "status": "passed"
+        },
+        "F10-urban-street-address-publication-release": {
+          "evidence_source": "review08-disposable-target-db-query",
+          "finding": "F10",
+          "status": "passed"
+        },
+        "F10-urban-street-address-versions-and-relationships": {
+          "evidence_source": "review08-disposable-target-db-query",
+          "finding": "F10",
+          "status": "passed"
+        }
+      },
+      "entity_counts": {
+        "administrative_code_history": 1,
+        "administrative_unit": 1,
+        "administrative_unit_version": 1,
+        "building": 1,
+        "building_primary_entrance": 1,
+        "correction_case": 1,
+        "country": 1,
+        "decision_event": 1,
+        "dispute_case": 1,
+        "entrance": 1,
+        "evidence_object": 1,
+        "field_assignment": 1,
+        "field_observation": 1,
+        "geometry_observation": 1,
+        "geometry_quality_assessment": 1,
+        "geometry_transformation": 1,
+        "geometry_version": 1,
+        "intake_case": 1,
+        "landmark": 1,
+        "legacy_crosswalk": 1,
+        "licence": 1,
+        "locality": 1,
+        "location_record": 2,
+        "location_record_assertion": 1,
+        "location_record_object_link": 2,
+        "location_record_relationship": 1,
+        "location_record_version": 2,
+        "migration_exception": 1,
+        "name_record": 1,
+        "non_building_object": 1,
+        "operational_area": 1,
+        "operational_area_coverage": 1,
+        "parcel_reference": 1,
+        "partner_projection": 1,
+        "public_code_alias": 1,
+        "publication_release": 1,
+        "publication_release_item": 1,
+        "registry_subject": 2,
+        "road": 1,
+        "road_segment": 1,
+        "source_authority": 1,
+        "source_package": 1,
+        "source_payload_archive": 1,
+        "source_record": 1,
+        "unit": 1
+      },
+      "entity_ids": {
+        "administrative_code_history": [
+          "urban-street-address-administrative_code_history-01"
+        ],
+        "administrative_unit": [
+          "urban-street-address-administrative_unit-01"
+        ],
+        "administrative_unit_version": [
+          "urban-street-address-administrative_unit_version-01"
+        ],
+        "building": [
+          "urban-street-address-building-01"
+        ],
+        "building_primary_entrance": [
+          "urban-street-address-building_primary_entrance-01"
+        ],
+        "correction_case": [
+          "urban-street-address-correction_case-01"
+        ],
+        "country": [
+          "urban-street-address-country-01"
+        ],
+        "decision_event": [
+          "urban-street-address-decision_event-01"
+        ],
+        "dispute_case": [
+          "urban-street-address-dispute_case-01"
+        ],
+        "entrance": [
+          "urban-street-address-entrance-01"
+        ],
+        "evidence_object": [
+          "urban-street-address-evidence_object-01"
+        ],
+        "field_assignment": [
+          "urban-street-address-field_assignment-01"
+        ],
+        "field_observation": [
+          "urban-street-address-field_observation-01"
+        ],
+        "geometry_observation": [
+          "urban-street-address-geometry_observation-01"
+        ],
+        "geometry_quality_assessment": [
+          "urban-street-address-geometry_quality_assessment-01"
+        ],
+        "geometry_transformation": [
+          "urban-street-address-geometry_transformation-01"
+        ],
+        "geometry_version": [
+          "urban-street-address-geometry_version-01"
+        ],
+        "intake_case": [
+          "urban-street-address-intake_case-01"
+        ],
+        "landmark": [
+          "urban-street-address-landmark-01"
+        ],
+        "legacy_crosswalk": [
+          "urban-street-address-legacy_crosswalk-01"
+        ],
+        "licence": [
+          "urban-street-address-licence-01"
+        ],
+        "locality": [
+          "urban-street-address-locality-01"
+        ],
+        "location_record": [
+          "urban-street-address-location_record-01",
+          "urban-street-address-location-record-entrance-positive"
+        ],
+        "location_record_assertion": [
+          "urban-street-address-location_record_assertion-01"
+        ],
+        "location_record_object_link": [
+          "urban-street-address-location_record_object_link-01",
+          "urban-street-address-object-link-entrance-positive-primary"
+        ],
+        "location_record_relationship": [
+          "urban-street-address-location_record_relationship-01"
+        ],
+        "location_record_version": [
+          "urban-street-address-location_record_version-01",
+          "urban-street-address-location-record-version-entrance-positive"
+        ],
+        "migration_exception": [
+          "urban-street-address-migration_exception-01"
+        ],
+        "name_record": [
+          "urban-street-address-name_record-01"
+        ],
+        "non_building_object": [
+          "urban-street-address-non_building_object-01"
+        ],
+        "operational_area": [
+          "urban-street-address-operational_area-01"
+        ],
+        "operational_area_coverage": [
+          "urban-street-address-operational_area_coverage-01"
+        ],
+        "parcel_reference": [
+          "urban-street-address-parcel_reference-01"
+        ],
+        "partner_projection": [
+          "urban-street-address-partner_projection-01"
+        ],
+        "public_code_alias": [
+          "urban-street-address-public_code_alias-01"
+        ],
+        "publication_release": [
+          "urban-street-address-publication_release-01"
+        ],
+        "publication_release_item": [
+          "urban-street-address-publication_release_item-01"
+        ],
+        "registry_subject": [
+          "urban-street-address-registry_subject-01",
+          "urban-street-address-registry-subject-entrance-positive"
+        ],
+        "road": [
+          "urban-street-address-road-01"
+        ],
+        "road_segment": [
+          "urban-street-address-road_segment-01"
+        ],
+        "source_authority": [
+          "urban-street-address-source_authority-01"
+        ],
+        "source_package": [
+          "urban-street-address-source_package-01"
+        ],
+        "source_payload_archive": [
+          "urban-street-address-source_payload_archive-01"
+        ],
+        "source_record": [
+          "urban-street-address-source_record-01"
+        ],
+        "unit": [
+          "urban-street-address-unit-01"
+        ]
+      },
+      "expected_fixture_rows": 49,
+      "failed_assertions": [],
+      "geometry_and_provenance": {
+        "authority_decisions": [
+          {
+            "actor_id": "decision_event-actor_id-001",
+            "decision_event_id": "urban-street-address-decision_event-01",
+            "decision_outcome": "approved",
+            "decision_type": "approve-geometry",
+            "details_json": "{'institution_id': 'national-gis-authority', 'permission_key': 'geometry.promote', 'territorial_scope': 'national-gis-authority', 'evidence_object_id': 'urban-street-address-evidence_object-01', 'source_observation_id': 'urban-street-address-geometry_observation-01', 'quality_authority_actor_id': 'decision_event-actor_id-001'}"
+          }
+        ],
+        "evidence_objects": [
+          {
+            "classification": "government-internal",
+            "content_hash": "evidence_object-content_hash-value",
+            "evidence_object_id": "urban-street-address-evidence_object-01"
+          }
+        ],
+        "geometry_versions": [
+          {
+            "geometry_role": "building-point",
+            "geometry_version_id": "urban-street-address-geometry_version-01",
+            "promotion_authority_scope": "national-gis-authority",
+            "promotion_decision_event_id": "urban-street-address-decision_event-01",
+            "promotion_evidence_object_id": "urban-street-address-evidence_object-01",
+            "quality_state": "accepted-canonical",
+            "validated_by_actor_id": "decision_event-actor_id-001"
+          }
+        ],
+        "observations": [
+          {
+            "capture_method": "browser-gps",
+            "geometry_observation_id": "urban-street-address-geometry_observation-01",
+            "geometry_role": "building-point"
+          }
+        ]
+      },
+      "historical_output": {
+        "admin_effective_versions": [
+          {
+            "admin_level": "country",
+            "administrative_unit_version_id": "urban-street-address-administrative_unit_version-01",
+            "effective_from": "2026-07-14 00:00:00+00:00",
+            "effective_to": null,
+            "lifecycle_state": "official",
+            "recorded_at": "2026-07-14 00:00:00+00:00"
+          }
+        ],
+        "location_lifecycle_timeline": [
+          {
+            "effective_from": "2026-07-14 00:00:00+00:00",
+            "effective_to": null,
+            "lifecycle_state": "active",
+            "location_record_version_id": "urban-street-address-location_record_version-01",
+            "recorded_at": "2026-07-14 00:00:00+00:00",
+            "recorded_to": null
+          },
+          {
+            "effective_from": "2026-07-14 00:00:00+00:00",
+            "effective_to": null,
+            "lifecycle_state": "active",
+            "location_record_version_id": "urban-street-address-location-record-version-entrance-positive",
+            "recorded_at": "2026-07-14 00:00:00+00:00",
+            "recorded_to": null
+          }
+        ],
+        "publication_versions": [
+          {
+            "location_record_version_id": "urban-street-address-location_record_version-01",
+            "projection_state": "included",
+            "published_label": "publication_release_item-published_label-value"
+          }
+        ]
+      },
+      "operator_projection": {
+        "decision_count": 1,
+        "evidence_count": 1,
+        "geometry": [
+          {
+            "geometry_role": "building-point",
+            "geometry_version_id": "urban-street-address-geometry_version-01",
+            "promotion_decision_event_id": "urban-street-address-decision_event-01",
+            "promotion_evidence_object_id": "urban-street-address-evidence_object-01",
+            "quality_state": "accepted-canonical"
+          }
+        ],
+        "location_versions": [
+          {
+            "effective_from": "2026-07-14 00:00:00+00:00",
+            "effective_to": null,
+            "lifecycle_state": "active",
+            "location_record_id": "urban-street-address-location_record-01",
+            "location_record_version_id": "urban-street-address-location_record_version-01",
+            "recorded_at": "2026-07-14 00:00:00+00:00",
+            "version_number": "1"
+          },
+          {
+            "effective_from": "2026-07-14 00:00:00+00:00",
+            "effective_to": null,
+            "lifecycle_state": "active",
+            "location_record_id": "urban-street-address-location-record-entrance-positive",
+            "location_record_version_id": "urban-street-address-location-record-version-entrance-positive",
+            "recorded_at": "2026-07-14 00:00:00+00:00",
+            "version_number": "1"
+          }
+        ],
+        "names": [
+          {
+            "effective_from": "2026-07-14 00:00:00+00:00",
+            "effective_to": null,
+            "language_code": "es",
+            "name_kind": "official-es",
+            "name_record_id": "urban-street-address-name_record-01",
+            "name_status": "official-current",
+            "name_text": "urban-street-address official name"
+          }
+        ],
+        "object_links": [
+          {
+            "cardinality_rank": "1",
+            "link_id": "urban-street-address-location_record_object_link-01",
+            "location_record_version_id": "urban-street-address-location_record_version-01",
+            "object_role": "primary-subject",
+            "subject_id": "urban-street-address-registry_subject-01"
+          },
+          {
+            "cardinality_rank": "1",
+            "link_id": "urban-street-address-object-link-entrance-positive-primary",
+            "location_record_version_id": "urban-street-address-location-record-version-entrance-positive",
+            "object_role": "primary-subject",
+            "subject_id": "urban-street-address-registry-subject-entrance-positive"
+          }
+        ]
+      },
+      "public_projection": [
+        {
+          "location_record_id": "urban-street-address-location_record-01",
+          "location_record_version_id": "urban-street-address-location_record_version-01",
+          "projection_payload_hash": "publication_release_item-projection_payload_hash-value",
+          "projection_payload_json": "{'entity': 'publication_release_item', 'fixture': True}",
+          "projection_state": "included",
+          "public_code_alias_id": "urban-street-address-public_code_alias-01",
+          "published_label": "publication_release_item-published_label-value"
+        }
+      ],
+      "publication_releases": [
+        {
+          "publication_release_id": "urban-street-address-publication_release-01",
+          "release_state": "approved"
+        }
+      ],
+      "queried_fixture_rows": 49,
+      "relationship_edges": [
+        {
+          "link_id": "urban-street-address-location_record_object_link-01",
+          "location_record_version_id": "urban-street-address-location_record_version-01",
+          "object_role": "primary-subject",
+          "subject_id": "urban-street-address-registry_subject-01"
+        },
+        {
+          "link_id": "urban-street-address-object-link-entrance-positive-primary",
+          "location_record_version_id": "urban-street-address-location-record-version-entrance-positive",
+          "object_role": "primary-subject",
+          "subject_id": "urban-street-address-registry-subject-entrance-positive"
+        }
+      ],
+      "scenario": "urban-street-address",
+      "status": "passed"
+    }
+  },
+  "summary": {
+    "assertions": 63,
+    "execution_mode": "review08-disposable-target-db-query",
+    "failed": [],
+    "scenarios": 7
+  }
+}

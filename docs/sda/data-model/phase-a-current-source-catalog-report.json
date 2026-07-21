@@ -1,0 +1,113 @@
+{
+  "execution_mode": "phase-a-current-source-discovery",
+  "migration_command": "infra/scripts/migrate.py apply with PGOPTIONS=-c search_path=current_source,public",
+  "migration_ledger_locations": [
+    {
+      "table_name": "schema_migrations",
+      "table_schema": "current_source"
+    }
+  ],
+  "migration_ledger_rows": [
+    {
+      "checksum": "3374f474f1796bf4753172da706f1a8df3f3e83ca707b866d35ab2f320386a73",
+      "filename": "000_current_operational_schema.sql",
+      "version": "000"
+    },
+    {
+      "checksum": "cca14e756c74f4820634cfc3a8c0c2de09b3645cfcd79822bcfe111635dfd2bb",
+      "filename": "001_schema_migration_baseline.sql",
+      "version": "001"
+    },
+    {
+      "checksum": "591f96fb3a0f723a9c5858cd390dd1994d9aa7815f43ac0942d689786684d919",
+      "filename": "002_government_grade_indexes_and_guards.sql",
+      "version": "002"
+    },
+    {
+      "checksum": "26cf76bfdf1ba634579e55f924d5e978606e195cd6a33bd65f1a1f284621f215",
+      "filename": "003_canonical_address_records.sql",
+      "version": "003"
+    },
+    {
+      "checksum": "1d6c30eedcb6111703a62d2595aa4700cdb8bb8d79f2a3eb307ad1f5b5cb8e39",
+      "filename": "004_registry_ready_not_signage_ready.sql",
+      "version": "004"
+    },
+    {
+      "checksum": "b97febc89d5bc94b3dd5d0d1a0f77f03395aee5616eeae755f3ad30872d003c5",
+      "filename": "005_address_record_postgis_geometry.sql",
+      "version": "005"
+    },
+    {
+      "checksum": "e6c0f3dd0508ff32ae5f12e52bfa6f68b065e356424c335e440bcd96b3161408",
+      "filename": "006_address_record_retirement_policy.sql",
+      "version": "006"
+    },
+    {
+      "checksum": "bcd606a1239ee343086b36be276540b6866d03287f7afe0621cc4d8225142d8d",
+      "filename": "007_lifecycle_metadata_hardening.sql",
+      "version": "007"
+    }
+  ],
+  "migration_result": {
+    "returncode": 0,
+    "stderr_tail": "",
+    "stdout_tail": "APPLY 000_current_operational_schema.sql\nAPPLY 001_schema_migration_baseline.sql\nAPPLY 002_government_grade_indexes_and_guards.sql\nAPPLY 003_canonical_address_records.sql\nAPPLY 004_registry_ready_not_signage_ready.sql\nAPPLY 005_address_record_postgis_geometry.sql\nAPPLY 006_address_record_retirement_policy.sql\nAPPLY 007_lifecycle_metadata_hardening.sql\n{\n  \"applied_count\": 0,\n  \"checksum_mismatch_versions\": [],\n  \"current\": false,\n  \"expected_count\": 8,\n  \"filename_mismatch_versions\": [],\n  \"latest_filename\": null,\n  \"latest_version\": null,\n  \"mismatch_versions\": [],\n  \"pending_count\": 8,\n  \"pending_versions\": [\n    \"000\",\n    \"001\",\n    \"002\",\n    \"003\",\n    \"004\",\n    \"005\",\n    \"006\",\n    \"007\"\n  ],\n  \"status\": \"pending\",\n  \"unknown_versions\": []\n}\n"
+  },
+  "required_operational_tables_present": [
+    "address_corrections",
+    "address_points",
+    "address_record_events",
+    "address_records",
+    "addresses",
+    "admin_units",
+    "audit_logs",
+    "auth_tokens",
+    "buildings",
+    "citizen_geotag_submissions",
+    "development_fixture_batches",
+    "development_fixture_records",
+    "field_assignments",
+    "field_submissions",
+    "import_jobs",
+    "import_rows",
+    "provinces",
+    "publication_pack_addresses",
+    "publication_packs",
+    "reference_data_load_history",
+    "reference_data_loads",
+    "roads",
+    "schema_migrations",
+    "territories",
+    "users"
+  ],
+  "schema": "current_source",
+  "table_count": 25,
+  "tables": [
+    "address_corrections",
+    "address_points",
+    "address_record_events",
+    "address_records",
+    "addresses",
+    "admin_units",
+    "audit_logs",
+    "auth_tokens",
+    "buildings",
+    "citizen_geotag_submissions",
+    "development_fixture_batches",
+    "development_fixture_records",
+    "field_assignments",
+    "field_submissions",
+    "import_jobs",
+    "import_rows",
+    "provinces",
+    "publication_pack_addresses",
+    "publication_packs",
+    "reference_data_load_history",
+    "reference_data_loads",
+    "roads",
+    "schema_migrations",
+    "territories",
+    "users"
+  ]
+}

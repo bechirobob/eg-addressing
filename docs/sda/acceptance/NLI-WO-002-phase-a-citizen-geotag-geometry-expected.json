@@ -1,0 +1,291 @@
+{
+  "accepted_pattern_control_ids": [
+    "NLI-WO-002-PA-GEO-PATTERN-01",
+    "NLI-WO-002-PA-GEO-02-ACCEPTANCE"
+  ],
+  "control_id": "NLI-WO-002-PA-GEO-03",
+  "control_status": "reviewer-owned-acceptance-oracle",
+  "implementation_must_not_modify": true,
+  "scope": "One authoritative vertical slice only: current_source.citizen_geotag_submissions -> canonical_target.proposed_geometry_observation",
+  "source_record": {
+    "schema": "current_source",
+    "table": "citizen_geotag_submissions",
+    "lookup": {
+      "id": "phase-a-geotag-001"
+    },
+    "required_values": {
+      "id": "phase-a-geotag-001",
+      "territory_id": "phase-a-territories-id",
+      "address_label": "Controlled Phase A household near Malabo civic office",
+      "latitude": 3.752,
+      "longitude": 8.783,
+      "accuracy_meters": 4.5,
+      "capture_method": "browser-gps",
+      "grid_code": "PHASE-A-NONOFFICIAL-001",
+      "status": "submitted",
+      "field_submission_id": "phase-a-field-submissions-id",
+      "field_verified_at": "2026-07-15T02:00:00Z",
+      "created_at": "2026-07-15T00:00:00Z",
+      "updated_at": "2026-07-15T01:00:00Z"
+    }
+  },
+  "reviewed_transform": {
+    "transform_group_id": "WO002-R06-geometry-observation-citizen_geotag_submissions",
+    "implementation_unit": "impl_wo002_r06_geometry_observation_citizen_geotag_submissions",
+    "required_callable": "transform_citizen_geotag_geometry",
+    "covered_source_fields": [
+      "citizen_geotag_submissions.accuracy_meters",
+      "citizen_geotag_submissions.latitude",
+      "citizen_geotag_submissions.longitude"
+    ],
+    "required_context_fields": [
+      "citizen_geotag_submissions.id",
+      "citizen_geotag_submissions.capture_method",
+      "citizen_geotag_submissions.created_at",
+      "citizen_geotag_submissions.updated_at",
+      "citizen_geotag_submissions.field_verified_at",
+      "citizen_geotag_submissions.status",
+      "citizen_geotag_submissions.territory_id",
+      "citizen_geotag_submissions.field_submission_id"
+    ],
+    "capture_method_translation": {
+      "browser-gps": "browser-gps"
+    },
+    "observed_at_rule": "citizen_geotag_submissions.created_at",
+    "recorded_at_rule": "citizen_geotag_submissions.created_at",
+    "field_verified_at_role": "verification context only; must not replace observation or recorded time",
+    "classification_rule": "restricted",
+    "identity_rule": "citizen_geotag_submissions.id resolves to a provisional non-official location_record identity; territory_id and field_submission_id are context/provenance only",
+    "target_entities": [
+      "geometry_observation"
+    ],
+    "forbidden_input": "docs/sda/acceptance/NLI-WO-002-phase-a-citizen-geotag-geometry-expected.json"
+  },
+  "preconditions": {
+    "citizen_geotag_identity_crosswalk": {
+      "owner_transform_group": "WO002-R06-identity-crosswalk-citizen_geotag_submissions",
+      "table": "proposed_legacy_crosswalk",
+      "values": {
+        "legacy_crosswalk_id": "phase-a-crosswalk-citizen-geotag-id-to-location-record",
+        "source_table": "citizen_geotag_submissions",
+        "source_field": "id",
+        "legacy_id": "phase-a-geotag-001",
+        "target_entity": "location_record",
+        "target_id": "phase-a-location-citizen-geotag-001",
+        "created_at": "2026-07-15T00:00:00Z"
+      }
+    },
+    "target_location_record": {
+      "table": "proposed_location_record",
+      "primary_key": {
+        "location_record_id": "phase-a-location-citizen-geotag-001"
+      },
+      "required_values": {
+        "record_type": "address",
+        "classification": "restricted"
+      }
+    },
+    "target_subject": {
+      "table": "proposed_registry_subject",
+      "primary_key": {
+        "subject_id": "phase-a-subject-phase-a-location-citizen-geotag-001"
+      },
+      "required_values": {
+        "native_id": "phase-a-location-citizen-geotag-001",
+        "subject_entity": "location_record",
+        "subject_state": "active"
+      }
+    },
+    "source_record": {
+      "table": "proposed_source_record",
+      "primary_key": {
+        "source_record_id": "phase-a-source-record-citizen-geotag-submissions-001"
+      },
+      "required_values": {
+        "source_key": "citizen_geotag_submissions:phase-a-geotag-001",
+        "raw_payload_classification": "restricted"
+      }
+    },
+    "evidence_object": {
+      "table": "proposed_evidence_object",
+      "primary_key": {
+        "evidence_object_id": "phase-a-evidence-citizen-geotag-submissions"
+      },
+      "required_values": {
+        "source_record_id": "phase-a-source-record-citizen-geotag-submissions-001",
+        "classification": "restricted"
+      }
+    }
+  },
+  "expected_inserted_rows": [
+    {
+      "table": "proposed_geometry_observation",
+      "primary_key": {
+        "geometry_observation_id": "phase-a-geometry-citizen-geotag-submissions-phase-a-geotag-001"
+      },
+      "values": {
+        "geometry_observation_id": "phase-a-geometry-citizen-geotag-submissions-phase-a-geotag-001",
+        "subject_id": "phase-a-subject-phase-a-location-citizen-geotag-001",
+        "geometry_role": "location-point",
+        "observed_geom_wkt": "POINT(8.783 3.752)",
+        "observed_geom_srid": 4326,
+        "capture_method": "browser-gps",
+        "horizontal_accuracy_m": "4.50",
+        "source_record_id": "phase-a-source-record-citizen-geotag-submissions-001",
+        "evidence_object_id": "phase-a-evidence-citizen-geotag-submissions",
+        "licence_id": null,
+        "observed_at": "2026-07-15T00:00:00Z",
+        "recorded_at": "2026-07-15T00:00:00Z",
+        "classification": "restricted"
+      }
+    },
+    {
+      "table": "proposed_migration_exception",
+      "primary_key": {
+        "migration_exception_id": "phase-a-exception-geometry-authority-citizen-geotag-submissions-phase-a-geotag-001"
+      },
+      "values": {
+        "migration_exception_id": "phase-a-exception-geometry-authority-citizen-geotag-submissions-phase-a-geotag-001",
+        "batch_id": "phase-a-citizen-geotag-submissions-geometry-slice",
+        "source_table": "citizen_geotag_submissions",
+        "source_field": null,
+        "source_key": "citizen_geotag_submissions:phase-a-geotag-001",
+        "exception_type": "authority-rfi",
+        "severity": "medium",
+        "owner": "SDA",
+        "created_at": "2026-07-15T00:00:00Z",
+        "resolved_at": null,
+        "details_json": {
+          "target_entity": "geometry_observation",
+          "target_id": "phase-a-geometry-citizen-geotag-submissions-phase-a-geotag-001",
+          "reason": "Canonical geometry promotion authority unresolved; restricted citizen geotag observation preserved without canonical promotion or public release",
+          "open_authority_rfi": "geometry-promotion-authority",
+          "non_official": true,
+          "public_release_prohibited": true
+        }
+      }
+    }
+  ],
+  "expected_absent_rows": [
+    {
+      "table": "proposed_geometry_version",
+      "reason": "No canonical geometry promotion is authorized"
+    },
+    {
+      "table": "proposed_geometry_quality_assessment",
+      "reason": "Field verification does not equal canonical geometry approval"
+    },
+    {
+      "table": "proposed_geometry_transformation",
+      "reason": "Source coordinates are already WGS84"
+    },
+    {
+      "table": "proposed_location_record_assertion",
+      "where": "value_json->>'current_field' IN ('citizen_geotag_submissions.latitude','citizen_geotag_submissions.longitude','citizen_geotag_submissions.accuracy_meters','citizen_geotag_submissions.capture_method')",
+      "reason": "Per-field assertions must not replace the grouped observation"
+    },
+    {
+      "table": "proposed_publication_release_item",
+      "reason": "Restricted citizen submission cannot create publication output"
+    },
+    {
+      "table": "proposed_public_code_alias",
+      "where": "location_record_id = 'phase-a-location-citizen-geotag-001'",
+      "reason": "Fixture grid_code is non-official and must not become a public code"
+    },
+    {
+      "table": "proposed_geometry_observation",
+      "where": "classification <> 'restricted' AND source_record_id = 'phase-a-source-record-citizen-geotag-submissions-001'",
+      "reason": "Citizen geotag precision must remain restricted"
+    }
+  ],
+  "required_tests": [
+    {
+      "test_id": "positive-authoritative-slice",
+      "expected": "Exact inserted and absent rows match this oracle"
+    },
+    {
+      "test_id": "second-run-idempotency",
+      "expected": "Zero inserts and zero updates on second execution"
+    },
+    {
+      "test_id": "precision-preservation",
+      "expected": "Typed PostGIS insertion preserves higher-precision coordinates"
+    },
+    {
+      "test_id": "capture-method-translation",
+      "expected": "browser-gps resolves from the authoritative target vocabulary and reviewed transform specification"
+    },
+    {
+      "test_id": "unknown-capture-method",
+      "expected_error": "citizen_geotag_submissions.capture_method has no reviewed translation"
+    },
+    {
+      "test_id": "field-verified-time-not-observation-time",
+      "expected": "field_verified_at may differ but observed_at and recorded_at both remain created_at"
+    },
+    {
+      "test_id": "wrong-field-verified-timing-implementation",
+      "expected_error": "citizen geotag geometry slice observed rows differ from reviewer-owned timing expectation"
+    },
+    {
+      "test_id": "wrong-longitude-transform-implementation",
+      "expected_error": "geometry observation does not match reviewer-owned expected WKT"
+    },
+    {
+      "test_id": "invalid-coordinate-current-source",
+      "expected_error": "coordinate out of range"
+    },
+    {
+      "test_id": "missing-source-record",
+      "expected_error": "citizen_geotag_submissions source row not found"
+    },
+    {
+      "test_id": "missing-citizen-geotag-crosswalk",
+      "expected_error": "citizen_geotag_submissions.id cannot resolve target location record"
+    },
+    {
+      "test_id": "wrong-subject-through-territory-or-field-submission",
+      "expected_error": "citizen geotag geometry subject must resolve through citizen_geotag_submissions.id"
+    },
+    {
+      "test_id": "missing-evidence-object",
+      "expected_error": "citizen geotag evidence object not found"
+    },
+    {
+      "test_id": "wrong-independent-expected-geometry",
+      "expected_error": "observed geometry differs from reviewer-owned expected geometry"
+    },
+    {
+      "test_id": "unexpected-extra-target-row",
+      "expected_error": "unexpected citizen geotag geometry slice target row"
+    },
+    {
+      "test_id": "transform-spec-binding-drift",
+      "expected_error": "citizen geotag geometry transform specification binding mismatch"
+    },
+    {
+      "test_id": "second-source-identity",
+      "expected": "Two citizen geotag identities create two restricted observations, two authority exceptions and two distinct identity crosswalks without duplicates"
+    },
+    {
+      "test_id": "privacy-publication-boundary",
+      "expected": "No public classification, public-code alias or publication release item is created"
+    },
+    {
+      "test_id": "same-database-rollback-proof",
+      "expected": "Every failing database mutation preserves identical pre-test and post-rollback target rows and hash before reset"
+    }
+  ],
+  "prohibited": [
+    "Modifying this reviewer-owned oracle",
+    "Using territory_id, field_submission_id, grid_code, citizen identity/contact fields or field_verified_at as the geometry subject identity",
+    "Using field_verified_at as observed_at or recorded_at",
+    "Creating public codes, publication items, canonical geometry versions, quality approvals, CRS transforms or per-field geometry assertions",
+    "Modifying the accepted address_points or address_records controls",
+    "Implementing any other transform group",
+    "Requesting broad Phase A reassessment or SDA Review 12",
+    "Modifying F04-F12",
+    "Modifying runtime application/frontend code, executable migrations, migration runner, Docker runtime, production/pilot data, secrets, .env files or PR #8"
+  ]
+}

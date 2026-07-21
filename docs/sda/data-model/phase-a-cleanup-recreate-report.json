@@ -1,0 +1,36 @@
+{
+  "cleanup_after_failure": {
+    "after": {},
+    "before": {
+      "canonical_target": 100,
+      "current_source": 25,
+      "test_control": 3
+    },
+    "execution_mode": "phase-a-cleanup",
+    "schemas_removed": [
+      "current_source",
+      "canonical_target",
+      "test_control"
+    ]
+  },
+  "cleanup_after_success": {
+    "after": {},
+    "before": {
+      "canonical_target": 100,
+      "current_source": 25,
+      "test_control": 3
+    },
+    "execution_mode": "phase-a-cleanup",
+    "schemas_removed": [
+      "current_source",
+      "canonical_target",
+      "test_control"
+    ]
+  },
+  "execution_mode": "phase-a-cleanup-recreate-proof-real-transform",
+  "expected_hash": "1e9d364c62cc19648dfc72a0948c69bebd357c267b5578e87254ef3958298051",
+  "failure_seen": true,
+  "first_recreate_hash": "1e9d364c62cc19648dfc72a0948c69bebd357c267b5578e87254ef3958298051",
+  "second_recreate_hash": "1e9d364c62cc19648dfc72a0948c69bebd357c267b5578e87254ef3958298051",
+  "status": "passed"
+}

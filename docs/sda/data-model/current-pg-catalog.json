@@ -1,0 +1,4730 @@
+{
+  "catalog": {
+    "constraints": [
+      {
+        "columns": [
+          "address_id"
+        ],
+        "conname": "address_corrections_address_id_fkey",
+        "contype": "f",
+        "definition": "FOREIGN KEY (address_id) REFERENCES addresses(id)",
+        "referenced_table": "addresses",
+        "table_name": "address_corrections"
+      },
+      {
+        "columns": [
+          "id"
+        ],
+        "conname": "address_corrections_pkey",
+        "contype": "p",
+        "definition": "PRIMARY KEY (id)",
+        "referenced_table": null,
+        "table_name": "address_corrections"
+      },
+      {
+        "columns": [
+          "address_id"
+        ],
+        "conname": "address_points_address_id_fkey",
+        "contype": "f",
+        "definition": "FOREIGN KEY (address_id) REFERENCES addresses(id) ON DELETE CASCADE",
+        "referenced_table": "addresses",
+        "table_name": "address_points"
+      },
+      {
+        "columns": [
+          "id"
+        ],
+        "conname": "address_points_pkey",
+        "contype": "p",
+        "definition": "PRIMARY KEY (id)",
+        "referenced_table": null,
+        "table_name": "address_points"
+      },
+      {
+        "columns": [
+          "address_record_id"
+        ],
+        "conname": "address_record_events_address_record_id_fkey",
+        "contype": "f",
+        "definition": "FOREIGN KEY (address_record_id) REFERENCES address_records(id) ON DELETE CASCADE",
+        "referenced_table": "address_records",
+        "table_name": "address_record_events"
+      },
+      {
+        "columns": [
+          "id"
+        ],
+        "conname": "address_record_events_pkey",
+        "contype": "p",
+        "definition": "PRIMARY KEY (id)",
+        "referenced_table": null,
+        "table_name": "address_record_events"
+      },
+      {
+        "columns": [
+          "address_code"
+        ],
+        "conname": "address_records_address_code_key",
+        "contype": "u",
+        "definition": "UNIQUE (address_code)",
+        "referenced_table": null,
+        "table_name": "address_records"
+      },
+      {
+        "columns": [
+          "latitude"
+        ],
+        "conname": "address_records_latitude_valid",
+        "contype": "c",
+        "definition": "CHECK (latitude >= '-90'::integer::double precision AND latitude <= 90::double precision)",
+        "referenced_table": null,
+        "table_name": "address_records"
+      },
+      {
+        "columns": [
+          "longitude"
+        ],
+        "conname": "address_records_longitude_valid",
+        "contype": "c",
+        "definition": "CHECK (longitude >= '-180'::integer::double precision AND longitude <= 180::double precision)",
+        "referenced_table": null,
+        "table_name": "address_records"
+      },
+      {
+        "columns": [
+          "id"
+        ],
+        "conname": "address_records_pkey",
+        "contype": "p",
+        "definition": "PRIMARY KEY (id)",
+        "referenced_table": null,
+        "table_name": "address_records"
+      },
+      {
+        "columns": [
+          "province_code"
+        ],
+        "conname": "address_records_province_code_fkey",
+        "contype": "f",
+        "definition": "FOREIGN KEY (province_code) REFERENCES provinces(code)",
+        "referenced_table": "provinces",
+        "table_name": "address_records"
+      },
+      {
+        "columns": [
+          "source_submission_id"
+        ],
+        "conname": "address_records_source_submission_id_fkey",
+        "contype": "f",
+        "definition": "FOREIGN KEY (source_submission_id) REFERENCES citizen_geotag_submissions(id)",
+        "referenced_table": "citizen_geotag_submissions",
+        "table_name": "address_records"
+      },
+      {
+        "columns": [
+          "territory_id"
+        ],
+        "conname": "address_records_territory_id_fkey",
+        "contype": "f",
+        "definition": "FOREIGN KEY (territory_id) REFERENCES territories(id)",
+        "referenced_table": "territories",
+        "table_name": "address_records"
+      },
+      {
+        "columns": [
+          "building_id"
+        ],
+        "conname": "addresses_building_id_fkey",
+        "contype": "f",
+        "definition": "FOREIGN KEY (building_id) REFERENCES buildings(id)",
+        "referenced_table": "buildings",
+        "table_name": "addresses"
+      },
+      {
+        "columns": [
+          "formatted"
+        ],
+        "conname": "addresses_formatted_key",
+        "contype": "u",
+        "definition": "UNIQUE (formatted)",
+        "referenced_table": null,
+        "table_name": "addresses"
+      },
+      {
+        "columns": [
+          "id"
+        ],
+        "conname": "addresses_pkey",
+        "contype": "p",
+        "definition": "PRIMARY KEY (id)",
+        "referenced_table": null,
+        "table_name": "addresses"
+      },
+      {
+        "columns": [
+          "province_code"
+        ],
+        "conname": "addresses_province_code_fkey",
+        "contype": "f",
+        "definition": "FOREIGN KEY (province_code) REFERENCES provinces(code)",
+        "referenced_table": "provinces",
+        "table_name": "addresses"
+      },
+      {
+        "columns": [
+          "road_id"
+        ],
+        "conname": "addresses_road_id_fkey",
+        "contype": "f",
+        "definition": "FOREIGN KEY (road_id) REFERENCES roads(id)",
+        "referenced_table": "roads",
+        "table_name": "addresses"
+      },
+      {
+        "columns": [
+          "superseded_by_address_id"
+        ],
+        "conname": "addresses_superseded_by_address_id_fkey",
+        "contype": "f",
+        "definition": "FOREIGN KEY (superseded_by_address_id) REFERENCES addresses(id)",
+        "referenced_table": "addresses",
+        "table_name": "addresses"
+      },
+      {
+        "columns": [
+          "territory_id"
+        ],
+        "conname": "addresses_territory_id_fkey",
+        "contype": "f",
+        "definition": "FOREIGN KEY (territory_id) REFERENCES territories(id)",
+        "referenced_table": "territories",
+        "table_name": "addresses"
+      },
+      {
+        "columns": [
+          "code"
+        ],
+        "conname": "admin_units_code_key",
+        "contype": "u",
+        "definition": "UNIQUE (code)",
+        "referenced_table": null,
+        "table_name": "admin_units"
+      },
+      {
+        "columns": [
+          "parent_id"
+        ],
+        "conname": "admin_units_parent_id_fkey",
+        "contype": "f",
+        "definition": "FOREIGN KEY (parent_id) REFERENCES admin_units(id)",
+        "referenced_table": "admin_units",
+        "table_name": "admin_units"
+      },
+      {
+        "columns": [
+          "id"
+        ],
+        "conname": "admin_units_pkey",
+        "contype": "p",
+        "definition": "PRIMARY KEY (id)",
+        "referenced_table": null,
+        "table_name": "admin_units"
+      },
+      {
+        "columns": [
+          "province_code"
+        ],
+        "conname": "admin_units_province_code_fkey",
+        "contype": "f",
+        "definition": "FOREIGN KEY (province_code) REFERENCES provinces(code)",
+        "referenced_table": "provinces",
+        "table_name": "admin_units"
+      },
+      {
+        "columns": [
+          "id"
+        ],
+        "conname": "audit_logs_pkey",
+        "contype": "p",
+        "definition": "PRIMARY KEY (id)",
+        "referenced_table": null,
+        "table_name": "audit_logs"
+      },
+      {
+        "columns": [
+          "token"
+        ],
+        "conname": "auth_tokens_pkey",
+        "contype": "p",
+        "definition": "PRIMARY KEY (token)",
+        "referenced_table": null,
+        "table_name": "auth_tokens"
+      },
+      {
+        "columns": [
+          "user_id"
+        ],
+        "conname": "auth_tokens_user_id_fkey",
+        "contype": "f",
+        "definition": "FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE",
+        "referenced_table": "users",
+        "table_name": "auth_tokens"
+      },
+      {
+        "columns": [
+          "label"
+        ],
+        "conname": "buildings_label_key",
+        "contype": "u",
+        "definition": "UNIQUE (label)",
+        "referenced_table": null,
+        "table_name": "buildings"
+      },
+      {
+        "columns": [
+          "id"
+        ],
+        "conname": "buildings_pkey",
+        "contype": "p",
+        "definition": "PRIMARY KEY (id)",
+        "referenced_table": null,
+        "table_name": "buildings"
+      },
+      {
+        "columns": [
+          "road_id"
+        ],
+        "conname": "buildings_road_id_fkey",
+        "contype": "f",
+        "definition": "FOREIGN KEY (road_id) REFERENCES roads(id)",
+        "referenced_table": "roads",
+        "table_name": "buildings"
+      },
+      {
+        "columns": [
+          "territory_id"
+        ],
+        "conname": "buildings_territory_id_fkey",
+        "contype": "f",
+        "definition": "FOREIGN KEY (territory_id) REFERENCES territories(id)",
+        "referenced_table": "territories",
+        "table_name": "buildings"
+      },
+      {
+        "columns": [
+          "id"
+        ],
+        "conname": "citizen_geotag_submissions_pkey",
+        "contype": "p",
+        "definition": "PRIMARY KEY (id)",
+        "referenced_table": null,
+        "table_name": "citizen_geotag_submissions"
+      },
+      {
+        "columns": [
+          "territory_id"
+        ],
+        "conname": "citizen_geotag_submissions_territory_id_fkey",
+        "contype": "f",
+        "definition": "FOREIGN KEY (territory_id) REFERENCES territories(id)",
+        "referenced_table": "territories",
+        "table_name": "citizen_geotag_submissions"
+      },
+      {
+        "columns": [
+          "batch_id"
+        ],
+        "conname": "development_fixture_batches_pkey",
+        "contype": "p",
+        "definition": "PRIMARY KEY (batch_id)",
+        "referenced_table": null,
+        "table_name": "development_fixture_batches"
+      },
+      {
+        "columns": [
+          "batch_id"
+        ],
+        "conname": "development_fixture_records_batch_id_fkey",
+        "contype": "f",
+        "definition": "FOREIGN KEY (batch_id) REFERENCES development_fixture_batches(batch_id) ON DELETE CASCADE",
+        "referenced_table": "development_fixture_batches",
+        "table_name": "development_fixture_records"
+      },
+      {
+        "columns": [
+          "batch_id",
+          "table_name",
+          "record_id"
+        ],
+        "conname": "development_fixture_records_pkey",
+        "contype": "p",
+        "definition": "PRIMARY KEY (batch_id, table_name, record_id)",
+        "referenced_table": null,
+        "table_name": "development_fixture_records"
+      },
+      {
+        "columns": [
+          "assignment_id"
+        ],
+        "conname": "field_assignments_pkey",
+        "contype": "p",
+        "definition": "PRIMARY KEY (assignment_id)",
+        "referenced_table": null,
+        "table_name": "field_assignments"
+      },
+      {
+        "columns": [
+          "territory_id"
+        ],
+        "conname": "field_assignments_territory_id_fkey",
+        "contype": "f",
+        "definition": "FOREIGN KEY (territory_id) REFERENCES territories(id)",
+        "referenced_table": "territories",
+        "table_name": "field_assignments"
+      },
+      {
+        "columns": [
+          "assignment_id"
+        ],
+        "conname": "field_submissions_assignment_id_fkey",
+        "contype": "f",
+        "definition": "FOREIGN KEY (assignment_id) REFERENCES field_assignments(assignment_id)",
+        "referenced_table": "field_assignments",
+        "table_name": "field_submissions"
+      },
+      {
+        "columns": [
+          "id"
+        ],
+        "conname": "field_submissions_pkey",
+        "contype": "p",
+        "definition": "PRIMARY KEY (id)",
+        "referenced_table": null,
+        "table_name": "field_submissions"
+      },
+      {
+        "columns": [
+          "territory_id"
+        ],
+        "conname": "field_submissions_territory_id_fkey",
+        "contype": "f",
+        "definition": "FOREIGN KEY (territory_id) REFERENCES territories(id)",
+        "referenced_table": "territories",
+        "table_name": "field_submissions"
+      },
+      {
+        "columns": [
+          "id"
+        ],
+        "conname": "import_jobs_pkey",
+        "contype": "p",
+        "definition": "PRIMARY KEY (id)",
+        "referenced_table": null,
+        "table_name": "import_jobs"
+      },
+      {
+        "columns": [
+          "job_id"
+        ],
+        "conname": "import_rows_job_id_fkey",
+        "contype": "f",
+        "definition": "FOREIGN KEY (job_id) REFERENCES import_jobs(id) ON DELETE CASCADE",
+        "referenced_table": "import_jobs",
+        "table_name": "import_rows"
+      },
+      {
+        "columns": [
+          "job_id",
+          "row_number"
+        ],
+        "conname": "import_rows_pkey",
+        "contype": "p",
+        "definition": "PRIMARY KEY (job_id, row_number)",
+        "referenced_table": null,
+        "table_name": "import_rows"
+      },
+      {
+        "columns": [
+          "territory_id"
+        ],
+        "conname": "import_rows_territory_id_fkey",
+        "contype": "f",
+        "definition": "FOREIGN KEY (territory_id) REFERENCES territories(id)",
+        "referenced_table": "territories",
+        "table_name": "import_rows"
+      },
+      {
+        "columns": [
+          "code"
+        ],
+        "conname": "provinces_pkey",
+        "contype": "p",
+        "definition": "PRIMARY KEY (code)",
+        "referenced_table": null,
+        "table_name": "provinces"
+      },
+      {
+        "columns": [
+          "address_id"
+        ],
+        "conname": "publication_pack_addresses_address_id_fkey",
+        "contype": "f",
+        "definition": "FOREIGN KEY (address_id) REFERENCES addresses(id)",
+        "referenced_table": "addresses",
+        "table_name": "publication_pack_addresses"
+      },
+      {
+        "columns": [
+          "publication_pack_id",
+          "address_id"
+        ],
+        "conname": "publication_pack_addresses_pkey",
+        "contype": "p",
+        "definition": "PRIMARY KEY (publication_pack_id, address_id)",
+        "referenced_table": null,
+        "table_name": "publication_pack_addresses"
+      },
+      {
+        "columns": [
+          "publication_pack_id"
+        ],
+        "conname": "publication_pack_addresses_publication_pack_id_fkey",
+        "contype": "f",
+        "definition": "FOREIGN KEY (publication_pack_id) REFERENCES publication_packs(id) ON DELETE CASCADE",
+        "referenced_table": "publication_packs",
+        "table_name": "publication_pack_addresses"
+      },
+      {
+        "columns": [
+          "id"
+        ],
+        "conname": "publication_packs_pkey",
+        "contype": "p",
+        "definition": "PRIMARY KEY (id)",
+        "referenced_table": null,
+        "table_name": "publication_packs"
+      },
+      {
+        "columns": [
+          "id"
+        ],
+        "conname": "reference_data_load_history_pkey",
+        "contype": "p",
+        "definition": "PRIMARY KEY (id)",
+        "referenced_table": null,
+        "table_name": "reference_data_load_history"
+      },
+      {
+        "columns": [
+          "package_id"
+        ],
+        "conname": "reference_data_loads_pkey",
+        "contype": "p",
+        "definition": "PRIMARY KEY (package_id)",
+        "referenced_table": null,
+        "table_name": "reference_data_loads"
+      },
+      {
+        "columns": [
+          "name"
+        ],
+        "conname": "roads_name_key",
+        "contype": "u",
+        "definition": "UNIQUE (name)",
+        "referenced_table": null,
+        "table_name": "roads"
+      },
+      {
+        "columns": [
+          "id"
+        ],
+        "conname": "roads_pkey",
+        "contype": "p",
+        "definition": "PRIMARY KEY (id)",
+        "referenced_table": null,
+        "table_name": "roads"
+      },
+      {
+        "columns": [
+          "territory_id"
+        ],
+        "conname": "roads_territory_id_fkey",
+        "contype": "f",
+        "definition": "FOREIGN KEY (territory_id) REFERENCES territories(id)",
+        "referenced_table": "territories",
+        "table_name": "roads"
+      },
+      {
+        "columns": [
+          "version"
+        ],
+        "conname": "schema_migrations_pkey",
+        "contype": "p",
+        "definition": "PRIMARY KEY (version)",
+        "referenced_table": null,
+        "table_name": "schema_migrations"
+      },
+      {
+        "columns": [
+          "srid"
+        ],
+        "conname": "spatial_ref_sys_pkey",
+        "contype": "p",
+        "definition": "PRIMARY KEY (srid)",
+        "referenced_table": null,
+        "table_name": "spatial_ref_sys"
+      },
+      {
+        "columns": [
+          "srid"
+        ],
+        "conname": "spatial_ref_sys_srid_check",
+        "contype": "c",
+        "definition": "CHECK (srid > 0 AND srid <= 998999)",
+        "referenced_table": null,
+        "table_name": "spatial_ref_sys"
+      },
+      {
+        "columns": [
+          "admin_unit_id"
+        ],
+        "conname": "territories_admin_unit_id_fkey",
+        "contype": "f",
+        "definition": "FOREIGN KEY (admin_unit_id) REFERENCES admin_units(id)",
+        "referenced_table": "admin_units",
+        "table_name": "territories"
+      },
+      {
+        "columns": [
+          "name"
+        ],
+        "conname": "territories_name_key",
+        "contype": "u",
+        "definition": "UNIQUE (name)",
+        "referenced_table": null,
+        "table_name": "territories"
+      },
+      {
+        "columns": [
+          "id"
+        ],
+        "conname": "territories_pkey",
+        "contype": "p",
+        "definition": "PRIMARY KEY (id)",
+        "referenced_table": null,
+        "table_name": "territories"
+      },
+      {
+        "columns": [
+          "province_code"
+        ],
+        "conname": "territories_province_code_fkey",
+        "contype": "f",
+        "definition": "FOREIGN KEY (province_code) REFERENCES provinces(code)",
+        "referenced_table": "provinces",
+        "table_name": "territories"
+      },
+      {
+        "columns": [
+          "id"
+        ],
+        "conname": "users_pkey",
+        "contype": "p",
+        "definition": "PRIMARY KEY (id)",
+        "referenced_table": null,
+        "table_name": "users"
+      },
+      {
+        "columns": [
+          "username"
+        ],
+        "conname": "users_username_key",
+        "contype": "u",
+        "definition": "UNIQUE (username)",
+        "referenced_table": null,
+        "table_name": "users"
+      }
+    ],
+    "geometries": [],
+    "indexes": [
+      {
+        "definition": "CREATE UNIQUE INDEX address_corrections_pkey ON public.address_corrections USING btree (id)",
+        "index_name": "address_corrections_pkey",
+        "indisprimary": true,
+        "indisunique": true,
+        "table_name": "address_corrections"
+      },
+      {
+        "definition": "CREATE INDEX idx_address_corrections_status_created_at ON public.address_corrections USING btree (status, created_at DESC)",
+        "index_name": "idx_address_corrections_status_created_at",
+        "indisprimary": false,
+        "indisunique": false,
+        "table_name": "address_corrections"
+      },
+      {
+        "definition": "CREATE INDEX idx_address_corrections_status_updated ON public.address_corrections USING btree (status, updated_at DESC)",
+        "index_name": "idx_address_corrections_status_updated",
+        "indisprimary": false,
+        "indisunique": false,
+        "table_name": "address_corrections"
+      },
+      {
+        "definition": "CREATE UNIQUE INDEX address_points_pkey ON public.address_points USING btree (id)",
+        "index_name": "address_points_pkey",
+        "indisprimary": true,
+        "indisunique": true,
+        "table_name": "address_points"
+      },
+      {
+        "definition": "CREATE INDEX idx_address_points_address_id_active ON public.address_points USING btree (address_id, is_active)",
+        "index_name": "idx_address_points_address_id_active",
+        "indisprimary": false,
+        "indisunique": false,
+        "table_name": "address_points"
+      },
+      {
+        "definition": "CREATE UNIQUE INDEX address_record_events_pkey ON public.address_record_events USING btree (id)",
+        "index_name": "address_record_events_pkey",
+        "indisprimary": true,
+        "indisunique": true,
+        "table_name": "address_record_events"
+      },
+      {
+        "definition": "CREATE INDEX idx_address_record_events_record_created ON public.address_record_events USING btree (address_record_id, created_at DESC)",
+        "index_name": "idx_address_record_events_record_created",
+        "indisprimary": false,
+        "indisunique": false,
+        "table_name": "address_record_events"
+      },
+      {
+        "definition": "CREATE UNIQUE INDEX address_records_address_code_key ON public.address_records USING btree (address_code)",
+        "index_name": "address_records_address_code_key",
+        "indisprimary": false,
+        "indisunique": true,
+        "table_name": "address_records"
+      },
+      {
+        "definition": "CREATE UNIQUE INDEX address_records_pkey ON public.address_records USING btree (id)",
+        "index_name": "address_records_pkey",
+        "indisprimary": true,
+        "indisunique": true,
+        "table_name": "address_records"
+      },
+      {
+        "definition": "CREATE INDEX idx_address_records_active_code ON public.address_records USING btree (address_code) WHERE (is_archived = false)",
+        "index_name": "idx_address_records_active_code",
+        "indisprimary": false,
+        "indisunique": false,
+        "table_name": "address_records"
+      },
+      {
+        "definition": "CREATE INDEX idx_address_records_active_status_updated ON public.address_records USING btree (status, updated_at DESC) WHERE (is_archived = false)",
+        "index_name": "idx_address_records_active_status_updated",
+        "indisprimary": false,
+        "indisunique": false,
+        "table_name": "address_records"
+      },
+      {
+        "definition": "CREATE INDEX idx_address_records_code ON public.address_records USING btree (address_code)",
+        "index_name": "idx_address_records_code",
+        "indisprimary": false,
+        "indisunique": false,
+        "table_name": "address_records"
+      },
+      {
+        "definition": "CREATE INDEX idx_address_records_geom ON public.address_records USING gist (geom)",
+        "index_name": "idx_address_records_geom",
+        "indisprimary": false,
+        "indisunique": false,
+        "table_name": "address_records"
+      },
+      {
+        "definition": "CREATE INDEX idx_address_records_province_status ON public.address_records USING btree (province_code, status)",
+        "index_name": "idx_address_records_province_status",
+        "indisprimary": false,
+        "indisunique": false,
+        "table_name": "address_records"
+      },
+      {
+        "definition": "CREATE INDEX idx_address_records_search_text ON public.address_records USING gin (to_tsvector('simple'::regconfig, search_text))",
+        "index_name": "idx_address_records_search_text",
+        "indisprimary": false,
+        "indisunique": false,
+        "table_name": "address_records"
+      },
+      {
+        "definition": "CREATE INDEX idx_address_records_status_updated ON public.address_records USING btree (status, updated_at DESC)",
+        "index_name": "idx_address_records_status_updated",
+        "indisprimary": false,
+        "indisunique": false,
+        "table_name": "address_records"
+      },
+      {
+        "definition": "CREATE INDEX idx_address_records_territory_status ON public.address_records USING btree (territory_id, status)",
+        "index_name": "idx_address_records_territory_status",
+        "indisprimary": false,
+        "indisunique": false,
+        "table_name": "address_records"
+      },
+      {
+        "definition": "CREATE UNIQUE INDEX addresses_formatted_key ON public.addresses USING btree (formatted)",
+        "index_name": "addresses_formatted_key",
+        "indisprimary": false,
+        "indisunique": true,
+        "table_name": "addresses"
+      },
+      {
+        "definition": "CREATE UNIQUE INDEX addresses_pkey ON public.addresses USING btree (id)",
+        "index_name": "addresses_pkey",
+        "indisprimary": true,
+        "indisunique": true,
+        "table_name": "addresses"
+      },
+      {
+        "definition": "CREATE UNIQUE INDEX idx_addresses_public_code_unique ON public.addresses USING btree (public_code) WHERE (public_code IS NOT NULL)",
+        "index_name": "idx_addresses_public_code_unique",
+        "indisprimary": false,
+        "indisunique": true,
+        "table_name": "addresses"
+      },
+      {
+        "definition": "CREATE UNIQUE INDEX admin_units_code_key ON public.admin_units USING btree (code)",
+        "index_name": "admin_units_code_key",
+        "indisprimary": false,
+        "indisunique": true,
+        "table_name": "admin_units"
+      },
+      {
+        "definition": "CREATE UNIQUE INDEX admin_units_pkey ON public.admin_units USING btree (id)",
+        "index_name": "admin_units_pkey",
+        "indisprimary": true,
+        "indisunique": true,
+        "table_name": "admin_units"
+      },
+      {
+        "definition": "CREATE UNIQUE INDEX audit_logs_pkey ON public.audit_logs USING btree (id)",
+        "index_name": "audit_logs_pkey",
+        "indisprimary": true,
+        "indisunique": true,
+        "table_name": "audit_logs"
+      },
+      {
+        "definition": "CREATE UNIQUE INDEX auth_tokens_pkey ON public.auth_tokens USING btree (token)",
+        "index_name": "auth_tokens_pkey",
+        "indisprimary": true,
+        "indisunique": true,
+        "table_name": "auth_tokens"
+      },
+      {
+        "definition": "CREATE UNIQUE INDEX buildings_label_key ON public.buildings USING btree (label)",
+        "index_name": "buildings_label_key",
+        "indisprimary": false,
+        "indisunique": true,
+        "table_name": "buildings"
+      },
+      {
+        "definition": "CREATE UNIQUE INDEX buildings_pkey ON public.buildings USING btree (id)",
+        "index_name": "buildings_pkey",
+        "indisprimary": true,
+        "indisunique": true,
+        "table_name": "buildings"
+      },
+      {
+        "definition": "CREATE UNIQUE INDEX citizen_geotag_submissions_pkey ON public.citizen_geotag_submissions USING btree (id)",
+        "index_name": "citizen_geotag_submissions_pkey",
+        "indisprimary": true,
+        "indisunique": true,
+        "table_name": "citizen_geotag_submissions"
+      },
+      {
+        "definition": "CREATE INDEX idx_citizen_geotag_grid_code ON public.citizen_geotag_submissions USING btree (grid_code)",
+        "index_name": "idx_citizen_geotag_grid_code",
+        "indisprimary": false,
+        "indisunique": false,
+        "table_name": "citizen_geotag_submissions"
+      },
+      {
+        "definition": "CREATE INDEX idx_citizen_geotag_public_tracking ON public.citizen_geotag_submissions USING btree (id, status, updated_at DESC)",
+        "index_name": "idx_citizen_geotag_public_tracking",
+        "indisprimary": false,
+        "indisunique": false,
+        "table_name": "citizen_geotag_submissions"
+      },
+      {
+        "definition": "CREATE INDEX idx_citizen_geotag_signage_ready ON public.citizen_geotag_submissions USING btree (status, signage_batch, updated_at DESC) WHERE (status = 'signage-ready'::text)",
+        "index_name": "idx_citizen_geotag_signage_ready",
+        "indisprimary": false,
+        "indisunique": false,
+        "table_name": "citizen_geotag_submissions"
+      },
+      {
+        "definition": "CREATE INDEX idx_citizen_geotag_status_created_at ON public.citizen_geotag_submissions USING btree (status, created_at DESC)",
+        "index_name": "idx_citizen_geotag_status_created_at",
+        "indisprimary": false,
+        "indisunique": false,
+        "table_name": "citizen_geotag_submissions"
+      },
+      {
+        "definition": "CREATE UNIQUE INDEX development_fixture_batches_pkey ON public.development_fixture_batches USING btree (batch_id)",
+        "index_name": "development_fixture_batches_pkey",
+        "indisprimary": true,
+        "indisunique": true,
+        "table_name": "development_fixture_batches"
+      },
+      {
+        "definition": "CREATE UNIQUE INDEX development_fixture_records_pkey ON public.development_fixture_records USING btree (batch_id, table_name, record_id)",
+        "index_name": "development_fixture_records_pkey",
+        "indisprimary": true,
+        "indisunique": true,
+        "table_name": "development_fixture_records"
+      },
+      {
+        "definition": "CREATE UNIQUE INDEX field_assignments_pkey ON public.field_assignments USING btree (assignment_id)",
+        "index_name": "field_assignments_pkey",
+        "indisprimary": true,
+        "indisunique": true,
+        "table_name": "field_assignments"
+      },
+      {
+        "definition": "CREATE UNIQUE INDEX field_submissions_pkey ON public.field_submissions USING btree (id)",
+        "index_name": "field_submissions_pkey",
+        "indisprimary": true,
+        "indisunique": true,
+        "table_name": "field_submissions"
+      },
+      {
+        "definition": "CREATE INDEX idx_field_submissions_review_status_created ON public.field_submissions USING btree (review_status, created_at DESC)",
+        "index_name": "idx_field_submissions_review_status_created",
+        "indisprimary": false,
+        "indisunique": false,
+        "table_name": "field_submissions"
+      },
+      {
+        "definition": "CREATE UNIQUE INDEX import_jobs_pkey ON public.import_jobs USING btree (id)",
+        "index_name": "import_jobs_pkey",
+        "indisprimary": true,
+        "indisunique": true,
+        "table_name": "import_jobs"
+      },
+      {
+        "definition": "CREATE UNIQUE INDEX import_rows_pkey ON public.import_rows USING btree (job_id, row_number)",
+        "index_name": "import_rows_pkey",
+        "indisprimary": true,
+        "indisunique": true,
+        "table_name": "import_rows"
+      },
+      {
+        "definition": "CREATE UNIQUE INDEX provinces_pkey ON public.provinces USING btree (code)",
+        "index_name": "provinces_pkey",
+        "indisprimary": true,
+        "indisunique": true,
+        "table_name": "provinces"
+      },
+      {
+        "definition": "CREATE UNIQUE INDEX publication_pack_addresses_pkey ON public.publication_pack_addresses USING btree (publication_pack_id, address_id)",
+        "index_name": "publication_pack_addresses_pkey",
+        "indisprimary": true,
+        "indisunique": true,
+        "table_name": "publication_pack_addresses"
+      },
+      {
+        "definition": "CREATE UNIQUE INDEX publication_packs_pkey ON public.publication_packs USING btree (id)",
+        "index_name": "publication_packs_pkey",
+        "indisprimary": true,
+        "indisunique": true,
+        "table_name": "publication_packs"
+      },
+      {
+        "definition": "CREATE UNIQUE INDEX reference_data_load_history_pkey ON public.reference_data_load_history USING btree (id)",
+        "index_name": "reference_data_load_history_pkey",
+        "indisprimary": true,
+        "indisunique": true,
+        "table_name": "reference_data_load_history"
+      },
+      {
+        "definition": "CREATE UNIQUE INDEX reference_data_loads_pkey ON public.reference_data_loads USING btree (package_id)",
+        "index_name": "reference_data_loads_pkey",
+        "indisprimary": true,
+        "indisunique": true,
+        "table_name": "reference_data_loads"
+      },
+      {
+        "definition": "CREATE UNIQUE INDEX roads_name_key ON public.roads USING btree (name)",
+        "index_name": "roads_name_key",
+        "indisprimary": false,
+        "indisunique": true,
+        "table_name": "roads"
+      },
+      {
+        "definition": "CREATE UNIQUE INDEX roads_pkey ON public.roads USING btree (id)",
+        "index_name": "roads_pkey",
+        "indisprimary": true,
+        "indisunique": true,
+        "table_name": "roads"
+      },
+      {
+        "definition": "CREATE UNIQUE INDEX schema_migrations_pkey ON public.schema_migrations USING btree (version)",
+        "index_name": "schema_migrations_pkey",
+        "indisprimary": true,
+        "indisunique": true,
+        "table_name": "schema_migrations"
+      },
+      {
+        "definition": "CREATE UNIQUE INDEX spatial_ref_sys_pkey ON public.spatial_ref_sys USING btree (srid)",
+        "index_name": "spatial_ref_sys_pkey",
+        "indisprimary": true,
+        "indisunique": true,
+        "table_name": "spatial_ref_sys"
+      },
+      {
+        "definition": "CREATE UNIQUE INDEX territories_name_key ON public.territories USING btree (name)",
+        "index_name": "territories_name_key",
+        "indisprimary": false,
+        "indisunique": true,
+        "table_name": "territories"
+      },
+      {
+        "definition": "CREATE UNIQUE INDEX territories_pkey ON public.territories USING btree (id)",
+        "index_name": "territories_pkey",
+        "indisprimary": true,
+        "indisunique": true,
+        "table_name": "territories"
+      },
+      {
+        "definition": "CREATE UNIQUE INDEX users_pkey ON public.users USING btree (id)",
+        "index_name": "users_pkey",
+        "indisprimary": true,
+        "indisunique": true,
+        "table_name": "users"
+      },
+      {
+        "definition": "CREATE UNIQUE INDEX users_username_key ON public.users USING btree (username)",
+        "index_name": "users_username_key",
+        "indisprimary": false,
+        "indisunique": true,
+        "table_name": "users"
+      }
+    ],
+    "tables": {
+      "address_corrections": {
+        "columns": [
+          {
+            "column_default": null,
+            "column_name": "id",
+            "data_type": "text",
+            "is_nullable": "NO",
+            "ordinal_position": 1,
+            "spatial_kind": null,
+            "table_name": "address_corrections",
+            "udt_name": "text"
+          },
+          {
+            "column_default": null,
+            "column_name": "address_id",
+            "data_type": "text",
+            "is_nullable": "YES",
+            "ordinal_position": 2,
+            "spatial_kind": null,
+            "table_name": "address_corrections",
+            "udt_name": "text"
+          },
+          {
+            "column_default": null,
+            "column_name": "public_code",
+            "data_type": "text",
+            "is_nullable": "YES",
+            "ordinal_position": 3,
+            "spatial_kind": null,
+            "table_name": "address_corrections",
+            "udt_name": "text"
+          },
+          {
+            "column_default": null,
+            "column_name": "query",
+            "data_type": "text",
+            "is_nullable": "NO",
+            "ordinal_position": 4,
+            "spatial_kind": null,
+            "table_name": "address_corrections",
+            "udt_name": "text"
+          },
+          {
+            "column_default": null,
+            "column_name": "correction_type",
+            "data_type": "text",
+            "is_nullable": "NO",
+            "ordinal_position": 5,
+            "spatial_kind": null,
+            "table_name": "address_corrections",
+            "udt_name": "text"
+          },
+          {
+            "column_default": null,
+            "column_name": "reason",
+            "data_type": "text",
+            "is_nullable": "NO",
+            "ordinal_position": 6,
+            "spatial_kind": null,
+            "table_name": "address_corrections",
+            "udt_name": "text"
+          },
+          {
+            "column_default": "''::text",
+            "column_name": "note",
+            "data_type": "text",
+            "is_nullable": "NO",
+            "ordinal_position": 7,
+            "spatial_kind": null,
+            "table_name": "address_corrections",
+            "udt_name": "text"
+          },
+          {
+            "column_default": null,
+            "column_name": "reporter_name",
+            "data_type": "text",
+            "is_nullable": "YES",
+            "ordinal_position": 8,
+            "spatial_kind": null,
+            "table_name": "address_corrections",
+            "udt_name": "text"
+          },
+          {
+            "column_default": null,
+            "column_name": "reporter_contact",
+            "data_type": "text",
+            "is_nullable": "YES",
+            "ordinal_position": 9,
+            "spatial_kind": null,
+            "table_name": "address_corrections",
+            "udt_name": "text"
+          },
+          {
+            "column_default": "'submitted'::text",
+            "column_name": "status",
+            "data_type": "text",
+            "is_nullable": "NO",
+            "ordinal_position": 10,
+            "spatial_kind": null,
+            "table_name": "address_corrections",
+            "udt_name": "text"
+          },
+          {
+            "column_default": "now()",
+            "column_name": "created_at",
+            "data_type": "timestamp with time zone",
+            "is_nullable": "NO",
+            "ordinal_position": 11,
+            "spatial_kind": null,
+            "table_name": "address_corrections",
+            "udt_name": "timestamptz"
+          },
+          {
+            "column_default": "now()",
+            "column_name": "updated_at",
+            "data_type": "timestamp with time zone",
+            "is_nullable": "NO",
+            "ordinal_position": 12,
+            "spatial_kind": null,
+            "table_name": "address_corrections",
+            "udt_name": "timestamptz"
+          },
+          {
+            "column_default": "''::text",
+            "column_name": "reviewer_note",
+            "data_type": "text",
+            "is_nullable": "NO",
+            "ordinal_position": 13,
+            "spatial_kind": null,
+            "table_name": "address_corrections",
+            "udt_name": "text"
+          }
+        ],
+        "comment": null,
+        "constraints": [
+          {
+            "columns": [
+              "address_id"
+            ],
+            "conname": "address_corrections_address_id_fkey",
+            "contype": "f",
+            "definition": "FOREIGN KEY (address_id) REFERENCES addresses(id)",
+            "referenced_table": "addresses",
+            "table_name": "address_corrections"
+          },
+          {
+            "columns": [
+              "id"
+            ],
+            "conname": "address_corrections_pkey",
+            "contype": "p",
+            "definition": "PRIMARY KEY (id)",
+            "referenced_table": null,
+            "table_name": "address_corrections"
+          }
+        ],
+        "geometries": [],
+        "indexes": [
+          {
+            "definition": "CREATE UNIQUE INDEX address_corrections_pkey ON public.address_corrections USING btree (id)",
+            "index_name": "address_corrections_pkey",
+            "indisprimary": true,
+            "indisunique": true,
+            "table_name": "address_corrections"
+          },
+          {
+            "definition": "CREATE INDEX idx_address_corrections_status_created_at ON public.address_corrections USING btree (status, created_at DESC)",
+            "index_name": "idx_address_corrections_status_created_at",
+            "indisprimary": false,
+            "indisunique": false,
+            "table_name": "address_corrections"
+          },
+          {
+            "definition": "CREATE INDEX idx_address_corrections_status_updated ON public.address_corrections USING btree (status, updated_at DESC)",
+            "index_name": "idx_address_corrections_status_updated",
+            "indisprimary": false,
+            "indisunique": false,
+            "table_name": "address_corrections"
+          }
+        ]
+      },
+      "address_points": {
+        "columns": [
+          {
+            "column_default": null,
+            "column_name": "id",
+            "data_type": "text",
+            "is_nullable": "NO",
+            "ordinal_position": 1,
+            "spatial_kind": null,
+            "table_name": "address_points",
+            "udt_name": "text"
+          },
+          {
+            "column_default": null,
+            "column_name": "address_id",
+            "data_type": "text",
+            "is_nullable": "NO",
+            "ordinal_position": 2,
+            "spatial_kind": null,
+            "table_name": "address_points",
+            "udt_name": "text"
+          },
+          {
+            "column_default": null,
+            "column_name": "latitude",
+            "data_type": "double precision",
+            "is_nullable": "NO",
+            "ordinal_position": 3,
+            "spatial_kind": null,
+            "table_name": "address_points",
+            "udt_name": "float8"
+          },
+          {
+            "column_default": null,
+            "column_name": "longitude",
+            "data_type": "double precision",
+            "is_nullable": "NO",
+            "ordinal_position": 4,
+            "spatial_kind": null,
+            "table_name": "address_points",
+            "udt_name": "float8"
+          },
+          {
+            "column_default": null,
+            "column_name": "accuracy_meters",
+            "data_type": "double precision",
+            "is_nullable": "YES",
+            "ordinal_position": 5,
+            "spatial_kind": null,
+            "table_name": "address_points",
+            "udt_name": "float8"
+          },
+          {
+            "column_default": "'manual'::text",
+            "column_name": "source_method",
+            "data_type": "text",
+            "is_nullable": "NO",
+            "ordinal_position": 6,
+            "spatial_kind": null,
+            "table_name": "address_points",
+            "udt_name": "text"
+          },
+          {
+            "column_default": "true",
+            "column_name": "is_active",
+            "data_type": "boolean",
+            "is_nullable": "NO",
+            "ordinal_position": 7,
+            "spatial_kind": null,
+            "table_name": "address_points",
+            "udt_name": "bool"
+          },
+          {
+            "column_default": "now()",
+            "column_name": "created_at",
+            "data_type": "timestamp with time zone",
+            "is_nullable": "NO",
+            "ordinal_position": 8,
+            "spatial_kind": null,
+            "table_name": "address_points",
+            "udt_name": "timestamptz"
+          },
+          {
+            "column_default": "now()",
+            "column_name": "updated_at",
+            "data_type": "timestamp with time zone",
+            "is_nullable": "NO",
+            "ordinal_position": 9,
+            "spatial_kind": null,
+            "table_name": "address_points",
+            "udt_name": "timestamptz"
+          }
+        ],
+        "comment": null,
+        "constraints": [
+          {
+            "columns": [
+              "address_id"
+            ],
+            "conname": "address_points_address_id_fkey",
+            "contype": "f",
+            "definition": "FOREIGN KEY (address_id) REFERENCES addresses(id) ON DELETE CASCADE",
+            "referenced_table": "addresses",
+            "table_name": "address_points"
+          },
+          {
+            "columns": [
+              "id"
+            ],
+            "conname": "address_points_pkey",
+            "contype": "p",
+            "definition": "PRIMARY KEY (id)",
+            "referenced_table": null,
+            "table_name": "address_points"
+          }
+        ],
+        "geometries": [],
+        "indexes": [
+          {
+            "definition": "CREATE UNIQUE INDEX address_points_pkey ON public.address_points USING btree (id)",
+            "index_name": "address_points_pkey",
+            "indisprimary": true,
+            "indisunique": true,
+            "table_name": "address_points"
+          },
+          {
+            "definition": "CREATE INDEX idx_address_points_address_id_active ON public.address_points USING btree (address_id, is_active)",
+            "index_name": "idx_address_points_address_id_active",
+            "indisprimary": false,
+            "indisunique": false,
+            "table_name": "address_points"
+          }
+        ]
+      },
+      "address_record_events": {
+        "columns": [
+          {
+            "column_default": null,
+            "column_name": "id",
+            "data_type": "text",
+            "is_nullable": "NO",
+            "ordinal_position": 1,
+            "spatial_kind": null,
+            "table_name": "address_record_events",
+            "udt_name": "text"
+          },
+          {
+            "column_default": null,
+            "column_name": "address_record_id",
+            "data_type": "text",
+            "is_nullable": "NO",
+            "ordinal_position": 2,
+            "spatial_kind": null,
+            "table_name": "address_record_events",
+            "udt_name": "text"
+          },
+          {
+            "column_default": null,
+            "column_name": "event_type",
+            "data_type": "text",
+            "is_nullable": "NO",
+            "ordinal_position": 3,
+            "spatial_kind": null,
+            "table_name": "address_record_events",
+            "udt_name": "text"
+          },
+          {
+            "column_default": null,
+            "column_name": "actor_id",
+            "data_type": "text",
+            "is_nullable": "YES",
+            "ordinal_position": 4,
+            "spatial_kind": null,
+            "table_name": "address_record_events",
+            "udt_name": "text"
+          },
+          {
+            "column_default": null,
+            "column_name": "actor_username",
+            "data_type": "text",
+            "is_nullable": "YES",
+            "ordinal_position": 5,
+            "spatial_kind": null,
+            "table_name": "address_record_events",
+            "udt_name": "text"
+          },
+          {
+            "column_default": null,
+            "column_name": "actor_role",
+            "data_type": "text",
+            "is_nullable": "YES",
+            "ordinal_position": 6,
+            "spatial_kind": null,
+            "table_name": "address_record_events",
+            "udt_name": "text"
+          },
+          {
+            "column_default": "'{}'::jsonb",
+            "column_name": "details",
+            "data_type": "jsonb",
+            "is_nullable": "NO",
+            "ordinal_position": 7,
+            "spatial_kind": null,
+            "table_name": "address_record_events",
+            "udt_name": "jsonb"
+          },
+          {
+            "column_default": "now()",
+            "column_name": "created_at",
+            "data_type": "timestamp with time zone",
+            "is_nullable": "NO",
+            "ordinal_position": 8,
+            "spatial_kind": null,
+            "table_name": "address_record_events",
+            "udt_name": "timestamptz"
+          }
+        ],
+        "comment": null,
+        "constraints": [
+          {
+            "columns": [
+              "address_record_id"
+            ],
+            "conname": "address_record_events_address_record_id_fkey",
+            "contype": "f",
+            "definition": "FOREIGN KEY (address_record_id) REFERENCES address_records(id) ON DELETE CASCADE",
+            "referenced_table": "address_records",
+            "table_name": "address_record_events"
+          },
+          {
+            "columns": [
+              "id"
+            ],
+            "conname": "address_record_events_pkey",
+            "contype": "p",
+            "definition": "PRIMARY KEY (id)",
+            "referenced_table": null,
+            "table_name": "address_record_events"
+          }
+        ],
+        "geometries": [],
+        "indexes": [
+          {
+            "definition": "CREATE UNIQUE INDEX address_record_events_pkey ON public.address_record_events USING btree (id)",
+            "index_name": "address_record_events_pkey",
+            "indisprimary": true,
+            "indisunique": true,
+            "table_name": "address_record_events"
+          },
+          {
+            "definition": "CREATE INDEX idx_address_record_events_record_created ON public.address_record_events USING btree (address_record_id, created_at DESC)",
+            "index_name": "idx_address_record_events_record_created",
+            "indisprimary": false,
+            "indisunique": false,
+            "table_name": "address_record_events"
+          }
+        ]
+      },
+      "address_records": {
+        "columns": [
+          {
+            "column_default": null,
+            "column_name": "id",
+            "data_type": "text",
+            "is_nullable": "NO",
+            "ordinal_position": 1,
+            "spatial_kind": null,
+            "table_name": "address_records",
+            "udt_name": "text"
+          },
+          {
+            "column_default": null,
+            "column_name": "address_code",
+            "data_type": "text",
+            "is_nullable": "NO",
+            "ordinal_position": 2,
+            "spatial_kind": null,
+            "table_name": "address_records",
+            "udt_name": "text"
+          },
+          {
+            "column_default": null,
+            "column_name": "source_submission_id",
+            "data_type": "text",
+            "is_nullable": "YES",
+            "ordinal_position": 3,
+            "spatial_kind": null,
+            "table_name": "address_records",
+            "udt_name": "text"
+          },
+          {
+            "column_default": null,
+            "column_name": "province_code",
+            "data_type": "text",
+            "is_nullable": "YES",
+            "ordinal_position": 4,
+            "spatial_kind": null,
+            "table_name": "address_records",
+            "udt_name": "text"
+          },
+          {
+            "column_default": null,
+            "column_name": "territory_id",
+            "data_type": "text",
+            "is_nullable": "YES",
+            "ordinal_position": 5,
+            "spatial_kind": null,
+            "table_name": "address_records",
+            "udt_name": "text"
+          },
+          {
+            "column_default": null,
+            "column_name": "address_label",
+            "data_type": "text",
+            "is_nullable": "NO",
+            "ordinal_position": 6,
+            "spatial_kind": null,
+            "table_name": "address_records",
+            "udt_name": "text"
+          },
+          {
+            "column_default": null,
+            "column_name": "status",
+            "data_type": "text",
+            "is_nullable": "NO",
+            "ordinal_position": 7,
+            "spatial_kind": null,
+            "table_name": "address_records",
+            "udt_name": "text"
+          },
+          {
+            "column_default": "'not-public'::text",
+            "column_name": "publication_state",
+            "data_type": "text",
+            "is_nullable": "NO",
+            "ordinal_position": 8,
+            "spatial_kind": null,
+            "table_name": "address_records",
+            "udt_name": "text"
+          },
+          {
+            "column_default": null,
+            "column_name": "latitude",
+            "data_type": "double precision",
+            "is_nullable": "NO",
+            "ordinal_position": 9,
+            "spatial_kind": null,
+            "table_name": "address_records",
+            "udt_name": "float8"
+          },
+          {
+            "column_default": null,
+            "column_name": "longitude",
+            "data_type": "double precision",
+            "is_nullable": "NO",
+            "ordinal_position": 10,
+            "spatial_kind": null,
+            "table_name": "address_records",
+            "udt_name": "float8"
+          },
+          {
+            "column_default": null,
+            "column_name": "accuracy_meters",
+            "data_type": "double precision",
+            "is_nullable": "YES",
+            "ordinal_position": 11,
+            "spatial_kind": null,
+            "table_name": "address_records",
+            "udt_name": "float8"
+          },
+          {
+            "column_default": "''::text",
+            "column_name": "search_text",
+            "data_type": "text",
+            "is_nullable": "NO",
+            "ordinal_position": 12,
+            "spatial_kind": null,
+            "table_name": "address_records",
+            "udt_name": "text"
+          },
+          {
+            "column_default": "'{}'::jsonb",
+            "column_name": "record_bundle",
+            "data_type": "jsonb",
+            "is_nullable": "NO",
+            "ordinal_position": 13,
+            "spatial_kind": null,
+            "table_name": "address_records",
+            "udt_name": "jsonb"
+          },
+          {
+            "column_default": "false",
+            "column_name": "is_archived",
+            "data_type": "boolean",
+            "is_nullable": "NO",
+            "ordinal_position": 14,
+            "spatial_kind": null,
+            "table_name": "address_records",
+            "udt_name": "bool"
+          },
+          {
+            "column_default": "now()",
+            "column_name": "created_at",
+            "data_type": "timestamp with time zone",
+            "is_nullable": "NO",
+            "ordinal_position": 15,
+            "spatial_kind": null,
+            "table_name": "address_records",
+            "udt_name": "timestamptz"
+          },
+          {
+            "column_default": "now()",
+            "column_name": "updated_at",
+            "data_type": "timestamp with time zone",
+            "is_nullable": "NO",
+            "ordinal_position": 16,
+            "spatial_kind": null,
+            "table_name": "address_records",
+            "udt_name": "timestamptz"
+          },
+          {
+            "column_default": null,
+            "column_name": "geom",
+            "data_type": "USER-DEFINED",
+            "is_nullable": "YES",
+            "ordinal_position": 17,
+            "spatial_kind": "geometry/geography",
+            "table_name": "address_records",
+            "udt_name": "geography"
+          }
+        ],
+        "comment": null,
+        "constraints": [
+          {
+            "columns": [
+              "address_code"
+            ],
+            "conname": "address_records_address_code_key",
+            "contype": "u",
+            "definition": "UNIQUE (address_code)",
+            "referenced_table": null,
+            "table_name": "address_records"
+          },
+          {
+            "columns": [
+              "latitude"
+            ],
+            "conname": "address_records_latitude_valid",
+            "contype": "c",
+            "definition": "CHECK (latitude >= '-90'::integer::double precision AND latitude <= 90::double precision)",
+            "referenced_table": null,
+            "table_name": "address_records"
+          },
+          {
+            "columns": [
+              "longitude"
+            ],
+            "conname": "address_records_longitude_valid",
+            "contype": "c",
+            "definition": "CHECK (longitude >= '-180'::integer::double precision AND longitude <= 180::double precision)",
+            "referenced_table": null,
+            "table_name": "address_records"
+          },
+          {
+            "columns": [
+              "id"
+            ],
+            "conname": "address_records_pkey",
+            "contype": "p",
+            "definition": "PRIMARY KEY (id)",
+            "referenced_table": null,
+            "table_name": "address_records"
+          },
+          {
+            "columns": [
+              "province_code"
+            ],
+            "conname": "address_records_province_code_fkey",
+            "contype": "f",
+            "definition": "FOREIGN KEY (province_code) REFERENCES provinces(code)",
+            "referenced_table": "provinces",
+            "table_name": "address_records"
+          },
+          {
+            "columns": [
+              "source_submission_id"
+            ],
+            "conname": "address_records_source_submission_id_fkey",
+            "contype": "f",
+            "definition": "FOREIGN KEY (source_submission_id) REFERENCES citizen_geotag_submissions(id)",
+            "referenced_table": "citizen_geotag_submissions",
+            "table_name": "address_records"
+          },
+          {
+            "columns": [
+              "territory_id"
+            ],
+            "conname": "address_records_territory_id_fkey",
+            "contype": "f",
+            "definition": "FOREIGN KEY (territory_id) REFERENCES territories(id)",
+            "referenced_table": "territories",
+            "table_name": "address_records"
+          }
+        ],
+        "geometries": [],
+        "indexes": [
+          {
+            "definition": "CREATE UNIQUE INDEX address_records_address_code_key ON public.address_records USING btree (address_code)",
+            "index_name": "address_records_address_code_key",
+            "indisprimary": false,
+            "indisunique": true,
+            "table_name": "address_records"
+          },
+          {
+            "definition": "CREATE UNIQUE INDEX address_records_pkey ON public.address_records USING btree (id)",
+            "index_name": "address_records_pkey",
+            "indisprimary": true,
+            "indisunique": true,
+            "table_name": "address_records"
+          },
+          {
+            "definition": "CREATE INDEX idx_address_records_active_code ON public.address_records USING btree (address_code) WHERE (is_archived = false)",
+            "index_name": "idx_address_records_active_code",
+            "indisprimary": false,
+            "indisunique": false,
+            "table_name": "address_records"
+          },
+          {
+            "definition": "CREATE INDEX idx_address_records_active_status_updated ON public.address_records USING btree (status, updated_at DESC) WHERE (is_archived = false)",
+            "index_name": "idx_address_records_active_status_updated",
+            "indisprimary": false,
+            "indisunique": false,
+            "table_name": "address_records"
+          },
+          {
+            "definition": "CREATE INDEX idx_address_records_code ON public.address_records USING btree (address_code)",
+            "index_name": "idx_address_records_code",
+            "indisprimary": false,
+            "indisunique": false,
+            "table_name": "address_records"
+          },
+          {
+            "definition": "CREATE INDEX idx_address_records_geom ON public.address_records USING gist (geom)",
+            "index_name": "idx_address_records_geom",
+            "indisprimary": false,
+            "indisunique": false,
+            "table_name": "address_records"
+          },
+          {
+            "definition": "CREATE INDEX idx_address_records_province_status ON public.address_records USING btree (province_code, status)",
+            "index_name": "idx_address_records_province_status",
+            "indisprimary": false,
+            "indisunique": false,
+            "table_name": "address_records"
+          },
+          {
+            "definition": "CREATE INDEX idx_address_records_search_text ON public.address_records USING gin (to_tsvector('simple'::regconfig, search_text))",
+            "index_name": "idx_address_records_search_text",
+            "indisprimary": false,
+            "indisunique": false,
+            "table_name": "address_records"
+          },
+          {
+            "definition": "CREATE INDEX idx_address_records_status_updated ON public.address_records USING btree (status, updated_at DESC)",
+            "index_name": "idx_address_records_status_updated",
+            "indisprimary": false,
+            "indisunique": false,
+            "table_name": "address_records"
+          },
+          {
+            "definition": "CREATE INDEX idx_address_records_territory_status ON public.address_records USING btree (territory_id, status)",
+            "index_name": "idx_address_records_territory_status",
+            "indisprimary": false,
+            "indisunique": false,
+            "table_name": "address_records"
+          }
+        ]
+      },
+      "addresses": {
+        "columns": [
+          {
+            "column_default": null,
+            "column_name": "id",
+            "data_type": "text",
+            "is_nullable": "NO",
+            "ordinal_position": 1,
+            "spatial_kind": null,
+            "table_name": "addresses",
+            "udt_name": "text"
+          },
+          {
+            "column_default": null,
+            "column_name": "formatted",
+            "data_type": "text",
+            "is_nullable": "NO",
+            "ordinal_position": 2,
+            "spatial_kind": null,
+            "table_name": "addresses",
+            "udt_name": "text"
+          },
+          {
+            "column_default": null,
+            "column_name": "territory_id",
+            "data_type": "text",
+            "is_nullable": "NO",
+            "ordinal_position": 3,
+            "spatial_kind": null,
+            "table_name": "addresses",
+            "udt_name": "text"
+          },
+          {
+            "column_default": null,
+            "column_name": "road_id",
+            "data_type": "text",
+            "is_nullable": "NO",
+            "ordinal_position": 4,
+            "spatial_kind": null,
+            "table_name": "addresses",
+            "udt_name": "text"
+          },
+          {
+            "column_default": null,
+            "column_name": "building_id",
+            "data_type": "text",
+            "is_nullable": "NO",
+            "ordinal_position": 5,
+            "spatial_kind": null,
+            "table_name": "addresses",
+            "udt_name": "text"
+          },
+          {
+            "column_default": null,
+            "column_name": "province_code",
+            "data_type": "text",
+            "is_nullable": "NO",
+            "ordinal_position": 6,
+            "spatial_kind": null,
+            "table_name": "addresses",
+            "udt_name": "text"
+          },
+          {
+            "column_default": null,
+            "column_name": "public_code",
+            "data_type": "text",
+            "is_nullable": "YES",
+            "ordinal_position": 7,
+            "spatial_kind": null,
+            "table_name": "addresses",
+            "udt_name": "text"
+          },
+          {
+            "column_default": "'manual'::text",
+            "column_name": "issuance_method",
+            "data_type": "text",
+            "is_nullable": "NO",
+            "ordinal_position": 8,
+            "spatial_kind": null,
+            "table_name": "addresses",
+            "udt_name": "text"
+          },
+          {
+            "column_default": "'admin-portal'::text",
+            "column_name": "source",
+            "data_type": "text",
+            "is_nullable": "NO",
+            "ordinal_position": 9,
+            "spatial_kind": null,
+            "table_name": "addresses",
+            "udt_name": "text"
+          },
+          {
+            "column_default": "'provisional'::text",
+            "column_name": "verification_status",
+            "data_type": "text",
+            "is_nullable": "NO",
+            "ordinal_position": 10,
+            "spatial_kind": null,
+            "table_name": "addresses",
+            "udt_name": "text"
+          },
+          {
+            "column_default": null,
+            "column_name": "superseded_by_address_id",
+            "data_type": "text",
+            "is_nullable": "YES",
+            "ordinal_position": 11,
+            "spatial_kind": null,
+            "table_name": "addresses",
+            "udt_name": "text"
+          },
+          {
+            "column_default": null,
+            "column_name": "status",
+            "data_type": "text",
+            "is_nullable": "NO",
+            "ordinal_position": 12,
+            "spatial_kind": null,
+            "table_name": "addresses",
+            "udt_name": "text"
+          },
+          {
+            "column_default": "'draft'::text",
+            "column_name": "publication_state",
+            "data_type": "text",
+            "is_nullable": "NO",
+            "ordinal_position": 13,
+            "spatial_kind": null,
+            "table_name": "addresses",
+            "udt_name": "text"
+          },
+          {
+            "column_default": "false",
+            "column_name": "is_archived",
+            "data_type": "boolean",
+            "is_nullable": "NO",
+            "ordinal_position": 14,
+            "spatial_kind": null,
+            "table_name": "addresses",
+            "udt_name": "bool"
+          },
+          {
+            "column_default": "now()",
+            "column_name": "created_at",
+            "data_type": "timestamp with time zone",
+            "is_nullable": "NO",
+            "ordinal_position": 15,
+            "spatial_kind": null,
+            "table_name": "addresses",
+            "udt_name": "timestamptz"
+          },
+          {
+            "column_default": "now()",
+            "column_name": "updated_at",
+            "data_type": "timestamp with time zone",
+            "is_nullable": "NO",
+            "ordinal_position": 16,
+            "spatial_kind": null,
+            "table_name": "addresses",
+            "udt_name": "timestamptz"
+          }
+        ],
+        "comment": null,
+        "constraints": [
+          {
+            "columns": [
+              "building_id"
+            ],
+            "conname": "addresses_building_id_fkey",
+            "contype": "f",
+            "definition": "FOREIGN KEY (building_id) REFERENCES buildings(id)",
+            "referenced_table": "buildings",
+            "table_name": "addresses"
+          },
+          {
+            "columns": [
+              "formatted"
+            ],
+            "conname": "addresses_formatted_key",
+            "contype": "u",
+            "definition": "UNIQUE (formatted)",
+            "referenced_table": null,
+            "table_name": "addresses"
+          },
+          {
+            "columns": [
+              "id"
+            ],
+            "conname": "addresses_pkey",
+            "contype": "p",
+            "definition": "PRIMARY KEY (id)",
+            "referenced_table": null,
+            "table_name": "addresses"
+          },
+          {
+            "columns": [
+              "province_code"
+            ],
+            "conname": "addresses_province_code_fkey",
+            "contype": "f",
+            "definition": "FOREIGN KEY (province_code) REFERENCES provinces(code)",
+            "referenced_table": "provinces",
+            "table_name": "addresses"
+          },
+          {
+            "columns": [
+              "road_id"
+            ],
+            "conname": "addresses_road_id_fkey",
+            "contype": "f",
+            "definition": "FOREIGN KEY (road_id) REFERENCES roads(id)",
+            "referenced_table": "roads",
+            "table_name": "addresses"
+          },
+          {
+            "columns": [
+              "superseded_by_address_id"
+            ],
+            "conname": "addresses_superseded_by_address_id_fkey",
+            "contype": "f",
+            "definition": "FOREIGN KEY (superseded_by_address_id) REFERENCES addresses(id)",
+            "referenced_table": "addresses",
+            "table_name": "addresses"
+          },
+          {
+            "columns": [
+              "territory_id"
+            ],
+            "conname": "addresses_territory_id_fkey",
+            "contype": "f",
+            "definition": "FOREIGN KEY (territory_id) REFERENCES territories(id)",
+            "referenced_table": "territories",
+            "table_name": "addresses"
+          }
+        ],
+        "geometries": [],
+        "indexes": [
+          {
+            "definition": "CREATE UNIQUE INDEX addresses_formatted_key ON public.addresses USING btree (formatted)",
+            "index_name": "addresses_formatted_key",
+            "indisprimary": false,
+            "indisunique": true,
+            "table_name": "addresses"
+          },
+          {
+            "definition": "CREATE UNIQUE INDEX addresses_pkey ON public.addresses USING btree (id)",
+            "index_name": "addresses_pkey",
+            "indisprimary": true,
+            "indisunique": true,
+            "table_name": "addresses"
+          },
+          {
+            "definition": "CREATE UNIQUE INDEX idx_addresses_public_code_unique ON public.addresses USING btree (public_code) WHERE (public_code IS NOT NULL)",
+            "index_name": "idx_addresses_public_code_unique",
+            "indisprimary": false,
+            "indisunique": true,
+            "table_name": "addresses"
+          }
+        ]
+      },
+      "admin_units": {
+        "columns": [
+          {
+            "column_default": null,
+            "column_name": "id",
+            "data_type": "text",
+            "is_nullable": "NO",
+            "ordinal_position": 1,
+            "spatial_kind": null,
+            "table_name": "admin_units",
+            "udt_name": "text"
+          },
+          {
+            "column_default": null,
+            "column_name": "level",
+            "data_type": "text",
+            "is_nullable": "NO",
+            "ordinal_position": 2,
+            "spatial_kind": null,
+            "table_name": "admin_units",
+            "udt_name": "text"
+          },
+          {
+            "column_default": null,
+            "column_name": "code",
+            "data_type": "text",
+            "is_nullable": "NO",
+            "ordinal_position": 3,
+            "spatial_kind": null,
+            "table_name": "admin_units",
+            "udt_name": "text"
+          },
+          {
+            "column_default": null,
+            "column_name": "parent_id",
+            "data_type": "text",
+            "is_nullable": "YES",
+            "ordinal_position": 4,
+            "spatial_kind": null,
+            "table_name": "admin_units",
+            "udt_name": "text"
+          },
+          {
+            "column_default": null,
+            "column_name": "province_code",
+            "data_type": "text",
+            "is_nullable": "YES",
+            "ordinal_position": 5,
+            "spatial_kind": null,
+            "table_name": "admin_units",
+            "udt_name": "text"
+          },
+          {
+            "column_default": null,
+            "column_name": "name_es",
+            "data_type": "text",
+            "is_nullable": "NO",
+            "ordinal_position": 6,
+            "spatial_kind": null,
+            "table_name": "admin_units",
+            "udt_name": "text"
+          },
+          {
+            "column_default": null,
+            "column_name": "name_en",
+            "data_type": "text",
+            "is_nullable": "NO",
+            "ordinal_position": 7,
+            "spatial_kind": null,
+            "table_name": "admin_units",
+            "udt_name": "text"
+          },
+          {
+            "column_default": "'active'::text",
+            "column_name": "status",
+            "data_type": "text",
+            "is_nullable": "NO",
+            "ordinal_position": 8,
+            "spatial_kind": null,
+            "table_name": "admin_units",
+            "udt_name": "text"
+          },
+          {
+            "column_default": "0",
+            "column_name": "sort_order",
+            "data_type": "integer",
+            "is_nullable": "NO",
+            "ordinal_position": 9,
+            "spatial_kind": null,
+            "table_name": "admin_units",
+            "udt_name": "int4"
+          },
+          {
+            "column_default": "now()",
+            "column_name": "created_at",
+            "data_type": "timestamp with time zone",
+            "is_nullable": "NO",
+            "ordinal_position": 10,
+            "spatial_kind": null,
+            "table_name": "admin_units",
+            "udt_name": "timestamptz"
+          },
+          {
+            "column_default": "now()",
+            "column_name": "updated_at",
+            "data_type": "timestamp with time zone",
+            "is_nullable": "NO",
+            "ordinal_position": 11,
+            "spatial_kind": null,
+            "table_name": "admin_units",
+            "udt_name": "timestamptz"
+          }
+        ],
+        "comment": null,
+        "constraints": [
+          {
+            "columns": [
+              "code"
+            ],
+            "conname": "admin_units_code_key",
+            "contype": "u",
+            "definition": "UNIQUE (code)",
+            "referenced_table": null,
+            "table_name": "admin_units"
+          },
+          {
+            "columns": [
+              "parent_id"
+            ],
+            "conname": "admin_units_parent_id_fkey",
+            "contype": "f",
+            "definition": "FOREIGN KEY (parent_id) REFERENCES admin_units(id)",
+            "referenced_table": "admin_units",
+            "table_name": "admin_units"
+          },
+          {
+            "columns": [
+              "id"
+            ],
+            "conname": "admin_units_pkey",
+            "contype": "p",
+            "definition": "PRIMARY KEY (id)",
+            "referenced_table": null,
+            "table_name": "admin_units"
+          },
+          {
+            "columns": [
+              "province_code"
+            ],
+            "conname": "admin_units_province_code_fkey",
+            "contype": "f",
+            "definition": "FOREIGN KEY (province_code) REFERENCES provinces(code)",
+            "referenced_table": "provinces",
+            "table_name": "admin_units"
+          }
+        ],
+        "geometries": [],
+        "indexes": [
+          {
+            "definition": "CREATE UNIQUE INDEX admin_units_code_key ON public.admin_units USING btree (code)",
+            "index_name": "admin_units_code_key",
+            "indisprimary": false,
+            "indisunique": true,
+            "table_name": "admin_units"
+          },
+          {
+            "definition": "CREATE UNIQUE INDEX admin_units_pkey ON public.admin_units USING btree (id)",
+            "index_name": "admin_units_pkey",
+            "indisprimary": true,
+            "indisunique": true,
+            "table_name": "admin_units"
+          }
+        ]
+      },
+      "audit_logs": {
+        "columns": [
+          {
+            "column_default": "nextval('audit_logs_id_seq'::regclass)",
+            "column_name": "id",
+            "data_type": "bigint",
+            "is_nullable": "NO",
+            "ordinal_position": 1,
+            "spatial_kind": null,
+            "table_name": "audit_logs",
+            "udt_name": "int8"
+          },
+          {
+            "column_default": null,
+            "column_name": "actor_user_id",
+            "data_type": "text",
+            "is_nullable": "YES",
+            "ordinal_position": 2,
+            "spatial_kind": null,
+            "table_name": "audit_logs",
+            "udt_name": "text"
+          },
+          {
+            "column_default": null,
+            "column_name": "actor_username",
+            "data_type": "text",
+            "is_nullable": "YES",
+            "ordinal_position": 3,
+            "spatial_kind": null,
+            "table_name": "audit_logs",
+            "udt_name": "text"
+          },
+          {
+            "column_default": null,
+            "column_name": "actor_role",
+            "data_type": "text",
+            "is_nullable": "YES",
+            "ordinal_position": 4,
+            "spatial_kind": null,
+            "table_name": "audit_logs",
+            "udt_name": "text"
+          },
+          {
+            "column_default": null,
+            "column_name": "action",
+            "data_type": "text",
+            "is_nullable": "NO",
+            "ordinal_position": 5,
+            "spatial_kind": null,
+            "table_name": "audit_logs",
+            "udt_name": "text"
+          },
+          {
+            "column_default": null,
+            "column_name": "entity_type",
+            "data_type": "text",
+            "is_nullable": "NO",
+            "ordinal_position": 6,
+            "spatial_kind": null,
+            "table_name": "audit_logs",
+            "udt_name": "text"
+          },
+          {
+            "column_default": null,
+            "column_name": "entity_id",
+            "data_type": "text",
+            "is_nullable": "NO",
+            "ordinal_position": 7,
+            "spatial_kind": null,
+            "table_name": "audit_logs",
+            "udt_name": "text"
+          },
+          {
+            "column_default": "'{}'::text",
+            "column_name": "details",
+            "data_type": "text",
+            "is_nullable": "NO",
+            "ordinal_position": 8,
+            "spatial_kind": null,
+            "table_name": "audit_logs",
+            "udt_name": "text"
+          },
+          {
+            "column_default": "now()",
+            "column_name": "created_at",
+            "data_type": "timestamp with time zone",
+            "is_nullable": "NO",
+            "ordinal_position": 9,
+            "spatial_kind": null,
+            "table_name": "audit_logs",
+            "udt_name": "timestamptz"
+          }
+        ],
+        "comment": null,
+        "constraints": [
+          {
+            "columns": [
+              "id"
+            ],
+            "conname": "audit_logs_pkey",
+            "contype": "p",
+            "definition": "PRIMARY KEY (id)",
+            "referenced_table": null,
+            "table_name": "audit_logs"
+          }
+        ],
+        "geometries": [],
+        "indexes": [
+          {
+            "definition": "CREATE UNIQUE INDEX audit_logs_pkey ON public.audit_logs USING btree (id)",
+            "index_name": "audit_logs_pkey",
+            "indisprimary": true,
+            "indisunique": true,
+            "table_name": "audit_logs"
+          }
+        ]
+      },
+      "auth_tokens": {
+        "columns": [
+          {
+            "column_default": null,
+            "column_name": "token",
+            "data_type": "text",
+            "is_nullable": "NO",
+            "ordinal_position": 1,
+            "spatial_kind": null,
+            "table_name": "auth_tokens",
+            "udt_name": "text"
+          },
+          {
+            "column_default": null,
+            "column_name": "user_id",
+            "data_type": "text",
+            "is_nullable": "NO",
+            "ordinal_position": 2,
+            "spatial_kind": null,
+            "table_name": "auth_tokens",
+            "udt_name": "text"
+          },
+          {
+            "column_default": "now()",
+            "column_name": "created_at",
+            "data_type": "timestamp with time zone",
+            "is_nullable": "NO",
+            "ordinal_position": 3,
+            "spatial_kind": null,
+            "table_name": "auth_tokens",
+            "udt_name": "timestamptz"
+          },
+          {
+            "column_default": "now()",
+            "column_name": "expires_at",
+            "data_type": "timestamp with time zone",
+            "is_nullable": "NO",
+            "ordinal_position": 4,
+            "spatial_kind": null,
+            "table_name": "auth_tokens",
+            "udt_name": "timestamptz"
+          },
+          {
+            "column_default": null,
+            "column_name": "revoked_at",
+            "data_type": "timestamp with time zone",
+            "is_nullable": "YES",
+            "ordinal_position": 5,
+            "spatial_kind": null,
+            "table_name": "auth_tokens",
+            "udt_name": "timestamptz"
+          },
+          {
+            "column_default": null,
+            "column_name": "last_seen_at",
+            "data_type": "timestamp with time zone",
+            "is_nullable": "YES",
+            "ordinal_position": 6,
+            "spatial_kind": null,
+            "table_name": "auth_tokens",
+            "udt_name": "timestamptz"
+          }
+        ],
+        "comment": null,
+        "constraints": [
+          {
+            "columns": [
+              "token"
+            ],
+            "conname": "auth_tokens_pkey",
+            "contype": "p",
+            "definition": "PRIMARY KEY (token)",
+            "referenced_table": null,
+            "table_name": "auth_tokens"
+          },
+          {
+            "columns": [
+              "user_id"
+            ],
+            "conname": "auth_tokens_user_id_fkey",
+            "contype": "f",
+            "definition": "FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE",
+            "referenced_table": "users",
+            "table_name": "auth_tokens"
+          }
+        ],
+        "geometries": [],
+        "indexes": [
+          {
+            "definition": "CREATE UNIQUE INDEX auth_tokens_pkey ON public.auth_tokens USING btree (token)",
+            "index_name": "auth_tokens_pkey",
+            "indisprimary": true,
+            "indisunique": true,
+            "table_name": "auth_tokens"
+          }
+        ]
+      },
+      "buildings": {
+        "columns": [
+          {
+            "column_default": null,
+            "column_name": "id",
+            "data_type": "text",
+            "is_nullable": "NO",
+            "ordinal_position": 1,
+            "spatial_kind": null,
+            "table_name": "buildings",
+            "udt_name": "text"
+          },
+          {
+            "column_default": null,
+            "column_name": "label",
+            "data_type": "text",
+            "is_nullable": "NO",
+            "ordinal_position": 2,
+            "spatial_kind": null,
+            "table_name": "buildings",
+            "udt_name": "text"
+          },
+          {
+            "column_default": null,
+            "column_name": "territory_id",
+            "data_type": "text",
+            "is_nullable": "NO",
+            "ordinal_position": 3,
+            "spatial_kind": null,
+            "table_name": "buildings",
+            "udt_name": "text"
+          },
+          {
+            "column_default": null,
+            "column_name": "road_id",
+            "data_type": "text",
+            "is_nullable": "NO",
+            "ordinal_position": 4,
+            "spatial_kind": null,
+            "table_name": "buildings",
+            "udt_name": "text"
+          },
+          {
+            "column_default": null,
+            "column_name": "status",
+            "data_type": "text",
+            "is_nullable": "NO",
+            "ordinal_position": 5,
+            "spatial_kind": null,
+            "table_name": "buildings",
+            "udt_name": "text"
+          },
+          {
+            "column_default": null,
+            "column_name": "usage",
+            "data_type": "text",
+            "is_nullable": "NO",
+            "ordinal_position": 6,
+            "spatial_kind": null,
+            "table_name": "buildings",
+            "udt_name": "text"
+          },
+          {
+            "column_default": "'{}'::jsonb",
+            "column_name": "spatial_evidence",
+            "data_type": "jsonb",
+            "is_nullable": "NO",
+            "ordinal_position": 7,
+            "spatial_kind": null,
+            "table_name": "buildings",
+            "udt_name": "jsonb"
+          },
+          {
+            "column_default": "false",
+            "column_name": "is_archived",
+            "data_type": "boolean",
+            "is_nullable": "NO",
+            "ordinal_position": 8,
+            "spatial_kind": null,
+            "table_name": "buildings",
+            "udt_name": "bool"
+          },
+          {
+            "column_default": "now()",
+            "column_name": "created_at",
+            "data_type": "timestamp with time zone",
+            "is_nullable": "NO",
+            "ordinal_position": 9,
+            "spatial_kind": null,
+            "table_name": "buildings",
+            "udt_name": "timestamptz"
+          },
+          {
+            "column_default": "now()",
+            "column_name": "updated_at",
+            "data_type": "timestamp with time zone",
+            "is_nullable": "NO",
+            "ordinal_position": 10,
+            "spatial_kind": null,
+            "table_name": "buildings",
+            "udt_name": "timestamptz"
+          }
+        ],
+        "comment": null,
+        "constraints": [
+          {
+            "columns": [
+              "label"
+            ],
+            "conname": "buildings_label_key",
+            "contype": "u",
+            "definition": "UNIQUE (label)",
+            "referenced_table": null,
+            "table_name": "buildings"
+          },
+          {
+            "columns": [
+              "id"
+            ],
+            "conname": "buildings_pkey",
+            "contype": "p",
+            "definition": "PRIMARY KEY (id)",
+            "referenced_table": null,
+            "table_name": "buildings"
+          },
+          {
+            "columns": [
+              "road_id"
+            ],
+            "conname": "buildings_road_id_fkey",
+            "contype": "f",
+            "definition": "FOREIGN KEY (road_id) REFERENCES roads(id)",
+            "referenced_table": "roads",
+            "table_name": "buildings"
+          },
+          {
+            "columns": [
+              "territory_id"
+            ],
+            "conname": "buildings_territory_id_fkey",
+            "contype": "f",
+            "definition": "FOREIGN KEY (territory_id) REFERENCES territories(id)",
+            "referenced_table": "territories",
+            "table_name": "buildings"
+          }
+        ],
+        "geometries": [],
+        "indexes": [
+          {
+            "definition": "CREATE UNIQUE INDEX buildings_label_key ON public.buildings USING btree (label)",
+            "index_name": "buildings_label_key",
+            "indisprimary": false,
+            "indisunique": true,
+            "table_name": "buildings"
+          },
+          {
+            "definition": "CREATE UNIQUE INDEX buildings_pkey ON public.buildings USING btree (id)",
+            "index_name": "buildings_pkey",
+            "indisprimary": true,
+            "indisunique": true,
+            "table_name": "buildings"
+          }
+        ]
+      },
+      "citizen_geotag_submissions": {
+        "columns": [
+          {
+            "column_default": null,
+            "column_name": "id",
+            "data_type": "text",
+            "is_nullable": "NO",
+            "ordinal_position": 1,
+            "spatial_kind": null,
+            "table_name": "citizen_geotag_submissions",
+            "udt_name": "text"
+          },
+          {
+            "column_default": null,
+            "column_name": "territory_id",
+            "data_type": "text",
+            "is_nullable": "YES",
+            "ordinal_position": 2,
+            "spatial_kind": null,
+            "table_name": "citizen_geotag_submissions",
+            "udt_name": "text"
+          },
+          {
+            "column_default": null,
+            "column_name": "address_label",
+            "data_type": "text",
+            "is_nullable": "NO",
+            "ordinal_position": 3,
+            "spatial_kind": null,
+            "table_name": "citizen_geotag_submissions",
+            "udt_name": "text"
+          },
+          {
+            "column_default": null,
+            "column_name": "citizen_name",
+            "data_type": "text",
+            "is_nullable": "YES",
+            "ordinal_position": 4,
+            "spatial_kind": null,
+            "table_name": "citizen_geotag_submissions",
+            "udt_name": "text"
+          },
+          {
+            "column_default": null,
+            "column_name": "citizen_contact",
+            "data_type": "text",
+            "is_nullable": "YES",
+            "ordinal_position": 5,
+            "spatial_kind": null,
+            "table_name": "citizen_geotag_submissions",
+            "udt_name": "text"
+          },
+          {
+            "column_default": null,
+            "column_name": "dip_last4",
+            "data_type": "text",
+            "is_nullable": "YES",
+            "ordinal_position": 6,
+            "spatial_kind": null,
+            "table_name": "citizen_geotag_submissions",
+            "udt_name": "text"
+          },
+          {
+            "column_default": "'unverified'::text",
+            "column_name": "identity_verification_status",
+            "data_type": "text",
+            "is_nullable": "NO",
+            "ordinal_position": 7,
+            "spatial_kind": null,
+            "table_name": "citizen_geotag_submissions",
+            "udt_name": "text"
+          },
+          {
+            "column_default": "false",
+            "column_name": "identity_document_verified",
+            "data_type": "boolean",
+            "is_nullable": "NO",
+            "ordinal_position": 8,
+            "spatial_kind": null,
+            "table_name": "citizen_geotag_submissions",
+            "udt_name": "bool"
+          },
+          {
+            "column_default": null,
+            "column_name": "identity_verified_at",
+            "data_type": "timestamp with time zone",
+            "is_nullable": "YES",
+            "ordinal_position": 9,
+            "spatial_kind": null,
+            "table_name": "citizen_geotag_submissions",
+            "udt_name": "timestamptz"
+          },
+          {
+            "column_default": "''::text",
+            "column_name": "landmark",
+            "data_type": "text",
+            "is_nullable": "NO",
+            "ordinal_position": 10,
+            "spatial_kind": null,
+            "table_name": "citizen_geotag_submissions",
+            "udt_name": "text"
+          },
+          {
+            "column_default": null,
+            "column_name": "latitude",
+            "data_type": "double precision",
+            "is_nullable": "NO",
+            "ordinal_position": 11,
+            "spatial_kind": null,
+            "table_name": "citizen_geotag_submissions",
+            "udt_name": "float8"
+          },
+          {
+            "column_default": null,
+            "column_name": "longitude",
+            "data_type": "double precision",
+            "is_nullable": "NO",
+            "ordinal_position": 12,
+            "spatial_kind": null,
+            "table_name": "citizen_geotag_submissions",
+            "udt_name": "float8"
+          },
+          {
+            "column_default": null,
+            "column_name": "accuracy_meters",
+            "data_type": "double precision",
+            "is_nullable": "YES",
+            "ordinal_position": 13,
+            "spatial_kind": null,
+            "table_name": "citizen_geotag_submissions",
+            "udt_name": "float8"
+          },
+          {
+            "column_default": "'browser-gps'::text",
+            "column_name": "capture_method",
+            "data_type": "text",
+            "is_nullable": "NO",
+            "ordinal_position": 14,
+            "spatial_kind": null,
+            "table_name": "citizen_geotag_submissions",
+            "udt_name": "text"
+          },
+          {
+            "column_default": null,
+            "column_name": "grid_code",
+            "data_type": "text",
+            "is_nullable": "NO",
+            "ordinal_position": 15,
+            "spatial_kind": null,
+            "table_name": "citizen_geotag_submissions",
+            "udt_name": "text"
+          },
+          {
+            "column_default": "'submitted'::text",
+            "column_name": "status",
+            "data_type": "text",
+            "is_nullable": "NO",
+            "ordinal_position": 16,
+            "spatial_kind": null,
+            "table_name": "citizen_geotag_submissions",
+            "udt_name": "text"
+          },
+          {
+            "column_default": "'none'::text",
+            "column_name": "duplicate_hint",
+            "data_type": "text",
+            "is_nullable": "NO",
+            "ordinal_position": 17,
+            "spatial_kind": null,
+            "table_name": "citizen_geotag_submissions",
+            "udt_name": "text"
+          },
+          {
+            "column_default": "''::text",
+            "column_name": "reviewer_note",
+            "data_type": "text",
+            "is_nullable": "NO",
+            "ordinal_position": 18,
+            "spatial_kind": null,
+            "table_name": "citizen_geotag_submissions",
+            "udt_name": "text"
+          },
+          {
+            "column_default": null,
+            "column_name": "suggested_road_name",
+            "data_type": "text",
+            "is_nullable": "YES",
+            "ordinal_position": 19,
+            "spatial_kind": null,
+            "table_name": "citizen_geotag_submissions",
+            "udt_name": "text"
+          },
+          {
+            "column_default": null,
+            "column_name": "suggested_local_area",
+            "data_type": "text",
+            "is_nullable": "YES",
+            "ordinal_position": 20,
+            "spatial_kind": null,
+            "table_name": "citizen_geotag_submissions",
+            "udt_name": "text"
+          },
+          {
+            "column_default": null,
+            "column_name": "suggested_place_name",
+            "data_type": "text",
+            "is_nullable": "YES",
+            "ordinal_position": 21,
+            "spatial_kind": null,
+            "table_name": "citizen_geotag_submissions",
+            "udt_name": "text"
+          },
+          {
+            "column_default": null,
+            "column_name": "map_display_name",
+            "data_type": "text",
+            "is_nullable": "YES",
+            "ordinal_position": 22,
+            "spatial_kind": null,
+            "table_name": "citizen_geotag_submissions",
+            "udt_name": "text"
+          },
+          {
+            "column_default": null,
+            "column_name": "road_suggestion_source",
+            "data_type": "text",
+            "is_nullable": "YES",
+            "ordinal_position": 23,
+            "spatial_kind": null,
+            "table_name": "citizen_geotag_submissions",
+            "udt_name": "text"
+          },
+          {
+            "column_default": null,
+            "column_name": "road_suggestion_attribution",
+            "data_type": "text",
+            "is_nullable": "YES",
+            "ordinal_position": 24,
+            "spatial_kind": null,
+            "table_name": "citizen_geotag_submissions",
+            "udt_name": "text"
+          },
+          {
+            "column_default": "'not-suggested'::text",
+            "column_name": "road_suggestion_status",
+            "data_type": "text",
+            "is_nullable": "NO",
+            "ordinal_position": 25,
+            "spatial_kind": null,
+            "table_name": "citizen_geotag_submissions",
+            "udt_name": "text"
+          },
+          {
+            "column_default": null,
+            "column_name": "reviewed_road_name",
+            "data_type": "text",
+            "is_nullable": "YES",
+            "ordinal_position": 26,
+            "spatial_kind": null,
+            "table_name": "citizen_geotag_submissions",
+            "udt_name": "text"
+          },
+          {
+            "column_default": null,
+            "column_name": "field_submission_id",
+            "data_type": "text",
+            "is_nullable": "YES",
+            "ordinal_position": 27,
+            "spatial_kind": null,
+            "table_name": "citizen_geotag_submissions",
+            "udt_name": "text"
+          },
+          {
+            "column_default": "'assigned'::text",
+            "column_name": "field_status",
+            "data_type": "text",
+            "is_nullable": "NO",
+            "ordinal_position": 28,
+            "spatial_kind": null,
+            "table_name": "citizen_geotag_submissions",
+            "udt_name": "text"
+          },
+          {
+            "column_default": "''::text",
+            "column_name": "field_note",
+            "data_type": "text",
+            "is_nullable": "NO",
+            "ordinal_position": 29,
+            "spatial_kind": null,
+            "table_name": "citizen_geotag_submissions",
+            "udt_name": "text"
+          },
+          {
+            "column_default": null,
+            "column_name": "field_verified_at",
+            "data_type": "timestamp with time zone",
+            "is_nullable": "YES",
+            "ordinal_position": 30,
+            "spatial_kind": null,
+            "table_name": "citizen_geotag_submissions",
+            "udt_name": "timestamptz"
+          },
+          {
+            "column_default": null,
+            "column_name": "signage_batch",
+            "data_type": "text",
+            "is_nullable": "YES",
+            "ordinal_position": 31,
+            "spatial_kind": null,
+            "table_name": "citizen_geotag_submissions",
+            "udt_name": "text"
+          },
+          {
+            "column_default": "now()",
+            "column_name": "created_at",
+            "data_type": "timestamp with time zone",
+            "is_nullable": "NO",
+            "ordinal_position": 32,
+            "spatial_kind": null,
+            "table_name": "citizen_geotag_submissions",
+            "udt_name": "timestamptz"
+          },
+          {
+            "column_default": "now()",
+            "column_name": "updated_at",
+            "data_type": "timestamp with time zone",
+            "is_nullable": "NO",
+            "ordinal_position": 33,
+            "spatial_kind": null,
+            "table_name": "citizen_geotag_submissions",
+            "udt_name": "timestamptz"
+          }
+        ],
+        "comment": null,
+        "constraints": [
+          {
+            "columns": [
+              "id"
+            ],
+            "conname": "citizen_geotag_submissions_pkey",
+            "contype": "p",
+            "definition": "PRIMARY KEY (id)",
+            "referenced_table": null,
+            "table_name": "citizen_geotag_submissions"
+          },
+          {
+            "columns": [
+              "territory_id"
+            ],
+            "conname": "citizen_geotag_submissions_territory_id_fkey",
+            "contype": "f",
+            "definition": "FOREIGN KEY (territory_id) REFERENCES territories(id)",
+            "referenced_table": "territories",
+            "table_name": "citizen_geotag_submissions"
+          }
+        ],
+        "geometries": [],
+        "indexes": [
+          {
+            "definition": "CREATE UNIQUE INDEX citizen_geotag_submissions_pkey ON public.citizen_geotag_submissions USING btree (id)",
+            "index_name": "citizen_geotag_submissions_pkey",
+            "indisprimary": true,
+            "indisunique": true,
+            "table_name": "citizen_geotag_submissions"
+          },
+          {
+            "definition": "CREATE INDEX idx_citizen_geotag_grid_code ON public.citizen_geotag_submissions USING btree (grid_code)",
+            "index_name": "idx_citizen_geotag_grid_code",
+            "indisprimary": false,
+            "indisunique": false,
+            "table_name": "citizen_geotag_submissions"
+          },
+          {
+            "definition": "CREATE INDEX idx_citizen_geotag_public_tracking ON public.citizen_geotag_submissions USING btree (id, status, updated_at DESC)",
+            "index_name": "idx_citizen_geotag_public_tracking",
+            "indisprimary": false,
+            "indisunique": false,
+            "table_name": "citizen_geotag_submissions"
+          },
+          {
+            "definition": "CREATE INDEX idx_citizen_geotag_signage_ready ON public.citizen_geotag_submissions USING btree (status, signage_batch, updated_at DESC) WHERE (status = 'signage-ready'::text)",
+            "index_name": "idx_citizen_geotag_signage_ready",
+            "indisprimary": false,
+            "indisunique": false,
+            "table_name": "citizen_geotag_submissions"
+          },
+          {
+            "definition": "CREATE INDEX idx_citizen_geotag_status_created_at ON public.citizen_geotag_submissions USING btree (status, created_at DESC)",
+            "index_name": "idx_citizen_geotag_status_created_at",
+            "indisprimary": false,
+            "indisunique": false,
+            "table_name": "citizen_geotag_submissions"
+          }
+        ]
+      },
+      "development_fixture_batches": {
+        "columns": [
+          {
+            "column_default": null,
+            "column_name": "batch_id",
+            "data_type": "text",
+            "is_nullable": "NO",
+            "ordinal_position": 1,
+            "spatial_kind": null,
+            "table_name": "development_fixture_batches",
+            "udt_name": "text"
+          },
+          {
+            "column_default": null,
+            "column_name": "fixture_version",
+            "data_type": "text",
+            "is_nullable": "NO",
+            "ordinal_position": 2,
+            "spatial_kind": null,
+            "table_name": "development_fixture_batches",
+            "udt_name": "text"
+          },
+          {
+            "column_default": null,
+            "column_name": "environment",
+            "data_type": "text",
+            "is_nullable": "NO",
+            "ordinal_position": 3,
+            "spatial_kind": null,
+            "table_name": "development_fixture_batches",
+            "udt_name": "text"
+          },
+          {
+            "column_default": "now()",
+            "column_name": "loaded_at",
+            "data_type": "timestamp with time zone",
+            "is_nullable": "NO",
+            "ordinal_position": 4,
+            "spatial_kind": null,
+            "table_name": "development_fixture_batches",
+            "udt_name": "timestamptz"
+          },
+          {
+            "column_default": null,
+            "column_name": "cleaned_at",
+            "data_type": "timestamp with time zone",
+            "is_nullable": "YES",
+            "ordinal_position": 5,
+            "spatial_kind": null,
+            "table_name": "development_fixture_batches",
+            "udt_name": "timestamptz"
+          },
+          {
+            "column_default": "'{}'::text",
+            "column_name": "execution_context",
+            "data_type": "text",
+            "is_nullable": "NO",
+            "ordinal_position": 6,
+            "spatial_kind": null,
+            "table_name": "development_fixture_batches",
+            "udt_name": "text"
+          }
+        ],
+        "comment": null,
+        "constraints": [
+          {
+            "columns": [
+              "batch_id"
+            ],
+            "conname": "development_fixture_batches_pkey",
+            "contype": "p",
+            "definition": "PRIMARY KEY (batch_id)",
+            "referenced_table": null,
+            "table_name": "development_fixture_batches"
+          }
+        ],
+        "geometries": [],
+        "indexes": [
+          {
+            "definition": "CREATE UNIQUE INDEX development_fixture_batches_pkey ON public.development_fixture_batches USING btree (batch_id)",
+            "index_name": "development_fixture_batches_pkey",
+            "indisprimary": true,
+            "indisunique": true,
+            "table_name": "development_fixture_batches"
+          }
+        ]
+      },
+      "development_fixture_records": {
+        "columns": [
+          {
+            "column_default": null,
+            "column_name": "batch_id",
+            "data_type": "text",
+            "is_nullable": "NO",
+            "ordinal_position": 1,
+            "spatial_kind": null,
+            "table_name": "development_fixture_records",
+            "udt_name": "text"
+          },
+          {
+            "column_default": null,
+            "column_name": "table_name",
+            "data_type": "text",
+            "is_nullable": "NO",
+            "ordinal_position": 2,
+            "spatial_kind": null,
+            "table_name": "development_fixture_records",
+            "udt_name": "text"
+          },
+          {
+            "column_default": null,
+            "column_name": "record_id",
+            "data_type": "text",
+            "is_nullable": "NO",
+            "ordinal_position": 3,
+            "spatial_kind": null,
+            "table_name": "development_fixture_records",
+            "udt_name": "text"
+          },
+          {
+            "column_default": null,
+            "column_name": "created_by_batch",
+            "data_type": "boolean",
+            "is_nullable": "NO",
+            "ordinal_position": 4,
+            "spatial_kind": null,
+            "table_name": "development_fixture_records",
+            "udt_name": "bool"
+          },
+          {
+            "column_default": "now()",
+            "column_name": "recorded_at",
+            "data_type": "timestamp with time zone",
+            "is_nullable": "NO",
+            "ordinal_position": 5,
+            "spatial_kind": null,
+            "table_name": "development_fixture_records",
+            "udt_name": "timestamptz"
+          }
+        ],
+        "comment": null,
+        "constraints": [
+          {
+            "columns": [
+              "batch_id"
+            ],
+            "conname": "development_fixture_records_batch_id_fkey",
+            "contype": "f",
+            "definition": "FOREIGN KEY (batch_id) REFERENCES development_fixture_batches(batch_id) ON DELETE CASCADE",
+            "referenced_table": "development_fixture_batches",
+            "table_name": "development_fixture_records"
+          },
+          {
+            "columns": [
+              "batch_id",
+              "table_name",
+              "record_id"
+            ],
+            "conname": "development_fixture_records_pkey",
+            "contype": "p",
+            "definition": "PRIMARY KEY (batch_id, table_name, record_id)",
+            "referenced_table": null,
+            "table_name": "development_fixture_records"
+          }
+        ],
+        "geometries": [],
+        "indexes": [
+          {
+            "definition": "CREATE UNIQUE INDEX development_fixture_records_pkey ON public.development_fixture_records USING btree (batch_id, table_name, record_id)",
+            "index_name": "development_fixture_records_pkey",
+            "indisprimary": true,
+            "indisunique": true,
+            "table_name": "development_fixture_records"
+          }
+        ]
+      },
+      "field_assignments": {
+        "columns": [
+          {
+            "column_default": null,
+            "column_name": "assignment_id",
+            "data_type": "text",
+            "is_nullable": "NO",
+            "ordinal_position": 1,
+            "spatial_kind": null,
+            "table_name": "field_assignments",
+            "udt_name": "text"
+          },
+          {
+            "column_default": null,
+            "column_name": "territory_id",
+            "data_type": "text",
+            "is_nullable": "NO",
+            "ordinal_position": 2,
+            "spatial_kind": null,
+            "table_name": "field_assignments",
+            "udt_name": "text"
+          },
+          {
+            "column_default": null,
+            "column_name": "territory",
+            "data_type": "text",
+            "is_nullable": "NO",
+            "ordinal_position": 3,
+            "spatial_kind": null,
+            "table_name": "field_assignments",
+            "udt_name": "text"
+          },
+          {
+            "column_default": null,
+            "column_name": "task",
+            "data_type": "text",
+            "is_nullable": "NO",
+            "ordinal_position": 4,
+            "spatial_kind": null,
+            "table_name": "field_assignments",
+            "udt_name": "text"
+          },
+          {
+            "column_default": null,
+            "column_name": "team",
+            "data_type": "text",
+            "is_nullable": "NO",
+            "ordinal_position": 5,
+            "spatial_kind": null,
+            "table_name": "field_assignments",
+            "udt_name": "text"
+          },
+          {
+            "column_default": null,
+            "column_name": "priority",
+            "data_type": "text",
+            "is_nullable": "NO",
+            "ordinal_position": 6,
+            "spatial_kind": null,
+            "table_name": "field_assignments",
+            "udt_name": "text"
+          },
+          {
+            "column_default": "now()",
+            "column_name": "created_at",
+            "data_type": "timestamp with time zone",
+            "is_nullable": "NO",
+            "ordinal_position": 7,
+            "spatial_kind": null,
+            "table_name": "field_assignments",
+            "udt_name": "timestamptz"
+          }
+        ],
+        "comment": null,
+        "constraints": [
+          {
+            "columns": [
+              "assignment_id"
+            ],
+            "conname": "field_assignments_pkey",
+            "contype": "p",
+            "definition": "PRIMARY KEY (assignment_id)",
+            "referenced_table": null,
+            "table_name": "field_assignments"
+          },
+          {
+            "columns": [
+              "territory_id"
+            ],
+            "conname": "field_assignments_territory_id_fkey",
+            "contype": "f",
+            "definition": "FOREIGN KEY (territory_id) REFERENCES territories(id)",
+            "referenced_table": "territories",
+            "table_name": "field_assignments"
+          }
+        ],
+        "geometries": [],
+        "indexes": [
+          {
+            "definition": "CREATE UNIQUE INDEX field_assignments_pkey ON public.field_assignments USING btree (assignment_id)",
+            "index_name": "field_assignments_pkey",
+            "indisprimary": true,
+            "indisunique": true,
+            "table_name": "field_assignments"
+          }
+        ]
+      },
+      "field_submissions": {
+        "columns": [
+          {
+            "column_default": null,
+            "column_name": "id",
+            "data_type": "text",
+            "is_nullable": "NO",
+            "ordinal_position": 1,
+            "spatial_kind": null,
+            "table_name": "field_submissions",
+            "udt_name": "text"
+          },
+          {
+            "column_default": null,
+            "column_name": "assignment_id",
+            "data_type": "text",
+            "is_nullable": "YES",
+            "ordinal_position": 2,
+            "spatial_kind": null,
+            "table_name": "field_submissions",
+            "udt_name": "text"
+          },
+          {
+            "column_default": null,
+            "column_name": "territory_id",
+            "data_type": "text",
+            "is_nullable": "NO",
+            "ordinal_position": 3,
+            "spatial_kind": null,
+            "table_name": "field_submissions",
+            "udt_name": "text"
+          },
+          {
+            "column_default": null,
+            "column_name": "submission_type",
+            "data_type": "text",
+            "is_nullable": "NO",
+            "ordinal_position": 4,
+            "spatial_kind": null,
+            "table_name": "field_submissions",
+            "udt_name": "text"
+          },
+          {
+            "column_default": null,
+            "column_name": "candidate_name",
+            "data_type": "text",
+            "is_nullable": "NO",
+            "ordinal_position": 5,
+            "spatial_kind": null,
+            "table_name": "field_submissions",
+            "udt_name": "text"
+          },
+          {
+            "column_default": null,
+            "column_name": "candidate_status",
+            "data_type": "text",
+            "is_nullable": "NO",
+            "ordinal_position": 6,
+            "spatial_kind": null,
+            "table_name": "field_submissions",
+            "udt_name": "text"
+          },
+          {
+            "column_default": "''::text",
+            "column_name": "notes",
+            "data_type": "text",
+            "is_nullable": "NO",
+            "ordinal_position": 7,
+            "spatial_kind": null,
+            "table_name": "field_submissions",
+            "udt_name": "text"
+          },
+          {
+            "column_default": null,
+            "column_name": "submitted_by",
+            "data_type": "text",
+            "is_nullable": "NO",
+            "ordinal_position": 8,
+            "spatial_kind": null,
+            "table_name": "field_submissions",
+            "udt_name": "text"
+          },
+          {
+            "column_default": "'submitted'::text",
+            "column_name": "review_status",
+            "data_type": "text",
+            "is_nullable": "NO",
+            "ordinal_position": 9,
+            "spatial_kind": null,
+            "table_name": "field_submissions",
+            "udt_name": "text"
+          },
+          {
+            "column_default": "''::text",
+            "column_name": "reviewer_note",
+            "data_type": "text",
+            "is_nullable": "NO",
+            "ordinal_position": 10,
+            "spatial_kind": null,
+            "table_name": "field_submissions",
+            "udt_name": "text"
+          },
+          {
+            "column_default": null,
+            "column_name": "registry_entity_id",
+            "data_type": "text",
+            "is_nullable": "YES",
+            "ordinal_position": 11,
+            "spatial_kind": null,
+            "table_name": "field_submissions",
+            "udt_name": "text"
+          },
+          {
+            "column_default": "'{}'::jsonb",
+            "column_name": "spatial_evidence",
+            "data_type": "jsonb",
+            "is_nullable": "NO",
+            "ordinal_position": 12,
+            "spatial_kind": null,
+            "table_name": "field_submissions",
+            "udt_name": "jsonb"
+          },
+          {
+            "column_default": "now()",
+            "column_name": "created_at",
+            "data_type": "timestamp with time zone",
+            "is_nullable": "NO",
+            "ordinal_position": 13,
+            "spatial_kind": null,
+            "table_name": "field_submissions",
+            "udt_name": "timestamptz"
+          },
+          {
+            "column_default": "now()",
+            "column_name": "updated_at",
+            "data_type": "timestamp with time zone",
+            "is_nullable": "NO",
+            "ordinal_position": 14,
+            "spatial_kind": null,
+            "table_name": "field_submissions",
+            "udt_name": "timestamptz"
+          }
+        ],
+        "comment": null,
+        "constraints": [
+          {
+            "columns": [
+              "assignment_id"
+            ],
+            "conname": "field_submissions_assignment_id_fkey",
+            "contype": "f",
+            "definition": "FOREIGN KEY (assignment_id) REFERENCES field_assignments(assignment_id)",
+            "referenced_table": "field_assignments",
+            "table_name": "field_submissions"
+          },
+          {
+            "columns": [
+              "id"
+            ],
+            "conname": "field_submissions_pkey",
+            "contype": "p",
+            "definition": "PRIMARY KEY (id)",
+            "referenced_table": null,
+            "table_name": "field_submissions"
+          },
+          {
+            "columns": [
+              "territory_id"
+            ],
+            "conname": "field_submissions_territory_id_fkey",
+            "contype": "f",
+            "definition": "FOREIGN KEY (territory_id) REFERENCES territories(id)",
+            "referenced_table": "territories",
+            "table_name": "field_submissions"
+          }
+        ],
+        "geometries": [],
+        "indexes": [
+          {
+            "definition": "CREATE UNIQUE INDEX field_submissions_pkey ON public.field_submissions USING btree (id)",
+            "index_name": "field_submissions_pkey",
+            "indisprimary": true,
+            "indisunique": true,
+            "table_name": "field_submissions"
+          },
+          {
+            "definition": "CREATE INDEX idx_field_submissions_review_status_created ON public.field_submissions USING btree (review_status, created_at DESC)",
+            "index_name": "idx_field_submissions_review_status_created",
+            "indisprimary": false,
+            "indisunique": false,
+            "table_name": "field_submissions"
+          }
+        ]
+      },
+      "import_jobs": {
+        "columns": [
+          {
+            "column_default": null,
+            "column_name": "id",
+            "data_type": "text",
+            "is_nullable": "NO",
+            "ordinal_position": 1,
+            "spatial_kind": null,
+            "table_name": "import_jobs",
+            "udt_name": "text"
+          },
+          {
+            "column_default": null,
+            "column_name": "name",
+            "data_type": "text",
+            "is_nullable": "NO",
+            "ordinal_position": 2,
+            "spatial_kind": null,
+            "table_name": "import_jobs",
+            "udt_name": "text"
+          },
+          {
+            "column_default": null,
+            "column_name": "source_name",
+            "data_type": "text",
+            "is_nullable": "NO",
+            "ordinal_position": 3,
+            "spatial_kind": null,
+            "table_name": "import_jobs",
+            "udt_name": "text"
+          },
+          {
+            "column_default": "'draft'::text",
+            "column_name": "status",
+            "data_type": "text",
+            "is_nullable": "NO",
+            "ordinal_position": 4,
+            "spatial_kind": null,
+            "table_name": "import_jobs",
+            "udt_name": "text"
+          },
+          {
+            "column_default": "0",
+            "column_name": "imported_count",
+            "data_type": "integer",
+            "is_nullable": "NO",
+            "ordinal_position": 5,
+            "spatial_kind": null,
+            "table_name": "import_jobs",
+            "udt_name": "int4"
+          },
+          {
+            "column_default": "now()",
+            "column_name": "created_at",
+            "data_type": "timestamp with time zone",
+            "is_nullable": "NO",
+            "ordinal_position": 6,
+            "spatial_kind": null,
+            "table_name": "import_jobs",
+            "udt_name": "timestamptz"
+          },
+          {
+            "column_default": "now()",
+            "column_name": "updated_at",
+            "data_type": "timestamp with time zone",
+            "is_nullable": "NO",
+            "ordinal_position": 7,
+            "spatial_kind": null,
+            "table_name": "import_jobs",
+            "udt_name": "timestamptz"
+          }
+        ],
+        "comment": null,
+        "constraints": [
+          {
+            "columns": [
+              "id"
+            ],
+            "conname": "import_jobs_pkey",
+            "contype": "p",
+            "definition": "PRIMARY KEY (id)",
+            "referenced_table": null,
+            "table_name": "import_jobs"
+          }
+        ],
+        "geometries": [],
+        "indexes": [
+          {
+            "definition": "CREATE UNIQUE INDEX import_jobs_pkey ON public.import_jobs USING btree (id)",
+            "index_name": "import_jobs_pkey",
+            "indisprimary": true,
+            "indisunique": true,
+            "table_name": "import_jobs"
+          }
+        ]
+      },
+      "import_rows": {
+        "columns": [
+          {
+            "column_default": null,
+            "column_name": "job_id",
+            "data_type": "text",
+            "is_nullable": "NO",
+            "ordinal_position": 1,
+            "spatial_kind": null,
+            "table_name": "import_rows",
+            "udt_name": "text"
+          },
+          {
+            "column_default": null,
+            "column_name": "row_number",
+            "data_type": "integer",
+            "is_nullable": "NO",
+            "ordinal_position": 2,
+            "spatial_kind": null,
+            "table_name": "import_rows",
+            "udt_name": "int4"
+          },
+          {
+            "column_default": null,
+            "column_name": "submission_type",
+            "data_type": "text",
+            "is_nullable": "NO",
+            "ordinal_position": 3,
+            "spatial_kind": null,
+            "table_name": "import_rows",
+            "udt_name": "text"
+          },
+          {
+            "column_default": null,
+            "column_name": "territory_id",
+            "data_type": "text",
+            "is_nullable": "NO",
+            "ordinal_position": 4,
+            "spatial_kind": null,
+            "table_name": "import_rows",
+            "udt_name": "text"
+          },
+          {
+            "column_default": null,
+            "column_name": "candidate_name",
+            "data_type": "text",
+            "is_nullable": "NO",
+            "ordinal_position": 5,
+            "spatial_kind": null,
+            "table_name": "import_rows",
+            "udt_name": "text"
+          },
+          {
+            "column_default": null,
+            "column_name": "candidate_status",
+            "data_type": "text",
+            "is_nullable": "NO",
+            "ordinal_position": 6,
+            "spatial_kind": null,
+            "table_name": "import_rows",
+            "udt_name": "text"
+          },
+          {
+            "column_default": "''::text",
+            "column_name": "notes",
+            "data_type": "text",
+            "is_nullable": "NO",
+            "ordinal_position": 7,
+            "spatial_kind": null,
+            "table_name": "import_rows",
+            "udt_name": "text"
+          },
+          {
+            "column_default": null,
+            "column_name": "validation_status",
+            "data_type": "text",
+            "is_nullable": "NO",
+            "ordinal_position": 8,
+            "spatial_kind": null,
+            "table_name": "import_rows",
+            "udt_name": "text"
+          },
+          {
+            "column_default": null,
+            "column_name": "validation_message",
+            "data_type": "text",
+            "is_nullable": "NO",
+            "ordinal_position": 9,
+            "spatial_kind": null,
+            "table_name": "import_rows",
+            "udt_name": "text"
+          },
+          {
+            "column_default": null,
+            "column_name": "committed_submission_id",
+            "data_type": "text",
+            "is_nullable": "YES",
+            "ordinal_position": 10,
+            "spatial_kind": null,
+            "table_name": "import_rows",
+            "udt_name": "text"
+          }
+        ],
+        "comment": null,
+        "constraints": [
+          {
+            "columns": [
+              "job_id"
+            ],
+            "conname": "import_rows_job_id_fkey",
+            "contype": "f",
+            "definition": "FOREIGN KEY (job_id) REFERENCES import_jobs(id) ON DELETE CASCADE",
+            "referenced_table": "import_jobs",
+            "table_name": "import_rows"
+          },
+          {
+            "columns": [
+              "job_id",
+              "row_number"
+            ],
+            "conname": "import_rows_pkey",
+            "contype": "p",
+            "definition": "PRIMARY KEY (job_id, row_number)",
+            "referenced_table": null,
+            "table_name": "import_rows"
+          },
+          {
+            "columns": [
+              "territory_id"
+            ],
+            "conname": "import_rows_territory_id_fkey",
+            "contype": "f",
+            "definition": "FOREIGN KEY (territory_id) REFERENCES territories(id)",
+            "referenced_table": "territories",
+            "table_name": "import_rows"
+          }
+        ],
+        "geometries": [],
+        "indexes": [
+          {
+            "definition": "CREATE UNIQUE INDEX import_rows_pkey ON public.import_rows USING btree (job_id, row_number)",
+            "index_name": "import_rows_pkey",
+            "indisprimary": true,
+            "indisunique": true,
+            "table_name": "import_rows"
+          }
+        ]
+      },
+      "provinces": {
+        "columns": [
+          {
+            "column_default": null,
+            "column_name": "code",
+            "data_type": "text",
+            "is_nullable": "NO",
+            "ordinal_position": 1,
+            "spatial_kind": null,
+            "table_name": "provinces",
+            "udt_name": "text"
+          },
+          {
+            "column_default": null,
+            "column_name": "name",
+            "data_type": "text",
+            "is_nullable": "NO",
+            "ordinal_position": 2,
+            "spatial_kind": null,
+            "table_name": "provinces",
+            "udt_name": "text"
+          },
+          {
+            "column_default": "now()",
+            "column_name": "created_at",
+            "data_type": "timestamp with time zone",
+            "is_nullable": "NO",
+            "ordinal_position": 3,
+            "spatial_kind": null,
+            "table_name": "provinces",
+            "udt_name": "timestamptz"
+          }
+        ],
+        "comment": null,
+        "constraints": [
+          {
+            "columns": [
+              "code"
+            ],
+            "conname": "provinces_pkey",
+            "contype": "p",
+            "definition": "PRIMARY KEY (code)",
+            "referenced_table": null,
+            "table_name": "provinces"
+          }
+        ],
+        "geometries": [],
+        "indexes": [
+          {
+            "definition": "CREATE UNIQUE INDEX provinces_pkey ON public.provinces USING btree (code)",
+            "index_name": "provinces_pkey",
+            "indisprimary": true,
+            "indisunique": true,
+            "table_name": "provinces"
+          }
+        ]
+      },
+      "publication_pack_addresses": {
+        "columns": [
+          {
+            "column_default": null,
+            "column_name": "publication_pack_id",
+            "data_type": "text",
+            "is_nullable": "NO",
+            "ordinal_position": 1,
+            "spatial_kind": null,
+            "table_name": "publication_pack_addresses",
+            "udt_name": "text"
+          },
+          {
+            "column_default": null,
+            "column_name": "address_id",
+            "data_type": "text",
+            "is_nullable": "NO",
+            "ordinal_position": 2,
+            "spatial_kind": null,
+            "table_name": "publication_pack_addresses",
+            "udt_name": "text"
+          }
+        ],
+        "comment": null,
+        "constraints": [
+          {
+            "columns": [
+              "address_id"
+            ],
+            "conname": "publication_pack_addresses_address_id_fkey",
+            "contype": "f",
+            "definition": "FOREIGN KEY (address_id) REFERENCES addresses(id)",
+            "referenced_table": "addresses",
+            "table_name": "publication_pack_addresses"
+          },
+          {
+            "columns": [
+              "publication_pack_id",
+              "address_id"
+            ],
+            "conname": "publication_pack_addresses_pkey",
+            "contype": "p",
+            "definition": "PRIMARY KEY (publication_pack_id, address_id)",
+            "referenced_table": null,
+            "table_name": "publication_pack_addresses"
+          },
+          {
+            "columns": [
+              "publication_pack_id"
+            ],
+            "conname": "publication_pack_addresses_publication_pack_id_fkey",
+            "contype": "f",
+            "definition": "FOREIGN KEY (publication_pack_id) REFERENCES publication_packs(id) ON DELETE CASCADE",
+            "referenced_table": "publication_packs",
+            "table_name": "publication_pack_addresses"
+          }
+        ],
+        "geometries": [],
+        "indexes": [
+          {
+            "definition": "CREATE UNIQUE INDEX publication_pack_addresses_pkey ON public.publication_pack_addresses USING btree (publication_pack_id, address_id)",
+            "index_name": "publication_pack_addresses_pkey",
+            "indisprimary": true,
+            "indisunique": true,
+            "table_name": "publication_pack_addresses"
+          }
+        ]
+      },
+      "publication_packs": {
+        "columns": [
+          {
+            "column_default": null,
+            "column_name": "id",
+            "data_type": "text",
+            "is_nullable": "NO",
+            "ordinal_position": 1,
+            "spatial_kind": null,
+            "table_name": "publication_packs",
+            "udt_name": "text"
+          },
+          {
+            "column_default": null,
+            "column_name": "name",
+            "data_type": "text",
+            "is_nullable": "NO",
+            "ordinal_position": 2,
+            "spatial_kind": null,
+            "table_name": "publication_packs",
+            "udt_name": "text"
+          },
+          {
+            "column_default": null,
+            "column_name": "status",
+            "data_type": "text",
+            "is_nullable": "NO",
+            "ordinal_position": 3,
+            "spatial_kind": null,
+            "table_name": "publication_packs",
+            "udt_name": "text"
+          },
+          {
+            "column_default": null,
+            "column_name": "audience",
+            "data_type": "text",
+            "is_nullable": "NO",
+            "ordinal_position": 4,
+            "spatial_kind": null,
+            "table_name": "publication_packs",
+            "udt_name": "text"
+          },
+          {
+            "column_default": "now()",
+            "column_name": "created_at",
+            "data_type": "timestamp with time zone",
+            "is_nullable": "NO",
+            "ordinal_position": 5,
+            "spatial_kind": null,
+            "table_name": "publication_packs",
+            "udt_name": "timestamptz"
+          },
+          {
+            "column_default": "now()",
+            "column_name": "updated_at",
+            "data_type": "timestamp with time zone",
+            "is_nullable": "NO",
+            "ordinal_position": 6,
+            "spatial_kind": null,
+            "table_name": "publication_packs",
+            "udt_name": "timestamptz"
+          }
+        ],
+        "comment": null,
+        "constraints": [
+          {
+            "columns": [
+              "id"
+            ],
+            "conname": "publication_packs_pkey",
+            "contype": "p",
+            "definition": "PRIMARY KEY (id)",
+            "referenced_table": null,
+            "table_name": "publication_packs"
+          }
+        ],
+        "geometries": [],
+        "indexes": [
+          {
+            "definition": "CREATE UNIQUE INDEX publication_packs_pkey ON public.publication_packs USING btree (id)",
+            "index_name": "publication_packs_pkey",
+            "indisprimary": true,
+            "indisunique": true,
+            "table_name": "publication_packs"
+          }
+        ]
+      },
+      "reference_data_load_history": {
+        "columns": [
+          {
+            "column_default": "nextval('reference_data_load_history_id_seq'::regclass)",
+            "column_name": "id",
+            "data_type": "bigint",
+            "is_nullable": "NO",
+            "ordinal_position": 1,
+            "spatial_kind": null,
+            "table_name": "reference_data_load_history",
+            "udt_name": "int8"
+          },
+          {
+            "column_default": null,
+            "column_name": "package_id",
+            "data_type": "text",
+            "is_nullable": "NO",
+            "ordinal_position": 2,
+            "spatial_kind": null,
+            "table_name": "reference_data_load_history",
+            "udt_name": "text"
+          },
+          {
+            "column_default": null,
+            "column_name": "package_version",
+            "data_type": "text",
+            "is_nullable": "NO",
+            "ordinal_position": 3,
+            "spatial_kind": null,
+            "table_name": "reference_data_load_history",
+            "udt_name": "text"
+          },
+          {
+            "column_default": null,
+            "column_name": "source",
+            "data_type": "text",
+            "is_nullable": "NO",
+            "ordinal_position": 4,
+            "spatial_kind": null,
+            "table_name": "reference_data_load_history",
+            "udt_name": "text"
+          },
+          {
+            "column_default": null,
+            "column_name": "authority_status",
+            "data_type": "text",
+            "is_nullable": "NO",
+            "ordinal_position": 5,
+            "spatial_kind": null,
+            "table_name": "reference_data_load_history",
+            "udt_name": "text"
+          },
+          {
+            "column_default": null,
+            "column_name": "package_checksum",
+            "data_type": "text",
+            "is_nullable": "NO",
+            "ordinal_position": 6,
+            "spatial_kind": null,
+            "table_name": "reference_data_load_history",
+            "udt_name": "text"
+          },
+          {
+            "column_default": "now()",
+            "column_name": "loaded_at",
+            "data_type": "timestamp with time zone",
+            "is_nullable": "NO",
+            "ordinal_position": 7,
+            "spatial_kind": null,
+            "table_name": "reference_data_load_history",
+            "udt_name": "timestamptz"
+          },
+          {
+            "column_default": "'{}'::text",
+            "column_name": "execution_context",
+            "data_type": "text",
+            "is_nullable": "NO",
+            "ordinal_position": 8,
+            "spatial_kind": null,
+            "table_name": "reference_data_load_history",
+            "udt_name": "text"
+          }
+        ],
+        "comment": null,
+        "constraints": [
+          {
+            "columns": [
+              "id"
+            ],
+            "conname": "reference_data_load_history_pkey",
+            "contype": "p",
+            "definition": "PRIMARY KEY (id)",
+            "referenced_table": null,
+            "table_name": "reference_data_load_history"
+          }
+        ],
+        "geometries": [],
+        "indexes": [
+          {
+            "definition": "CREATE UNIQUE INDEX reference_data_load_history_pkey ON public.reference_data_load_history USING btree (id)",
+            "index_name": "reference_data_load_history_pkey",
+            "indisprimary": true,
+            "indisunique": true,
+            "table_name": "reference_data_load_history"
+          }
+        ]
+      },
+      "reference_data_loads": {
+        "columns": [
+          {
+            "column_default": null,
+            "column_name": "package_id",
+            "data_type": "text",
+            "is_nullable": "NO",
+            "ordinal_position": 1,
+            "spatial_kind": null,
+            "table_name": "reference_data_loads",
+            "udt_name": "text"
+          },
+          {
+            "column_default": null,
+            "column_name": "package_version",
+            "data_type": "text",
+            "is_nullable": "NO",
+            "ordinal_position": 2,
+            "spatial_kind": null,
+            "table_name": "reference_data_loads",
+            "udt_name": "text"
+          },
+          {
+            "column_default": null,
+            "column_name": "source",
+            "data_type": "text",
+            "is_nullable": "NO",
+            "ordinal_position": 3,
+            "spatial_kind": null,
+            "table_name": "reference_data_loads",
+            "udt_name": "text"
+          },
+          {
+            "column_default": null,
+            "column_name": "authority_status",
+            "data_type": "text",
+            "is_nullable": "NO",
+            "ordinal_position": 4,
+            "spatial_kind": null,
+            "table_name": "reference_data_loads",
+            "udt_name": "text"
+          },
+          {
+            "column_default": null,
+            "column_name": "package_checksum",
+            "data_type": "text",
+            "is_nullable": "NO",
+            "ordinal_position": 5,
+            "spatial_kind": null,
+            "table_name": "reference_data_loads",
+            "udt_name": "text"
+          },
+          {
+            "column_default": "now()",
+            "column_name": "loaded_at",
+            "data_type": "timestamp with time zone",
+            "is_nullable": "NO",
+            "ordinal_position": 6,
+            "spatial_kind": null,
+            "table_name": "reference_data_loads",
+            "udt_name": "timestamptz"
+          },
+          {
+            "column_default": "'{}'::text",
+            "column_name": "execution_context",
+            "data_type": "text",
+            "is_nullable": "NO",
+            "ordinal_position": 7,
+            "spatial_kind": null,
+            "table_name": "reference_data_loads",
+            "udt_name": "text"
+          }
+        ],
+        "comment": null,
+        "constraints": [
+          {
+            "columns": [
+              "package_id"
+            ],
+            "conname": "reference_data_loads_pkey",
+            "contype": "p",
+            "definition": "PRIMARY KEY (package_id)",
+            "referenced_table": null,
+            "table_name": "reference_data_loads"
+          }
+        ],
+        "geometries": [],
+        "indexes": [
+          {
+            "definition": "CREATE UNIQUE INDEX reference_data_loads_pkey ON public.reference_data_loads USING btree (package_id)",
+            "index_name": "reference_data_loads_pkey",
+            "indisprimary": true,
+            "indisunique": true,
+            "table_name": "reference_data_loads"
+          }
+        ]
+      },
+      "roads": {
+        "columns": [
+          {
+            "column_default": null,
+            "column_name": "id",
+            "data_type": "text",
+            "is_nullable": "NO",
+            "ordinal_position": 1,
+            "spatial_kind": null,
+            "table_name": "roads",
+            "udt_name": "text"
+          },
+          {
+            "column_default": null,
+            "column_name": "name",
+            "data_type": "text",
+            "is_nullable": "NO",
+            "ordinal_position": 2,
+            "spatial_kind": null,
+            "table_name": "roads",
+            "udt_name": "text"
+          },
+          {
+            "column_default": null,
+            "column_name": "territory_id",
+            "data_type": "text",
+            "is_nullable": "NO",
+            "ordinal_position": 3,
+            "spatial_kind": null,
+            "table_name": "roads",
+            "udt_name": "text"
+          },
+          {
+            "column_default": null,
+            "column_name": "status",
+            "data_type": "text",
+            "is_nullable": "NO",
+            "ordinal_position": 4,
+            "spatial_kind": null,
+            "table_name": "roads",
+            "udt_name": "text"
+          },
+          {
+            "column_default": null,
+            "column_name": "length_km",
+            "data_type": "text",
+            "is_nullable": "NO",
+            "ordinal_position": 5,
+            "spatial_kind": null,
+            "table_name": "roads",
+            "udt_name": "text"
+          },
+          {
+            "column_default": "'{}'::jsonb",
+            "column_name": "spatial_evidence",
+            "data_type": "jsonb",
+            "is_nullable": "NO",
+            "ordinal_position": 6,
+            "spatial_kind": null,
+            "table_name": "roads",
+            "udt_name": "jsonb"
+          },
+          {
+            "column_default": "false",
+            "column_name": "is_archived",
+            "data_type": "boolean",
+            "is_nullable": "NO",
+            "ordinal_position": 7,
+            "spatial_kind": null,
+            "table_name": "roads",
+            "udt_name": "bool"
+          },
+          {
+            "column_default": "now()",
+            "column_name": "created_at",
+            "data_type": "timestamp with time zone",
+            "is_nullable": "NO",
+            "ordinal_position": 8,
+            "spatial_kind": null,
+            "table_name": "roads",
+            "udt_name": "timestamptz"
+          },
+          {
+            "column_default": "now()",
+            "column_name": "updated_at",
+            "data_type": "timestamp with time zone",
+            "is_nullable": "NO",
+            "ordinal_position": 9,
+            "spatial_kind": null,
+            "table_name": "roads",
+            "udt_name": "timestamptz"
+          }
+        ],
+        "comment": null,
+        "constraints": [
+          {
+            "columns": [
+              "name"
+            ],
+            "conname": "roads_name_key",
+            "contype": "u",
+            "definition": "UNIQUE (name)",
+            "referenced_table": null,
+            "table_name": "roads"
+          },
+          {
+            "columns": [
+              "id"
+            ],
+            "conname": "roads_pkey",
+            "contype": "p",
+            "definition": "PRIMARY KEY (id)",
+            "referenced_table": null,
+            "table_name": "roads"
+          },
+          {
+            "columns": [
+              "territory_id"
+            ],
+            "conname": "roads_territory_id_fkey",
+            "contype": "f",
+            "definition": "FOREIGN KEY (territory_id) REFERENCES territories(id)",
+            "referenced_table": "territories",
+            "table_name": "roads"
+          }
+        ],
+        "geometries": [],
+        "indexes": [
+          {
+            "definition": "CREATE UNIQUE INDEX roads_name_key ON public.roads USING btree (name)",
+            "index_name": "roads_name_key",
+            "indisprimary": false,
+            "indisunique": true,
+            "table_name": "roads"
+          },
+          {
+            "definition": "CREATE UNIQUE INDEX roads_pkey ON public.roads USING btree (id)",
+            "index_name": "roads_pkey",
+            "indisprimary": true,
+            "indisunique": true,
+            "table_name": "roads"
+          }
+        ]
+      },
+      "schema_migrations": {
+        "columns": [
+          {
+            "column_default": null,
+            "column_name": "version",
+            "data_type": "text",
+            "is_nullable": "NO",
+            "ordinal_position": 1,
+            "spatial_kind": null,
+            "table_name": "schema_migrations",
+            "udt_name": "text"
+          },
+          {
+            "column_default": null,
+            "column_name": "filename",
+            "data_type": "text",
+            "is_nullable": "NO",
+            "ordinal_position": 2,
+            "spatial_kind": null,
+            "table_name": "schema_migrations",
+            "udt_name": "text"
+          },
+          {
+            "column_default": null,
+            "column_name": "checksum",
+            "data_type": "text",
+            "is_nullable": "NO",
+            "ordinal_position": 3,
+            "spatial_kind": null,
+            "table_name": "schema_migrations",
+            "udt_name": "text"
+          },
+          {
+            "column_default": "now()",
+            "column_name": "applied_at",
+            "data_type": "timestamp with time zone",
+            "is_nullable": "NO",
+            "ordinal_position": 4,
+            "spatial_kind": null,
+            "table_name": "schema_migrations",
+            "udt_name": "timestamptz"
+          },
+          {
+            "column_default": "'{}'::text",
+            "column_name": "execution_context",
+            "data_type": "text",
+            "is_nullable": "NO",
+            "ordinal_position": 5,
+            "spatial_kind": null,
+            "table_name": "schema_migrations",
+            "udt_name": "text"
+          }
+        ],
+        "comment": null,
+        "constraints": [
+          {
+            "columns": [
+              "version"
+            ],
+            "conname": "schema_migrations_pkey",
+            "contype": "p",
+            "definition": "PRIMARY KEY (version)",
+            "referenced_table": null,
+            "table_name": "schema_migrations"
+          }
+        ],
+        "geometries": [],
+        "indexes": [
+          {
+            "definition": "CREATE UNIQUE INDEX schema_migrations_pkey ON public.schema_migrations USING btree (version)",
+            "index_name": "schema_migrations_pkey",
+            "indisprimary": true,
+            "indisunique": true,
+            "table_name": "schema_migrations"
+          }
+        ]
+      },
+      "territories": {
+        "columns": [
+          {
+            "column_default": null,
+            "column_name": "id",
+            "data_type": "text",
+            "is_nullable": "NO",
+            "ordinal_position": 1,
+            "spatial_kind": null,
+            "table_name": "territories",
+            "udt_name": "text"
+          },
+          {
+            "column_default": null,
+            "column_name": "name",
+            "data_type": "text",
+            "is_nullable": "NO",
+            "ordinal_position": 2,
+            "spatial_kind": null,
+            "table_name": "territories",
+            "udt_name": "text"
+          },
+          {
+            "column_default": null,
+            "column_name": "province_code",
+            "data_type": "text",
+            "is_nullable": "NO",
+            "ordinal_position": 3,
+            "spatial_kind": null,
+            "table_name": "territories",
+            "udt_name": "text"
+          },
+          {
+            "column_default": null,
+            "column_name": "admin_unit_id",
+            "data_type": "text",
+            "is_nullable": "YES",
+            "ordinal_position": 4,
+            "spatial_kind": null,
+            "table_name": "territories",
+            "udt_name": "text"
+          },
+          {
+            "column_default": null,
+            "column_name": "type",
+            "data_type": "text",
+            "is_nullable": "NO",
+            "ordinal_position": 5,
+            "spatial_kind": null,
+            "table_name": "territories",
+            "udt_name": "text"
+          },
+          {
+            "column_default": null,
+            "column_name": "readiness",
+            "data_type": "text",
+            "is_nullable": "NO",
+            "ordinal_position": 6,
+            "spatial_kind": null,
+            "table_name": "territories",
+            "udt_name": "text"
+          },
+          {
+            "column_default": "false",
+            "column_name": "is_archived",
+            "data_type": "boolean",
+            "is_nullable": "NO",
+            "ordinal_position": 7,
+            "spatial_kind": null,
+            "table_name": "territories",
+            "udt_name": "bool"
+          },
+          {
+            "column_default": "now()",
+            "column_name": "created_at",
+            "data_type": "timestamp with time zone",
+            "is_nullable": "NO",
+            "ordinal_position": 8,
+            "spatial_kind": null,
+            "table_name": "territories",
+            "udt_name": "timestamptz"
+          },
+          {
+            "column_default": "now()",
+            "column_name": "updated_at",
+            "data_type": "timestamp with time zone",
+            "is_nullable": "NO",
+            "ordinal_position": 9,
+            "spatial_kind": null,
+            "table_name": "territories",
+            "udt_name": "timestamptz"
+          }
+        ],
+        "comment": null,
+        "constraints": [
+          {
+            "columns": [
+              "admin_unit_id"
+            ],
+            "conname": "territories_admin_unit_id_fkey",
+            "contype": "f",
+            "definition": "FOREIGN KEY (admin_unit_id) REFERENCES admin_units(id)",
+            "referenced_table": "admin_units",
+            "table_name": "territories"
+          },
+          {
+            "columns": [
+              "name"
+            ],
+            "conname": "territories_name_key",
+            "contype": "u",
+            "definition": "UNIQUE (name)",
+            "referenced_table": null,
+            "table_name": "territories"
+          },
+          {
+            "columns": [
+              "id"
+            ],
+            "conname": "territories_pkey",
+            "contype": "p",
+            "definition": "PRIMARY KEY (id)",
+            "referenced_table": null,
+            "table_name": "territories"
+          },
+          {
+            "columns": [
+              "province_code"
+            ],
+            "conname": "territories_province_code_fkey",
+            "contype": "f",
+            "definition": "FOREIGN KEY (province_code) REFERENCES provinces(code)",
+            "referenced_table": "provinces",
+            "table_name": "territories"
+          }
+        ],
+        "geometries": [],
+        "indexes": [
+          {
+            "definition": "CREATE UNIQUE INDEX territories_name_key ON public.territories USING btree (name)",
+            "index_name": "territories_name_key",
+            "indisprimary": false,
+            "indisunique": true,
+            "table_name": "territories"
+          },
+          {
+            "definition": "CREATE UNIQUE INDEX territories_pkey ON public.territories USING btree (id)",
+            "index_name": "territories_pkey",
+            "indisprimary": true,
+            "indisunique": true,
+            "table_name": "territories"
+          }
+        ]
+      },
+      "users": {
+        "columns": [
+          {
+            "column_default": null,
+            "column_name": "id",
+            "data_type": "text",
+            "is_nullable": "NO",
+            "ordinal_position": 1,
+            "spatial_kind": null,
+            "table_name": "users",
+            "udt_name": "text"
+          },
+          {
+            "column_default": null,
+            "column_name": "username",
+            "data_type": "text",
+            "is_nullable": "NO",
+            "ordinal_position": 2,
+            "spatial_kind": null,
+            "table_name": "users",
+            "udt_name": "text"
+          },
+          {
+            "column_default": null,
+            "column_name": "full_name",
+            "data_type": "text",
+            "is_nullable": "NO",
+            "ordinal_position": 3,
+            "spatial_kind": null,
+            "table_name": "users",
+            "udt_name": "text"
+          },
+          {
+            "column_default": null,
+            "column_name": "role",
+            "data_type": "text",
+            "is_nullable": "NO",
+            "ordinal_position": 4,
+            "spatial_kind": null,
+            "table_name": "users",
+            "udt_name": "text"
+          },
+          {
+            "column_default": null,
+            "column_name": "password_hash",
+            "data_type": "text",
+            "is_nullable": "NO",
+            "ordinal_position": 5,
+            "spatial_kind": null,
+            "table_name": "users",
+            "udt_name": "text"
+          },
+          {
+            "column_default": "true",
+            "column_name": "is_active",
+            "data_type": "boolean",
+            "is_nullable": "NO",
+            "ordinal_position": 6,
+            "spatial_kind": null,
+            "table_name": "users",
+            "udt_name": "bool"
+          },
+          {
+            "column_default": "now()",
+            "column_name": "created_at",
+            "data_type": "timestamp with time zone",
+            "is_nullable": "NO",
+            "ordinal_position": 7,
+            "spatial_kind": null,
+            "table_name": "users",
+            "udt_name": "timestamptz"
+          }
+        ],
+        "comment": null,
+        "constraints": [
+          {
+            "columns": [
+              "id"
+            ],
+            "conname": "users_pkey",
+            "contype": "p",
+            "definition": "PRIMARY KEY (id)",
+            "referenced_table": null,
+            "table_name": "users"
+          },
+          {
+            "columns": [
+              "username"
+            ],
+            "conname": "users_username_key",
+            "contype": "u",
+            "definition": "UNIQUE (username)",
+            "referenced_table": null,
+            "table_name": "users"
+          }
+        ],
+        "geometries": [],
+        "indexes": [
+          {
+            "definition": "CREATE UNIQUE INDEX users_pkey ON public.users USING btree (id)",
+            "index_name": "users_pkey",
+            "indisprimary": true,
+            "indisunique": true,
+            "table_name": "users"
+          },
+          {
+            "definition": "CREATE UNIQUE INDEX users_username_key ON public.users USING btree (username)",
+            "index_name": "users_username_key",
+            "indisprimary": false,
+            "indisunique": true,
+            "table_name": "users"
+          }
+        ]
+      }
+    }
+  },
+  "migration_application": {
+    "extensions": [
+      {
+        "extname": "fuzzystrmatch",
+        "extversion": "1.2"
+      },
+      {
+        "extname": "plpgsql",
+        "extversion": "1.0"
+      },
+      {
+        "extname": "postgis",
+        "extversion": "3.4.3"
+      },
+      {
+        "extname": "postgis_tiger_geocoder",
+        "extversion": "3.4.3"
+      },
+      {
+        "extname": "postgis_topology",
+        "extversion": "3.4.3"
+      }
+    ],
+    "ledger": [
+      {
+        "applied_at": "<disposable-db-apply-time>",
+        "checksum": "3374f474f1796bf4753172da706f1a8df3f3e83ca707b866d35ab2f320386a73",
+        "execution_context": "<review04-design-pipeline>",
+        "filename": "000_current_operational_schema.sql",
+        "version": "000"
+      },
+      {
+        "applied_at": "<disposable-db-apply-time>",
+        "checksum": "cca14e756c74f4820634cfc3a8c0c2de09b3645cfcd79822bcfe111635dfd2bb",
+        "execution_context": "<review04-design-pipeline>",
+        "filename": "001_schema_migration_baseline.sql",
+        "version": "001"
+      },
+      {
+        "applied_at": "<disposable-db-apply-time>",
+        "checksum": "591f96fb3a0f723a9c5858cd390dd1994d9aa7815f43ac0942d689786684d919",
+        "execution_context": "<review04-design-pipeline>",
+        "filename": "002_government_grade_indexes_and_guards.sql",
+        "version": "002"
+      },
+      {
+        "applied_at": "<disposable-db-apply-time>",
+        "checksum": "26cf76bfdf1ba634579e55f924d5e978606e195cd6a33bd65f1a1f284621f215",
+        "execution_context": "<review04-design-pipeline>",
+        "filename": "003_canonical_address_records.sql",
+        "version": "003"
+      },
+      {
+        "applied_at": "<disposable-db-apply-time>",
+        "checksum": "1d6c30eedcb6111703a62d2595aa4700cdb8bb8d79f2a3eb307ad1f5b5cb8e39",
+        "execution_context": "<review04-design-pipeline>",
+        "filename": "004_registry_ready_not_signage_ready.sql",
+        "version": "004"
+      },
+      {
+        "applied_at": "<disposable-db-apply-time>",
+        "checksum": "b97febc89d5bc94b3dd5d0d1a0f77f03395aee5616eeae755f3ad30872d003c5",
+        "execution_context": "<review04-design-pipeline>",
+        "filename": "005_address_record_postgis_geometry.sql",
+        "version": "005"
+      },
+      {
+        "applied_at": "<disposable-db-apply-time>",
+        "checksum": "e6c0f3dd0508ff32ae5f12e52bfa6f68b065e356424c335e440bcd96b3161408",
+        "execution_context": "<review04-design-pipeline>",
+        "filename": "006_address_record_retirement_policy.sql",
+        "version": "006"
+      },
+      {
+        "applied_at": "<disposable-db-apply-time>",
+        "checksum": "bcd606a1239ee343086b36be276540b6866d03287f7afe0621cc4d8225142d8d",
+        "execution_context": "<review04-design-pipeline>",
+        "filename": "007_lifecycle_metadata_hardening.sql",
+        "version": "007"
+      }
+    ],
+    "migrations": [
+      {
+        "action": "accepted-current-migration",
+        "checksum": "3374f474f1796bf4753172da706f1a8df3f3e83ca707b866d35ab2f320386a73",
+        "file": "000_current_operational_schema.sql"
+      },
+      {
+        "action": "accepted-current-migration",
+        "checksum": "cca14e756c74f4820634cfc3a8c0c2de09b3645cfcd79822bcfe111635dfd2bb",
+        "file": "001_schema_migration_baseline.sql"
+      },
+      {
+        "action": "accepted-current-migration",
+        "checksum": "591f96fb3a0f723a9c5858cd390dd1994d9aa7815f43ac0942d689786684d919",
+        "file": "002_government_grade_indexes_and_guards.sql"
+      },
+      {
+        "action": "accepted-current-migration",
+        "checksum": "26cf76bfdf1ba634579e55f924d5e978606e195cd6a33bd65f1a1f284621f215",
+        "file": "003_canonical_address_records.sql"
+      },
+      {
+        "action": "accepted-current-migration",
+        "checksum": "1d6c30eedcb6111703a62d2595aa4700cdb8bb8d79f2a3eb307ad1f5b5cb8e39",
+        "file": "004_registry_ready_not_signage_ready.sql"
+      },
+      {
+        "action": "accepted-current-migration",
+        "checksum": "b97febc89d5bc94b3dd5d0d1a0f77f03395aee5616eeae755f3ad30872d003c5",
+        "file": "005_address_record_postgis_geometry.sql"
+      },
+      {
+        "action": "accepted-current-migration",
+        "checksum": "e6c0f3dd0508ff32ae5f12e52bfa6f68b065e356424c335e440bcd96b3161408",
+        "file": "006_address_record_retirement_policy.sql"
+      },
+      {
+        "action": "accepted-current-migration",
+        "checksum": "bcd606a1239ee343086b36be276540b6866d03287f7afe0621cc4d8225142d8d",
+        "file": "007_lifecycle_metadata_hardening.sql"
+      }
+    ]
+  }
+}
