@@ -1,0 +1,26 @@
+/* Keep the desktop field-notes control on its own readable row. */
+@media (min-width: 1100px) {
+  html body:has(.operator-workspace-shell) article.field-intake-panel form.human-field-form > label.territory-field-wide {
+    display: block !important;
+    position: static !important;
+    float: none !important;
+    clear: both !important;
+    width: 100% !important;
+    max-width: none !important;
+  }
+
+  html body:has(.operator-workspace-shell) article.field-intake-panel form.human-field-form > label.territory-field-wide > .territory-label {
+    display: block !important;
+    width: 100% !important;
+    margin-bottom: 7px !important;
+  }
+
+  html body:has(.operator-workspace-shell) article.field-intake-panel form.human-field-form > label.territory-field-wide > textarea.territory-textarea {
+    display: block !important;
+    width: 100% !important;
+    max-width: none !important;
+    height: 104px !important;
+    min-height: 104px !important;
+    margin: 0 !important;
+  }
+}
