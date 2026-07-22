@@ -1,10 +1,10 @@
 # Agent Task Context Pack — PR #14 Presentation Credential Rotation
 
-**Repository:** `bechirobob/eg-addressing`  
-**Base branch/SHA:** `nli/wo-003-operator-interface-foundation` / `515d90dc20583d10a5ac2ff532247087c7e3fd8a`  
-**Task branch/SHA:** `preview/presentation-ready-2026-07-22` / pre-change `b6b8077e787dddf58df4e0f64a1626b1c8efe061`  
-**PR/issue:** PR #14  
-**Working tree:** controlled preview workflow change plus supporting records  
+**Repository:** `bechirobob/eg-addressing`
+**Base branch/SHA:** `nli/wo-003-operator-interface-foundation` / `515d90dc20583d10a5ac2ff532247087c7e3fd8a`
+**Task branch/SHA:** `preview/presentation-ready-2026-07-22` / pre-change `b6b8077e787dddf58df4e0f64a1626b1c8efe061`
+**PR/issue:** PR #14
+**Working tree:** controlled preview workflow change plus supporting records
 **Prepared at:** 2026-07-22
 
 ## 1. Authority
@@ -169,4 +169,3 @@
 - [x] Positive and negative evidence is criterion-specific.
 - [x] Persistent hosting is not silently introduced.
 - [x] Publication, production and data boundaries remain prohibited.
-
