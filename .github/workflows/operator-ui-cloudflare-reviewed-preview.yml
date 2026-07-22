@@ -115,10 +115,19 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          docker compose --env-file .env -f infra/docker/docker-compose.yml up -d postgres redis minio
+          docker compose --env-file .env -f infra/docker/docker-compose.yml up -d --wait --wait-timeout 180 postgres redis minio
+          consecutive_ready_checks=0
           for attempt in $(seq 1 60); do
-            if docker compose --env-file .env -f infra/docker/docker-compose.yml exec -T postgres pg_isready -U addressing -d addressing >/dev/null 2>&1; then
-              exit 0
+            if docker compose --env-file .env -f infra/docker/docker-compose.yml exec -T postgres \
+              psql -U addressing -d addressing -v ON_ERROR_STOP=1 -tAc 'SELECT 1' \
+              | grep -qx '1'; then
+              consecutive_ready_checks=$((consecutive_ready_checks + 1))
+              if [ "${consecutive_ready_checks}" -ge 3 ]; then
+                echo 'PostgreSQL accepted three consecutive SQL readiness probes.'
+                exit 0
+              fi
+            else
+              consecutive_ready_checks=0
             fi
             sleep 2
           done
