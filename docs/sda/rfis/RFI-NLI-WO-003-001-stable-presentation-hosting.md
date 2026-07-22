@@ -64,10 +64,10 @@ Credential rotation and a fresh short-lived dual-link preview may proceed. Persi
 
 ## 8. Decision
 
-**Decision:** Pending  
-**Rationale:**  
-**Conditions:**  
-**Affected standards/ADR/work order:**  
+**Decision:** Pending
+**Rationale:**
+**Conditions:**
+**Affected standards/ADR/work order:**
 **Decision date and authority:**
 
 ## 9. Implementation acknowledgment
