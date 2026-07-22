@@ -1,0 +1,69 @@
+/* Protected-route overflow containment and responsive report layout. */
+
+html body:has(.operator-workspace-shell) .operator-workspace-column,
+html body:has(.operator-workspace-shell) .desktop-main-content,
+html body:has(.operator-workspace-shell) .reports-service-grid,
+html body:has(.operator-workspace-shell) .reports-service-grid > *,
+html body:has(.operator-workspace-shell) .reports-action-strip,
+html body:has(.operator-workspace-shell) .metric-row-list,
+html body:has(.operator-workspace-shell) .reports-filter-grid,
+html body:has(.operator-workspace-shell) .reports-detail-grid,
+html body:has(.operator-workspace-shell) .reports-section-panel,
+html body:has(.operator-workspace-shell) .reports-detail-disclosure {
+  min-width: 0 !important;
+  max-width: 100% !important;
+}
+
+html body:has(.operator-workspace-shell) .operator-workspace-column,
+html body:has(.operator-workspace-shell) .desktop-main-content {
+  overflow-x: clip !important;
+}
+
+html body:has(.operator-workspace-shell) .reports-service-grid {
+  grid-template-columns: minmax(0, 1fr) !important;
+  overflow-x: clip !important;
+}
+
+html body:has(.operator-workspace-shell) .reports-action-strip {
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+}
+
+html body:has(.operator-workspace-shell) .metric-row-list {
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+}
+
+html body:has(.operator-workspace-shell) .reports-filter-grid {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)) !important;
+}
+
+html body:has(.operator-workspace-shell) .reports-detail-grid {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+}
+
+html body:has(.operator-workspace-shell) .report-table-wrap {
+  width: 100% !important;
+  max-width: 100% !important;
+  overflow-x: auto !important;
+}
+
+html body:has(.operator-workspace-shell) .report-table-wrap .data-table {
+  width: 100% !important;
+  min-width: 520px;
+}
+
+@media (max-width: 860px) {
+  html body:has(.operator-workspace-shell) .reports-action-strip,
+  html body:has(.operator-workspace-shell) .metric-row-list,
+  html body:has(.operator-workspace-shell) .reports-filter-grid,
+  html body:has(.operator-workspace-shell) .reports-detail-grid {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+
+  html body:has(.operator-workspace-shell) .report-table-wrap .data-table {
+    min-width: 0;
+  }
+}
