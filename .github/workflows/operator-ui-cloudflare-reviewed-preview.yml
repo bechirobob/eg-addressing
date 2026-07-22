@@ -32,21 +32,33 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          TEMP_PASSWORD="EGVisual-${GITHUB_RUN_ID}-Review!"
+          BOOTSTRAP_FIXTURE_PASSWORD="Bootstrap!$(openssl rand -hex 18)9"
+          ADMIN_PASSWORD="Admin!$(openssl rand -hex 18)9"
+          EDITOR_PASSWORD="Editor!$(openssl rand -hex 18)9"
+          VIEWER_PASSWORD="Viewer!$(openssl rand -hex 18)9"
+          AGENCY_VIEWER_PASSWORD="Agency!$(openssl rand -hex 18)9"
           POSTGRES_PASSWORD="preview-db-${GITHUB_RUN_ID}"
           JWT_SECRET="$(openssl rand -hex 32)"
           SESSION_SECRET="$(openssl rand -hex 32)"
           S3_ACCESS_KEY="preview${GITHUB_RUN_ID}"
           S3_SECRET_KEY="$(openssl rand -hex 24)"
 
-          echo "::add-mask::${TEMP_PASSWORD}"
+          echo "::add-mask::${BOOTSTRAP_FIXTURE_PASSWORD}"
+          echo "::add-mask::${ADMIN_PASSWORD}"
+          echo "::add-mask::${EDITOR_PASSWORD}"
+          echo "::add-mask::${VIEWER_PASSWORD}"
+          echo "::add-mask::${AGENCY_VIEWER_PASSWORD}"
           echo "::add-mask::${POSTGRES_PASSWORD}"
           echo "::add-mask::${JWT_SECRET}"
           echo "::add-mask::${SESSION_SECRET}"
           echo "::add-mask::${S3_SECRET_KEY}"
 
           {
-            echo "TEMP_PASSWORD=${TEMP_PASSWORD}"
+            echo "BOOTSTRAP_FIXTURE_PASSWORD=${BOOTSTRAP_FIXTURE_PASSWORD}"
+            echo "ADMIN_PASSWORD=${ADMIN_PASSWORD}"
+            echo "EDITOR_PASSWORD=${EDITOR_PASSWORD}"
+            echo "VIEWER_PASSWORD=${VIEWER_PASSWORD}"
+            echo "AGENCY_VIEWER_PASSWORD=${AGENCY_VIEWER_PASSWORD}"
             echo "POSTGRES_PASSWORD=${POSTGRES_PASSWORD}"
           } >> "${GITHUB_ENV}"
 
@@ -122,8 +134,44 @@ jobs:
           python infra/scripts/load_reference_data.py load
           APP_ENV=development \
           EG_ALLOW_DEV_FIXTURES=YES \
-          DEVELOPMENT_FIXTURE_PASSWORD="${TEMP_PASSWORD}" \
+          DEVELOPMENT_FIXTURE_PASSWORD="${BOOTSTRAP_FIXTURE_PASSWORD}" \
           python infra/scripts/load_development_fixtures.py load
+
+          python - <<'PY'
+          import os
+          import sys
+
+          import psycopg
+
+          sys.path.insert(0, 'services/api')
+          from app.db import _hash_password
+
+          credentials = {
+              'admin': ('admin', os.environ['ADMIN_PASSWORD']),
+              'editor': ('editor', os.environ['EDITOR_PASSWORD']),
+              'viewer': ('viewer', os.environ['VIEWER_PASSWORD']),
+              'agency_viewer': ('agency_viewer', os.environ['AGENCY_VIEWER_PASSWORD']),
+          }
+          database_url = os.environ['DATABASE_URL'].replace('postgresql+psycopg://', 'postgresql://', 1)
+          with psycopg.connect(database_url) as connection:
+              with connection.cursor() as cursor:
+                  for username, (expected_role, password) in credentials.items():
+                      cursor.execute(
+                          '''
+                          UPDATE users
+                          SET password_hash = %s, is_active = TRUE
+                          WHERE username = %s AND role = %s
+                          RETURNING username, role
+                          ''',
+                          (_hash_password(password), username, expected_role),
+                      )
+                      row = cursor.fetchone()
+                      if row != (username, expected_role):
+                          raise SystemExit(f'credential rotation failed for {username}')
+                  cursor.execute('DELETE FROM auth_tokens')
+              connection.commit()
+          print('temporary role credentials rotated independently; existing sessions revoked')
+          PY
 
       - name: Build and start redesigned application stack
         shell: bash
@@ -145,12 +193,39 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          for username in admin editor viewer agency_viewer; do
-            python - "${username}" <<'PY' > /tmp/login-payload.json
+          role_password() {
+            case "$1" in
+              admin) printf '%s' "${ADMIN_PASSWORD}" ;;
+              editor) printf '%s' "${EDITOR_PASSWORD}" ;;
+              viewer) printf '%s' "${VIEWER_PASSWORD}" ;;
+              agency_viewer) printf '%s' "${AGENCY_VIEWER_PASSWORD}" ;;
+              *) return 1 ;;
+            esac
+          }
+
+          reject_password() {
+            local username="$1"
+            local password="$2"
+            python - "${username}" "${password}" <<'PY' > /tmp/rejected-login-payload.json
           import json
-          import os
           import sys
-          print(json.dumps({'username': sys.argv[1], 'password': os.environ['TEMP_PASSWORD']}))
+          print(json.dumps({'username': sys.argv[1], 'password': sys.argv[2]}))
+          PY
+            local status
+            status="$(curl --silent --show-error --output /tmp/rejected-login.json --write-out '%{http_code}' \
+              --header 'Content-Type: application/json' \
+              --request POST \
+              --data @/tmp/rejected-login-payload.json \
+              http://127.0.0.1:3100/api/v1/auth/login)"
+            test "${status}" = '401'
+          }
+
+          for username in admin editor viewer agency_viewer; do
+            password="$(role_password "${username}")"
+            python - "${username}" "${password}" <<'PY' > /tmp/login-payload.json
+          import json
+          import sys
+          print(json.dumps({'username': sys.argv[1], 'password': sys.argv[2]}))
           PY
             curl --fail --silent --show-error \
               --header 'Content-Type: application/json' \
@@ -170,6 +245,17 @@ jobs:
           print(f'{username} local bearer login verified')
           PY
           done
+
+          rejected_shared_password="EGVisual-${GITHUB_RUN_ID}-Review!"
+          reject_password admin "${rejected_shared_password}"
+          reject_password editor "${rejected_shared_password}"
+          reject_password viewer "${rejected_shared_password}"
+          reject_password agency_viewer "${rejected_shared_password}"
+          reject_password admin 'admin123'
+          reject_password editor 'editor123'
+          reject_password viewer 'viewer123'
+          reject_password agency_viewer 'agency123'
+          echo 'local rejection of former shared pattern and known defaults verified'
 
       - name: Start redundant Cloudflare HTTPS tunnels
         id: tunnels
@@ -221,15 +307,26 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
+          role_password() {
+            case "$1" in
+              admin) printf '%s' "${ADMIN_PASSWORD}" ;;
+              editor) printf '%s' "${EDITOR_PASSWORD}" ;;
+              viewer) printf '%s' "${VIEWER_PASSWORD}" ;;
+              agency_viewer) printf '%s' "${AGENCY_VIEWER_PASSWORD}" ;;
+              *) return 1 ;;
+            esac
+          }
+
           verify_role() {
             local base_url="$1"
             local label="$2"
             local username="$3"
-            python - "${username}" <<'PY' > /tmp/public-login-payload.json
+            local password
+            password="$(role_password "${username}")"
+            python - "${username}" "${password}" <<'PY' > /tmp/public-login-payload.json
           import json
-          import os
           import sys
-          print(json.dumps({'username': sys.argv[1], 'password': os.environ['TEMP_PASSWORD']}))
+          print(json.dumps({'username': sys.argv[1], 'password': sys.argv[2]}))
           PY
             curl --fail --silent --show-error \
               --header 'Content-Type: application/json' \
@@ -263,10 +360,44 @@ jobs:
           PY
           }
 
+          verify_rejected_password() {
+            local base_url="$1"
+            local label="$2"
+            local username="$3"
+            local password="$4"
+            python - "${username}" "${password}" <<'PY' > /tmp/public-rejected-login-payload.json
+          import json
+          import sys
+          print(json.dumps({'username': sys.argv[1], 'password': sys.argv[2]}))
+          PY
+            local status
+            status="$(curl --silent --show-error --output "/tmp/${label}-${username}-rejected-login.json" --write-out '%{http_code}' \
+              --header 'Content-Type: application/json' \
+              --request POST \
+              --data @/tmp/public-rejected-login-payload.json \
+              "${base_url}/api/v1/auth/login")"
+            test "${status}" = '401'
+          }
+
           for username in admin editor viewer agency_viewer; do
             verify_role "${PRIMARY_URL}" primary "${username}"
             verify_role "${BACKUP_URL}" backup "${username}"
           done
+
+          rejected_shared_password="EGVisual-${GITHUB_RUN_ID}-Review!"
+          for base_and_label in "${PRIMARY_URL}|primary" "${BACKUP_URL}|backup"; do
+            base_url="${base_and_label%%|*}"
+            label="${base_and_label##*|}"
+            verify_rejected_password "${base_url}" "${label}" admin "${rejected_shared_password}"
+            verify_rejected_password "${base_url}" "${label}" editor "${rejected_shared_password}"
+            verify_rejected_password "${base_url}" "${label}" viewer "${rejected_shared_password}"
+            verify_rejected_password "${base_url}" "${label}" agency_viewer "${rejected_shared_password}"
+            verify_rejected_password "${base_url}" "${label}" admin 'admin123'
+            verify_rejected_password "${base_url}" "${label}" editor 'editor123'
+            verify_rejected_password "${base_url}" "${label}" viewer 'viewer123'
+            verify_rejected_password "${base_url}" "${label}" agency_viewer 'agency123'
+          done
+          echo 'external rejection of former shared pattern and known defaults verified on both domains'
 
           mkdir -p artifacts/operator-visual-review
           cat > artifacts/operator-visual-review/access.txt <<EOF
@@ -281,13 +412,13 @@ jobs:
           PRIMARY HOME: ${PRIMARY_URL}/
           BACKUP HOME: ${BACKUP_URL}/
 
-          Temporary accounts — all use the same password:
-          admin
-          editor
-          viewer
-          agency_viewer
+          Temporary accounts — independently rotated credentials:
+          admin: ${ADMIN_PASSWORD}
+          editor: ${EDITOR_PASSWORD}
+          viewer: ${VIEWER_PASSWORD}
+          agency_viewer: ${AGENCY_VIEWER_PASSWORD}
 
-          Password: ${TEMP_PASSWORD}
+          The former shared-password pattern and known default passwords were rejected locally and through both public domains.
 
           Primary staff routes:
           ${PRIMARY_URL}/field
@@ -308,7 +439,7 @@ jobs:
         with:
           name: operator-ui-cloudflare-reviewed-access-${{ github.run_id }}
           path: artifacts/operator-visual-review/access.txt
-          retention-days: 1
+          retention-days: 2
           if-no-files-found: error
 
       - name: Keep reviewed preview available
