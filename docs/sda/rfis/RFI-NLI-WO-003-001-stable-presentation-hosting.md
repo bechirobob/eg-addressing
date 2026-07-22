@@ -1,9 +1,9 @@
 # NLI Request for Information — RFI-NLI-WO-003-001
 
-**Related work order:** NLI-WO-003 — Operator Interface and Navigation Foundation  
-**Raised by:** Implementation Agent  
-**Date:** 2026-07-22  
-**Required by:** Before provisioning a persistent presentation hostname or host  
+**Related work order:** NLI-WO-003 — Operator Interface and Navigation Foundation
+**Raised by:** Implementation Agent
+**Date:** 2026-07-22
+**Required by:** Before provisioning a persistent presentation hostname or host
 **Status:** OPEN
 
 ## 1. Decision question
@@ -76,4 +76,3 @@ Credential rotation and a fresh short-lived dual-link preview may proceed. Persi
 - [ ] Acceptance-criterion map updated.
 - [ ] New risks/conditions recorded.
 - [ ] Separate hosting work order or explicit scope authorization issued.
-
