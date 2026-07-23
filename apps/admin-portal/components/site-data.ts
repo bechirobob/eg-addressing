@@ -51,6 +51,13 @@ export const navItems: NavItem[] = [
     group: 'public',
   },
   {
+    href: '/workspace',
+    label: 'Home',
+    visibleTo: ['viewer', 'editor', 'admin', 'agency_viewer'],
+    priorityFor: ['viewer', 'editor', 'admin', 'agency_viewer'],
+    group: 'staff',
+  },
+  {
     href: '/signage',
     label: 'Publication & signage',
     visibleTo: ['editor', 'admin'],
@@ -132,6 +139,7 @@ const routeRules: RouteRule[] = [
   { path: '/', allowedRoles: ['guest', 'viewer', 'editor', 'admin', 'agency_viewer'] },
   { path: '/operations-runbook', allowedRoles: ['guest', 'viewer', 'editor', 'admin', 'agency_viewer'] },
   { path: '/login', allowedRoles: ['guest', 'viewer', 'editor', 'admin', 'agency_viewer'] },
+  { path: '/workspace', allowedRoles: ['viewer', 'editor', 'admin', 'agency_viewer'] },
   { path: '/reports', allowedRoles: ['viewer', 'editor', 'admin', 'agency_viewer'] },
   { path: '/issue', allowedRoles: ['guest', 'viewer', 'editor', 'admin', 'agency_viewer'] },
   { path: '/track', allowedRoles: ['guest', 'viewer', 'editor', 'admin', 'agency_viewer'] },
@@ -148,7 +156,7 @@ const routeRules: RouteRule[] = [
 ];
 
 const PUBLIC_PREFIXES = ['/code/', '/proof/'];
-const PROTECTED_PREFIXES = ['/admin', '/reports', '/exports', '/registry', '/verify', '/field', '/signage', '/records', '/territories'];
+const PROTECTED_PREFIXES = ['/workspace', '/admin', '/reports', '/exports', '/registry', '/verify', '/field', '/signage', '/records', '/territories'];
 
 function normalizePathname(pathname: string): string {
   const [withoutQuery] = pathname.split(/[?#]/, 1);
@@ -157,9 +165,7 @@ function normalizePathname(pathname: string): string {
 }
 
 export function defaultRouteForRole(role: OperatorRole): string {
-  if (role === 'admin') return '/field';
-  if (role === 'editor') return '/registry';
-  if (role === 'viewer' || role === 'agency_viewer') return '/reports';
+  if (role === 'admin' || role === 'editor' || role === 'viewer' || role === 'agency_viewer') return '/workspace';
   return '/';
 }
 

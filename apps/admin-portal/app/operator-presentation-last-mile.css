@@ -1,0 +1,41 @@
+/* Last-mile corrections from the complete desktop/mobile screenshot audit. */
+
+@media (min-width: 1100px) {
+  .field-intake-panel .human-field-form > .spatial-evidence-capture,
+  .field-intake-panel .human-field-form > label.territory-field-wide,
+  .field-intake-panel .human-field-form > .territory-form-actions {
+    grid-column: 1 / -1 !important;
+    width: 100% !important;
+  }
+
+  .field-intake-panel .human-field-form > label.territory-field-wide .territory-textarea {
+    width: 100% !important;
+    min-height: 104px !important;
+    height: 104px !important;
+  }
+
+  .field-intake-panel .human-field-form > .spatial-evidence-capture {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+
+  .field-intake-panel .human-field-form > .spatial-evidence-capture > * {
+    grid-column: 1 !important;
+    max-width: none !important;
+  }
+
+  .operator-review-shell .operator-review-desk:has(.request-list-panel .panel-state),
+  .operations-panel .review-layout:has(.request-list-panel .panel-state) {
+    min-height: 190px !important;
+    margin-bottom: 8px !important;
+  }
+
+  .operator-review-shell .operator-review-desk:has(.request-list-panel .panel-state) .request-list-panel,
+  .operator-review-shell .operator-review-desk:has(.request-list-panel .panel-state) .request-detail-panel {
+    min-height: 150px !important;
+  }
+
+  .operator-review-shell .signage-export-panel {
+    margin-top: 8px !important;
+  }
+}

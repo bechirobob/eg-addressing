@@ -1,0 +1,107 @@
+:root {
+  /* BGEDS 1.0 — semantic color */
+  --bge-color-canvas: #f4f6f8;
+  --bge-color-surface: #ffffff;
+  --bge-color-surface-subtle: #f8f9fb;
+  --bge-color-surface-raised: #ffffff;
+  --bge-color-text: #17212b;
+  --bge-color-text-secondary: #52606d;
+  --bge-color-text-muted: #6b7785;
+  --bge-color-text-inverse: #ffffff;
+  --bge-color-divider: #d9dee5;
+  --bge-color-divider-strong: #aeb8c4;
+  --bge-color-institution: #0d263d;
+  --bge-color-institution-strong: #081b2d;
+  --bge-color-institution-soft: #e8eef3;
+  --bge-color-action: #154f78;
+  --bge-color-action-hover: #103f61;
+  --bge-color-action-active: #0b314c;
+  --bge-color-action-soft: #e5eff6;
+  --bge-color-focus: #006fbb;
+  --bge-color-selected: #e6f0f7;
+  --bge-color-info: #1f5e8c;
+  --bge-color-info-soft: #e8f2f8;
+  --bge-color-success: #1f6b45;
+  --bge-color-success-soft: #e8f4ed;
+  --bge-color-warning: #8a5a00;
+  --bge-color-warning-soft: #fbf2d8;
+  --bge-color-danger: #9a2f2f;
+  --bge-color-danger-soft: #faeaea;
+  --bge-color-disabled: #9ba5b1;
+  --bge-color-flag-green: #2c7a42;
+  --bge-color-flag-red: #b32d37;
+  --bge-color-flag-blue: #2b6f9f;
+
+  /* BGEDS 1.0 — typography */
+  --bge-font-sans: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --bge-font-mono: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+  --bge-font-size-display: 2rem;
+  --bge-line-height-display: 2.5rem;
+  --bge-font-size-page-title: 1.5rem;
+  --bge-line-height-page-title: 2rem;
+  --bge-font-size-section: 1.125rem;
+  --bge-line-height-section: 1.625rem;
+  --bge-font-size-subsection: 1rem;
+  --bge-line-height-subsection: 1.5rem;
+  --bge-font-size-body: 0.875rem;
+  --bge-line-height-body: 1.3125rem;
+  --bge-font-size-small: 0.8125rem;
+  --bge-line-height-small: 1.1875rem;
+  --bge-font-size-label: 0.75rem;
+  --bge-line-height-label: 1rem;
+  --bge-font-weight-regular: 400;
+  --bge-font-weight-medium: 550;
+  --bge-font-weight-semibold: 650;
+  --bge-font-weight-bold: 720;
+
+  /* BGEDS 1.0 — spacing */
+  --bge-space-0: 0;
+  --bge-space-1: 0.25rem;
+  --bge-space-2: 0.5rem;
+  --bge-space-3: 0.75rem;
+  --bge-space-4: 1rem;
+  --bge-space-5: 1.25rem;
+  --bge-space-6: 1.5rem;
+  --bge-space-8: 2rem;
+  --bge-space-10: 2.5rem;
+  --bge-space-12: 3rem;
+
+  /* BGEDS 1.0 — sizing */
+  --bge-control-height-compact: 2rem;
+  --bge-control-height: 2.5rem;
+  --bge-control-height-touch: 2.75rem;
+  --bge-rail-width: 15.5rem;
+  --bge-rail-width-collapsed: 4.25rem;
+  --bge-topbar-height: 3.75rem;
+  --bge-contextbar-height: 3rem;
+  --bge-inspector-width: 22rem;
+  --bge-content-max: 100rem;
+
+  /* BGEDS 1.0 — borders and elevation */
+  --bge-border-width: 1px;
+  --bge-radius-none: 0;
+  --bge-radius-small: 0.1875rem;
+  --bge-radius-medium: 0.375rem;
+  --bge-radius-large: 0.5rem;
+  --bge-shadow-menu: 0 8px 24px rgb(13 38 61 / 14%);
+  --bge-shadow-dialog: 0 18px 50px rgb(13 38 61 / 20%);
+
+  /* BGEDS 1.0 — motion */
+  --bge-duration-fast: 100ms;
+  --bge-duration-standard: 180ms;
+  --bge-ease-standard: cubic-bezier(0.2, 0, 0, 1);
+
+  /* BGEDS 1.0 — layers */
+  --bge-z-base: 0;
+  --bge-z-sticky: 20;
+  --bge-z-menu: 40;
+  --bge-z-dialog: 60;
+  --bge-z-toast: 80;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --bge-duration-fast: 0ms;
+    --bge-duration-standard: 0ms;
+  }
+}

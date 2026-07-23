@@ -1,0 +1,111 @@
+name: operator-ui-browser-evidence
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'apps/admin-portal/**'
+      - '.github/workflows/operator-ui-browser-evidence.yml'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'apps/admin-portal/**'
+      - '.github/workflows/operator-ui-browser-evidence.yml'
+
+concurrency:
+  group: operator-ui-browser-evidence-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  browser-evidence:
+    name: browser-evidence
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    env:
+      NEXT_PUBLIC_APP_ENV: staging
+      NEXT_PUBLIC_DEPLOYMENT_LABEL: CI BROWSER EVIDENCE / NOT OFFICIAL PRODUCTION
+      NEXT_PUBLIC_API_BASE_URL: ''
+      INTERNAL_API_BASE_URL: http://127.0.0.1:9
+      OPERATOR_UI_BASE_URL: http://127.0.0.1:3100
+    defaults:
+      run:
+        working-directory: apps/admin-portal
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: apps/admin-portal/package-lock.json
+
+      - name: Install application dependencies
+        run: npm ci
+
+      - name: Install controlled browser evidence dependency
+        run: npm install --no-save --package-lock=false playwright@1.55.0
+
+      - name: Install Chromium runtime
+        run: npx playwright install --with-deps chromium
+
+      - name: Build operator portal
+        run: npm run build
+
+      - name: Start controlled preview server
+        run: |
+          nohup npm run start -- --hostname 127.0.0.1 --port 3100 > /tmp/operator-ui-next.log 2>&1 &
+          echo $! > /tmp/operator-ui-next.pid
+          for attempt in $(seq 1 60); do
+            if curl --fail --silent http://127.0.0.1:3100/ >/dev/null; then
+              exit 0
+            fi
+            sleep 1
+          done
+          cat /tmp/operator-ui-next.log
+          exit 1
+
+      - name: Audit independent desktop and mobile presentation
+        env:
+          OPERATOR_UI_COMMIT: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: |
+          set -o pipefail
+          mkdir -p artifacts/operator-ui-browser-evidence
+          node scripts/operator-presentation-audit-runner.mjs 2>&1 | tee artifacts/operator-ui-browser-evidence/execution.log
+
+      - name: Audit government design lab across desktop, tablet, and mobile
+        env:
+          OPERATOR_UI_COMMIT: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: |
+          set -o pipefail
+          node scripts/government-design-lab-audit.mjs 2>&1 | tee artifacts/operator-ui-browser-evidence/government-design-lab-execution.log
+
+      - name: Audit protected government workspace across desktop, tablet, and mobile
+        env:
+          OPERATOR_UI_COMMIT: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: |
+          set -o pipefail
+          node scripts/government-workspace-browser-audit.mjs 2>&1 | tee artifacts/operator-ui-browser-evidence/government-workspace-execution.log
+
+      - name: Upload browser evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: operator-ui-browser-evidence-${{ github.run_id }}
+          path: apps/admin-portal/artifacts/operator-ui-browser-evidence
+          if-no-files-found: warn
+          retention-days: 14
+
+      - name: Stop controlled preview server
+        if: always()
+        run: |
+          if [ -f /tmp/operator-ui-next.pid ]; then
+            kill "$(cat /tmp/operator-ui-next.pid)" 2>/dev/null || true
+          fi
+          if [ -f /tmp/operator-ui-next.log ]; then
+            tail -n 120 /tmp/operator-ui-next.log
+          fi
