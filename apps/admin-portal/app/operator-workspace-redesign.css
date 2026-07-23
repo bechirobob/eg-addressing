@@ -1,0 +1,828 @@
+/*
+ * NLI-WO-003 protected workspace redesign.
+ * This layer deliberately leaves the accepted public homepage unchanged.
+ * It converts authenticated staff routes into a restrained government work
+ * environment: clear institutional header, fixed role navigation, borderless
+ * work sections, compact forms, explicit tables and mobile-first task flow.
+ */
+
+body:has(.operator-workspace-shell) {
+  --operator-navy: #0b2f50;
+  --operator-navy-strong: #08243d;
+  --operator-blue: #175d91;
+  --operator-gold: #c49a43;
+  --operator-canvas: #eef2f4;
+  --operator-paper: #ffffff;
+  --operator-rule: #d7dee3;
+  --operator-rule-strong: #b8c4cc;
+  --operator-muted: #5a6874;
+  --operator-ink: #132431;
+  background: var(--operator-canvas);
+  color: var(--operator-ink);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Arial, sans-serif;
+}
+
+body:has(.operator-workspace-shell) .page-shell {
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  padding: 0;
+}
+
+body:has(.operator-workspace-shell) .flag-ribbon {
+  height: 5px;
+  margin: 0;
+}
+
+body:has(.operator-workspace-shell) .staging-notice {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px 18px;
+  min-height: 34px;
+  margin: 0;
+  padding: 7px 24px;
+  border: 0;
+  background: #f2ead8;
+  color: #593c0a;
+  font-size: 0.72rem;
+  letter-spacing: 0.01em;
+}
+
+body:has(.operator-workspace-shell) .staging-notice strong {
+  flex: 0 0 auto;
+  font-size: 0.68rem;
+  letter-spacing: 0.09em;
+}
+
+body:has(.operator-workspace-shell) .masthead {
+  display: grid;
+  grid-template-columns: 220px minmax(0, 1fr);
+  align-items: center;
+  gap: 26px;
+  min-height: 104px;
+  margin: 0;
+  padding: 16px 30px;
+  border: 0;
+  background: var(--operator-navy);
+  color: #fff;
+}
+
+body:has(.operator-workspace-shell) .masthead-topline {
+  margin: 0;
+}
+
+body:has(.operator-workspace-shell) .official-lockup {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+body:has(.operator-workspace-shell) .crest-frame {
+  width: 52px;
+  padding: 3px;
+  border: 0;
+  background: #fff;
+  box-shadow: none;
+}
+
+body:has(.operator-workspace-shell) .kicker {
+  max-width: 130px;
+  margin: 0;
+  color: #fff;
+  font-size: 0.62rem;
+  line-height: 1.35;
+  letter-spacing: 0.1em;
+}
+
+body:has(.operator-workspace-shell) .masthead-content-grid,
+body:has(.operator-workspace-shell) .masthead-copy {
+  display: block;
+  max-width: none;
+}
+
+body:has(.operator-workspace-shell) .masthead-copy .eyebrow {
+  display: block;
+  margin-bottom: 5px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #bfccd6;
+  font-size: 0.64rem;
+  letter-spacing: 0.12em;
+}
+
+body:has(.operator-workspace-shell) .masthead h1 {
+  margin: 0;
+  color: #fff;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Arial, sans-serif;
+  font-size: clamp(1.55rem, 2.2vw, 2.05rem);
+  font-weight: 720;
+  line-height: 1.12;
+  letter-spacing: -0.025em;
+}
+
+body:has(.operator-workspace-shell) .masthead-subtitle {
+  max-width: 900px;
+  margin: 6px 0 0;
+  color: #d8e1e8;
+  font-size: 0.84rem;
+  line-height: 1.45;
+}
+
+body:has(.operator-workspace-shell) .civic-hero-illustration {
+  display: none;
+}
+
+body:has(.operator-workspace-shell) .operator-workspace-shell {
+  display: grid;
+  grid-template-columns: 232px minmax(0, 1fr);
+  gap: 0;
+  align-items: stretch;
+  min-height: calc(100vh - 143px);
+  margin: 0;
+}
+
+body:has(.operator-workspace-shell) .operator-sidebar-desktop {
+  position: sticky;
+  top: 0;
+  align-self: start;
+  min-height: calc(100vh - 143px);
+  max-height: 100vh;
+  padding: 24px 18px 40px;
+  border: 0;
+  background: var(--operator-navy-strong);
+  color: #fff;
+}
+
+body:has(.operator-workspace-shell) .operator-sidebar-identity {
+  padding: 0 4px 20px;
+  border: 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.16);
+}
+
+body:has(.operator-workspace-shell) .operator-platform-link,
+body:has(.operator-workspace-shell) .operator-platform-link strong {
+  color: #fff;
+}
+
+body:has(.operator-workspace-shell) .operator-platform-link span {
+  color: #aebdca;
+  font-size: 0.58rem;
+  line-height: 1.35;
+}
+
+body:has(.operator-workspace-shell) .operator-platform-link strong {
+  font-size: 0.88rem;
+  font-weight: 700;
+}
+
+body:has(.operator-workspace-shell) .operator-role-context {
+  margin-top: 16px;
+  padding-left: 10px;
+  border-left: 2px solid var(--operator-gold);
+}
+
+body:has(.operator-workspace-shell) .operator-role-context span,
+body:has(.operator-workspace-shell) .operator-role-context small {
+  color: #aebdca;
+  font-size: 0.66rem;
+}
+
+body:has(.operator-workspace-shell) .operator-role-context strong {
+  color: #fff;
+  font-size: 0.79rem;
+  font-weight: 650;
+}
+
+body:has(.operator-workspace-shell) .operator-sidebar .top-nav {
+  gap: 20px;
+  padding: 22px 0 0;
+}
+
+body:has(.operator-workspace-shell) .operator-sidebar .nav-group-label {
+  margin: 0 8px 5px;
+  color: #8296a7;
+  font-size: 0.56rem;
+  letter-spacing: 0.12em;
+}
+
+body:has(.operator-workspace-shell) .operator-sidebar .nav-group-links {
+  gap: 1px;
+}
+
+body:has(.operator-workspace-shell) .operator-sidebar .nav-link {
+  min-height: 39px;
+  padding: 9px 10px;
+  border: 0;
+  border-left: 2px solid transparent;
+  background: transparent;
+  color: #dbe4eb;
+  font-size: 0.79rem;
+  font-weight: 570;
+}
+
+body:has(.operator-workspace-shell) .operator-sidebar .nav-link:hover,
+body:has(.operator-workspace-shell) .operator-sidebar .nav-link:focus-visible {
+  border-left-color: #8197a8;
+  background: rgba(255, 255, 255, 0.07);
+  color: #fff;
+}
+
+body:has(.operator-workspace-shell) .operator-sidebar .nav-link-active {
+  border-left-color: var(--operator-gold);
+  background: rgba(255, 255, 255, 0.11);
+  color: #fff;
+  font-weight: 720;
+}
+
+body:has(.operator-workspace-shell) .operator-workspace-column {
+  min-width: 0;
+  padding: 0 32px 56px;
+  background: var(--operator-paper);
+}
+
+body:has(.operator-workspace-shell) .operator-utility-bar {
+  position: sticky;
+  top: 0;
+  z-index: 15;
+  min-height: 52px;
+  margin: 0 -32px 28px;
+  padding: 9px 32px;
+  border: 0;
+  border-bottom: 1px solid var(--operator-rule);
+  background: rgba(255, 255, 255, 0.97);
+  backdrop-filter: blur(8px);
+}
+
+body:has(.operator-workspace-shell) .operator-location-context span {
+  color: var(--operator-muted);
+  font-size: 0.61rem;
+  letter-spacing: 0.11em;
+}
+
+body:has(.operator-workspace-shell) .operator-location-context strong {
+  color: var(--operator-ink);
+  font-size: 0.9rem;
+  font-weight: 720;
+}
+
+body:has(.operator-workspace-shell) .operator-session-utility > span {
+  color: var(--operator-muted);
+  font-size: 0.7rem;
+}
+
+body:has(.operator-workspace-shell) .operator-session-utility button {
+  min-height: 32px;
+  padding: 5px 9px;
+  border: 1px solid var(--operator-rule-strong);
+  border-radius: 0;
+  background: #fff;
+  color: var(--operator-ink);
+  font-size: 0.72rem;
+}
+
+body:has(.operator-workspace-shell) .desktop-main-content {
+  width: 100%;
+  max-width: 1240px;
+  margin: 0 auto;
+}
+
+/* Authenticated page content is organized as work sections, not card stacks. */
+body:has(.operator-workspace-shell) :is(.hero-card, .panel, .status-card, .public-task-panel) {
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+body:has(.operator-workspace-shell) :is(.hero-card, .panel, .status-card, .public-task-panel)::before,
+body:has(.operator-workspace-shell) :is(.hero-card, .panel, .status-card, .public-task-panel)::after {
+  display: none;
+}
+
+body:has(.operator-workspace-shell) :is(.panel, .status-card, .public-task-panel) {
+  padding: 0;
+}
+
+body:has(.operator-workspace-shell) .section-grid {
+  gap: 32px 28px;
+  margin-top: 0;
+}
+
+body:has(.operator-workspace-shell) .panel-head {
+  display: grid;
+  gap: 3px;
+  margin: 0 0 15px;
+  padding: 0;
+}
+
+body:has(.operator-workspace-shell) .section-label {
+  color: var(--operator-blue);
+  font-size: 0.61rem;
+  letter-spacing: 0.12em;
+}
+
+body:has(.operator-workspace-shell) :is(.panel h2, .public-task-panel h2, .hero-card h2) {
+  margin: 0;
+  color: var(--operator-ink);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Arial, sans-serif;
+  font-size: clamp(1.4rem, 2vw, 1.9rem);
+  font-weight: 720;
+  line-height: 1.18;
+  letter-spacing: -0.025em;
+}
+
+body:has(.operator-workspace-shell) :is(.panel h3, .public-task-panel h3, .status-card h3) {
+  margin: 0;
+  color: var(--operator-ink);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Arial, sans-serif;
+  font-size: 1.14rem;
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+body:has(.operator-workspace-shell) :is(.institutional-note, .field-help, .hero-copy, .public-task-copy) {
+  color: var(--operator-muted);
+  font-size: 0.82rem;
+  line-height: 1.52;
+}
+
+body:has(.operator-workspace-shell) .field-workspace {
+  grid-template-columns: minmax(260px, 0.72fr) minmax(0, 1.55fr);
+  align-items: start;
+}
+
+body:has(.operator-workspace-shell) .field-assignments-panel,
+body:has(.operator-workspace-shell) .live-intake-panel {
+  grid-column: 1 / -1;
+}
+
+body:has(.operator-workspace-shell) .field-location-checks-panel {
+  grid-column: 1;
+}
+
+body:has(.operator-workspace-shell) .field-intake-panel {
+  grid-column: 2;
+}
+
+body:has(.operator-workspace-shell) .field-summary-ledger,
+body:has(.operator-workspace-shell) .field-today-summary {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0;
+  margin: 0 0 18px;
+  padding: 0;
+  border: 0;
+  border-block: 1px solid var(--operator-rule);
+}
+
+body:has(.operator-workspace-shell) :is(.field-summary-ledger, .field-today-summary) > div {
+  min-width: 0;
+  padding: 13px 18px 13px 0;
+  border: 0;
+}
+
+body:has(.operator-workspace-shell) :is(.field-summary-ledger, .field-today-summary) dt,
+body:has(.operator-workspace-shell) :is(.field-summary-ledger, .field-today-summary) span {
+  color: var(--operator-muted);
+  font-size: 0.61rem;
+  font-weight: 760;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+body:has(.operator-workspace-shell) :is(.field-summary-ledger, .field-today-summary) dd,
+body:has(.operator-workspace-shell) :is(.field-summary-ledger, .field-today-summary) strong {
+  display: block;
+  margin: 4px 0 0;
+  color: var(--operator-ink);
+  font-size: 1.28rem;
+  font-weight: 750;
+}
+
+body:has(.operator-workspace-shell) .field-summary-ledger small {
+  display: block;
+  max-width: 31ch;
+  margin-top: 3px;
+  color: var(--operator-muted);
+  font-size: 0.7rem;
+  line-height: 1.35;
+}
+
+body:has(.operator-workspace-shell) .workbench-panel-disclosure {
+  border: 0;
+  background: transparent;
+}
+
+body:has(.operator-workspace-shell) .workbench-panel-disclosure > summary {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 18px;
+  margin-bottom: 16px;
+  padding: 0 0 12px;
+  border: 0;
+  border-bottom: 2px solid var(--operator-navy);
+  list-style: none;
+}
+
+body:has(.operator-workspace-shell) .workbench-panel-disclosure > summary::-webkit-details-marker {
+  display: none;
+}
+
+body:has(.operator-workspace-shell) .workbench-panel-disclosure > summary strong {
+  display: block;
+  margin-top: 4px;
+  color: var(--operator-ink);
+  font-size: clamp(1.25rem, 1.9vw, 1.7rem);
+  line-height: 1.2;
+  letter-spacing: -0.025em;
+}
+
+body:has(.operator-workspace-shell) .workbench-panel-disclosure > summary em {
+  color: var(--operator-muted);
+  font-size: 0.7rem;
+  font-style: normal;
+}
+
+body:has(.operator-workspace-shell) .territory-form {
+  gap: 18px;
+}
+
+body:has(.operator-workspace-shell) .human-form-grid {
+  gap: 14px 16px;
+}
+
+body:has(.operator-workspace-shell) .territory-field {
+  gap: 5px;
+}
+
+body:has(.operator-workspace-shell) .territory-label {
+  color: var(--operator-ink);
+  font-size: 0.63rem;
+  font-weight: 760;
+  letter-spacing: 0.07em;
+}
+
+body:has(.operator-workspace-shell) :is(input, select, textarea, .territory-input, .verification-input) {
+  min-height: 40px;
+  border: 1px solid var(--operator-rule-strong);
+  border-radius: 0;
+  background: #fff;
+  color: var(--operator-ink);
+  box-shadow: none;
+  font-size: 0.84rem;
+}
+
+body:has(.operator-workspace-shell) :is(input, select, textarea, .territory-input, .verification-input):focus {
+  border-color: var(--operator-blue);
+  outline: 2px solid rgba(23, 93, 145, 0.16);
+  outline-offset: 0;
+}
+
+body:has(.operator-workspace-shell) fieldset,
+body:has(.operator-workspace-shell) .evidence-reference-fields {
+  margin: 0;
+  padding: 16px 0 0;
+  border: 0;
+  border-top: 1px solid var(--operator-rule);
+}
+
+body:has(.operator-workspace-shell) fieldset legend {
+  padding: 0 12px 0 0;
+  color: var(--operator-ink);
+  font-size: 0.72rem;
+  font-weight: 760;
+}
+
+body:has(.operator-workspace-shell) :is(.human-capture-card, .spatial-evidence-capture) {
+  padding: 16px 0 0;
+  border: 0;
+  border-top: 1px solid var(--operator-rule);
+  background: transparent;
+}
+
+body:has(.operator-workspace-shell) .field-checklist {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0;
+  margin: 0 0 18px;
+  padding: 0;
+  border-bottom: 1px solid var(--operator-rule);
+  list-style: none;
+}
+
+body:has(.operator-workspace-shell) .field-checklist li {
+  padding: 8px 6px 8px 0;
+  border: 0;
+  border-bottom: 3px solid transparent;
+  color: var(--operator-muted);
+  font-size: 0.68rem;
+  font-weight: 680;
+}
+
+body:has(.operator-workspace-shell) .field-checklist li[aria-current="step"] {
+  border-bottom-color: var(--operator-blue);
+  color: var(--operator-ink);
+}
+
+body:has(.operator-workspace-shell) .field-checklist li[data-complete="true"] {
+  color: var(--gov-green);
+}
+
+body:has(.operator-workspace-shell) :is(.verification-button, .primary-action, .guided-primary-action) {
+  min-height: 40px;
+  padding: 9px 14px;
+  border: 0;
+  border-radius: 0;
+  background: var(--operator-navy);
+  color: #fff;
+  box-shadow: none;
+  font-size: 0.78rem;
+  font-weight: 720;
+}
+
+body:has(.operator-workspace-shell) :is(.secondary-button, .secondary-action, .table-action, .mini-action-button) {
+  min-height: 36px;
+  padding: 7px 11px;
+  border: 1px solid var(--operator-rule-strong);
+  border-radius: 0;
+  background: #fff;
+  color: var(--operator-ink);
+  box-shadow: none;
+  font-size: 0.74rem;
+  font-weight: 650;
+}
+
+body:has(.operator-workspace-shell) :is(.verification-button, .primary-action, .guided-primary-action):hover,
+body:has(.operator-workspace-shell) :is(.verification-button, .primary-action, .guided-primary-action):focus-visible {
+  background: var(--operator-blue);
+}
+
+body:has(.operator-workspace-shell) :is(.quiet-disclosure, .inline-disclosure, .disclosure-panel) {
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+body:has(.operator-workspace-shell) :is(.quiet-disclosure, .inline-disclosure, .disclosure-panel) > summary {
+  padding: 8px 0;
+  border-bottom: 1px solid var(--operator-rule);
+  color: var(--operator-ink);
+  font-size: 0.76rem;
+  font-weight: 680;
+}
+
+body:has(.operator-workspace-shell) .table-wrap {
+  overflow: auto;
+  border: 0;
+  border-block: 1px solid var(--operator-rule);
+  background: #fff;
+}
+
+body:has(.operator-workspace-shell) .data-table {
+  font-size: 0.76rem;
+}
+
+body:has(.operator-workspace-shell) .data-table th {
+  padding: 10px 9px;
+  border: 0;
+  border-bottom: 1px solid var(--operator-rule-strong);
+  background: #f5f7f8;
+  color: var(--operator-muted);
+  font-size: 0.61rem;
+  letter-spacing: 0.06em;
+}
+
+body:has(.operator-workspace-shell) .data-table td {
+  padding: 10px 9px;
+  border: 0;
+  border-bottom: 1px solid #e7ecef;
+}
+
+body:has(.operator-workspace-shell) .data-table tbody tr:hover {
+  background: #f4f8fb;
+}
+
+body:has(.operator-workspace-shell) :is(.panel-state, .form-notice) {
+  padding: 10px 0 10px 12px;
+  border: 0;
+  border-left: 3px solid var(--operator-rule-strong);
+  background: transparent;
+  color: var(--operator-muted);
+  font-size: 0.78rem;
+}
+
+body:has(.operator-workspace-shell) .form-notice.success {
+  border-left-color: var(--gov-green);
+}
+
+body:has(.operator-workspace-shell) .form-notice.error {
+  border-left-color: var(--gov-red);
+}
+
+body:has(.operator-workspace-shell) :is(.status-pill, .tag, .registry-result-count) {
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: var(--operator-muted);
+  font-size: 0.66rem;
+  letter-spacing: 0.04em;
+}
+
+body:has(.operator-workspace-shell) :is(.result-card, .assignment-card, .export-card, .territory-record, .registry-simple-row, .registry-selected-card) {
+  border-radius: 0;
+  box-shadow: none;
+}
+
+body:has(.operator-workspace-shell) .registry-simple-row {
+  border: 0;
+  border-left: 2px solid transparent;
+  border-bottom: 1px solid #e7ecef;
+  background: transparent;
+}
+
+body:has(.operator-workspace-shell) .registry-simple-row:hover,
+body:has(.operator-workspace-shell) .registry-simple-row.active {
+  border-left-color: var(--operator-blue);
+  background: #f4f8fb;
+}
+
+/* Sign-in receives a clear, restrained staff-access treatment without
+ * changing public service pages or introducing a fake dashboard. */
+.page-shell-access .login-workspace {
+  max-width: 560px;
+  margin: 34px auto 0;
+}
+
+.page-shell-access .login-access-panel {
+  padding: 28px 30px;
+  border: 0;
+  border-top: 4px solid var(--eg-blue-deep);
+  border-radius: 0;
+  background: #fff;
+  box-shadow: 0 12px 34px rgba(13, 47, 79, 0.08);
+}
+
+.page-shell-access .login-access-panel .panel-head {
+  display: grid;
+  gap: 5px;
+}
+
+.page-shell-access .login-access-panel h3 {
+  margin: 0;
+  color: var(--eg-blue-deep);
+  font-size: 1.35rem;
+  line-height: 1.25;
+}
+
+.page-shell-access .login-access-panel .territory-form {
+  margin-top: 22px;
+}
+
+.page-shell-access .login-access-panel :is(input, .territory-input) {
+  min-height: 46px;
+  border-radius: 0;
+  background: #fff;
+}
+
+.page-shell-access .login-access-panel .verification-button {
+  min-height: 44px;
+  border-radius: 0;
+  background: var(--eg-blue-deep);
+  box-shadow: none;
+}
+
+@media (max-width: 1040px) {
+  body:has(.operator-workspace-shell) .operator-workspace-shell {
+    grid-template-columns: 208px minmax(0, 1fr);
+  }
+
+  body:has(.operator-workspace-shell) .operator-workspace-column {
+    padding-inline: 24px;
+  }
+
+  body:has(.operator-workspace-shell) .operator-utility-bar {
+    margin-inline: -24px;
+    padding-inline: 24px;
+  }
+}
+
+@media (max-width: 860px) {
+  body:has(.operator-workspace-shell) .masthead {
+    display: block;
+    min-height: 0;
+    padding: 14px 16px 16px;
+  }
+
+  body:has(.operator-workspace-shell) .masthead-topline {
+    margin-bottom: 11px;
+  }
+
+  body:has(.operator-workspace-shell) .operator-workspace-shell {
+    display: block;
+    min-height: 0;
+  }
+
+  body:has(.operator-workspace-shell) .operator-workspace-column {
+    padding: 12px 14px 88px;
+  }
+
+  body:has(.operator-workspace-shell) .operator-mobile-menu {
+    min-height: 46px;
+    margin: 0 0 8px;
+    border: 0;
+    border-bottom: 1px solid var(--operator-rule);
+    background: #fff;
+  }
+
+  body:has(.operator-workspace-shell) .operator-sidebar-mobile:not([hidden]) {
+    width: min(320px, 90vw);
+    padding: 22px 18px 30px;
+    border: 0;
+    background: var(--operator-navy-strong);
+    color: #fff;
+  }
+
+  body:has(.operator-workspace-shell) .operator-utility-bar {
+    position: static;
+    margin: 0 0 22px;
+    padding: 7px 0 10px;
+    backdrop-filter: none;
+  }
+
+  body:has(.operator-workspace-shell) .field-workspace,
+  body:has(.operator-workspace-shell) :is(.hero-grid, .section-grid, .registry-simple-layout) {
+    grid-template-columns: 1fr;
+  }
+
+  body:has(.operator-workspace-shell) :is(.field-assignments-panel, .field-location-checks-panel, .field-intake-panel, .live-intake-panel) {
+    grid-column: 1;
+  }
+
+  body:has(.operator-workspace-shell) .field-summary-ledger,
+  body:has(.operator-workspace-shell) .field-today-summary {
+    grid-template-columns: 1fr;
+  }
+
+  body:has(.operator-workspace-shell) :is(.field-summary-ledger, .field-today-summary) > div {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 3px 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid #e7ecef;
+  }
+
+  body:has(.operator-workspace-shell) .field-summary-ledger small {
+    grid-column: 1 / -1;
+  }
+
+  body:has(.operator-workspace-shell) .mobile-control-nav {
+    border-top: 1px solid var(--operator-rule-strong);
+    background: #fff;
+  }
+
+  body:has(.operator-workspace-shell) .mobile-control-nav-link {
+    border-right: 0;
+    color: var(--operator-muted);
+  }
+}
+
+@media (max-width: 560px) {
+  body:has(.operator-workspace-shell) .staging-notice {
+    display: block;
+    padding-inline: 12px;
+    text-align: center;
+  }
+
+  body:has(.operator-workspace-shell) .staging-notice span {
+    display: none;
+  }
+
+  body:has(.operator-workspace-shell) .masthead h1 {
+    font-size: 1.38rem;
+  }
+
+  body:has(.operator-workspace-shell) .masthead-subtitle {
+    font-size: 0.77rem;
+  }
+
+  body:has(.operator-workspace-shell) .workbench-panel-disclosure > summary {
+    align-items: start;
+  }
+
+  body:has(.operator-workspace-shell) .field-checklist {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .page-shell-access .login-workspace {
+    margin-top: 22px;
+  }
+
+  .page-shell-access .login-access-panel {
+    padding: 22px 18px;
+  }
+}

@@ -1,0 +1,8 @@
+/* One clear administration destination per role; avoid duplicate labels in the rail. */
+.operator-sidebar .nav-link[href*="from=staff-services"] {
+  display: none !important;
+}
+
+.operator-sidebar .nav-group:has(.nav-link[href*="from=staff-services"]:only-child) {
+  display: none !important;
+}
