@@ -1,5 +1,6 @@
 import 'leaflet/dist/leaflet.css';
 import './globals.css';
+import './government-design-tokens.css';
 import './operator-shell.css';
 import './operator-workspace-redesign.css';
 import './operator-workspace-authoritative.css';
