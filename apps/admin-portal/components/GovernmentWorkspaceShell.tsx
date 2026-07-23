@@ -13,6 +13,9 @@ import { resolveBrowserApiBaseUrl, sessionRequestInit, useStoredSession } from '
 type GovernmentWorkspaceShellProps = {
   apiBaseUrl: string;
   attentionCount: number;
+  sectionLabel?: string;
+  workspaceTitle?: string;
+  workContext?: string[];
   children: ReactNode;
 };
 
@@ -50,7 +53,14 @@ function routeIsActive(href: string, pathname: string) {
   return href === pathname || (href !== '/workspace' && pathname.startsWith(`${href}/`));
 }
 
-export function GovernmentWorkspaceShell({ apiBaseUrl, attentionCount, children }: GovernmentWorkspaceShellProps) {
+export function GovernmentWorkspaceShell({
+  apiBaseUrl,
+  attentionCount,
+  sectionLabel = 'Government workspace',
+  workspaceTitle = 'National Operations',
+  workContext,
+  children,
+}: GovernmentWorkspaceShellProps) {
   const router = useRouter();
   const pathname = usePathname() || '/workspace';
   const browserApiBaseUrl = resolveBrowserApiBaseUrl(apiBaseUrl);
@@ -69,6 +79,13 @@ export function GovernmentWorkspaceShell({ apiBaseUrl, attentionCount, children 
   );
   const searchHref = isRouteAccessible('/registry', role) ? '/registry' : '/reports';
   const showReviewNotice = process.env.NEXT_PUBLIC_APP_ENV !== 'production';
+  const resolvedContext = workContext?.length
+    ? workContext
+    : [
+        'National scope',
+        `Authority: ${sessionUser ? humanizeRole(sessionUser.role) : 'Resolving'}`,
+        'Publication remains subject to official approval controls',
+      ];
 
   const handleLogout = useCallback(async () => {
     setIsLoggingOut(true);
@@ -175,11 +192,11 @@ export function GovernmentWorkspaceShell({ apiBaseUrl, attentionCount, children 
           />
         ) : null}
 
-        <section className="government-workspace-main" aria-label="National addressing workspace">
+        <section className="government-workspace-main" aria-label={`${workspaceTitle} workspace`}>
           <header className="government-topbar">
             <div className="government-topbar-title">
-              <span>Government workspace</span>
-              <strong>National Operations</strong>
+              <span>{sectionLabel}</span>
+              <strong>{workspaceTitle}</strong>
             </div>
 
             <Link className="government-global-search" href={searchHref}>
@@ -205,9 +222,12 @@ export function GovernmentWorkspaceShell({ apiBaseUrl, attentionCount, children 
           </header>
 
           <div className="government-work-context">
-            <span><GovernmentIcon name="territory" /> National scope</span>
-            <span>Authority: {sessionUser ? humanizeRole(sessionUser.role) : 'Resolving'}</span>
-            <span>Publication remains subject to official approval controls</span>
+            {resolvedContext.map((item, index) => (
+              <span key={`${item}-${index}`}>
+                {index === 0 ? <GovernmentIcon name="territory" /> : null}
+                {item}
+              </span>
+            ))}
           </div>
 
           <div id="government-workspace-content" className="government-workspace-content">
