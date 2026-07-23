@@ -1,43 +1,50 @@
-import { SiteChrome } from '../../components/SiteChrome';
-import { RegistryCorePanel } from '../../components/RegistryCorePanel';
+import type { Metadata } from 'next';
 
-type Territory = { id: string; name: string; province_code: string; province: string; type: string; readiness: string; is_archived: boolean };
-type Road = { id: string; name: string; territory_id: string; territory_name: string; status: string; length_km: string; is_archived: boolean };
-type Building = { id: string; label: string; territory_id: string; territory_name: string; road_id: string; road_name: string; status: string; usage: string; is_archived: boolean };
-type Address = { id: string; formatted: string; territory_id: string; territory_name: string; road_id: string; road_name: string; building_id: string; building_label: string; province_code: string; status: string; publication_state: string; is_archived: boolean };
+import { GovernmentRegistryWorkbench } from '../../components/GovernmentRegistryWorkbench';
+import { GovernmentWorkspaceShell } from '../../components/GovernmentWorkspaceShell';
+import { SiteChrome } from '../../components/SiteChrome';
+import { getGovernmentWorkspaceData } from '../../lib/governmentWorkspaceData';
 
 export const dynamic = 'force-dynamic';
+
+export const metadata: Metadata = {
+  title: 'Address Registry — EG Addressing',
+  description: 'Protected authoritative address registry workspace for the Republic of Equatorial Guinea.',
+  robots: {
+    index: false,
+    follow: false,
+  },
+};
 
 export default async function RegistryPage({
   searchParams,
 }: {
   searchParams?: Promise<{ entity?: string }>;
 }) {
+  const apiBaseUrl = process.env.INTERNAL_API_BASE_URL ?? 'http://api:8100';
   const publicApiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL ?? '';
   const resolvedSearchParams = (await searchParams) ?? {};
-  const territories: Territory[] = [];
-  const roads: Road[] = [];
-  const buildings: Building[] = [];
-  const addresses: Address[] = [];
+  const { attentionCount } = await getGovernmentWorkspaceData(apiBaseUrl);
 
   return (
     <SiteChrome
       apiBaseUrl={publicApiBaseUrl}
-      eyebrow="Staff service"
-      eyebrowKey="registryEyebrow"
-      title="Address registry"
-      titleKey="registryTitle"
-      subtitle="Search, update, and manage official address records."
-      subtitleKey="registrySubtitle"
+      eyebrow="Government workspace"
+      title="Address Registry"
+      subtitle="Protected authoritative records workspace."
     >
-      <RegistryCorePanel
-        initialTerritories={territories}
-        initialRoads={roads}
-        initialBuildings={buildings}
-        initialAddresses={addresses}
+      <GovernmentWorkspaceShell
         apiBaseUrl={publicApiBaseUrl}
-        highlightEntityId={resolvedSearchParams.entity ?? null}
-      />
+        attentionCount={attentionCount}
+        sectionLabel="Authoritative records"
+        workspaceTitle="Address Registry"
+        workContext={['National registry scope', 'Addresses · roads · buildings', 'Publication authority remains separate']}
+      >
+        <GovernmentRegistryWorkbench
+          apiBaseUrl={publicApiBaseUrl}
+          highlightEntityId={resolvedSearchParams.entity ?? null}
+        />
+      </GovernmentWorkspaceShell>
     </SiteChrome>
   );
 }
