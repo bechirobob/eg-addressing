@@ -77,6 +77,13 @@ jobs:
           mkdir -p artifacts/operator-ui-browser-evidence
           node scripts/operator-presentation-audit-runner.mjs 2>&1 | tee artifacts/operator-ui-browser-evidence/execution.log
 
+      - name: Audit government design lab across desktop, tablet, and mobile
+        env:
+          OPERATOR_UI_COMMIT: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: |
+          set -o pipefail
+          node scripts/government-design-lab-audit.mjs 2>&1 | tee artifacts/operator-ui-browser-evidence/government-design-lab-execution.log
+
       - name: Upload browser evidence
         if: always()
         uses: actions/upload-artifact@v4
