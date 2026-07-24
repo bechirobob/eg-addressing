@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 
-import { GovernmentVerificationWorkbench } from '../../components/GovernmentVerificationWorkbench';
+import { GovernmentOperatorHome } from '../../components/GovernmentOperatorHome';
 import { GovernmentWorkspaceShell } from '../../components/GovernmentWorkspaceShell';
 import { SiteChrome } from '../../components/SiteChrome';
 import { getGovernmentWorkspaceData } from '../../lib/governmentWorkspaceData';
@@ -8,34 +8,37 @@ import { getGovernmentWorkspaceData } from '../../lib/governmentWorkspaceData';
 export const dynamic = 'force-dynamic';
 
 export const metadata: Metadata = {
-  title: 'Verification — EG Addressing',
-  description: 'Protected evidence review and authoritative decision workspace for the Republic of Equatorial Guinea.',
+  title: 'National Operations — EG Addressing',
+  description: 'Protected national operations workspace for the Equatorial Guinea National Addressing Platform.',
   robots: {
     index: false,
     follow: false,
   },
 };
 
-export default async function VerifyPage() {
+export default async function GovernmentWorkspacePage() {
   const apiBaseUrl = process.env.INTERNAL_API_BASE_URL ?? 'http://api:8100';
   const publicApiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL ?? '';
-  const { attentionCount } = await getGovernmentWorkspaceData(apiBaseUrl);
+  const { summary, readinessSummary, attentionCount } = await getGovernmentWorkspaceData(apiBaseUrl);
 
   return (
     <SiteChrome
       apiBaseUrl={publicApiBaseUrl}
       eyebrow="Government workspace"
-      title="Verification"
-      subtitle="Protected evidence review and authoritative decision workspace."
+      title="National operations"
+      subtitle="Protected operational workspace for authoritative addressing services."
     >
       <GovernmentWorkspaceShell
         apiBaseUrl={publicApiBaseUrl}
         attentionCount={attentionCount}
-        sectionLabel="Evidence and authority"
-        workspaceTitle="Verification"
-        workContext={['National verification scope', 'Submitted and under-review cases', 'Approval remains separate from publication']}
+        sectionLabel="Government workspace"
+        workspaceTitle="National Operations"
       >
-        <GovernmentVerificationWorkbench apiBaseUrl={publicApiBaseUrl} />
+        <GovernmentOperatorHome
+          apiBaseUrl={publicApiBaseUrl}
+          summary={summary}
+          readinessSummary={readinessSummary}
+        />
       </GovernmentWorkspaceShell>
     </SiteChrome>
   );

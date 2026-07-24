@@ -1,0 +1,727 @@
+/*
+ * Presentation-day protected workspace audit and polish.
+ * Public routes remain unchanged. The rules below are scoped to authenticated
+ * operator shells and deliberately give desktop and mobile distinct layouts.
+ */
+
+.operator-workspace-shell,
+.operator-workspace-shell * {
+  min-width: 0;
+}
+
+.operator-sidebar,
+.operator-sidebar * {
+  text-rendering: optimizeLegibility;
+}
+
+.operator-sidebar-desktop,
+.operator-sidebar-mobile:not([hidden]) {
+  background: #082c4a !important;
+  color: #f5f9fc !important;
+}
+
+.operator-sidebar .operator-platform-link,
+.operator-sidebar .operator-platform-link strong,
+.operator-sidebar .operator-role-context strong {
+  color: #ffffff !important;
+  opacity: 1 !important;
+}
+
+.operator-sidebar .operator-platform-link span,
+.operator-sidebar .operator-role-context span,
+.operator-sidebar .operator-role-context small,
+.operator-sidebar .nav-group-label {
+  color: #a9bdcc !important;
+  opacity: 1 !important;
+}
+
+.operator-sidebar .nav-link,
+.operator-sidebar .nav-link *,
+.operator-sidebar .nav-link svg {
+  color: #e7f0f6 !important;
+  opacity: 1 !important;
+}
+
+.operator-sidebar .nav-link svg {
+  fill: none !important;
+  stroke: currentColor !important;
+}
+
+.operator-sidebar .nav-link {
+  min-height: 42px !important;
+  padding: 10px 12px !important;
+  border-left: 3px solid transparent !important;
+  background: transparent !important;
+  font-size: 0.84rem !important;
+  font-weight: 650 !important;
+  line-height: 1.25 !important;
+}
+
+.operator-sidebar .nav-link:hover,
+.operator-sidebar .nav-link:focus-visible {
+  border-left-color: #8fc3e4 !important;
+  background: rgba(255, 255, 255, 0.09) !important;
+  color: #ffffff !important;
+  outline: 2px solid transparent !important;
+}
+
+.operator-sidebar .nav-link-active,
+.operator-sidebar .nav-link-active * {
+  border-left-color: #f1c968 !important;
+  background: #174f78 !important;
+  color: #ffffff !important;
+  font-weight: 760 !important;
+}
+
+.operator-sidebar .nav-group-links {
+  gap: 4px !important;
+}
+
+.operator-sidebar .nav-group-label {
+  margin-bottom: 6px !important;
+  font-size: 0.68rem !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.11em !important;
+}
+
+.operator-utility-bar {
+  background: rgba(255, 255, 255, 0.98) !important;
+}
+
+.operator-workspace-column,
+.desktop-main-content,
+.section-grid,
+.registry-simple-shell,
+.operator-review-shell,
+.operations-panel,
+.staff-admin-workspace {
+  min-width: 0;
+}
+
+.desktop-main-content {
+  width: 100%;
+}
+
+.table-wrap,
+.staff-admin-table-wrap,
+.registry-record-table-wrap,
+.blocked-items-table-wrap,
+.report-table-wrap {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: auto !important;
+  overscroll-behavior-inline: contain;
+}
+
+.data-table,
+.staff-admin-table {
+  width: 100%;
+  min-width: 760px;
+  table-layout: auto;
+}
+
+.data-table th,
+.staff-admin-table th {
+  white-space: nowrap;
+}
+
+.data-table td,
+.staff-admin-table td {
+  overflow-wrap: anywhere;
+}
+
+.operator-workspace-shell input,
+.operator-workspace-shell select,
+.operator-workspace-shell textarea,
+.operator-workspace-shell button {
+  max-width: 100%;
+}
+
+.operator-workspace-shell textarea {
+  resize: vertical;
+}
+
+.operator-workspace-shell .panel-head,
+.operator-workspace-shell .quiet-head,
+.operator-workspace-shell .review-glance-head,
+.operator-workspace-shell .registry-toolbar,
+.operator-workspace-shell .registry-hold-head,
+.operator-workspace-shell .staff-admin-list-head {
+  align-items: start !important;
+}
+
+.operator-workspace-shell .mobile-card-list {
+  display: none !important;
+}
+
+.operator-workspace-shell .desktop-table-wrap {
+  display: block !important;
+}
+
+/* Desktop: deliberate workbench layouts rather than stretched mobile stacks. */
+@media (min-width: 1100px) {
+  .operator-workspace-shell {
+    grid-template-columns: 264px minmax(0, 1fr) !important;
+  }
+
+  .operator-sidebar-desktop {
+    width: 264px !important;
+    padding: 24px 18px 42px !important;
+  }
+
+  .operator-workspace-column {
+    padding-right: 34px !important;
+    padding-left: 34px !important;
+  }
+
+  .desktop-main-content {
+    max-width: 1320px !important;
+    margin-inline: auto !important;
+  }
+
+  .operator-workspace-shell .panel-head,
+  .operator-workspace-shell .quiet-head,
+  .operator-workspace-shell .review-glance-head,
+  .operator-workspace-shell .registry-toolbar,
+  .operator-workspace-shell .registry-hold-head,
+  .operator-workspace-shell .staff-admin-list-head {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) auto !important;
+    gap: 18px !important;
+  }
+
+  .operator-workspace-shell .territory-form-actions,
+  .operator-workspace-shell .button-row,
+  .operator-workspace-shell .calm-action-row,
+  .operator-workspace-shell .staff-admin-actions {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    align-items: center !important;
+    gap: 10px !important;
+  }
+
+  /* Field work */
+  .field-workspace {
+    display: grid !important;
+    grid-template-columns: minmax(300px, 0.7fr) minmax(620px, 1.55fr) !important;
+    gap: 32px 34px !important;
+    align-items: start !important;
+  }
+
+  .field-assignments-panel,
+  .live-intake-panel {
+    grid-column: 1 / -1 !important;
+  }
+
+  .field-location-checks-panel {
+    grid-column: 1 !important;
+  }
+
+  .field-intake-panel {
+    grid-column: 2 !important;
+  }
+
+  .field-summary-ledger,
+  .field-today-summary {
+    display: grid !important;
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: 18px !important;
+  }
+
+  .field-intake-panel .human-form-grid,
+  .field-intake-panel .evidence-reference-fields .human-form-grid {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 14px 16px !important;
+  }
+
+  .field-intake-panel .territory-field-wide,
+  .field-intake-panel .evidence-reference-fields,
+  .field-intake-panel .spatial-evidence-capture,
+  .field-intake-panel .territory-form-actions {
+    grid-column: 1 / -1 !important;
+  }
+
+  .field-intake-panel .spatial-evidence-capture {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1.25fr) minmax(260px, 0.75fr) !important;
+    gap: 12px 24px !important;
+    align-items: start !important;
+  }
+
+  .field-intake-panel .human-capture-head,
+  .field-intake-panel .guided-primary-action,
+  .field-intake-panel .field-help,
+  .field-intake-panel .human-evidence-summary,
+  .field-intake-panel .technical-evidence-disclosure {
+    grid-column: 1 !important;
+  }
+
+  .field-intake-panel .nested-field,
+  .field-intake-panel .territory-textarea:last-child {
+    grid-column: 2 !important;
+  }
+
+  /* Registry */
+  .registry-simple-shell {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) !important;
+    gap: 34px !important;
+  }
+
+  .registry-simple-hero,
+  .registry-simple-section {
+    width: 100% !important;
+  }
+
+  .registry-section-list {
+    display: grid !important;
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: 1px !important;
+    background: #d7dee3 !important;
+  }
+
+  .registry-section-row {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) auto !important;
+    align-content: start !important;
+    min-height: 112px !important;
+    padding: 16px 18px !important;
+    border: 0 !important;
+    background: #ffffff !important;
+    text-align: left !important;
+  }
+
+  .registry-section-row small {
+    grid-column: 1 / -1 !important;
+    margin-top: 8px !important;
+  }
+
+  .registry-secondary-action {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    align-items: center !important;
+    gap: 10px 16px !important;
+  }
+
+  .registry-secondary-action > span {
+    flex: 1 1 360px !important;
+  }
+
+  .registry-record-table-wrap {
+    margin-top: 18px !important;
+    margin-bottom: 18px !important;
+  }
+
+  .registry-simple-layout {
+    display: block !important;
+  }
+
+  .registry-simple-detail {
+    width: 100% !important;
+    margin-top: 18px !important;
+  }
+
+  .registry-simple-detail > .panel-state {
+    min-height: 72px !important;
+    display: grid !important;
+    place-items: center !important;
+  }
+
+  .registry-selected-card {
+    width: 100% !important;
+  }
+
+  .registry-simple-form,
+  .staff-admin-create-form,
+  .reports-filter-grid,
+  .import-row-grid {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 14px 18px !important;
+  }
+
+  .registry-simple-form .territory-field-wide,
+  .registry-simple-form .territory-form-actions,
+  .staff-admin-create-form .territory-form-actions,
+  .import-row-grid .territory-field-wide {
+    grid-column: 1 / -1 !important;
+  }
+
+  /* Verification */
+  .verification-workspace {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1.55fr) minmax(310px, 0.75fr) !important;
+    gap: 34px !important;
+    align-items: start !important;
+  }
+
+  .verification-queue-panel {
+    grid-column: 1 !important;
+  }
+
+  .verification-trust-panel {
+    grid-column: 2 !important;
+    position: sticky !important;
+    top: 72px !important;
+  }
+
+  .review-card {
+    grid-template-columns: minmax(0, 1fr) auto !important;
+  }
+
+  /* Publication and signage review */
+  .operator-review-shell {
+    display: grid !important;
+    gap: 30px !important;
+  }
+
+  .operator-review-desk,
+  .review-layout {
+    display: grid !important;
+    grid-template-columns: 330px minmax(0, 1fr) !important;
+    gap: 26px !important;
+    align-items: start !important;
+  }
+
+  .request-list-panel {
+    max-height: 720px !important;
+    overflow-y: auto !important;
+  }
+
+  .request-detail-panel {
+    min-height: 300px !important;
+  }
+
+  .request-detail-panel > .panel-state {
+    min-height: 220px !important;
+    display: grid !important;
+    place-items: center !important;
+  }
+
+  .request-detail-grid,
+  .compact-review-grid,
+  .reports-detail-grid {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 18px !important;
+  }
+
+  .review-glance-chips,
+  .publication-summary-list,
+  .reports-action-strip,
+  .admin-readiness-summary {
+    display: grid !important;
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+    gap: 12px !important;
+  }
+
+  /* Reports */
+  .reports-service-grid {
+    display: grid !important;
+    grid-template-columns: repeat(12, minmax(0, 1fr)) !important;
+    gap: 28px 30px !important;
+    align-items: start !important;
+  }
+
+  .reports-intro-panel {
+    grid-column: span 7 !important;
+  }
+
+  .reports-summary-panel {
+    grid-column: span 5 !important;
+  }
+
+  .reports-filter-panel {
+    grid-column: span 8 !important;
+  }
+
+  .reports-readiness-panel {
+    grid-column: span 4 !important;
+  }
+
+  .reports-detail-disclosure {
+    grid-column: 1 / -1 !important;
+  }
+
+  .reports-action-strip {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  }
+
+  .reports-filter-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  }
+
+  /* Staff administration */
+  .staff-admin-workspace {
+    display: grid !important;
+    grid-template-columns: repeat(12, minmax(0, 1fr)) !important;
+    gap: 30px !important;
+    align-items: start !important;
+  }
+
+  .staff-admin-intro {
+    grid-column: span 7 !important;
+  }
+
+  .staff-admin-create-panel {
+    grid-column: span 5 !important;
+  }
+
+  .staff-admin-list-panel {
+    grid-column: 1 / -1 !important;
+  }
+
+  .staff-admin-table {
+    min-width: 980px !important;
+  }
+
+  /* Publication operations */
+  .publication-operations-grid {
+    display: grid !important;
+    grid-template-columns: repeat(12, minmax(0, 1fr)) !important;
+    gap: 30px !important;
+    align-items: start !important;
+  }
+
+  .publication-glance-panel {
+    grid-column: 1 / -1 !important;
+  }
+
+  .publication-operations-grid > article:nth-of-type(2),
+  .controlled-publication-panel {
+    grid-column: span 6 !important;
+  }
+
+  .publication-operations-grid > article:nth-of-type(4) {
+    grid-column: span 7 !important;
+  }
+
+  .publication-operations-grid > article:nth-of-type(5) {
+    grid-column: span 5 !important;
+  }
+
+  .publication-operations-grid > article:nth-of-type(6) {
+    grid-column: 1 / -1 !important;
+  }
+
+  /* Case files and territory administration */
+  .operations-panel .registry-toolbar,
+  .operations-panel .registry-hold-workbench,
+  .operations-panel > form,
+  .operations-panel .review-layout {
+    width: 100% !important;
+  }
+
+  .hold-risk-row {
+    grid-template-columns: minmax(220px, 1.2fr) minmax(160px, 0.8fr) minmax(180px, 1fr) minmax(190px, 1fr) minmax(190px, 1fr) !important;
+  }
+}
+
+/* Tablet: keep the permanent rail but stop narrow two-column workbenches. */
+@media (min-width: 861px) and (max-width: 1099px) {
+  .operator-workspace-shell {
+    grid-template-columns: 222px minmax(0, 1fr) !important;
+  }
+
+  .operator-sidebar-desktop {
+    width: 222px !important;
+  }
+
+  .operator-workspace-column {
+    padding-right: 22px !important;
+    padding-left: 22px !important;
+  }
+
+  .field-workspace,
+  .verification-workspace,
+  .publication-operations-grid,
+  .reports-service-grid,
+  .staff-admin-workspace,
+  .operator-review-desk,
+  .review-layout {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+
+  .field-workspace > *,
+  .verification-workspace > *,
+  .publication-operations-grid > *,
+  .reports-service-grid > *,
+  .staff-admin-workspace > * {
+    grid-column: 1 !important;
+  }
+
+  .verification-trust-panel {
+    position: static !important;
+  }
+
+  .registry-section-list,
+  .reports-action-strip,
+  .publication-summary-list,
+  .admin-readiness-summary {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+
+  .registry-simple-layout {
+    display: block !important;
+  }
+}
+
+/* Mobile: explicit task-first flow, no desktop tables or permanent rail. */
+@media (max-width: 860px) {
+  .operator-workspace-shell {
+    display: block !important;
+  }
+
+  .operator-sidebar-desktop {
+    display: none !important;
+  }
+
+  .operator-sidebar-mobile:not([hidden]) {
+    width: min(326px, 90vw) !important;
+    padding: 22px 18px 34px !important;
+  }
+
+  .operator-sidebar .nav-link {
+    min-height: 46px !important;
+    font-size: 0.9rem !important;
+  }
+
+  .operator-workspace-column {
+    padding: 10px 14px 88px !important;
+  }
+
+  .operator-utility-bar {
+    margin-bottom: 18px !important;
+  }
+
+  .desktop-main-content {
+    width: 100% !important;
+    max-width: none !important;
+  }
+
+  .operator-workspace-shell .desktop-table-wrap,
+  .operator-workspace-shell .staff-admin-table-wrap {
+    display: none !important;
+  }
+
+  .operator-workspace-shell .mobile-card-list {
+    display: grid !important;
+  }
+
+  .field-workspace,
+  .verification-workspace,
+  .publication-operations-grid,
+  .reports-service-grid,
+  .staff-admin-workspace,
+  .operator-review-shell,
+  .operator-review-desk,
+  .review-layout,
+  .registry-simple-shell,
+  .registry-simple-layout,
+  .request-detail-grid,
+  .compact-review-grid,
+  .reports-detail-grid,
+  .field-intake-panel .human-form-grid,
+  .field-intake-panel .evidence-reference-fields .human-form-grid,
+  .field-intake-panel .spatial-evidence-capture,
+  .registry-simple-form,
+  .staff-admin-create-form,
+  .reports-filter-grid,
+  .import-row-grid {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) !important;
+    gap: 20px !important;
+  }
+
+  .field-workspace > *,
+  .verification-workspace > *,
+  .publication-operations-grid > *,
+  .reports-service-grid > *,
+  .staff-admin-workspace > *,
+  .field-intake-panel .human-form-grid > *,
+  .field-intake-panel .evidence-reference-fields .human-form-grid > *,
+  .field-intake-panel .spatial-evidence-capture > * {
+    grid-column: 1 !important;
+  }
+
+  .operator-workspace-shell .panel-head,
+  .operator-workspace-shell .quiet-head,
+  .operator-workspace-shell .review-glance-head,
+  .operator-workspace-shell .registry-toolbar,
+  .operator-workspace-shell .registry-hold-head,
+  .operator-workspace-shell .staff-admin-list-head {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 8px !important;
+  }
+
+  .field-summary-ledger,
+  .field-today-summary,
+  .registry-section-list,
+  .review-glance-chips,
+  .publication-summary-list,
+  .reports-action-strip,
+  .admin-readiness-summary {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 10px !important;
+  }
+
+  .registry-section-row {
+    min-height: 0 !important;
+    padding: 14px !important;
+  }
+
+  .registry-secondary-action,
+  .operator-workspace-shell .territory-form-actions,
+  .operator-workspace-shell .button-row,
+  .operator-workspace-shell .calm-action-row,
+  .operator-workspace-shell .staff-admin-actions {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 9px !important;
+  }
+
+  .registry-secondary-action > *,
+  .operator-workspace-shell .territory-form-actions > *,
+  .operator-workspace-shell .button-row > *,
+  .operator-workspace-shell .calm-action-row > *,
+  .operator-workspace-shell .staff-admin-actions > * {
+    width: 100% !important;
+  }
+
+  .request-list-panel {
+    max-height: none !important;
+    overflow: visible !important;
+  }
+
+  .request-detail-panel {
+    min-height: 0 !important;
+  }
+
+  .hold-risk-ledger {
+    overflow-x: auto !important;
+  }
+
+  .hold-risk-row {
+    min-width: 760px !important;
+  }
+}
+
+@media (max-width: 520px) {
+  .field-summary-ledger,
+  .field-today-summary,
+  .registry-section-list,
+  .review-glance-chips,
+  .publication-summary-list,
+  .reports-action-strip,
+  .admin-readiness-summary {
+    grid-template-columns: 1fr !important;
+  }
+
+  .operator-session-utility > span {
+    display: none !important;
+  }
+}
