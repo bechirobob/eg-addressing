@@ -2,7 +2,6 @@ import type { Metadata } from 'next';
 
 import { GovernmentVerificationWorkbench } from '../../components/GovernmentVerificationWorkbench';
 import { GovernmentWorkspaceShell } from '../../components/GovernmentWorkspaceShell';
-import { SiteChrome } from '../../components/SiteChrome';
 import { getGovernmentWorkspaceData } from '../../lib/governmentWorkspaceData';
 
 export const dynamic = 'force-dynamic';
@@ -22,21 +21,14 @@ export default async function VerifyPage() {
   const { attentionCount } = await getGovernmentWorkspaceData(apiBaseUrl);
 
   return (
-    <SiteChrome
+    <GovernmentWorkspaceShell
       apiBaseUrl={publicApiBaseUrl}
-      eyebrow="Government workspace"
-      title="Verification"
-      subtitle="Protected evidence review and authoritative decision workspace."
+      attentionCount={attentionCount}
+      sectionLabel="Evidence and authority"
+      workspaceTitle="Verification"
+      workContext={['National verification scope', 'Submitted and under-review cases', 'Approval remains separate from publication']}
     >
-      <GovernmentWorkspaceShell
-        apiBaseUrl={publicApiBaseUrl}
-        attentionCount={attentionCount}
-        sectionLabel="Evidence and authority"
-        workspaceTitle="Verification"
-        workContext={['National verification scope', 'Submitted and under-review cases', 'Approval remains separate from publication']}
-      >
-        <GovernmentVerificationWorkbench apiBaseUrl={publicApiBaseUrl} />
-      </GovernmentWorkspaceShell>
-    </SiteChrome>
+      <GovernmentVerificationWorkbench apiBaseUrl={publicApiBaseUrl} />
+    </GovernmentWorkspaceShell>
   );
 }
