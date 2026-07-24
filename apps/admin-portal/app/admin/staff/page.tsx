@@ -2,7 +2,6 @@ import type { Metadata } from 'next';
 
 import { GovernmentAdministrationWorkbench } from '../../../components/GovernmentAdministrationWorkbench';
 import { GovernmentWorkspaceShell } from '../../../components/GovernmentWorkspaceShell';
-import { SiteChrome } from '../../../components/SiteChrome';
 import { getGovernmentWorkspaceData } from '../../../lib/governmentWorkspaceData';
 
 export const dynamic = 'force-dynamic';
@@ -19,21 +18,14 @@ export default async function AdminStaffPage() {
   const { attentionCount } = await getGovernmentWorkspaceData(apiBaseUrl);
 
   return (
-    <SiteChrome
+    <GovernmentWorkspaceShell
       apiBaseUrl={publicApiBaseUrl}
-      eyebrow="Government workspace"
-      title="Administration"
-      subtitle="Protected personnel, access, and session-control services."
+      attentionCount={attentionCount}
+      sectionLabel="Platform control"
+      workspaceTitle="Administration"
+      workContext={['National personnel register', 'Administrator authority required', 'Least privilege and session revocation controls active']}
     >
-      <GovernmentWorkspaceShell
-        apiBaseUrl={publicApiBaseUrl}
-        attentionCount={attentionCount}
-        sectionLabel="Platform control"
-        workspaceTitle="Administration"
-        workContext={['National personnel register', 'Administrator authority required', 'Least privilege and session revocation controls active']}
-      >
-        <GovernmentAdministrationWorkbench apiBaseUrl={publicApiBaseUrl} />
-      </GovernmentWorkspaceShell>
-    </SiteChrome>
+      <GovernmentAdministrationWorkbench apiBaseUrl={publicApiBaseUrl} />
+    </GovernmentWorkspaceShell>
   );
 }
