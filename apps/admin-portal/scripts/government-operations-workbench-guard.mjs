@@ -33,8 +33,8 @@ assert(/\/api\/v1\/reporting\/summary/.test(sharedData) && /\/api\/v1\/pilot-rea
 for (const endpoint of ['/api/v1/territories', '/api/v1/roads', '/api/v1/buildings', '/api/v1/addresses']) {
   assert(registry.includes(endpoint), `registry workbench must use ${endpoint}`);
 }
-assert(/method: 'PATCH'/.test(registry), 'registry workbench must preserve controlled updates');
-assert(/method: 'DELETE'/.test(registry), 'registry workbench must preserve administrator archive actions');
+assert(/mutate\(`\/api\/v1\/\$\{collection\}\/\$\{encodeURIComponent\(selectedRecord\.id\)\}`, 'PATCH', editValues\)/.test(registry), 'registry workbench must preserve controlled updates');
+assert(/mutate\(`\/api\/v1\/\$\{activeTab\}\/\$\{encodeURIComponent\(selectedRecord\.id\)\}`, 'DELETE'\)/.test(registry), 'registry workbench must preserve administrator archive actions');
 assert(/Editor or administrator authority is required/.test(registry), 'registry workbench must explain write authority');
 assert(/Administrator authority is required to archive/.test(registry), 'registry workbench must explain archive authority');
 assert(/Publication authority remains separate/.test(registry), 'registry workbench must distinguish registry state from publication authority');
