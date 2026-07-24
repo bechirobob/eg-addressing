@@ -44,23 +44,25 @@ const ownership = {
   '/code/[code]': { layer: 'public dynamic', owner: 'public address profile', roles: allRoles, nav: 'hidden-dynamic', decision: 'keep' },
   '/proof/[code]': { layer: 'public dynamic', owner: 'public proof/QR validation', roles: allRoles, nav: 'hidden-dynamic', decision: 'keep' },
   '/workspace': { layer: 'staff government shell', owner: 'authenticated national operations home', roles: staffRoles, nav: 'workspace-home', decision: 'keep-primary' },
-  '/field': { layer: 'staff primary', owner: 'field work / geometry evidence', roles: ['editor', 'admin'], nav: 'workspace', decision: 'migrate-next' },
+  '/field': { layer: 'staff government workbench', owner: 'field assignment, GNSS evidence, and device synchronization', roles: ['editor', 'admin'], nav: 'workspace', decision: 'migrated-primary' },
   '/registry': { layer: 'staff government workbench', owner: 'authoritative address registry', roles: ['editor', 'admin'], nav: 'workspace', decision: 'migrated-primary' },
   '/verify': { layer: 'staff government workbench', owner: 'evidence review and authoritative decision queue', roles: ['editor', 'admin'], nav: 'workspace', decision: 'migrated-primary' },
   '/reports': { layer: 'staff primary read-only', owner: 'readiness/reporting/audit summary', roles: staffRoles, nav: 'workspace', decision: 'keep-summary-first' },
-  '/signage': { layer: 'staff primary gated', owner: 'publication/signage preparation', roles: ['editor', 'admin'], nav: 'workspace', decision: 'keep-primary-gated' },
+  '/signage': { layer: 'staff government workbench gated', owner: 'publication readiness, release control, and signage preparation', roles: ['editor', 'admin'], nav: 'workspace', decision: 'migrated-primary-gated' },
   '/records': { layer: 'staff secondary', owner: 'case files under address registry', roles: ['viewer', 'editor', 'admin'], nav: 'hidden-owner-registry', decision: 'keep-secondary' },
   '/territories': { layer: 'staff secondary', owner: 'territory/admin unit maintenance', roles: ['editor', 'admin'], nav: 'workspace', decision: 'keep-secondary' },
-  '/exports': { layer: 'admin internal secondary', owner: 'publication/intake operations', roles: ['admin'], nav: 'workspace-control', decision: 'keep-internal-or-consolidate-later' },
-  '/admin/staff': { layer: 'admin primary', owner: 'staff account control + tiny readiness summary', roles: ['admin'], nav: 'workspace-control', decision: 'keep-primary-admin' },
+  '/exports': { layer: 'admin government workbench secondary', owner: 'consolidated publication outputs and controlled intake', roles: ['admin'], nav: 'workspace-control', decision: 'consolidated-publication-secondary' },
+  '/admin/staff': { layer: 'admin government workbench', owner: 'personnel, role, account-state, and session control', roles: ['admin'], nav: 'workspace-control', decision: 'migrated-primary-admin' },
 };
 
 const siteData = await read('components/site-data.ts');
 const governmentShell = await read('components/GovernmentWorkspaceShell.tsx');
 const governmentRegistry = await read('components/GovernmentRegistryWorkbench.tsx');
 const governmentVerification = await read('components/GovernmentVerificationWorkbench.tsx');
-const fieldWorkflowPanel = await read('components/FieldWorkflowPanel.tsx');
-const signageOperationsPanel = await read('components/SignageOperationsPanel.tsx');
+const governmentField = await read('components/GovernmentFieldOperationsWorkbench.tsx');
+const governmentAdministration = await read('components/GovernmentAdministrationWorkbench.tsx');
+const governmentPublication = await read('components/GovernmentPublicationWorkbench.tsx');
+const outputsPage = await read('app/exports/page.tsx');
 const packageJson = JSON.parse(await read('package.json'));
 const discoveredRoutes = await discoverPageRoutes();
 const ownershipRoutes = Object.keys(ownership).sort();
@@ -97,8 +99,10 @@ assert(/href: '\/login',[\s\S]*visibleTo: \[\]/.test(siteData), 'login must rema
 assert(!siteData.includes("href: '/operations-runbook'"), 'operations runbook must stay hidden from nav');
 assert(/<Link href="\/verify">/.test(governmentRegistry), 'migrated registry must keep an in-workbench verification handoff');
 assert(/<Link href="\/registry">/.test(governmentVerification), 'migrated verification must keep an in-workbench registry handoff');
-assert(/<Link href="\/verify">Review submitted evidence<\/Link>/.test(fieldWorkflowPanel), 'field workflow must keep an in-layer review queue handoff');
-assert(/sessionUser\?\.role === 'admin'[\s\S]*<Link href="\/exports">Open publication operations<\/Link>/.test(signageOperationsPanel), 'signage must keep an admin-only publication operations handoff');
+assert(/href="\/verify"/.test(governmentField), 'migrated field operations must keep an in-workbench verification handoff');
+assert(/GovernmentAdministrationWorkbench/.test(governmentAdministration), 'personnel administration must remain a dedicated government workbench');
+assert(/Link href="\/registry"/.test(governmentPublication), 'publication workbench must retain registry handoff');
+assert(/initialSection="outputs"/.test(outputsPage), 'exports route must consolidate into the publication outputs section');
 assert(packageJson.scripts['test:route-ownership'] === 'node scripts/route-ownership-guard.mjs', 'package script test:route-ownership must run this guard');
 
 console.log(`route-ownership-guard passed (${discoveredRoutes.length} routes declared)`);
