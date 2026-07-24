@@ -21,7 +21,8 @@ const roleAwareChrome = await read('components/RoleAwareChrome.tsx');
 const governmentWorkspaceShell = await read('components/GovernmentWorkspaceShell.tsx');
 const loginPanel = await read('components/LoginPanel.tsx');
 const homePage = await read('app/page.tsx');
-const staffAdmin = await read('components/StaffAdminPanel.tsx');
+const administrationPage = await read('app/admin/staff/page.tsx');
+const governmentAdministration = await read('components/GovernmentAdministrationWorkbench.tsx');
 
 assert(/(^|\n)knowledge\//.test(gitignore), 'knowledge/ must stay ignored so mission logs never ride into git by accident');
 assert(/(^|\n)\.hermes\//.test(gitignore), 'local tooling state should stay ignored');
@@ -45,10 +46,12 @@ assert(/\{ path: '\/admin\/staff', allowedRoles: \['admin'\] \}/.test(siteData),
 assert(/href: '\/admin\/staff',[\s\S]*visibleTo: \['admin'\][\s\S]*group: 'admin'/.test(siteData), 'staff account navigation must only be visible inside the admin group for admin users');
 assert(/\(role === 'guest' \? item\.group === 'public' : item\.group !== 'public'\)/.test(roleAwareChrome), 'signed-in admins can see staff and admin navigation while guests only see public navigation');
 assert(/navAdmin/.test(roleAwareChrome) && /navStaffAccounts/.test(roleAwareChrome), 'admin navigation group and staff account link must have explicit label keys');
-assert(/StaffAdminPanel/.test(await read('app/admin/staff/page.tsx')), 'staff account panel must be route-split under /admin/staff');
-assert(/admin-readiness-summary/.test(staffAdmin) && /\/api\/v1\/pilot-readiness\/summary/.test(staffAdmin), 'admin area must expose only a tiny readiness summary from the protected readiness endpoint.');
-assert(!/System readiness dashboard|Audit dashboard|Route inventory/.test(staffAdmin), 'admin readiness must stay summary-only, not become a full dashboard.');
-assert(!/StaffAdminPanel/.test(roleAwareChrome), 'shared staff chrome must not import or load the staff account panel');
+assert(/GovernmentWorkspaceShell/.test(administrationPage) && /GovernmentAdministrationWorkbench/.test(administrationPage), 'staff account route must use the protected government administration workbench');
+assert(/\/api\/v1\/admin\/users/.test(governmentAdministration) && /\/revoke-sessions/.test(governmentAdministration) && /\/disable/.test(governmentAdministration), 'administration workbench must preserve protected personnel and session endpoints');
+assert(/Current administrator cannot disable this session account/.test(governmentAdministration), 'current administrator lockout protection must be visible');
+assert(/Last active administrator cannot be disabled/.test(governmentAdministration), 'last active administrator lockout protection must be visible');
+assert(!/System readiness dashboard|Audit dashboard|Route inventory/.test(governmentAdministration), 'administration readiness must stay operationally focused, not become a generic dashboard');
+assert(!/GovernmentAdministrationWorkbench/.test(roleAwareChrome), 'shared staff chrome must not import or load the administration workbench');
 assert(/\{ path: '\/verify', allowedRoles: \['editor', 'admin'\] \}/.test(siteData), 'verify route must stay editor/admin only');
 assert(/\{\s*href: '\/login',[\s\S]*visibleTo: \[\]/.test(siteData), 'login must not appear in shared public navigation');
 assert(/className="service-start-staff"/.test(homePage) && /href="\/login"/.test(homePage), 'the only public sign-in affordance must be the homepage Staff services block');
