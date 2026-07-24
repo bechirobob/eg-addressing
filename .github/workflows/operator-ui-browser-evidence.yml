@@ -96,7 +96,7 @@ jobs:
           OPERATOR_UI_COMMIT: ${{ github.event.pull_request.head.sha || github.sha }}
         run: |
           set -o pipefail
-          node scripts/government-operational-workbench-browser-audit.mjs 2>&1 | tee artifacts/operator-ui-browser-evidence/government-operational-workbench-execution.log
+          node scripts/government-operational-workbench-browser-audit-runner.mjs 2>&1 | tee artifacts/operator-ui-browser-evidence/government-operational-workbench-execution.log
 
       - name: Upload browser evidence
         if: always()
