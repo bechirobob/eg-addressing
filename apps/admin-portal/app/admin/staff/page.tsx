@@ -1,19 +1,39 @@
+import type { Metadata } from 'next';
+
+import { GovernmentAdministrationWorkbench } from '../../../components/GovernmentAdministrationWorkbench';
+import { GovernmentWorkspaceShell } from '../../../components/GovernmentWorkspaceShell';
 import { SiteChrome } from '../../../components/SiteChrome';
-import { StaffAdminPanel } from '../../../components/StaffAdminPanel';
+import { getGovernmentWorkspaceData } from '../../../lib/governmentWorkspaceData';
 
 export const dynamic = 'force-dynamic';
 
-export default function AdminStaffPage() {
+export const metadata: Metadata = {
+  title: 'Administration — EG Addressing',
+  description: 'Protected personnel, role, account-state, and session-control workspace for the Equatorial Guinea National Addressing Platform.',
+  robots: { index: false, follow: false },
+};
+
+export default async function AdminStaffPage() {
+  const apiBaseUrl = process.env.INTERNAL_API_BASE_URL ?? 'http://api:8100';
   const publicApiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL ?? '';
+  const { attentionCount } = await getGovernmentWorkspaceData(apiBaseUrl);
 
   return (
     <SiteChrome
       apiBaseUrl={publicApiBaseUrl}
-      eyebrow="Admin area"
-      title="Staff account control"
-      subtitle="Create staff accounts, rotate credentials, sign users out everywhere, and deactivate access from the protected administration area."
+      eyebrow="Government workspace"
+      title="Administration"
+      subtitle="Protected personnel, access, and session-control services."
     >
-      <StaffAdminPanel apiBaseUrl={publicApiBaseUrl} />
+      <GovernmentWorkspaceShell
+        apiBaseUrl={publicApiBaseUrl}
+        attentionCount={attentionCount}
+        sectionLabel="Platform control"
+        workspaceTitle="Administration"
+        workContext={['National personnel register', 'Administrator authority required', 'Least privilege and session revocation controls active']}
+      >
+        <GovernmentAdministrationWorkbench apiBaseUrl={publicApiBaseUrl} />
+      </GovernmentWorkspaceShell>
     </SiteChrome>
   );
 }
