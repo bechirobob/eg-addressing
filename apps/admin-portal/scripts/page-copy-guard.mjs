@@ -57,7 +57,12 @@ const pages = [
   },
   {
     path: '/field',
-    required: ['Field work', 'Complete assigned location checks and submit field evidence for review.'],
+    required: [
+      'Field Operations',
+      'Coordinate assignments, inspect mapped locations, capture GNSS evidence, and synchronize verified field work into the protected review flow.',
+      'Valid next actions',
+      'Field capture does not create a public address',
+    ],
   },
   {
     path: '/registry',
@@ -79,7 +84,29 @@ const pages = [
   },
   {
     path: '/signage',
-    required: ['Publication & signage', 'Review approved address records before public release and physical signage.'],
+    required: [
+      'Publication',
+      'Resolve release blockers, hold verified records, simulate institutional approval, and prepare controlled public and physical outputs.',
+      'Valid next actions',
+      'Preparation, approval, publication, and signage are separate states',
+    ],
+  },
+  {
+    path: '/admin/staff',
+    required: [
+      'Administration',
+      'Manage authorized personnel, roles, account state, and active sessions from one protected personnel register.',
+      'Least privilege remains the default',
+    ],
+  },
+  {
+    path: '/exports',
+    required: [
+      'Publication Outputs',
+      'Publication',
+      'Official outputs',
+      'Preparation, approval, publication, and signage are separate states',
+    ],
   },
   {
     path: '/reports',
