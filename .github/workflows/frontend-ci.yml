@@ -75,3 +75,6 @@ jobs:
 
       - name: Verify registry and verification workbenches
         run: npm run test:government-operational-workbenches
+
+      - name: Verify field administration and publication workbenches
+        run: npm run test:government-service-delivery-workbenches
