@@ -21,6 +21,15 @@ const forbiddenEverywhere = [
   'http://api:8100',
 ];
 
+const protectedGate = {
+  required: ['National Addressing Platform', 'Confirming protected workspace authority'],
+  forbidden: [
+    'BECOREOPS INTERNAL REVIEW ENVIRONMENT',
+    'Developed by BeCoreOps for the Government of the Republic of Equatorial Guinea',
+    'Valid next actions',
+  ],
+};
+
 const pages = [
   {
     path: '/',
@@ -47,67 +56,13 @@ const pages = [
     required: ['Track request', 'Tracking code'],
     forbidden: ['citizen_contact', 'dip_last4', 'admin123'],
   },
-  {
-    path: '/workspace',
-    required: [
-      'National Operations',
-      'Today’s addressing work',
-      'Developed by BeCoreOps for the Government of the Republic of Equatorial Guinea',
-    ],
-  },
-  {
-    path: '/field',
-    required: [
-      'Field Operations',
-      'Coordinate assignments, inspect mapped locations, capture GNSS evidence, and synchronize verified field work into the protected review flow.',
-      'Valid next actions',
-      'Field capture does not create a public address',
-    ],
-  },
-  {
-    path: '/registry',
-    required: [
-      'Address Registry',
-      'Search, inspect, create, update, and route official address records from one controlled workspace.',
-      'Valid next actions',
-      'Developed by BeCoreOps for the Government of the Republic of Equatorial Guinea',
-    ],
-  },
-  {
-    path: '/verify',
-    required: [
-      'Verification',
-      'Review submitted evidence, resolve exceptions, and make authoritative decisions without leaving the case workspace.',
-      'Decision inspector',
-      'Approval is not publication',
-    ],
-  },
-  {
-    path: '/signage',
-    required: [
-      'Publication',
-      'Resolve release blockers, hold verified records, simulate institutional approval, and prepare controlled public and physical outputs.',
-      'Valid next actions',
-      'Preparation, approval, publication, and signage are separate states',
-    ],
-  },
-  {
-    path: '/admin/staff',
-    required: [
-      'Administration',
-      'Manage authorized personnel, roles, account state, and active sessions from one protected personnel register.',
-      'Least privilege remains the default',
-    ],
-  },
-  {
-    path: '/exports',
-    required: [
-      'Publication Outputs',
-      'Publication',
-      'Official outputs',
-      'Preparation, approval, publication, and signage are separate states',
-    ],
-  },
+  { path: '/workspace', ...protectedGate },
+  { path: '/field', ...protectedGate },
+  { path: '/registry', ...protectedGate },
+  { path: '/verify', ...protectedGate },
+  { path: '/signage', ...protectedGate },
+  { path: '/admin/staff', ...protectedGate },
+  { path: '/exports', ...protectedGate },
   {
     path: '/reports',
     required: ['Reports', 'Reports are read-only', 'Track workload, review progress, field activity, and publication readiness.'],
