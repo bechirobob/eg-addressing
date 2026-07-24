@@ -20,11 +20,20 @@ corrected = corrected.replace(
 );
 corrected = corrected.replace(
   "for (const route of ['/field', '/registry', '/verify', '/signage', '/reports', '/records', '/territories']) {",
-  "for (const route of ['/field', '/signage', '/reports', '/records', '/territories']) {",
+  "for (const route of ['/reports', '/records', '/territories']) {",
 );
-corrected = corrected.replace("  await captureProtected({ role: 'editor', route: '/registry', viewport: tablet, label: 'editor-registry-tablet' });\n", '');
-corrected = corrected.replace("  await captureProtected({ role: 'editor', route: '/registry', viewport: mobile, label: 'editor-registry-mobile' });\n", '');
-corrected = corrected.replace("  await captureProtected({ role: 'editor', route: '/verify', viewport: mobile, label: 'editor-verify-mobile' });\n", '');
+for (const line of [
+  "  await captureProtected({ role: 'admin', route: '/exports', viewport: desktop, label: 'admin-exports-desktop' });\n",
+  "  await captureProtected({ role: 'admin', route: '/admin/staff', viewport: desktop, label: 'admin-staff-desktop' });\n",
+  "  await captureProtected({ role: 'editor', route: '/registry', viewport: tablet, label: 'editor-registry-tablet' });\n",
+  "  await captureProtected({ role: 'editor', route: '/field', viewport: mobile, label: 'editor-field-mobile' });\n",
+  "  await captureProtected({ role: 'editor', route: '/registry', viewport: mobile, label: 'editor-registry-mobile' });\n",
+  "  await captureProtected({ role: 'editor', route: '/verify', viewport: mobile, label: 'editor-verify-mobile' });\n",
+  "  await captureProtected({ role: 'editor', route: '/signage', viewport: mobile, label: 'editor-signage-mobile' });\n",
+  "  await captureProtected({ role: 'admin', route: '/admin/staff', viewport: mobile, label: 'admin-staff-mobile' });\n",
+]) {
+  corrected = corrected.replace(line, '');
+}
 if (
   corrected === source
   || corrected.includes("'/territories': '.territory-admin-grid'")
@@ -32,9 +41,10 @@ if (
   || corrected.includes('waitForURL(/\\/reports$/')
   || corrected.includes("locator('.operator-workspace-shell.chrome-role-viewer').waitFor")
   || corrected.includes("for (const route of ['/field', '/registry', '/verify'")
-  || corrected.includes("label: 'editor-registry-tablet'")
-  || corrected.includes("label: 'editor-registry-mobile'")
-  || corrected.includes("label: 'editor-verify-mobile'")
+  || corrected.includes("label: 'admin-exports-desktop'")
+  || corrected.includes("label: 'admin-staff-desktop'")
+  || corrected.includes("label: 'editor-field-mobile'")
+  || corrected.includes("label: 'editor-signage-mobile'")
 ) {
   throw new Error('presentation audit runtime corrections were not applied');
 }
