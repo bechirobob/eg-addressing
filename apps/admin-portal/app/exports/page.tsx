@@ -2,7 +2,6 @@ import type { Metadata } from 'next';
 
 import { GovernmentPublicationWorkbench } from '../../components/GovernmentPublicationWorkbench';
 import { GovernmentWorkspaceShell } from '../../components/GovernmentWorkspaceShell';
-import { SiteChrome } from '../../components/SiteChrome';
 import { getGovernmentWorkspaceData } from '../../lib/governmentWorkspaceData';
 
 export const dynamic = 'force-dynamic';
@@ -19,21 +18,14 @@ export default async function ExportsPage() {
   const { attentionCount } = await getGovernmentWorkspaceData(apiBaseUrl);
 
   return (
-    <SiteChrome
+    <GovernmentWorkspaceShell
       apiBaseUrl={publicApiBaseUrl}
-      eyebrow="Government workspace"
-      title="Publication Outputs"
-      subtitle="Administrator-only official packs, signage exports, and controlled registry intake."
+      attentionCount={attentionCount}
+      sectionLabel="Platform control"
+      workspaceTitle="Publication Outputs"
+      workContext={['Administrator-only output control', 'Official packs use published or explicitly selected protected records', 'Physical signage remains downstream of public release']}
     >
-      <GovernmentWorkspaceShell
-        apiBaseUrl={publicApiBaseUrl}
-        attentionCount={attentionCount}
-        sectionLabel="Platform control"
-        workspaceTitle="Publication Outputs"
-        workContext={['Administrator-only output control', 'Official packs use published or explicitly selected protected records', 'Physical signage remains downstream of public release']}
-      >
-        <GovernmentPublicationWorkbench apiBaseUrl={publicApiBaseUrl} initialSection="outputs" />
-      </GovernmentWorkspaceShell>
-    </SiteChrome>
+      <GovernmentPublicationWorkbench apiBaseUrl={publicApiBaseUrl} initialSection="outputs" />
+    </GovernmentWorkspaceShell>
   );
 }
