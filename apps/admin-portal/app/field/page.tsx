@@ -1,56 +1,39 @@
+import type { Metadata } from 'next';
+
+import { GovernmentFieldOperationsWorkbench } from '../../components/GovernmentFieldOperationsWorkbench';
+import { GovernmentWorkspaceShell } from '../../components/GovernmentWorkspaceShell';
 import { SiteChrome } from '../../components/SiteChrome';
-import { FieldWorkflowPanel } from '../../components/FieldWorkflowPanel';
+import { getGovernmentWorkspaceData } from '../../lib/governmentWorkspaceData';
 
 export const dynamic = 'force-dynamic';
 
-type Assignment = {
-  assignment_id: string;
-  territory_id: string;
-  territory: string;
-  task: string;
-  team: string;
-  priority: string;
+export const metadata: Metadata = {
+  title: 'Field Operations — EG Addressing',
+  description: 'Protected assignment, GNSS evidence, and field synchronization workspace for the Equatorial Guinea National Addressing Platform.',
+  robots: { index: false, follow: false },
 };
-
-type Submission = {
-  id: string;
-  assignment_id?: string | null;
-  territory_id: string;
-  territory_name: string;
-  submission_type: 'road' | 'building' | 'address';
-  candidate_name: string;
-  candidate_status: string;
-  notes: string;
-  submitted_by: string;
-  review_status: string;
-  reviewer_note: string;
-  registry_entity_id?: string | null;
-};
-
-type Territory = { id: string; name: string };
 
 export default async function FieldPage() {
+  const apiBaseUrl = process.env.INTERNAL_API_BASE_URL ?? 'http://api:8100';
   const publicApiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL ?? '';
-  const assignments: Assignment[] = [];
-  const submissions: Submission[] = [];
-  const territories: Territory[] = [];
+  const { attentionCount } = await getGovernmentWorkspaceData(apiBaseUrl);
 
   return (
     <SiteChrome
       apiBaseUrl={publicApiBaseUrl}
-      eyebrow="Staff service"
-      eyebrowKey="fieldEyebrow"
-      title="Field work"
-      titleKey="fieldTitle"
-      subtitle="Complete assigned location checks and submit field evidence for review."
-      subtitleKey="fieldSubtitle"
+      eyebrow="Government workspace"
+      title="Field operations"
+      subtitle="Protected assignment, location inspection, evidence capture, and synchronization services."
     >
-      <FieldWorkflowPanel
-        assignments={assignments}
-        submissions={submissions}
-        territories={territories}
+      <GovernmentWorkspaceShell
         apiBaseUrl={publicApiBaseUrl}
-      />
+        attentionCount={attentionCount}
+        sectionLabel="Territorial operations"
+        workspaceTitle="Field Operations"
+        workContext={['National and territorial field scope', 'GNSS evidence and device synchronization', 'Verification owns the next authoritative decision']}
+      >
+        <GovernmentFieldOperationsWorkbench apiBaseUrl={publicApiBaseUrl} />
+      </GovernmentWorkspaceShell>
     </SiteChrome>
   );
 }
