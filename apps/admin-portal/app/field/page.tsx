@@ -2,7 +2,6 @@ import type { Metadata } from 'next';
 
 import { GovernmentFieldOperationsWorkbench } from '../../components/GovernmentFieldOperationsWorkbench';
 import { GovernmentWorkspaceShell } from '../../components/GovernmentWorkspaceShell';
-import { SiteChrome } from '../../components/SiteChrome';
 import { getGovernmentWorkspaceData } from '../../lib/governmentWorkspaceData';
 
 export const dynamic = 'force-dynamic';
@@ -19,21 +18,14 @@ export default async function FieldPage() {
   const { attentionCount } = await getGovernmentWorkspaceData(apiBaseUrl);
 
   return (
-    <SiteChrome
+    <GovernmentWorkspaceShell
       apiBaseUrl={publicApiBaseUrl}
-      eyebrow="Government workspace"
-      title="Field operations"
-      subtitle="Protected assignment, location inspection, evidence capture, and synchronization services."
+      attentionCount={attentionCount}
+      sectionLabel="Territorial operations"
+      workspaceTitle="Field Operations"
+      workContext={['National and territorial field scope', 'GNSS evidence and device synchronization', 'Verification owns the next authoritative decision']}
     >
-      <GovernmentWorkspaceShell
-        apiBaseUrl={publicApiBaseUrl}
-        attentionCount={attentionCount}
-        sectionLabel="Territorial operations"
-        workspaceTitle="Field Operations"
-        workContext={['National and territorial field scope', 'GNSS evidence and device synchronization', 'Verification owns the next authoritative decision']}
-      >
-        <GovernmentFieldOperationsWorkbench apiBaseUrl={publicApiBaseUrl} />
-      </GovernmentWorkspaceShell>
-    </SiteChrome>
+      <GovernmentFieldOperationsWorkbench apiBaseUrl={publicApiBaseUrl} />
+    </GovernmentWorkspaceShell>
   );
 }
