@@ -2,7 +2,6 @@ import type { Metadata } from 'next';
 
 import { GovernmentRegistryWorkbench } from '../../components/GovernmentRegistryWorkbench';
 import { GovernmentWorkspaceShell } from '../../components/GovernmentWorkspaceShell';
-import { SiteChrome } from '../../components/SiteChrome';
 import { getGovernmentWorkspaceData } from '../../lib/governmentWorkspaceData';
 
 export const dynamic = 'force-dynamic';
@@ -27,24 +26,17 @@ export default async function RegistryPage({
   const { attentionCount } = await getGovernmentWorkspaceData(apiBaseUrl);
 
   return (
-    <SiteChrome
+    <GovernmentWorkspaceShell
       apiBaseUrl={publicApiBaseUrl}
-      eyebrow="Government workspace"
-      title="Address Registry"
-      subtitle="Protected authoritative records workspace."
+      attentionCount={attentionCount}
+      sectionLabel="Authoritative records"
+      workspaceTitle="Address Registry"
+      workContext={['National registry scope', 'Addresses · roads · buildings', 'Publication authority remains separate']}
     >
-      <GovernmentWorkspaceShell
+      <GovernmentRegistryWorkbench
         apiBaseUrl={publicApiBaseUrl}
-        attentionCount={attentionCount}
-        sectionLabel="Authoritative records"
-        workspaceTitle="Address Registry"
-        workContext={['National registry scope', 'Addresses · roads · buildings', 'Publication authority remains separate']}
-      >
-        <GovernmentRegistryWorkbench
-          apiBaseUrl={publicApiBaseUrl}
-          highlightEntityId={resolvedSearchParams.entity ?? null}
-        />
-      </GovernmentWorkspaceShell>
-    </SiteChrome>
+        highlightEntityId={resolvedSearchParams.entity ?? null}
+      />
+    </GovernmentWorkspaceShell>
   );
 }
