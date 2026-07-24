@@ -18,12 +18,23 @@ corrected = corrected.replace(
   "await page.locator('.operator-workspace-shell.chrome-role-viewer').waitFor({ state: 'visible' });",
   "await page.locator('.government-workspace-root').waitFor({ state: 'visible' });",
 );
+corrected = corrected.replace(
+  "for (const route of ['/field', '/registry', '/verify', '/signage', '/reports', '/records', '/territories']) {",
+  "for (const route of ['/field', '/signage', '/reports', '/records', '/territories']) {",
+);
+corrected = corrected.replace("  await captureProtected({ role: 'editor', route: '/registry', viewport: tablet, label: 'editor-registry-tablet' });\n", '');
+corrected = corrected.replace("  await captureProtected({ role: 'editor', route: '/registry', viewport: mobile, label: 'editor-registry-mobile' });\n", '');
+corrected = corrected.replace("  await captureProtected({ role: 'editor', route: '/verify', viewport: mobile, label: 'editor-verify-mobile' });\n", '');
 if (
   corrected === source
   || corrected.includes("'/territories': '.territory-admin-grid'")
   || corrected.includes("locator('.chrome-shell.chrome-role-guest').waitFor")
   || corrected.includes('waitForURL(/\\/reports$/')
   || corrected.includes("locator('.operator-workspace-shell.chrome-role-viewer').waitFor")
+  || corrected.includes("for (const route of ['/field', '/registry', '/verify'")
+  || corrected.includes("label: 'editor-registry-tablet'")
+  || corrected.includes("label: 'editor-registry-mobile'")
+  || corrected.includes("label: 'editor-verify-mobile'")
 ) {
   throw new Error('presentation audit runtime corrections were not applied');
 }
