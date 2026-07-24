@@ -2,7 +2,6 @@ import type { Metadata } from 'next';
 
 import { GovernmentOperatorHome } from '../../components/GovernmentOperatorHome';
 import { GovernmentWorkspaceShell } from '../../components/GovernmentWorkspaceShell';
-import { SiteChrome } from '../../components/SiteChrome';
 import { getGovernmentWorkspaceData } from '../../lib/governmentWorkspaceData';
 
 export const dynamic = 'force-dynamic';
@@ -22,24 +21,17 @@ export default async function GovernmentWorkspacePage() {
   const { summary, readinessSummary, attentionCount } = await getGovernmentWorkspaceData(apiBaseUrl);
 
   return (
-    <SiteChrome
+    <GovernmentWorkspaceShell
       apiBaseUrl={publicApiBaseUrl}
-      eyebrow="Government workspace"
-      title="National operations"
-      subtitle="Protected operational workspace for authoritative addressing services."
+      attentionCount={attentionCount}
+      sectionLabel="Government workspace"
+      workspaceTitle="National Operations"
     >
-      <GovernmentWorkspaceShell
+      <GovernmentOperatorHome
         apiBaseUrl={publicApiBaseUrl}
-        attentionCount={attentionCount}
-        sectionLabel="Government workspace"
-        workspaceTitle="National Operations"
-      >
-        <GovernmentOperatorHome
-          apiBaseUrl={publicApiBaseUrl}
-          summary={summary}
-          readinessSummary={readinessSummary}
-        />
-      </GovernmentWorkspaceShell>
-    </SiteChrome>
+        summary={summary}
+        readinessSummary={readinessSummary}
+      />
+    </GovernmentWorkspaceShell>
   );
 }
