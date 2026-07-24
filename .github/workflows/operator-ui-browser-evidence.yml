@@ -91,6 +91,13 @@ jobs:
           set -o pipefail
           node scripts/government-workspace-browser-audit.mjs 2>&1 | tee artifacts/operator-ui-browser-evidence/government-workspace-execution.log
 
+      - name: Audit registry and verification government workbenches
+        env:
+          OPERATOR_UI_COMMIT: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: |
+          set -o pipefail
+          node scripts/government-operational-workbench-browser-audit.mjs 2>&1 | tee artifacts/operator-ui-browser-evidence/government-operational-workbench-execution.log
+
       - name: Upload browser evidence
         if: always()
         uses: actions/upload-artifact@v4
