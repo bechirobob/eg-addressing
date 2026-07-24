@@ -13,6 +13,7 @@ import './operator-presentation-field-stack.css';
 import './operator-presentation-field-label.css';
 import './operator-presentation-nav-cleanup.css';
 import './government-workspace.css';
+import './government-access-gate.css';
 import './government-operations-workbench.css';
 import './government-service-delivery-workbenches.css';
 import type { Metadata } from 'next';
