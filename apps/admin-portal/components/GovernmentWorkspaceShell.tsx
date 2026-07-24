@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import type { ReactNode } from 'react';
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { clearStoredToken } from './demoAuth';
 import { GovernmentIcon, type GovernmentIconName } from './GovernmentIcon';
@@ -69,6 +69,9 @@ export function GovernmentWorkspaceShell({
   const [isLoggingOut, setIsLoggingOut] = useState(false);
 
   const role: OperatorRole = sessionStatus === 'ready' && sessionUser ? sessionUser.role : 'guest';
+  const routeAccessible = sessionStatus === 'ready' && sessionUser
+    ? isRouteAccessible(pathname, sessionUser.role)
+    : false;
   const visiblePrimaryNavigation = useMemo(
     () => PRIMARY_NAVIGATION.filter((item) => isRouteAccessible(item.href, role)),
     [role],
@@ -86,6 +89,15 @@ export function GovernmentWorkspaceShell({
         `Authority: ${sessionUser ? humanizeRole(sessionUser.role) : 'Resolving'}`,
         'Publication remains subject to official approval controls',
       ];
+
+  useEffect(() => {
+    if (sessionStatus === 'loading') return;
+    if (sessionStatus === 'guest' || !sessionUser) {
+      router.replace('/login');
+      return;
+    }
+    if (!routeAccessible) router.replace('/workspace');
+  }, [routeAccessible, router, sessionStatus, sessionUser]);
 
   const handleLogout = useCallback(async () => {
     setIsLoggingOut(true);
@@ -123,6 +135,17 @@ export function GovernmentWorkspaceShell({
         </Link>
       );
     });
+  }
+
+  if (sessionStatus !== 'ready' || !sessionUser || !routeAccessible) {
+    return (
+      <main className="government-access-gate" aria-live="polite">
+        <img src="/eg-coat-of-arms.svg" alt="Coat of arms of the Republic of Equatorial Guinea" />
+        <p>Republic of Equatorial Guinea</p>
+        <h1>National Addressing Platform</h1>
+        <span>{sessionStatus === 'loading' ? 'Confirming protected workspace authority…' : 'Redirecting to the authorized service…'}</span>
+      </main>
+    );
   }
 
   return (
@@ -178,7 +201,7 @@ export function GovernmentWorkspaceShell({
 
           <div className="government-sidebar-footer">
             <span>Active authority</span>
-            <strong>{sessionUser ? humanizeRole(sessionUser.role) : 'Resolving session'}</strong>
+            <strong>{humanizeRole(sessionUser.role)}</strong>
             <small>Access and territorial scope are enforced by the platform authority service.</small>
           </div>
         </aside>
@@ -211,8 +234,8 @@ export function GovernmentWorkspaceShell({
                 <span>{attentionCount}</span>
               </div>
               <div className="government-user-copy">
-                <strong>{sessionUser?.full_name ?? 'Resolving operator'}</strong>
-                <span>{sessionUser ? humanizeRole(sessionUser.role) : 'Checking authority'}</span>
+                <strong>{sessionUser.full_name}</strong>
+                <span>{humanizeRole(sessionUser.role)}</span>
               </div>
               <button type="button" onClick={() => void handleLogout()} disabled={isLoggingOut}>
                 <GovernmentIcon name="signout" />
