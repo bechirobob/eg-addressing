@@ -55,5 +55,26 @@ jobs:
           npm run generate:api-types
           git diff --exit-code components/apiTypes.ts
 
-      - name: Run frontend CI checks
-        run: npm run test:ci
+      - name: Build frontend
+        run: npm run build
+
+      - name: Verify role and session authority
+        run: npm run test:role-auth
+
+      - name: Verify registry action authority
+        run: npm run test:registry-actions
+
+      - name: Verify generated API contract guard
+        run: npm run test:api-types
+
+      - name: Verify BGEDS foundation
+        run: npm run test:government-design-foundation
+
+      - name: Verify government workspace shell
+        run: npm run test:government-workspace-shell
+
+      - name: Verify registry and verification workbenches
+        run: npm run test:government-operational-workbenches
+
+      - name: Verify field administration and publication workbenches
+        run: npm run test:government-service-delivery-workbenches

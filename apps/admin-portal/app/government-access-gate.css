@@ -1,0 +1,38 @@
+.government-access-gate {
+  min-height: 100vh;
+  padding: 48px 24px;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  background: #f4f1e9;
+  color: #102536;
+  font-family: var(--font-sans, Arial, sans-serif);
+  text-align: center;
+}
+
+.government-access-gate img {
+  width: 72px;
+  height: 86px;
+  object-fit: contain;
+}
+
+.government-access-gate p {
+  margin: 18px 0 0;
+  color: #4c6476;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.government-access-gate h1 {
+  margin: 5px 0 0;
+  font-size: clamp(1.25rem, 3vw, 1.8rem);
+  line-height: 1.2;
+}
+
+.government-access-gate span {
+  margin-top: 10px;
+  color: #5c6973;
+  font-size: 0.78rem;
+}

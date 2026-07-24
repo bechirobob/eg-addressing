@@ -127,6 +127,29 @@ Protected routes are for staff/operator workflows:
 
 Public routes must not expose private contact data, raw evidence files, internal reviewer notes, full D.I.P. data, or operator-only status details.
 
+## Protected operator workspace
+
+Protected routes use one shared workspace rather than repeating a generic page navigation block on every screen.
+
+Desktop rules:
+
+- use a stable left navigation rail and one primary content column;
+- show the current section, signed-in user, and role context;
+- retain the coat of arms and national identity in a compact masthead;
+- prioritize tables, record rows, search, and the next valid action over decorative summaries;
+- keep advanced or infrequent controls behind clear disclosures;
+- use the available desktop width for operational tables without creating empty margins.
+
+Mobile rules:
+
+- replace the desktop rail with a text-labeled navigation drawer;
+- keep high-frequency authorized routes reachable through compact quick navigation;
+- show record rows instead of shrinking desktop tables below usable widths;
+- preserve touch targets, visible focus, reduced-motion behavior, and non-map alternatives;
+- do not represent local, queued, provisional, or unpublished work as registry acceptance.
+
+The operator workspace stylesheet is `app/operator-shell.css`. It may override spacing and layout on authenticated protected routes, but it must use the shared `--gov-*` tokens and must not change public/protected authority, route access, API behavior, or workflow states.
+
 ## Verification rule
 
 Before reporting a UI phase complete, run:

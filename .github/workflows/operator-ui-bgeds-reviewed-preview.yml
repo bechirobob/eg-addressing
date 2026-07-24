@@ -1,0 +1,357 @@
+name: operator-ui-bgeds-reviewed-preview
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'apps/admin-portal/**'
+      - 'services/api/**'
+      - 'infra/**'
+      - '.github/workflows/operator-ui-bgeds-reviewed-preview.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: operator-ui-bgeds-reviewed-preview
+  cancel-in-progress: true
+
+jobs:
+  reviewed-preview:
+    if: github.event_name == 'workflow_dispatch' || github.head_ref == 'nli/wo-007-field-administration-publication-workspaces'
+    runs-on: ubuntu-latest
+    timeout-minutes: 260
+    steps:
+      - name: Checkout reviewed source
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Create isolated review configuration
+        shell: bash
+        run: |
+          set -euo pipefail
+          BOOTSTRAP_FIXTURE_PASSWORD="Bootstrap!$(openssl rand -hex 18)9"
+          ADMIN_PASSWORD="Admin!$(openssl rand -hex 18)9"
+          EDITOR_PASSWORD="Editor!$(openssl rand -hex 18)9"
+          VIEWER_PASSWORD="Viewer!$(openssl rand -hex 18)9"
+          AGENCY_VIEWER_PASSWORD="Agency!$(openssl rand -hex 18)9"
+          POSTGRES_PASSWORD="preview-db-${GITHUB_RUN_ID}-$(openssl rand -hex 8)"
+          JWT_SECRET="$(openssl rand -hex 32)"
+          SESSION_SECRET="$(openssl rand -hex 32)"
+          S3_ACCESS_KEY="preview${GITHUB_RUN_ID}"
+          S3_SECRET_KEY="$(openssl rand -hex 24)"
+
+          for value in "$BOOTSTRAP_FIXTURE_PASSWORD" "$ADMIN_PASSWORD" "$EDITOR_PASSWORD" "$VIEWER_PASSWORD" "$AGENCY_VIEWER_PASSWORD" "$POSTGRES_PASSWORD" "$JWT_SECRET" "$SESSION_SECRET" "$S3_SECRET_KEY"; do
+            echo "::add-mask::${value}"
+          done
+
+          {
+            echo "BOOTSTRAP_FIXTURE_PASSWORD=${BOOTSTRAP_FIXTURE_PASSWORD}"
+            echo "ADMIN_PASSWORD=${ADMIN_PASSWORD}"
+            echo "EDITOR_PASSWORD=${EDITOR_PASSWORD}"
+            echo "VIEWER_PASSWORD=${VIEWER_PASSWORD}"
+            echo "AGENCY_VIEWER_PASSWORD=${AGENCY_VIEWER_PASSWORD}"
+            echo "POSTGRES_PASSWORD=${POSTGRES_PASSWORD}"
+          } >> "$GITHUB_ENV"
+
+          cat > .env <<EOF
+          APP_ENV=development
+          NEXT_PUBLIC_DEPLOYMENT_LABEL=BECOREOPS DEVELOPMENT PREVIEW / NOT OFFICIAL PRODUCTION
+          PROJECT_NAME=eg-addressing
+          COMPOSE_PROJECT_NAME=eg_addressing_bgeds_preview_${GITHUB_RUN_ID}
+          TZ=Africa/Malabo
+          LOG_LEVEL=INFO
+
+          ADMIN_PORT=3100
+          API_PORT=8100
+          POSTGRES_PORT=5434
+          REDIS_PORT=6384
+          MINIO_PORT=9100
+          MINIO_CONSOLE_PORT=9101
+
+          POSTGRES_DB=addressing
+          POSTGRES_USER=addressing
+          POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+          DATABASE_URL=postgresql+psycopg://addressing:${POSTGRES_PASSWORD}@postgres:5432/addressing
+          REDIS_URL=redis://redis:6379/0
+
+          S3_ENDPOINT=http://minio:9000
+          S3_REGION=eu-west-1
+          S3_BUCKET=addressing-bgeds-review
+          S3_ACCESS_KEY=${S3_ACCESS_KEY}
+          S3_SECRET_KEY=${S3_SECRET_KEY}
+
+          JWT_SECRET=${JWT_SECRET}
+          SESSION_SECRET=${SESSION_SECRET}
+          SESSION_TTL_HOURS=6
+          SESSION_COOKIE_MODE=bearer-local-storage
+          SESSION_COOKIE_SECURE=false
+          ALLOW_DEFAULT_DEMO_PASSWORDS=false
+          PUBLICATION_RELEASE_ENABLED=false
+          NEXT_PUBLIC_PUBLICATION_RELEASE_ENABLED=false
+
+          ADMIN_BASE_URL=http://127.0.0.1:3100
+          API_BASE_URL=http://127.0.0.1:8100/api
+          NEXT_PUBLIC_API_BASE_URL=
+          INTERNAL_API_BASE_URL=http://api:8100
+
+          PUBLIC_RATE_LIMIT_ENABLED=true
+          PUBLIC_RATE_LIMIT_MAX_REQUESTS=240
+          PUBLIC_RATE_LIMIT_WINDOW_SECONDS=60
+          EOF
+
+      - name: Install migration dependencies
+        run: python -m pip install --disable-pip-version-check -r services/api/requirements.txt
+
+      - name: Start isolated infrastructure
+        shell: bash
+        run: |
+          set -euo pipefail
+          docker compose --env-file .env -f infra/docker/docker-compose.yml up -d --wait --wait-timeout 180 postgres redis minio
+          for attempt in $(seq 1 60); do
+            if docker compose --env-file .env -f infra/docker/docker-compose.yml exec -T postgres \
+              psql -U addressing -d addressing -v ON_ERROR_STOP=1 -tAc 'SELECT 1' | grep -qx '1'; then
+              exit 0
+            fi
+            sleep 2
+          done
+          docker compose --env-file .env -f infra/docker/docker-compose.yml ps
+          exit 1
+
+      - name: Apply migrations and load temporary review data
+        shell: bash
+        run: |
+          set -euo pipefail
+          export DATABASE_URL="postgresql+psycopg://addressing:${POSTGRES_PASSWORD}@127.0.0.1:5434/addressing"
+          python infra/scripts/migrate.py apply
+          python infra/scripts/load_reference_data.py load
+          APP_ENV=development \
+          EG_ALLOW_DEV_FIXTURES=YES \
+          DEVELOPMENT_FIXTURE_PASSWORD="${BOOTSTRAP_FIXTURE_PASSWORD}" \
+          python infra/scripts/load_development_fixtures.py load
+
+          python - <<'PY'
+          import os
+          import sys
+          import psycopg
+
+          sys.path.insert(0, 'services/api')
+          from app.db import _hash_password
+
+          credentials = {
+              'admin': ('admin', os.environ['ADMIN_PASSWORD']),
+              'editor': ('editor', os.environ['EDITOR_PASSWORD']),
+              'viewer': ('viewer', os.environ['VIEWER_PASSWORD']),
+              'agency_viewer': ('agency_viewer', os.environ['AGENCY_VIEWER_PASSWORD']),
+          }
+          database_url = os.environ['DATABASE_URL'].replace('postgresql+psycopg://', 'postgresql://', 1)
+          with psycopg.connect(database_url) as connection:
+              with connection.cursor() as cursor:
+                  for username, (role, password) in credentials.items():
+                      cursor.execute(
+                          '''
+                          UPDATE users
+                          SET password_hash = %s, is_active = TRUE
+                          WHERE username = %s AND role = %s
+                          RETURNING username, role
+                          ''',
+                          (_hash_password(password), username, role),
+                      )
+                      if cursor.fetchone() != (username, role):
+                          raise SystemExit(f'credential rotation failed for {username}')
+                  cursor.execute('DELETE FROM auth_tokens')
+              connection.commit()
+          print('temporary review credentials rotated; previous sessions revoked')
+          PY
+
+      - name: Build and start review application
+        shell: bash
+        run: |
+          set -euo pipefail
+          docker compose --env-file .env -f infra/docker/docker-compose.yml up -d --build api admin
+          for attempt in $(seq 1 90); do
+            if curl --fail --silent http://127.0.0.1:8100/api/v1/health >/dev/null \
+              && curl --fail --silent http://127.0.0.1:3100/login >/dev/null; then
+              exit 0
+            fi
+            sleep 2
+          done
+          docker compose --env-file .env -f infra/docker/docker-compose.yml ps
+          docker compose --env-file .env -f infra/docker/docker-compose.yml logs --tail=200 api admin
+          exit 1
+
+      - name: Verify rotated roles locally
+        shell: bash
+        run: |
+          set -euo pipefail
+          for username in admin editor viewer agency_viewer; do
+            case "$username" in
+              admin) password="$ADMIN_PASSWORD" ;;
+              editor) password="$EDITOR_PASSWORD" ;;
+              viewer) password="$VIEWER_PASSWORD" ;;
+              agency_viewer) password="$AGENCY_VIEWER_PASSWORD" ;;
+            esac
+            python - "$username" "$password" <<'PY' > /tmp/login-payload.json
+          import json, sys
+          print(json.dumps({'username': sys.argv[1], 'password': sys.argv[2]}))
+          PY
+            curl --fail --silent --show-error \
+              -H 'Content-Type: application/json' \
+              -X POST --data @/tmp/login-payload.json \
+              http://127.0.0.1:3100/api/v1/auth/login > "/tmp/${username}-login.json"
+            python - "$username" <<'PY'
+          import json, sys
+          from pathlib import Path
+          username = sys.argv[1]
+          payload = json.loads(Path(f'/tmp/{username}-login.json').read_text())
+          expected = 'agency_viewer' if username == 'agency_viewer' else username
+          assert payload.get('user', {}).get('role') == expected, payload
+          assert payload.get('token'), payload
+          PY
+          done
+
+          for pair in 'admin admin123' 'editor editor123' 'viewer viewer123' 'agency_viewer agency123'; do
+            set -- $pair
+            python - "$1" "$2" <<'PY' > /tmp/rejected-login-payload.json
+          import json, sys
+          print(json.dumps({'username': sys.argv[1], 'password': sys.argv[2]}))
+          PY
+            status="$(curl --silent --output /dev/null --write-out '%{http_code}' -H 'Content-Type: application/json' -X POST --data @/tmp/rejected-login-payload.json http://127.0.0.1:3100/api/v1/auth/login)"
+            test "$status" = '401'
+          done
+
+      - name: Start redundant Cloudflare HTTPS review tunnels
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl --fail --location --silent --show-error \
+            https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64 \
+            --output /tmp/cloudflared
+          chmod +x /tmp/cloudflared
+
+          nohup /tmp/cloudflared tunnel --no-autoupdate --protocol http2 --url http://127.0.0.1:3100 > /tmp/cloudflared-primary.log 2>&1 &
+          echo $! > /tmp/cloudflared-primary.pid
+          nohup /tmp/cloudflared tunnel --no-autoupdate --protocol http2 --url http://127.0.0.1:3100 > /tmp/cloudflared-backup.log 2>&1 &
+          echo $! > /tmp/cloudflared-backup.pid
+
+          find_tunnel() {
+            local log_file="$1"
+            for attempt in $(seq 1 150); do
+              url="$(grep -Eo 'https://[-a-z0-9]+\.trycloudflare\.com' "$log_file" | tail -1 || true)"
+              if [ -n "$url" ] && curl --fail --silent "$url/login" >/dev/null 2>&1; then
+                printf '%s' "$url"
+                return 0
+              fi
+              sleep 2
+            done
+            cat "$log_file" || true
+            return 1
+          }
+
+          PRIMARY_URL="$(find_tunnel /tmp/cloudflared-primary.log)"
+          BACKUP_URL="$(find_tunnel /tmp/cloudflared-backup.log)"
+          test -n "$PRIMARY_URL"
+          test -n "$BACKUP_URL"
+          test "$PRIMARY_URL" != "$BACKUP_URL"
+          {
+            echo "PRIMARY_URL=${PRIMARY_URL}"
+            echo "BACKUP_URL=${BACKUP_URL}"
+          } >> "$GITHUB_ENV"
+
+      - name: Verify public review domains
+        shell: bash
+        run: |
+          set -euo pipefail
+          for base_url in "$PRIMARY_URL" "$BACKUP_URL"; do
+            curl --fail --silent --show-error "$base_url/login" >/dev/null
+            python - "$ADMIN_PASSWORD" <<'PY' > /tmp/public-login.json
+          import json, sys
+          print(json.dumps({'username': 'admin', 'password': sys.argv[1]}))
+          PY
+            curl --fail --silent --show-error -H 'Content-Type: application/json' -X POST --data @/tmp/public-login.json "$base_url/api/v1/auth/login" > /tmp/public-login-response.json
+            python - <<'PY'
+          import json
+          from pathlib import Path
+          payload = json.loads(Path('/tmp/public-login-response.json').read_text())
+          assert payload.get('user', {}).get('role') == 'admin', payload
+          assert payload.get('token'), payload
+          PY
+          done
+
+      - name: Publish review access artifact
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/bgeds-review-preview
+          cat > /tmp/bgeds-review-preview/review-access.txt <<EOF
+          BECOREOPS INTERNAL REVIEW ENVIRONMENT
+          Exact head: ${GITHUB_HEAD_REF:-${GITHUB_REF_NAME}}
+          Exact commit: ${GITHUB_SHA}
+
+          Primary preview: ${PRIMARY_URL}
+          Backup preview: ${BACKUP_URL}
+
+          Administrator
+          Username: admin
+          Password: ${ADMIN_PASSWORD}
+
+          Registry / Verification / Field / Publication editor
+          Username: editor
+          Password: ${EDITOR_PASSWORD}
+
+          Read-only government viewer
+          Username: viewer
+          Password: ${VIEWER_PASSWORD}
+
+          Agency viewer
+          Username: agency_viewer
+          Password: ${AGENCY_VIEWER_PASSWORD}
+
+          Publication release is disabled. This temporary environment contains development fixtures only and is not an official government record.
+          EOF
+          chmod 600 /tmp/bgeds-review-preview/review-access.txt
+
+      - name: Upload temporary review access
+        uses: actions/upload-artifact@v4
+        with:
+          name: bgeds-review-preview-${{ github.run_id }}
+          path: /tmp/bgeds-review-preview/review-access.txt
+          retention-days: 1
+          if-no-files-found: error
+
+      - name: Keep reviewed preview available
+        shell: bash
+        run: |
+          set -euo pipefail
+          failures=0
+          for minute in $(seq 1 210); do
+            local_ok=0
+            primary_ok=0
+            backup_ok=0
+            curl --fail --silent http://127.0.0.1:3100/login >/dev/null && local_ok=1 || true
+            curl --fail --silent "$PRIMARY_URL/login" >/dev/null && primary_ok=1 || true
+            curl --fail --silent "$BACKUP_URL/login" >/dev/null && backup_ok=1 || true
+            if [ "$local_ok" -eq 1 ] && { [ "$primary_ok" -eq 1 ] || [ "$backup_ok" -eq 1 ]; }; then
+              failures=0
+            else
+              failures=$((failures + 1))
+            fi
+            if [ "$failures" -ge 5 ]; then
+              echo 'Preview failed five consecutive health checks.' >&2
+              exit 1
+            fi
+            sleep 60
+          done
+
+      - name: Stop temporary review environment
+        if: always()
+        shell: bash
+        run: |
+          if [ -f /tmp/cloudflared-primary.pid ]; then kill "$(cat /tmp/cloudflared-primary.pid)" 2>/dev/null || true; fi
+          if [ -f /tmp/cloudflared-backup.pid ]; then kill "$(cat /tmp/cloudflared-backup.pid)" 2>/dev/null || true; fi
+          docker compose --env-file .env -f infra/docker/docker-compose.yml down -v --remove-orphans || true
