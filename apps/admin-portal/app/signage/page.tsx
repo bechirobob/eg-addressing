@@ -2,7 +2,6 @@ import type { Metadata } from 'next';
 
 import { GovernmentPublicationWorkbench } from '../../components/GovernmentPublicationWorkbench';
 import { GovernmentWorkspaceShell } from '../../components/GovernmentWorkspaceShell';
-import { SiteChrome } from '../../components/SiteChrome';
 import { getGovernmentWorkspaceData } from '../../lib/governmentWorkspaceData';
 
 export const dynamic = 'force-dynamic';
@@ -19,21 +18,14 @@ export default async function SignagePage() {
   const { attentionCount } = await getGovernmentWorkspaceData(apiBaseUrl);
 
   return (
-    <SiteChrome
+    <GovernmentWorkspaceShell
       apiBaseUrl={publicApiBaseUrl}
-      eyebrow="Government workspace"
-      title="Publication"
-      subtitle="Protected readiness review, institutional release control, and official output preparation."
+      attentionCount={attentionCount}
+      sectionLabel="Controlled official release"
+      workspaceTitle="Publication"
+      workContext={['National publication and signage scope', 'Preparation, approval, publication, and signage remain separate', 'Public release requires administrator authority and an active institutional flag']}
     >
-      <GovernmentWorkspaceShell
-        apiBaseUrl={publicApiBaseUrl}
-        attentionCount={attentionCount}
-        sectionLabel="Controlled official release"
-        workspaceTitle="Publication"
-        workContext={['National publication and signage scope', 'Preparation, approval, publication, and signage remain separate', 'Public release requires administrator authority and an active institutional flag']}
-      >
-        <GovernmentPublicationWorkbench apiBaseUrl={publicApiBaseUrl} />
-      </GovernmentWorkspaceShell>
-    </SiteChrome>
+      <GovernmentPublicationWorkbench apiBaseUrl={publicApiBaseUrl} />
+    </GovernmentWorkspaceShell>
   );
 }
