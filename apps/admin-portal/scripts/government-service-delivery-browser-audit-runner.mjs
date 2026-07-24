@@ -23,9 +23,19 @@ const deterministicWait = `  await page.locator('.government-three-pane-workbenc
   await page.waitForTimeout(550);`;
 corrected = corrected.replace(waitAnchor, deterministicWait);
 
+const packInspectorExpected = "assert(bodyText.includes('Official publication pack'), `${label}: official pack inspector is missing`);";
+const packInspectorReplacement = "assert((await page.getByText('Official publication pack', { exact: true }).count()) >= 1, `${label}: official pack inspector is missing`);";
+corrected = corrected.replace(packInspectorExpected, packInspectorReplacement);
+
+const packFixtureExpected = "assert(bodyText.includes('Official institutional address release 008'), `${label}: publication pack fixture is not represented`);";
+const packFixtureReplacement = "assert((await page.getByText('Official institutional address release 008', { exact: true }).count()) >= 1, `${label}: publication pack fixture is not represented`);";
+corrected = corrected.replace(packFixtureExpected, packFixtureReplacement);
+
 if (
   corrected === source
   || corrected.includes(publicationLockExpected)
+  || corrected.includes(packInspectorExpected)
+  || corrected.includes(packFixtureExpected)
   || !corrected.includes("selectOption('outputs')")
   || !corrected.includes("getByText('Official publication pack'")
 ) {
