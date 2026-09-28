@@ -27,7 +27,10 @@ assert(/import '\.\/government-workspace\.css';/.test(layout), 'root layout must
 assert(/import '\.\/government-access-gate\.css';/.test(layout), 'root layout must load the protected route access state');
 assert(/GovernmentWorkspaceShell/.test(page) && /GovernmentOperatorHome/.test(page), 'workspace route must compose the protected shell and actionable home');
 assert(!/SiteChrome/.test(page), 'government workspace must not be nested inside the legacy public or operator presentation shell');
-assert(/getGovernmentWorkspaceData/.test(page), 'operator home must use the shared government workspace data service');
+assert(/useOperationsSummary/.test(home), 'operator home must use the authenticated operations summary hook');
+const operationsData = await read('components/useOperationsSummary.ts');
+assert(/sessionRequestInit\(token\)/.test(operationsData), 'operations summaries must include the active session');
+assert(!/getGovernmentWorkspaceData/.test(page), 'operator home must not bootstrap protected summaries through an anonymous server request');
 assert(/\/api\/v1\/reporting\/summary/.test(sharedData), 'government workspace data must use the current reporting summary rather than illustrative operational totals');
 assert(/\/api\/v1\/pilot-readiness\/summary/.test(sharedData), 'government workspace data must use the protected readiness summary');
 assert(/robots:[\s\S]*index: false/.test(page), 'protected workspace metadata must prevent indexing');
