@@ -5,6 +5,10 @@ import { chromium } from 'playwright';
 
 const baseUrl = (process.env.OPERATOR_UI_BASE_URL || 'http://127.0.0.1:3100').replace(/\/$/, '');
 const outputDir = path.resolve(process.env.OPERATOR_UI_EVIDENCE_DIR || 'artifacts/operator-ui-browser-evidence');
+// Synthetic browser-only fixtures; never written to a server or used as production evidence.
+const summary = { totals: { territories: 18, submissions: 1248, review_queue: 27, published_addresses: 986, correction_queue: 8, geotag_queue: 14 } };
+const readiness = { readiness_status: 'pilot-prep', passed_gates: 4, total_gates: 6, gates: ['Location request intake', 'Administrative review queue', 'Field check workflow', 'Public correction queue', 'Published output after full approval', 'Auditability'].map((name, i) => ({ name, status: i < 4 ? 'passed' : 'needs-attention', evidence: i < 4 ? 'Evidence recorded in the pilot summary.' : 'Additional evidence is required before this check can pass.', next_step: 'Review the current evidence with the responsible officer.' })) };
+
 const commitSha = process.env.OPERATOR_UI_COMMIT || process.env.GITHUB_SHA || 'unknown';
 
 await mkdir(outputDir, { recursive: true });
@@ -34,6 +38,12 @@ async function installSession(page, role) {
       body: JSON.stringify({ user: userForRole(role), auth_mode: 'bearer' }),
     });
   });
+
+  await page.route('**/api/v1/reporting/summary', (route) => {
+    assert(route.request().headers().authorization === 'Bearer workspace-browser-evidence-token', 'Summary must use the active session');
+    return route.fulfill({ json: summary });
+  });
+  await page.route('**/api/v1/pilot-readiness/summary', (route) => route.fulfill({ json: readiness }));
 
   await page.route('**/api/v1/auth/logout', async (route) => {
     await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ signed_out: true }) });
@@ -108,9 +118,15 @@ async function auditWorkspace(browser, { role, viewport, label }) {
     };
   }
 
-  const summaryCount = await page.locator('.government-home-summary > div').count();
-  assert(summaryCount === 5, `${label}: operational summary must present five stable measures`);
-  assert((await page.locator('.government-work-table-row').count()) === 4, `${label}: operational work table is incomplete`);
+  await page.getByText('27', { exact: true }).waitFor();
+  const summaryCount = await page.locator('dl[aria-label="Current operational summary"] > div').count();
+  assert(summaryCount === 4, `${label}: summary must separate platform totals and readiness`);
+  assert(await page.locator('[aria-labelledby="operations-queues-title"] li').count() === 3, `${label}: three distinct queues must be shown`);
+  await page.getByRole('button', { name: 'Pilot readiness', exact: true }).focus();
+  await page.keyboard.press('Enter');
+  assert(await page.locator('[aria-labelledby="operations-readiness-title"] li').count() === 6, `${label}: keyboard view control must expose all gates`);
+  assert(await page.locator('[aria-labelledby="operations-queues-title"]').count() === 0, 'Readiness view must be focused');
+  await page.getByRole('button', { name: 'Overview', exact: true }).click();
   assert(consoleErrors.length === 0, `${label}: browser console errors: ${consoleErrors.join(' | ')}`);
 
   const screenshot = `${label}.png`;
@@ -130,12 +146,76 @@ async function auditWorkspace(browser, { role, viewport, label }) {
   };
 }
 
-const browser = await chromium.launch({ headless: true });
+async function auditFailures(browser) {
+  const context = await browser.newContext({ viewport: { width: 390, height: 844 } });
+  const page = await context.newPage();
+  await installSession(page, 'viewer');
+  let releaseLoading;
+  const loadingGate = new Promise((resolve) => { releaseLoading = resolve; });
+  let mode = 'failure';
+  await page.route('**/api/v1/reporting/summary', async (route) => { await loadingGate; return mode === 'failure'
+    ? route.fulfill({ status: 503, json: { detail: 'Synthetic outage' } })
+    : route.fulfill({ json: mode === 'malformed' ? { totals: { submissions: -1 } } : { totals: { ...summary.totals, review_queue: 0, correction_queue: 0, geotag_queue: 0 } } }); });
+  await page.goto(`${baseUrl}/workspace`);
+  await page.getByText('Loading current summaries…', { exact: true }).waitFor();
+  assert(await page.locator('dl[aria-busy="true"] dd').allTextContents().then((values) => values.every((value) => value === '—')), 'Loading must not show invented totals');
+  releaseLoading();
+  await page.getByText('Workload summary unavailable.', { exact: true }).waitFor();
+  assert(await page.getByText('No pending items', { exact: true }).count() === 0, 'Failed data must not become empty queues');
+  assert(await page.getByText('4 of 6 gates passed', { exact: true }).count() === 1, 'Readiness must survive a workload outage');
+  assert(await page.locator('.government-home a[href="/admin/staff"]').count() === 0, 'Viewer cannot see admin actions');
+  await page.screenshot({ path: path.join(outputDir, 'government-workspace-partial-failure.png'), fullPage: true });
+  mode = 'malformed';
+  await page.getByRole('button', { name: 'Refresh summaries' }).click();
+  await page.getByText('Workload summary unavailable.', { exact: true }).waitFor();
+  mode = 'empty';
+  await page.getByRole('button', { name: 'Refresh summaries' }).click();
+  await page.getByText('No pending items', { exact: true }).first().waitFor();
+  assert(await page.getByText('No pending items', { exact: true }).count() === 3, 'Genuine zero queues must be distinguished from missing data');
+  assert(await page.getByText('Workload summary unavailable.', { exact: true }).count() === 0, 'Retry must recover without a reload');
+  await page.route('**/api/v1/pilot-readiness/summary', (route) => route.fulfill({ status: 403, json: { detail: 'Synthetic denial' } }));
+  await page.getByRole('button', { name: 'Refresh summaries' }).click();
+  await page.getByText('Readiness summary unavailable.', { exact: true }).waitFor();
+  assert(await page.getByText('No pending items', { exact: true }).count() === 3, 'Workload must survive a readiness denial');
+  await context.close();
+
+  const cookieContext = await browser.newContext();
+  await cookieContext.addCookies([{ name: 'eg_addressing_session', value: 'synthetic-cookie', url: baseUrl }]);
+  const cookiePage = await cookieContext.newPage();
+  let cookieSeen = false;
+  await cookiePage.route('**/api/v1/auth/me', (route) => route.fulfill({ json: { user: userForRole('agency_viewer') } }));
+  await cookiePage.route('**/api/v1/reporting/summary', async (route) => {
+    cookieSeen = (await route.request().allHeaders()).cookie?.includes('eg_addressing_session=synthetic-cookie');
+    return route.fulfill({ json: summary });
+  });
+  await cookiePage.route('**/api/v1/pilot-readiness/summary', (route) => route.fulfill({ json: readiness }));
+  await cookiePage.goto(`${baseUrl}/workspace`);
+  await cookiePage.getByText('27', { exact: true }).waitFor();
+  assert(cookieSeen, 'Cookie sessions must be included in summary requests');
+  await cookieContext.close();
+
+  const guest = await browser.newContext();
+  const guestPage = await guest.newPage();
+  let protectedRequests = 0;
+  await guestPage.route('**/api/v1/auth/me', (route) => route.fulfill({ status: 401, json: { detail: 'Not signed in' } }));
+  await guestPage.route('**/api/v1/reporting/summary', (route) => { protectedRequests++; return route.abort(); });
+  await guestPage.goto(`${baseUrl}/workspace`);
+  await guestPage.waitForURL('**/login');
+  assert(protectedRequests === 0, 'Guests must not request dashboard summaries');
+  assert(await guestPage.locator('.government-home').count() === 0, 'Guests must not see protected dashboard content');
+  await guest.close();
+  return { label: 'failure-recovery-session-boundary', status: 'passed', cases: ['loading', 'partial outage', 'malformed data', 'empty queues', 'retry', 'readiness denial', 'cookie session', 'guest redirect'] };
+}
+
+const browser = await chromium.launch({ headless: true, executablePath: process.env.PLAYWRIGHT_EXECUTABLE_PATH || undefined });
 try {
   const evidence = [];
   evidence.push(await auditWorkspace(browser, { role: 'admin', viewport: { width: 1440, height: 900 }, label: 'government-workspace-admin-desktop' }));
   evidence.push(await auditWorkspace(browser, { role: 'editor', viewport: { width: 1024, height: 768 }, label: 'government-workspace-editor-tablet' }));
   evidence.push(await auditWorkspace(browser, { role: 'viewer', viewport: { width: 390, height: 844 }, label: 'government-workspace-viewer-mobile' }));
+
+  evidence.push(await auditWorkspace(browser, { role: 'admin', viewport: { width: 320, height: 800 }, label: 'government-workspace-admin-reflow' }));
+  evidence.push(await auditFailures(browser));
 
   const result = {
     commitSha,

@@ -12,7 +12,7 @@ import { resolveBrowserApiBaseUrl, sessionRequestInit, useStoredSession } from '
 
 type GovernmentWorkspaceShellProps = {
   apiBaseUrl: string;
-  attentionCount: number;
+  attentionCount: number | null;
   sectionLabel?: string;
   workspaceTitle?: string;
   workContext?: string[];
@@ -229,10 +229,10 @@ export function GovernmentWorkspaceShell({
             </Link>
 
             <div className="government-session">
-              <div className="government-attention" aria-label={`${attentionCount} items require attention`}>
+              {attentionCount !== null && <div className="government-attention" aria-label={`${attentionCount} items require attention`}>
                 <GovernmentIcon name="alert" />
                 <span>{attentionCount}</span>
-              </div>
+              </div>}
               <div className="government-user-copy">
                 <strong>{sessionUser.full_name}</strong>
                 <span>{humanizeRole(sessionUser.role)}</span>
